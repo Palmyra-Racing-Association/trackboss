@@ -1,0 +1,1 @@
+# clubmanager-2.0
