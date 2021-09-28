@@ -2,7 +2,7 @@
   "name": "clubmanager-2.0",
   "version": "1.0.0",
   "description": "Palmyra Racing Associate Club Management application backend",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
