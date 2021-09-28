@@ -664,12 +664,12 @@ paths:
         404:
           description: Not Found
           content: {}
-  /api/earnedPointss:
+  /api/earnedPoints:
     get:
       tags:
       - earned-points-resource
-      summary: getAllEarnedPointss
-      operationId: getAllEarnedPointssUsingGET
+      summary: getAllEarnedPoints
+      operationId: getAllEarnedPointsUsingGET
       responses:
         200:
           description: OK
@@ -752,7 +752,7 @@ paths:
           description: Not Found
           content: {}
       x-codegen-request-body-name: earnedPoints
-  /api/earnedPointss/me:
+  /api/earnedPoints/me:
     get:
       tags:
       - earned-points-resource
@@ -776,7 +776,7 @@ paths:
         404:
           description: Not Found
           content: {}
-  /api/earnedPointss/member{memberId}:
+  /api/earnedPoints/member{memberId}:
     get:
       tags:
       - earned-points-resource
@@ -808,7 +808,7 @@ paths:
         404:
           description: Not Found
           content: {}
-  /api/earnedPointss/myVerifications:
+  /api/earnedPoints/myVerifications:
     get:
       tags:
       - earned-points-resource
@@ -832,7 +832,7 @@ paths:
         404:
           description: Not Found
           content: {}
-  /api/earnedPointss/unverified:
+  /api/earnedPoints/unverified:
     get:
       tags:
       - earned-points-resource
@@ -856,7 +856,7 @@ paths:
         404:
           description: Not Found
           content: {}
-  /api/earnedPointss/{id}:
+  /api/earnedPoints/{id}:
     get:
       tags:
       - earned-points-resource
@@ -912,7 +912,7 @@ paths:
         403:
           description: Forbidden
           content: {}
-  /api/earnedPointss/{year}/member{memberId}:
+  /api/earnedPoints/{year}/member{memberId}:
     get:
       tags:
       - earned-points-resource
@@ -1823,12 +1823,12 @@ paths:
         403:
           description: Forbidden
           content: {}
-  /api/memberStatuss:
+  /api/memberStatuses:
     get:
       tags:
       - member-status-resource
-      summary: getAllMemberStatuss
-      operationId: getAllMemberStatussUsingGET
+      summary: getAllMemberStatuses
+      operationId: getAllMemberStatusesUsingGET
       responses:
         200:
           description: OK
@@ -1911,7 +1911,7 @@ paths:
           description: Not Found
           content: {}
       x-codegen-request-body-name: memberStatus
-  /api/memberStatuss/{id}:
+  /api/memberStatuses/{id}:
     get:
       tags:
       - member-status-resource
@@ -1967,12 +1967,12 @@ paths:
         403:
           description: Forbidden
           content: {}
-  /api/memberTypess:
+  /api/memberTypes:
     get:
       tags:
       - member-types-resource
-      summary: getAllMemberTypess
-      operationId: getAllMemberTypessUsingGET
+      summary: getAllMemberTypes
+      operationId: getAllMemberTypesUsingGET
       responses:
         200:
           description: OK
@@ -2055,7 +2055,7 @@ paths:
           description: Not Found
           content: {}
       x-codegen-request-body-name: memberTypes
-  /api/memberTypess/{id}:
+  /api/memberTypes/{id}:
     get:
       tags:
       - member-types-resource
@@ -2343,7 +2343,7 @@ paths:
           description: Not Found
           content: {}
       x-codegen-request-body-name: member
-  /api/members/andworkers:
+  /api/members/andWorkers:
     get:
       tags:
       - member-resource
@@ -3020,12 +3020,12 @@ paths:
           description: Not Found
           content: {}
       x-codegen-request-body-name: userDTO
-  /api/ridingAreaStatuss:
+  /api/ridingAreaStatuses:
     get:
       tags:
       - riding-area-status-resource
-      summary: getAllRidingAreaStatuss
-      operationId: getAllRidingAreaStatussUsingGET
+      summary: getAllRidingAreaStatuses
+      operationId: getAllRidingAreaStatusesUsingGET
       responses:
         200:
           description: OK
@@ -3108,7 +3108,7 @@ paths:
           description: Not Found
           content: {}
       x-codegen-request-body-name: ridingAreaStatus
-  /api/ridingAreaStatuss/{id}:
+  /api/ridingAreaStatuses/{id}:
     get:
       tags:
       - riding-area-status-resource
