@@ -4,7 +4,10 @@
   "description": "Palmyra Racing Associate Club Management application backend",
   "main": "server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node src/server.ts",
+    "frontend": "cd frontend && npm start",
+    "dependencies": "npx depcheck"
   },
   "repository": {
     "type": "git",
@@ -26,6 +29,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.24.2",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
