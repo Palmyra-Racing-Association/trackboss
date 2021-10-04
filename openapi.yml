@@ -1705,7 +1705,6 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/billing/run:
     post:
       tags:
         - billing
