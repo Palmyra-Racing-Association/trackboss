@@ -1040,7 +1040,9 @@ paths:
       description: >
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
-        the request body.
+        the request body. **Note:** while most fields require admin permissions
+        to update, both *1)* assigning the job to a member or paid laborer and
+        *2)* checking in to the job can be done by a member as well.
       requestBody:
         content:
           application/json:
