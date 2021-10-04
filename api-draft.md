@@ -30,6 +30,8 @@
 - [x] get a job
 - [x] get all jobs
 - [x] get all open jobs per event
+- [x] grant provisional work points for a job
+- [x] pay cost value for a job
 
 - [x] create a paid laborer
 - [x] update a paid laborer
@@ -37,31 +39,31 @@
 - [x] get all paid laborers
 - [x] get a paid laborer
 
-- [ ] grant provisional work points to member
-- [ ] remove work points from member
-- [ ] verify work points for member
-- [ ] get current verified work points for member
-- [ ] get current verified work point details for member
-- [ ] get current verified work points for membership
-- [ ] get current verified work point details for membership
-- [ ] get unverified work point details by member
-- [ ] get unverified work point details by membership
-- [ ] get all unverified work points
-- [ ] get work point details for member by year
-- [ ] get work point details for membership by year
-- [ ] get total work point detail history for member
-- [ ] get total work point detail history for membership
+- [x] remove work points from member
+- [x] verify work points for member
+- [x] get current verified work points for member
+- [x] get current verified work points for membership
+- [x] get unverified work points by member
+- [x] get unverified work points by membership
+- [x] get all unverified work points
+- [x] get work points for member by year
+- [x] get work points for membership by year
+- [x] get total work point history for member
+- [x] get total work point history for membership
 
-- [ ] get yearly dues
-- [ ] get yearly work point threshold
+- [x] get yearly dues
+- [x] get yearly work point threshold
 
-- [ ] calculate bills for all memberships for current year
-- [ ] distribute bills for all memberships for current year
-- [ ] pay bill?
-- [ ] update bill payment status
-- [ ] get bill for membership by year
-- [ ] get all bills for membership by year
+- [x] calculate bills for all memberships for current year
+- [x] distribute bills for all memberships for current year
+- [x] pay bill?
+- [x] update bill payment status
+- [x] get bill for membership by year
+- [x] get all bills for membership by year
+- [x] get all bills by payment status or year
 
-- [ ] get all track statuses
-- [ ] create track status
-- [ ] update track status
+- [x] get all track statuses
+- [x] get a track status
+- [x] create track status
+- [x] update track status
+- [x] delete track status (in case of user error)

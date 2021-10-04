@@ -22,7 +22,13 @@ tags:
     description: >
       Creating, updating, and getting work points, including verification and
       history.
+  - name: billing
+    description: >
+      Handling billing calculation, distribution, payment, and retrieval.
+  - name: tracks
+    description: Creating, updating, and getting track statuses.
 paths:
+  # member
   /api/newMember:
     put:
       tags:
@@ -269,6 +275,7 @@ paths:
               schema:
                 # TODO
 
+  # membership
   /api/newMembership:
     put:
       tags:
@@ -472,7 +479,7 @@ paths:
               schema:
                 # TODO
         
-
+  # event
   /api/newEvent:
     put:
       tags:
@@ -636,6 +643,7 @@ paths:
               schema:
                 # TODO
 
+  # job
   /api/newJob:
     put:
       tags:
@@ -679,6 +687,47 @@ paths:
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    post:
+      tags:
+        - jobs
+        - workPoints
+      summary: Award work points or cost value for this job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -844,6 +893,7 @@ paths:
               schema:
                 # TODO
 
+  # paidLaborer
   /api/newPaidLaborer:
     put:
       tags:
@@ -987,6 +1037,562 @@ paths:
       tags:
         - paidLaborer
       summary: Get all paid laborers
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+
+  # workPoints
+  /api/workPoints:
+    get:
+      tags:
+        - workPoints
+      summary: Get all work points by verification status or year
+      description: >
+        Omit `verificationStatus` to get all work points regardless of
+        verification status. Omit `year` to get all work points regardless of
+        year. The two parameters can be combined, used separately, or omitted
+        altogether.
+      parameters:
+        - name: verificationStatus
+          in: query
+          schema:
+            type: string
+            enum:
+              - pending
+              - verified
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/workPoints/{workPointsID}:
+    parameters:
+      - name: workPointsID
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - workPoints
+      summary: Verify these work points
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - workPoints
+      summary: Delete these work points
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/workPoints/byMember/{memberID}:
+    parameters:
+      - name: memberID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - workPoints
+      summary: Get this member's work points
+      description: >
+        Omit `verificationStatus` to get all work points regardless of
+        verification status. Omit `year` to get all work points regardless of
+        year. The two parameters can be combined, used separately, or omitted
+        altogether.
+      parameters:
+        - name: verificationStatus
+          in: query
+          schema:
+            type: string
+            enum:
+              - pending
+              - verified
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/workPoints/byMembership/{membershipID}:
+    parameters:
+      - name: membershipID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - workPoints
+      summary: Get this membership's work points
+      description: >
+        Omit `verificationStatus` to get all work points regardless of
+        verification status. Omit `year` to get all work points regardless of
+        year. The two parameters can be combined, used separately, or omitted
+        altogether.
+      parameters:
+        - name: verificationStatus
+          in: query
+          schema:
+            type: string
+            enum:
+              - pending
+              - verified
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+
+  # billing
+  /api/yearlyDues:
+    get:
+      tags:
+        - billing
+      summary: Get a year's dues
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: integer
+            default: current year
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/yearlyWorkPointThreshold:
+    get:
+      tags:
+        - billing
+      summary: Get a year's work point threshold for completely subsidizing dues
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: integer
+            default: current year
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/billing:
+    get:
+      tags:
+        - billing
+      summary: Get all bills by payment status or year
+      description: >
+        Omit `paymentStatus` to get all bills regardless of payment status. Omit
+        `year` to get all bills regardless of year. The two parameters can be
+        combined, used separately, or omitted altogether.
+      parameters:
+        - name: paymentStatus
+          in: query
+          schema:
+            type: string
+            enum:
+              - paid
+              - outstanding
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/billing/run:
+    post:
+      tags:
+        - billing
+      summary: Calculate and distribute all bills for the year
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/billing/{membershipID}:
+    parameters:
+      - name: membershipID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - billing
+      summary: Get bills for this membership
+      description: >
+        The query parameter governs whether this endpoint returns all bills or
+        just the bill for a specified year. Omit it to return all bills.
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    post:
+      tags:
+        - billing
+      summary: Pay this membership's outstanding balance
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+
+  # tracks
+  /api/newTrackStatus:
+    put:
+      tags:
+        - trackStatus
+      summary: Create a new trackStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/trackStatus/{trackStatusID}:
+    parameters:
+      - name: trackStatusID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - trackStatus
+      summary: Get this track status
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - trackStatus
+      summary: Update this track status
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - trackStatus
+      summary: Delete this track status
+      description: >
+        While this shouldn't be needed in normal operation, this can be used in
+        the event of user error when creating or updating a track status.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/trackStatuses:
+    get:
+      tags:
+        - trackStatus
+      summary: Get all track statuses
       responses:
         200:
           description: OK
