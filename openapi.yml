@@ -412,6 +412,17 @@ paths:
       tags:
         - membership
       summary: Get all memberships
+      parameters:
+        - name: types
+          in: query
+          description: The types of memberships to return
+          schema:
+            type: string
+            enum: 
+              - all
+              - activeOnly
+              - pendingOnly
+            default: activeOnly
       responses:
         200:
           description: OK
@@ -431,6 +442,36 @@ paths:
             application/json:
               schema:
                 # TODO
+  /api/membership/register:
+    post:
+      tags:
+        - membership
+      summary: Register for a new membership
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+        
 
   /api/newEvent:
     put:
@@ -704,6 +745,35 @@ paths:
             application/json:
               schema:
                 # TODO
+    put:
+      tags:
+        - job
+      summary: Clone this job
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
     delete:
       tags:
         - job
@@ -738,6 +808,22 @@ paths:
       tags:
         - job
       summary: Get all jobs
+      parameters:
+        - name: assignmentStatus
+          in: query
+          description: The statuses of jobs to return
+          schema:
+            type: string
+            enum:
+              - all
+              - openOnly
+              - assignedOnly
+            default: all
+        - name: eventID
+          in: query
+          description: An event to pull jobs for
+          schema:
+            type: integer
       responses:
         200:
           description: OK

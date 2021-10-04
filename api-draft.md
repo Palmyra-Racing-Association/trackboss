@@ -13,9 +13,9 @@
 - [x] update a membership (including renewal and payment status)
 - [x] delete a membership
 - [x] get all memberships
-- [ ] register for a membership
-- [ ] get all pending memberships
-- [ ] get a pending membership
+- [x] register for a membership
+- [x] get all pending memberships
+- [x] get a pending membership
 
 - [x] create an event
 - [x] update an event
@@ -24,12 +24,12 @@
 - [x] get all events
 
 - [x] create a job
-- [ ] clone a job
+- [x] clone a job
 - [x] update a job (including assigning a member or paid laborer and updating work points or wage)
 - [x] delete a job
 - [x] get a job
 - [x] get all jobs
-- [ ] get all open jobs per event
+- [x] get all open jobs per event
 
 - [x] create a paid laborer
 - [x] update a paid laborer
