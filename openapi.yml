@@ -1,0 +1,922 @@
+openapi: 3.0.3
+info:
+  title: ClubManager API
+  description: >
+    Specification for the ClubManager API,
+    used by web and mobile clients to interact with the server.
+  version: 0.1.0
+tags:
+  - name: member
+    description: Creating, updating, and getting members.
+  - name: membership
+    description: >
+      Creating, updating, and getting memberships (which can contain multiple
+      members), including registration.
+  - name: event
+    description: Creating, updating, and getting events.
+  - name: job
+    description: Creating, updating, and getting jobs.
+  - name: paidLaborer
+    description: Creating, updating, and getting paid laborers.
+  - name: workPoints
+    description: >
+      Creating, updating, and getting work points, including verification and
+      history.
+paths:
+  /api/newMember:
+    put:
+      tags:
+        - member
+      summary: Create a new member
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/member/{memberID}:
+    parameters:
+      - name: memberID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - member
+      summary: Get this member
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - member
+      summary: Update this member
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - member
+      summary: Delete this member
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/member/{memberID}/resetPassword:
+    parameters:
+      - name: memberID
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - member
+      summary: Reset this member's password
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/member/{memberID}/changePassword:
+    parameters:
+      - name: memberID
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags:
+        - member
+      summary: Change this member's password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/members:
+    get:
+      tags:
+        - member
+      summary: Get all members
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+
+  /api/newMembership:
+    put:
+      tags:
+        - membership
+      summary: Create a new membership
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/membership/{membershipID}:
+    parameters:
+      - name: membershipID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - membership
+      summary: Get this membership
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - membership
+      summary: Update this membership
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - membership
+      summary: Delete this membership
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/memberships:
+    get:
+      tags:
+        - membership
+      summary: Get all memberships
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+
+  /api/newEvent:
+    put:
+      tags:
+        - event
+      summary: Create a new event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/event/{eventID}:
+    parameters:
+      - name: eventID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - event
+      summary: Get this event
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - event
+      summary: Update this event
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - event
+      summary: Delete this event
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/events:
+    get:
+      tags:
+        - event
+      summary: Get all events
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+
+  /api/newJob:
+    put:
+      tags:
+        - job
+      summary: Create a new job
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/job/{jobID}:
+    parameters:
+      - name: jobID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - job
+      summary: Get this job
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - job
+      summary: Update this job
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - job
+      summary: Delete this job
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/jobs:
+    get:
+      tags:
+        - job
+      summary: Get all jobs
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+
+  /api/newPaidLaborer:
+    put:
+      tags:
+        - paidLaborer
+      summary: Create a new paid laborer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/paidLaborer/{paidLaborerID}:
+    parameters:
+      - name: paidLaborerID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - paidLaborer
+      summary: Get this paid laborer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - paidLaborer
+      summary: Update this paid laborer
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - paidLaborer
+      summary: Delete this paid laborer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/paidLaborers:
+    get:
+      tags:
+        - paidLaborer
+      summary: Get all paid laborers
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
