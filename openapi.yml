@@ -58,6 +58,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         500:
           description: Internal Server Error
           content:
@@ -132,6 +138,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         404:
           description: Not Found
           content:
@@ -157,6 +169,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -193,6 +211,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -234,6 +258,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -295,6 +325,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -373,6 +409,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         404:
           description: Not Found
           content:
@@ -398,6 +440,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -439,6 +487,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -499,6 +553,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -577,6 +637,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         404:
           description: Not Found
           content:
@@ -602,6 +668,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -663,6 +735,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -738,6 +816,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         404:
           description: Not Found
           content:
@@ -782,6 +866,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         404:
           description: Not Found
           content:
@@ -811,6 +901,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         404:
           description: Not Found
           content:
@@ -836,6 +932,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -917,6 +1019,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         500:
           description: Internal Server Error
           content:
@@ -991,6 +1099,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         404:
           description: Not Found
           content:
@@ -1016,6 +1130,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -1093,6 +1213,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         500:
           description: Internal Server Error
           content:
@@ -1123,6 +1249,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         500:
           description: Internal Server Error
           content:
@@ -1142,6 +1274,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -1193,6 +1331,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         500:
           description: Internal Server Error
           content:
@@ -1236,6 +1380,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -1342,6 +1492,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         500:
           description: Internal Server Error
           content:
@@ -1362,6 +1518,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -1404,6 +1566,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         404:
           description: Not Found
           content:
@@ -1429,6 +1597,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -1466,6 +1640,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
@@ -1544,6 +1724,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
         404:
           description: Not Found
           content:
@@ -1572,6 +1758,12 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
           content:
             application/json:
               schema:
