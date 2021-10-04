@@ -12,6 +12,9 @@ tags:
     description: >
       Creating, updating, and getting memberships (which can contain multiple
       members), including registration.
+  - name: bike
+    description: >
+      Creating, updating, and getting bikes as assigned to memberships.
   - name: event
     description: Creating, updating, and getting events.
   - name: job
@@ -533,6 +536,202 @@ paths:
               schema:
                 # TODO
         
+  # bike
+  /api/newBike:
+    put:
+      tags:
+        - bike
+      summary: Create a new bike
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/bike/{bikeID}:
+    parameters:
+      - name: bikeID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - bike
+      summary: Get this bike
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - bike
+      summary: Update this bike
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - bike
+      summary: Delete this bike
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/bikes:
+    get:
+      tags:
+        - bike
+      summary: Get all bikes
+      description: >
+        The query parameter governs whether this endpoint returns all bikes or
+        just the bikes for a specified membership. Omit it to return all bikes.
+      parameters:
+        - name: membershipID
+          in: query
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+
   # event
   /api/newEvent:
     put:
@@ -789,7 +988,7 @@ paths:
                 # TODO
     post:
       tags:
-        - jobs
+        - job
         - workPoints
       summary: Award work points or cost value for this job
       requestBody:

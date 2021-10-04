@@ -17,6 +17,13 @@
 - [x] get all pending memberships
 - [x] get a pending membership
 
+- [x] add a bike to a membership
+- [x] update a bike on a membership
+- [x] remove a bike from a membership
+- [x] get a bike
+- [x] get all bikes for a membership
+- [x] get all bikes
+
 - [x] create an event
 - [x] update an event
 - [x] delete an event
