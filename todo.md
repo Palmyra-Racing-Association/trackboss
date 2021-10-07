@@ -10,3 +10,4 @@
     - [ ] all jobs (time range like events?)
 - [ ] incorporate workPoints endpoints into jobs
 - [ ] make sure endpoints with query params all have descriptions
+- [ ] remove yearlyDues endpoint
