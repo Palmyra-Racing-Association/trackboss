@@ -28,8 +28,6 @@ tags:
   - name: billing
     description: >
       Handling billing calculation, distribution, payment, and retrieval.
-  - name: tracks
-    description: Creating, updating, and getting track statuses.
 paths:
   # member
   /api/newMember:
@@ -259,6 +257,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
         401:
           description: Unauthorized
           content:
@@ -322,6 +326,12 @@ paths:
       responses:
         201:
           description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -470,6 +480,10 @@ paths:
       tags:
         - membership
       summary: Get all memberships
+      description: >
+        The query parameter governs whether this endpoint returns all
+        memberships or just the memberships with a specific status. Omit it to
+        return all memberships.
       parameters:
         - name: types
           in: query
@@ -477,10 +491,9 @@ paths:
           schema:
             type: string
             enum: 
-              - all
-              - activeOnly
-              - pendingOnly
-            default: activeOnly
+              - active
+              - inactive
+              - pending
       responses:
         200:
           description: OK
@@ -550,6 +563,12 @@ paths:
       responses:
         201:
           description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -750,6 +769,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
         401:
           description: Unauthorized
           content:
@@ -913,6 +938,192 @@ paths:
             application/json:
               schema:
                 # TODO
+  /api/newEventType:
+    put:
+      tags:
+        - event
+      summary: Create a new event type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/eventType/{eventTypeID}:
+    parameters:
+      - name: eventTypeID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - event
+      summary: Get this event type
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - event
+      summary: Update this event type
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - event
+      summary: Delete this event type
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/eventTypes:
+    get:
+      tags:
+        - event
+      summary: Get all event types
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
 
   # job
   /api/newJob:
@@ -928,6 +1139,12 @@ paths:
       responses:
         201:
           description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -970,53 +1187,6 @@ paths:
                 # TODO
         401:
           description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-    post:
-      tags:
-        - job
-        - workPoints
-      summary: Award work points or cost value for this job
-      requestBody:
-        content:
-          application/json:
-            schema:
-              # TODO
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
           content:
             application/json:
               schema:
@@ -1176,6 +1346,192 @@ paths:
           description: An event to pull jobs for
           schema:
             type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/newJobType:
+    put:
+      tags:
+        - job
+      summary: Create a new job type
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/jobType/{jobTypeID}:
+    parameters:
+      - name: jobTypeID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - job
+      summary: Get this job type
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - job
+      summary: Update this job type
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - job
+      summary: Delete this job type
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/jobTypes:
+    get:
+      tags:
+        - job
+      summary: Get all job types
       responses:
         200:
           description: OK
@@ -1456,6 +1812,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
         500:
           description: Internal Server Error
           content:
@@ -1481,6 +1843,12 @@ paths:
                 # TODO
         403:
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
           content:
             application/json:
               schema:
@@ -1538,6 +1906,12 @@ paths:
             application/json:
               schema:
                 # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
         500:
           description: Internal Server Error
           content:
@@ -1587,6 +1961,12 @@ paths:
                 # TODO
         403:
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
           content:
             application/json:
               schema:
@@ -1809,191 +2189,6 @@ paths:
                 # TODO
         404:
           description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-
-  # tracks
-  /api/newTrackStatus:
-    put:
-      tags:
-        - trackStatus
-      summary: Create a new trackStatus
-      requestBody:
-        content:
-          application/json:
-            schema:
-              # TODO
-      responses:
-        201:
-          description: Created
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-  /api/trackStatus/{trackStatusID}:
-    parameters:
-      - name: trackStatusID
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      tags:
-        - trackStatus
-      summary: Get this track status
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-    patch:
-      tags:
-        - trackStatus
-      summary: Update this track status
-      description: >
-        The request body needs only contain the fields with data to be updated.
-        If data in a field should not be updated, that field can be omitted from
-        the request body.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              # TODO
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-    delete:
-      tags:
-        - trackStatus
-      summary: Delete this track status
-      description: >
-        While this shouldn't be needed in normal operation, this can be used in
-        the event of user error when creating or updating a track status.
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-  /api/trackStatuses:
-    get:
-      tags:
-        - trackStatus
-      summary: Get all track statuses
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
           content:
             application/json:
               schema:
