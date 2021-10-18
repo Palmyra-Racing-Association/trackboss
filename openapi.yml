@@ -19,12 +19,12 @@ tags:
     description: Creating, updating, and getting events.
   - name: job
     description: Creating, updating, and getting jobs.
+  - name: eventJob
+    description: >
+      Relating events and jobs: by default, *this* event type needs
+      *X* amount of *that* job type.
   - name: paidLaborer
     description: Creating, updating, and getting paid laborers.
-  - name: workPoints
-    description: >
-      Creating, updating, and getting work points, including verification and
-      history.
   - name: billing
     description: >
       Handling billing calculation, distribution, payment, and retrieval.
@@ -292,9 +292,24 @@ paths:
       tags:
         - member
       summary: Get all members
+      parameters:
+        - name: role
+          in: query
+          description: "Optional: filter members by a specific role"
+          schema:
+            type: string
+            enum:
+              - boardMember
+              - member
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -398,6 +413,9 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
+
+        **Note:** This endpoint is used to mark a membership as inactive, rather
+        than using a `DELETE` endpoint to remove it entirely.
       requestBody:
         content:
           application/json:
@@ -440,54 +458,15 @@ paths:
             application/json:
               schema:
                 # TODO
-    delete:
-      tags:
-        - membership
-      summary: Delete this membership
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
   /api/memberships:
     get:
       tags:
         - membership
       summary: Get all memberships
-      description: >
-        The query parameter governs whether this endpoint returns all
-        memberships or just the memberships with a specific status. Omit it to
-        return all memberships.
       parameters:
-        - name: types
+        - name: status
           in: query
-          description: The types of memberships to return
+          description: "Optional: filter memberships by a specific status"
           schema:
             type: string
             enum: 
@@ -717,12 +696,10 @@ paths:
       tags:
         - bike
       summary: Get all bikes
-      description: >
-        The query parameter governs whether this endpoint returns all bikes or
-        just the bikes for a specified membership. Omit it to return all bikes.
       parameters:
         - name: membershipID
           in: query
+          description: "Optional: pull bikes for a specific membership"
           schema:
             type: integer
       responses:
@@ -919,9 +896,32 @@ paths:
       tags:
         - event
       summary: Get all events
+      parameters:
+        - name: Range
+          in: header
+          description: |
+            Optional: filter events by a specific timeframe.
+            Format is one of:
+            - `YYYYMMDD-YYYYMMDD`
+            - `YYYYMMDD-`
+            - `-YYYYMMDD`
+          schema:
+            type: string
       responses:
         200:
           description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        206:
+          description: Partial Content
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -1210,7 +1210,11 @@ paths:
       description: >
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
-        the request body. **Note:** while most fields require admin permissions
+        the request body.
+
+        **Note 1:** This endpoint is used to verify work points.
+        
+        **Note 2:** While most fields require admin permissions
         to update, both *1)* assigning the job to a member or paid laborer and
         *2)* checking in to the job can be done by a member as well.
       requestBody:
@@ -1333,19 +1337,94 @@ paths:
       parameters:
         - name: assignmentStatus
           in: query
-          description: The statuses of jobs to return
+          description: "Optional: filter jobs by a specific assignment status"
           schema:
             type: string
             enum:
-              - all
-              - openOnly
-              - assignedOnly
-            default: all
-        - name: eventID
+              - open
+              - assigned
+        - name: verificationStatus
           in: query
-          description: An event to pull jobs for
+          description: "Optional: filter jobs by a specific verification status"
+          schema:
+            type: string
+            enum:
+              - pending
+              - verified
+        - name: memberID
+          in: query
+          description: "Optional: pull jobs for a specific **member**"
           schema:
             type: integer
+        - name: membershipID
+          in: query
+          description: "Optional: pull jobs for a specific **membership**"
+          schema:
+            type: integer
+        - name: eventID
+          in: query
+          description: "Optional: pull jobs for a specific **event**"
+          schema:
+            type: integer
+        - name: Range
+          in: header
+          description: |
+            Optional: filter jobs by a specific timeframe.
+            Format is one of:
+            - `YYYYMMDD-YYYYMMDD`
+            - `YYYYMMDD-`
+            - `-YYYYMMDD`
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        206:
+          description: Partial Content
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/workPoints/byMember/{memberID}:
+    parameters:
+      - name: memberID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - job
+      summary: Get the total verified work points for this member
+      parameters:
+        - name: year
+          in: query
+          description: "Optional: pull the work point total for a specific year"
+          schema:
+            type: integer
+            default: the current year
       responses:
         200:
           description: OK
@@ -1355,6 +1434,67 @@ paths:
                 # TODO
         401:
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/workPoints/byMembership/{membershipID}:
+    parameters:
+      - name: membershipID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - job
+      summary: Get the total verified work points for this membership
+      parameters:
+        - name: year
+          in: query
+          description: "Optional: pull the work point total for a specific year"
+          schema:
+            type: integer
+            default: the current year
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
           content:
             application/json:
               schema:
@@ -1552,6 +1692,170 @@ paths:
               schema:
                 # TODO
 
+  # eventJob
+  /api/newEventJob:
+    put:
+      tags:
+        - eventJob
+      summary: Create a new event-job instance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/eventJob/{eventJobID}:
+    parameters:
+      - name: eventJobID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - eventJob
+      summary: Get this event-job instance
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    patch:
+      tags:
+        - eventJob
+      summary: Update this event-job instance
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              # TODO
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+    delete:
+      tags:
+        - eventJob
+      summary: Delete this event-job instance
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+
   # paidLaborer
   /api/newPaidLaborer:
     put:
@@ -1734,281 +2038,7 @@ paths:
               schema:
                 # TODO
 
-  # workPoints
-  /api/workPoints:
-    get:
-      tags:
-        - workPoints
-      summary: Get all work points by verification status or year
-      description: >
-        Omit `verificationStatus` to get all work points regardless of
-        verification status. Omit `year` to get all work points regardless of
-        year. The two parameters can be combined, used separately, or omitted
-        altogether.
-      parameters:
-        - name: verificationStatus
-          in: query
-          schema:
-            type: string
-            enum:
-              - pending
-              - verified
-        - name: year
-          in: query
-          schema:
-            type: integer
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-  /api/workPoints/{workPointsID}:
-    parameters:
-      - name: workPointsID
-        in: path
-        required: true
-        schema:
-          type: integer
-    post:
-      tags:
-        - workPoints
-      summary: Verify these work points
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-    delete:
-      tags:
-        - workPoints
-      summary: Delete these work points
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-  /api/workPoints/byMember/{memberID}:
-    parameters:
-      - name: memberID
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      tags:
-        - workPoints
-      summary: Get this member's work points
-      description: >
-        Omit `verificationStatus` to get all work points regardless of
-        verification status. Omit `year` to get all work points regardless of
-        year. The two parameters can be combined, used separately, or omitted
-        altogether.
-      parameters:
-        - name: verificationStatus
-          in: query
-          schema:
-            type: string
-            enum:
-              - pending
-              - verified
-        - name: year
-          in: query
-          schema:
-            type: integer
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-  /api/workPoints/byMembership/{membershipID}:
-    parameters:
-      - name: membershipID
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      tags:
-        - workPoints
-      summary: Get this membership's work points
-      description: >
-        Omit `verificationStatus` to get all work points regardless of
-        verification status. Omit `year` to get all work points regardless of
-        year. The two parameters can be combined, used separately, or omitted
-        altogether.
-      parameters:
-        - name: verificationStatus
-          in: query
-          schema:
-            type: string
-            enum:
-              - pending
-              - verified
-        - name: year
-          in: query
-          schema:
-            type: integer
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-
   # billing
-  /api/yearlyDues:
-    get:
-      tags:
-        - billing
-      summary: Get a year's dues
-      parameters:
-        - name: year
-          in: query
-          schema:
-            type: integer
-            default: current year
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
   /api/yearlyWorkPointThreshold:
     get:
       tags:
@@ -2017,9 +2047,10 @@ paths:
       parameters:
         - name: year
           in: query
+          description: "Optional: pull the threshold for a specific year"
           schema:
             type: integer
-            default: current year
+            default: the current year
       responses:
         200:
           description: OK
@@ -2044,13 +2075,10 @@ paths:
       tags:
         - billing
       summary: Get all bills by payment status or year
-      description: >
-        Omit `paymentStatus` to get all bills regardless of payment status. Omit
-        `year` to get all bills regardless of year. The two parameters can be
-        combined, used separately, or omitted altogether.
       parameters:
         - name: paymentStatus
           in: query
+          description: "Optional: filter bills by a specific payment status"
           schema:
             type: string
             enum:
@@ -2058,6 +2086,7 @@ paths:
               - outstanding
         - name: year
           in: query
+          description: "Optional: filter bills by a specific year"
           schema:
             type: integer
       responses:
@@ -2125,12 +2154,10 @@ paths:
       tags:
         - billing
       summary: Get bills for this membership
-      description: >
-        The query parameter governs whether this endpoint returns all bills or
-        just the bill for a specified year. Omit it to return all bills.
       parameters:
         - name: year
           in: query
+          description: "Optional: filter bills by a specific year"
           schema:
             type: integer
       responses:
