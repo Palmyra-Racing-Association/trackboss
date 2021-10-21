@@ -713,12 +713,6 @@ paths:
             application/json:
               schema:
                 # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
         500:
           description: Internal Server Error
           content:
