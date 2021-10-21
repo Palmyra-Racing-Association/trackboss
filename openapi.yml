@@ -31,7 +31,7 @@ tags:
 paths:
   # member
   /api/newMember:
-    put:
+    post:
       tags:
         - member
       summary: Create a new member
@@ -329,7 +329,7 @@ paths:
 
   # membership
   /api/newMembership:
-    put:
+    post:
       tags:
         - membership
       summary: Create a new membership
@@ -530,7 +530,7 @@ paths:
         
   # bike
   /api/newBike:
-    put:
+    post:
       tags:
         - bike
       summary: Create a new bike
@@ -730,7 +730,7 @@ paths:
 
   # event
   /api/newEvent:
-    put:
+    post:
       tags:
         - event
       summary: Create a new event
@@ -939,7 +939,7 @@ paths:
               schema:
                 # TODO
   /api/newEventType:
-    put:
+    post:
       tags:
         - event
       summary: Create a new event type
@@ -1127,7 +1127,7 @@ paths:
 
   # job
   /api/newJob:
-    put:
+    post:
       tags:
         - job
       summary: Create a new job
@@ -1259,7 +1259,7 @@ paths:
             application/json:
               schema:
                 # TODO
-    put:
+    post:
       tags:
         - job
       summary: Clone this job
@@ -1506,7 +1506,7 @@ paths:
               schema:
                 # TODO
   /api/newJobType:
-    put:
+    post:
       tags:
         - job
       summary: Create a new job type
@@ -1694,7 +1694,7 @@ paths:
 
   # eventJob
   /api/newEventJob:
-    put:
+    post:
       tags:
         - eventJob
       summary: Create a new event-job instance
@@ -1858,7 +1858,7 @@ paths:
 
   # paidLaborer
   /api/newPaidLaborer:
-    put:
+    post:
       tags:
         - paidLaborer
       summary: Create a new paid laborer
