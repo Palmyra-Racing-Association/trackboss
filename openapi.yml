@@ -1015,6 +1015,9 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
+
+        **Note:** This endpoint is used to mark an event type as inactive, rather
+        than using a `DELETE` endpoint to remove it entirely.
       requestBody:
         content:
           application/json:
@@ -1029,41 +1032,6 @@ paths:
                 # TODO
         400:
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-    delete:
-      tags:
-        - event
-      summary: Delete this event type
-      responses:
-        200:
-          description: OK
           content:
             application/json:
               schema:
@@ -1582,6 +1550,9 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
+
+        **Note:** This endpoint is used to mark a job type as inactive, rather
+        than using a `DELETE` endpoint to remove it entirely.
       requestBody:
         content:
           application/json:
@@ -1596,41 +1567,6 @@ paths:
                 # TODO
         400:
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-    delete:
-      tags:
-        - job
-      summary: Delete this job type
-      responses:
-        200:
-          description: OK
           content:
             application/json:
               schema:
