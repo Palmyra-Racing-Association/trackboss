@@ -1,8 +1,8 @@
-import express, { Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 import member from './Member';
 import membership from './Membership';
 
-const router = express.Router();
+const router = Router();
 
 router.use('/member', member);
 router.use('/membership', membership);

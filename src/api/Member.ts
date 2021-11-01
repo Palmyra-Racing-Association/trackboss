@@ -1,6 +1,6 @@
-import express, { Request, Response } from 'express';
+import { Request, Response, Router } from 'express';
 
-const member = express.Router();
+const member = Router();
 
 member.get('/:memberID', (req: Request, res: Response) => {
     res.status(501).send();
