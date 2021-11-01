@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
-import member from './Member';
-import membership from './Membership';
+import member from './member';
+import membership from './membership';
 
 const router = Router();
 
