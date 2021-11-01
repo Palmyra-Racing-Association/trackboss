@@ -1,3 +1,13 @@
-// this makes the compiler not complain if the file is empty
-// the tsconfig specifies a safety flag that requires all files to be modules, and empty file is not a module
-export {}
+import express from 'express';
+import api from './api/API';
+
+const app = express();
+
+const port = 3000;
+
+app.use('/api', api);
+app.listen(port, () => {
+    console.log(`PRA Club Manager API listenting on port ${port}`);
+});
+
+export {};
