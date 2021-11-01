@@ -2,25 +2,25 @@ import { Request, Response, Router } from 'express';
 import member from './member';
 import membership from './membership';
 
-const router = Router();
+const api = Router();
 
-router.use('/member', member);
-router.use('/membership', membership);
+api.use('/member', member);
+api.use('/membership', membership);
 
-router.get('/members', (req: Request, res: Response) => {
+api.get('/members', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
-router.get('/memberships', (req: Request, res: Response) => {
+api.get('/memberships', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
-router.post('/newMember', (req: Request, res: Response) => {
+api.post('/newMember', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
-router.post('/newMembership', (req: Request, res: Response) => {
+api.post('/newMembership', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
-export default router;
+export default api;
