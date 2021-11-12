@@ -17,8 +17,14 @@ tags:
       Creating, updating, and getting bikes as assigned to memberships.
   - name: event
     description: Creating, updating, and getting events.
+  - name: eventType
+    description: Creating, updating, and getting eventTypes.
   - name: job
     description: Creating, updating, and getting jobs.
+  - name: jobType
+    description: Creating, updating, and getting jobTypes.
+  - name: workPoints
+    description: Obtaining verified work points for a member or membership.
   - name: eventJob
     description: >
       Relating events and jobs: by default, *this* event type needs
@@ -28,7 +34,7 @@ tags:
       Handling billing calculation, distribution, payment, and retrieval.
 paths:
   # member
-  /api/newMember:
+  /api/member/new:
     post:
       tags:
         - member
@@ -285,7 +291,7 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/members:
+  /api/member/list:
     get:
       tags:
         - member
@@ -326,7 +332,7 @@ paths:
                 # TODO
 
   # membership
-  /api/newMembership:
+  /api/membership/new:
     post:
       tags:
         - membership
@@ -456,7 +462,7 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/memberships:
+  /api/membership/list:
     get:
       tags:
         - membership
@@ -527,7 +533,7 @@ paths:
                 # TODO
         
   # bike
-  /api/newBike:
+  /api/bike/new:
     post:
       tags:
         - bike
@@ -689,7 +695,7 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/bikes:
+  /api/bike/list:
     get:
       tags:
         - bike
@@ -721,7 +727,7 @@ paths:
                 # TODO
 
   # event
-  /api/newEvent:
+  /api/event/new:
     post:
       tags:
         - event
@@ -883,7 +889,7 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/events:
+  /api/event/list:
     get:
       tags:
         - event
@@ -930,10 +936,10 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/newEventType:
+  /api/eventType/new:
     post:
       tags:
-        - event
+        - eventType
       summary: Create a new event type
       requestBody:
         content:
@@ -980,7 +986,7 @@ paths:
           type: integer
     get:
       tags:
-        - event
+        - eventType
       summary: Get this event type
       responses:
         200:
@@ -1009,7 +1015,7 @@ paths:
                 # TODO
     patch:
       tags:
-        - event
+        - eventType
       summary: Update this event type
       description: >
         The request body needs only contain the fields with data to be updated.
@@ -1060,10 +1066,10 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/eventTypes:
+  /api/eventType/list:
     get:
       tags:
-        - event
+        - eventType
       summary: Get all event types
       responses:
         200:
@@ -1086,7 +1092,7 @@ paths:
                 # TODO
 
   # job
-  /api/newJob:
+  /api/job/new:
     post:
       tags:
         - job
@@ -1289,7 +1295,7 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/jobs:
+  /api/job/list:
     get:
       tags:
         - job
@@ -1367,108 +1373,10 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/workPoints/byMember/{memberID}:
-    parameters:
-      - name: memberID
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      tags:
-        - job
-      summary: Get the total verified work points for this member
-      parameters:
-        - name: year
-          in: query
-          description: "Optional: pull the work point total for a specific year"
-          schema:
-            type: integer
-            default: the current year
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-  /api/workPoints/byMembership/{membershipID}:
-    parameters:
-      - name: membershipID
-        in: path
-        required: true
-        schema:
-          type: integer
-    get:
-      tags:
-        - job
-      summary: Get the total verified work points for this membership
-      parameters:
-        - name: year
-          in: query
-          description: "Optional: pull the work point total for a specific year"
-          schema:
-            type: integer
-            default: the current year
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-  /api/newJobType:
+  /api/jobType/new:
     post:
       tags:
-        - job
+        - jobType
       summary: Create a new job type
       requestBody:
         content:
@@ -1515,7 +1423,7 @@ paths:
           type: integer
     get:
       tags:
-        - job
+        - jobType
       summary: Get this job type
       responses:
         200:
@@ -1544,7 +1452,7 @@ paths:
                 # TODO
     patch:
       tags:
-        - job
+        - jobType
       summary: Update this job type
       description: >
         The request body needs only contain the fields with data to be updated.
@@ -1595,10 +1503,10 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/jobTypes:
+  /api/jobType/list:
     get:
       tags:
-        - job
+        - jobType
       summary: Get all job types
       responses:
         200:
@@ -1619,9 +1527,108 @@ paths:
             application/json:
               schema:
                 # TODO
-
+  
+  # workPoints
+  /api/workPoints/byMember/{memberID}:
+    parameters:
+      - name: memberID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - workPoints
+      summary: Get the total verified work points for this member
+      parameters:
+        - name: year
+          in: query
+          description: "Optional: pull the work point total for a specific year"
+          schema:
+            type: integer
+            default: the current year
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
+  /api/workPoints/byMembership/{membershipID}:
+    parameters:
+      - name: membershipID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - workPoints
+      summary: Get the total verified work points for this membership
+      parameters:
+        - name: year
+          in: query
+          description: "Optional: pull the work point total for a specific year"
+          schema:
+            type: integer
+            default: the current year
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                # TODO
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                # TODO
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                # TODO
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                # TODO
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                # TODO
   # eventJob
-  /api/newEventJob:
+  /api/eventJob/new:
     post:
       tags:
         - eventJob
@@ -1785,7 +1792,7 @@ paths:
                 # TODO
 
   # billing
-  /api/yearlyWorkPointThreshold:
+  /api/billing/yearlyWorkPointThreshold:
     get:
       tags:
         - billing
@@ -1816,7 +1823,7 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/billing:
+  /api/billing/list:
     get:
       tags:
         - billing
@@ -1860,6 +1867,7 @@ paths:
             application/json:
               schema:
                 # TODO
+  /api/billing:
     post:
       tags:
         - billing
