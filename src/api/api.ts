@@ -6,10 +6,10 @@ import membership from './membership';
 
 const api = Router();
 
-api.use('/billing', billing);
-api.use('/eventJob', eventJob);
 api.use('/member', member);
 api.use('/membership', membership);
+api.use('/eventJob', eventJob);
+api.use('/billing', billing);
 
 api.get('/members', (req: Request, res: Response) => {
     res.status(501).send();
