@@ -22,5 +22,4 @@ event.get('/list', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
-
 export default event;
