@@ -11,11 +11,11 @@ event.get('/:eventID', (req: Request, res: Response) => {
 });
 
 event.patch('/:eventID', (req: Request, res: Response) => {
-  res.status(501).send();
+    res.status(501).send();
 });
 
 event.delete('/:eventID', (req: Request, res: Response) => {
-  res.status(501).send();
+    res.status(501).send();
 });
 
 event.get('/list', (req: Request, res: Response) => {
