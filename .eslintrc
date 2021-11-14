@@ -45,6 +45,9 @@
                     "jsx": "never",
                     "ts": "never",
                     "tsx": "never"
+                }],
+                "import/no-extraneous-dependencies": ["error", {
+                    "devDependencies": ["**/*.test.*", "**/setupTests.ts"]
                 }]
             }
         }
