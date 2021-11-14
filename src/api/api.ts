@@ -3,6 +3,7 @@ import billing from './billing';
 import eventJob from './eventJob';
 import member from './member';
 import membership from './membership';
+import event from './event';
 
 const api = Router();
 
@@ -10,6 +11,7 @@ api.use('/member', member);
 api.use('/membership', membership);
 api.use('/eventJob', eventJob);
 api.use('/billing', billing);
+api.use('/event', event);
 
 api.get('/members', (req: Request, res: Response) => {
     res.status(501).send();
