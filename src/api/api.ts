@@ -1,32 +1,20 @@
-import { Request, Response, Router } from 'express';
+import { Router } from 'express';
+import bike from './bike';
 import billing from './billing';
 import eventJob from './eventJob';
+import job from './job';
 import member from './member';
 import membership from './membership';
-import bike from './bike';
+import workPoints from './workPoints';
 
 const api = Router();
 
 api.use('/member', member);
 api.use('/membership', membership);
+api.use('/bike', bike);
+api.use('/job', job);
+api.use('/workPoints', workPoints);
 api.use('/eventJob', eventJob);
 api.use('/billing', billing);
-api.use('/bike', bike);
-
-api.get('/members', (req: Request, res: Response) => {
-    res.status(501).send();
-});
-
-api.get('/memberships', (req: Request, res: Response) => {
-    res.status(501).send();
-});
-
-api.post('/newMember', (req: Request, res: Response) => {
-    res.status(501).send();
-});
-
-api.post('/newMembership', (req: Request, res: Response) => {
-    res.status(501).send();
-});
 
 export default api;
