@@ -216,13 +216,6 @@ paths:
             application/json:
               schema:
                 # TODO
-  /api/member/{memberID}/resetPassword:
-    parameters:
-      - name: memberID
-        in: path
-        required: true
-        schema:
-          type: integer
   /api/member/list:
     get:
       tags:
