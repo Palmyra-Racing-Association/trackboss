@@ -32,6 +32,21 @@ tags:
   - name: billing
     description: >
       Handling billing calculation, distribution, payment, and retrieval.
+components:
+  securitySchemes:
+  # I'm not sure if we are going to need BasicAuth depends how we handle Cognito
+    BasicAuth:
+      type: http
+      scheme: basic
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+security:
+  - BearerAuth: [] 
 paths:
   # member
   /api/member/new:
@@ -507,6 +522,8 @@ paths:
       tags:
         - membership
       summary: Register for a new membership
+      security: {}
+      description: This request does not require authentication.
       requestBody:
         content:
           application/json:
