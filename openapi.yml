@@ -54,6 +54,7 @@ paths:
       tags:
         - member
       summary: Create a new member
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       requestBody:
         content:
           application/json:
@@ -101,6 +102,7 @@ paths:
       tags:
         - member
       summary: Get this member
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -134,6 +136,8 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
+        <br><br>
+        This endpoint requires an `Authorization:Bearer` header with a JWT ID token
       requestBody:
         content:
           application/json:
@@ -180,6 +184,7 @@ paths:
       tags:
         - member
       summary: Delete this member
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -222,6 +227,7 @@ paths:
       tags:
         - member
       summary: Reset this member's password
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -264,6 +270,7 @@ paths:
       tags:
         - member
       summary: Change this member's password
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       requestBody:
         content:
           application/json:
@@ -311,6 +318,7 @@ paths:
       tags:
         - member
       summary: Get all members
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: role
           in: query
@@ -352,6 +360,7 @@ paths:
       tags:
         - membership
       summary: Create a new membership
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       requestBody:
         content:
           application/json:
@@ -399,6 +408,7 @@ paths:
       tags:
         - membership
       summary: Get this membership
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -435,6 +445,8 @@ paths:
 
         **Note:** This endpoint is used to mark a membership as inactive, rather
         than using a `DELETE` endpoint to remove it entirely.
+        <br><br>
+        This endpoint requires an `Authorization:Bearer` header with a JWT ID token
       requestBody:
         content:
           application/json:
@@ -482,6 +494,7 @@ paths:
       tags:
         - membership
       summary: Get all memberships
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: status
           in: query
@@ -555,6 +568,7 @@ paths:
       tags:
         - bike
       summary: Create a new bike
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       requestBody:
         content:
           application/json:
@@ -602,6 +616,7 @@ paths:
       tags:
         - bike
       summary: Get this bike
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -635,6 +650,8 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
+        <br><br>
+        This endpoint requires an `Authorization:Bearer` header with a JWT ID token
       requestBody:
         content:
           application/json:
@@ -681,6 +698,7 @@ paths:
       tags:
         - bike
       summary: Delete this bike
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -717,6 +735,7 @@ paths:
       tags:
         - bike
       summary: Get all bikes
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: membershipID
           in: query
@@ -749,6 +768,7 @@ paths:
       tags:
         - event
       summary: Create a new event
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       requestBody:
         content:
           application/json:
@@ -796,6 +816,7 @@ paths:
       tags:
         - event
       summary: Get this event
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -829,6 +850,8 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
+        <br><br>
+        This endpoint requires an `Authorization:Bearer` header with a JWT ID token
       requestBody:
         content:
           application/json:
@@ -875,6 +898,7 @@ paths:
       tags:
         - event
       summary: Delete this event
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -911,6 +935,7 @@ paths:
       tags:
         - event
       summary: Get all events
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: Range
           in: header
@@ -958,6 +983,7 @@ paths:
       tags:
         - eventType
       summary: Create a new event type
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       requestBody:
         content:
           application/json:
@@ -1005,6 +1031,7 @@ paths:
       tags:
         - eventType
       summary: Get this event type
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -1041,6 +1068,9 @@ paths:
 
         **Note:** This endpoint is used to mark an event type as inactive, rather
         than using a `DELETE` endpoint to remove it entirely.
+        
+        <br><br>
+        This endpoint requires an `Authorization:Bearer` header with a JWT ID token
       requestBody:
         content:
           application/json:
@@ -1088,6 +1118,7 @@ paths:
       tags:
         - eventType
       summary: Get all event types
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -1114,6 +1145,7 @@ paths:
       tags:
         - job
       summary: Create a new job
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       requestBody:
         content:
           application/json:
@@ -1161,6 +1193,7 @@ paths:
       tags:
         - job
       summary: Get this job
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -1200,6 +1233,9 @@ paths:
         **Note 2:** While most fields require admin permissions
         to update, both *1)* assigning the job to a member or paid laborer and
         *2)* checking in to the job can be done by a member as well.
+        
+        <br><br>
+        This endpoint requires an `Authorization:Bearer` header with a JWT ID token
       requestBody:
         content:
           application/json:
@@ -1246,6 +1282,7 @@ paths:
       tags:
         - job
       summary: Clone this job
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         201:
           description: Created
@@ -1281,6 +1318,7 @@ paths:
       tags:
         - job
       summary: Delete this job
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -1317,6 +1355,7 @@ paths:
       tags:
         - job
       summary: Get all jobs
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: assignmentStatus
           in: query
@@ -1395,6 +1434,7 @@ paths:
       tags:
         - jobType
       summary: Create a new job type
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       requestBody:
         content:
           application/json:
@@ -1442,6 +1482,7 @@ paths:
       tags:
         - jobType
       summary: Get this job type
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -1478,6 +1519,9 @@ paths:
 
         **Note:** This endpoint is used to mark a job type as inactive, rather
         than using a `DELETE` endpoint to remove it entirely.
+        
+        <br><br>
+        This endpoint requires an `Authorization:Bearer` header with a JWT ID token
       requestBody:
         content:
           application/json:
@@ -1525,6 +1569,7 @@ paths:
       tags:
         - jobType
       summary: Get all job types
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -1557,6 +1602,7 @@ paths:
       tags:
         - workPoints
       summary: Get the total verified work points for this member
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: year
           in: query
@@ -1606,6 +1652,7 @@ paths:
       tags:
         - workPoints
       summary: Get the total verified work points for this membership
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: year
           in: query
@@ -1650,6 +1697,7 @@ paths:
       tags:
         - eventJob
       summary: Create a new event-job instance
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       requestBody:
         content:
           application/json:
@@ -1697,6 +1745,7 @@ paths:
       tags:
         - eventJob
       summary: Get this event-job instance
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -1730,6 +1779,9 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
+        
+        <br><br>
+        This endpoint requires an `Authorization:Bearer` header with a JWT ID token
       requestBody:
         content:
           application/json:
@@ -1776,6 +1828,7 @@ paths:
       tags:
         - eventJob
       summary: Delete this event-job instance
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
@@ -1814,6 +1867,7 @@ paths:
       tags:
         - billing
       summary: Get a year's work point threshold for completely subsidizing dues
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: year
           in: query
@@ -1845,6 +1899,7 @@ paths:
       tags:
         - billing
       summary: Get all bills by payment status or year
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: paymentStatus
           in: query
@@ -1889,6 +1944,7 @@ paths:
       tags:
         - billing
       summary: Calculate and distribute all bills for the year
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         201:
           description: Created
@@ -1925,6 +1981,7 @@ paths:
       tags:
         - billing
       summary: Get bills for this membership
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       parameters:
         - name: year
           in: query
@@ -1966,6 +2023,7 @@ paths:
       tags:
         - billing
       summary: Pay this membership's outstanding balance
+      description: "This endpoint requires an `Authorization:Bearer` header with a JWT ID token"
       responses:
         200:
           description: OK
