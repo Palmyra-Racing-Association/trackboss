@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import bike from './bike';
 import billing from './billing';
+import event from './event';
 import eventJob from './eventJob';
 import job from './job';
 import member from './member';
@@ -12,6 +13,7 @@ const api = Router();
 api.use('/member', member);
 api.use('/membership', membership);
 api.use('/bike', bike);
+api.use('/event', event);
 api.use('/job', job);
 api.use('/workPoints', workPoints);
 api.use('/eventJob', eventJob);
