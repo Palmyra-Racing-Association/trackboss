@@ -18,81 +18,13 @@ CREATE SCHEMA IF NOT EXISTS `pradb` DEFAULT CHARACTER SET utf8 ;
 USE `pradb` ;
 
 -- -----------------------------------------------------
--- Table `pradb`.`membership`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `pradb`.`membership` ;
-
-CREATE TABLE IF NOT EXISTS `pradb`.`membership` (
-  `membership_id` INT NOT NULL AUTO_INCREMENT,
-  `cur_year_paid` BIT NULL,
-  `cur_year_renewed` BIT NULL,
-  `view_online` BIT NULL,
-  `renewal_sent` BIT NULL,
-  `last_modified_date` DATE NULL,
-  `last_modified_by` INT NULL,
-  `year_joined` INT NULL,
-  `address` VARCHAR(255) NULL,
-  `city` VARCHAR(255) NULL,
-  `state` VARCHAR(255) NULL,
-  `zip` VARCHAR(255) NULL,
-  PRIMARY KEY (`membership_id`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `pradb`.`member_bikes`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `pradb`.`member_bikes` ;
-
-CREATE TABLE IF NOT EXISTS `pradb`.`member_bikes` (
-  `bike_id` INT NOT NULL AUTO_INCREMENT,
-  `year` VARCHAR(10) NULL,
-  `make` VARCHAR(50) NULL,
-  `model` VARCHAR(50) NULL,
-  `membership_id` INT NOT NULL,
-  PRIMARY KEY (`bike_id`, `membership_id`),
-  INDEX `membership_id_idx` (`membership_id` ASC) VISIBLE,
-  CONSTRAINT `FK_bike_membership`
-    FOREIGN KEY (`membership_id`)
-    REFERENCES `pradb`.`membership` (`membership_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `pradb`.`member_bill`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `pradb`.`member_bill` ;
-
-CREATE TABLE IF NOT EXISTS `pradb`.`member_bill` (
-  `bill_id` INT NOT NULL AUTO_INCREMENT,
-  `generated_date` DATE NULL,
-  `year` INT NULL,
-  `amount` DOUBLE NULL,
-  `amount_with_fee` DOUBLE NULL,
-  `membership_id` INT NULL,
-  `emailed_bill` DATE NULL,
-  `sent` BIT NULL,
-  `bill_status` VARCHAR(50) NULL,
-  PRIMARY KEY (`bill_id`),
-  INDEX `membership_id_idx` (`membership_id` ASC) VISIBLE,
-  CONSTRAINT `FK_bill_membership`
-    FOREIGN KEY (`membership_id`)
-    REFERENCES `pradb`.`membership` (`membership_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `pradb`.`member_types`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `pradb`.`member_types` ;
 
 CREATE TABLE IF NOT EXISTS `pradb`.`member_types` (
   `member_type_id` INT NOT NULL AUTO_INCREMENT,
-  `type` VARCHAR(255) NULL,
+  `type` VARCHAR(255) NOT NULL,
   `base_dues_amt` FLOAT NULL,
   PRIMARY KEY (`member_type_id`))
 ENGINE = InnoDB;
@@ -141,13 +73,87 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `pradb`.`membership`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pradb`.`membership` ;
+
+CREATE TABLE IF NOT EXISTS `pradb`.`membership` (
+  `membership_id` INT NOT NULL AUTO_INCREMENT,
+  `cur_year_paid` BIT NOT NULL,
+  `cur_year_renewed` BIT NOT NULL,
+  `view_online` BIT NOT NULL,
+  `renewal_sent` BIT NOT NULL,
+  `last_modified_date` DATE NULL,
+  `last_modified_by` INT NULL,
+  `year_joined` INT NULL,
+  `address` VARCHAR(255) NULL,
+  `city` VARCHAR(255) NULL,
+  `state` VARCHAR(255) NULL,
+  `zip` VARCHAR(255) NULL,
+  PRIMARY KEY (`membership_id`),
+  INDEX `FK_membership_lm_idx` (`last_modified_by` ASC) VISIBLE,
+  CONSTRAINT `FK_membership_lm`
+    FOREIGN KEY (`last_modified_by`)
+    REFERENCES `pradb`.`member` (`member_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pradb`.`member_bikes`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pradb`.`member_bikes` ;
+
+CREATE TABLE IF NOT EXISTS `pradb`.`member_bikes` (
+  `bike_id` INT NOT NULL AUTO_INCREMENT,
+  `year` VARCHAR(10) NULL,
+  `make` VARCHAR(50) NULL,
+  `model` VARCHAR(50) NULL,
+  `membership_id` INT NOT NULL,
+  PRIMARY KEY (`bike_id`),
+  INDEX `membership_id_idx` (`membership_id` ASC) VISIBLE,
+  CONSTRAINT `FK_bike_membership`
+    FOREIGN KEY (`membership_id`)
+    REFERENCES `pradb`.`membership` (`membership_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pradb`.`member_bill`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pradb`.`member_bill` ;
+
+CREATE TABLE IF NOT EXISTS `pradb`.`member_bill` (
+  `bill_id` INT NOT NULL AUTO_INCREMENT,
+  `generated_date` DATE NULL,
+  `year` INT NULL,
+  `amount` DOUBLE NULL,
+  `amount_with_fee` DOUBLE NULL,
+  `membership_id` INT NOT NULL,
+  `emailed_bill` DATE NULL,
+  `sent` BIT NULL,
+  `bill_status` VARCHAR(50) NULL,
+  PRIMARY KEY (`bill_id`),
+  INDEX `membership_id_idx` (`membership_id` ASC) VISIBLE,
+  CONSTRAINT `FK_bill_membership`
+    FOREIGN KEY (`membership_id`)
+    REFERENCES `pradb`.`membership` (`membership_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `pradb`.`member_status`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `pradb`.`member_status` ;
 
 CREATE TABLE IF NOT EXISTS `pradb`.`member_status` (
   `member_status_id` INT NOT NULL AUTO_INCREMENT,
-  `member_id` INT NULL,
+  `member_id` INT NOT NULL,
   `year` INT NULL,
   `status` VARCHAR(255) NULL,
   PRIMARY KEY (`member_status_id`),
@@ -167,7 +173,7 @@ DROP TABLE IF EXISTS `pradb`.`board_member_title` ;
 
 CREATE TABLE IF NOT EXISTS `pradb`.`board_member_title` (
   `board_title_id` INT NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(255) NULL,
+  `title` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`board_title_id`))
 ENGINE = InnoDB;
 
@@ -180,8 +186,8 @@ DROP TABLE IF EXISTS `pradb`.`board_member` ;
 CREATE TABLE IF NOT EXISTS `pradb`.`board_member` (
   `board_id` INT NOT NULL AUTO_INCREMENT,
   `year` INT NULL,
-  `member_id` INT NULL,
-  `board_title_id` INT NULL,
+  `member_id` INT NOT NULL,
+  `board_title_id` INT NOT NULL,
   PRIMARY KEY (`board_id`),
   INDEX `board_title_id_idx` (`board_title_id` ASC) VISIBLE,
   INDEX `member_id_idx` (`member_id` ASC) VISIBLE,
@@ -206,7 +212,7 @@ DROP TABLE IF EXISTS `pradb`.`riding_area_status` ;
 CREATE TABLE IF NOT EXISTS `pradb`.`riding_area_status` (
   `riding_area_status_id` INT NOT NULL AUTO_INCREMENT,
   `area_name` VARCHAR(255) NOT NULL,
-  `status` BIT NULL,
+  `status` BIT NOT NULL,
   PRIMARY KEY (`riding_area_status_id`))
 ENGINE = InnoDB;
 
@@ -218,8 +224,16 @@ DROP TABLE IF EXISTS `pradb`.`event_type` ;
 
 CREATE TABLE IF NOT EXISTS `pradb`.`event_type` (
   `event_type_id` INT NOT NULL AUTO_INCREMENT,
-  `type` VARCHAR(255) NULL,
-  PRIMARY KEY (`event_type_id`))
+  `type` VARCHAR(255) NOT NULL,
+  `last_modified_date` DATE NULL,
+  `last_modified_by` INT NULL,
+  PRIMARY KEY (`event_type_id`),
+  INDEX `FK_eventype_lm_idx` (`last_modified_by` ASC) VISIBLE,
+  CONSTRAINT `FK_eventype_lm`
+    FOREIGN KEY (`last_modified_by`)
+    REFERENCES `pradb`.`member` (`member_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -251,14 +265,14 @@ DROP TABLE IF EXISTS `pradb`.`job_type` ;
 
 CREATE TABLE IF NOT EXISTS `pradb`.`job_type` (
   `job_type_id` INT NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(255) NULL,
+  `title` VARCHAR(255) NOT NULL,
   `point_value` FLOAT NULL,
   `cash_value` FLOAT NULL,
   `job_day` VARCHAR(255) NULL,
   `job_day_number` INT NULL,
-  `reserved` BIT NULL,
-  `online` BIT NULL,
-  `meal_ticket` BIT NULL,
+  `reserved` BIT NOT NULL,
+  `online` BIT NOT NULL,
+  `meal_ticket` BIT NOT NULL,
   `sort_order` INT NULL,
   `last_modified_date` DATE NULL,
   `last_modified_by` INT NULL,
@@ -284,10 +298,10 @@ CREATE TABLE IF NOT EXISTS `pradb`.`job` (
   `job_type_id` INT NOT NULL,
   `last_modified_date` DATE NULL,
   `last_modified_by` INT NULL,
-  `verified` BIT NULL,
+  `verified` BIT NOT NULL,
   `verified_date` DATE NULL,
   `points_awarded` FLOAT NULL,
-  `paid` BIT NULL,
+  `paid` BIT NOT NULL,
   `paid_date` DATE NULL,
   PRIMARY KEY (`job_id`),
   INDEX `member_id_idx` (`member_id` ASC) VISIBLE,
