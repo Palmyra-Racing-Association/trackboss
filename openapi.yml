@@ -53,6 +53,50 @@ components:
     string:
       type: string
       maxLength: 255
+    uuid:
+      type: string
+      format: uuid
+    date:
+      type: string
+      format: date
+    email:
+      type: string
+      format: email
+      maxLength: 255
+    errorResponse:
+      type: object
+      properties:
+        reason:
+          type: string
+    member:
+      type: object
+      properties:
+        member_id:
+          $ref: "#/components/schemas/id"
+        membership_id:
+          $ref: "#/components/schemas/id"
+        uuid:
+          $ref: "#/components/schemas/uuid"
+        member_type_id:
+          $ref: "#/components/schemas/id"
+        first_name:
+          $ref: "#/components/schemas/string"
+        last_name:
+          $ref: "#/components/schemas/string"
+        phone_number:
+          type: string
+        occupation:
+          $ref: "#/components/schemas/string"
+        email:
+          $ref: "#/components/schemas/email"
+        birthdate:
+          $ref: "#/components/schemas/date"
+        date_joined:
+          $ref: "#/components/schemas/date"
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/id"
 security:
   - BearerAuth: [] 
 paths:
@@ -77,8 +121,7 @@ paths:
                 membership_id:
                   $ref: "#/components/schemas/id"
                 uuid:
-                  type: string
-                  format: uuid
+                  $ref: "#/components/schemas/uuid"
                 member_type_id:
                   $ref: "#/components/schemas/id"
                 first_name:
@@ -90,15 +133,11 @@ paths:
                 occupation:
                   $ref: "#/components/schemas/string"
                 email:
-                  type: string
-                  format: email
-                  maxLength: 255
+                  $ref: "#/components/schemas/email"
                 birthdate:
-                  type: string
-                  format: date
+                  $ref: "#/components/schemas/date"
                 date_joined:
-                  type: string
-                  format: date
+                  $ref: "#/components/schemas/date"
                 modified_by:
                   $ref: "#/components/schemas/id"
       responses:
@@ -107,31 +146,31 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/member"
         400:
           description: Bad Request
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/member/{memberID}:
     parameters:
       - name: memberID
@@ -156,19 +195,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     patch:
       tags:
         - member
@@ -193,8 +232,7 @@ paths:
                 membership_id:
                   $ref: "#/components/schemas/id"
                 uuid:
-                  type: string
-                  format: uuid
+                  $ref: "#/components/schemas/uuid"
                 member_type_id:
                   $ref: "#/components/schemas/id"
                 first_name:
@@ -206,15 +244,11 @@ paths:
                 occupation:
                   $ref: "#/components/schemas/string"
                 email:
-                  type: string
-                  format: email
-                  maxLength: 255
+                  $ref: "#/components/schemas/email"
                 birthdate:
-                  type: string
-                  format: date
+                  $ref: "#/components/schemas/date"
                 date_joined:
-                  type: string
-                  format: date
+                  $ref: "#/components/schemas/date"
                 modified_by:
                   $ref: "#/components/schemas/id"
             example:
@@ -234,31 +268,31 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     delete:
       tags:
         - member
@@ -276,25 +310,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/member/list:
     get:
       tags:
@@ -322,19 +356,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
 
   # membership
   /api/membership/new:
@@ -360,25 +394,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/membership/{membershipID}:
     parameters:
       - name: membershipID
@@ -403,19 +437,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     patch:
       tags:
         - membership
@@ -446,31 +480,31 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/membership/list:
     get:
       tags:
@@ -499,19 +533,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/membership/register:
     post:
       tags:
@@ -536,13 +570,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         
   # bike
   /api/bike/new:
@@ -568,25 +602,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/bike/{bikeID}:
     parameters:
       - name: bikeID
@@ -611,19 +645,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     patch:
       tags:
         - bike
@@ -651,31 +685,31 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     delete:
       tags:
         - bike
@@ -693,25 +727,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/bike/list:
     get:
       tags:
@@ -736,13 +770,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
 
   # event
   /api/event/new:
@@ -768,25 +802,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/event/{eventID}:
     parameters:
       - name: eventID
@@ -811,19 +845,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     patch:
       tags:
         - event
@@ -851,31 +885,31 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     delete:
       tags:
         - event
@@ -893,25 +927,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/event/list:
     get:
       tags:
@@ -947,19 +981,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/eventType/new:
     post:
       tags:
@@ -983,25 +1017,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/eventType/{eventTypeID}:
     parameters:
       - name: eventTypeID
@@ -1026,19 +1060,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     patch:
       tags:
         - eventType
@@ -1070,31 +1104,31 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/eventType/list:
     get:
       tags:
@@ -1113,13 +1147,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
 
   # job
   /api/job/new:
@@ -1145,25 +1179,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/job/{jobID}:
     parameters:
       - name: jobID
@@ -1188,19 +1222,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     patch:
       tags:
         - job
@@ -1235,31 +1269,31 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     post:
       tags:
         - job
@@ -1277,25 +1311,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     delete:
       tags:
         - job
@@ -1313,25 +1347,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/job/list:
     get:
       tags:
@@ -1398,19 +1432,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/jobType/new:
     post:
       tags:
@@ -1434,25 +1468,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/jobType/{jobTypeID}:
     parameters:
       - name: jobTypeID
@@ -1477,19 +1511,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     patch:
       tags:
         - jobType
@@ -1521,31 +1555,31 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/jobType/list:
     get:
       tags:
@@ -1564,13 +1598,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   
   # workPoints
   /api/workPoints/byMember/{memberID}:
@@ -1604,25 +1638,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         400:
           description: Bad Request
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/workPoints/byMembership/{membershipID}:
     parameters:
       - name: membershipID
@@ -1654,25 +1688,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         400:
           description: Bad Request
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   # eventJob
   /api/eventJob/new:
     post:
@@ -1697,25 +1731,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/eventJob/{eventJobID}:
     parameters:
       - name: eventJobID
@@ -1740,19 +1774,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     patch:
       tags:
         - eventJob
@@ -1781,31 +1815,31 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         401:
           description: Unauthorized
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     delete:
       tags:
         - eventJob
@@ -1823,25 +1857,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
 
   # billing
   /api/billing/yearlyWorkPointThreshold:
@@ -1869,13 +1903,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/billing/list:
     get:
       tags:
@@ -1908,19 +1942,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/billing:
     post:
       tags:
@@ -1939,19 +1973,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
   /api/billing/{membershipID}:
     parameters:
       - name: membershipID
@@ -1982,25 +2016,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
     post:
       tags:
         - billing
@@ -2018,22 +2052,22 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         403:
           description: Forbidden
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         404:
           description: Not Found
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
         500:
           description: Internal Server Error
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/errorResponse"
