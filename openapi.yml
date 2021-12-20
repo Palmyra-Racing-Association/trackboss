@@ -45,6 +45,14 @@ components:
   responses:
     UnauthorizedError:
       description: ID token is missing or invalid
+  schemas:
+    id:
+      type: integer
+      format: int32
+      minimum: 0
+    string:
+      type: string
+      maxLength: 255
 security:
   - BearerAuth: [] 
 paths:
@@ -56,10 +64,43 @@ paths:
       summary: Create a new member
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - member_type_id
+                - modified_by
+              additionalProperties: false
+              properties:
+                membership_id:
+                  $ref: "#/components/schemas/id"
+                uuid:
+                  type: string
+                  format: uuid
+                member_type_id:
+                  $ref: "#/components/schemas/id"
+                first_name:
+                  $ref: "#/components/schemas/string"
+                last_name:
+                  $ref: "#/components/schemas/string"
+                phone_number:
+                  type: string
+                occupation:
+                  $ref: "#/components/schemas/string"
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                birthdate:
+                  type: string
+                  format: date
+                date_joined:
+                  type: string
+                  format: date
+                modified_by:
+                  $ref: "#/components/schemas/id"
       responses:
         201:
           description: Created
@@ -139,10 +180,48 @@ paths:
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              minProperties: 2
+              additionalProperties: false
+              properties:
+                membership_id:
+                  $ref: "#/components/schemas/id"
+                uuid:
+                  type: string
+                  format: uuid
+                member_type_id:
+                  $ref: "#/components/schemas/id"
+                first_name:
+                  $ref: "#/components/schemas/string"
+                last_name:
+                  $ref: "#/components/schemas/string"
+                phone_number:
+                  type: string
+                occupation:
+                  $ref: "#/components/schemas/string"
+                email:
+                  type: string
+                  format: email
+                  maxLength: 255
+                birthdate:
+                  type: string
+                  format: date
+                date_joined:
+                  type: string
+                  format: date
+                modified_by:
+                  $ref: "#/components/schemas/id"
+            example:
+              email: newemail@gmail.com
+              phone_number: 585-123-4567
+              modified_by: 42
+
       responses:
         200:
           description: OK
