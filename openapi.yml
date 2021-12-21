@@ -73,7 +73,7 @@ components:
           schema:
             $ref: "#/components/schemas/errorResponse"
   schemas:
-    id:
+    integer:
       type: integer
       format: int32
       minimum: 0
@@ -99,13 +99,13 @@ components:
       type: object
       properties:
         member_id:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/integer"
         membership_id:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/integer"
         uuid:
           $ref: "#/components/schemas/uuid"
         member_type_id:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/integer"
         first_name:
           $ref: "#/components/schemas/string"
         last_name:
@@ -123,7 +123,63 @@ components:
         last_modified_date:
           $ref: "#/components/schemas/date"
         last_modified_by:
-          $ref: "#/components/schemas/id"
+          $ref: "#/components/schemas/integer"
+    membership:
+      type: object
+      properties:
+        membership_id:
+          $ref: "#/components/schemas/integer"
+        active:
+          type: boolean
+        cur_year_paid:
+          type: boolean
+        cur_year_renewed:
+          type: boolean
+        view_online:
+          type: boolean
+        renewal_sent:
+          type: boolean
+        year_joined:
+          $ref: "#/components/schemas/integer"
+        address:
+          $ref: "#/components/schemas/string"
+        city:
+          $ref: "#/components/schemas/string"
+        state:
+          $ref: "#/components/schemas/string"
+        zip:
+          $ref: "#/components/schemas/string"
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/integer"
+    registration:
+      type: object
+      required:
+        - member_type_id
+      properties:
+        member_type_id:
+          $ref: "#/components/schemas/integer"
+        first_name:
+          $ref: "#/components/schemas/string"
+        last_name:
+          $ref: "#/components/schemas/string"
+        phone_number:
+          type: string
+        occupation:
+          $ref: "#/components/schemas/string"
+        email:
+          $ref: "#/components/schemas/email"
+        birthdate:
+          $ref: "#/components/schemas/date"
+        address:
+          $ref: "#/components/schemas/string"
+        city:
+          $ref: "#/components/schemas/string"
+        state:
+          $ref: "#/components/schemas/string"
+        zip:
+          $ref: "#/components/schemas/string"
 security:
   - BearerAuth: [] 
 paths:
@@ -146,11 +202,11 @@ paths:
               additionalProperties: false
               properties:
                 membership_id:
-                  $ref: "#/components/schemas/id"
+                  $ref: "#/components/schemas/integer"
                 uuid:
                   $ref: "#/components/schemas/uuid"
                 member_type_id:
-                  $ref: "#/components/schemas/id"
+                  $ref: "#/components/schemas/integer"
                 first_name:
                   $ref: "#/components/schemas/string"
                 last_name:
@@ -166,7 +222,7 @@ paths:
                 date_joined:
                   $ref: "#/components/schemas/date"
                 modified_by:
-                  $ref: "#/components/schemas/id"
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
@@ -229,11 +285,11 @@ paths:
               additionalProperties: false
               properties:
                 membership_id:
-                  $ref: "#/components/schemas/id"
+                  $ref: "#/components/schemas/integer"
                 uuid:
                   $ref: "#/components/schemas/uuid"
                 member_type_id:
-                  $ref: "#/components/schemas/id"
+                  $ref: "#/components/schemas/integer"
                 first_name:
                   $ref: "#/components/schemas/string"
                 last_name:
@@ -249,7 +305,7 @@ paths:
                 date_joined:
                   $ref: "#/components/schemas/date"
                 modified_by:
-                  $ref: "#/components/schemas/id"
+                  $ref: "#/components/schemas/integer"
             example:
               email: newemail@gmail.com
               phone_number: 585-123-4567
@@ -285,7 +341,7 @@ paths:
                 type: object
                 properties:
                   member_id:
-                    $ref: "#/components/schemas/id"
+                    $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
@@ -333,17 +389,33 @@ paths:
       summary: Create a new membership
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              properties:
+                year_joined:
+                  $ref: "#/components/schemas/integer"
+                address:
+                  $ref: "#/components/schemas/string"
+                city:
+                  $ref: "#/components/schemas/string"
+                state:
+                  $ref: "#/components/schemas/string"
+                zip:
+                  $ref: "#/components/schemas/string"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/membership"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -370,7 +442,7 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/membership"
         401:
           $ref: "#/components/responses/unauthorizedError"
         404:
@@ -385,23 +457,57 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-
+        <br><br>
         **Note:** This endpoint is used to mark a membership as inactive, rather
         than using a `DELETE` endpoint to remove it entirely.
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              minProperties: 2
+              additionalProperties: false
+              properties:
+                active:
+                  type: boolean
+                cur_year_paid:
+                  type: boolean
+                cur_year_renewed:
+                  type: boolean
+                view_online:
+                  type: boolean
+                renewal_sent:
+                  type: boolean
+                year_joined:
+                  $ref: "#/components/schemas/integer"
+                address:
+                  $ref: "#/components/schemas/string"
+                city:
+                  $ref: "#/components/schemas/string"
+                state:
+                  $ref: "#/components/schemas/string"
+                zip:
+                  $ref: "#/components/schemas/string"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
+            example:
+              address: 1234 New Address Street
+              city: Hoboken
+              state: NJ
+              zip: 07030
+              modified_by: 42
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/membership"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -434,7 +540,9 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/membership"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
@@ -446,20 +554,21 @@ paths:
       tags:
         - membership
       summary: Register for a new membership
-      security: {}
+      security: []
       description: This request does not require authentication.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              $ref: "#/components/schemas/registration"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/registration"
         400:
           $ref: "#/components/responses/badRequestError"
         500:
@@ -473,6 +582,7 @@ paths:
       summary: Create a new bike
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -528,6 +638,7 @@ paths:
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -601,6 +712,7 @@ paths:
       summary: Create a new event
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -656,6 +768,7 @@ paths:
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -740,6 +853,7 @@ paths:
       summary: Create a new event type
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -792,13 +906,13 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-
+        <br><br>
         **Note:** This endpoint is used to mark an event type as inactive, rather
         than using a `DELETE` endpoint to remove it entirely.
-        
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -846,6 +960,7 @@ paths:
       summary: Create a new job
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -898,16 +1013,16 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-
+        <br><br>
         **Note 1:** This endpoint is used to verify work points.
-        
+        <br><br>
         **Note 2:** While most fields require admin permissions
         to update, both *1)* assigning the job to a member or paid laborer and
         *2)* checking in to the job can be done by a member as well.
-        
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -1043,6 +1158,7 @@ paths:
       summary: Create a new job type
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -1095,13 +1211,13 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-
+        <br><br>
         **Note:** This endpoint is used to mark a job type as inactive, rather
         than using a `DELETE` endpoint to remove it entirely.
-        
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -1218,6 +1334,7 @@ paths:
       summary: Create a new event-job instance
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -1270,10 +1387,10 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-        
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
