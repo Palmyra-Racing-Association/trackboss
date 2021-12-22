@@ -1575,7 +1575,10 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  total:
+                    $ref: "#/components/schemas/number"
         401:
           $ref: "#/components/responses/unauthorizedError"
         400:
@@ -1609,7 +1612,10 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  total:
+                    $ref: "#/components/schemas/number"
         401:
           $ref: "#/components/responses/unauthorizedError"
         400:
