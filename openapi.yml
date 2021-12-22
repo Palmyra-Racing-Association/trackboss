@@ -106,12 +106,12 @@ components:
       properties:
         member_id:
           $ref: "#/components/schemas/integer"
-        membership_id:
-          $ref: "#/components/schemas/integer"
+        membership_admin:
+          $ref: "#/components/schemas/string"
         uuid:
           $ref: "#/components/schemas/uuid"
-        member_type_id:
-          $ref: "#/components/schemas/integer"
+        member_type:
+          $ref: "#/components/schemas/string"
         first_name:
           $ref: "#/components/schemas/string"
         last_name:
@@ -126,15 +126,25 @@ components:
           $ref: "#/components/schemas/date"
         date_joined:
           $ref: "#/components/schemas/date"
+        address:
+          $ref: "#/components/schemas/string"
+        city:
+          $ref: "#/components/schemas/string"
+        state:
+          $ref: "#/components/schemas/string"
+        zip:
+          $ref: "#/components/schemas/string"
         last_modified_date:
           $ref: "#/components/schemas/date"
         last_modified_by:
-          $ref: "#/components/schemas/integer"
+          $ref: "#/components/schemas/string"
     membership:
       type: object
       properties:
         membership_id:
           $ref: "#/components/schemas/integer"
+        membership_admin:
+          $ref: "#/components/schemas/string"
         active:
           type: boolean
         cur_year_paid:
@@ -158,14 +168,12 @@ components:
         last_modified_date:
           $ref: "#/components/schemas/date"
         last_modified_by:
-          $ref: "#/components/schemas/integer"
+          $ref: "#/components/schemas/string"
     registration:
       type: object
-      required:
-        - member_type_id
       properties:
-        member_type_id:
-          $ref: "#/components/schemas/integer"
+        member_type:
+          $ref: "#/components/schemas/string"
         first_name:
           $ref: "#/components/schemas/string"
         last_name:
@@ -197,8 +205,8 @@ components:
           $ref: "#/components/schemas/shortString"
         model:
           $ref: "#/components/schemas/shortString"
-        membership_id:
-          $ref: "#/components/schemas/integer"
+        membership_admin:
+          $ref: "#/components/schemas/string"
     event:
       type: object
       properties:
@@ -206,8 +214,8 @@ components:
           $ref: "#/components/schemas/integer"
         date:
           $ref: "#/components/schemas/date"
-        event_type_id:
-          $ref: "#/components/schemas/integer"
+        event_type:
+          $ref: "#/components/schemas/string"
         event_name:
           $ref: "#/components/schemas/string"
         event_description:
@@ -222,18 +230,20 @@ components:
         last_modified_date:
           $ref: "#/components/schemas/date"
         last_modified_by:
-          $ref: "#/components/schemas/integer"
+          $ref: "#/components/schemas/string"
     job:
       type: object
       properties:
         job_id:
           $ref: "#/components/schemas/integer"
-        member_id:
-          $ref: "#/components/schemas/integer"
-        event_id:
-          $ref: "#/components/schemas/integer"
-        job_type_id:
-          $ref: "#/components/schemas/integer"
+        member:
+          $ref: "#/components/schemas/string"
+        event:
+          $ref: "#/components/schemas/string"
+        event_date:
+          $ref: "#/components/schemas/date"
+        job_type:
+          $ref: "#/components/schemas/string"
         verified:
           type: boolean
         verified_date:
@@ -247,7 +257,7 @@ components:
         last_modified_date:
           $ref: "#/components/schemas/date"
         last_modified_by:
-          $ref: "#/components/schemas/integer"
+          $ref: "#/components/schemas/string"
     jobType:
       type: object
       properties:
@@ -272,16 +282,16 @@ components:
         last_modified_date:
           $ref: "#/components/schemas/date"
         last_modified_by:
-          $ref: "#/components/schemas/integer"
+          $ref: "#/components/schemas/string"
     eventJob:
       type: object
       properties:
         event_job_id:
           $ref: "#/components/schemas/integer"
-        event_type_id:
-          $ref: "#/components/schemas/integer"
-        job_type_id:
-          $ref: "#/components/schemas/integer"
+        event_type:
+          $ref: "#/components/schemas/string"
+        job_type:
+          $ref: "#/components/schemas/string"
         count:
           $ref: "#/components/schemas/integer"
     bill:
@@ -297,8 +307,10 @@ components:
           $ref: "#/components/schemas/number"
         amount_with_fee:
           $ref: "#/components/schemas/number"
-        membership_id:
-          $ref: "#/components/schemas/integer"
+        membership_admin:
+          $ref: "#/components/schemas/string"
+        membership_admin_email:
+          $ref: "#/components/schemas/email"
         emailed_bill:
           $ref: "#/components/schemas/date"
         bill_status:
@@ -684,7 +696,32 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/registration"
+              type: object
+              required:
+                - member_type_id
+              properties:
+                member_type_id:
+                  $ref: "#/components/schemas/integer"
+                first_name:
+                  $ref: "#/components/schemas/string"
+                last_name:
+                  $ref: "#/components/schemas/string"
+                phone_number:
+                  type: string
+                occupation:
+                  $ref: "#/components/schemas/string"
+                email:
+                  $ref: "#/components/schemas/email"
+                birthdate:
+                  $ref: "#/components/schemas/date"
+                address:
+                  $ref: "#/components/schemas/string"
+                city:
+                  $ref: "#/components/schemas/string"
+                state:
+                  $ref: "#/components/schemas/string"
+                zip:
+                  $ref: "#/components/schemas/string"
       responses:
         201:
           description: Created
