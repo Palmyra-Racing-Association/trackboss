@@ -80,6 +80,9 @@ components:
     string:
       type: string
       maxLength: 255
+    shortString:
+      type: string
+      maxLength: 50
     uuid:
       type: string
       format: uuid
@@ -179,6 +182,32 @@ components:
         state:
           $ref: "#/components/schemas/string"
         zip:
+          $ref: "#/components/schemas/string"
+    bike:
+      type: object
+      properties:
+        bike_id:
+          $ref: "#/components/schemas/integer"
+        year:
+          $ref: "#/components/schemas/shortString"
+        make:
+          $ref: "#/components/schemas/shortString"
+        model:
+          $ref: "#/components/schemas/shortString"
+        membership_id:
+          $ref: "#/components/schemas/integer"
+    event:
+      type: object
+      properties:
+        event_id:
+          $ref: "#/components/schemas/integer"
+        date:
+          $ref: "#/components/schemas/date"
+        event_type_id:
+          $ref: "#/components/schemas/integer"
+        event_name:
+          $ref: "#/components/schemas/string"
+        event_description:
           $ref: "#/components/schemas/string"
 security:
   - BearerAuth: [] 
@@ -586,14 +615,25 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - membership_id
+              properties:
+                year:
+                  $ref: "#/components/schemas/shortString"
+                make:
+                  $ref: "#/components/schemas/shortString"
+                model:
+                  $ref: "#/components/schemas/shortString"
+                membership_id:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/bike"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -620,7 +660,7 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/bike"
         401:
           $ref: "#/components/responses/unauthorizedError"
         404:
@@ -642,14 +682,27 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                year:
+                  $ref: "#/components/schemas/shortString"
+                make:
+                  $ref: "#/components/schemas/shortString"
+                model:
+                  $ref: "#/components/schemas/shortString"
+                membership_id:
+                  $ref: "#/components/schemas/integer"
+            example:
+              membership_id: 101
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/bike"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -671,7 +724,10 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  bike_id:
+                    $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
@@ -698,7 +754,9 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/bike"
         401:
           $ref: "#/components/responses/unauthorizedError"
         500:
@@ -716,14 +774,23 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              properties:
+                date:
+                  $ref: "#/components/schemas/date"
+                event_type_id:
+                  $ref: "#/components/schemas/integer"
+                event_name:
+                  $ref: "#/components/schemas/string"
+                event_description:
+                  $ref: "#/components/schemas/string"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/event"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -750,7 +817,7 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/event"
         401:
           $ref: "#/components/responses/unauthorizedError"
         404:
@@ -772,14 +839,28 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                date:
+                  $ref: "#/components/schemas/date"
+                event_type_id:
+                  $ref: "#/components/schemas/integer"
+                event_name:
+                  $ref: "#/components/schemas/string"
+                event_description:
+                  $ref: "#/components/schemas/string"
+            example:
+              date: 12/18/21
+              event_name: Squeaky Training Wheels Invitational (Rescheduled)
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/event"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -801,7 +882,10 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  event_id:
+                    $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
@@ -833,19 +917,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/event"
         206:
           description: Partial Content
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/event"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
           $ref: "#/components/responses/unauthorizedError"
         500:
           $ref: "#/components/responses/internalServerError"
+  
+  # eventType
   /api/eventType/new:
     post:
       tags:
