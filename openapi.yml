@@ -284,6 +284,25 @@ components:
           $ref: "#/components/schemas/integer"
         count:
           $ref: "#/components/schemas/integer"
+    bill:
+      type: object
+      properties:
+        bill_id:
+          $ref: "#/components/schemas/integer"
+        generated_date:
+          $ref: "#/components/schemas/date"
+        year:
+          $ref: "#/components/schemas/integer"
+        amount:
+          $ref: "#/components/schemas/number"
+        amount_with_fee:
+          $ref: "#/components/schemas/number"
+        membership_id:
+          $ref: "#/components/schemas/integer"
+        emailed_bill:
+          $ref: "#/components/schemas/date"
+        bill_status:
+          $ref: "#/components/schemas/shortString"
 security:
   - BearerAuth: [] 
 paths:
@@ -1750,7 +1769,12 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  year:
+                    $ref: "#/components/schemas/integer"
+                  threshold:
+                    $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
         500:
@@ -1781,7 +1805,9 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/bill"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
@@ -1800,7 +1826,9 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/bill"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
@@ -1831,7 +1859,9 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/bill"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
@@ -1848,10 +1878,6 @@ paths:
       responses:
         200:
           description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
