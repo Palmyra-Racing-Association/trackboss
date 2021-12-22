@@ -273,6 +273,17 @@ components:
           $ref: "#/components/schemas/date"
         last_modified_by:
           $ref: "#/components/schemas/integer"
+    eventJob:
+      type: object
+      properties:
+        event_job_id:
+          $ref: "#/components/schemas/integer"
+        event_type_id:
+          $ref: "#/components/schemas/integer"
+        job_type_id:
+          $ref: "#/components/schemas/integer"
+        count:
+          $ref: "#/components/schemas/integer"
 security:
   - BearerAuth: [] 
 paths:
@@ -1588,6 +1599,7 @@ paths:
           $ref: "#/components/responses/notFoundError"
         500:
           $ref: "#/components/responses/internalServerError"
+  
   # eventJob
   /api/eventJob/new:
     post:
@@ -1600,14 +1612,25 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - event_type_id
+                - job_type_id
+                - count
+              properties:
+                event_type_id:
+                  $ref: "#/components/schemas/integer"
+                job_type_id:
+                  $ref: "#/components/schemas/integer"
+                count:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventJob"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -1634,7 +1657,7 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventJob"
         401:
           $ref: "#/components/responses/unauthorizedError"
         404:
@@ -1656,14 +1679,23 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                event_type_id:
+                  $ref: "#/components/schemas/integer"
+                job_type_id:
+                  $ref: "#/components/schemas/integer"
+                count:
+                  $ref: "#/components/schemas/integer"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventJob"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -1685,7 +1717,10 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  event_job_id:
+                    $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
