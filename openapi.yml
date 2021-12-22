@@ -77,6 +77,9 @@ components:
       type: integer
       format: int32
       minimum: 0
+    number: # to handle floats
+      type: number
+      minimum: 0
     string:
       type: string
       maxLength: 255
@@ -216,6 +219,31 @@ components:
           $ref: "#/components/schemas/integer"
         type:
           $ref: "#/components/schemas/string"
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/integer"
+    job:
+      type: object
+      properties:
+        job_id:
+          $ref: "#/components/schemas/integer"
+        member_id:
+          $ref: "#/components/schemas/integer"
+        event_id:
+          $ref: "#/components/schemas/integer"
+        job_type_id:
+          $ref: "#/components/schemas/integer"
+        verified:
+          type: boolean
+        verified_date:
+          $ref: "#/components/schemas/date"
+        points_awarded:
+          $ref: "#/components/schemas/number"
+        paid:
+          type: boolean
+        paid_date:
+          $ref: "#/components/schemas/date"
         last_modified_date:
           $ref: "#/components/schemas/date"
         last_modified_by:
@@ -1083,14 +1111,28 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - job_type_id
+                - modified_by
+              properties:
+                member_id:
+                  $ref: "#/components/schemas/integer"
+                event_id:
+                  $ref: "#/components/schemas/integer"
+                job_type_id:
+                  $ref: "#/components/schemas/integer"
+                points_awarded:
+                  $ref: "#/components/schemas/number"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/job"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -1117,7 +1159,7 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/job"
         401:
           $ref: "#/components/responses/unauthorizedError"
         404:
@@ -1145,14 +1187,31 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              minProperties: 2
+              additionalProperties: false
+              properties:
+                member_id:
+                  $ref: "#/components/schemas/integer"
+                event_id:
+                  $ref: "#/components/schemas/integer"
+                job_type_id:
+                  $ref: "#/components/schemas/integer"
+                verified:
+                  type: boolean
+                paid:
+                  type: boolean
+            example:
+              verified: true
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/job"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -1174,7 +1233,7 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/job"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
@@ -1194,7 +1253,10 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  job_id:
+                    $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
@@ -1257,19 +1319,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/job"
         206:
           description: Partial Content
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/job"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
           $ref: "#/components/responses/unauthorizedError"
         500:
           $ref: "#/components/responses/internalServerError"
+  
+  # jobType
   /api/jobType/new:
     post:
       tags:
