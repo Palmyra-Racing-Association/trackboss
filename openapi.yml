@@ -248,6 +248,31 @@ components:
           $ref: "#/components/schemas/date"
         last_modified_by:
           $ref: "#/components/schemas/integer"
+    jobType:
+      type: object
+      properties:
+        job_type_id:
+          $ref: "#/components/schemas/integer"
+        title:
+          $ref: "#/components/schemas/string"
+        point_value:
+          $ref: "#/components/schemas/number"
+        cash_value:
+          $ref: "#/components/schemas/number"
+        job_day:
+          $ref: "#/components/schemas/string"
+        reserved:
+          type: boolean
+        online:
+          type: boolean
+        meal_ticket:
+          type: boolean
+        sort_order:
+          $ref: "#/components/schemas/integer"
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/integer"
 security:
   - BearerAuth: [] 
 paths:
@@ -1349,14 +1374,39 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - title
+                - reserved
+                - online
+                - meal_ticket
+                - modified_by
+              properties:
+                title:
+                  $ref: "#/components/schemas/string"
+                point_value:
+                  $ref: "#/components/schemas/number"
+                cash_value:
+                  $ref: "#/components/schemas/number"
+                job_day:
+                  $ref: "#/components/schemas/string"
+                reserved:
+                  type: boolean
+                online:
+                  type: boolean
+                meal_ticket:
+                  type: boolean
+                sort_order:
+                  $ref: "#/components/schemas/integer"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/jobType"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -1383,7 +1433,7 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/jobType"
         401:
           $ref: "#/components/responses/unauthorizedError"
         404:
@@ -1408,14 +1458,37 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              minProperties: 2
+              additionalProperties: false
+              properties:
+                title:
+                  $ref: "#/components/schemas/string"
+                point_value:
+                  $ref: "#/components/schemas/number"
+                cash_value:
+                  $ref: "#/components/schemas/number"
+                job_day:
+                  $ref: "#/components/schemas/string"
+                reserved:
+                  type: boolean
+                online:
+                  type: boolean
+                meal_ticket:
+                  type: boolean
+                sort_order:
+                  $ref: "#/components/schemas/integer"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/jobType"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -1438,7 +1511,9 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/jobType"
         401:
           $ref: "#/components/responses/unauthorizedError"
         500:
