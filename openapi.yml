@@ -209,6 +209,17 @@ components:
           $ref: "#/components/schemas/string"
         event_description:
           $ref: "#/components/schemas/string"
+    eventType:
+      type: object
+      properties:
+        event_type_id:
+          $ref: "#/components/schemas/integer"
+        type:
+          $ref: "#/components/schemas/string"
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/integer"
 security:
   - BearerAuth: [] 
 paths:
@@ -947,14 +958,22 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - type
+                - modified_by
+              properties:
+                type:
+                  $ref: "#/components/schemas/string"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventType"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -981,7 +1000,7 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventType"
         401:
           $ref: "#/components/responses/unauthorizedError"
         404:
@@ -1006,14 +1025,22 @@ paths:
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - type
+                - modified_by
+              properties:
+                type:
+                  $ref: "#/components/schemas/string"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventType"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
@@ -1036,7 +1063,9 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/eventType"
         401:
           $ref: "#/components/responses/unauthorizedError"
         500:
