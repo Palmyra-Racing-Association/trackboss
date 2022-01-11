@@ -12,3 +12,5 @@ assignees: ''
 
 # Acceptance Criteria
 - [ ] 
+- [ ] Unit tests are updated
+- [ ] Unit tests pass
