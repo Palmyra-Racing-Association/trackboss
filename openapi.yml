@@ -147,8 +147,6 @@ components:
           $ref: "#/components/schemas/string"
         active:
           type: boolean
-        cur_year_paid:
-          type: boolean
         cur_year_renewed:
           type: boolean
         view_online:
@@ -313,8 +311,8 @@ components:
           $ref: "#/components/schemas/email"
         emailed_bill:
           $ref: "#/components/schemas/date"
-        bill_status:
-          $ref: "#/components/schemas/shortString"
+        cur_year_paid:
+          type: boolean
 security:
   - BearerAuth: [] 
 paths:
@@ -609,8 +607,6 @@ paths:
               additionalProperties: false
               properties:
                 active:
-                  type: boolean
-                cur_year_paid:
                   type: boolean
                 cur_year_renewed:
                   type: boolean
