@@ -228,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `pradb`.`event_type` (
   `last_modified_by` INT NULL,
   `active` BIT NOT NULL,
   PRIMARY KEY (`event_type_id`),
-  INDEX `FK_eventype_lm_idx` (`last_modified_by` ASC) VISIBLE,
+  INDEX `FK_event_type_lm_idx` (`last_modified_by` ASC) VISIBLE,
   CONSTRAINT `FK_event_type_lm`
     FOREIGN KEY (`last_modified_by`)
     REFERENCES `pradb`.`member` (`member_id`)
