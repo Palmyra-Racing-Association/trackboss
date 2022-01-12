@@ -134,7 +134,6 @@ CREATE TABLE IF NOT EXISTS `pradb`.`member_bill` (
   `amount_with_fee` DOUBLE NULL,
   `membership_id` INT NOT NULL,
   `emailed_bill` DATE NULL,
-  `bill_status` VARCHAR(50) NULL,
   `cur_year_paid` BIT NOT NULL,
   PRIMARY KEY (`bill_id`),
   INDEX `membership_id_idx` (`membership_id` ASC) VISIBLE,
