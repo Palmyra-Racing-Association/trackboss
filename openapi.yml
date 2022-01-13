@@ -223,6 +223,8 @@ components:
           $ref: "#/components/schemas/integer"
         type:
           $ref: "#/components/schemas/string"
+        active:
+          type: boolean
         last_modified_date:
           $ref: "#/components/schemas/date"
         last_modified_by:
@@ -275,6 +277,8 @@ components:
           type: boolean
         sort_order:
           $ref: "#/components/schemas/integer"
+        active:
+          type: boolean
         last_modified_date:
           $ref: "#/components/schemas/date"
         last_modified_by:
@@ -1151,6 +1155,8 @@ paths:
               properties:
                 type:
                   $ref: "#/components/schemas/string"
+                active:
+                  type: boolean
                 modified_by:
                   $ref: "#/components/schemas/integer"
       responses:
@@ -1546,6 +1552,8 @@ paths:
                   type: boolean
                 sort_order:
                   $ref: "#/components/schemas/integer"
+                active:
+                  type: boolean
                 modified_by:
                   $ref: "#/components/schemas/integer"
       responses:
