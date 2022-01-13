@@ -11,10 +11,27 @@ jobs:
     - name: Specify Node version
       uses: actions/setup-node@v2
       with:
-        node-version: "17"
+        node-version: "16"
     - name: Install modules
       run: |
         npm ci
         (cd frontend && npm ci)
     - name: Run ESLint
       run: npx eslint .
+  jest:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Specify Node version
+      uses: actions/setup-node@v2
+      with:
+        node-version: "16"
+    - name: Install modules
+      run: |
+        npm ci
+        (cd frontend && npm ci)
+    - name: Run Jest
+      run: |
+        npm run test
+        (cd frontend && npm run test)
