@@ -896,6 +896,13 @@ paths:
         - event
       summary: Create a new event
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      parameters:
+        - name: autoGenerateJobs
+          in: query
+          description: "Optional: auto-generate known jobs necessary for this new event"
+          schema:
+            type: boolean
+            default: true
       requestBody:
         required: true
         content:
