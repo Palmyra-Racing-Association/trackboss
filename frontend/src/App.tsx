@@ -4,12 +4,6 @@ import './App.css';
 import { getByMember, getByMembership } from './controller/workPoints';
 
 function App() {
-    getByMember(1).then((json) => {
-        console.debug(json);
-    });
-    getByMembership(1).then((json) => {
-        console.debug(json);
-    });
     return (
         <div className="App">
             <header className="App-header">
