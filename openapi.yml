@@ -149,8 +149,6 @@ components:
           type: boolean
         cur_year_renewed:
           type: boolean
-        view_online:
-          type: boolean
         renewal_sent:
           type: boolean
         year_joined:
@@ -609,8 +607,6 @@ paths:
                 active:
                   type: boolean
                 cur_year_renewed:
-                  type: boolean
-                view_online:
                   type: boolean
                 renewal_sent:
                   type: boolean
