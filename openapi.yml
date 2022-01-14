@@ -110,6 +110,8 @@ components:
           $ref: "#/components/schemas/string"
         uuid:
           $ref: "#/components/schemas/uuid"
+        active:
+          type: boolean
         member_type:
           $ref: "#/components/schemas/string"
         first_name:
@@ -407,6 +409,9 @@ paths:
         If data in a field should not be updated, that field can be omitted from
         the request body.
         <br><br>
+        **Note:** This endpoint is used to mark a member as inactive, rather
+        than using a `DELETE` endpoint to remove it entirely.
+        <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
         required: true
@@ -423,6 +428,8 @@ paths:
                   $ref: "#/components/schemas/integer"
                 uuid:
                   $ref: "#/components/schemas/uuid"
+                active:
+                  type: boolean
                 member_type_id:
                   $ref: "#/components/schemas/integer"
                 first_name:
@@ -454,29 +461,6 @@ paths:
                 $ref: "#/components/schemas/member"
         400:
           $ref: "#/components/responses/badRequestError"
-        401:
-          $ref: "#/components/responses/unauthorizedError"
-        403:
-          $ref: "#/components/responses/forbiddenError"
-        404:
-          $ref: "#/components/responses/notFoundError"
-        500:
-          $ref: "#/components/responses/internalServerError"
-    delete:
-      tags:
-        - member
-      summary: Delete this member
-      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  member_id:
-                    $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
         403:
