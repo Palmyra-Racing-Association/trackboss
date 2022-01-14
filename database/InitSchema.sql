@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS `pradb`.`member` (
   `date_joined` DATE NULL,
   `last_modified_date` DATE NULL,
   `last_modified_by` INT NULL,
+  `active` BIT NOT NULL,
   PRIMARY KEY (`member_id`),
   UNIQUE INDEX `uuid_UNIQUE` (`uuid` ASC) VISIBLE,
   INDEX `member_type_id_idx` (`member_type_id` ASC) VISIBLE,
@@ -90,10 +91,17 @@ CREATE TABLE IF NOT EXISTS `pradb`.`membership` (
   `city` VARCHAR(255) NULL,
   `state` VARCHAR(255) NULL,
   `zip` VARCHAR(255) NULL,
+  `membership_admin_id` INT NULL,
   PRIMARY KEY (`membership_id`),
   INDEX `FK_membership_lm_idx` (`last_modified_by` ASC) VISIBLE,
+  INDEX `FK_membership_admin_idx` (`membership_admin_id` ASC) VISIBLE,
   CONSTRAINT `FK_membership_lm`
     FOREIGN KEY (`last_modified_by`)
+    REFERENCES `pradb`.`member` (`member_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `FK_membership_admin`
+    FOREIGN KEY (`membership_admin_id`)
     REFERENCES `pradb`.`member` (`member_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -296,6 +304,7 @@ CREATE TABLE IF NOT EXISTS `pradb`.`job` (
   `member_id` INT NULL,
   `event_id` INT NULL,
   `job_type_id` INT NOT NULL,
+  `job_date` DATE NULL,
   `last_modified_date` DATE NULL,
   `last_modified_by` INT NULL,
   `verified` BIT NOT NULL,
@@ -354,6 +363,18 @@ CREATE TABLE IF NOT EXISTS `pradb`.`event_job` (
     REFERENCES `pradb`.`job_type` (`job_type_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pradb`.`point_threshold`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `pradb`.`point_threshold` ;
+
+CREATE TABLE IF NOT EXISTS `pradb`.`point_threshold` (
+  `year` INT NOT NULL,
+  `amount` INT NOT NULL,
+  PRIMARY KEY (`year`))
 ENGINE = InnoDB;
 
 
