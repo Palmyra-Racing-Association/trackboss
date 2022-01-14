@@ -12,6 +12,5 @@ export async function getByMembership(membershipId: Number) {
         method: 'GET',
         mode: 'no-cors',
     });
-    const status = await response.status;
-    return status;
+    return response;
 }

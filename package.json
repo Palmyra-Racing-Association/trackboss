@@ -23,7 +23,8 @@
     },
     "homepage": "https://github.com/Squeaky-Training-Wheels/clubmanager-2.0#readme",
     "dependencies": {
-        "express": "^4.17.1"
+        "express": "^4.17.1",
+        "msw": "^0.36.4"
     },
     "devDependencies": {
         "@tsconfig/node16": "^1.0.2",
