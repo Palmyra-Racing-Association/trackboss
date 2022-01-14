@@ -34,17 +34,289 @@ tags:
       Handling billing calculation, distribution, payment, and retrieval.
 components:
   securitySchemes:
-  # I'm not sure if we are going to need BasicAuth depends how we handle Cognito
-    BasicAuth:
-      type: http
-      scheme: basic
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
   responses:
-    UnauthorizedError:
-      description: ID token is missing or invalid
+    badRequestError:
+      description: "Bad Request: Request body is missing or invalid"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorResponse"
+    unauthorizedError:
+      description: "Unauthorized: ID token is missing or invalid"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorResponse"
+    forbiddenError:
+      description: >
+        Forbidden: The user has insufficient permissions for this resource
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorResponse"
+    notFoundError:
+      description: "Not Found: The resource does not exist"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorResponse"
+    internalServerError:
+      description: >
+        Internal Server Error: The server has had an error unrelated to the
+        user's actions
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorResponse"
+  schemas:
+    integer:
+      type: integer
+      format: int32
+      minimum: 0
+    number: # to handle floats
+      type: number
+      minimum: 0
+    string:
+      type: string
+      maxLength: 255
+    shortString:
+      type: string
+      maxLength: 50
+    uuid:
+      type: string
+      format: uuid
+    date:
+      type: string
+      format: date
+    email:
+      type: string
+      format: email
+      maxLength: 255
+    errorResponse:
+      type: object
+      properties:
+        reason:
+          type: string
+    member:
+      type: object
+      properties:
+        member_id:
+          $ref: "#/components/schemas/integer"
+        membership_admin:
+          $ref: "#/components/schemas/string"
+        uuid:
+          $ref: "#/components/schemas/uuid"
+        active:
+          type: boolean
+        member_type:
+          $ref: "#/components/schemas/string"
+        first_name:
+          $ref: "#/components/schemas/string"
+        last_name:
+          $ref: "#/components/schemas/string"
+        phone_number:
+          type: string
+        occupation:
+          $ref: "#/components/schemas/string"
+        email:
+          $ref: "#/components/schemas/email"
+        birthdate:
+          $ref: "#/components/schemas/date"
+        date_joined:
+          $ref: "#/components/schemas/date"
+        address:
+          $ref: "#/components/schemas/string"
+        city:
+          $ref: "#/components/schemas/string"
+        state:
+          $ref: "#/components/schemas/string"
+        zip:
+          $ref: "#/components/schemas/string"
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/string"
+    membership:
+      type: object
+      properties:
+        membership_id:
+          $ref: "#/components/schemas/integer"
+        membership_admin:
+          $ref: "#/components/schemas/string"
+        active:
+          type: boolean
+        cur_year_renewed:
+          type: boolean
+        renewal_sent:
+          type: boolean
+        year_joined:
+          $ref: "#/components/schemas/integer"
+        address:
+          $ref: "#/components/schemas/string"
+        city:
+          $ref: "#/components/schemas/string"
+        state:
+          $ref: "#/components/schemas/string"
+        zip:
+          $ref: "#/components/schemas/string"
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/string"
+    registration:
+      type: object
+      properties:
+        member_type:
+          $ref: "#/components/schemas/string"
+        first_name:
+          $ref: "#/components/schemas/string"
+        last_name:
+          $ref: "#/components/schemas/string"
+        phone_number:
+          type: string
+        occupation:
+          $ref: "#/components/schemas/string"
+        email:
+          $ref: "#/components/schemas/email"
+        birthdate:
+          $ref: "#/components/schemas/date"
+        address:
+          $ref: "#/components/schemas/string"
+        city:
+          $ref: "#/components/schemas/string"
+        state:
+          $ref: "#/components/schemas/string"
+        zip:
+          $ref: "#/components/schemas/string"
+    bike:
+      type: object
+      properties:
+        bike_id:
+          $ref: "#/components/schemas/integer"
+        year:
+          $ref: "#/components/schemas/shortString"
+        make:
+          $ref: "#/components/schemas/shortString"
+        model:
+          $ref: "#/components/schemas/shortString"
+        membership_admin:
+          $ref: "#/components/schemas/string"
+    event:
+      type: object
+      properties:
+        event_id:
+          $ref: "#/components/schemas/integer"
+        date:
+          $ref: "#/components/schemas/date"
+        event_type:
+          $ref: "#/components/schemas/string"
+        event_name:
+          $ref: "#/components/schemas/string"
+        event_description:
+          $ref: "#/components/schemas/string"
+    eventType:
+      type: object
+      properties:
+        event_type_id:
+          $ref: "#/components/schemas/integer"
+        type:
+          $ref: "#/components/schemas/string"
+        active:
+          type: boolean
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/string"
+    job:
+      type: object
+      properties:
+        job_id:
+          $ref: "#/components/schemas/integer"
+        member:
+          $ref: "#/components/schemas/string"
+        event:
+          $ref: "#/components/schemas/string"
+        job_date:
+          $ref: "#/components/schemas/date"
+        job_type:
+          $ref: "#/components/schemas/string"
+        verified:
+          type: boolean
+        verified_date:
+          $ref: "#/components/schemas/date"
+        points_awarded:
+          $ref: "#/components/schemas/number"
+        paid:
+          type: boolean
+        paid_date:
+          $ref: "#/components/schemas/date"
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/string"
+    jobType:
+      type: object
+      properties:
+        job_type_id:
+          $ref: "#/components/schemas/integer"
+        title:
+          $ref: "#/components/schemas/string"
+        point_value:
+          $ref: "#/components/schemas/number"
+        cash_value:
+          $ref: "#/components/schemas/number"
+        job_day_number:
+          $ref: "#/components/schemas/integer"
+        reserved:
+          type: boolean
+        online:
+          type: boolean
+        meal_ticket:
+          type: boolean
+        sort_order:
+          $ref: "#/components/schemas/integer"
+        active:
+          type: boolean
+        last_modified_date:
+          $ref: "#/components/schemas/date"
+        last_modified_by:
+          $ref: "#/components/schemas/string"
+    eventJob:
+      type: object
+      properties:
+        event_job_id:
+          $ref: "#/components/schemas/integer"
+        event_type:
+          $ref: "#/components/schemas/string"
+        job_type:
+          $ref: "#/components/schemas/string"
+        count:
+          $ref: "#/components/schemas/integer"
+    bill:
+      type: object
+      properties:
+        bill_id:
+          $ref: "#/components/schemas/integer"
+        generated_date:
+          $ref: "#/components/schemas/date"
+        year:
+          $ref: "#/components/schemas/integer"
+        amount:
+          $ref: "#/components/schemas/number"
+        amount_with_fee:
+          $ref: "#/components/schemas/number"
+        membership_admin:
+          $ref: "#/components/schemas/string"
+        membership_admin_email:
+          $ref: "#/components/schemas/email"
+        emailed_bill:
+          $ref: "#/components/schemas/date"
+        cur_year_paid:
+          type: boolean
 security:
   - BearerAuth: [] 
 paths:
@@ -56,41 +328,53 @@ paths:
       summary: Create a new member
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - member_type_id
+                - modified_by
+              additionalProperties: false
+              properties:
+                membership_id:
+                  $ref: "#/components/schemas/integer"
+                uuid:
+                  $ref: "#/components/schemas/uuid"
+                member_type_id:
+                  $ref: "#/components/schemas/integer"
+                first_name:
+                  $ref: "#/components/schemas/string"
+                last_name:
+                  $ref: "#/components/schemas/string"
+                phone_number:
+                  type: string
+                occupation:
+                  $ref: "#/components/schemas/string"
+                email:
+                  $ref: "#/components/schemas/email"
+                birthdate:
+                  $ref: "#/components/schemas/date"
+                date_joined:
+                  $ref: "#/components/schemas/date"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/member"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/member/{memberID}:
     parameters:
       - name: memberID
@@ -109,25 +393,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/member"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     patch:
       tags:
         - member
@@ -137,85 +409,66 @@ paths:
         If data in a field should not be updated, that field can be omitted from
         the request body.
         <br><br>
+        **Note:** This endpoint is used to mark a member as inactive, rather
+        than using a `DELETE` endpoint to remove it entirely.
+        <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              minProperties: 2
+              additionalProperties: false
+              properties:
+                membership_id:
+                  $ref: "#/components/schemas/integer"
+                uuid:
+                  $ref: "#/components/schemas/uuid"
+                active:
+                  type: boolean
+                member_type_id:
+                  $ref: "#/components/schemas/integer"
+                first_name:
+                  $ref: "#/components/schemas/string"
+                last_name:
+                  $ref: "#/components/schemas/string"
+                phone_number:
+                  type: string
+                occupation:
+                  $ref: "#/components/schemas/string"
+                email:
+                  $ref: "#/components/schemas/email"
+                birthdate:
+                  $ref: "#/components/schemas/date"
+                date_joined:
+                  $ref: "#/components/schemas/date"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
+            example:
+              email: newemail@gmail.com
+              phone_number: 585-123-4567
+              modified_by: 42
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/member"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
-    delete:
-      tags:
-        - member
-      summary: Delete this member
-      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
-        500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/member/list:
     get:
       tags:
@@ -237,25 +490,15 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/member"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
 
   # membership
   /api/membership/new:
@@ -265,41 +508,41 @@ paths:
       summary: Create a new membership
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              properties:
+                year_joined:
+                  $ref: "#/components/schemas/integer"
+                address:
+                  $ref: "#/components/schemas/string"
+                city:
+                  $ref: "#/components/schemas/string"
+                state:
+                  $ref: "#/components/schemas/string"
+                zip:
+                  $ref: "#/components/schemas/string"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/membership"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/membership/{membershipID}:
     parameters:
       - name: membershipID
@@ -318,25 +561,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/membership"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     patch:
       tags:
         - membership
@@ -345,53 +576,63 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-
+        <br><br>
         **Note:** This endpoint is used to mark a membership as inactive, rather
         than using a `DELETE` endpoint to remove it entirely.
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              minProperties: 2
+              additionalProperties: false
+              properties:
+                active:
+                  type: boolean
+                cur_year_renewed:
+                  type: boolean
+                renewal_sent:
+                  type: boolean
+                year_joined:
+                  $ref: "#/components/schemas/integer"
+                address:
+                  $ref: "#/components/schemas/string"
+                city:
+                  $ref: "#/components/schemas/string"
+                state:
+                  $ref: "#/components/schemas/string"
+                zip:
+                  $ref: "#/components/schemas/string"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
+            example:
+              address: 1234 New Address Street
+              city: Hoboken
+              state: NJ
+              zip: 07030
+              modified_by: 42
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/membership"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/membership/list:
     get:
       tags:
@@ -414,56 +655,64 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/membership"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/membership/register:
     post:
       tags:
         - membership
       summary: Register for a new membership
-      security: {}
+      security: []
       description: This request does not require authentication.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - member_type_id
+              properties:
+                member_type_id:
+                  $ref: "#/components/schemas/integer"
+                first_name:
+                  $ref: "#/components/schemas/string"
+                last_name:
+                  $ref: "#/components/schemas/string"
+                phone_number:
+                  type: string
+                occupation:
+                  $ref: "#/components/schemas/string"
+                email:
+                  $ref: "#/components/schemas/email"
+                birthdate:
+                  $ref: "#/components/schemas/date"
+                address:
+                  $ref: "#/components/schemas/string"
+                city:
+                  $ref: "#/components/schemas/string"
+                state:
+                  $ref: "#/components/schemas/string"
+                zip:
+                  $ref: "#/components/schemas/string"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/registration"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
         
   # bike
   /api/bike/new:
@@ -473,41 +722,37 @@ paths:
       summary: Create a new bike
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - membership_id
+              properties:
+                year:
+                  $ref: "#/components/schemas/shortString"
+                make:
+                  $ref: "#/components/schemas/shortString"
+                model:
+                  $ref: "#/components/schemas/shortString"
+                membership_id:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/bike"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/bike/{bikeID}:
     parameters:
       - name: bikeID
@@ -526,25 +771,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/bike"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     patch:
       tags:
         - bike
@@ -556,47 +789,41 @@ paths:
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                year:
+                  $ref: "#/components/schemas/shortString"
+                make:
+                  $ref: "#/components/schemas/shortString"
+                model:
+                  $ref: "#/components/schemas/shortString"
+                membership_id:
+                  $ref: "#/components/schemas/integer"
+            example:
+              membership_id: 101
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/bike"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     delete:
       tags:
         - bike
@@ -608,31 +835,18 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  bike_id:
+                    $ref: "#/components/schemas/integer"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/bike/list:
     get:
       tags:
@@ -651,19 +865,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/bike"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
 
   # event
   /api/event/new:
@@ -672,42 +880,43 @@ paths:
         - event
       summary: Create a new event
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      parameters:
+        - name: autoGenerateJobs
+          in: query
+          description: "Optional: auto-generate known jobs necessary for this new event"
+          schema:
+            type: boolean
+            default: true
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              properties:
+                date:
+                  $ref: "#/components/schemas/date"
+                event_type_id:
+                  $ref: "#/components/schemas/integer"
+                event_name:
+                  $ref: "#/components/schemas/string"
+                event_description:
+                  $ref: "#/components/schemas/string"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/event"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/event/{eventID}:
     parameters:
       - name: eventID
@@ -726,25 +935,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/event"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     patch:
       tags:
         - event
@@ -756,47 +953,42 @@ paths:
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                date:
+                  $ref: "#/components/schemas/date"
+                event_type_id:
+                  $ref: "#/components/schemas/integer"
+                event_name:
+                  $ref: "#/components/schemas/string"
+                event_description:
+                  $ref: "#/components/schemas/string"
+            example:
+              date: 12/18/21
+              event_name: Squeaky Training Wheels Invitational (Rescheduled)
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/event"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     delete:
       tags:
         - event
@@ -808,31 +1000,18 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  event_id:
+                    $ref: "#/components/schemas/integer"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/event/list:
     get:
       tags:
@@ -856,31 +1035,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/event"
         206:
           description: Partial Content
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/event"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
+  
+  # eventType
   /api/eventType/new:
     post:
       tags:
@@ -888,41 +1061,34 @@ paths:
       summary: Create a new event type
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - type
+                - modified_by
+              properties:
+                type:
+                  $ref: "#/components/schemas/string"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventType"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/eventType/{eventTypeID}:
     parameters:
       - name: eventTypeID
@@ -941,25 +1107,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventType"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     patch:
       tags:
         - eventType
@@ -968,54 +1122,44 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-
+        <br><br>
         **Note:** This endpoint is used to mark an event type as inactive, rather
         than using a `DELETE` endpoint to remove it entirely.
-        
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - type
+                - modified_by
+              properties:
+                type:
+                  $ref: "#/components/schemas/string"
+                active:
+                  type: boolean
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventType"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/eventType/list:
     get:
       tags:
@@ -1028,19 +1172,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/eventType"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
 
   # job
   /api/job/new:
@@ -1050,41 +1188,43 @@ paths:
       summary: Create a new job
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - job_type_id
+                - job_date
+                - modified_by
+              properties:
+                member_id:
+                  $ref: "#/components/schemas/integer"
+                event_id:
+                  $ref: "#/components/schemas/integer"
+                job_type_id:
+                  $ref: "#/components/schemas/integer"
+                job_date:
+                  $ref: "#/components/schemas/date"
+                points_awarded:
+                  $ref: "#/components/schemas/number"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/job"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/job/{jobID}:
     parameters:
       - name: jobID
@@ -1103,25 +1243,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/job"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     patch:
       tags:
         - job
@@ -1130,57 +1258,56 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-
+        <br><br>
         **Note 1:** This endpoint is used to verify work points.
-        
+        <br><br>
         **Note 2:** While most fields require admin permissions
         to update, both *1)* assigning the job to a member or paid laborer and
         *2)* checking in to the job can be done by a member as well.
-        
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              minProperties: 2
+              additionalProperties: false
+              properties:
+                member_id:
+                  $ref: "#/components/schemas/integer"
+                event_id:
+                  $ref: "#/components/schemas/integer"
+                job_type_id:
+                  $ref: "#/components/schemas/integer"
+                job_date:
+                  $ref: "#/components/schemas/date"
+                verified:
+                  type: boolean
+                paid:
+                  type: boolean
+            example:
+              verified: true
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/job"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     post:
       tags:
         - job
@@ -1192,31 +1319,15 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/job"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     delete:
       tags:
         - job
@@ -1228,31 +1339,18 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  job_id:
+                    $ref: "#/components/schemas/integer"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/job/list:
     get:
       tags:
@@ -1307,31 +1405,25 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/job"
         206:
           description: Partial Content
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/job"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
+  
+  # jobType
   /api/jobType/new:
     post:
       tags:
@@ -1339,41 +1431,51 @@ paths:
       summary: Create a new job type
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - title
+                - reserved
+                - online
+                - meal_ticket
+                - modified_by
+              properties:
+                title:
+                  $ref: "#/components/schemas/string"
+                point_value:
+                  $ref: "#/components/schemas/number"
+                cash_value:
+                  $ref: "#/components/schemas/number"
+                job_day_number:
+                  $ref: "#/components/schemas/integer"
+                reserved:
+                  type: boolean
+                online:
+                  type: boolean
+                meal_ticket:
+                  type: boolean
+                sort_order:
+                  $ref: "#/components/schemas/integer"
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/jobType"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/jobType/{jobTypeID}:
     parameters:
       - name: jobTypeID
@@ -1392,25 +1494,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/jobType"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     patch:
       tags:
         - jobType
@@ -1419,54 +1509,59 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-
+        <br><br>
         **Note:** This endpoint is used to mark a job type as inactive, rather
         than using a `DELETE` endpoint to remove it entirely.
-        
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - modified_by
+              minProperties: 2
+              additionalProperties: false
+              properties:
+                title:
+                  $ref: "#/components/schemas/string"
+                point_value:
+                  $ref: "#/components/schemas/number"
+                cash_value:
+                  $ref: "#/components/schemas/number"
+                job_day_number:
+                  $ref: "#/components/schemas/integer"
+                reserved:
+                  type: boolean
+                online:
+                  type: boolean
+                meal_ticket:
+                  type: boolean
+                sort_order:
+                  $ref: "#/components/schemas/integer"
+                active:
+                  type: boolean
+                modified_by:
+                  $ref: "#/components/schemas/integer"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/jobType"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/jobType/list:
     get:
       tags:
@@ -1479,19 +1574,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/jobType"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   
   # workPoints
   /api/workPoints/byMember/{memberID}:
@@ -1519,31 +1608,18 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  total:
+                    $ref: "#/components/schemas/number"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/workPoints/byMembership/{membershipID}:
     parameters:
       - name: membershipID
@@ -1569,31 +1645,19 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  total:
+                    $ref: "#/components/schemas/number"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
+  
   # eventJob
   /api/eventJob/new:
     post:
@@ -1602,41 +1666,37 @@ paths:
       summary: Create a new event-job instance
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              required:
+                - event_type_id
+                - job_type_id
+                - count
+              properties:
+                event_type_id:
+                  $ref: "#/components/schemas/integer"
+                job_type_id:
+                  $ref: "#/components/schemas/integer"
+                count:
+                  $ref: "#/components/schemas/integer"
       responses:
         201:
           description: Created
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventJob"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/eventJob/{eventJobID}:
     parameters:
       - name: eventJobID
@@ -1655,25 +1715,13 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventJob"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     patch:
       tags:
         - eventJob
@@ -1682,51 +1730,40 @@ paths:
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
-        
         <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              # TODO
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                event_type_id:
+                  $ref: "#/components/schemas/integer"
+                job_type_id:
+                  $ref: "#/components/schemas/integer"
+                count:
+                  $ref: "#/components/schemas/integer"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                # TODO
+                $ref: "#/components/schemas/eventJob"
         400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/badRequestError"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     delete:
       tags:
         - eventJob
@@ -1738,31 +1775,18 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  event_job_id:
+                    $ref: "#/components/schemas/integer"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
 
   # billing
   /api/billing/yearlyWorkPointThreshold:
@@ -1784,19 +1808,16 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: object
+                properties:
+                  year:
+                    $ref: "#/components/schemas/integer"
+                  threshold:
+                    $ref: "#/components/schemas/integer"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/billing/list:
     get:
       tags:
@@ -1823,25 +1844,15 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/bill"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/billing:
     post:
       tags:
@@ -1854,25 +1865,15 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/bill"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
   /api/billing/{membershipID}:
     parameters:
       - name: membershipID
@@ -1897,31 +1898,17 @@ paths:
           content:
             application/json:
               schema:
-                # TODO
+                type: array
+                items:
+                  $ref: "#/components/schemas/bill"
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
     post:
       tags:
         - billing
@@ -1930,31 +1917,11 @@ paths:
       responses:
         200:
           description: OK
-          content:
-            application/json:
-              schema:
-                # TODO
         401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/unauthorizedError"
         403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/forbiddenError"
         404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/notFoundError"
         500:
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                # TODO
+          $ref: "#/components/responses/internalServerError"
