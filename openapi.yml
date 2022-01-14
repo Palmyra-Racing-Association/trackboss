@@ -267,8 +267,8 @@ components:
           $ref: "#/components/schemas/number"
         cash_value:
           $ref: "#/components/schemas/number"
-        job_day:
-          $ref: "#/components/schemas/string"
+        job_day_number:
+          $ref: "#/components/schemas/integer"
         reserved:
           type: boolean
         online:
@@ -1460,8 +1460,8 @@ paths:
                   $ref: "#/components/schemas/number"
                 cash_value:
                   $ref: "#/components/schemas/number"
-                job_day:
-                  $ref: "#/components/schemas/string"
+                job_day_number:
+                  $ref: "#/components/schemas/integer"
                 reserved:
                   type: boolean
                 online:
@@ -1542,8 +1542,8 @@ paths:
                   $ref: "#/components/schemas/number"
                 cash_value:
                   $ref: "#/components/schemas/number"
-                job_day:
-                  $ref: "#/components/schemas/string"
+                job_day_number:
+                  $ref: "#/components/schemas/integer"
                 reserved:
                   type: boolean
                 online:
