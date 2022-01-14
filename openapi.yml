@@ -238,7 +238,7 @@ components:
           $ref: "#/components/schemas/string"
         event:
           $ref: "#/components/schemas/string"
-        event_date:
+        job_date:
           $ref: "#/components/schemas/date"
         job_type:
           $ref: "#/components/schemas/string"
@@ -1211,6 +1211,7 @@ paths:
               type: object
               required:
                 - job_type_id
+                - job_date
                 - modified_by
               properties:
                 member_id:
@@ -1219,6 +1220,8 @@ paths:
                   $ref: "#/components/schemas/integer"
                 job_type_id:
                   $ref: "#/components/schemas/integer"
+                job_date:
+                  $ref: "#/components/schemas/date"
                 points_awarded:
                   $ref: "#/components/schemas/number"
                 modified_by:
@@ -1296,6 +1299,8 @@ paths:
                   $ref: "#/components/schemas/integer"
                 job_type_id:
                   $ref: "#/components/schemas/integer"
+                job_date:
+                  $ref: "#/components/schemas/date"
                 verified:
                   type: boolean
                 paid:
