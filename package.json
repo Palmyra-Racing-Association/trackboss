@@ -5,6 +5,7 @@
     "main": "server.ts",
     "scripts": {
         "test": "jest",
+        "ci-test": "jest --ci --reporters $(pwd)/.github/jest-reporter.js",
         "dev": "concurrently \"npm run frontend\" \"npm run server\"",
         "server": "nodemon src/server.ts",
         "frontend": "cd frontend && npm start",

@@ -33,5 +33,5 @@ jobs:
         (cd frontend && npm ci)
     - name: Run Jest
       run: |
-        npm run test
-        (cd frontend && npm run test)
+        npm run ci-test
+        (cd frontend && npm run ci-test)
