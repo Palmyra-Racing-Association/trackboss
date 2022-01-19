@@ -2,6 +2,8 @@ name: PR
 on:
   - pull_request
   - workflow_dispatch
+env:
+  NODE_VERSION: "16"
 jobs:
   eslint:
     runs-on: ubuntu-latest
@@ -11,7 +13,7 @@ jobs:
     - name: Specify Node version
       uses: actions/setup-node@v2
       with:
-        node-version: "16"
+        node-version: ${{ env.NODE_VERSION }}
     - name: Install modules
       run: |
         npm ci
@@ -26,7 +28,7 @@ jobs:
     - name: Specify Node version
       uses: actions/setup-node@v2
       with:
-        node-version: "16"
+        node-version: ${{ env.NODE_VERSION }}
     - name: Install modules
       run: |
         npm ci
