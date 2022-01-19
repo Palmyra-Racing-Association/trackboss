@@ -25,7 +25,7 @@ class JestReporter {
 
           const [, line, col] = captureGroup;
           console.log(
-            `::error file=${testFilePath},line=${line},col=${col},title=${result.title}::${message}`,
+            `::error file=${testFilePath},line=${line},col=${col},title=${result.fullName}::${message}`,
           );
         });
       });
