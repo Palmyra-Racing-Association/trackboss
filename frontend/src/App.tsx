@@ -22,6 +22,7 @@ function App() {
                     Learn React
                 </a>
                 API Target is
+                {' '}
                 {url}
             </header>
         </div>

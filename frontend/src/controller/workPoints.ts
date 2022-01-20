@@ -1,15 +1,21 @@
 export async function getByMember(memberId: Number) {
-    const response = await fetch(`http://localhost:8080/api/workPoints/byMember/${memberId}`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/byMember/${memberId}`, {
         method: 'GET',
         mode: 'no-cors',
     });
-    return response;
+    if (response.status === 200) {
+        return (await response.json()).total;
+    }
+    return 'error: endpoint not found';
 }
 
 export async function getByMembership(membershipId: Number) {
-    const response = await fetch(`http://localhost:8080/api/workPoints/byMembership/${membershipId}`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/byMembership/${membershipId}`, {
         method: 'GET',
         mode: 'no-cors',
     });
-    return response;
+    if (response.status === 200) {
+        return (await response.json()).total;
+    }
+    return 'error: endpoint not found';
 }
