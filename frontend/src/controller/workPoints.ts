@@ -4,7 +4,7 @@ export async function getByMember(memberId: Number) {
         mode: 'no-cors',
     });
     if (response.status === 200) {
-        return (await response.json()).total;
+        return response.json();
     }
     return 'error: endpoint not found';
 }
@@ -15,7 +15,7 @@ export async function getByMembership(membershipId: Number) {
         mode: 'no-cors',
     });
     if (response.status === 200) {
-        return (await response.json()).total;
+        return response.json();
     }
     return 'error: endpoint not found';
 }
