@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 
 function App() {
+    const url = process.env.REACT_APP_API_URL;
     return (
         <div className="App">
             <header className="App-header">
@@ -20,6 +21,8 @@ function App() {
                 >
                     Learn React
                 </a>
+                API Target is
+                {url}
             </header>
         </div>
     );
