@@ -10,7 +10,7 @@ export function errorHandler(response: any) {
 }
 
 
-export function generateHeaders(token: String) {
+export function generateHeaders(token: string) {
     return ({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
