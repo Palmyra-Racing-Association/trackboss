@@ -1,4 +1,4 @@
-function errorHandler(response: any) {
+export function errorHandler(response: any) {
     if (response.status === 400) {
         return 'Bad request';
     } if (response.status === 401) {
@@ -10,11 +10,9 @@ function errorHandler(response: any) {
 }
 
 
-function generateHeaders(token: String) {
-    return {
+export function generateHeaders(token: String) {
+    return ({
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
-    }
+    });
 }
-
-export default {errorHandler, generateHeaders}
