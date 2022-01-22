@@ -8,11 +8,13 @@ import job from './job';
 import jobType from './jobType';
 import member from './member';
 import membership from './membership';
+import memberType from './memberType';
 import workPoints from './workPoints';
 
 const api = Router();
 
 api.use('/member', member);
+api.use('/memberType', memberType);
 api.use('/membership', membership);
 api.use('/bike', bike);
 api.use('/event', event);

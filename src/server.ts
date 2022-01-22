@@ -1,5 +1,6 @@
 import express from 'express';
 import api from './api/api';
+import logger from './logger';
 
 const app = express();
 
@@ -7,9 +8,5 @@ const port = 8080;
 
 app.use('/api', api);
 app.listen(port, () => {
-    // TODO #36: replace this console.log with a logger, remove the ESLint suppressor
-    // eslint-disable-next-line no-console
-    console.log(`PRA Club Manager API listenting on port ${port}`);
+    logger.info(`PRA Club Manager API listening on port ${port}`);
 });
-
-export {};
