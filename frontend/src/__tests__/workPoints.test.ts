@@ -9,7 +9,7 @@ test('getByMembership returns total with valid id', async () => {
 test('getByMembership returns error with invalid id', async () => {
     const token = 'TestingToken';
     const res = await getByMembership(token, -1);
-    expect(res).toEqual('Bad request');
+    expect(res.reason).toEqual('Bad request');
 });
 
 test('getByMember returns total', async () => {
@@ -21,5 +21,5 @@ test('getByMember returns total', async () => {
 test('getByMembership returns error with invalid id', async () => {
     const token = 'TestingToken';
     const res = await getByMember(token, -1);
-    expect(res).toEqual('Bad request');
+    expect(res.reason).toEqual('Bad request');
 });

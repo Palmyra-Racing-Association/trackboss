@@ -1,5 +1,3 @@
-import errorHandler from './utils';
-
 export async function getByMember(token: String, memberId: Number) {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/byMember/${memberId}`, {
         method: 'GET',
@@ -9,10 +7,7 @@ export async function getByMember(token: String, memberId: Number) {
             Authorization: `Bearer ${token}`,
         },
     });
-    if (response.status === 200) {
-        return response.json();
-    }
-    return errorHandler(response);
+    return response.json();
 }
 
 export async function getByMembership(token: String, membershipId: Number) {
@@ -24,8 +19,5 @@ export async function getByMembership(token: String, membershipId: Number) {
             Authorization: `Bearer ${token}`,
         },
     });
-    if (response.status === 200) {
-        return response.json();
-    }
-    return errorHandler(response);
+    return response.json();
 }

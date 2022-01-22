@@ -6,7 +6,7 @@ const handlers = [
         return response;
     }),
     rest.get(`${process.env.REACT_APP_API_URL}/api/workPoints/byMembership/-1`, (req, res, ctx) => {
-        const response = res(ctx.status(400));
+        const response = res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         return response;
     }),
     rest.get(`${process.env.REACT_APP_API_URL}/api/workPoints/byMember/1`, (req, res, ctx) => {
@@ -14,7 +14,7 @@ const handlers = [
         return response;
     }),
     rest.get(`${process.env.REACT_APP_API_URL}/api/workPoints/byMember/-1`, (req, res, ctx) => {
-        const response = res(ctx.status(400));
+        const response = res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         return response;
     }),
 ];
