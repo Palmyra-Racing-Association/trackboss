@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
@@ -7,7 +6,6 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
                 <p>
                     Edit
                     {' '}
@@ -24,6 +22,7 @@ function App() {
                     Learn React
                 </a>
                 API Target is
+                {' '}
                 {url}
             </header>
         </div>
