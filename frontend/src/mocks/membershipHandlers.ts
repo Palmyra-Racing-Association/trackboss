@@ -26,14 +26,14 @@ const membershipHandlers = [
     rest.get(`${process.env.REACT_APP_API_URL}/api/membership/list`, (req, res, ctx) => {
         const status = req.url.searchParams.get('status');
 
-        if (status === 'Bad request') {
-            return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
+        if (status === 'Badrequest') {
+            return res(ctx.status(400), ctx.json({ reason: 'Badrequest' }));
         } if (status === 'Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
-        } if (status === 'Not Found') {
-            return res(ctx.status(404), ctx.json({ reason: 'Not Found' }));
-        } if (status === 'Internal Server Error') {
-            return res(ctx.status(404), ctx.json({ reason: 'Internal Server Error' }));
+        } if (status === 'NotFound') {
+            return res(ctx.status(404), ctx.json({ reason: 'NotFound' }));
+        } if (status === 'InternalServerError') {
+            return res(ctx.status(404), ctx.json({ reason: 'InternalServerError' }));
         }
         return res(ctx.status(200), ctx.json([{ membership_id: 1 }, { membership_id: 2 }]));
     }),

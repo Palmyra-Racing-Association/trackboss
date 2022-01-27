@@ -168,8 +168,8 @@ test('getMembershipList returns list with valid id', async () => {
 
 test('getMembershipList returns 400', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token, 'Bad request');
-    expect(res.reason).toEqual('Bad request');
+    const res = await getMembershipList(token, 'Badrequest');
+    expect(res.reason).toEqual('Badrequest');
 });
 
 test('getMembershipList returns 401', async () => {
@@ -180,14 +180,14 @@ test('getMembershipList returns 401', async () => {
 
 test('getMembershipList returns 404', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token, 'Not Found');
-    expect(res.reason).toEqual('Not Found');
+    const res = await getMembershipList(token, 'NotFound');
+    expect(res.reason).toEqual('NotFound');
 });
 
 test('getMembershipList returns 500', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token, 'Internal Server Error');
-    expect(res.reason).toEqual('Internal Server Error');
+    const res = await getMembershipList(token, 'InternalServerError');
+    expect(res.reason).toEqual('InternalServerError');
 });
 
 // registerMembership
