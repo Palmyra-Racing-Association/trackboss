@@ -16,6 +16,7 @@ export type Membership = {
 }
 
 export type PostNewMembershipRequest = {
+    membershipAdminId: number,
     yearJoined: number,
     address: string,
     city: string,
@@ -31,8 +32,7 @@ export type GetMembershipRequest = {}
 export type GetMembershipResponse = Membership | ErrorResponse
 
 export type PatchMembershipRequest = {
-    membershipId?: number,
-    membershipAdmin?: string,
+    membershipAdminId?: number,
     active?: boolean,
     curYearRenewed?: boolean,
     renewalSent: boolean,
@@ -41,13 +41,14 @@ export type PatchMembershipRequest = {
     city?: string
     state?: string,
     zip?: string
+    modifiedBy: number
 }
 
 export type PatchMemberResponse = Membership | ErrorResponse
 
 export type GetMembershipListRequest = {}
 
-export type GetMembershipListResponse = Membership[]
+export type GetMembershipListResponse = Membership[] | ErrorResponse
 
 export type PostRegisterNewMembershipRequest = {
     memberTypeId: number,
@@ -56,7 +57,7 @@ export type PostRegisterNewMembershipRequest = {
     phoneNumber: string,
     occupation: string,
     email: string,
-    birthdate: string,
+    birthdate: Date,
     address: string,
     city: string,
     state: string,
@@ -70,9 +71,9 @@ export type PostRegisterMembershipResponse = {
     phoneNumber: string,
     occupation: string,
     email: string,
-    birthdate: string,
+    birthdate: Date,
     address: string,
     city: string,
     state: string,
     zip: string
-}
+} | ErrorResponse

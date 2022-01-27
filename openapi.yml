@@ -188,7 +188,7 @@ components:
         lastName:
           $ref: "#/components/schemas/string"
         phoneNumber:
-          type: string
+          $ref: "#/components/schemas/string"
         occupation:
           $ref: "#/components/schemas/string"
         email:
@@ -360,7 +360,7 @@ paths:
                 lastName:
                   $ref: "#/components/schemas/string"
                 phoneNumber:
-                  type: string
+                  $ref: "#/components/schemas/string"
                 occupation:
                   $ref: "#/components/schemas/string"
                 email:
@@ -478,7 +478,7 @@ paths:
                 lastName:
                   $ref: "#/components/schemas/string"
                 phoneNumber:
-                  type: string
+                  $ref: "#/components/schemas/string"
                 occupation:
                   $ref: "#/components/schemas/string"
                 email:
@@ -612,6 +612,8 @@ paths:
               required:
                 - modifiedBy
               properties:
+                membershipAdminId:
+                  $ref: "#/components/schemas/integer"
                 yearJoined:
                   $ref: "#/components/schemas/integer"
                 address:
@@ -693,7 +695,7 @@ paths:
                 lastName:
                   $ref: "#/components/schemas/string"
                 phoneNumber:
-                  type: string
+                  $ref: "#/components/schemas/string"
                 occupation:
                   $ref: "#/components/schemas/string"
                 email:
@@ -768,6 +770,8 @@ paths:
               minProperties: 2
               additionalProperties: false
               properties:
+                membershipAdminId:
+                  $ref: "#/components/schemas/integer"
                 active:
                   type: boolean
                 curYearRenewed:
