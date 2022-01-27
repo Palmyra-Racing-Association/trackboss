@@ -50,13 +50,11 @@ export async function updateEvent(token: string, eventID: number, eventData: obj
     return response.json();
 }
 
-export async function deleteEvent(eventID: number) {
+export async function deleteEvent(token, eventID: number) {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
         method: 'DELETE',
         mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: generateHeaders(token),
     });
     return response.json();
 }

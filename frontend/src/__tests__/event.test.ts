@@ -160,31 +160,31 @@ test('updateEvent returns internal server error', async () => {
 
 // getEventList
 test('getEventList returns list with valid id and no query param', async () => {
-    const token = 'Bearer TestingToken';
+    const token = 'TestingToken';
     const res = await getEventList(token);
     expect(res[0]).toEqual({ event_id: 1 });
 });
 
 test('getEventList returns 400', async () => {
-    const token = 'Bearer Badrequest';
+    const token = 'Badrequest';
     const res = await getEventList(token, 'Badrequest');
     expect(res.reason).toEqual('Badrequest');
 });
 
 test('getEventList returns 401', async () => {
-    const token = 'Bearer Unauthorized';
+    const token = 'Unauthorized';
     const res = await getEventList(token, 'Unauthorized');
     expect(res.reason).toEqual('Unauthorized');
 });
 
 test('getEventList returns 404', async () => {
-    const token = 'Bearer NotFound';
+    const token = 'NotFound';
     const res = await getEventList(token, 'NotFound');
     expect(res.reason).toEqual('NotFound');
 });
 
 test('getEventList returns 500', async () => {
-    const token = 'Bearer InternalServerError';
+    const token = 'InternalServerError';
     const res = await getEventList(token, 'InternalServerError');
     expect(res.reason).toEqual('InternalServerError');
 });
@@ -193,29 +193,29 @@ test('getEventList returns 500', async () => {
 test('delete event returns valid event_id', async () => {
     const token = 'TestingToken';
     const res = await deleteEvent(token, 1);
-    expect(res.Event_id).toEqual(1);
+    expect(res.event_id).toEqual(1);
 });
 
 test('deleteEvent returns 400', async () => {
-    const token = 'TestingToken';
+    const token = 'Bad request';
     const res = await deleteEvent(token, -1);
     expect(res.reason).toEqual('Bad request');
 });
 
 test('deleteEvent returns 401', async () => {
-    const token = 'TestingToken';
+    const token = 'Unauthorized';
     const res = await deleteEvent(token, -2);
     expect(res.reason).toEqual('Unauthorized');
 });
 
 test('deleteEvent returns 404', async () => {
-    const token = 'TestingToken';
+    const token = 'Not Found';
     const res = await deleteEvent(token, -3);
     expect(res.reason).toEqual('Not Found');
 });
 
 test('deleteEvent returns 500', async () => {
-    const token = 'TestingToken';
+    const token = 'Internal Server Error';
     const res = await deleteEvent(token, -4);
     expect(res.reason).toEqual('Internal Server Error');
 });
