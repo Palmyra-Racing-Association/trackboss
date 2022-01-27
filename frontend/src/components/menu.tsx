@@ -83,7 +83,6 @@ import { IoIosArrowBack } from "react-icons/io";
                     isFullWidth={true}
                     bg='white'
                     color='black'
-                    isActive={true}
                     _hover={ { bg: 'gray.100' }}
                     _active={{
                       bg: 'orange',
