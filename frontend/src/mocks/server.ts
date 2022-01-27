@@ -4,6 +4,7 @@ import workPointsHandlers from './workPointsHandlers';
 import membershipHandlers from './membershipHandlers';
 import jobTypeHandlers from './jobTypeHandlers';
 import memberHandlers from './memberHandlers';
+import eventTypeHandlers from './eventTypeHandlers';
 import bikeHandlers from './bikeHandlers';
 
 // This configures a request mocking server with the given request handlers.
@@ -13,6 +14,7 @@ const server = setupServer(
     ...memberHandlers,
     ...jobTypeHandlers,
     ...bikeHandlers,
+    ...eventTypeHandlers,
 );
 
 export { server, rest };
