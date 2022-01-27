@@ -22,6 +22,22 @@ const memberHandlers = [
         return res(ctx.status(201), ctx.json({ member_id: 1 }));
     }),
 
+    // getMemberList
+    rest.get(`${process.env.REACT_APP_API_URL}/api/member/list`, (req, res, ctx) => {
+        const status = req.url.searchParams.get('status');
+
+        if (status === 'Badrequest') {
+            return res(ctx.status(400), ctx.json({ reason: 'Badrequest' }));
+        } if (status === 'Unauthorized') {
+            return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
+        } if (status === 'NotFound') {
+            return res(ctx.status(404), ctx.json({ reason: 'NotFound' }));
+        } if (status === 'InternalServerError') {
+            return res(ctx.status(404), ctx.json({ reason: 'InternalServerError' }));
+        }
+        return res(ctx.status(200), ctx.json([{ member_id: 1 }, { member_id: 2 }]));
+    }),
+
     // getMember
     rest.get(`${process.env.REACT_APP_API_URL}/api/member/:memberID`, (req, res, ctx) => {
         const { memberID } = req.params;
@@ -58,21 +74,7 @@ const memberHandlers = [
         return res(ctx.status(201), ctx.json({ member_id: 1 }));
     }),
 
-    // getMemberList
-    rest.get(`${process.env.REACT_APP_API_URL}/api/member/list`, (req, res, ctx) => {
-        const status = req.url.searchParams.get('status');
-
-        if (status === 'Badrequest') {
-            return res(ctx.status(400), ctx.json({ reason: 'Badrequest' }));
-        } if (status === 'Unauthorized') {
-            return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
-        } if (status === 'NotFound') {
-            return res(ctx.status(404), ctx.json({ reason: 'NotFound' }));
-        } if (status === 'InternalServerError') {
-            return res(ctx.status(404), ctx.json({ reason: 'InternalServerError' }));
-        }
-        return res(ctx.status(200), ctx.json([{ member_id: 1 }, { member_id: 2 }]));
-    }),
+    
 
     
 
