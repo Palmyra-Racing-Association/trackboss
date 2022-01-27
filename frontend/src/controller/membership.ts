@@ -10,7 +10,7 @@ export async function createMembership(token: string, memberData: object) {
     return response.json();
 }
 
-export async function getMembershipList(token: string, listType: string | undefined) {
+export async function getMembershipList(token: string, listType?: string) {
     if (listType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/list?status=${listType}`, {
             method: 'GET',

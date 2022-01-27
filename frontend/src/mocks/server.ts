@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import workPointsHandlers from './workpointsHandlers';
+import workPointsHandlers from './workPointsHandlers';
 import membershipHandlers from './membershipHandlers';
 
 // This configures a request mocking server with the given request handlers.

@@ -162,7 +162,7 @@ test('createMembership returns internal server error', async () => {
 // getMembershipList
 test('getMembershipList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token, undefined);
+    const res = await getMembershipList(token);
     expect(res[0]).toEqual({ membership_id: 1 });
 });
 
