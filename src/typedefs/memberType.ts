@@ -11,7 +11,6 @@ export type GetMemberTypeRequest = {};
 export type GetMemberTypeResponse = MemberType | ErrorResponse;
 
 export type PatchMemberRequest = {
-    memberTypeId?: number,
     type?: string,
     baseDuesAmt?: number
 };

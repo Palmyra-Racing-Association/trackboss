@@ -4,7 +4,7 @@ export type Member = {
     memberId: number,
     membershipAdmin: string,
     uuid: string,
-    active: true,
+    active: boolean,
     memberType: string,
     firstName: string,
     lastName: string,
@@ -18,7 +18,7 @@ export type Member = {
     state: string,
     zip: string,
     lastModifiedDate: Date,
-    lastModifiedBy: number | string
+    lastModifiedBy: string
 }
 
 export type PostNewMemberRequest = {
@@ -42,11 +42,10 @@ export type GetMemberRequest = {};
 export type GetMemberResponse = Member | ErrorResponse;
 
 export type PatchMemberRequest = {
-    memberId?: number,
-    membershipAdmin?: string,
+    membershipId?: number,
     uuid?: string,
-    active?: true,
-    memberType?: string,
+    active?: boolean,
+    memberTypeId?: number,
     firstName?: string,
     lastName?: string,
     phoneNumber?: string,
@@ -54,12 +53,7 @@ export type PatchMemberRequest = {
     email?: string,
     birthdate?: Date,
     dateJoined?: Date,
-    address?: string,
-    city?: string,
-    state?: string,
-    zip?: string,
-    lastModifiedDate?: Date,
-    lastModifiedBy?: string
+    modifiedBy: number
 }
 
 export type PatchMemberResponse = Member | ErrorResponse;
