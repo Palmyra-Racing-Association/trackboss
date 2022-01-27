@@ -14,7 +14,7 @@ export async function getMembershipList(token: string, listType: string) {
     const urlString = 'http://localhost:8080/api/membership/list';
     const url = new URL(urlString);
     url.searchParams.append('status', listType);
-    const response = await fetch(url.toString(),
+    const response = await fetch(url.href,
         {
             method: 'GET',
             mode: 'no-cors',
