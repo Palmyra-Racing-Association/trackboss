@@ -29,7 +29,7 @@
         "start": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" react-scripts start",
         "build": "cross-env REACT_APP_API_URL=\"https://apps.palmyramx.com\" react-scripts build",
         "test": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" react-scripts test",
-        "ci-test": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" react-scripts test --reporters $(pwd)/../.github/jest-reporter.js",
+        "ci-test": "react-scripts test --reporters $(pwd)/../.github/jest-reporter.js",
         "eject": "react-scripts eject",
         "dependencies": "npx depcheck"
     },
