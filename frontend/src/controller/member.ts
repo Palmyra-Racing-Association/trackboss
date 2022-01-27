@@ -1,5 +1,4 @@
-import generateHeaders from "./utils";
-
+import generateHeaders from './utils';
 
 export async function createMember(token: string, memberData: object) {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/new`, {

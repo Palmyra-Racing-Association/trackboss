@@ -13,14 +13,14 @@ test('createMember returns new member_id with valid data', async () => {
         {
             membership_id: 0,
             member_type_id: 0,
-            first_name: "string",
-            last_name: "string",
-            phone_number: "string",
-            occupation: "string",
-            email: "user@example.com",
-            birthdate: "2022-01-27",
-            date_joined: "2022-01-27",
-            modified_by: 0
+            first_name: 'string',
+            last_name: 'string',
+            phone_number: 'string',
+            occupation: 'string',
+            email: 'user@example.com',
+            birthdate: '2022-01-27',
+            date_joined: '2022-01-27',
+            modified_by: 0,
         },
     );
     expect(res.member_id).toEqual(1);
@@ -70,7 +70,7 @@ test('createMember returns internal server error', async () => {
     expect(res.reason).toEqual('Internal Server Error');
 });
 
-//getMemberList
+// getMemberList
 test('getMemberList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getMemberList(token);
@@ -202,5 +202,3 @@ test('updateMember returns internal server error', async () => {
     );
     expect(res.reason).toEqual('Internal Server Error');
 });
-
-

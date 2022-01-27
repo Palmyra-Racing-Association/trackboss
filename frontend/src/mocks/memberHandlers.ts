@@ -73,11 +73,5 @@ const memberHandlers = [
 
         return res(ctx.status(201), ctx.json({ member_id: 1 }));
     }),
-
-    
-
-    
-
 ];
-
 export { memberHandlers as default };
