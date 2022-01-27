@@ -8,6 +8,8 @@ info:
 tags:
   - name: member
     description: Creating, updating, and getting members.
+  - name: memberType
+    description: Updating and getting memberTypes.
   - name: membership
     description: >
       Creating, updating, and getting memberships (which can contain multiple
@@ -140,6 +142,15 @@ components:
           $ref: "#/components/schemas/date"
         last_modified_by:
           $ref: "#/components/schemas/string"
+    memberType:
+      type: object
+      properties:
+        member_type_id:
+          $ref: "#/components/schemas/integer"
+        type:
+          $ref: "#/components/schemas/string"
+        base_dues_amt:
+          $ref: "#/components/schemas/number"
     membership:
       type: object
       properties:
@@ -495,6 +506,91 @@ paths:
                   $ref: "#/components/schemas/member"
         400:
           $ref: "#/components/responses/badRequestError"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+
+  # memberType
+  /api/memberType/{memberTypeID}:
+    parameters:
+      - name: memberTypeID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - memberType
+      summary: Get this memberType
+      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/memberType"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        404:
+          $ref: "#/components/responses/notFoundError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+    patch:
+      tags:
+        - memberType
+      summary: Update this memberType
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+        <br><br>
+        This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  $ref: "#/components/schemas/string"
+                base_dues_amt:
+                  $ref: "#/components/schemas/number"
+            example:
+              base_dues_amt: 100
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/memberType"
+        400:
+          $ref: "#/components/responses/badRequestError"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        403:
+          $ref: "#/components/responses/forbiddenError"
+        404:
+          $ref: "#/components/responses/notFoundError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+  /api/memberType/list:
+    get:
+      tags:
+        - memberType
+      summary: Get all memberTypes
+      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/memberType"
         401:
           $ref: "#/components/responses/unauthorizedError"
         500:

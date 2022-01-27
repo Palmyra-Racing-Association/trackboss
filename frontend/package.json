@@ -13,7 +13,8 @@
         "react-router-dom": "^6.2.1",
         "react-scripts": "4.0.3",
         "react-test-renderer": "^17.0.2",
-        "web-vitals": "^1.1.2"
+        "web-vitals": "^1.1.2",
+        "msw": "^0.36.5"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.14.1",
@@ -27,12 +28,15 @@
         "@types/react-test-renderer": "^17.0.1",
         "eslint-config-airbnb": "^18.2.1",
         "eslint-plugin-jsx-a11y": "^6.4.1",
+        "jest": "^26.6.0",
+        "react-test-renderer": "^17.0.2",
         "typescript": "^4.4.3"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
+        "start": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" react-scripts start",
+        "build": "cross-env REACT_APP_API_URL=\"https://apps.palmyramx.com\" react-scripts build",
+        "test": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" react-scripts test",
+        "ci-test": "react-scripts test --reporters $(pwd)/../.github/jest-reporter.js",
         "eject": "react-scripts eject",
         "dependencies": "npx depcheck"
     },
