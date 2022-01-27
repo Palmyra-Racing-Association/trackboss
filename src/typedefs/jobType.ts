@@ -1,3 +1,5 @@
+import { ErrorResponse } from './errorResponse';
+
 export type JobType = {
     jobTypeId: number,
     title: string,
@@ -12,3 +14,19 @@ export type JobType = {
     lastModifiedDate: Date,
     lastModifiedBy: string
 }
+
+export type PostNewJobTypeRequest = {}
+
+export type PostNewJobTypeResponse = JobType | ErrorResponse
+
+export type GetJobTypeRequest = {}
+
+export type GetJobTypeResponse = JobType | ErrorResponse
+
+export type PatchJobTypeRequest = {}
+
+export type PatchJobTypeResponse = JobType | ErrorResponse
+
+export type GetJobTypeListRequest = {}
+
+export type GetJobTypeListResponse = JobType[] | ErrorResponse

@@ -15,6 +15,20 @@ export type Membership = {
     lastModifiedBy: string
 }
 
+export type Registration = {
+    memberType: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
+    occupation: string,
+    email: string,
+    birthdate: Date,
+    address: string,
+    city: string,
+    state: string,
+    zip: string
+}
+
 export type PostNewMembershipRequest = {
     membershipAdminId: number,
     yearJoined: number,
@@ -64,16 +78,4 @@ export type PostRegisterNewMembershipRequest = {
     zip: string
 }
 
-export type PostRegisterMembershipResponse = {
-    memberType: string,
-    firstName: string,
-    lastName: string,
-    phoneNumber: string,
-    occupation: string,
-    email: string,
-    birthdate: Date,
-    address: string,
-    city: string,
-    state: string,
-    zip: string
-} | ErrorResponse
+export type PostRegisterMembershipResponse = Registration | ErrorResponse
