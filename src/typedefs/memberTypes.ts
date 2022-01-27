@@ -18,7 +18,7 @@ export type Member = {
     state: string,
     zip: string,
     lastModifiedDate: Date,
-    lastModifiedBy: string
+    lastModifiedBy: number | string
 }
 
 export type PostNewMemberRequest = {

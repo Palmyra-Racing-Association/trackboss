@@ -24,18 +24,23 @@ export type PostNewMembershipRequest = {
     modifiedBy: number
 }
 
-export type PostNewMembershipResposne = Membership | ErrorResponse
+export type PostNewMembershipResponse = Membership | ErrorResponse
 
 export type GetMembershipRequest = {}
 
 export type GetMembershipResponse = Membership | ErrorResponse
 
 export type PatchMembershipRequest = {
-    address: string,
-    city: string,
-    state: string,
-    zi: number,
-    modifiedBy: number
+    membershipId?: number,
+    membershipAdmin?: string,
+    active?: boolean,
+    curYearRenewed?: boolean,
+    renewalSent: boolean,
+    yearJoined?: number,
+    address?: string,
+    city?: string
+    state?: string,
+    zip?: string
 }
 
 export type PatchMemberResponse = Membership | ErrorResponse
