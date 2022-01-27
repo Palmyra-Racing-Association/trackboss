@@ -6,7 +6,7 @@ import {
 } from '../controller/jobType';
 
 // createJobType
-test('createJobType returns new member_id with valid data', async () => {
+test('createJobType returns new job_type_id with valid data', async () => {
     const token = 'TestingToken';
     const res = await createJobType(
         token,
@@ -19,7 +19,7 @@ test('createJobType returns new member_id with valid data', async () => {
             modified_by: 0,
         },
     );
-    expect(res.membership_id).toEqual(1);
+    expect(res.job_type_id).toEqual(1);
 });
 
 test('createJobType returns bad request', async () => {
@@ -67,10 +67,10 @@ test('createJobType returns internal server error', async () => {
 });
 
 // getJobType
-test('getJobType returns membership with valid id', async () => {
+test('getJobType returns jobType with valid id', async () => {
     const token = 'TestingToken';
     const res = await getJobType(token, 1);
-    expect(res.membership_id).toEqual(1);
+    expect(res.job_type_id).toEqual(1);
 });
 
 test('getJobType returns 400', async () => {
@@ -98,7 +98,7 @@ test('getJobType returns 500', async () => {
 });
 
 // updateJobType
-test('updateJobType returns new member_id with valid data', async () => {
+test('updateJobType returns new job_type_id with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateJobType(
         token,
@@ -111,7 +111,7 @@ test('updateJobType returns new member_id with valid data', async () => {
             modified_by: 42,
         },
     );
-    expect(res.membership_id).toEqual(1);
+    expect(res.job_type_id).toEqual(1);
 });
 
 test('updateJobType returns bad request', async () => {
@@ -166,29 +166,5 @@ test('updateJobType returns internal server error', async () => {
 test('getJobTypeList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getJobTypeList(token);
-    expect(res[0]).toEqual({ membership_id: 1 });
-});
-
-test('getJobTypeList returns list with valid id and query param', async () => {
-    const token = 'TestingToken';
-    const res = await getJobTypeList(token);
-    expect(res[0]).toEqual({ membership_id: 1 });
-});
-
-test('getJobTypeList returns 400', async () => {
-    const token = 'TestingToken';
-    const res = await getJobTypeList(token);
-    expect(res.reason).toEqual('Badrequest');
-});
-
-test('getJobTypeList returns 401', async () => {
-    const token = '401';
-    const res = await getJobTypeList(token);
-    expect(res.reason).toEqual('Unauthorized');
-});
-
-test('getJobTypeList returns 500', async () => {
-    const token = '500';
-    const res = await getJobTypeList(token);
-    expect(res.reason).toEqual('InternalServerError');
+    expect(res[0]).toEqual({ job_type_id: 1 });
 });

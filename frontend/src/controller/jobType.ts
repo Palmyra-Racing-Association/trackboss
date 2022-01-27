@@ -1,11 +1,11 @@
 import generateHeaders from './utils';
 
-export async function createJobType(token: string, memberData: object) {
+export async function createJobType(token: string, jobTypeData: object) {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/jobType/new`, {
         method: 'POST',
         mode: 'no-cors',
         headers: generateHeaders(token),
-        body: JSON.stringify(memberData),
+        body: JSON.stringify(jobTypeData),
     });
     return response.json();
 }
