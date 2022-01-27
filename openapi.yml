@@ -1460,6 +1460,8 @@ paths:
                   type: boolean
                 paid:
                   type: boolean
+                modifiedBy:
+                  $ref: "#/components/schemas/integer"
             example:
               verified: true
       responses:

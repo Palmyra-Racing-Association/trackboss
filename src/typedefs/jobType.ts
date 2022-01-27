@@ -15,7 +15,17 @@ export type JobType = {
     lastModifiedBy: string
 }
 
-export type PostNewJobTypeRequest = {}
+export type PostNewJobTypeRequest = {
+    title: string,
+    pointValue: number,
+    cashValue: number,
+    jobDayNumber: number,
+    reserved: boolean,
+    online: boolean,
+    mealTicket: boolean,
+    sortOrder: number,
+    modifiedBy: number
+}
 
 export type PostNewJobTypeResponse = JobType | ErrorResponse
 
@@ -23,7 +33,18 @@ export type GetJobTypeRequest = {}
 
 export type GetJobTypeResponse = JobType | ErrorResponse
 
-export type PatchJobTypeRequest = {}
+export type PatchJobTypeRequest = {
+    title?: string,
+    pointValue?: number,
+    cashValue?: number,
+    jobDayNumber?: number,
+    reserved?: boolean,
+    online?: boolean,
+    mealTicket?: boolean,
+    sortOrder?: number,
+    active?: boolean,
+    modifiedBy: number
+}
 
 export type PatchJobTypeResponse = JobType | ErrorResponse
 
