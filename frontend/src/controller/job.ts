@@ -12,6 +12,7 @@ export async function createJob(token: string, jobData: object) {
 
 export async function getJobList(token: string, queryType?: string, filterType?: string) {
     if (queryType && filterType) {
+        console.log('HMMM');
         const response = await fetch(
             `${process.env.REACT_APP_API_URL}/api/job/list?${queryType}=${filterType}`, {
                 method: 'GET',
@@ -22,7 +23,7 @@ export async function getJobList(token: string, queryType?: string, filterType?:
         return response.json();
     }
     // // else
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/list`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/list`, {
         method: 'GET',
         mode: 'no-cors',
         headers: generateHeaders(token),
@@ -40,7 +41,7 @@ export async function getJob(token: string, jobID: number) {
 }
 
 export async function updateJob(token: string, jobID: number, jobData: object) {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/${jobID}`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'PATCH',
         mode: 'no-cors',
         headers: generateHeaders(token),

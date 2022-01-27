@@ -8,20 +8,20 @@ import {
 } from '../controller/job';
 
 // createJob
-test('createJob returns new member_id with valid data', async () => {
+test('createJob returns new job_id with valid data', async () => {
     const token = 'TestingToken';
     const res = await createJob(
         token,
         {
-            year_joined: 1995,
-            address: 'test string',
-            city: 'test string',
-            state: 'test string',
-            zip: 'test string',
+            member_id: 0,
+            event_id: 0,
+            job_type_id: 0,
+            job_date: '2022-01-27',
+            points_awarded: 0,
             modified_by: 0,
         },
     );
-    expect(res.membership_id).toEqual(1);
+    expect(res.job_id).toEqual(1);
 });
 
 test('createJob returns bad request', async () => {
@@ -29,7 +29,7 @@ test('createJob returns bad request', async () => {
     const res = await createJob(
         token,
         {
-            address: 'Bad Request',
+            job_date: 'Bad Request',
         },
     );
     expect(res.reason).toEqual('Bad Request');
@@ -40,7 +40,7 @@ test('createJob returns unauthorized', async () => {
     const res = await createJob(
         token,
         {
-            address: 'Unauthorized',
+            job_date: 'Unauthorized',
         },
     );
     expect(res.reason).toEqual('Unauthorized');
@@ -51,7 +51,7 @@ test('createJob returns forbidden', async () => {
     const res = await createJob(
         token,
         {
-            address: 'Forbidden',
+            job_date: 'Forbidden',
         },
     );
     expect(res.reason).toEqual('Forbidden');
@@ -62,17 +62,17 @@ test('createJob returns internal server error', async () => {
     const res = await createJob(
         token,
         {
-            address: 'Internal Server Error',
+            job_date: 'Internal Server Error',
         },
     );
     expect(res.reason).toEqual('Internal Server Error');
 });
 
 // getJob
-test('getJob returns membership with valid id', async () => {
+test('getJob returns job with valid id', async () => {
     const token = 'TestingToken';
     const res = await getJob(token, 1);
-    expect(res.membership_id).toEqual(1);
+    expect(res.job_id).toEqual(1);
 });
 
 test('getJob returns 400', async () => {
@@ -100,164 +100,161 @@ test('getJob returns 500', async () => {
 });
 
 // updateJob
-test('updateJob returns new member_id with valid data', async () => {
+test('updateJob returns new job_id with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateJob(
         token,
         1,
         {
-            address: '1234 New Address Street',
-            city: 'Hoboken',
-            state: 'NJ',
-            zip: 7030,
-            modified_by: 42,
+            verified: true,
         },
     );
-    expect(res.membership_id).toEqual(1);
+    expect(res.job_id).toEqual(1);
 });
 
 test('updateJob returns bad request', async () => {
-    const token = 'TestingToken';
+    const token = 'Bad Request';
     const res = await updateJob(
         token,
         1,
         {
-            address: 'Bad Request',
+            verified: true,
         },
     );
     expect(res.reason).toEqual('Bad Request');
 });
 
 test('updateJob returns unauthorized', async () => {
-    const token = 'TestingToken';
+    const token = 'Unauthorized';
     const res = await updateJob(
         token,
         1,
         {
-            address: 'Unauthorized',
+            verified: true,
         },
     );
     expect(res.reason).toEqual('Unauthorized');
 });
 
 test('updateJob returns forbidden', async () => {
-    const token = 'TestingToken';
+    const token = 'Forbidden';
     const res = await updateJob(
         token,
         1,
         {
-            address: 'Forbidden',
+            verified: true,
         },
     );
     expect(res.reason).toEqual('Forbidden');
 });
 
 test('updateJob returns internal server error', async () => {
-    const token = 'TestingToken';
+    const token = 'Internal Server Error';
     const res = await updateJob(
         token,
         1,
         {
-            address: 'Internal Server Error',
+            verified: true,
         },
     );
     expect(res.reason).toEqual('Internal Server Error');
 });
 
 // getJobList
-test('getJobList returns list with valid id and no query param', async () => {
+test('getJobList returns list with valid strings', async () => {
     const token = 'TestingToken';
-    const res = await getJobList(token);
-    expect(res[0]).toEqual({ membership_id: 1 });
+    const res = await getJobList(token, 'queryType', 'FilterType');
+    expect(res[0]).toEqual({ job_id: 1 });
 });
 
-test('getJobList returns list with valid id and query param', async () => {
-    const token = 'TestingToken';
-    const res = await getJobList(token, 'valid');
-    expect(res[0]).toEqual({ membership_id: 1 });
-});
+// test('getJobList returns list with no params', async () => {
+//     const token = 'TestingToken';
+//     const res = await getJobList(token);
+//     expect(res[0]).toEqual({ job_id: 1 });
+// });
 
-test('getJobList returns 400', async () => {
-    const token = 'TestingToken';
-    const res = await getJobList(token, 'Badrequest');
-    expect(res.reason).toEqual('Badrequest');
-});
+// test('getJobList returns 400', async () => {
+//     const token = 'TestingToken';
+//     const res = await getJobList(token, 'Bad Request');
+//     expect(res.reason).toEqual('Bad Request');
+// });
 
-test('getJobList returns 401', async () => {
-    const token = 'TestingToken';
-    const res = await getJobList(token, 'Unauthorized');
-    expect(res.reason).toEqual('Unauthorized');
-});
+// test('getJobList returns 401', async () => {
+//     const token = 'TestingToken';
+//     const res = await getJobList(token, 'Unauthorized');
+//     expect(res.reason).toEqual('Unauthorized');
+// });
 
-test('getJobList returns 404', async () => {
-    const token = 'TestingToken';
-    const res = await getJobList(token, 'NotFound');
-    expect(res.reason).toEqual('NotFound');
-});
+// test('getJobList returns 404', async () => {
+//     const token = 'TestingToken';
+//     const res = await getJobList(token, 'Not Found');
+//     expect(res.reason).toEqual('Not Found');
+// });
 
-test('getJobList returns 500', async () => {
-    const token = 'TestingToken';
-    const res = await getJobList(token, 'InternalServerError');
-    expect(res.reason).toEqual('InternalServerError');
-});
+// test('getJobList returns 500', async () => {
+//     const token = 'TestingToken';
+//     const res = await getJobList(token, 'Internal Server Error');
+//     expect(res.reason).toEqual('Internal Server Error');
+// });
 
 // cloneJob
-test('cloneJob returns new member_id with valid data', async () => {
+test('cloneJob returns new job_id with valid data', async () => {
     const token = 'TestingToken';
-    const res = await cloneJob(
-        token,
-        {
-            year_joined: 1995,
-            address: 'test string',
-            city: 'test string',
-            state: 'test string',
-            zip: 'test string',
-            modified_by: 0,
-        },
-    );
-    expect(res.membership_id).toEqual(1);
+    const res = await cloneJob(token, 1);
+    expect(res.job_id).toEqual(1);
 });
 
 test('cloneJob returns bad request', async () => {
     const token = 'TestingToken';
-    const res = await cloneJob(
-        token,
-        {
-            address: 'Bad Request',
-        },
-    );
+    const res = await cloneJob(token, -1);
     expect(res.reason).toEqual('Bad Request');
 });
 
 test('cloneJob returns unauthorized', async () => {
     const token = 'TestingToken';
-    const res = await cloneJob(
-        token,
-        {
-            address: 'Unauthorized',
-        },
-    );
+    const res = await cloneJob(token, -2);
     expect(res.reason).toEqual('Unauthorized');
 });
 
 test('cloneJob returns forbidden', async () => {
     const token = 'TestingToken';
-    const res = await cloneJob(
-        token,
-        {
-            address: 'Forbidden',
-        },
-    );
+    const res = await cloneJob(token, -3);
     expect(res.reason).toEqual('Forbidden');
 });
 
 test('cloneJob returns internal server error', async () => {
     const token = 'TestingToken';
-    const res = await cloneJob(
-        token,
-        {
-            address: 'Internal Server Error',
-        },
-    );
+    const res = await cloneJob(token, -4);
+    expect(res.reason).toEqual('Internal Server Error');
+});
+
+// deleteJob
+test('deleteJob returns new job_id with valid data', async () => {
+    const token = 'TestingToken';
+    const res = await deleteJob(token, 1);
+    expect(res.job_id).toEqual(1);
+});
+
+test('deleteJob returns bad request', async () => {
+    const token = 'TestingToken';
+    const res = await deleteJob(token, -1);
+    expect(res.reason).toEqual('Bad Request');
+});
+
+test('deleteJob returns unauthorized', async () => {
+    const token = 'TestingToken';
+    const res = await deleteJob(token, -2);
+    expect(res.reason).toEqual('Unauthorized');
+});
+
+test('deleteJob returns forbidden', async () => {
+    const token = 'TestingToken';
+    const res = await deleteJob(token, -3);
+    expect(res.reason).toEqual('Forbidden');
+});
+
+test('deleteJob returns internal server error', async () => {
+    const token = 'TestingToken';
+    const res = await deleteJob(token, -4);
     expect(res.reason).toEqual('Internal Server Error');
 });

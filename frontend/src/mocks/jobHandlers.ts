@@ -1,98 +1,104 @@
 import { rest } from 'msw';
 
 const jobHandlers = [
-    // createMembership
-    rest.post(`${process.env.REACT_APP_API_URL}/api/membership/new`, (req, res, ctx) => {
+    // createJob
+    rest.post(`${process.env.REACT_APP_API_URL}/api/job/new`, (req, res, ctx) => {
         const bodyString = JSON.stringify(req.body);
         const body = JSON.parse(bodyString);
 
-        if (body.address === 'Bad Request') {
+        if (body.job_date === 'Bad Request') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         }
-        if (body.address === 'Unauthorized') {
+        if (body.job_date === 'Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
         }
-        if (body.address === 'Forbidden') {
+        if (body.job_date === 'Forbidden') {
             return res(ctx.status(402), ctx.json({ reason: 'Forbidden' }));
         }
-        if (body.address === 'Internal Server Error') {
+        if (body.job_date === 'Internal Server Error') {
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ membership_id: 1 }));
+        return res(ctx.status(201), ctx.json({ job_id: 1 }));
     }),
 
-    // getMembershipList
-    rest.get(`${process.env.REACT_APP_API_URL}/api/membership/list`, (req, res, ctx) => {
-        const status = req.url.searchParams.get('status');
+    // getJobList
+    rest.get(`${process.env.REACT_APP_API_URL}/api/job/list`, (req, res, ctx) => {
+        const queryType = req.url.searchParams.get('queryType');
 
-        if (status === 'Badrequest') {
-            return res(ctx.status(400), ctx.json({ reason: 'Badrequest' }));
-        } if (status === 'Unauthorized') {
+        if (queryType === 'Bad Request') {
+            return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
+        } if (queryType === 'Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
-        } if (status === 'NotFound') {
-            return res(ctx.status(404), ctx.json({ reason: 'NotFound' }));
-        } if (status === 'InternalServerError') {
-            return res(ctx.status(404), ctx.json({ reason: 'InternalServerError' }));
+        } if (queryType === 'Not Found') {
+            return res(ctx.status(404), ctx.json({ reason: 'Not Found' }));
+        } if (queryType === 'Internal Server Error') {
+            return res(ctx.status(404), ctx.json({ reason: 'Internal Server Error' }));
         }
-        return res(ctx.status(200), ctx.json([{ membership_id: 1 }, { membership_id: 2 }]));
+        return res(ctx.status(200), ctx.json([{ job_id: 1 }, { job_id: 2 }]));
     }),
 
-    // getMembership
-    rest.get(`${process.env.REACT_APP_API_URL}/api/membership/:membershipID`, (req, res, ctx) => {
-        const { membershipID } = req.params;
-        if (membershipID === '1') {
-            return res(ctx.status(200), ctx.json({ membership_id: 1 }));
-        } if (membershipID === '-1') {
+    // getJob
+    rest.get(`${process.env.REACT_APP_API_URL}/api/job/:jobID`, (req, res, ctx) => {
+        const { jobID } = req.params;
+        if (jobID === '1') {
+            return res(ctx.status(200), ctx.json({ job_id: 1 }));
+        } if (jobID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
-        } if (membershipID === '-2') {
+        } if (jobID === '-2') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
-        } if (membershipID === '-3') {
+        } if (jobID === '-3') {
             return res(ctx.status(404), ctx.json({ reason: 'Not Found' }));
         }
         return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
     }),
 
-    // updateMembership
-    rest.patch(`${process.env.REACT_APP_API_URL}/api/membership/:membershipID`, (req, res, ctx) => {
-        const bodyString = JSON.stringify(req.body);
-        const body = JSON.parse(bodyString);
+    // updateJob
+    rest.patch(`${process.env.REACT_APP_API_URL}/api/job/:jobID`, (req, res, ctx) => {
+        const token = req.headers.get('Authorization');
 
-        if (body.address === 'Bad Request') {
+        if (token === 'Bearer Bad Request') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
-        }
-        if (body.address === 'Unauthorized') {
+        } if (token === 'Bearer Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
+        } if (token === 'Bearer Not Found') {
+            return res(ctx.status(404), ctx.json({ reason: 'Not Found' }));
+        } if (token === 'Bearer Forbidden') {
+            return res(ctx.status(404), ctx.json({ reason: 'Forbidden' }));
+        } if (token === 'Bearer Internal Server Error') {
+            return res(ctx.status(404), ctx.json({ reason: 'Internal Server Error' }));
         }
-        if (body.address === 'Forbidden') {
-            return res(ctx.status(402), ctx.json({ reason: 'Forbidden' }));
-        }
-        if (body.address === 'Internal Server Error') {
-            return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
-        }
-
-        return res(ctx.status(201), ctx.json({ membership_id: 1 }));
+        return res(ctx.status(200), ctx.json({ job_id: 1 }));
     }),
 
-    // createMembership
-    rest.post(`${process.env.REACT_APP_API_URL}/api/membership/register`, (req, res, ctx) => {
-        const bodyString = JSON.stringify(req.body);
-        const body = JSON.parse(bodyString);
-
-        if (body.address === 'Bad Request') {
+    // cloneJob
+    rest.post(`${process.env.REACT_APP_API_URL}/api/job/:jobID`, (req, res, ctx) => {
+        const { jobID } = req.params;
+        if (jobID === '1') {
+            return res(ctx.status(200), ctx.json({ job_id: 1 }));
+        } if (jobID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
-        }
-        if (body.address === 'Unauthorized') {
+        } if (jobID === '-2') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
+        } if (jobID === '-3') {
+            return res(ctx.status(404), ctx.json({ reason: 'Forbidden' }));
         }
-        if (body.address === 'Forbidden') {
-            return res(ctx.status(402), ctx.json({ reason: 'Forbidden' }));
-        }
-        if (body.address === 'Internal Server Error') {
-            return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
-        }
+        return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
+    }),
 
-        return res(ctx.status(201), ctx.json({ member_type: 'new member' }));
+    // deleteJob
+    rest.delete(`${process.env.REACT_APP_API_URL}/api/job/:jobID`, (req, res, ctx) => {
+        const { jobID } = req.params;
+        if (jobID === '1') {
+            return res(ctx.status(200), ctx.json({ job_id: 1 }));
+        } if (jobID === '-1') {
+            return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
+        } if (jobID === '-2') {
+            return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
+        } if (jobID === '-3') {
+            return res(ctx.status(404), ctx.json({ reason: 'Forbidden' }));
+        }
+        return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
     }),
 ];
 
