@@ -12,7 +12,12 @@ export type DeletedBike = {
     bikeId: number
 }
 
-export type PostNewBikeRequest = {}
+export type PostNewBikeRequest = {
+    year: string,
+    make: string,
+    model: string,
+    membershipId: number
+}
 
 export type PostNewBikeResponse = Bike | ErrorResponse
 
@@ -20,7 +25,12 @@ export type GetBikeRequest = {}
 
 export type GetBikeResponse = Bike | ErrorResponse
 
-export type PatchBikeRequest = {}
+export type PatchBikeRequest = {
+    year?: string,
+    make?: string,
+    model?: string,
+    membershipId?: number
+}
 
 export type PatchBikeResponse = Bike | ErrorResponse
 

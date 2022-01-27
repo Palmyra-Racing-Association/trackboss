@@ -12,7 +12,12 @@ export type DeletedEvent = {
     eventId: number
 }
 
-export type PostNewEventRequest = {}
+export type PostNewEventRequest = {
+    date: Date,
+    eventTypeId: number,
+    eventName: string,
+    eventDescription: string
+}
 
 export type PostNewEventResponse = Event | ErrorResponse
 
@@ -20,7 +25,12 @@ export type GetEventRequest = {}
 
 export type GetEventResponse = Event | ErrorResponse
 
-export type PatchEventRequest = {}
+export type PatchEventRequest = {
+    date?: Date,
+    eventTypeId?: number,
+    eventName?: string,
+    eventDescription?: string
+}
 
 export type PatchEventResponse = Event | ErrorResponse
 

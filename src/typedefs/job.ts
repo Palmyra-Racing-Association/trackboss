@@ -19,7 +19,14 @@ export type DeletedJob = {
     jobId: number
 }
 
-export type PostNewJobRequest = {}
+export type PostNewJobRequest = {
+    memberId?: number,
+    eventId: number,
+    jobTypeId: number,
+    jobDate: Date,
+    pointsAwarded: number,
+    modifiedBy: number
+}
 
 export type PostNewJobResponse = Job | ErrorResponse
 
@@ -27,7 +34,15 @@ export type GetJobRequest = {}
 
 export type GetJobResponse = Job | ErrorResponse
 
-export type PatchJobRequest = {}
+export type PatchJobRequest = {
+    memberId?: number,
+    eventId?: number,
+    jobTypeId?: number,
+    jobDate?: Date,
+    verified?: boolean,
+    paid?: boolean,
+    modifiedBy: number
+}
 
 export type PatchJobResponse = Job | ErrorResponse
 
