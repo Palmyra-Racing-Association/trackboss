@@ -35,7 +35,6 @@ const eventHandlers = [
             return res(ctx.status(200), ctx.json([{ event_id: 1 }, { event_id: 2 }]));
         }
         return res(ctx.status(501), ctx.json({ reason: 'InternalServerError' }));
- 
     }),
 
     // getEvent
@@ -62,7 +61,7 @@ const eventHandlers = [
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
         } if (status === 'Bearer Not Found') {
             return res(ctx.status(404), ctx.json({ reason: 'Not Found' }));
-        } if (status === 'Bearer Testing Token') {
+        } if (status === 'Bearer TestingToken') {
             return res(ctx.status(200), ctx.json({ event_id: 1 }));
         }
         return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
