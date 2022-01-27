@@ -20,7 +20,16 @@ export async function getMember(token: string, memberId: number) {
     return response.json();
 }
 
-export async function getMemberList(token: string) {
+export async function getMemberList(token: string, listType?: string) {
+    if (listType) {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/list?status=${listType}`, {
+            method: 'GET',
+            mode: 'no-cors',
+            headers: generateHeaders(token),
+        });
+        return response.json();
+    }
+    // else
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/list`, {
         method: 'GET',
         mode: 'no-cors',

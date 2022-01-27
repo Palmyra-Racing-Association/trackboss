@@ -11,7 +11,7 @@ test('createMember returns new member_id with valid data', async () => {
     const res = await createMember(
         token,
         {
-            membershd: 0,
+            membership_id: 0,
             member_type_id: 0,
             first_name: "string",
             last_name: "string",
@@ -71,10 +71,10 @@ test('createMember returns internal server error', async () => {
 });
 
 // getMember
-test('getMember returns membership with valid id', async () => {
+test('getMember returns member with valid id', async () => {
     const token = 'TestingToken';
     const res = await getMember(token, 1);
-    expect(res.membershd).toEqual(1);
+    expect(res.member_id).toEqual(1);
 });
 
 test('getMember returns 400', async () => {
@@ -115,7 +115,7 @@ test('updateMember returns new member_id with valid data', async () => {
             modified_by: 42,
         },
     );
-    expect(res.membershd).toEqual(1);
+    expect(res.member_id).toEqual(1);
 });
 
 test('updateMember returns bad request', async () => {
@@ -166,7 +166,8 @@ test('updateMember returns internal server error', async () => {
     expect(res.reason).toEqual('Internal Server Error');
 });
 
-// getMemberList
+
+//getMemberList
 test('getMemberList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getMemberList(token);
@@ -175,30 +176,30 @@ test('getMemberList returns list with valid id and no query param', async () => 
 
 test('getMemberList returns list with valid id and query param', async () => {
     const token = 'TestingToken';
-    const res = await getMemberList(token);
+    const res = await getMemberList(token, 'valid');
     expect(res[0]).toEqual({ member_id: 1 });
 });
 
 test('getMemberList returns 400', async () => {
     const token = 'TestingToken';
-    const res = await getMemberList(token);
+    const res = await getMemberList(token, 'Badrequest');
     expect(res.reason).toEqual('Badrequest');
 });
 
 test('getMemberList returns 401', async () => {
     const token = 'TestingToken';
-    const res = await getMemberList(token);
+    const res = await getMemberList(token, 'Unauthorized');
     expect(res.reason).toEqual('Unauthorized');
 });
 
 test('getMemberList returns 404', async () => {
     const token = 'TestingToken';
-    const res = await getMemberList(token);
+    const res = await getMemberList(token, 'NotFound');
     expect(res.reason).toEqual('NotFound');
 });
 
 test('getMemberList returns 500', async () => {
     const token = 'TestingToken';
-    const res = await getMemberList(token);
+    const res = await getMemberList(token, 'InternalServerError');
     expect(res.reason).toEqual('InternalServerError');
 });
