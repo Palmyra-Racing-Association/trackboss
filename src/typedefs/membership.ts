@@ -30,12 +30,12 @@ export type Registration = {
 }
 
 export type PostNewMembershipRequest = {
-    membershipAdminId: number,
-    yearJoined: number,
-    address: string,
-    city: string,
-    state: string,
-    zip: string,
+    membershipAdminId?: number,
+    yearJoined?: number,
+    address?: string,
+    city?: string,
+    state?: string,
+    zip?: string,
     modifiedBy: number
 }
 
@@ -66,16 +66,16 @@ export type GetMembershipListResponse = Membership[] | ErrorResponse
 
 export type PostRegisterNewMembershipRequest = {
     memberTypeId: number,
-    firstName: string,
-    lastName: string,
-    phoneNumber: string,
-    occupation: string,
-    email: string,
-    birthdate: Date,
-    address: string,
-    city: string,
-    state: string,
-    zip: string
+    firstName?: string,
+    lastName?: string,
+    phoneNumber?: string,
+    occupation?: string,
+    email?: string,
+    birthdate?: Date,
+    address?: string,
+    city?: string,
+    state?: string,
+    zip?: string
 }
 
 export type PostRegisterMembershipResponse = Registration | ErrorResponse

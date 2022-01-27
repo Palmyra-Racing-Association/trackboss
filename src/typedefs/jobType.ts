@@ -17,13 +17,13 @@ export type JobType = {
 
 export type PostNewJobTypeRequest = {
     title: string,
-    pointValue: number,
-    cashValue: number,
-    jobDayNumber: number,
+    pointValue?: number,
+    cashValue?: number,
+    jobDayNumber?: number,
     reserved: boolean,
     online: boolean,
     mealTicket: boolean,
-    sortOrder: number,
+    sortOrder?: number,
     modifiedBy: number
 }
 
