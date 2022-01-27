@@ -26,13 +26,13 @@ const membershipHandlers = [
     rest.get(`${process.env.REACT_APP_API_URL}/api/bike/list`, (req, res, ctx) => {
         const membershipID = req.url.searchParams.get('membershipID');
         if (membershipID === '-1') {
-            return res(ctx.status(400), ctx.json({ reason: 'Badrequest' }));
+            return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (membershipID === '-2') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
         } if (membershipID === '-3') {
-            return res(ctx.status(404), ctx.json({ reason: 'NotFound' }));
+            return res(ctx.status(404), ctx.json({ reason: 'Not Found' }));
         } if (membershipID === '-4') {
-            return res(ctx.status(404), ctx.json({ reason: 'InternalServerError' }));
+            return res(ctx.status(404), ctx.json({ reason: 'Internal Server Error' }));
         }
         return res(ctx.status(200), ctx.json([{ bike_id: 1 }, { bike_id: 2 }]));
     }),

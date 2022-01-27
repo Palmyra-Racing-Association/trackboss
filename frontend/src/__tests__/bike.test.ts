@@ -176,7 +176,7 @@ test('getBikeList returns list with valid id and query param', async () => {
 test('getBikeList returns 400', async () => {
     const token = 'TestingToken';
     const res = await getBikeList(token, -1);
-    expect(res.reason).toEqual('Badrequest');
+    expect(res.reason).toEqual('Bad request');
 });
 
 test('getBikeList returns 401', async () => {
@@ -188,13 +188,13 @@ test('getBikeList returns 401', async () => {
 test('getBikeList returns 404', async () => {
     const token = 'TestingToken';
     const res = await getBikeList(token, -3);
-    expect(res.reason).toEqual('NotFound');
+    expect(res.reason).toEqual('Not Found');
 });
 
 test('getBikeList returns 500', async () => {
     const token = 'TestingToken';
     const res = await getBikeList(token, -4);
-    expect(res.reason).toEqual('InternalServerError');
+    expect(res.reason).toEqual('Internal Server Error');
 });
 
 // deleteBike
