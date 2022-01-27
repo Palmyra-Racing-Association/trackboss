@@ -104,7 +104,7 @@ test('updateEvent returns new event_id with valid data', async () => {
         1,
         {
             date: '12/18/21',
-            'event_name': 'Squeaky Training Wheels Invitational (Rescheduled)',
+            event_name: 'Squeaky Training Wheels Invitational (Rescheduled)',
         },
     );
     expect(res.event_id).toEqual(1);
