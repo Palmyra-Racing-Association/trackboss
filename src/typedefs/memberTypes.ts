@@ -1,3 +1,5 @@
+import { ErrorResponse } from './errorResponse';
+
 export type Member = {
     memberId: number,
     membershipAdmin: string,
@@ -17,7 +19,7 @@ export type Member = {
     zip: string,
     lastModifiedDate: Date,
     lastModifiedBy: string
-  }
+}
 
 export type PostNewMemberRequest = {
     membershipId: number,
@@ -33,11 +35,11 @@ export type PostNewMemberRequest = {
     modifiedBy: number
 }
 
-export type PostNewMemberResponse = Member;
+export type PostNewMemberResponse = Member | ErrorResponse;
 
-export type GetMemberRequest = {}
+export type GetMemberRequest = {};
 
-export type GetMemberResponse = Member
+export type GetMemberResponse = Member | ErrorResponse;
 
 export type PatchMemberRequest = {
     memberId?: number,
@@ -60,8 +62,8 @@ export type PatchMemberRequest = {
     lastModifiedBy?: string
 }
 
-export type PatchMemberResponse = Member;
+export type PatchMemberResponse = Member | ErrorResponse;
 
 export type GetMemberListRequest = {}
 
-export type GetMemberListResponse = Member[];
+export type GetMemberListResponse = Member[] | ErrorResponse;
