@@ -1,15 +1,15 @@
 import React from 'react';
 import './App.css';
 import { ChakraProvider } from '@chakra-ui/react';
-import DrawerExample from './components/menu';
 import theme from './theme';
+import Header from './components/Header';
 
-function App() {
+function Dashboard() {
     return (
         <ChakraProvider theme={theme}>
-            <DrawerExample />
+            <Header title="Dashboard" />
         </ChakraProvider>
     );
 }
 
-export default App;
+export default Dashboard;

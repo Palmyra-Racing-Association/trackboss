@@ -24,7 +24,7 @@ import { AiOutlineMenu, AiFillHome, AiFillCalendar} from 'react-icons/ai';
 import { HiUsers, HiCog } from "react-icons/hi";
 import { IoIosArrowBack } from "react-icons/io";
 
-  export default function DrawerExample() {
+  export default function HamburgerMenu() {
     const { isOpen, onOpen, onClose } = useDisclosure()
    
   
