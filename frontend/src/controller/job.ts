@@ -1,25 +1,27 @@
 import generateHeaders from './utils';
 
-export async function createMembership(token: string, memberData: object) {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/new`, {
+export async function createJob(token: string, jobData: object) {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/new`, {
         method: 'POST',
         mode: 'no-cors',
         headers: generateHeaders(token),
-        body: JSON.stringify(memberData),
+        body: JSON.stringify(jobData),
     });
     return response.json();
 }
 
-export async function getMembershipList(token: string, listType?: string) {
-    if (listType) {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/list?status=${listType}`, {
-            method: 'GET',
-            mode: 'no-cors',
-            headers: generateHeaders(token),
-        });
+export async function getJobList(token: string, queryType?: string, filterType?: string) {
+    if (queryType && filterType) {
+        const response = await fetch(
+            `${process.env.REACT_APP_API_URL}/api/job/list?${queryType}=${filterType}`, {
+                method: 'GET',
+                mode: 'no-cors',
+                headers: generateHeaders(token),
+            },
+        );
         return response.json();
     }
-    // else
+    // // else
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/list`, {
         method: 'GET',
         mode: 'no-cors',
@@ -28,8 +30,8 @@ export async function getMembershipList(token: string, listType?: string) {
     return response.json();
 }
 
-export async function getMembership(token: string, membershipID: number) {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/${membershipID}`, {
+export async function getJob(token: string, jobID: number) {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'GET',
         mode: 'no-cors',
         headers: generateHeaders(token),
@@ -37,24 +39,30 @@ export async function getMembership(token: string, membershipID: number) {
     return response.json();
 }
 
-export async function updateMembership(token: string, membershipID: number, memberData: object) {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/${membershipID}`, {
+export async function updateJob(token: string, jobID: number, jobData: object) {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/${jobID}`, {
         method: 'PATCH',
         mode: 'no-cors',
         headers: generateHeaders(token),
-        body: JSON.stringify(memberData),
+        body: JSON.stringify(jobData),
     });
     return response.json();
 }
 
-export async function registerMembership(registrationData: object) {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/register`, {
+export async function cloneJob(token: string, jobID: number) {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'POST',
         mode: 'no-cors',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(registrationData),
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
+
+export async function deleteJob(token: string, jobID: number) {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
+        method: 'DELETE',
+        mode: 'no-cors',
+        headers: generateHeaders(token),
     });
     return response.json();
 }

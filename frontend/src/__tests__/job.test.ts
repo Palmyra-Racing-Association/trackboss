@@ -1,15 +1,16 @@
 import {
-    createMembership,
-    getMembership,
-    updateMembership,
-    registerMembership,
-    getMembershipList,
-} from '../controller/membership';
+    createJob,
+    getJob,
+    updateJob,
+    getJobList,
+    cloneJob,
+    deleteJob,
+} from '../controller/job';
 
-// createMembership
-test('createMembership returns new member_id with valid data', async () => {
+// createJob
+test('createJob returns new member_id with valid data', async () => {
     const token = 'TestingToken';
-    const res = await createMembership(
+    const res = await createJob(
         token,
         {
             year_joined: 1995,
@@ -23,9 +24,9 @@ test('createMembership returns new member_id with valid data', async () => {
     expect(res.membership_id).toEqual(1);
 });
 
-test('createMembership returns bad request', async () => {
+test('createJob returns bad request', async () => {
     const token = 'TestingToken';
-    const res = await createMembership(
+    const res = await createJob(
         token,
         {
             address: 'Bad Request',
@@ -34,9 +35,9 @@ test('createMembership returns bad request', async () => {
     expect(res.reason).toEqual('Bad Request');
 });
 
-test('createMembership returns unauthorized', async () => {
+test('createJob returns unauthorized', async () => {
     const token = 'TestingToken';
-    const res = await createMembership(
+    const res = await createJob(
         token,
         {
             address: 'Unauthorized',
@@ -45,9 +46,9 @@ test('createMembership returns unauthorized', async () => {
     expect(res.reason).toEqual('Unauthorized');
 });
 
-test('createMembership returns forbidden', async () => {
+test('createJob returns forbidden', async () => {
     const token = 'TestingToken';
-    const res = await createMembership(
+    const res = await createJob(
         token,
         {
             address: 'Forbidden',
@@ -56,9 +57,9 @@ test('createMembership returns forbidden', async () => {
     expect(res.reason).toEqual('Forbidden');
 });
 
-test('createMembership returns internal server error', async () => {
+test('createJob returns internal server error', async () => {
     const token = 'TestingToken';
-    const res = await createMembership(
+    const res = await createJob(
         token,
         {
             address: 'Internal Server Error',
@@ -67,41 +68,41 @@ test('createMembership returns internal server error', async () => {
     expect(res.reason).toEqual('Internal Server Error');
 });
 
-// getMembership
-test('getMembership returns membership with valid id', async () => {
+// getJob
+test('getJob returns membership with valid id', async () => {
     const token = 'TestingToken';
-    const res = await getMembership(token, 1);
+    const res = await getJob(token, 1);
     expect(res.membership_id).toEqual(1);
 });
 
-test('getMembership returns 400', async () => {
+test('getJob returns 400', async () => {
     const token = 'TestingToken';
-    const res = await getMembership(token, -1);
+    const res = await getJob(token, -1);
     expect(res.reason).toEqual('Bad request');
 });
 
-test('getMembership returns 401', async () => {
+test('getJob returns 401', async () => {
     const token = 'TestingToken';
-    const res = await getMembership(token, -2);
+    const res = await getJob(token, -2);
     expect(res.reason).toEqual('Unauthorized');
 });
 
-test('getMembership returns 404', async () => {
+test('getJob returns 404', async () => {
     const token = 'TestingToken';
-    const res = await getMembership(token, -3);
+    const res = await getJob(token, -3);
     expect(res.reason).toEqual('Not Found');
 });
 
-test('getMembership returns 500', async () => {
+test('getJob returns 500', async () => {
     const token = 'TestingToken';
-    const res = await getMembership(token, -4);
+    const res = await getJob(token, -4);
     expect(res.reason).toEqual('Internal Server Error');
 });
 
-// updateMembership
-test('createMembership returns new member_id with valid data', async () => {
+// updateJob
+test('updateJob returns new member_id with valid data', async () => {
     const token = 'TestingToken';
-    const res = await updateMembership(
+    const res = await updateJob(
         token,
         1,
         {
@@ -115,10 +116,11 @@ test('createMembership returns new member_id with valid data', async () => {
     expect(res.membership_id).toEqual(1);
 });
 
-test('createMembership returns bad request', async () => {
+test('updateJob returns bad request', async () => {
     const token = 'TestingToken';
-    const res = await createMembership(
+    const res = await updateJob(
         token,
+        1,
         {
             address: 'Bad Request',
         },
@@ -126,10 +128,11 @@ test('createMembership returns bad request', async () => {
     expect(res.reason).toEqual('Bad Request');
 });
 
-test('createMembership returns unauthorized', async () => {
+test('updateJob returns unauthorized', async () => {
     const token = 'TestingToken';
-    const res = await createMembership(
+    const res = await updateJob(
         token,
+        1,
         {
             address: 'Unauthorized',
         },
@@ -137,10 +140,11 @@ test('createMembership returns unauthorized', async () => {
     expect(res.reason).toEqual('Unauthorized');
 });
 
-test('createMembership returns forbidden', async () => {
+test('updateJob returns forbidden', async () => {
     const token = 'TestingToken';
-    const res = await createMembership(
+    const res = await updateJob(
         token,
+        1,
         {
             address: 'Forbidden',
         },
@@ -148,10 +152,11 @@ test('createMembership returns forbidden', async () => {
     expect(res.reason).toEqual('Forbidden');
 });
 
-test('createMembership returns internal server error', async () => {
+test('updateJob returns internal server error', async () => {
     const token = 'TestingToken';
-    const res = await createMembership(
+    const res = await updateJob(
         token,
+        1,
         {
             address: 'Internal Server Error',
         },
@@ -159,65 +164,64 @@ test('createMembership returns internal server error', async () => {
     expect(res.reason).toEqual('Internal Server Error');
 });
 
-// getMembershipList
-test('getMembershipList returns list with valid id and no query param', async () => {
+// getJobList
+test('getJobList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token);
+    const res = await getJobList(token);
     expect(res[0]).toEqual({ membership_id: 1 });
 });
 
-test('getMembershipList returns list with valid id and query param', async () => {
+test('getJobList returns list with valid id and query param', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token, 'valid');
+    const res = await getJobList(token, 'valid');
     expect(res[0]).toEqual({ membership_id: 1 });
 });
 
-test('getMembershipList returns 400', async () => {
+test('getJobList returns 400', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token, 'Badrequest');
+    const res = await getJobList(token, 'Badrequest');
     expect(res.reason).toEqual('Badrequest');
 });
 
-test('getMembershipList returns 401', async () => {
+test('getJobList returns 401', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token, 'Unauthorized');
+    const res = await getJobList(token, 'Unauthorized');
     expect(res.reason).toEqual('Unauthorized');
 });
 
-test('getMembershipList returns 404', async () => {
+test('getJobList returns 404', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token, 'NotFound');
+    const res = await getJobList(token, 'NotFound');
     expect(res.reason).toEqual('NotFound');
 });
 
-test('getMembershipList returns 500', async () => {
+test('getJobList returns 500', async () => {
     const token = 'TestingToken';
-    const res = await getMembershipList(token, 'InternalServerError');
+    const res = await getJobList(token, 'InternalServerError');
     expect(res.reason).toEqual('InternalServerError');
 });
 
-// registerMembership
-test('registerMembership returns new member_id with valid data', async () => {
-    const res = await registerMembership(
+// cloneJob
+test('cloneJob returns new member_id with valid data', async () => {
+    const token = 'TestingToken';
+    const res = await cloneJob(
+        token,
         {
-            member_type_id: 0,
-            first_name: 'string',
-            last_name: 'string',
-            phone_number: 'string',
-            occupation: 'string',
-            email: 'user@example.com',
-            birthdate: '2022-01-27',
-            address: 'string',
-            city: 'string',
-            state: 'string',
-            zip: 'string',
+            year_joined: 1995,
+            address: 'test string',
+            city: 'test string',
+            state: 'test string',
+            zip: 'test string',
+            modified_by: 0,
         },
     );
-    expect(res.member_type).toEqual('new member');
+    expect(res.membership_id).toEqual(1);
 });
 
-test('registerMembership returns bad request', async () => {
-    const res = await registerMembership(
+test('cloneJob returns bad request', async () => {
+    const token = 'TestingToken';
+    const res = await cloneJob(
+        token,
         {
             address: 'Bad Request',
         },
@@ -225,8 +229,10 @@ test('registerMembership returns bad request', async () => {
     expect(res.reason).toEqual('Bad Request');
 });
 
-test('registerMembership returns unauthorized', async () => {
-    const res = await registerMembership(
+test('cloneJob returns unauthorized', async () => {
+    const token = 'TestingToken';
+    const res = await cloneJob(
+        token,
         {
             address: 'Unauthorized',
         },
@@ -234,8 +240,10 @@ test('registerMembership returns unauthorized', async () => {
     expect(res.reason).toEqual('Unauthorized');
 });
 
-test('registerMembership returns forbidden', async () => {
-    const res = await registerMembership(
+test('cloneJob returns forbidden', async () => {
+    const token = 'TestingToken';
+    const res = await cloneJob(
+        token,
         {
             address: 'Forbidden',
         },
@@ -243,8 +251,10 @@ test('registerMembership returns forbidden', async () => {
     expect(res.reason).toEqual('Forbidden');
 });
 
-test('registerMembership returns internal server error', async () => {
-    const res = await registerMembership(
+test('cloneJob returns internal server error', async () => {
+    const token = 'TestingToken';
+    const res = await cloneJob(
+        token,
         {
             address: 'Internal Server Error',
         },
