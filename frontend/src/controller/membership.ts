@@ -11,7 +11,8 @@ export async function createMembership(token: string, memberData: object) {
 }
 
 export async function getMembershipList(token: string, listType: string) {
-    const url = new URL(`${process.env.REACT_APP_API_URL}/api/membership/list`);
+    const urlString = `${process.env.REACT_APP_API_URL}/api/membership/list`;
+    const url = new URL(urlString);
     url.searchParams.append('status', listType);
     const response = await fetch(url.toString(),
         {
