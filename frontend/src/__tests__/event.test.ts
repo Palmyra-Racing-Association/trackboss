@@ -12,10 +12,10 @@ test('createEvent returns new event_id with valid data', async () => {
     const res = await createEvent(
         token,
         {
-            "date": "2022-01-27",
-            "event_type_id": 0,
-            "event_name": "string",
-            "event_description": "string"
+            date: '2022-01-27',
+            event_type_id: 0,
+            event_name: 'string',
+            event_description: 'string',
         },
     );
     expect(res.event_id).toEqual(1);
@@ -103,8 +103,8 @@ test('updateEvent returns new event_id with valid data', async () => {
         token,
         1,
         {
-            "date": "12/18/21",
-            "event_name": "Squeaky Training Wheels Invitational (Rescheduled)"
+            date: '12/18/21',
+            'event_name': 'Squeaky Training Wheels Invitational (Rescheduled)',
         },
     );
     expect(res.event_id).toEqual(1);

@@ -28,7 +28,6 @@ export async function getEventList(token: string, listType?: string) {
     return response.json();
 }
 
-
 export async function getEvent(token: string, eventID: number) {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
         method: 'GET',
@@ -37,8 +36,6 @@ export async function getEvent(token: string, eventID: number) {
     });
     return response.json();
 }
-
-
 
 export async function updateEvent(token: string, eventID: number, eventData: object) {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
