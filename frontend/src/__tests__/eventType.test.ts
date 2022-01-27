@@ -138,10 +138,7 @@ test('updateEventType returns new event_type_id with valid data', async () => {
         1,
         {
             type: '1234 New type Street',
-            city: 'Hoboken',
-            state: 'NJ',
-            zip: 7030,
-            modified_by: 42,
+            modified_by: 0,
         },
     );
     expect(res.event_type_id).toEqual(1);
