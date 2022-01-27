@@ -1,32 +1,17 @@
 import React from 'react';
-import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import MemberList from './pages/MemberList';
+import Settings from './pages/Settings';
+import CalendarPage from './pages/CalendarPage';
 
-function App() {
-    const url = process.env.REACT_APP_API_URL;
+export default function App() {
     return (
-        <div className="App">
-            <header className="App-header">
-                <p>
-                    Edit
-                    {' '}
-                    <code>src/App.tsx</code>
-                    {' '}
-                    and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-                API Target is
-                {' '}
-                {url}
-            </header>
-        </div>
+        <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="calendar" element={<CalendarPage />} />
+            <Route path="members" element={<MemberList />} />
+            <Route path="settings" element={<Settings />} />
+        </Routes>
     );
 }
-
-export default App;
