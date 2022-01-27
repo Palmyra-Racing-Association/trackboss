@@ -22,16 +22,16 @@ export type Member = {
 }
 
 export type PostNewMemberRequest = {
-    membershipId: number,
-    uuid: string,
+    membershipId?: number,
+    uuid?: string,
     memberTypeId: number,
-    firstName: string,
-    lastName: string,
-    phoneNumber: string,
-    occupation: string,
-    email: string,
-    birthdate: Date,
-    dateJoined: Date,
+    firstName?: string,
+    lastName?: string,
+    phoneNumber?: string,
+    occupation?: string,
+    email?: string,
+    birthdate?: Date,
+    dateJoined?: Date,
     modifiedBy: number
 }
 

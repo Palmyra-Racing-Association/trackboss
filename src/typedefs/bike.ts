@@ -13,9 +13,9 @@ export type DeletedBike = {
 }
 
 export type PostNewBikeRequest = {
-    year: string,
-    make: string,
-    model: string,
+    year?: string,
+    make?: string,
+    model?: string,
     membershipId: number
 }
 

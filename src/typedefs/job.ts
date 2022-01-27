@@ -21,10 +21,10 @@ export type DeletedJob = {
 
 export type PostNewJobRequest = {
     memberId?: number,
-    eventId: number,
+    eventId?: number,
     jobTypeId: number,
     jobDate: Date,
-    pointsAwarded: number,
+    pointsAwarded?: number,
     modifiedBy: number
 }
 
