@@ -12,7 +12,6 @@ export async function createJob(token: string, jobData: object) {
 
 export async function getJobList(token: string, queryType?: string, filterType?: string) {
     if (queryType && filterType) {
-        console.log('HMMM');
         const response = await fetch(
             `${process.env.REACT_APP_API_URL}/api/job/list?${queryType}=${filterType}`, {
                 method: 'GET',

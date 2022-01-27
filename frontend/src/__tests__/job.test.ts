@@ -167,35 +167,35 @@ test('getJobList returns list with valid strings', async () => {
     expect(res[0]).toEqual({ job_id: 1 });
 });
 
-// test('getJobList returns list with no params', async () => {
-//     const token = 'TestingToken';
-//     const res = await getJobList(token);
-//     expect(res[0]).toEqual({ job_id: 1 });
-// });
+test('getJobList returns list with no params', async () => {
+    const token = 'TestingToken';
+    const res = await getJobList(token);
+    expect(res[0]).toEqual({ job_id: 1 });
+});
 
-// test('getJobList returns 400', async () => {
-//     const token = 'TestingToken';
-//     const res = await getJobList(token, 'Bad Request');
-//     expect(res.reason).toEqual('Bad Request');
-// });
+test('getJobList returns 400', async () => {
+    const token = 'TestingToken';
+    const res = await getJobList(token, 'queryType', 'Bad Request');
+    expect(res.reason).toEqual('Bad Request');
+});
 
-// test('getJobList returns 401', async () => {
-//     const token = 'TestingToken';
-//     const res = await getJobList(token, 'Unauthorized');
-//     expect(res.reason).toEqual('Unauthorized');
-// });
+test('getJobList returns 401', async () => {
+    const token = 'TestingToken';
+    const res = await getJobList(token, 'queryType', 'Unauthorized');
+    expect(res.reason).toEqual('Unauthorized');
+});
 
-// test('getJobList returns 404', async () => {
-//     const token = 'TestingToken';
-//     const res = await getJobList(token, 'Not Found');
-//     expect(res.reason).toEqual('Not Found');
-// });
+test('getJobList returns 404', async () => {
+    const token = 'TestingToken';
+    const res = await getJobList(token, 'queryType', 'Not Found');
+    expect(res.reason).toEqual('Not Found');
+});
 
-// test('getJobList returns 500', async () => {
-//     const token = 'TestingToken';
-//     const res = await getJobList(token, 'Internal Server Error');
-//     expect(res.reason).toEqual('Internal Server Error');
-// });
+test('getJobList returns 500', async () => {
+    const token = 'TestingToken';
+    const res = await getJobList(token, 'queryType', 'Internal Server Error');
+    expect(res.reason).toEqual('Internal Server Error');
+});
 
 // cloneJob
 test('cloneJob returns new job_id with valid data', async () => {
