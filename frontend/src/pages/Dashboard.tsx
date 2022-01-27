@@ -1,13 +1,12 @@
 import React from 'react';
-import './App.css';
 import { ChakraProvider } from '@chakra-ui/react';
-import theme from './theme';
-import Header from './components/Header';
+import theme from '../theme';
+import Header from '../components/Header';
 
 function Dashboard() {
     return (
         <ChakraProvider theme={theme}>
-            <Header title="Dashboard" />
+            <Header title="Dashboard" activeButtonId={1} />
         </ChakraProvider>
     );
 }

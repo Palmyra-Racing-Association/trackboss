@@ -23,11 +23,16 @@ import {
 import { AiOutlineMenu, AiFillHome, AiFillCalendar} from 'react-icons/ai';
 import { HiUsers, HiCog } from "react-icons/hi";
 import { IoIosArrowBack } from "react-icons/io";
+import { Link, useNavigate} from 'react-router-dom';
 
-  export default function HamburgerMenu() {
+
+interface pageProps {
+  activeButtonId: number
+}
+  export default function HamburgerMenu(props:pageProps) {
     const { isOpen, onOpen, onClose } = useDisclosure()
-   
-  
+    let history = useNavigate();
+
     return (
       <HStack>
         <IconButton 
@@ -35,7 +40,8 @@ import { IoIosArrowBack } from "react-icons/io";
           icon={ <IoIosArrowBack size='lg'/> } 
           color='orange'
           bg='white'
-          size='lg' 
+          size='lg'
+          onClick={() => history(-1)} 
         />
         <div>
           <IconButton
@@ -72,8 +78,10 @@ import { IoIosArrowBack } from "react-icons/io";
                       bg: 'orange',
                       color: 'white',
                     }}
+                    id="1"
+                    isActive={props.activeButtonId == 1}
                   >
-                    Dashboard
+                    <Link to="/">Dashboard</Link>
                   </Button>
                   <Button 
                     height='80px'
@@ -89,8 +97,10 @@ import { IoIosArrowBack } from "react-icons/io";
                       color: 'white',
                     }}
                     borderRadius='0'
+                    id="2"
+                    isActive={props.activeButtonId == 2}
                   >
-                    Calendar
+                    <Link to="/calendar">Calendar</Link>
                   </Button>
                   <Button 
                     height='80px'
@@ -106,8 +116,10 @@ import { IoIosArrowBack } from "react-icons/io";
                       bg: 'orange',
                       color: 'white',
                     }}
+                    id="3"
+                    isActive={props.activeButtonId == 3}
                   >
-                    Members
+                    <Link to="/members">Members</Link>
                   </Button>
                   <Button 
                     height='80px'
@@ -123,8 +135,10 @@ import { IoIosArrowBack } from "react-icons/io";
                       bg: 'orange',
                       color: 'white',
                     }}
+                    id="4"
+                    isActive={props.activeButtonId == 4}
                   >
-                    My Account
+                    <Link to="/settings">My Account</Link>
                   </Button>
                 </VStack>
               </DrawerBody>
