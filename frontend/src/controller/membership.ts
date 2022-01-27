@@ -10,8 +10,17 @@ export async function createMembership(token: string, memberData: object) {
     return response.json();
 }
 
-export async function getMembershipList(token: string, listType: string) {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/list?status=${listType}`, {
+export async function getMembershipList(token: string, listType: string | undefined) {
+    if (listType) {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/list?status=${listType}`, {
+            method: 'GET',
+            mode: 'no-cors',
+            headers: generateHeaders(token),
+        });
+        return response.json();
+    }
+    // else
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/list`, {
         method: 'GET',
         mode: 'no-cors',
         headers: generateHeaders(token),
