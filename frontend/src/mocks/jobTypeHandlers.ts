@@ -6,16 +6,16 @@ const jobTypeHandlers = [
         const bodyString = JSON.stringify(req.body);
         const body = JSON.parse(bodyString);
 
-        if (body.address === 'Bad Request') {
+        if (body.title === 'Bad Request') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         }
-        if (body.address === 'Unauthorized') {
+        if (body.title === 'Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
         }
-        if (body.address === 'Forbidden') {
+        if (body.title === 'Forbidden') {
             return res(ctx.status(402), ctx.json({ reason: 'Forbidden' }));
         }
-        if (body.address === 'Internal Server Error') {
+        if (body.title === 'Internal Server Error') {
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
@@ -48,16 +48,16 @@ const jobTypeHandlers = [
         const bodyString = JSON.stringify(req.body);
         const body = JSON.parse(bodyString);
 
-        if (body.address === 'Bad Request') {
+        if (body.title === 'Bad Request') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         }
-        if (body.address === 'Unauthorized') {
+        if (body.title === 'Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
         }
-        if (body.address === 'Forbidden') {
+        if (body.title === 'Forbidden') {
             return res(ctx.status(402), ctx.json({ reason: 'Forbidden' }));
         }
-        if (body.address === 'Internal Server Error') {
+        if (body.title === 'Internal Server Error') {
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 

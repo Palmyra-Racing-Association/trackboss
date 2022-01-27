@@ -11,11 +11,14 @@ test('createJobType returns new job_type_id with valid data', async () => {
     const res = await createJobType(
         token,
         {
-            year_joined: 1995,
-            address: 'test string',
-            city: 'test string',
-            state: 'test string',
-            zip: 'test string',
+            title: 'string',
+            point_value: 0,
+            cash_value: 0,
+            job_day_number: 0,
+            reserved: true,
+            online: true,
+            meal_ticket: true,
+            sort_order: 0,
             modified_by: 0,
         },
     );
@@ -27,7 +30,7 @@ test('createJobType returns bad request', async () => {
     const res = await createJobType(
         token,
         {
-            address: 'Bad Request',
+            title: 'Bad Request',
         },
     );
     expect(res.reason).toEqual('Bad Request');
@@ -38,7 +41,7 @@ test('createJobType returns unauthorized', async () => {
     const res = await createJobType(
         token,
         {
-            address: 'Unauthorized',
+            title: 'Unauthorized',
         },
     );
     expect(res.reason).toEqual('Unauthorized');
@@ -49,7 +52,7 @@ test('createJobType returns forbidden', async () => {
     const res = await createJobType(
         token,
         {
-            address: 'Forbidden',
+            title: 'Forbidden',
         },
     );
     expect(res.reason).toEqual('Forbidden');
@@ -60,7 +63,7 @@ test('createJobType returns internal server error', async () => {
     const res = await createJobType(
         token,
         {
-            address: 'Internal Server Error',
+            title: 'Internal Server Error',
         },
     );
     expect(res.reason).toEqual('Internal Server Error');
@@ -104,11 +107,16 @@ test('updateJobType returns new job_type_id with valid data', async () => {
         token,
         1,
         {
-            address: '1234 New Address Street',
-            city: 'Hoboken',
-            state: 'NJ',
-            zip: 7030,
-            modified_by: 42,
+            title: 'string',
+            point_value: 0,
+            cash_value: 0,
+            job_day_number: 0,
+            reserved: true,
+            online: true,
+            meal_ticket: true,
+            sort_order: 0,
+            active: true,
+            modified_by: 0,
         },
     );
     expect(res.job_type_id).toEqual(1);
@@ -120,7 +128,7 @@ test('updateJobType returns bad request', async () => {
         token,
         1,
         {
-            address: 'Bad Request',
+            title: 'Bad Request',
         },
     );
     expect(res.reason).toEqual('Bad Request');
@@ -132,7 +140,7 @@ test('updateJobType returns unauthorized', async () => {
         token,
         1,
         {
-            address: 'Unauthorized',
+            title: 'Unauthorized',
         },
     );
     expect(res.reason).toEqual('Unauthorized');
@@ -144,7 +152,7 @@ test('updateJobType returns forbidden', async () => {
         token,
         1,
         {
-            address: 'Forbidden',
+            title: 'Forbidden',
         },
     );
     expect(res.reason).toEqual('Forbidden');
@@ -156,7 +164,7 @@ test('updateJobType returns internal server error', async () => {
         token,
         1,
         {
-            address: 'Internal Server Error',
+            title: 'Internal Server Error',
         },
     );
     expect(res.reason).toEqual('Internal Server Error');
