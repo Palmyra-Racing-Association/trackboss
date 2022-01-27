@@ -176,3 +176,15 @@ test('getJobTypeList returns list with valid id and no query param', async () =>
     const res = await getJobTypeList(token);
     expect(res[0]).toEqual({ job_type_id: 1 });
 });
+
+test('getJobTypeList returns 401', async () => {
+    const token = 'Unauthorized';
+    const res = await getJobTypeList(token);
+    expect(res.reason).toEqual('Unauthorized');
+});
+
+test('getMemberList returns 500', async () => {
+    const token = 'Internal Server Error';
+    const res = await getJobTypeList(token);
+    expect(res.reason).toEqual('Internal Server Error');
+});

@@ -24,8 +24,14 @@ const jobTypeHandlers = [
 
     // getJobTypeList
     rest.get(`${process.env.REACT_APP_API_URL}/api/jobType/list`, (req, res, ctx) => {
-        const response = res(ctx.status(200), ctx.json([{ job_type_id: 1 }, { job_type_id: 2 }]));
-        return response;
+        const token = req.headers.get('Authorization');
+        if (token === 'Bearer Unauthorized') {
+            return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
+        }
+        if (token === 'Bearer Internal Server Error') {
+            return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
+        }
+        return res(ctx.status(200), ctx.json([{ job_type_id: 1 }, { job_type_id: 2 }]));
     }),
 
     // getJobType
