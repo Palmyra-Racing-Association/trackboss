@@ -3,7 +3,7 @@ import { ErrorResponse } from './errorResponse';
 export type Membership = {
     membershipId: number,
     membershipAdmin: string,
-    active: boolean,
+    status: string,
     curYearRenewed: boolean,
     renewalSent: boolean,
     yearJoined: number,
@@ -47,7 +47,7 @@ export type GetMembershipResponse = Membership | ErrorResponse
 
 export type PatchMembershipRequest = {
     membershipAdminId?: number,
-    active?: boolean,
+    status?: string,
     curYearRenewed?: boolean,
     renewalSent: boolean,
     yearJoined?: number,

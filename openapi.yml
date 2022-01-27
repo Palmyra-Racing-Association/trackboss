@@ -158,8 +158,8 @@ components:
           $ref: "#/components/schemas/integer"
         membershipAdmin:
           $ref: "#/components/schemas/string"
-        active:
-          type: boolean
+        status:
+          $ref: "#/components/schemas/string"
         curYearRenewed:
           type: boolean
         renewalSent:
@@ -772,8 +772,8 @@ paths:
               properties:
                 membershipAdminId:
                   $ref: "#/components/schemas/integer"
-                active:
-                  type: boolean
+                status:
+                  $ref: "#/components/schemas/string"
                 curYearRenewed:
                   type: boolean
                 renewalSent:

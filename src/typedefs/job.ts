@@ -23,7 +23,7 @@ export type PostNewJobRequest = {
     memberId?: number,
     eventId?: number,
     jobTypeId: number,
-    jobDate: Date,
+    jobDate?: Date,
     pointsAwarded?: number,
     modifiedBy: number
 }

@@ -14,7 +14,7 @@ export type DeletedEvent = {
 
 export type PostNewEventRequest = {
     date?: Date,
-    eventTypeId?: number,
+    eventTypeId: number,
     eventName?: string,
     eventDescription?: string
 }
