@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-const membershipHandlers = [
+const bikeHandlers = [
     // createBike
     rest.post(`${process.env.REACT_APP_API_URL}/api/bike/new`, (req, res, ctx) => {
         const bodyString = JSON.stringify(req.body);
@@ -89,4 +89,4 @@ const membershipHandlers = [
     }),
 ];
 
-export { membershipHandlers as default };
+export { bikeHandlers as default };

@@ -15,7 +15,7 @@ export async function getBills(token: string) {
         mode: 'no-cors',
         headers: generateHeaders(token),
     });
-    return response.json();
+    return response;
 }
 
 export async function getBillsForMembership(token: string, membershipID: number) {
@@ -42,5 +42,5 @@ export async function payBill(token: string, membershipID: number) {
         mode: 'no-cors',
         headers: generateHeaders(token),
     });
-    return response.json();
+    return response;
 }
