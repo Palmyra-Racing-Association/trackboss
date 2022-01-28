@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 const billingHandlers = [
-     // getYearlyThreshold
+    // getYearlyThreshold
     rest.get(`${process.env.REACT_APP_API_URL}/api/billing/yearlyWorkPointThreshold`, (req, res, ctx) => {
         const token = req.headers.get('Authorization');
 
@@ -14,7 +14,7 @@ const billingHandlers = [
         return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
     }),
 
-    //getBills
+    // getBills
     rest.get(`${process.env.REACT_APP_API_URL}/api/billing/list`, (req, res, ctx) => {
         const token = req.headers.get('Authorization');
 
@@ -35,7 +35,7 @@ const billingHandlers = [
         const token = req.headers.get('Authorization');
 
         if (token === 'Bearer TestingToken') {
-            return res(ctx.status(200), ctx.json([{ bill_id: 1, }]));
+            return res(ctx.status(200), ctx.json([{ bill_id: 1 }]));
         }
         if (token === 'Bearer Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
@@ -46,12 +46,12 @@ const billingHandlers = [
         return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
     }),
 
-    //getBillsForMembership
+    // getBillsForMembership
     rest.get(`${process.env.REACT_APP_API_URL}/api/billing/:memberID`, (req, res, ctx) => {
         const token = req.headers.get('Authorization');
 
         if (token === 'Bearer TestingToken') {
-            return res(ctx.status(200), ctx.json({ bill_id: 1, }));
+            return res(ctx.status(200), ctx.json({ bill_id: 1 }));
         }
         if (token === 'Bearer Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
@@ -62,7 +62,7 @@ const billingHandlers = [
         return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
     }),
 
-    //payBill
+    // payBill
     rest.post(`${process.env.REACT_APP_API_URL}/api/billing/:memberID`, (req, res, ctx) => {
         const token = req.headers.get('Authorization');
 

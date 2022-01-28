@@ -19,7 +19,6 @@ test('getYearlyThreshold returns 401', async () => {
     expect(res.reason).toEqual('Unauthorized');
 });
 
-
 test('getYearlyThreshold returns 500', async () => {
     const token = 'Internal Server Error';
     const res = await getYearlyThreshold(token);
@@ -80,7 +79,7 @@ test('getBillsForMembership returns 500', async () => {
 test('generateBills returns valid first item', async () => {
     const token = 'TestingToken';
     const res = await generateBills(token);
-    expect(res[0]).toEqual({ bill_id: 1, });
+    expect(res[0]).toEqual({ bill_id: 1 });
 });
 
 test('generateBills returns 401', async () => {
