@@ -10,15 +10,15 @@ billing.get('/list', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
-billing.post('/', (req: Request, res: Response) => {
-    res.status(501).send();
-});
-
 billing.get('/:membershipID', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
 billing.post('/:membershipID', (req: Request, res: Response) => {
+    res.status(501).send();
+});
+
+billing.post('/', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
