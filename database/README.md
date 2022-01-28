@@ -23,11 +23,11 @@ Then you'll want to make a directory on Ubuntu:
 Place this somewhere you remember, we will have to reference it in a second
 >sudo mkdir /mysql-db/ 
 
-Navigate to your project repo IN ubuntu
+Navigate to the database folder your project repo IN ubuntu
 >cd /mnt/c/Users/[ACTUAL PROJECT REPO PATH]/clubmanager-2.0/database
 
-Copy the mock_data.zip from repo to ubuntu 
->sudo cp mock_data.zip /mysql-db/ <- THIS IS THE DIRECTORY FROM ABOVE
+Zip the mock_data from repo to ubuntu : Recall the /mysql-db/ is the directory from above
+>sudo zip -r /mysql-db/mock_data.zip 
 
 
 Navigate Back to your /mysql-db/ directory:
