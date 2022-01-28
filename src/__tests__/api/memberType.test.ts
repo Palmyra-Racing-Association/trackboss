@@ -5,6 +5,10 @@ const TAG_ROOT = '/api/memberType';
 
 const supertestServer = supertest(server);
 
+afterAll(() => {
+    server.close();
+});
+
 describe('All unimplemented memberType endpoints are reachable', () => {
     it('GET /memberType/list is reachable', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`);

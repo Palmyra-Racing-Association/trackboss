@@ -5,6 +5,10 @@ const TAG_ROOT = '/api/job';
 
 const supertestServer = supertest(server);
 
+afterAll(() => {
+    server.close();
+});
+
 describe('All unimplemented job endpoints are reachable', () => {
     it('POST /job/new is reachable', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`);

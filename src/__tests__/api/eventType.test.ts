@@ -5,6 +5,10 @@ const TAG_ROOT = '/api/eventType';
 
 const supertestServer = supertest(server);
 
+afterAll(() => {
+    server.close();
+});
+
 describe('All unimplemented eventType endpoints are reachable', () => {
     it('POST /eventType/new is reachable', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`);

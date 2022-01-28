@@ -5,6 +5,10 @@ const TAG_ROOT = '/api/bike';
 
 const supertestServer = supertest(server);
 
+afterAll(() => {
+    server.close();
+});
+
 describe('All unimplemented bike endpoints are reachable', () => {
     it('POST /bike/new is reachable', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`);

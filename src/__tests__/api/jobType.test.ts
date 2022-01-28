@@ -5,6 +5,10 @@ const TAG_ROOT = '/api/jobType';
 
 const supertestServer = supertest(server);
 
+afterAll(() => {
+    server.close();
+});
+
 describe('All unimplemented jobType endpoints are reachable', () => {
     it('POST /jobType/new is reachable', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`);

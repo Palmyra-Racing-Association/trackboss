@@ -5,6 +5,10 @@ const TAG_ROOT = '/api/membership';
 
 const supertestServer = supertest(server);
 
+afterAll(() => {
+    server.close();
+});
+
 describe('All unimplemented membership endpoints are reachable', () => {
     it('POST /membership/new is reachable', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`);

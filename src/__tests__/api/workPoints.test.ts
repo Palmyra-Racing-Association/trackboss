@@ -5,6 +5,10 @@ const TAG_ROOT = '/api/workPoints';
 
 const supertestServer = supertest(server);
 
+afterAll(() => {
+    server.close();
+});
+
 describe('All unimplemented workPoints endpoints are reachable', () => {
     it('GET /workPoints/byMember/:id is reachable', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/byMember/42`);
