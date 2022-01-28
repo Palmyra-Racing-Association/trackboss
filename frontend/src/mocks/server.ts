@@ -1,21 +1,26 @@
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
-import workPointsHandlers from './workPointsHandlers';
-import membershipHandlers from './membershipHandlers';
-import jobTypeHandlers from './jobTypeHandlers';
-import memberHandlers from './memberHandlers';
+import eventHandlers from './eventHandlers';
+import eventJobHandlers from './eventJobHandlers';
 import eventTypeHandlers from './eventTypeHandlers';
+import membershipHandlers from './membershipHandlers';
+import jobHandlers from './jobHandlers';
+import jobTypeHandlers from './jobTypeHandlers';
+import workPointsHandlers from './workPointsHandlers';
 import bikeHandlers from './bikeHandlers';
 import billingHandlers from './billingHandlers';
-import eventJobHandlers from './eventJobHandlers';
-import eventHandlers from './eventHandlers';
+import memberHandlers from './memberHandlers';
 
 // This configures a request mocking server with the given request handlers.
 const server = setupServer(
+    ...eventTypeHandlers,
+    ...eventJobHandlers,
+    ...eventHandlers,
     ...membershipHandlers,
-    ...workPointsHandlers,
     ...memberHandlers,
+    ...jobHandlers,
     ...jobTypeHandlers,
+    ...workPointsHandlers,
     ...bikeHandlers,
     ...billingHandlers,
     ...eventTypeHandlers,
