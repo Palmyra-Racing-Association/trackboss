@@ -24,8 +24,8 @@ Place this somewhere you remember, we will have to reference it in a second
 Navigate to your project repo IN ubuntu
 >cd /mnt/c/Users/[ACTUAL PROJECT REPO PATH]/clubmanager-2.0/database
 
-Copy the mock_data.zip from repo to ubuntu 
->sudo cp mock_data.zip /mysql-db/ <- THIS IS THE DIRECTORY FROM ABOVE
+Zip the mock_data folder into your newly created directory
+>sudo zip -r /mysql-db/mock_data.zip mock_data
 
 
 Navigate Back to your /mysql-db/ directory:
