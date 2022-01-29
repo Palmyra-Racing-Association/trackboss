@@ -23,11 +23,11 @@ Then you'll want to make a directory on Ubuntu:
 Place this somewhere you remember, we will have to reference it in a second
 >sudo mkdir /mysql-db/ 
 
-Navigate to the database folder your project repo IN ubuntu
+Navigate to your project repo IN ubuntu
 >cd /mnt/c/Users/[ACTUAL PROJECT REPO PATH]/clubmanager-2.0/database
 
-Zip the mock_data from repo to ubuntu : Recall the /mysql-db/ is the directory from above
->sudo zip -r /mysql-db/mock_data.zip 
+Copy the mock_data.zip from repo to ubuntu 
+>sudo cp mock_data.zip /mysql-db/ <- THIS IS THE DIRECTORY FROM ABOVE
 
 
 Navigate Back to your /mysql-db/ directory:
@@ -44,6 +44,7 @@ Change into the directory that contains all of the newly unzipped files
 
 **from /mysql-db/mock_data/ you can run:**
 
+- **bash setup_user.sh** <- You NEED to run this to set up the dbUser
 - **bash reset_db.sh** 	<- This will Drop the db(if exists), then load the schema and all of the Mock Data
 - bash drop_db.sh		<- This will Drop the database
 - bash create_db.sh 	<- This will just generate the DB Schema
