@@ -12,10 +12,8 @@ Install MySQL
 Start the MySQL Server
 > sudo /etc/init.d/mysql start	
 
-Start security script promps ( My options were N, test123, N, N, Y, Y)
+Start security script promps ( My options were N, [ROOT PW], N, N, Y, Y)
 > sudo mysql_secure_installation
-
-Note: If you choose a different password(than test123), you will have to update the .sh files
 
 
 Then you'll want to make a directory on Ubuntu:
