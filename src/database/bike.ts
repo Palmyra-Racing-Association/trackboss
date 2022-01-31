@@ -9,7 +9,7 @@ export const INSERT_BIKE_SQL = 'INSERT INTO member_bikes (year, make, model, mem
 export const GET_BIKE_SQL = 'SELECT bike_id, year, make, model, membership_admin FROM v_bike WHERE bike_id = ?';
 
 export async function insertBike(req: PostNewBikeRequest): Promise<number> {
-    //const sql = 'INSERT INTO member_bikes (year, make, model, membership_id) VALUES (?, ?, ?, ?)';
+    // const sql = 'INSERT INTO member_bikes (year, make, model, membership_id) VALUES (?, ?, ?, ?)';
     const values = [req.year, req.make, req.model, req.membershipId];
 
     let result;
@@ -24,7 +24,7 @@ export async function insertBike(req: PostNewBikeRequest): Promise<number> {
 }
 
 export async function getBike(id: number): Promise<Bike> {
-    //const sql = 'SELECT bike_id, year, make, model, membership_admin FROM v_bike WHERE bike_id = ?';
+    // const sql = 'SELECT bike_id, year, make, model, membership_admin FROM v_bike WHERE bike_id = ?';
     const values = [id];
 
     let results;
