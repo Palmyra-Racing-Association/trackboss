@@ -29,9 +29,4 @@ describe('All unimplemented member endpoints are reachable', () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/42`);
         expect(res.status).toEqual(501);
     });
-
-    it('DELETE /member/:id is reachable', async () => {
-        const res = await supertestServer.delete(`${TAG_ROOT}/42`);
-        expect(res.status).toEqual(501);
-    });
 });
