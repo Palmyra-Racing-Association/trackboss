@@ -1,6 +1,3 @@
-### **NOTE:** If your repo is cloned where you are setting up the database you can skip to running the scripts in the `mock_data` folder!
-
-
 **Install MySQL and UnZip:**
 ---------------------------------------------------------------------------------------------------------------------------
 Install Unzip so we don't have to copy many files over
@@ -17,6 +14,9 @@ Start the MySQL Server
 
 Start security script promps ( My options were N, [ROOT PW], N, N, Y, Y)
 > sudo mysql_secure_installation
+
+
+### **NOTE:** If your repo is cloned where you are setting up the database you can skip to running the scripts in the `mock_data` folder!
 
 
 Then you'll want to make a directory on Ubuntu:
