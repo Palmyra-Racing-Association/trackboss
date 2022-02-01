@@ -6,6 +6,10 @@ job.post('/new', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
+job.get('/list', (req: Request, res: Response) => {
+    res.status(501).send();
+});
+
 job.get('/:jobID', (req: Request, res: Response) => {
     res.status(501).send();
 });
@@ -19,10 +23,6 @@ job.post('/:jobID', (req: Request, res: Response) => {
 });
 
 job.delete('/:jobID', (req: Request, res: Response) => {
-    res.status(501).send();
-});
-
-job.get('/list', (req: Request, res: Response) => {
     res.status(501).send();
 });
 
