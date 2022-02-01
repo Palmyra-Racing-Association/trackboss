@@ -47,7 +47,7 @@ export async function updateEvent(token: string, eventID: number, eventData: obj
     return response.json();
 }
 
-export async function deleteEvent(token, eventID: number) {
+export async function deleteEvent(token: string, eventID: number) {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
         method: 'DELETE',
         mode: 'no-cors',
