@@ -107,7 +107,7 @@ components:
       type: object
       properties:
         memberId:
-          $ref: "#/components/schemas/integer"
+          $ref: "#/components/schemas/number" # just the DB ID
         membershipAdmin:
           $ref: "#/components/schemas/string"
         uuid:
@@ -422,12 +422,16 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
     get:
       tags:
         - member
       summary: Get this member
-      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      description: >
+        The `memberId` path parameter can either be a database ID or a
+        Cognito-provided UUID.
+        <br><br>
+        This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       responses:
         200:
           description: OK
@@ -446,6 +450,9 @@ paths:
         - member
       summary: Update this member
       description: >
+        The `memberId` path parameter can either be a database ID or a
+        Cognito-provided UUID.
+        <br><br>
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.

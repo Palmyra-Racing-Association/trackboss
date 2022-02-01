@@ -1,7 +1,7 @@
 import { ErrorResponse } from './errorResponse';
 
 export type Member = {
-    memberId: number,
+    memberId: string,
     membershipAdmin: string,
     uuid: string,
     active: boolean,
