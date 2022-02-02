@@ -34,7 +34,7 @@ jobs:
     - name: Start MySQL service
       run: sudo systemctl start mysql.service
     - name: Configure database
-      run: >
+      run: |
         sed -i "s/-u root/-u root --password root/g" database/mock_data/setup_user.sh
         cd database/mock_data && ./setup_user.sh
     # - name: Run Jest on backend
