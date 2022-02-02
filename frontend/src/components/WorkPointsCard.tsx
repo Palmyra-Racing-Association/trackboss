@@ -9,9 +9,9 @@ interface cardProps {
 
 export default function WorkPointsCard(props: cardProps) {
     return (
-        <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200">
+        <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={3}>
             <Center>
-                <VStack>
+                <VStack p={0}>
                     <GaugeChart
                         hideText
                         id="gauge-chart"
@@ -19,9 +19,12 @@ export default function WorkPointsCard(props: cardProps) {
                         percent={0.86}
                         colors={['#FF9F46', '#76CE6F']}
                     />
-                    <Text>You have completed</Text>
-                    <Text color='orange' fontSize='5xl'>{props.percent}%</Text>
-                    <Text>of this year's work points</Text>
+                    <VStack spacing={0}>
+                        <Text pt={5} fontSize="2xl">You have completed</Text>
+                        <Text color='orange' fontSize='5xl'>{props.percent}%</Text>
+                        <Text fontSize="2xl">of this year's work points</Text>
+                    </VStack>
+                    
                 </VStack>   
             </Center>
            
