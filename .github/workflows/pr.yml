@@ -5,45 +5,47 @@ on:
 env:
   NODE_VERSION: "16"
 jobs:
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Specify Node version
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Install modules
-      run: |
-        npm ci
-        (cd frontend && npm ci)
-    - name: Run ESLint
-      run: npx eslint .
+  # eslint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
+  #   - name: Specify Node version
+  #     uses: actions/setup-node@v2
+  #     with:
+  #       node-version: ${{ env.NODE_VERSION }}
+  #   - name: Install modules
+  #     run: |
+  #       npm ci
+  #       (cd frontend && npm ci)
+  #   - name: Run ESLint
+  #     run: npx eslint .
   jest-backend:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Specify Node version
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Install modules
-      run: npm ci
-    - name: Run Jest on backend
-      run: npm run ci-test
-  jest-frontend:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Specify Node version
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Install modules
-      run: cd frontend && npm ci
-    - name: Run Jest on frontend
-      run: cd frontend && npm run ci-test
+    # - name: Checkout code
+    #   uses: actions/checkout@v2
+    # - name: Specify Node version
+    #   uses: actions/setup-node@v2
+    #   with:
+    #     node-version: ${{ env.NODE_VERSION }}
+    # - name: Install modules
+    #   run: npm ci
+    - name: Start MySQL service
+      run: sudo systemctl start mysql.service
+    # - name: Run Jest on backend
+    #   run: npm run ci-test
+  # jest-frontend:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
+  #   - name: Specify Node version
+  #     uses: actions/setup-node@v2
+  #     with:
+  #       node-version: ${{ env.NODE_VERSION }}
+  #   - name: Install modules
+  #     run: cd frontend && npm ci
+  #   - name: Run Jest on frontend
+  #     run: cd frontend && npm run ci-test
 
