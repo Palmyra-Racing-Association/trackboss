@@ -9,12 +9,12 @@ import {
     DELETE_BIKE_SQL,
 } from '../../../database/bike';
 import pool from '../../../database/pool';
-import { 
-    getBikeListResponse, 
-    getBikeResponse, 
-    insertBikeResponse, 
-    patchBikeResponse, 
-    deleteBikeResponse 
+import {
+    getBikeListResponse,
+    getBikeResponse,
+    insertBikeResponse,
+    patchBikeResponse,
+    deleteBikeResponse,
 } from './mockHelpers/bike';
 
 const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {

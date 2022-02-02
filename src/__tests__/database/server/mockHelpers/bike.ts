@@ -84,7 +84,7 @@ export function patchBikeResponse(id: number) {
 }
 
 export function deleteBikeResponse(id: number) {
-    switch(id) {
+    switch (id) {
         case 50:
             return Promise.resolve([{ affectedRows: 1 }]);
         case 5000:

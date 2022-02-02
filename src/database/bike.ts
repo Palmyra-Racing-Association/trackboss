@@ -100,10 +100,9 @@ export async function patchBike(id: number, req: PatchBikeRequest): Promise<void
     }
 }
 
-
 export async function deleteBike(id: number): Promise<void> {
     const values = [id];
-    
+
     let result;
     try {
         [result] = await pool.query<OkPacket>(DELETE_BIKE_SQL, values);
@@ -116,4 +115,3 @@ export async function deleteBike(id: number): Promise<void> {
         throw new Error('not found');
     }
 }
-
