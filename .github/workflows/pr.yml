@@ -25,12 +25,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-    # - name: Specify Node version
-    #   uses: actions/setup-node@v2
-    #   with:
-    #     node-version: ${{ env.NODE_VERSION }}
-    # - name: Install modules
-    #   run: npm ci
+    - name: Specify Node version
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: Install modules
+      run: npm ci
     - name: Start MySQL service
       run: sudo systemctl start mysql.service
     - name: Configure database
@@ -39,8 +39,8 @@ jobs:
         sed -i "s/-u root/-u root -proot/g" setup_user.sh
         ./setup_user.sh
         ./reset_db.sh
-    # - name: Run Jest on backend
-    #   run: npm run ci-test
+    - name: Run Jest on backend
+      run: npm run ci-test
   # jest-frontend:
   #   runs-on: ubuntu-latest
   #   steps:
