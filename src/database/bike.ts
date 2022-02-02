@@ -101,19 +101,19 @@ export async function patchBike(id: number, req: PatchBikeRequest): Promise<void
 }
 
 
-    export async function deleteBike(id: number): Promise<void> {
-        const values = [id];
-        
-        let result;
-        try {
-            [result] = await pool.query<OkPacket>(DELETE_BIKE_SQL, values);
-        } catch (e) {
-            logger.error(`DB error deleting bike: ${e}`);
-            throw new Error('internal server error');
-        }
+export async function deleteBike(id: number): Promise<void> {
+    const values = [id];
     
-        if (result.affectedRows < 1) {
-            throw new Error('not found');
-        }
+    let result;
+    try {
+        [result] = await pool.query<OkPacket>(DELETE_BIKE_SQL, values);
+    } catch (e) {
+        logger.error(`DB error deleting bike: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
 }
 

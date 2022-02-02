@@ -116,13 +116,12 @@ describe('patchBike()', () => {
 });
 
 describe('deleteBike()', () => {
-
     it('Deletes a bike', async () => {
         const bikeId = 50;
         await deleteBike(bikeId);
         expect(mockQuery).toHaveBeenCalled();
     });
-    
+
     it('Throws for bike not found', async () => {
         const bikeId = 5000;
         await expect(deleteBike(bikeId)).rejects.toThrow('not found');

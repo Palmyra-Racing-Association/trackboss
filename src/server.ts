@@ -11,6 +11,5 @@ const server = app.listen(port, () => {
     logger.info(`PRA Club Manager API listening on port ${port}`);
 });
 
-
 // export the HTTP server so that it can be closed if necessary (mostly for testing)
 export default server;
