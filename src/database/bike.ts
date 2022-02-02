@@ -6,10 +6,11 @@ import pool from './pool';
 import { Bike, PostNewBikeRequest } from '../typedefs/bike';
 
 export const INSERT_BIKE_SQL = 'INSERT INTO member_bikes (year, make, model, membership_id) VALUES (?, ?, ?, ?)';
+export const GET_BIKE_LIST_SQL = 'SELECT bike_id, year, make, model, membership_admin FROM v_bike';
+export const GET_BIKE_LIST_BY_MEMBERSHIP_SQL = `${GET_BIKE_LIST_SQL} WHERE membership_id = ?`;
 export const GET_BIKE_SQL = 'SELECT bike_id, year, make, model, membership_admin FROM v_bike WHERE bike_id = ?';
 
 export async function insertBike(req: PostNewBikeRequest): Promise<number> {
-    // const sql = 'INSERT INTO member_bikes (year, make, model, membership_id) VALUES (?, ?, ?, ?)';
     const values = [req.year, req.make, req.model, req.membershipId];
 
     let result;
@@ -23,8 +24,35 @@ export async function insertBike(req: PostNewBikeRequest): Promise<number> {
     return result.insertId;
 }
 
+export async function getBikeList(membershipId?: number): Promise<Bike[]> {
+    let sql;
+    let values: number[];
+    if (typeof membershipId !== 'undefined') {
+        sql = GET_BIKE_LIST_BY_MEMBERSHIP_SQL;
+        values = [membershipId];
+    } else {
+        sql = GET_BIKE_LIST_SQL;
+        values = [];
+    }
+
+    let results;
+    try {
+        [results] = await pool.query<RowDataPacket[]>(sql, values);
+    } catch (e) {
+        logger.error(`DB error getting bike list: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    return results.map((result) => ({
+        bikeId: result.bike_id,
+        year: result.year,
+        make: result.year,
+        model: result.model,
+        membershipAdmin: result.membership_admin,
+    }));
+}
+
 export async function getBike(id: number): Promise<Bike> {
-    // const sql = 'SELECT bike_id, year, make, model, membership_admin FROM v_bike WHERE bike_id = ?';
     const values = [id];
 
     let results;

@@ -1,4 +1,4 @@
-import { getBike, insertBike } from '../../../database/bike';
+import { getBike, getBikeList, insertBike } from '../../../database/bike';
 import mockQuery from './mockQuery';
 
 describe('insertBike()', () => {
@@ -14,6 +14,38 @@ describe('insertBike()', () => {
         const request = { year: '-100', make: 'Toyonda', model: 'OK124', membershipId: 21 };
 
         await expect(insertBike(request)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('getBikeList()', () => {
+    it('Returns an unfiltered list of bikes', async () => {
+        const results = await getBikeList();
+        expect(mockQuery).toHaveBeenCalled();
+        expect(results.length).toBeGreaterThan(1);
+    });
+
+    it('Returns a filtered list of bikes', async () => {
+        const membershipId = 42;
+        const membershipAdmin = 'membership42Admin';
+
+        const results = await getBikeList(membershipId);
+        expect(mockQuery).toHaveBeenCalled();
+        results.forEach((result) => {
+            expect(result.membershipAdmin).toBe(membershipAdmin);
+        });
+    });
+
+    it('Returns an empty list of bikes without error', async () => {
+        const membershipId = 1000;
+        const results = await getBikeList(membershipId);
+        expect(mockQuery).toHaveBeenCalled();
+        expect(results.length).toBe(0);
+    });
+
+    it('Throws for internal server error', async () => {
+        const membershipId = -100;
+        await expect(getBikeList(membershipId)).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 });
