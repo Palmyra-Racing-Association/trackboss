@@ -5,9 +5,10 @@ import {
     GET_BIKE_LIST_SQL,
     GET_BIKE_SQL,
     INSERT_BIKE_SQL,
+    PATCH_BIKE_SQL,
 } from '../../../database/bike';
 import pool from '../../../database/pool';
-import { getBikeListResponse, getBikeResponse, insertBikeResponse } from './mockHelpers/bike';
+import { getBikeListResponse, getBikeResponse, insertBikeResponse, patchBikeResponse } from './mockHelpers/bike';
 
 const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
@@ -18,6 +19,8 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
             return getBikeListResponse(values);
         case GET_BIKE_SQL:
             return getBikeResponse(values[0]);
+        case PATCH_BIKE_SQL:
+            return patchBikeResponse(values[0]);
         default:
             return Promise.resolve();
     }

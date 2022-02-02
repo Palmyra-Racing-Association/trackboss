@@ -1,4 +1,5 @@
-import { getBike, getBikeList, insertBike } from '../../../database/bike';
+import { PatchBikeRequest } from 'src/typedefs/bike';
+import { getBike, getBikeList, insertBike, patchBike } from '../../../database/bike';
 import mockQuery from './mockQuery';
 
 describe('insertBike()', () => {
@@ -73,6 +74,43 @@ describe('getBike()', () => {
     it('Throws for internal server error', async () => {
         const bikeId = -100;
         await expect(getBike(bikeId)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('patchBike()', () => {
+    const testPatchWithObject = async (req: PatchBikeRequest) => {
+        const bikeId = 42;
+        // no error means success
+        await patchBike(bikeId, req);
+        expect(mockQuery).toHaveBeenCalled();
+    };
+
+    it('Patches a bike with year field', async () => {
+        await testPatchWithObject({ year: '2000' });
+    });
+
+    it('Patches a bike with make field', async () => {
+        await testPatchWithObject({ make: 'Yamahondayota' });
+    });
+
+    it('Patches a bike with model field', async () => {
+        await testPatchWithObject({ model: 'Impossible Chicken Sandwich' });
+    });
+
+    it('Patches a bike with membershipId field', async () => {
+        await testPatchWithObject({ membershipId: 42 });
+    });
+
+    it('Throws for bike not found', async () => {
+        const bikeId = 3000;
+        await expect(patchBike(bikeId, {})).rejects.toThrow('not found');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error', async () => {
+        const bikeId = -100;
+        await expect(patchBike(bikeId, {})).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 });

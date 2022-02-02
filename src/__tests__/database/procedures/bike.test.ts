@@ -143,4 +143,12 @@ describe('sp_patch_bike()', () => {
         const [result] = await pool.query<OkPacket>(sql, values);
         expect(result.affectedRows).toBe(0);
     });
+
+    it('Patches nothing when bikeId not found', async () => {
+        const sql = 'CALL sp_patch_bike(?, ?, ?, ?, ?)';
+        const values = [3000, null, null, null, null];
+
+        const [result] = await pool.query<OkPacket>(sql, values);
+        expect(result.affectedRows).toBe(0);
+    });
 });

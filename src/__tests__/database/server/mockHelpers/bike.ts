@@ -69,3 +69,16 @@ export function insertBikeResponse(year: string) {
             return Promise.resolve();
     }
 }
+
+export function patchBikeResponse(id: number) {
+    switch (id) {
+        case 42:
+            return Promise.resolve([{ affectedRows: 1 }]);
+        case 3000:
+            return Promise.resolve([{ affectedRows: 0 }]);
+        case -100:
+            throw new Error('error message');
+        default:
+            return Promise.resolve();
+    }
+}
