@@ -6,7 +6,7 @@ import {
 } from '../controller/jobType';
 
 // createJobType
-test('createJobType returns new job_type_id with valid data', async () => {
+test('createJobType returns new jobTypeId with valid data', async () => {
     const token = 'TestingToken';
     const res = await createJobType(
         token,
@@ -14,15 +14,15 @@ test('createJobType returns new job_type_id with valid data', async () => {
             title: 'string',
             point_value: 0,
             cash_value: 0,
-            job_day_number: 0,
+            job_dayNumber: 0,
             reserved: true,
             online: true,
-            meal_ticket: true,
+            mealTicket: true,
             sort_order: 0,
             modified_by: 0,
         },
     );
-    expect(res.job_type_id).toEqual(1);
+    expect(res.jobTypeId).toEqual(1);
 });
 
 test('createJobType returns bad request', async () => {
@@ -73,7 +73,7 @@ test('createJobType returns internal server error', async () => {
 test('getJobType returns jobType with valid id', async () => {
     const token = 'TestingToken';
     const res = await getJobType(token, 1);
-    expect(res.job_type_id).toEqual(1);
+    expect(res.jobTypeId).toEqual(1);
 });
 
 test('getJobType returns 400', async () => {
@@ -101,7 +101,7 @@ test('getJobType returns 500', async () => {
 });
 
 // updateJobType
-test('updateJobType returns new job_type_id with valid data', async () => {
+test('updateJobType returns new jobTypeId with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateJobType(
         token,
@@ -110,16 +110,16 @@ test('updateJobType returns new job_type_id with valid data', async () => {
             title: 'string',
             point_value: 0,
             cash_value: 0,
-            job_day_number: 0,
+            job_dayNumber: 0,
             reserved: true,
             online: true,
-            meal_ticket: true,
+            mealTicket: true,
             sort_order: 0,
             active: true,
             modified_by: 0,
         },
     );
-    expect(res.job_type_id).toEqual(1);
+    expect(res.jobTypeId).toEqual(1);
 });
 
 test('updateJobType returns bad request', async () => {
@@ -174,7 +174,7 @@ test('updateJobType returns internal server error', async () => {
 test('getJobTypeList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getJobTypeList(token);
-    expect(res[0]).toEqual({ job_type_id: 1 });
+    expect(res[0]).toEqual({ jobTypeId: 1 });
 });
 
 test('getJobTypeList returns 401', async () => {

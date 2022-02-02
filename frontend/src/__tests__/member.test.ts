@@ -6,16 +6,16 @@ import {
 } from '../controller/member';
 
 // createMember
-test('createMember returns new member_id with valid data', async () => {
+test('createMember returns new memberId with valid data', async () => {
     const token = 'TestingToken';
     const res = await createMember(
         token,
         {
-            membership_id: 0,
-            member_type_id: 0,
-            first_name: 'string',
-            last_name: 'string',
-            phone_number: 'string',
+            membershipId: 0,
+            memberTypeId: 0,
+            firstName: 'string',
+            lastName: 'string',
+            phoneNumber: 'string',
             occupation: 'string',
             email: 'user@example.com',
             birthdate: '2022-01-27',
@@ -23,7 +23,7 @@ test('createMember returns new member_id with valid data', async () => {
             modified_by: 0,
         },
     );
-    expect(res.member_id).toEqual(1);
+    expect(res.memberId).toEqual(1);
 });
 
 test('createMember returns bad request', async () => {
@@ -74,13 +74,13 @@ test('createMember returns internal server error', async () => {
 test('getMemberList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getMemberList(token);
-    expect(res[0]).toEqual({ member_id: 1 });
+    expect(res[0]).toEqual({ memberId: 1 });
 });
 
 test('getMemberList returns list with valid id and query param', async () => {
     const token = 'TestingToken';
     const res = await getMemberList(token, 'valid');
-    expect(res[0]).toEqual({ member_id: 1 });
+    expect(res[0]).toEqual({ memberId: 1 });
 });
 
 test('getMemberList returns 400', async () => {
@@ -111,7 +111,7 @@ test('getMemberList returns 500', async () => {
 test('getMember returns member with valid id', async () => {
     const token = 'TestingToken';
     const res = await getMember(token, 1);
-    expect(res.member_id).toEqual(1);
+    expect(res.memberId).toEqual(1);
 });
 
 test('getMember returns 400', async () => {
@@ -139,7 +139,7 @@ test('getMember returns 500', async () => {
 });
 
 // updateMember
-test('updateMember returns new member_id with valid data', async () => {
+test('updateMember returns new memberId with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateMember(
         token,
@@ -152,7 +152,7 @@ test('updateMember returns new member_id with valid data', async () => {
             modified_by: 42,
         },
     );
-    expect(res.member_id).toEqual(1);
+    expect(res.memberId).toEqual(1);
 });
 
 test('updateMember returns bad request', async () => {

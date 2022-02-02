@@ -1,6 +1,15 @@
 import generateHeaders from './utils';
+import {
+    DeleteEventResponse,
+    GetEventListResponse,
+    GetEventResponse,
+    PatchEventRequest,
+    PatchEventResponse,
+    PostNewEventRequest,
+    PostNewEventResponse,
+} from '../../../src/typedefs/event';
 
-export async function createEvent(token: string, eventData: object) {
+export async function createEvent(token: string, eventData: PostNewEventRequest): Promise<PostNewEventResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/new`, {
         method: 'POST',
         mode: 'no-cors',
@@ -10,7 +19,7 @@ export async function createEvent(token: string, eventData: object) {
     return response.json();
 }
 
-export async function getEventList(token: string, listType?: string) {
+export async function getEventList(token: string, listType?: string): Promise<GetEventListResponse> {
     if (listType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/list`, {
             method: 'GET',
@@ -28,7 +37,7 @@ export async function getEventList(token: string, listType?: string) {
     return response.json();
 }
 
-export async function getEvent(token: string, eventID: number) {
+export async function getEvent(token: string, eventID: number): Promise<GetEventResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
         method: 'GET',
         mode: 'no-cors',
@@ -37,7 +46,11 @@ export async function getEvent(token: string, eventID: number) {
     return response.json();
 }
 
-export async function updateEvent(token: string, eventID: number, eventData: object) {
+export async function updateEvent(
+    token: string,
+    eventID: number,
+    eventData: PatchEventRequest,
+): Promise<PatchEventResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
         method: 'PATCH',
         mode: 'no-cors',
@@ -47,7 +60,7 @@ export async function updateEvent(token: string, eventID: number, eventData: obj
     return response.json();
 }
 
-export async function deleteEvent(token: string, eventID: number) {
+export async function deleteEvent(token: string, eventID: number): Promise<DeleteEventResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
         method: 'DELETE',
         mode: 'no-cors',

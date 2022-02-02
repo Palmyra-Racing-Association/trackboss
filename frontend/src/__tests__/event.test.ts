@@ -7,18 +7,18 @@ import {
 } from '../controller/event';
 
 // createEvent
-test('createEvent returns new event_id with valid data', async () => {
+test('createEvent returns new eventId with valid data', async () => {
     const token = 'TestingToken';
     const res = await createEvent(
         token,
         {
             date: '2022-01-27',
-            event_type_id: 0,
-            event_name: 'string',
+            eventTypeId: 0,
+            eventName: 'string',
             event_description: 'string',
         },
     );
-    expect(res.event_id).toEqual(1);
+    expect(res.eventId).toEqual(1);
 });
 
 test('createEvent returns bad request', async () => {
@@ -69,7 +69,7 @@ test('createEvent returns internal server error', async () => {
 test('getEvent returns Event with valid id', async () => {
     const token = 'TestingToken';
     const res = await getEvent(token, 1);
-    expect(res.event_id).toEqual(1);
+    expect(res.eventId).toEqual(1);
 });
 
 test('getEvent returns 400', async () => {
@@ -97,17 +97,17 @@ test('getEvent returns 500', async () => {
 });
 
 // updateEvent
-test('updateEvent returns new event_id with valid data', async () => {
+test('updateEvent returns new eventId with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateEvent(
         token,
         1,
         {
             date: '12/18/21',
-            event_name: 'Squeaky Training Wheels Invitational (Rescheduled)',
+            eventName: 'Squeaky Training Wheels Invitational (Rescheduled)',
         },
     );
-    expect(res.event_id).toEqual(1);
+    expect(res.eventId).toEqual(1);
 });
 
 test('updateEvent returns bad request', async () => {
@@ -162,7 +162,7 @@ test('updateEvent returns internal server error', async () => {
 test('getEventList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getEventList(token);
-    expect(res[0]).toEqual({ event_id: 1 });
+    expect(res[0]).toEqual({ eventId: 1 });
 });
 
 test('getEventList returns 400', async () => {
@@ -190,10 +190,10 @@ test('getEventList returns 500', async () => {
 });
 
 // deleteEvent
-test('delete event returns valid event_id', async () => {
+test('delete event returns valid eventId', async () => {
     const token = 'TestingToken';
     const res = await deleteEvent(token, 1);
-    expect(res.event_id).toEqual(1);
+    expect(res.eventId).toEqual(1);
 });
 
 test('deleteEvent returns 400', async () => {

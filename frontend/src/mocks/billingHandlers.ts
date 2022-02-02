@@ -35,7 +35,7 @@ const billingHandlers = [
         const token = req.headers.get('Authorization');
 
         if (token === 'Bearer TestingToken') {
-            return res(ctx.status(200), ctx.json([{ bill_id: 1 }]));
+            return res(ctx.status(200), ctx.json([{ billId: 1 }]));
         }
         if (token === 'Bearer Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
@@ -51,7 +51,7 @@ const billingHandlers = [
         const token = req.headers.get('Authorization');
 
         if (token === 'Bearer TestingToken') {
-            return res(ctx.status(200), ctx.json({ bill_id: 1 }));
+            return res(ctx.status(200), ctx.json({ billId: 1 }));
         }
         if (token === 'Bearer Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));

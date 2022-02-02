@@ -1,6 +1,19 @@
 import generateHeaders from './utils';
+import {
+    GetMembershipListResponse,
+    GetMembershipResponse,
+    PatchMembershipRequest,
+    PatchMembershipResponse,
+    PostNewMembershipRequest,
+    PostNewMembershipResponse,
+    PostRegisterMembershipResponse,
+    PostRegisterMembershipRequest,
+} from '../../../src/typedefs/membership';
 
-export async function createMembership(token: string, memberData: object) {
+export async function createMembership(
+    token: string,
+    memberData: PostNewMembershipRequest,
+): Promise<PostNewMembershipResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/new`, {
         method: 'POST',
         mode: 'no-cors',
@@ -10,7 +23,7 @@ export async function createMembership(token: string, memberData: object) {
     return response.json();
 }
 
-export async function getMembershipList(token: string, listType?: string) {
+export async function getMembershipList(token: string, listType?: string): Promise<GetMembershipListResponse> {
     if (listType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/list?status=${listType}`, {
             method: 'GET',
@@ -28,7 +41,7 @@ export async function getMembershipList(token: string, listType?: string) {
     return response.json();
 }
 
-export async function getMembership(token: string, membershipID: number) {
+export async function getMembership(token: string, membershipID: number): Promise<GetMembershipResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/${membershipID}`, {
         method: 'GET',
         mode: 'no-cors',
@@ -37,7 +50,11 @@ export async function getMembership(token: string, membershipID: number) {
     return response.json();
 }
 
-export async function updateMembership(token: string, membershipID: number, memberData: object) {
+export async function updateMembership(
+    token: string,
+    membershipID: number,
+    memberData: PatchMembershipRequest,
+): Promise<PatchMembershipResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/${membershipID}`, {
         method: 'PATCH',
         mode: 'no-cors',
@@ -47,7 +64,9 @@ export async function updateMembership(token: string, membershipID: number, memb
     return response.json();
 }
 
-export async function registerMembership(registrationData: object) {
+export async function registerMembership(
+    registrationData: PostRegisterMembershipRequest,
+): Promise<PostRegisterMembershipResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/register`, {
         method: 'POST',
         mode: 'no-cors',

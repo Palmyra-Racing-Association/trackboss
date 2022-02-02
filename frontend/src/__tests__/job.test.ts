@@ -8,20 +8,20 @@ import {
 } from '../controller/job';
 
 // createJob
-test('createJob returns new job_id with valid data', async () => {
+test('createJob returns new jobId with valid data', async () => {
     const token = 'TestingToken';
     const res = await createJob(
         token,
         {
-            member_id: 0,
-            event_id: 0,
-            job_type_id: 0,
+            memberId: 0,
+            eventId: 0,
+            jobTypeId: 0,
             job_date: '2022-01-27',
             points_awarded: 0,
             modified_by: 0,
         },
     );
-    expect(res.job_id).toEqual(1);
+    expect(res.jobId).toEqual(1);
 });
 
 test('createJob returns bad request', async () => {
@@ -72,7 +72,7 @@ test('createJob returns internal server error', async () => {
 test('getJob returns job with valid id', async () => {
     const token = 'TestingToken';
     const res = await getJob(token, 1);
-    expect(res.job_id).toEqual(1);
+    expect(res.jobId).toEqual(1);
 });
 
 test('getJob returns 400', async () => {
@@ -100,7 +100,7 @@ test('getJob returns 500', async () => {
 });
 
 // updateJob
-test('updateJob returns new job_id with valid data', async () => {
+test('updateJob returns new jobId with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateJob(
         token,
@@ -109,7 +109,7 @@ test('updateJob returns new job_id with valid data', async () => {
             verified: true,
         },
     );
-    expect(res.job_id).toEqual(1);
+    expect(res.jobId).toEqual(1);
 });
 
 test('updateJob returns bad request', async () => {
@@ -164,13 +164,13 @@ test('updateJob returns internal server error', async () => {
 test('getJobList returns list with valid strings', async () => {
     const token = 'TestingToken';
     const res = await getJobList(token, 'queryType', 'FilterType');
-    expect(res[0]).toEqual({ job_id: 1 });
+    expect(res[0]).toEqual({ jobId: 1 });
 });
 
 test('getJobList returns list with no params', async () => {
     const token = 'TestingToken';
     const res = await getJobList(token);
-    expect(res[0]).toEqual({ job_id: 1 });
+    expect(res[0]).toEqual({ jobId: 1 });
 });
 
 test('getJobList returns 400', async () => {
@@ -198,10 +198,10 @@ test('getJobList returns 500', async () => {
 });
 
 // cloneJob
-test('cloneJob returns new job_id with valid data', async () => {
+test('cloneJob returns new jobId with valid data', async () => {
     const token = 'TestingToken';
     const res = await cloneJob(token, 1);
-    expect(res.job_id).toEqual(1);
+    expect(res.jobId).toEqual(1);
 });
 
 test('cloneJob returns bad request', async () => {
@@ -229,10 +229,10 @@ test('cloneJob returns internal server error', async () => {
 });
 
 // deleteJob
-test('deleteJob returns new job_id with valid data', async () => {
+test('deleteJob returns new jobId with valid data', async () => {
     const token = 'TestingToken';
     const res = await deleteJob(token, 1);
-    expect(res.job_id).toEqual(1);
+    expect(res.jobId).toEqual(1);
 });
 
 test('deleteJob returns bad request', async () => {

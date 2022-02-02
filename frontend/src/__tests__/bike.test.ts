@@ -7,7 +7,7 @@ import {
 } from '../controller/bike';
 
 // createBike
-test('createBike returns new bike_id with valid data', async () => {
+test('createBike returns new bikeId with valid data', async () => {
     const token = 'TestingToken';
     const res = await createBike(
         token,
@@ -15,10 +15,10 @@ test('createBike returns new bike_id with valid data', async () => {
             year: 'string',
             make: 'string',
             model: 'string',
-            membership_id: 0,
+            membershipId: 0,
         },
     );
-    expect(res.bike_id).toEqual(1);
+    expect(res.bikeId).toEqual(1);
 });
 
 test('createBike returns bad request', async () => {
@@ -66,10 +66,10 @@ test('createBike returns internal server error', async () => {
 });
 
 // getBike
-test('getBike returns bike_id with valid id', async () => {
+test('getBike returns bikeId with valid id', async () => {
     const token = 'TestingToken';
     const res = await getBike(token, 1);
-    expect(res.bike_id).toEqual(1);
+    expect(res.bikeId).toEqual(1);
 });
 
 test('getBike returns 400', async () => {
@@ -97,7 +97,7 @@ test('getBike returns 500', async () => {
 });
 
 // updateBike
-test('updateBike returns new member_id with valid data', async () => {
+test('updateBike returns new memberId with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateBike(
         token,
@@ -106,10 +106,10 @@ test('updateBike returns new member_id with valid data', async () => {
             year: 'string',
             make: 'string',
             model: 'string',
-            membership_id: 0,
+            membershipId: 0,
         },
     );
-    expect(res.bike_id).toEqual(1);
+    expect(res.bikeId).toEqual(1);
 });
 
 test('updateBike returns bad request', async () => {
@@ -164,13 +164,13 @@ test('updateBike returns internal server error', async () => {
 test('getBikeList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getBikeList(token);
-    expect(res[0]).toEqual({ bike_id: 1 });
+    expect(res[0]).toEqual({ bikeId: 1 });
 });
 
 test('getBikeList returns list with valid id and query param', async () => {
     const token = 'TestingToken';
     const res = await getBikeList(token, 1);
-    expect(res[0]).toEqual({ bike_id: 1 });
+    expect(res[0]).toEqual({ bikeId: 1 });
 });
 
 test('getBikeList returns 400', async () => {
@@ -198,10 +198,10 @@ test('getBikeList returns 500', async () => {
 });
 
 // deleteBike
-test('deleteBike returns bike_id with valid id', async () => {
+test('deleteBike returns bikeId with valid id', async () => {
     const token = 'TestingToken';
     const res = await deleteBike(token, 1);
-    expect(res.bike_id).toEqual(1);
+    expect(res.bikeId).toEqual(1);
 });
 
 test('deleteBike returns 400', async () => {

@@ -54,7 +54,7 @@ test('getBills returns 500', async () => {
 test('getBillsForMembership returns valid bill id', async () => {
     const token = 'TestingToken';
     const res = await getBillsForMembership(token, 1);
-    expect(res.bill_id).toEqual(1);
+    expect(res.billId).toEqual(1);
 });
 
 test('getBillsForMembership returns 401', async () => {
@@ -79,7 +79,7 @@ test('getBillsForMembership returns 500', async () => {
 test('generateBills returns valid first item', async () => {
     const token = 'TestingToken';
     const res = await generateBills(token);
-    expect(res[0]).toEqual({ bill_id: 1 });
+    expect(res[0]).toEqual({ billId: 1 });
 });
 
 test('generateBills returns 401', async () => {

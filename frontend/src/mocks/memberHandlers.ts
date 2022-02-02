@@ -19,7 +19,7 @@ const memberHandlers = [
             return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ member_id: 1 }));
+        return res(ctx.status(201), ctx.json({ memberId: 1 }));
     }),
 
     // getMemberList
@@ -35,14 +35,14 @@ const memberHandlers = [
         } if (status === 'InternalServerError') {
             return res(ctx.status(404), ctx.json({ reason: 'InternalServerError' }));
         }
-        return res(ctx.status(200), ctx.json([{ member_id: 1 }, { member_id: 2 }]));
+        return res(ctx.status(200), ctx.json([{ memberId: 1 }, { memberId: 2 }]));
     }),
 
     // getMember
     rest.get(`${process.env.REACT_APP_API_URL}/api/member/:memberID`, (req, res, ctx) => {
         const { memberID } = req.params;
         if (memberID === '1') {
-            return res(ctx.status(200), ctx.json({ member_id: 1 }));
+            return res(ctx.status(200), ctx.json({ memberId: 1 }));
         } if (memberID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (memberID === '-2') {
@@ -71,7 +71,7 @@ const memberHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ member_id: 1 }));
+        return res(ctx.status(201), ctx.json({ memberId: 1 }));
     }),
 ];
 export { memberHandlers as default };

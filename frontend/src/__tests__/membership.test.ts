@@ -7,7 +7,7 @@ import {
 } from '../controller/membership';
 
 // createMembership
-test('createMembership returns new member_id with valid data', async () => {
+test('createMembership returns new memberId with valid data', async () => {
     const token = 'TestingToken';
     const res = await createMembership(
         token,
@@ -20,7 +20,7 @@ test('createMembership returns new member_id with valid data', async () => {
             modified_by: 0,
         },
     );
-    expect(res.membership_id).toEqual(1);
+    expect(res.membershipId).toEqual(1);
 });
 
 test('createMembership returns bad request', async () => {
@@ -71,7 +71,7 @@ test('createMembership returns internal server error', async () => {
 test('getMembership returns membership with valid id', async () => {
     const token = 'TestingToken';
     const res = await getMembership(token, 1);
-    expect(res.membership_id).toEqual(1);
+    expect(res.membershipId).toEqual(1);
 });
 
 test('getMembership returns 400', async () => {
@@ -99,7 +99,7 @@ test('getMembership returns 500', async () => {
 });
 
 // updateMembership
-test('createMembership returns new member_id with valid data', async () => {
+test('createMembership returns new memberId with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateMembership(
         token,
@@ -112,7 +112,7 @@ test('createMembership returns new member_id with valid data', async () => {
             modified_by: 42,
         },
     );
-    expect(res.membership_id).toEqual(1);
+    expect(res.membershipId).toEqual(1);
 });
 
 test('createMembership returns bad request', async () => {
@@ -163,13 +163,13 @@ test('createMembership returns internal server error', async () => {
 test('getMembershipList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getMembershipList(token);
-    expect(res[0]).toEqual({ membership_id: 1 });
+    expect(res[0]).toEqual({ membershipId: 1 });
 });
 
 test('getMembershipList returns list with valid id and query param', async () => {
     const token = 'TestingToken';
     const res = await getMembershipList(token, 'valid');
-    expect(res[0]).toEqual({ membership_id: 1 });
+    expect(res[0]).toEqual({ membershipId: 1 });
 });
 
 test('getMembershipList returns 400', async () => {
@@ -197,13 +197,13 @@ test('getMembershipList returns 500', async () => {
 });
 
 // registerMembership
-test('registerMembership returns new member_id with valid data', async () => {
+test('registerMembership returns new memberId with valid data', async () => {
     const res = await registerMembership(
         {
-            member_type_id: 0,
-            first_name: 'string',
-            last_name: 'string',
-            phone_number: 'string',
+            memberTypeId: 0,
+            firstName: 'string',
+            lastName: 'string',
+            phoneNumber: 'string',
             occupation: 'string',
             email: 'user@example.com',
             birthdate: '2022-01-27',
@@ -213,7 +213,7 @@ test('registerMembership returns new member_id with valid data', async () => {
             zip: 'string',
         },
     );
-    expect(res.member_type).toEqual('new member');
+    expect(res.memberType).toEqual('new member');
 });
 
 test('registerMembership returns bad request', async () => {

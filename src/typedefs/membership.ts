@@ -58,13 +58,13 @@ export type PatchMembershipRequest = {
     modifiedBy: number
 }
 
-export type PatchMemberResponse = Membership | ErrorResponse
+export type PatchMembershipResponse = Membership | ErrorResponse
 
 export type GetMembershipListRequest = {}
 
 export type GetMembershipListResponse = Membership[] | ErrorResponse
 
-export type PostRegisterNewMembershipRequest = {
+export type PostRegisterMembershipRequest = {
     memberTypeId: number,
     firstName?: string,
     lastName?: string,

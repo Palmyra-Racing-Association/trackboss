@@ -19,7 +19,7 @@ const jobHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ job_id: 1 }));
+        return res(ctx.status(201), ctx.json({ jobId: 1 }));
     }),
 
     // getJobList
@@ -35,14 +35,14 @@ const jobHandlers = [
         } if (queryType === 'Internal Server Error') {
             return res(ctx.status(404), ctx.json({ reason: 'Internal Server Error' }));
         }
-        return res(ctx.status(200), ctx.json([{ job_id: 1 }, { job_id: 2 }]));
+        return res(ctx.status(200), ctx.json([{ jobId: 1 }, { jobId: 2 }]));
     }),
 
     // getJob
     rest.get(`${process.env.REACT_APP_API_URL}/api/job/:jobID`, (req, res, ctx) => {
         const { jobID } = req.params;
         if (jobID === '1') {
-            return res(ctx.status(200), ctx.json({ job_id: 1 }));
+            return res(ctx.status(200), ctx.json({ jobId: 1 }));
         } if (jobID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (jobID === '-2') {
@@ -68,14 +68,14 @@ const jobHandlers = [
         } if (token === 'Bearer Internal Server Error') {
             return res(ctx.status(404), ctx.json({ reason: 'Internal Server Error' }));
         }
-        return res(ctx.status(200), ctx.json({ job_id: 1 }));
+        return res(ctx.status(200), ctx.json({ jobId: 1 }));
     }),
 
     // cloneJob
     rest.post(`${process.env.REACT_APP_API_URL}/api/job/:jobID`, (req, res, ctx) => {
         const { jobID } = req.params;
         if (jobID === '1') {
-            return res(ctx.status(200), ctx.json({ job_id: 1 }));
+            return res(ctx.status(200), ctx.json({ jobId: 1 }));
         } if (jobID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         } if (jobID === '-2') {
@@ -90,7 +90,7 @@ const jobHandlers = [
     rest.delete(`${process.env.REACT_APP_API_URL}/api/job/:jobID`, (req, res, ctx) => {
         const { jobID } = req.params;
         if (jobID === '1') {
-            return res(ctx.status(200), ctx.json({ job_id: 1 }));
+            return res(ctx.status(200), ctx.json({ jobId: 1 }));
         } if (jobID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         } if (jobID === '-2') {

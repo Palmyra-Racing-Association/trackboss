@@ -19,7 +19,7 @@ const eventHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ event_id: 1 }));
+        return res(ctx.status(201), ctx.json({ eventId: 1 }));
     }),
 
     // getEventList
@@ -32,7 +32,7 @@ const eventHandlers = [
         } if (status === 'Bearer NotFound') {
             return res(ctx.status(404), ctx.json({ reason: 'NotFound' }));
         } if (status === 'Bearer TestingToken') {
-            return res(ctx.status(200), ctx.json([{ event_id: 1 }, { event_id: 2 }]));
+            return res(ctx.status(200), ctx.json([{ eventId: 1 }, { eventId: 2 }]));
         }
         return res(ctx.status(501), ctx.json({ reason: 'InternalServerError' }));
     }),
@@ -41,7 +41,7 @@ const eventHandlers = [
     rest.get(`${process.env.REACT_APP_API_URL}/api/event/:eventID`, (req, res, ctx) => {
         const { eventID } = req.params;
         if (eventID === '1') {
-            return res(ctx.status(200), ctx.json({ event_id: 1 }));
+            return res(ctx.status(200), ctx.json({ eventId: 1 }));
         } if (eventID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (eventID === '-2') {
@@ -62,7 +62,7 @@ const eventHandlers = [
         } if (status === 'Bearer Not Found') {
             return res(ctx.status(404), ctx.json({ reason: 'Not Found' }));
         } if (status === 'Bearer TestingToken') {
-            return res(ctx.status(200), ctx.json({ event_id: 1 }));
+            return res(ctx.status(200), ctx.json({ eventId: 1 }));
         }
         return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
     }),
@@ -85,7 +85,7 @@ const eventHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ event_id: 1 }));
+        return res(ctx.status(201), ctx.json({ eventId: 1 }));
     }),
 ];
 export { eventHandlers as default };

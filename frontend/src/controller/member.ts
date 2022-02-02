@@ -1,6 +1,14 @@
 import generateHeaders from './utils';
+import {
+    GetMemberListResponse,
+    GetMemberResponse,
+    PatchMemberRequest,
+    PatchMemberResponse,
+    PostNewMemberRequest,
+    PostNewMemberResponse,
+} from '../../../src/typedefs/member';
 
-export async function createMember(token: string, memberData: object) {
+export async function createMember(token: string, memberData: PostNewMemberRequest): Promise<PostNewMemberResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/new`, {
         method: 'POST',
         mode: 'no-cors',
@@ -10,7 +18,7 @@ export async function createMember(token: string, memberData: object) {
     return response.json();
 }
 
-export async function getMember(token: string, memberId: number) {
+export async function getMember(token: string, memberId: number): Promise<GetMemberResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/${memberId}`, {
         method: 'GET',
         mode: 'no-cors',
@@ -19,7 +27,7 @@ export async function getMember(token: string, memberId: number) {
     return response.json();
 }
 
-export async function getMemberList(token: string, listType?: string) {
+export async function getMemberList(token: string, listType?: string): Promise<GetMemberListResponse> {
     if (listType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/list?status=${listType}`, {
             method: 'GET',
@@ -37,7 +45,11 @@ export async function getMemberList(token: string, listType?: string) {
     return response.json();
 }
 
-export async function updateMember(token: string, memberID: number, memberData: object) {
+export async function updateMember(
+    token: string,
+    memberID: number,
+    memberData: PatchMemberRequest,
+): Promise<PatchMemberResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/${memberID}`, {
         method: 'PATCH',
         mode: 'no-cors',

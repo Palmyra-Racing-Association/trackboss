@@ -6,7 +6,7 @@ import {
 } from '../controller/eventType';
 
 // createEventType
-test('createEventType returns new event_type_id with valid data', async () => {
+test('createEventType returns new eventTypeId with valid data', async () => {
     const token = 'TestingToken';
     const res = await createEventType(
         token,
@@ -15,7 +15,7 @@ test('createEventType returns new event_type_id with valid data', async () => {
             modified_by: 0,
         },
     );
-    expect(res.event_type_id).toEqual(1);
+    expect(res.eventTypeId).toEqual(1);
 });
 
 test('createEventType returns bad request', async () => {
@@ -66,13 +66,13 @@ test('createEventType returns internal server error', async () => {
 test('getEventTypeList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getEventTypeList(token);
-    expect(res[0]).toEqual({ event_type_id: 1 });
+    expect(res[0]).toEqual({ eventTypeId: 1 });
 });
 
 test('getEventTypeList returns list with valid id and query param', async () => {
     const token = 'TestingToken';
     const res = await getEventTypeList(token);
-    expect(res[0]).toEqual({ event_type_id: 1 });
+    expect(res[0]).toEqual({ eventTypeId: 1 });
 });
 
 test('getEventTypeList returns 400', async () => {
@@ -103,7 +103,7 @@ test('getEventTypeList returns 500', async () => {
 test('getEventType returns EventType with valid id', async () => {
     const token = 'TestingToken';
     const res = await getEventType(token, 1);
-    expect(res.event_type_id).toEqual(1);
+    expect(res.eventTypeId).toEqual(1);
 });
 
 test('getEventType returns 400', async () => {
@@ -131,7 +131,7 @@ test('getEventType returns 500', async () => {
 });
 
 // updateEventType
-test('updateEventType returns new event_type_id with valid data', async () => {
+test('updateEventType returns new eventTypeId with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateEventType(
         token,
@@ -141,7 +141,7 @@ test('updateEventType returns new event_type_id with valid data', async () => {
             modified_by: 0,
         },
     );
-    expect(res.event_type_id).toEqual(1);
+    expect(res.eventTypeId).toEqual(1);
 });
 
 test('updateEventType returns bad request', async () => {
