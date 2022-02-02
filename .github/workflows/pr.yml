@@ -35,7 +35,7 @@ jobs:
       run: sudo systemctl start mysql.service
     - name: Configure database
       run: |
-        sed -i "s/-u root/-u root --password root/g" database/mock_data/setup_user.sh
+        sed -i "s/-u root/-u root -proot/g" database/mock_data/setup_user.sh
         cd database/mock_data && ./setup_user.sh
     # - name: Run Jest on backend
     #   run: npm run ci-test
