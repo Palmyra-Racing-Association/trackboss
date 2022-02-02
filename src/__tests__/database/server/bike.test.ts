@@ -1,5 +1,5 @@
 import { PatchBikeRequest } from 'src/typedefs/bike';
-import { getBike, getBikeList, insertBike, patchBike } from '../../../database/bike';
+import { getBike, getBikeList, insertBike, patchBike, deleteBike } from '../../../database/bike';
 import mockQuery from './mockQuery';
 
 describe('insertBike()', () => {
@@ -111,6 +111,27 @@ describe('patchBike()', () => {
     it('Throws for internal server error', async () => {
         const bikeId = -100;
         await expect(patchBike(bikeId, {})).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('deleteBike()', () => {
+
+    it('Deletes a bike', async () => {
+        const bikeId = 50;
+        await deleteBike(bikeId);
+        expect(mockQuery).toHaveBeenCalled();
+    });
+    
+    it('Throws for bike not found', async () => {
+        const bikeId = 5000;
+        await expect(deleteBike(bikeId)).rejects.toThrow('not found');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error', async () => {
+        const bikeId = -100;
+        await expect(deleteBike(bikeId)).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 });

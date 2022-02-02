@@ -10,6 +10,7 @@ export const GET_BIKE_LIST_BY_MEMBERSHIP_SQL = `${GET_BIKE_LIST_SQL} WHERE membe
 export const GET_BIKE_SQL = 'SELECT bike_id, year, make, model, membership_admin FROM v_bike WHERE bike_id = ?';
 export const INSERT_BIKE_SQL = 'INSERT INTO member_bikes (year, make, model, membership_id) VALUES (?, ?, ?, ?)';
 export const PATCH_BIKE_SQL = 'CALL sp_patch_bike(?, ?, ?, ?, ?)';
+export const DELETE_BIKE_SQL = 'DELETE FROM member_bikes WHERE bike_id = ?';
 
 export async function insertBike(req: PostNewBikeRequest): Promise<number> {
     const values = [req.year, req.make, req.model, req.membershipId];
@@ -98,3 +99,21 @@ export async function patchBike(id: number, req: PatchBikeRequest): Promise<void
         throw new Error('not found');
     }
 }
+
+
+    export async function deleteBike(id: number): Promise<void> {
+        const values = [id];
+        
+        let result;
+        try {
+            [result] = await pool.query<OkPacket>(DELETE_BIKE_SQL, values);
+        } catch (e) {
+            logger.error(`DB error deleting bike: ${e}`);
+            throw new Error('internal server error');
+        }
+    
+        if (result.affectedRows < 1) {
+            throw new Error('not found');
+        }
+}
+

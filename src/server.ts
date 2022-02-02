@@ -12,9 +12,9 @@ const server = app.listen(port, () => {
     logger.info(`PRA Club Manager API listening on port ${port}`);
 });
 const fn = async () => {
-    const id = 1;
+    const id = 104;
     const req = {};
-    logger.info(`${JSON.stringify(await patchBike(id, req))}`);
+    //logger.info(`${JSON.stringify(await patchBike(id, req))}`);
 };
 
 fn();

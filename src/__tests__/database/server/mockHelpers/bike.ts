@@ -82,3 +82,16 @@ export function patchBikeResponse(id: number) {
             return Promise.resolve();
     }
 }
+
+export function deleteBikeResponse(id: number) {
+    switch(id) {
+        case 50:
+            return Promise.resolve([{ affectedRows: 1 }]);
+        case 5000:
+            return Promise.resolve([{ affectedRows: 0 }]);
+        case -100:
+            throw new Error('error message');
+        default:
+            return Promise.resolve();
+    }
+}
