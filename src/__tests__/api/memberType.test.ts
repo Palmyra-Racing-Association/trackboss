@@ -5,8 +5,8 @@ const TAG_ROOT = '/api/memberType';
 
 const supertestServer = supertest(server);
 
-afterAll(() => {
-    server.close();
+afterAll((done) => {
+    server.close(done);
 });
 
 describe('All unimplemented memberType endpoints are reachable', () => {

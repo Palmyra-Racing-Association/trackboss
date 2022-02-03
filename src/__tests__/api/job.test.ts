@@ -5,8 +5,8 @@ const TAG_ROOT = '/api/job';
 
 const supertestServer = supertest(server);
 
-afterAll(() => {
-    server.close();
+afterAll((done) => {
+    server.close(done);
 });
 
 describe('All unimplemented job endpoints are reachable', () => {

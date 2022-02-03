@@ -5,8 +5,8 @@ const TAG_ROOT = '/api/billing';
 
 const supertestServer = supertest(server);
 
-afterAll(() => {
-    server.close();
+afterAll((done) => {
+    server.close(done);
 });
 
 describe('All unimplemented billing endpoints are reachable', () => {
