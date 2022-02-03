@@ -11,13 +11,13 @@ export type Member = {
     phoneNumber: string,
     occupation: string,
     email: string,
-    birthdate: Date,
-    dateJoined: Date,
+    birthdate: string,
+    dateJoined: string,
     address: string,
     city: string,
     state: string,
     zip: string,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     lastModifiedBy: string
 }
 
@@ -30,8 +30,8 @@ export type PostNewMemberRequest = {
     phoneNumber?: string,
     occupation?: string,
     email?: string,
-    birthdate?: Date,
-    dateJoined?: Date,
+    birthdate?: string,
+    dateJoined?: string,
     modifiedBy: number
 }
 
@@ -51,8 +51,8 @@ export type PatchMemberRequest = {
     phoneNumber?: string,
     occupation?: string,
     email?: string,
-    birthdate?: Date,
-    dateJoined?: Date,
+    birthdate?: string,
+    dateJoined?: string,
     modifiedBy: number
 }
 

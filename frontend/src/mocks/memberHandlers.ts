@@ -6,16 +6,16 @@ const memberHandlers = [
         const bodyString = JSON.stringify(req.body);
         const body = JSON.parse(bodyString);
 
-        if (body.address === 'Bad Request') {
+        if (body.firstName === 'Bad Request') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         }
-        if (body.address === 'Unauthorized') {
+        if (body.firstName === 'Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
         }
-        if (body.address === 'Forbidden') {
+        if (body.firstName === 'Forbidden') {
             return res(ctx.status(403), ctx.json({ reason: 'Forbidden' }));
         }
-        if (body.address === 'Internal Server Error') {
+        if (body.firstName === 'Internal Server Error') {
             return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
         }
 
@@ -58,16 +58,16 @@ const memberHandlers = [
         const bodyString = JSON.stringify(req.body);
         const body = JSON.parse(bodyString);
 
-        if (body.address === 'Bad Request') {
+        if (body.firstName === 'Bad Request') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         }
-        if (body.address === 'Unauthorized') {
+        if (body.firstName === 'Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
         }
-        if (body.address === 'Forbidden') {
+        if (body.firstName === 'Forbidden') {
             return res(ctx.status(402), ctx.json({ reason: 'Forbidden' }));
         }
-        if (body.address === 'Internal Server Error') {
+        if (body.firstName === 'Internal Server Error') {
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 

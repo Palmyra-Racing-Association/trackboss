@@ -12,10 +12,14 @@ test('createEventType returns new eventTypeId with valid data', async () => {
         token,
         {
             type: 'string',
-            modified_by: 0,
+            modifiedBy: 0,
         },
     );
-    expect(res.eventTypeId).toEqual(1);
+    if ('eventTypeId' in res) {
+        expect(res.eventTypeId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('createEventType returns bad request', async () => {
@@ -24,9 +28,14 @@ test('createEventType returns bad request', async () => {
         token,
         {
             type: 'Bad Request',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateEventType returns unauthorized', async () => {
@@ -35,9 +44,14 @@ test('updateEventType returns unauthorized', async () => {
         token,
         {
             type: 'Unauthorized',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createEventType returns forbidden', async () => {
@@ -46,9 +60,14 @@ test('createEventType returns forbidden', async () => {
         token,
         {
             type: 'Forbidden',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createEventType returns internal server error', async () => {
@@ -57,77 +76,126 @@ test('createEventType returns internal server error', async () => {
         token,
         {
             type: 'Internal Server Error',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // getEventTypeList
 test('getEventTypeList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getEventTypeList(token);
-    expect(res[0]).toEqual({ eventTypeId: 1 });
+    if (Array.isArray(res)) {
+        expect(res[0]).toEqual({ eventTypeId: 1 });
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getEventTypeList returns list with valid id and query param', async () => {
     const token = 'TestingToken';
     const res = await getEventTypeList(token);
-    expect(res[0]).toEqual({ eventTypeId: 1 });
+    if (Array.isArray(res)) {
+        expect(res[0]).toEqual({ eventTypeId: 1 });
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getEventTypeList returns 400', async () => {
     const token = 'Bad request';
     const res = await getEventTypeList(token);
-    expect(res.reason).toEqual('Bad request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEventTypeList returns 401', async () => {
     const token = 'Unauthorized';
     const res = await getEventTypeList(token);
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEventTypeList returns 404', async () => {
     const token = 'Not Found';
     const res = await getEventTypeList(token);
-    expect(res.reason).toEqual('Not Found');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Not Found');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEventTypeList returns 500', async () => {
     const token = 'Internal Server Error';
     const res = await getEventTypeList(token);
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // getEventType
 test('getEventType returns EventType with valid id', async () => {
     const token = 'TestingToken';
     const res = await getEventType(token, 1);
-    expect(res.eventTypeId).toEqual(1);
+    if ('eventTypeId' in res) {
+        expect(res.eventTypeId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getEventType returns 400', async () => {
     const token = 'TestingToken';
     const res = await getEventType(token, -1);
-    expect(res.reason).toEqual('Bad request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEventType returns 401', async () => {
     const token = 'TestingToken';
     const res = await getEventType(token, -2);
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEventType returns 404', async () => {
     const token = 'TestingToken';
     const res = await getEventType(token, -3);
-    expect(res.reason).toEqual('Not Found');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Not Found');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEventType returns 500', async () => {
     const token = 'TestingToken';
     const res = await getEventType(token, -4);
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // updateEventType
@@ -138,10 +206,14 @@ test('updateEventType returns new eventTypeId with valid data', async () => {
         1,
         {
             type: '1234 New type Street',
-            modified_by: 0,
+            modifiedBy: 0,
         },
     );
-    expect(res.eventTypeId).toEqual(1);
+    if ('eventTypeId' in res) {
+        expect(res.eventTypeId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('updateEventType returns bad request', async () => {
@@ -151,9 +223,14 @@ test('updateEventType returns bad request', async () => {
         1,
         {
             type: 'Bad Request',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateEventType returns unauthorized', async () => {
@@ -163,9 +240,14 @@ test('updateEventType returns unauthorized', async () => {
         1,
         {
             type: 'Unauthorized',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateEventType returns forbidden', async () => {
@@ -175,9 +257,14 @@ test('updateEventType returns forbidden', async () => {
         1,
         {
             type: 'Forbidden',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateEventType returns internal server error', async () => {
@@ -187,7 +274,12 @@ test('updateEventType returns internal server error', async () => {
         1,
         {
             type: 'Internal Server Error',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });

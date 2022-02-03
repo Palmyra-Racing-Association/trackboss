@@ -11,7 +11,7 @@ export type Membership = {
     city: string
     state: string,
     zip: string,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     lastModifiedBy: string
 }
 
@@ -22,7 +22,7 @@ export type Registration = {
     phoneNumber: string,
     occupation: string,
     email: string,
-    birthdate: Date,
+    birthdate: string,
     address: string,
     city: string,
     state: string,
@@ -71,7 +71,7 @@ export type PostRegisterMembershipRequest = {
     phoneNumber?: string,
     occupation?: string,
     email?: string,
-    birthdate?: Date,
+    birthdate?: string,
     address?: string,
     city?: string,
     state?: string,

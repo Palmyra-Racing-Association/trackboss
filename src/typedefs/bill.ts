@@ -2,19 +2,19 @@ import { ErrorResponse } from './errorResponse';
 
 export type Bill = {
     billId: number,
-    generatedDate: Date,
+    generatedDate: string,
     year: number,
     amount: number,
     amountWithFee: number,
     membershipAdmin: string,
     membershipAdminEmail: string,
-    emailedBill: Date,
+    emailedBill: string,
     curYearPaid: boolean
 }
 
 export type WorkPointThreshold = {
     year: number,
-    total: number
+    threshold: number
 }
 
 export type GetWorkPointThresholdRequest = {}

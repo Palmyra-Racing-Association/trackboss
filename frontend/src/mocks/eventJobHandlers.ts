@@ -7,7 +7,7 @@ const eventJobHandlers = [
         const body = JSON.parse(bodyString);
 
         if (body.eventTypeId === 1) {
-            return res(ctx.status(201), ctx.json({ event_jobId: 1 }));
+            return res(ctx.status(201), ctx.json({ eventJobId: 1 }));
         }
         if (body.eventTypeId === -1) {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
@@ -25,7 +25,7 @@ const eventJobHandlers = [
     rest.get(`${process.env.REACT_APP_API_URL}/api/eventJob/:eventJobID`, (req, res, ctx) => {
         const { eventJobID } = req.params;
         if (eventJobID === '1') {
-            return res(ctx.status(200), ctx.json({ eventTypeId: 1 }));
+            return res(ctx.status(200), ctx.json({ eventJobId: 1 }));
         } if (eventJobID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (eventJobID === '-2') {
@@ -40,7 +40,7 @@ const eventJobHandlers = [
     rest.patch(`${process.env.REACT_APP_API_URL}/api/eventJob/:eventJobID`, (req, res, ctx) => {
         const { eventJobID } = req.params;
         if (eventJobID === '1') {
-            return res(ctx.status(200), ctx.json({ eventTypeId: 1 }));
+            return res(ctx.status(200), ctx.json({ eventJobId: 1 }));
         } if (eventJobID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         } if (eventJobID === '-2') {
@@ -57,7 +57,7 @@ const eventJobHandlers = [
     rest.delete(`${process.env.REACT_APP_API_URL}/api/eventJob/:eventJobID`, (req, res, ctx) => {
         const { eventJobID } = req.params;
         if (eventJobID === '1') {
-            return res(ctx.status(200), ctx.json({ eventTypeId: 1 }));
+            return res(ctx.status(200), ctx.json({ eventJobId: 1 }));
         } if (eventJobID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         } if (eventJobID === '-2') {

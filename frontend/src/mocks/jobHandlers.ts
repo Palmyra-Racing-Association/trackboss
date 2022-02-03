@@ -6,16 +6,16 @@ const jobHandlers = [
         const bodyString = JSON.stringify(req.body);
         const body = JSON.parse(bodyString);
 
-        if (body.job_date === 'Bad Request') {
+        if (body.jobDate === 'Bad Request') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad Request' }));
         }
-        if (body.job_date === 'Unauthorized') {
+        if (body.jobDate === 'Unauthorized') {
             return res(ctx.status(401), ctx.json({ reason: 'Unauthorized' }));
         }
-        if (body.job_date === 'Forbidden') {
+        if (body.jobDate === 'Forbidden') {
             return res(ctx.status(402), ctx.json({ reason: 'Forbidden' }));
         }
-        if (body.job_date === 'Internal Server Error') {
+        if (body.jobDate === 'Internal Server Error') {
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 

@@ -16,12 +16,16 @@ test('createJob returns new jobId with valid data', async () => {
             memberId: 0,
             eventId: 0,
             jobTypeId: 0,
-            job_date: '2022-01-27',
-            points_awarded: 0,
-            modified_by: 0,
+            jobDate: '2022-01-27',
+            pointsAwarded: 0,
+            modifiedBy: 0,
         },
     );
-    expect(res.jobId).toEqual(1);
+    if ('jobId' in res) {
+        expect(res.jobId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('createJob returns bad request', async () => {
@@ -29,10 +33,16 @@ test('createJob returns bad request', async () => {
     const res = await createJob(
         token,
         {
-            job_date: 'Bad Request',
+            jobDate: 'Bad Request',
+            jobTypeId: 0,
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createJob returns unauthorized', async () => {
@@ -40,10 +50,16 @@ test('createJob returns unauthorized', async () => {
     const res = await createJob(
         token,
         {
-            job_date: 'Unauthorized',
+            jobDate: 'Unauthorized',
+            jobTypeId: 0,
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createJob returns forbidden', async () => {
@@ -51,10 +67,16 @@ test('createJob returns forbidden', async () => {
     const res = await createJob(
         token,
         {
-            job_date: 'Forbidden',
+            jobDate: 'Forbidden',
+            jobTypeId: 0,
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createJob returns internal server error', async () => {
@@ -62,41 +84,67 @@ test('createJob returns internal server error', async () => {
     const res = await createJob(
         token,
         {
-            job_date: 'Internal Server Error',
+            jobDate: 'Internal Server Error',
+            jobTypeId: 0,
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // getJob
 test('getJob returns job with valid id', async () => {
     const token = 'TestingToken';
     const res = await getJob(token, 1);
-    expect(res.jobId).toEqual(1);
+    if ('jobId' in res) {
+        expect(res.jobId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getJob returns 400', async () => {
     const token = 'TestingToken';
     const res = await getJob(token, -1);
-    expect(res.reason).toEqual('Bad request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getJob returns 401', async () => {
     const token = 'TestingToken';
     const res = await getJob(token, -2);
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getJob returns 404', async () => {
     const token = 'TestingToken';
     const res = await getJob(token, -3);
-    expect(res.reason).toEqual('Not Found');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Not Found');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getJob returns 500', async () => {
     const token = 'TestingToken';
     const res = await getJob(token, -4);
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // updateJob
@@ -107,9 +155,14 @@ test('updateJob returns new jobId with valid data', async () => {
         1,
         {
             verified: true,
+            modifiedBy: 0,
         },
     );
-    expect(res.jobId).toEqual(1);
+    if ('jobId' in res) {
+        expect(res.jobId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('updateJob returns bad request', async () => {
@@ -119,9 +172,14 @@ test('updateJob returns bad request', async () => {
         1,
         {
             verified: true,
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateJob returns unauthorized', async () => {
@@ -131,9 +189,14 @@ test('updateJob returns unauthorized', async () => {
         1,
         {
             verified: true,
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateJob returns forbidden', async () => {
@@ -143,9 +206,14 @@ test('updateJob returns forbidden', async () => {
         1,
         {
             verified: true,
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateJob returns internal server error', async () => {
@@ -155,106 +223,175 @@ test('updateJob returns internal server error', async () => {
         1,
         {
             verified: true,
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // getJobList
 test('getJobList returns list with valid strings', async () => {
     const token = 'TestingToken';
     const res = await getJobList(token, 'queryType', 'FilterType');
-    expect(res[0]).toEqual({ jobId: 1 });
+    if (Array.isArray(res)) {
+        expect(res[0]).toEqual({ jobId: 1 });
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getJobList returns list with no params', async () => {
     const token = 'TestingToken';
     const res = await getJobList(token);
-    expect(res[0]).toEqual({ jobId: 1 });
+    if (Array.isArray(res)) {
+        expect(res[0]).toEqual({ jobId: 1 });
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getJobList returns 400', async () => {
     const token = 'TestingToken';
     const res = await getJobList(token, 'queryType', 'Bad Request');
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getJobList returns 401', async () => {
     const token = 'TestingToken';
     const res = await getJobList(token, 'queryType', 'Unauthorized');
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getJobList returns 404', async () => {
     const token = 'TestingToken';
     const res = await getJobList(token, 'queryType', 'Not Found');
-    expect(res.reason).toEqual('Not Found');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Not Found');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getJobList returns 500', async () => {
     const token = 'TestingToken';
     const res = await getJobList(token, 'queryType', 'Internal Server Error');
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // cloneJob
 test('cloneJob returns new jobId with valid data', async () => {
     const token = 'TestingToken';
     const res = await cloneJob(token, 1);
-    expect(res.jobId).toEqual(1);
+    if ('jobId' in res) {
+        expect(res.jobId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('cloneJob returns bad request', async () => {
     const token = 'TestingToken';
     const res = await cloneJob(token, -1);
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('cloneJob returns unauthorized', async () => {
     const token = 'TestingToken';
     const res = await cloneJob(token, -2);
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('cloneJob returns forbidden', async () => {
     const token = 'TestingToken';
     const res = await cloneJob(token, -3);
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('cloneJob returns internal server error', async () => {
     const token = 'TestingToken';
     const res = await cloneJob(token, -4);
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // deleteJob
 test('deleteJob returns new jobId with valid data', async () => {
     const token = 'TestingToken';
     const res = await deleteJob(token, 1);
-    expect(res.jobId).toEqual(1);
+    if ('jobId' in res) {
+        expect(res.jobId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('deleteJob returns bad request', async () => {
     const token = 'TestingToken';
     const res = await deleteJob(token, -1);
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('deleteJob returns unauthorized', async () => {
     const token = 'TestingToken';
     const res = await deleteJob(token, -2);
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('deleteJob returns forbidden', async () => {
     const token = 'TestingToken';
     const res = await deleteJob(token, -3);
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('deleteJob returns internal server error', async () => {
     const token = 'TestingToken';
     const res = await deleteJob(token, -4);
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });

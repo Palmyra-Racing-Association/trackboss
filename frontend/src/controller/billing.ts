@@ -52,5 +52,5 @@ export async function payBill(token: string, membershipID: number): Promise<Post
         mode: 'no-cors',
         headers: generateHeaders(token),
     });
-    return response;
+    return response.json();
 }
