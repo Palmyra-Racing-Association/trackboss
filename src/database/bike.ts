@@ -79,13 +79,7 @@ export async function getBike(id: number): Promise<Bike> {
 }
 
 export async function patchBike(id: number, req: PatchBikeRequest): Promise<void> {
-    const values = [
-        id,
-        req.year !== undefined ? req.year : null,
-        req.make !== undefined ? req.make : null,
-        req.model !== undefined ? req.model : null,
-        req.membershipId !== undefined ? req.membershipId : null,
-    ];
+    const values = [id, req.year, req.make, req.model, req.membershipId];
 
     let result;
     try {
