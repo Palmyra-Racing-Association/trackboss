@@ -5,8 +5,8 @@ const TAG_ROOT = '/api/workPoints';
 
 const supertestServer = supertest(server);
 
-afterAll(() => {
-    server.close();
+afterAll((done) => {
+    server.close(done);
 });
 
 describe('All unimplemented workPoints endpoints are reachable', () => {
