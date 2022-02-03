@@ -106,21 +106,21 @@ components:
     member:
       type: object
       properties:
-        member_id:
-          $ref: "#/components/schemas/integer"
-        membership_admin:
+        memberId:
+          $ref: "#/components/schemas/number" # just the DB ID
+        membershipAdmin:
           $ref: "#/components/schemas/string"
         uuid:
           $ref: "#/components/schemas/uuid"
         active:
           type: boolean
-        member_type:
+        memberType:
           $ref: "#/components/schemas/string"
-        first_name:
+        firstName:
           $ref: "#/components/schemas/string"
-        last_name:
+        lastName:
           $ref: "#/components/schemas/string"
-        phone_number:
+        phoneNumber:
           type: string
         occupation:
           $ref: "#/components/schemas/string"
@@ -128,7 +128,7 @@ components:
           $ref: "#/components/schemas/email"
         birthdate:
           $ref: "#/components/schemas/date"
-        date_joined:
+        dateJoined:
           $ref: "#/components/schemas/date"
         address:
           $ref: "#/components/schemas/string"
@@ -138,33 +138,33 @@ components:
           $ref: "#/components/schemas/string"
         zip:
           $ref: "#/components/schemas/string"
-        last_modified_date:
+        lastModifiedDate:
           $ref: "#/components/schemas/date"
-        last_modified_by:
+        lastModifiedBy:
           $ref: "#/components/schemas/string"
     memberType:
       type: object
       properties:
-        member_type_id:
+        memberTypeId:
           $ref: "#/components/schemas/integer"
         type:
           $ref: "#/components/schemas/string"
-        base_dues_amt:
+        baseDuesAmt:
           $ref: "#/components/schemas/number"
     membership:
       type: object
       properties:
-        membership_id:
+        membershipId:
           $ref: "#/components/schemas/integer"
-        membership_admin:
+        membershipAdmin:
           $ref: "#/components/schemas/string"
-        active:
+        status:
+          $ref: "#/components/schemas/string"
+        curYearRenewed:
           type: boolean
-        cur_year_renewed:
+        renewalSent:
           type: boolean
-        renewal_sent:
-          type: boolean
-        year_joined:
+        yearJoined:
           $ref: "#/components/schemas/integer"
         address:
           $ref: "#/components/schemas/string"
@@ -174,21 +174,21 @@ components:
           $ref: "#/components/schemas/string"
         zip:
           $ref: "#/components/schemas/string"
-        last_modified_date:
+        lastModifiedDate:
           $ref: "#/components/schemas/date"
-        last_modified_by:
+        lastModifiedBy:
           $ref: "#/components/schemas/string"
     registration:
       type: object
       properties:
-        member_type:
+        memberType:
           $ref: "#/components/schemas/string"
-        first_name:
+        firstName:
           $ref: "#/components/schemas/string"
-        last_name:
+        lastName:
           $ref: "#/components/schemas/string"
-        phone_number:
-          type: string
+        phoneNumber:
+          $ref: "#/components/schemas/string"
         occupation:
           $ref: "#/components/schemas/string"
         email:
@@ -206,7 +206,7 @@ components:
     bike:
       type: object
       properties:
-        bike_id:
+        bikeId:
           $ref: "#/components/schemas/integer"
         year:
           $ref: "#/components/schemas/shortString"
@@ -214,119 +214,119 @@ components:
           $ref: "#/components/schemas/shortString"
         model:
           $ref: "#/components/schemas/shortString"
-        membership_admin:
+        membershipAdmin:
           $ref: "#/components/schemas/string"
     event:
       type: object
       properties:
-        event_id:
+        eventId:
           $ref: "#/components/schemas/integer"
         date:
           $ref: "#/components/schemas/date"
-        event_type:
+        eventType:
           $ref: "#/components/schemas/string"
-        event_name:
+        eventName:
           $ref: "#/components/schemas/string"
-        event_description:
+        eventDescription:
           $ref: "#/components/schemas/string"
     eventType:
       type: object
       properties:
-        event_type_id:
+        eventTypeId:
           $ref: "#/components/schemas/integer"
         type:
           $ref: "#/components/schemas/string"
         active:
           type: boolean
-        last_modified_date:
+        lastModifiedDate:
           $ref: "#/components/schemas/date"
-        last_modified_by:
+        lastModifiedBy:
           $ref: "#/components/schemas/string"
     job:
       type: object
       properties:
-        job_id:
+        jobId:
           $ref: "#/components/schemas/integer"
         member:
           $ref: "#/components/schemas/string"
         event:
           $ref: "#/components/schemas/string"
-        job_date:
+        jobDate:
           $ref: "#/components/schemas/date"
-        job_type:
+        jobType:
           $ref: "#/components/schemas/string"
         verified:
           type: boolean
-        verified_date:
+        verifiedDate:
           $ref: "#/components/schemas/date"
-        points_awarded:
+        pointsAwarded:
           $ref: "#/components/schemas/number"
         paid:
           type: boolean
-        paid_date:
+        paidDate:
           $ref: "#/components/schemas/date"
-        last_modified_date:
+        lastModifiedDate:
           $ref: "#/components/schemas/date"
-        last_modified_by:
+        lastModifiedBy:
           $ref: "#/components/schemas/string"
     jobType:
       type: object
       properties:
-        job_type_id:
+        jobTypeId:
           $ref: "#/components/schemas/integer"
         title:
           $ref: "#/components/schemas/string"
-        point_value:
+        pointValue:
           $ref: "#/components/schemas/number"
-        cash_value:
+        cashValue:
           $ref: "#/components/schemas/number"
-        job_day_number:
+        jobDayNumber:
           $ref: "#/components/schemas/integer"
         reserved:
           type: boolean
         online:
           type: boolean
-        meal_ticket:
+        mealTicket:
           type: boolean
-        sort_order:
+        sortOrder:
           $ref: "#/components/schemas/integer"
         active:
           type: boolean
-        last_modified_date:
+        lastModifiedDate:
           $ref: "#/components/schemas/date"
-        last_modified_by:
+        lastModifiedBy:
           $ref: "#/components/schemas/string"
     eventJob:
       type: object
       properties:
-        event_job_id:
+        eventJobId:
           $ref: "#/components/schemas/integer"
-        event_type:
+        eventType:
           $ref: "#/components/schemas/string"
-        job_type:
+        jobType:
           $ref: "#/components/schemas/string"
         count:
           $ref: "#/components/schemas/integer"
     bill:
       type: object
       properties:
-        bill_id:
+        billId:
           $ref: "#/components/schemas/integer"
-        generated_date:
+        generatedDate:
           $ref: "#/components/schemas/date"
         year:
           $ref: "#/components/schemas/integer"
         amount:
           $ref: "#/components/schemas/number"
-        amount_with_fee:
+        amountWithFee:
           $ref: "#/components/schemas/number"
-        membership_admin:
+        membershipAdmin:
           $ref: "#/components/schemas/string"
-        membership_admin_email:
+        membershipAdminEmail:
           $ref: "#/components/schemas/email"
-        emailed_bill:
+        emailedBill:
           $ref: "#/components/schemas/date"
-        cur_year_paid:
+        curYearPaid:
           type: boolean
 security:
   - BearerAuth: [] 
@@ -345,31 +345,31 @@ paths:
             schema:
               type: object
               required:
-                - member_type_id
-                - modified_by
+                - memberTypeId
+                - modifiedBy
               additionalProperties: false
               properties:
-                membership_id:
+                membershipId:
                   $ref: "#/components/schemas/integer"
                 uuid:
                   $ref: "#/components/schemas/uuid"
-                member_type_id:
+                memberTypeId:
                   $ref: "#/components/schemas/integer"
-                first_name:
+                firstName:
                   $ref: "#/components/schemas/string"
-                last_name:
+                lastName:
                   $ref: "#/components/schemas/string"
-                phone_number:
-                  type: string
+                phoneNumber:
+                  $ref: "#/components/schemas/string"
                 occupation:
                   $ref: "#/components/schemas/string"
                 email:
                   $ref: "#/components/schemas/email"
                 birthdate:
                   $ref: "#/components/schemas/date"
-                date_joined:
+                dateJoined:
                   $ref: "#/components/schemas/date"
-                modified_by:
+                modifiedBy:
                   $ref: "#/components/schemas/integer"
       responses:
         201:
@@ -422,12 +422,16 @@ paths:
         in: path
         required: true
         schema:
-          type: integer
+          type: string
     get:
       tags:
         - member
       summary: Get this member
-      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      description: >
+        The `memberId` path parameter can either be a database ID or a
+        Cognito-provided UUID.
+        <br><br>
+        This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       responses:
         200:
           description: OK
@@ -446,6 +450,9 @@ paths:
         - member
       summary: Update this member
       description: >
+        The `memberId` path parameter can either be a database ID or a
+        Cognito-provided UUID.
+        <br><br>
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
@@ -461,38 +468,38 @@ paths:
             schema:
               type: object
               required:
-                - modified_by
+                - modifiedBy
               minProperties: 2
               additionalProperties: false
               properties:
-                membership_id:
+                membershipId:
                   $ref: "#/components/schemas/integer"
                 uuid:
                   $ref: "#/components/schemas/uuid"
                 active:
                   type: boolean
-                member_type_id:
+                memberTypeId:
                   $ref: "#/components/schemas/integer"
-                first_name:
+                firstName:
                   $ref: "#/components/schemas/string"
-                last_name:
+                lastName:
                   $ref: "#/components/schemas/string"
-                phone_number:
-                  type: string
+                phoneNumber:
+                  $ref: "#/components/schemas/string"
                 occupation:
                   $ref: "#/components/schemas/string"
                 email:
                   $ref: "#/components/schemas/email"
                 birthdate:
                   $ref: "#/components/schemas/date"
-                date_joined:
+                dateJoined:
                   $ref: "#/components/schemas/date"
-                modified_by:
+                modifiedBy:
                   $ref: "#/components/schemas/integer"
             example:
               email: newemail@gmail.com
-              phone_number: 585-123-4567
-              modified_by: 42
+              phoneNumber: 585-123-4567
+              modifiedBy: 42
       responses:
         200:
           description: OK
@@ -574,10 +581,10 @@ paths:
               properties:
                 type:
                   $ref: "#/components/schemas/string"
-                base_dues_amt:
+                baseDuesAmt:
                   $ref: "#/components/schemas/number"
             example:
-              base_dues_amt: 100
+              baseDuesAmt: 100
       responses:
         200:
           description: OK
@@ -610,9 +617,11 @@ paths:
             schema:
               type: object
               required:
-                - modified_by
+                - modifiedBy
               properties:
-                year_joined:
+                membershipAdminId:
+                  $ref: "#/components/schemas/integer"
+                yearJoined:
                   $ref: "#/components/schemas/integer"
                 address:
                   $ref: "#/components/schemas/string"
@@ -622,7 +631,7 @@ paths:
                   $ref: "#/components/schemas/string"
                 zip:
                   $ref: "#/components/schemas/string"
-                modified_by:
+                modifiedBy:
                   $ref: "#/components/schemas/integer"
       responses:
         201:
@@ -684,16 +693,16 @@ paths:
             schema:
               type: object
               required:
-                - member_type_id
+                - memberTypeId
               properties:
-                member_type_id:
+                memberTypeId:
                   $ref: "#/components/schemas/integer"
-                first_name:
+                firstName:
                   $ref: "#/components/schemas/string"
-                last_name:
+                lastName:
                   $ref: "#/components/schemas/string"
-                phone_number:
-                  type: string
+                phoneNumber:
+                  $ref: "#/components/schemas/string"
                 occupation:
                   $ref: "#/components/schemas/string"
                 email:
@@ -764,17 +773,19 @@ paths:
             schema:
               type: object
               required:
-                - modified_by
+                - modifiedBy
               minProperties: 2
               additionalProperties: false
               properties:
-                active:
+                membershipAdminId:
+                  $ref: "#/components/schemas/integer"
+                status:
+                  $ref: "#/components/schemas/string"
+                curYearRenewed:
                   type: boolean
-                cur_year_renewed:
+                renewalSent:
                   type: boolean
-                renewal_sent:
-                  type: boolean
-                year_joined:
+                yearJoined:
                   $ref: "#/components/schemas/integer"
                 address:
                   $ref: "#/components/schemas/string"
@@ -784,14 +795,14 @@ paths:
                   $ref: "#/components/schemas/string"
                 zip:
                   $ref: "#/components/schemas/string"
-                modified_by:
+                modifiedBy:
                   $ref: "#/components/schemas/integer"
             example:
               address: 1234 New Address Street
               city: Hoboken
               state: NJ
               zip: 07030
-              modified_by: 42
+              modifiedBy: 42
       responses:
         200:
           description: OK
@@ -824,7 +835,7 @@ paths:
             schema:
               type: object
               required:
-                - membership_id
+                - membershipId
               properties:
                 year:
                   $ref: "#/components/schemas/shortString"
@@ -832,7 +843,7 @@ paths:
                   $ref: "#/components/schemas/shortString"
                 model:
                   $ref: "#/components/schemas/shortString"
-                membership_id:
+                membershipId:
                   $ref: "#/components/schemas/integer"
       responses:
         201:
@@ -924,10 +935,10 @@ paths:
                   $ref: "#/components/schemas/shortString"
                 model:
                   $ref: "#/components/schemas/shortString"
-                membership_id:
+                membershipId:
                   $ref: "#/components/schemas/integer"
             example:
-              membership_id: 101
+              membershipId: 101
       responses:
         200:
           description: OK
@@ -958,7 +969,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  bike_id:
+                  bikeId:
                     $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
@@ -992,11 +1003,11 @@ paths:
               properties:
                 date:
                   $ref: "#/components/schemas/date"
-                event_type_id:
+                eventTypeId:
                   $ref: "#/components/schemas/integer"
-                event_name:
+                eventName:
                   $ref: "#/components/schemas/string"
-                event_description:
+                eventDescription:
                   $ref: "#/components/schemas/string"
       responses:
         201:
@@ -1099,15 +1110,15 @@ paths:
               properties:
                 date:
                   $ref: "#/components/schemas/date"
-                event_type_id:
+                eventTypeId:
                   $ref: "#/components/schemas/integer"
-                event_name:
+                eventName:
                   $ref: "#/components/schemas/string"
-                event_description:
+                eventDescription:
                   $ref: "#/components/schemas/string"
             example:
               date: 12/18/21
-              event_name: Squeaky Training Wheels Invitational (Rescheduled)
+              eventName: Squeaky Training Wheels Invitational (Rescheduled)
       responses:
         200:
           description: OK
@@ -1138,7 +1149,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  event_id:
+                  eventId:
                     $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
@@ -1164,11 +1175,11 @@ paths:
               type: object
               required:
                 - type
-                - modified_by
+                - modifiedBy
               properties:
                 type:
                   $ref: "#/components/schemas/string"
-                modified_by:
+                modifiedBy:
                   $ref: "#/components/schemas/integer"
       responses:
         201:
@@ -1250,13 +1261,13 @@ paths:
               type: object
               required:
                 - type
-                - modified_by
+                - modifiedBy
               properties:
                 type:
                   $ref: "#/components/schemas/string"
                 active:
                   type: boolean
-                modified_by:
+                modifiedBy:
                   $ref: "#/components/schemas/integer"
       responses:
         200:
@@ -1290,21 +1301,21 @@ paths:
             schema:
               type: object
               required:
-                - job_type_id
-                - job_date
-                - modified_by
+                - jobTypeId
+                - jobDate
+                - modifiedBy
               properties:
-                member_id:
+                memberId:
                   $ref: "#/components/schemas/integer"
-                event_id:
+                eventId:
                   $ref: "#/components/schemas/integer"
-                job_type_id:
+                jobTypeId:
                   $ref: "#/components/schemas/integer"
-                job_date:
+                jobDate:
                   $ref: "#/components/schemas/date"
-                points_awarded:
+                pointsAwarded:
                   $ref: "#/components/schemas/number"
-                modified_by:
+                modifiedBy:
                   $ref: "#/components/schemas/integer"
       responses:
         201:
@@ -1440,22 +1451,24 @@ paths:
             schema:
               type: object
               required:
-                - modified_by
+                - modifiedBy
               minProperties: 2
               additionalProperties: false
               properties:
-                member_id:
+                memberId:
                   $ref: "#/components/schemas/integer"
-                event_id:
+                eventId:
                   $ref: "#/components/schemas/integer"
-                job_type_id:
+                jobTypeId:
                   $ref: "#/components/schemas/integer"
-                job_date:
+                jobDate:
                   $ref: "#/components/schemas/date"
                 verified:
                   type: boolean
                 paid:
                   type: boolean
+                modifiedBy:
+                  $ref: "#/components/schemas/integer"
             example:
               verified: true
       responses:
@@ -1508,7 +1521,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  job_id:
+                  jobId:
                     $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"
@@ -1536,26 +1549,26 @@ paths:
                 - title
                 - reserved
                 - online
-                - meal_ticket
-                - modified_by
+                - mealTicket
+                - modifiedBy
               properties:
                 title:
                   $ref: "#/components/schemas/string"
-                point_value:
+                pointValue:
                   $ref: "#/components/schemas/number"
-                cash_value:
+                cashValue:
                   $ref: "#/components/schemas/number"
-                job_day_number:
+                jobDayNumber:
                   $ref: "#/components/schemas/integer"
                 reserved:
                   type: boolean
                 online:
                   type: boolean
-                meal_ticket:
+                mealTicket:
                   type: boolean
-                sort_order:
+                sortOrder:
                   $ref: "#/components/schemas/integer"
-                modified_by:
+                modifiedBy:
                   $ref: "#/components/schemas/integer"
       responses:
         201:
@@ -1636,29 +1649,29 @@ paths:
             schema:
               type: object
               required:
-                - modified_by
+                - modifiedBy
               minProperties: 2
               additionalProperties: false
               properties:
                 title:
                   $ref: "#/components/schemas/string"
-                point_value:
+                pointValue:
                   $ref: "#/components/schemas/number"
-                cash_value:
+                cashValue:
                   $ref: "#/components/schemas/number"
-                job_day_number:
+                jobDayNumber:
                   $ref: "#/components/schemas/integer"
                 reserved:
                   type: boolean
                 online:
                   type: boolean
-                meal_ticket:
+                mealTicket:
                   type: boolean
-                sort_order:
+                sortOrder:
                   $ref: "#/components/schemas/integer"
                 active:
                   type: boolean
-                modified_by:
+                modifiedBy:
                   $ref: "#/components/schemas/integer"
       responses:
         200:
@@ -1768,13 +1781,13 @@ paths:
             schema:
               type: object
               required:
-                - event_type_id
-                - job_type_id
+                - eventTypeId
+                - jobTypeId
                 - count
               properties:
-                event_type_id:
+                eventTypeId:
                   $ref: "#/components/schemas/integer"
-                job_type_id:
+                jobTypeId:
                   $ref: "#/components/schemas/integer"
                 count:
                   $ref: "#/components/schemas/integer"
@@ -1837,9 +1850,9 @@ paths:
               minProperties: 1
               additionalProperties: false
               properties:
-                event_type_id:
+                eventTypeId:
                   $ref: "#/components/schemas/integer"
-                job_type_id:
+                jobTypeId:
                   $ref: "#/components/schemas/integer"
                 count:
                   $ref: "#/components/schemas/integer"
@@ -1873,7 +1886,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  event_job_id:
+                  eventJobId:
                     $ref: "#/components/schemas/integer"
         401:
           $ref: "#/components/responses/unauthorizedError"

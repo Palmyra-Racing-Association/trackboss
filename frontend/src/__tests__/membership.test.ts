@@ -7,20 +7,24 @@ import {
 } from '../controller/membership';
 
 // createMembership
-test('createMembership returns new member_id with valid data', async () => {
+test('createMembership returns new memberId with valid data', async () => {
     const token = 'TestingToken';
     const res = await createMembership(
         token,
         {
-            year_joined: 1995,
+            yearJoined: 1995,
             address: 'test string',
             city: 'test string',
             state: 'test string',
             zip: 'test string',
-            modified_by: 0,
+            modifiedBy: 0,
         },
     );
-    expect(res.membership_id).toEqual(1);
+    if ('membershipId' in res) {
+        expect(res.membershipId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('createMembership returns bad request', async () => {
@@ -29,9 +33,14 @@ test('createMembership returns bad request', async () => {
         token,
         {
             address: 'Bad Request',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createMembership returns unauthorized', async () => {
@@ -40,9 +49,14 @@ test('createMembership returns unauthorized', async () => {
         token,
         {
             address: 'Unauthorized',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createMembership returns forbidden', async () => {
@@ -51,9 +65,14 @@ test('createMembership returns forbidden', async () => {
         token,
         {
             address: 'Forbidden',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createMembership returns internal server error', async () => {
@@ -62,44 +81,69 @@ test('createMembership returns internal server error', async () => {
         token,
         {
             address: 'Internal Server Error',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // getMembership
 test('getMembership returns membership with valid id', async () => {
     const token = 'TestingToken';
     const res = await getMembership(token, 1);
-    expect(res.membership_id).toEqual(1);
+    if ('membershipId' in res) {
+        expect(res.membershipId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getMembership returns 400', async () => {
     const token = 'TestingToken';
     const res = await getMembership(token, -1);
-    expect(res.reason).toEqual('Bad request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getMembership returns 401', async () => {
     const token = 'TestingToken';
     const res = await getMembership(token, -2);
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getMembership returns 404', async () => {
     const token = 'TestingToken';
     const res = await getMembership(token, -3);
-    expect(res.reason).toEqual('Not Found');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Not Found');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getMembership returns 500', async () => {
     const token = 'TestingToken';
     const res = await getMembership(token, -4);
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // updateMembership
-test('createMembership returns new member_id with valid data', async () => {
+test('createMembership returns new memberId with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateMembership(
         token,
@@ -108,11 +152,16 @@ test('createMembership returns new member_id with valid data', async () => {
             address: '1234 New Address Street',
             city: 'Hoboken',
             state: 'NJ',
-            zip: 7030,
-            modified_by: 42,
+            zip: '7030',
+            renewalSent: false,
+            modifiedBy: 42,
         },
     );
-    expect(res.membership_id).toEqual(1);
+    if ('membershipId' in res) {
+        expect(res.membershipId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('createMembership returns bad request', async () => {
@@ -121,9 +170,14 @@ test('createMembership returns bad request', async () => {
         token,
         {
             address: 'Bad Request',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createMembership returns unauthorized', async () => {
@@ -132,9 +186,14 @@ test('createMembership returns unauthorized', async () => {
         token,
         {
             address: 'Unauthorized',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createMembership returns forbidden', async () => {
@@ -143,9 +202,14 @@ test('createMembership returns forbidden', async () => {
         token,
         {
             address: 'Forbidden',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createMembership returns internal server error', async () => {
@@ -154,56 +218,85 @@ test('createMembership returns internal server error', async () => {
         token,
         {
             address: 'Internal Server Error',
+            modifiedBy: 0,
         },
     );
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // getMembershipList
 test('getMembershipList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getMembershipList(token);
-    expect(res[0]).toEqual({ membership_id: 1 });
+    if (Array.isArray(res)) {
+        expect(res[0]).toEqual({ membershipId: 1 });
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getMembershipList returns list with valid id and query param', async () => {
     const token = 'TestingToken';
     const res = await getMembershipList(token, 'valid');
-    expect(res[0]).toEqual({ membership_id: 1 });
+    if (Array.isArray(res)) {
+        expect(res[0]).toEqual({ membershipId: 1 });
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getMembershipList returns 400', async () => {
     const token = 'TestingToken';
     const res = await getMembershipList(token, 'Badrequest');
-    expect(res.reason).toEqual('Badrequest');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Badrequest');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getMembershipList returns 401', async () => {
     const token = 'TestingToken';
     const res = await getMembershipList(token, 'Unauthorized');
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getMembershipList returns 404', async () => {
     const token = 'TestingToken';
     const res = await getMembershipList(token, 'NotFound');
-    expect(res.reason).toEqual('NotFound');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('NotFound');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getMembershipList returns 500', async () => {
     const token = 'TestingToken';
     const res = await getMembershipList(token, 'InternalServerError');
-    expect(res.reason).toEqual('InternalServerError');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('InternalServerError');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // registerMembership
-test('registerMembership returns new member_id with valid data', async () => {
+test('registerMembership returns new memberId with valid data', async () => {
     const res = await registerMembership(
         {
-            member_type_id: 0,
-            first_name: 'string',
-            last_name: 'string',
-            phone_number: 'string',
+            memberTypeId: 0,
+            firstName: 'string',
+            lastName: 'string',
+            phoneNumber: 'string',
             occupation: 'string',
             email: 'user@example.com',
             birthdate: '2022-01-27',
@@ -213,41 +306,65 @@ test('registerMembership returns new member_id with valid data', async () => {
             zip: 'string',
         },
     );
-    expect(res.member_type).toEqual('new member');
+    if ('memberType' in res) {
+        expect(res.memberType).toEqual('new member');
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('registerMembership returns bad request', async () => {
     const res = await registerMembership(
         {
             address: 'Bad Request',
+            memberTypeId: 0,
         },
     );
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('registerMembership returns unauthorized', async () => {
     const res = await registerMembership(
         {
             address: 'Unauthorized',
+            memberTypeId: 0,
         },
     );
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('registerMembership returns forbidden', async () => {
     const res = await registerMembership(
         {
             address: 'Forbidden',
+            memberTypeId: 0,
         },
     );
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('registerMembership returns internal server error', async () => {
     const res = await registerMembership(
         {
             address: 'Internal Server Error',
+            memberTypeId: 0,
         },
     );
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
