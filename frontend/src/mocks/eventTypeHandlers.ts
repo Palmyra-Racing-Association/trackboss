@@ -19,14 +19,14 @@ const eventTypeHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ event_type_id: 1 }));
+        return res(ctx.status(201), ctx.json({ eventTypeId: 1 }));
     }),
 
     // getEventTypeList
     rest.get(`${process.env.REACT_APP_API_URL}/api/eventType/list`, (req, res, ctx) => {
         const token = req.headers.get('Authorization');
         if (token === 'Bearer TestingToken') {
-            return res(ctx.status(200), ctx.json([{ event_type_id: 1 }, { event_type_id: 2 }]));
+            return res(ctx.status(200), ctx.json([{ eventTypeId: 1 }, { eventTypeId: 2 }]));
         } if (token === 'Bearer Bad request') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (token === 'Bearer Unauthorized') {
@@ -41,7 +41,7 @@ const eventTypeHandlers = [
     rest.get(`${process.env.REACT_APP_API_URL}/api/eventType/:eventTypeID`, (req, res, ctx) => {
         const { eventTypeID } = req.params;
         if (eventTypeID === '1') {
-            return res(ctx.status(200), ctx.json({ event_type_id: 1 }));
+            return res(ctx.status(200), ctx.json({ eventTypeId: 1 }));
         } if (eventTypeID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (eventTypeID === '-2') {
@@ -70,7 +70,7 @@ const eventTypeHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ event_type_id: 1 }));
+        return res(ctx.status(201), ctx.json({ eventTypeId: 1 }));
     }),
 ];
 

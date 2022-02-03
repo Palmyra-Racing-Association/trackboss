@@ -4,14 +4,14 @@ export type Job = {
     jobId: number,
     member: string,
     event: string,
-    jobDate: Date,
+    jobDate: string,
     jobType: string,
     verified: boolean,
-    verifiedDate: Date,
+    verifiedDate: string,
     pointsAwarded: number,
     paid: boolean,
-    paidDate: Date,
-    lastModifiedDate: Date,
+    paidDate: string,
+    lastModifiedDate: string,
     lastModifiedBy: string
 }
 
@@ -23,7 +23,7 @@ export type PostNewJobRequest = {
     memberId?: number,
     eventId?: number,
     jobTypeId: number,
-    jobDate: Date,
+    jobDate?: string,
     pointsAwarded?: number,
     modifiedBy: number
 }
@@ -38,7 +38,7 @@ export type PatchJobRequest = {
     memberId?: number,
     eventId?: number,
     jobTypeId?: number,
-    jobDate?: Date,
+    jobDate?: string,
     verified?: boolean,
     paid?: boolean,
     modifiedBy: number

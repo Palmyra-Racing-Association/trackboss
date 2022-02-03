@@ -3,15 +3,15 @@ import { ErrorResponse } from './errorResponse';
 export type Membership = {
     membershipId: number,
     membershipAdmin: string,
-    active: boolean,
+    status: string,
     curYearRenewed: boolean,
     renewalSent: boolean,
     yearJoined: number,
     address: string,
-    city: string
+    city: string,
     state: string,
     zip: string,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     lastModifiedBy: string
 }
 
@@ -22,7 +22,7 @@ export type Registration = {
     phoneNumber: string,
     occupation: string,
     email: string,
-    birthdate: Date,
+    birthdate: string,
     address: string,
     city: string,
     state: string,
@@ -47,31 +47,31 @@ export type GetMembershipResponse = Membership | ErrorResponse
 
 export type PatchMembershipRequest = {
     membershipAdminId?: number,
-    active?: boolean,
+    status?: string,
     curYearRenewed?: boolean,
     renewalSent: boolean,
     yearJoined?: number,
     address?: string,
-    city?: string
+    city?: string,
     state?: string,
-    zip?: string
+    zip?: string,
     modifiedBy: number
 }
 
-export type PatchMemberResponse = Membership | ErrorResponse
+export type PatchMembershipResponse = Membership | ErrorResponse
 
 export type GetMembershipListRequest = {}
 
 export type GetMembershipListResponse = Membership[] | ErrorResponse
 
-export type PostRegisterNewMembershipRequest = {
+export type PostRegisterMembershipRequest = {
     memberTypeId: number,
     firstName?: string,
     lastName?: string,
     phoneNumber?: string,
     occupation?: string,
     email?: string,
-    birthdate?: Date,
+    birthdate?: string,
     address?: string,
     city?: string,
     state?: string,

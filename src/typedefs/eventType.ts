@@ -4,7 +4,7 @@ export type EventType = {
     eventTypeId: number,
     type: string,
     active: boolean,
-    lastModifiedDate: Date,
+    lastModifiedDate: string,
     lastModifiedBy: string
 }
 
