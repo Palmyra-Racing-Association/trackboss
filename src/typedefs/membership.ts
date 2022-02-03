@@ -8,7 +8,7 @@ export type Membership = {
     renewalSent: boolean,
     yearJoined: number,
     address: string,
-    city: string
+    city: string,
     state: string,
     zip: string,
     lastModifiedDate: string,
@@ -52,9 +52,9 @@ export type PatchMembershipRequest = {
     renewalSent: boolean,
     yearJoined?: number,
     address?: string,
-    city?: string
+    city?: string,
     state?: string,
-    zip?: string
+    zip?: string,
     modifiedBy: number
 }
 
