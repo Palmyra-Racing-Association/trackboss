@@ -9,18 +9,19 @@ const port = process.env.PORT || 8080;
 
 app.use('/api', api);
 const server = app.listen(port, () => {
-    logger.info(`PRA Club Manager API listening on port ${port}`);
+    //logger.info(`PRA Club Manager API listening on port ${port}`);
 });
 
 const fn = async () => {
+    const i = 8;
     const id = 11;
     const id2 = 12;
     const req = {
         'type': 'abcd', 
         'modifiedBy': 2
     };
-    logger.info(`${JSON.stringify(await patchEventType(id, req))}`);
-    //logger.info(`${JSON.stringify(await getEventType(id))}`);
+    //logger.info(`${JSON.stringify(await patchEventType(id, req))}`);
+    //logger.info(`${JSON.stringify(await getEventType(i))}`);
     //logger.info(`${JSON.stringify(await getEventType(id2))}`);
 };
 

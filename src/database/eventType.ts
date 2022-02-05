@@ -8,7 +8,7 @@ import { EventType, PatchEventTypeRequest, PostNewEventTypeRequest } from '../ty
 
 export const GET_EVENT_TYPE_LIST_SQL = 'SELECT event_type_id, type, active, last_modified_by, last_modified_date FROM event_type';
 export const GET_EVENT_TYPE_SQL = `${GET_EVENT_TYPE_LIST_SQL} WHERE event_type_id = ?`;
-export const INSERT_EVENT_TYPE_LIST_SQL =
+export const INSERT_EVENT_TYPE_SQL =
     'INSERT INTO event_type (type, last_modified_by, last_modified_date, active) VALUES (?, ?, ?, 1)';
 export const PATCH_EVENT_TYPE_SQL = 'CALL sp_patch_event_type (?, ?, ?, ?, ?)';
 
@@ -19,7 +19,7 @@ export async function insertEventType(req: PostNewEventTypeRequest): Promise<num
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_EVENT_TYPE_LIST_SQL, values);
+        [result] = await pool.query<OkPacket>(INSERT_EVENT_TYPE_SQL, values);
     } catch (e) {
         logger.error(`DB error inserting event type: ${e}`);
         throw new Error('internal server error');
@@ -46,7 +46,7 @@ export async function getEventType(id: number): Promise<EventType> {
     return {
         eventTypeId: results[0].event_type_id,
         type: results[0].type,
-        active: results[0].active.toString(), //NEED TO COME BACK AND FIX THIS
+        active: results[0].active[0],
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
