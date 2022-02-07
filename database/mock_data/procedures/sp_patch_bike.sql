@@ -1,4 +1,6 @@
-CREATE DEFINER=`dev`@`localhost` PROCEDURE `sp_patch_bike`(
+DELIMITER //
+DROP PROCEDURE IF EXISTS `sp_patch_bike`;
+CREATE PROCEDURE `sp_patch_bike`(
 IN _bike_id INT,
 IN _year VARCHAR(50),
 IN _make VARCHAR(50),

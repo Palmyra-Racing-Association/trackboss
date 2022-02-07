@@ -1,8 +1,6 @@
-CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `dev`@`localhost` 
-    SQL SECURITY DEFINER
-VIEW `v_bike` AS
+DELIMITER //
+DROP VIEW IF EXISTS `v_bike`;
+CREATE VIEW `v_bike` AS
     SELECT 
         `b`.`bike_id` AS `bike_id`,
         `b`.`year` AS `year`,
