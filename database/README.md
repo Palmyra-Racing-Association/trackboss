@@ -49,3 +49,4 @@ Change into the directory that contains all of the newly unzipped files
 - **bash reset_db.sh** 	<- This will Drop the db(if exists), then load the schema and all of the Mock Data
 - bash drop_db.sh		<- This will Drop the database
 - bash create_db.sh 	<- This will just generate the DB Schema
+- bash load_procedures.sh <- This will load all procedures in the `procedures` folder
