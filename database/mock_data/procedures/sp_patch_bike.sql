@@ -19,4 +19,4 @@ BEGIN
         model = IFNULL(_model, @cur_model),
         membership_id = IFNULL(_membership_id, @cur_membership_id)
 	WHERE bike_id = _bike_id;
-END
+END//
