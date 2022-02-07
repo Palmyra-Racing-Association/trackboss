@@ -3,10 +3,10 @@
 ###########################
 ###########################
 ### member_types ###
-insert into member_types(type, base_dues_amt) VALUES ('admin',100);
-insert into member_types(type, base_dues_amt) VALUES ("membership_admin",100);
-insert into member_types(type, base_dues_amt) VALUES ("member",0);
-insert into member_types(type, base_dues_amt) VALUES ("paid laborer",0);
+insert into member_types(type, base_dues_amt) VALUES ('Admin',100);
+insert into member_types(type, base_dues_amt) VALUES ("Membership Admin",100);
+insert into member_types(type, base_dues_amt) VALUES ("Member",0);
+insert into member_types(type, base_dues_amt) VALUES ("Paid Laborer",0);
 
 
 ### point_threshold ###
