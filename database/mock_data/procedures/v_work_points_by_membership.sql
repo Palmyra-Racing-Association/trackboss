@@ -10,3 +10,4 @@ CREATE VIEW `v_work_points_by_membership` AS
             LEFT JOIN
         membership ms ON m.membership_id = ms.membership_id
     GROUP BY ms.membership_id , year;
+//

@@ -4,3 +4,4 @@ CREATE VIEW `v_work_points_by_member` AS
     FROM
         job
     GROUP BY member_id
+//
