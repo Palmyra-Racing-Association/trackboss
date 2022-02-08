@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<div
+  className="css-merm6w"
+>
+  <div
+    className="css-gmuwbf"
+  >
+    <div
+      className="chakra-stack css-1ak7tnr"
+    >
+      <img />
+      <div
+        className="chakra-stack css-jp20jv"
+      >
+        <p
+          className="chakra-text css-12gxl7b"
+        >
+          You have completed
+        </p>
+        <p
+          className="chakra-text css-ev573i"
+        >
+          67
+          %
+        </p>
+        <p
+          className="chakra-text css-1gjuw9l"
+        >
+          of this year's work points
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;

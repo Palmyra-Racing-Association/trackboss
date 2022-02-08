@@ -3,7 +3,7 @@
 exports[`renders correctly for Calendar 1`] = `
 <div>
   <div
-    className="chakra-stack css-1d75akg"
+    className="chakra-stack css-1yllzyt"
   >
     <div
       className="chakra-stack css-84zodg"
@@ -65,11 +65,15 @@ exports[`renders correctly for Calendar 1`] = `
         </button>
       </div>
     </div>
-    <h2
-      className="chakra-heading css-0"
+    <div
+      className="css-gmuwbf"
     >
-      Calendar
-    </h2>
+      <h2
+        className="chakra-heading css-0"
+      >
+        Calendar
+      </h2>
+    </div>
   </div>
 </div>
 `;
@@ -77,7 +81,7 @@ exports[`renders correctly for Calendar 1`] = `
 exports[`renders correctly for Dashboard 1`] = `
 <div>
   <div
-    className="chakra-stack css-1d75akg"
+    className="chakra-stack css-1yllzyt"
   >
     <div
       className="chakra-stack css-84zodg"
@@ -139,11 +143,15 @@ exports[`renders correctly for Dashboard 1`] = `
         </button>
       </div>
     </div>
-    <h2
-      className="chakra-heading css-0"
+    <div
+      className="css-gmuwbf"
     >
-      Dashboard
-    </h2>
+      <h2
+        className="chakra-heading css-0"
+      >
+        Dashboard
+      </h2>
+    </div>
   </div>
 </div>
 `;
@@ -151,7 +159,7 @@ exports[`renders correctly for Dashboard 1`] = `
 exports[`renders correctly for Member List 1`] = `
 <div>
   <div
-    className="chakra-stack css-1d75akg"
+    className="chakra-stack css-1yllzyt"
   >
     <div
       className="chakra-stack css-84zodg"
@@ -213,11 +221,15 @@ exports[`renders correctly for Member List 1`] = `
         </button>
       </div>
     </div>
-    <h2
-      className="chakra-heading css-0"
+    <div
+      className="css-gmuwbf"
     >
-      Members
-    </h2>
+      <h2
+        className="chakra-heading css-0"
+      >
+        Members
+      </h2>
+    </div>
   </div>
 </div>
 `;
@@ -225,7 +237,7 @@ exports[`renders correctly for Member List 1`] = `
 exports[`renders correctly for Settings 1`] = `
 <div>
   <div
-    className="chakra-stack css-1d75akg"
+    className="chakra-stack css-1yllzyt"
   >
     <div
       className="chakra-stack css-84zodg"
@@ -287,11 +299,15 @@ exports[`renders correctly for Settings 1`] = `
         </button>
       </div>
     </div>
-    <h2
-      className="chakra-heading css-0"
+    <div
+      className="css-gmuwbf"
     >
-      General Info
-    </h2>
+      <h2
+        className="chakra-heading css-0"
+      >
+        General Info
+      </h2>
+    </div>
   </div>
 </div>
 `;
