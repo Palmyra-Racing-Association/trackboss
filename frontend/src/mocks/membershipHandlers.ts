@@ -19,7 +19,7 @@ const membershipHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ membership_id: 1 }));
+        return res(ctx.status(201), ctx.json({ membershipId: 1 }));
     }),
 
     // getMembershipList
@@ -35,14 +35,14 @@ const membershipHandlers = [
         } if (status === 'InternalServerError') {
             return res(ctx.status(404), ctx.json({ reason: 'InternalServerError' }));
         }
-        return res(ctx.status(200), ctx.json([{ membership_id: 1 }, { membership_id: 2 }]));
+        return res(ctx.status(200), ctx.json([{ membershipId: 1 }, { membershipId: 2 }]));
     }),
 
     // getMembership
     rest.get(`${process.env.REACT_APP_API_URL}/api/membership/:membershipID`, (req, res, ctx) => {
         const { membershipID } = req.params;
         if (membershipID === '1') {
-            return res(ctx.status(200), ctx.json({ membership_id: 1 }));
+            return res(ctx.status(200), ctx.json({ membershipId: 1 }));
         } if (membershipID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (membershipID === '-2') {
@@ -71,7 +71,7 @@ const membershipHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ membership_id: 1 }));
+        return res(ctx.status(201), ctx.json({ membershipId: 1 }));
     }),
 
     // createMembership
@@ -92,7 +92,7 @@ const membershipHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ member_type: 'new member' }));
+        return res(ctx.status(201), ctx.json({ memberType: 'new member' }));
     }),
 ];
 

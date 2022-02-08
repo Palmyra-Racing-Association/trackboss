@@ -7,18 +7,22 @@ import {
 } from '../controller/event';
 
 // createEvent
-test('createEvent returns new event_id with valid data', async () => {
+test('createEvent returns new eventId with valid data', async () => {
     const token = 'TestingToken';
     const res = await createEvent(
         token,
         {
             date: '2022-01-27',
-            event_type_id: 0,
-            event_name: 'string',
-            event_description: 'string',
+            eventTypeId: 0,
+            eventName: 'string',
+            eventDescription: 'string',
         },
     );
-    expect(res.event_id).toEqual(1);
+    if ('eventId' in res) {
+        expect(res.eventId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('createEvent returns bad request', async () => {
@@ -26,10 +30,15 @@ test('createEvent returns bad request', async () => {
     const res = await createEvent(
         token,
         {
-            address: 'Bad Request',
+            eventName: 'Bad Request',
+            eventTypeId: 0,
         },
     );
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createEvent returns unauthorized', async () => {
@@ -37,10 +46,15 @@ test('createEvent returns unauthorized', async () => {
     const res = await createEvent(
         token,
         {
-            address: 'Unauthorized',
+            eventName: 'Unauthorized',
+            eventTypeId: 0,
         },
     );
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createEvent returns forbidden', async () => {
@@ -48,10 +62,15 @@ test('createEvent returns forbidden', async () => {
     const res = await createEvent(
         token,
         {
-            address: 'Forbidden',
+            eventName: 'Forbidden',
+            eventTypeId: 0,
         },
     );
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('createEvent returns internal server error', async () => {
@@ -59,55 +78,84 @@ test('createEvent returns internal server error', async () => {
     const res = await createEvent(
         token,
         {
-            address: 'Internal Server Error',
+            eventName: 'Internal Server Error',
+            eventTypeId: 0,
         },
     );
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // getEvent
 test('getEvent returns Event with valid id', async () => {
     const token = 'TestingToken';
     const res = await getEvent(token, 1);
-    expect(res.event_id).toEqual(1);
+    if ('eventId' in res) {
+        expect(res.eventId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getEvent returns 400', async () => {
     const token = 'TestingToken';
     const res = await getEvent(token, -1);
-    expect(res.reason).toEqual('Bad request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEvent returns 401', async () => {
     const token = 'TestingToken';
     const res = await getEvent(token, -2);
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('getEvent returns 404', async () => {
     const token = 'TestingToken';
     const res = await getEvent(token, -3);
-    expect(res.reason).toEqual('Not Found');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Not Found');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEvent returns 500', async () => {
     const token = 'TestingToken';
     const res = await getEvent(token, -4);
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // updateEvent
-test('updateEvent returns new event_id with valid data', async () => {
+test('updateEvent returns new eventId with valid data', async () => {
     const token = 'TestingToken';
     const res = await updateEvent(
         token,
         1,
         {
             date: '12/18/21',
-            event_name: 'Squeaky Training Wheels Invitational (Rescheduled)',
+            eventName: 'Squeaky Training Wheels Invitational (Rescheduled)',
         },
     );
-    expect(res.event_id).toEqual(1);
+    if ('eventId' in res) {
+        expect(res.eventId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('updateEvent returns bad request', async () => {
@@ -116,10 +164,14 @@ test('updateEvent returns bad request', async () => {
         token,
         1,
         {
-            address: 'Bad Request',
+            eventName: 'Bad Request',
         },
     );
-    expect(res.reason).toEqual('Bad Request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad Request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateEvent returns unauthorized', async () => {
@@ -128,10 +180,14 @@ test('updateEvent returns unauthorized', async () => {
         token,
         1,
         {
-            address: 'Unauthorized',
+            eventName: 'Unauthorized',
         },
     );
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateEvent returns forbidden', async () => {
@@ -140,10 +196,14 @@ test('updateEvent returns forbidden', async () => {
         token,
         1,
         {
-            address: 'Forbidden',
+            eventName: 'Forbidden',
         },
     );
-    expect(res.reason).toEqual('Forbidden');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Forbidden');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('updateEvent returns internal server error', async () => {
@@ -152,70 +212,114 @@ test('updateEvent returns internal server error', async () => {
         token,
         1,
         {
-            address: 'Internal Server Error',
+            eventName: 'Internal Server Error',
         },
     );
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // getEventList
 test('getEventList returns list with valid id and no query param', async () => {
     const token = 'TestingToken';
     const res = await getEventList(token);
-    expect(res[0]).toEqual({ event_id: 1 });
+    if (Array.isArray(res)) {
+        expect(res[0]).toEqual({ eventId: 1 });
+    } else {
+        throw new Error('Received unexpected error message');
+    }
 });
 
 test('getEventList returns 400', async () => {
     const token = 'Badrequest';
     const res = await getEventList(token, 'Badrequest');
-    expect(res.reason).toEqual('Badrequest');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Badrequest');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEventList returns 401', async () => {
     const token = 'Unauthorized';
     const res = await getEventList(token, 'Unauthorized');
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEventList returns 404', async () => {
     const token = 'NotFound';
     const res = await getEventList(token, 'NotFound');
-    expect(res.reason).toEqual('NotFound');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('NotFound');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('getEventList returns 500', async () => {
     const token = 'InternalServerError';
     const res = await getEventList(token, 'InternalServerError');
-    expect(res.reason).toEqual('InternalServerError');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('InternalServerError');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 // deleteEvent
-test('delete event returns valid event_id', async () => {
+test('delete event returns valid eventId', async () => {
     const token = 'TestingToken';
     const res = await deleteEvent(token, 1);
-    expect(res.event_id).toEqual(1);
+    if ('eventId' in res) {
+        expect(res.eventId).toEqual(1);
+    } else {
+        throw new Error('Received unexpected error response');
+    }
 });
 
 test('deleteEvent returns 400', async () => {
     const token = 'Bad request';
     const res = await deleteEvent(token, -1);
-    expect(res.reason).toEqual('Bad request');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Bad request');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('deleteEvent returns 401', async () => {
     const token = 'Unauthorized';
     const res = await deleteEvent(token, -2);
-    expect(res.reason).toEqual('Unauthorized');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Unauthorized');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('deleteEvent returns 404', async () => {
     const token = 'Not Found';
     const res = await deleteEvent(token, -3);
-    expect(res.reason).toEqual('Not Found');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Not Found');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });
 
 test('deleteEvent returns 500', async () => {
     const token = 'Internal Server Error';
     const res = await deleteEvent(token, -4);
-    expect(res.reason).toEqual('Internal Server Error');
+    if ('reason' in res) {
+        expect(res.reason).toEqual('Internal Server Error');
+    } else {
+        throw new Error('Received unexpected non-error response');
+    }
 });

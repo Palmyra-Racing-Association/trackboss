@@ -19,7 +19,7 @@ const bikeHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ bike_id: 1 }));
+        return res(ctx.status(201), ctx.json({ bikeId: 1 }));
     }),
 
     // getBikeList
@@ -34,14 +34,14 @@ const bikeHandlers = [
         } if (membershipID === '-4') {
             return res(ctx.status(404), ctx.json({ reason: 'Internal Server Error' }));
         }
-        return res(ctx.status(200), ctx.json([{ bike_id: 1 }, { bike_id: 2 }]));
+        return res(ctx.status(200), ctx.json([{ bikeId: 1 }, { bikeId: 2 }]));
     }),
 
     // getBike
     rest.get(`${process.env.REACT_APP_API_URL}/api/bike/:bikeID`, (req, res, ctx) => {
         const { bikeID } = req.params;
         if (bikeID === '1') {
-            return res(ctx.status(200), ctx.json({ bike_id: 1 }));
+            return res(ctx.status(200), ctx.json({ bikeId: 1 }));
         } if (bikeID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (bikeID === '-2') {
@@ -70,14 +70,14 @@ const bikeHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ bike_id: 1 }));
+        return res(ctx.status(201), ctx.json({ bikeId: 1 }));
     }),
 
     // deleteBike
     rest.delete(`${process.env.REACT_APP_API_URL}/api/bike/:bikeID`, (req, res, ctx) => {
         const { bikeID } = req.params;
         if (bikeID === '1') {
-            return res(ctx.status(200), ctx.json({ bike_id: 1 }));
+            return res(ctx.status(200), ctx.json({ bikeId: 1 }));
         } if (bikeID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (bikeID === '-2') {

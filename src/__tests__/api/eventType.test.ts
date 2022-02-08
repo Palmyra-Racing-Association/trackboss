@@ -5,8 +5,8 @@ const TAG_ROOT = '/api/eventType';
 
 const supertestServer = supertest(server);
 
-afterAll(() => {
-    server.close();
+afterAll((done) => {
+    server.close(done);
 });
 
 describe('All unimplemented eventType endpoints are reachable', () => {

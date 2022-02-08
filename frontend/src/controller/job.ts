@@ -1,6 +1,16 @@
-import generateHeaders from './utils';
+import { generateHeaders } from './utils';
+import {
+    DeleteJobResponse,
+    GetJobListResponse,
+    GetJobResponse,
+    PatchJobRequest,
+    PatchJobResponse,
+    PostCloneJobResponse,
+    PostNewJobRequest,
+    PostNewJobResponse,
+} from '../../../src/typedefs/job';
 
-export async function createJob(token: string, jobData: object) {
+export async function createJob(token: string, jobData: PostNewJobRequest): Promise<PostNewJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/new`, {
         method: 'POST',
         mode: 'no-cors',
@@ -10,7 +20,7 @@ export async function createJob(token: string, jobData: object) {
     return response.json();
 }
 
-export async function getJobList(token: string, queryType?: string, filterType?: string) {
+export async function getJobList(token: string, queryType?: string, filterType?: string): Promise<GetJobListResponse> {
     if (queryType && filterType) {
         const response = await fetch(
             `${process.env.REACT_APP_API_URL}/api/job/list?${queryType}=${filterType}`, {
@@ -30,7 +40,7 @@ export async function getJobList(token: string, queryType?: string, filterType?:
     return response.json();
 }
 
-export async function getJob(token: string, jobID: number) {
+export async function getJob(token: string, jobID: number): Promise<GetJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'GET',
         mode: 'no-cors',
@@ -39,7 +49,7 @@ export async function getJob(token: string, jobID: number) {
     return response.json();
 }
 
-export async function updateJob(token: string, jobID: number, jobData: object) {
+export async function updateJob(token: string, jobID: number, jobData: PatchJobRequest): Promise<PatchJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'PATCH',
         mode: 'no-cors',
@@ -49,7 +59,7 @@ export async function updateJob(token: string, jobID: number, jobData: object) {
     return response.json();
 }
 
-export async function cloneJob(token: string, jobID: number) {
+export async function cloneJob(token: string, jobID: number): Promise<PostCloneJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'POST',
         mode: 'no-cors',
@@ -58,7 +68,7 @@ export async function cloneJob(token: string, jobID: number) {
     return response.json();
 }
 
-export async function deleteJob(token: string, jobID: number) {
+export async function deleteJob(token: string, jobID: number): Promise<DeleteJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'DELETE',
         mode: 'no-cors',
