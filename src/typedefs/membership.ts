@@ -49,7 +49,7 @@ export type PatchMembershipRequest = {
     membershipAdminId?: number,
     status?: string,
     curYearRenewed?: boolean,
-    renewalSent: boolean,
+    renewalSent?: boolean,
     yearJoined?: number,
     address?: string,
     city?: string,
