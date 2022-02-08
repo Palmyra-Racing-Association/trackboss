@@ -2,14 +2,14 @@
 
 exports[`renders all props correctly 1`] = `
 <div
-  className="css-1ovjvli"
+  className="css-1wrvpfi"
   onClick={[Function]}
 >
   <div
     className="css-gmuwbf"
   >
     <div
-      className="chakra-stack css-1hkoj8r"
+      className="chakra-stack css-1vzxskl"
     >
       <div
         className="chakra-stack css-84zodg"
@@ -42,7 +42,7 @@ exports[`renders all props correctly 1`] = `
           </svg>
         </button>
         <h2
-          className="chakra-heading css-0"
+          className="chakra-heading css-uux7qa"
         >
           Next Event
         </h2>
@@ -52,19 +52,17 @@ exports[`renders all props correctly 1`] = `
         className="chakra-divider css-1upb9tn"
       />
       <p
-        className="chakra-text css-1ez5l2u"
+        className="chakra-text css-1xo06ej"
       >
         Dec 19th
       </p>
       <p
-        className="chakra-text css-1n49pl7"
+        className="chakra-text css-1gjuw9l"
       >
-        12:00pm
-        -
-        5:00pm
+        Starts at 5pm
       </p>
       <p
-        className="chakra-text css-1n49pl7"
+        className="chakra-text css-1gjuw9l"
       >
         pick rocks, kid
       </p>

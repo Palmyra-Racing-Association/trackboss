@@ -1,0 +1,146 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+Array [
+  <div
+    className="chakra-stack css-p747s7"
+  >
+    <div>
+      <div
+        className="css-arm2n8"
+      >
+        <div
+          className="chakra-stack css-84zodg"
+        >
+          <button
+            aria-label="Back"
+            className="chakra-button css-dic36v"
+            onClick={[Function]}
+            type="button"
+          >
+            <svg
+              aria-hidden={true}
+              fill="currentColor"
+              focusable={false}
+              height="lg"
+              stroke="currentColor"
+              strokeWidth="0"
+              style={
+                Object {
+                  "color": undefined,
+                }
+              }
+              viewBox="0 0 512 512"
+              width="lg"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M217.9 256L345 129c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.3-34 0L167 239c-9.1 9.1-9.3 23.7-.7 33.1L310.9 417c4.7 4.7 10.9 7 17 7s12.3-2.3 17-7c9.4-9.4 9.4-24.6 0-33.9L217.9 256z"
+              />
+            </svg>
+          </button>
+          <div>
+            <button
+              aria-label="Menu"
+              className="chakra-button css-10gjanl"
+              onClick={[Function]}
+              type="button"
+            >
+              <svg
+                aria-hidden={true}
+                fill="currentColor"
+                focusable={false}
+                height="1em"
+                stroke="currentColor"
+                strokeWidth="0"
+                style={
+                  Object {
+                    "color": undefined,
+                  }
+                }
+                viewBox="0 0 1024 1024"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div
+          className="css-17xejub"
+        />
+        <div
+          className="css-0"
+        >
+          <h2
+            className="chakra-heading css-1azmuzd"
+          >
+            Dashboard
+          </h2>
+        </div>
+        <div
+          className="css-17xejub"
+        />
+      </div>
+    </div>
+    <div
+      className="css-gmuwbf"
+    >
+      <div
+        className="chakra-stack css-84zodg"
+      >
+        <div
+          className="css-15ddyrp"
+          onClick={[Function]}
+        >
+          <div
+            className="css-gmuwbf"
+          >
+            <div
+              className="chakra-stack css-10j85wf"
+            >
+              <GaugeChart
+                colors={
+                  Array [
+                    "#FF9F46",
+                    "#76CE6F",
+                  ]
+                }
+                hideText={true}
+                id="gauge-chart"
+                nrOfLevels={20}
+                percent={0.67}
+              />
+              <div
+                className="chakra-stack css-jp20jv"
+              >
+                <p
+                  className="chakra-text css-1srjgni"
+                >
+                  You have completed
+                </p>
+                <p
+                  className="chakra-text css-sit8fr"
+                >
+                  0
+                  %
+                </p>
+                <p
+                  className="chakra-text css-1bsg0uq"
+                >
+                  of this year's work points
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div />
+      </div>
+    </div>
+  </div>,
+  <span />,
+]
+`;

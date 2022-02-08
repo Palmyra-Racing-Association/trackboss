@@ -1,9 +1,9 @@
-/*eslint-disable*/
 import React from 'react';
 import {
-    Center,
     Heading,
-    HStack,
+    Flex,
+    Spacer,
+    Box,
 } from '@chakra-ui/react';
 
 import HamburgerMenu from './HamburgerMenu';
@@ -16,12 +16,14 @@ interface pageProps {
 export default function Header(props:pageProps) {
     return (
         <div>
-            <HStack bg="white" boxShadow="lg" padding="6" spacing="650" >
+            <Flex bg="white" boxShadow="lg" padding="6">
                 <HamburgerMenu activeButtonId={props.activeButtonId} />
-                <Center>
-                    <Heading size="3xl">{props.title}</Heading>
-                </Center>
-            </HStack>
+                <Spacer />
+                <Box>
+                    <Heading pr={33} size="3xl">{props.title}</Heading>
+                </Box>
+                <Spacer />
+            </Flex>
         </div>
     );
 }

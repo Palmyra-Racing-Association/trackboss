@@ -18,3 +18,19 @@ export async function getByMembership(token: string, membershipId: number): Prom
     });
     return response.json();
 }
+
+// TODO: mocked response for frontend development. change when api is complete
+export async function getWorkPointsPercentage() {
+    const workPointsResponse = {
+        total: 10,
+    };
+
+    const thresholdResponse = {
+        year: 2021,
+        threshold: 15,
+    };
+
+    // this can probably stay
+    const percentage = (workPointsResponse.total / thresholdResponse.threshold) * 100;
+    return Math.ceil(percentage);
+}
