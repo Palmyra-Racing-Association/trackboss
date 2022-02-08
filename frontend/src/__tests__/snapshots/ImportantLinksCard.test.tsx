@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import renderer from 'react-test-renderer';
 import ImportantLinksCard from '../../components/ImportantLinksCard';
 
 it('header renders correctly', () => {
@@ -51,4 +52,13 @@ it('palmyra racing instagram link renders correctly', () => {
     );
     expect(screen.getByText('Instagram').closest('a'))
         .toHaveAttribute('href', 'https://www.instagram.com/palmyramx_hogback_hill/?hl=en');
+});
+
+it('renders correctly', () => {
+    const importantLinksCard = renderer.create(
+        <BrowserRouter>
+            <ImportantLinksCard />
+        </BrowserRouter>,
+    ).toJSON();
+    expect(importantLinksCard).toMatchSnapshot();
 });
