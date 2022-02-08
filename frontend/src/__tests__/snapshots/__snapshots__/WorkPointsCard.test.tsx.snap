@@ -2,14 +2,14 @@
 
 exports[`renders correctly 1`] = `
 <div
-  className="css-merm6w"
+  className="css-1mkw5k2"
   onClick={[Function]}
 >
   <div
     className="css-gmuwbf"
   >
     <div
-      className="chakra-stack css-1ak7tnr"
+      className="chakra-stack css-1vzxskl"
     >
       <GaugeChart
         colors={
