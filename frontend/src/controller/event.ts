@@ -1,4 +1,4 @@
-import generateHeaders from './utils';
+import { generateHeaders } from './utils';
 import {
     DeleteEventResponse,
     GetEventListResponse,
@@ -35,6 +35,29 @@ export async function getEventList(token: string, listType?: string): Promise<Ge
         headers: generateHeaders(token),
     });
     return response.json();
+}
+
+// TODO: this is a mocked response for frontend development, replace once API is completed
+export async function getMostRecentEventData() {
+    // const todayString = getTodaysDate();
+    // const upcomingEvents = await getEventList('TestToken', todayString);
+    const upcomingEvents = [
+        {
+            event_id: 0,
+            date: '2022-02-07',
+            event_type: 'string',
+            event_name: 'Work Day',
+            event_description: 'string',
+        },
+        {
+            event_id: 1,
+            date: '2022-02-07',
+            event_type: 'string',
+            event_name: 'string',
+            event_description: 'string',
+        },
+    ];
+    return upcomingEvents[0]; // Assuming that the API will return the list sorted by date
 }
 
 export async function getEvent(token: string, eventID: number): Promise<GetEventResponse> {

@@ -1,4 +1,4 @@
-import generateHeaders from './utils';
+import { generateHeaders } from './utils';
 import { GetMembershipWorkPointsResponse, GetMemberWorkPointsResponse } from '../../../src/typedefs/workPoints';
 
 export async function getByMember(token: string, memberId: number): Promise<GetMemberWorkPointsResponse> {
