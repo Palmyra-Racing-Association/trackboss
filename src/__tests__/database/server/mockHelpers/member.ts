@@ -1,5 +1,7 @@
 /* eslint-disable no-throw-literal */
-// This is just a mock, so I'm only concerned with throwing one 'errno' field in some cases.
+// ESLint doesn't like `throw { errno: # }` since it's not throwing an error, but for a
+// mock, that is sufficient because we only care about 'errno' and it's easier than
+// instantiating an implementor of NodeJS.ErrnoException to get that field
 
 export function getMemberListResponse(values: string[]) {
     const memberList = [
