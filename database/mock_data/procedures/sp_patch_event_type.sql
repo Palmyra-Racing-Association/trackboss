@@ -19,5 +19,4 @@ SELECT type, active, last_modified_by, last_modified_date
         last_modified_by = IFNULL(_last_modified_by, @last_modified_by),
         last_modified_date = IFNULL(_last_modified_date, @last_modified_date)
 	WHERE event_type_id = _event_type_id;
-END
 END//
