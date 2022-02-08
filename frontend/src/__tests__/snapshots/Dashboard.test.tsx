@@ -3,12 +3,10 @@ import { BrowserRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 import Dashboard  from '../../pages/Dashboard';
 import WorkPointsCard from '../../components/WorkPointsCard';
+import GaugeChart from 'react-gauge-chart';
 
-jest.mock('react-gauge-chart', () => {
-    return {
-      'default': 'GaugeChart'
-    }
-  });
+jest.mock('react-gauge-chart', () => 'GaugeChart');
+
 
 
 it('renders correctly', () => {

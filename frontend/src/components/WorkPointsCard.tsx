@@ -16,7 +16,7 @@ export default function WorkPointsCard(props: cardProps) {
                         hideText
                         id="gauge-chart"
                         nrOfLevels={20}
-                        percent={0.86}
+                        percent={0.67}
                         colors={['#FF9F46', '#76CE6F']}
                     />
                     <VStack spacing={0}>

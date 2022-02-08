@@ -10,7 +10,18 @@ exports[`renders correctly 1`] = `
     <div
       className="chakra-stack css-1ak7tnr"
     >
-      <img />
+      <GaugeChart
+        colors={
+          Array [
+            "#FF9F46",
+            "#76CE6F",
+          ]
+        }
+        hideText={true}
+        id="gauge-chart"
+        nrOfLevels={20}
+        percent={0.67}
+      />
       <div
         className="chakra-stack css-jp20jv"
       >
