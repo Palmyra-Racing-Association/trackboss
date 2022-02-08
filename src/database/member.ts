@@ -38,10 +38,20 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
     let result;
     try {
         [result] = await pool.query<OkPacket>(INSERT_MEMBER_SQL, values);
-    } catch (e) {
-        // TODO: account for user error
-        logger.error(`DB error inserting member: ${e}`);
-        throw new Error('internal server error');
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error inserting member in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error inserting member: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
     }
 
     return result.insertId;
@@ -49,10 +59,12 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
 
 export async function getMemberList(type?: string): Promise<Member[]> {
     let sql;
-    let values: (string | undefined)[];
+    let values: string[];
     if (typeof type !== 'undefined') {
         sql = GET_MEMBER_LIST_BY_TYPE_SQL;
-        values = [MEMBER_TYPE_MAP.get(type)];
+        // if type is not in the map, it won't hurt to throw it in
+        // anyway (and this makes testing easier)
+        values = [MEMBER_TYPE_MAP.get(type) || type];
     } else {
         sql = GET_MEMBER_LIST_SQL;
         values = [];
@@ -144,10 +156,22 @@ export async function patchMember(id: number, req: PatchMemberRequest): Promise<
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_MEMBER_SQL, values);
-    } catch (e) {
-        logger.error(`DB error patching member: ${e}`);
-        throw new Error('internal server error');
+        [result] = await pool.query<OkPacket>(INSERT_MEMBER_SQL, values);
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1451: // FK violation - referenced somewhere else
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error patching member in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error patching member: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
     }
 
     if (result.affectedRows < 1) {
