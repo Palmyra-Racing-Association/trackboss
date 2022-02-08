@@ -1,6 +1,14 @@
 import { extendTheme } from '@chakra-ui/react';
 
 export default extendTheme({
+    styles: {
+        global: {
+            body: {
+                bg: 'gray.50',
+            },
+        },
+    },
+
     colors: {
         transparent: 'transparent',
         white: '#ffffff',
@@ -16,6 +24,7 @@ export default extendTheme({
         red: '#EE6439',
         green: '#76CE6F',
         blue: '#68A4FF',
+        yellow: '#FFEB50',
     },
     fonts: {
         heading: 'Russo One, sans-serif',

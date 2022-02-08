@@ -15,9 +15,11 @@ import {
     INSERT_MEMBER_SQL,
     PATCH_MEMBER_SQL,
 } from '../../../database/member';
+import { GET_WORK_POINTS_BY_MEMBERSHIP_SQL, GET_WORK_POINTS_BY_MEMBER_SQL } from '../../../database/workPoints';
 import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
 import * as memberHelpers from './mockHelpers/member';
+import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 
 const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
@@ -41,6 +43,10 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
             return memberHelpers.getMemberResponse(values[0]);
         case PATCH_MEMBER_SQL:
             return memberHelpers.patchMemberResponse(values[0]);
+        case GET_WORK_POINTS_BY_MEMBER_SQL:
+            return getWorkPointsByMemberResponse(values);
+        case GET_WORK_POINTS_BY_MEMBERSHIP_SQL:
+            return getWorkPointsByMembershipResponse(values);
         default:
             return Promise.resolve();
     }
