@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import GaugeChart from 'react-gauge-chart';
 import { Box, Center, Text, VStack } from '@chakra-ui/react';
@@ -21,15 +20,14 @@ export default function WorkPointsCard(props: cardProps) {
                     />
                     <VStack spacing={0}>
                         <Text pt={5} fontSize="4xl">You have completed</Text>
-                        <Text color='orange' fontSize='6xl'>{props.percent}%</Text>
-                        <Text fontSize="4xl">of this year's work points</Text>
+                        <Text color="orange" fontSize="6xl">
+                            {props.percent}
+                            %
+                        </Text>
+                        <Text fontSize="4xl">of this year&apos;s work points</Text>
                     </VStack>
-                    
-                </VStack>   
+                </VStack>
             </Center>
-           
-
-
         </Box>
     );
 }
