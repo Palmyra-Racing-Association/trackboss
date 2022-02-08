@@ -1,14 +1,28 @@
 import React from 'react';
 import GaugeChart from 'react-gauge-chart';
 import { Box, Center, Text, VStack } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
 
 interface cardProps {
     percent: number,
 }
 
 export default function WorkPointsCard(props: cardProps) {
+    const navigate = useNavigate();
+    const navigateToWorkPoints = () => {
+        const path = '/settings';
+        navigate(path);
+    };
+
     return (
-        <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={3}>
+        <Box
+            onClick={navigateToWorkPoints}
+            bg="white"
+            boxShadow="md"
+            border="1px"
+            borderColor="gray.200"
+            p={3}
+        >
             <Center>
                 <VStack p={0} boxSize="lg">
                     <GaugeChart
