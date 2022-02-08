@@ -88,6 +88,7 @@ Array [
       >
         <div
           className="css-9nem3t"
+          onClick={[Function]}
         >
           <div
             className="css-gmuwbf"
@@ -118,7 +119,7 @@ Array [
                 <p
                   className="chakra-text css-sit8fr"
                 >
-                  67
+                  0
                   %
                 </p>
                 <p
