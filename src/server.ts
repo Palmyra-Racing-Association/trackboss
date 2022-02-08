@@ -13,16 +13,16 @@ const server = app.listen(port, () => {
 });
 
 const fn = async () => {
-    const i = 8;
+    const i = 1;
     const id = 11;
-    const id2 = 12;
+    const id2 = 9;
     const req = {
         'type': 'abcd', 
         'modifiedBy': 2
     };
     //logger.info(`${JSON.stringify(await patchEventType(id, req))}`);
-    //logger.info(`${JSON.stringify(await getEventType(i))}`);
-    //logger.info(`${JSON.stringify(await getEventType(id2))}`);
+    logger.info(`${JSON.stringify(await getEventType(i))}`);
+    logger.info(`${JSON.stringify(await getEventType(id2))}`);
 };
 
 fn();
