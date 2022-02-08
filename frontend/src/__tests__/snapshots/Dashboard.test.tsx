@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
-import Dashboard  from '../../pages/Dashboard';
+import Dashboard from '../../pages/Dashboard';
 
 jest.mock('react-gauge-chart', () => 'GaugeChart');
 

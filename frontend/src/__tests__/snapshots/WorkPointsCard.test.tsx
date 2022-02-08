@@ -9,7 +9,7 @@ it('renders correctly', () => {
     const workPointsCard = renderer.create(
         <BrowserRouter>
             <WorkPointsCard percent={67} />
-        </BrowserRouter>
+        </BrowserRouter>,
     ).toJSON();
     expect(workPointsCard).toMatchSnapshot();
 });
