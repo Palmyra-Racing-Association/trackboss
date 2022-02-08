@@ -156,7 +156,7 @@ export async function patchMember(id: number, req: PatchMemberRequest): Promise<
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_MEMBER_SQL, values);
+        [result] = await pool.query<OkPacket>(PATCH_MEMBER_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
