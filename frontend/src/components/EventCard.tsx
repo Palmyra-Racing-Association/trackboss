@@ -38,12 +38,12 @@ export default function EventCard(props: cardProps) {
                             color="gray.200"
                             icon={<GoKebabVertical />}
                         />
-                        <Heading>Next Event</Heading>
+                        <Heading pr={5}>Next Event</Heading>
                     </HStack>
                     <Divider />
                     <Text pt={5} color="orange" fontSize="5xl">{props.date}</Text>
                     {/* TODO: this should come from props once the API is updated */}
-                    <Text fontSize="2xl">5pm-7pm</Text>
+                    <Text fontSize="2xl">Starts at 5pm</Text>
                     <Text fontSize="2xl">{props.name}</Text>
                 </VStack>
             </Center>
