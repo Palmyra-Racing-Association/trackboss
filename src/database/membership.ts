@@ -73,7 +73,7 @@ export async function getMembershipList(status?: string): Promise<Membership[]> 
         throw new Error('internal server error');
     }
 
-    return results.map((result) => ({
+    return _.map(results, (result) => ({
         membershipId: result.membership_id,
         membershipAdmin: result.membership_admin,
         status: result.status,
@@ -143,7 +143,6 @@ export async function patchMembership(id: number, req: PatchMembershipRequest): 
             switch (e.errno) {
                 case 1451: // FK violation - referenced somewhere else
                 case 1452: // FK violation - referenced is missing
-                // TODO: case enum is violated?
                     logger.error(`User error patching membership in DB: ${e}`);
                     throw new Error('user input error');
                 default:
