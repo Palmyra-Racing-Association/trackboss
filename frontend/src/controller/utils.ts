@@ -21,3 +21,10 @@ export function getTodaysDate() {
     const todayString = `${yyyy}${mm}${dd}-`;
     return todayString;
 }
+
+export function convertEventDateFormat(date: string) {
+    const eventDate = new Date(date).toUTCString();
+    const dateArray = eventDate.split(' ');
+    const formattedDate = `${dateArray[2]} ${dateArray[1]}`;
+    return formattedDate;
+}

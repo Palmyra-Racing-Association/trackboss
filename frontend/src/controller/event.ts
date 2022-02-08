@@ -1,4 +1,5 @@
-import { generateHeaders } from './utils';
+import { generateHeaders, convertEventDateFormat } from './utils';
+// import { getTodaysDate } from './utils';
 import {
     DeleteEventResponse,
     GetEventListResponse,
@@ -38,25 +39,33 @@ export async function getEventList(token: string, listType?: string): Promise<Ge
 }
 
 // TODO: this is a mocked response for frontend development, replace once API is completed
-export async function getMostRecentEventData() {
+export async function getUpcomingEventData() {
     // const todayString = getTodaysDate();
-    // const upcomingEvents = await getEventList('TestToken', todayString);
+    // const upcomingEvents: GetEventListResponse = await getEventList('TestToken', todayString);
+    // if ('reason' in upcomingEvents) {
+    //     console.log('TODO: error handling?');
+    // } else {
+    //     return upcomingEvents[0];
+    // }
+
     const upcomingEvents = [
         {
-            event_id: 0,
+            eventId: 0,
             date: '2022-02-07',
-            event_type: 'string',
-            event_name: 'Work Day',
-            event_description: 'string',
+            eventType: 'string',
+            eventName: 'Work Day',
+            eventDescription: 'string',
         },
         {
-            event_id: 1,
+            eventId: 1,
             date: '2022-02-07',
-            event_type: 'string',
-            event_name: 'string',
-            event_description: 'string',
+            eventType: 'string',
+            eventName: 'string',
+            eventDescription: 'string',
         },
     ];
+    const formattedEventDate = convertEventDateFormat(upcomingEvents[0].date);
+    upcomingEvents[0].date = formattedEventDate;
     return upcomingEvents[0]; // Assuming that the API will return the list sorted by date
 }
 

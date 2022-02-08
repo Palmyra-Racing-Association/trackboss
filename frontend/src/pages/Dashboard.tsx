@@ -4,19 +4,19 @@ import theme from '../theme';
 import Header from '../components/Header';
 import WorkPointsCard from '../components/WorkPointsCard';
 import EventCard from '../components/EventCard';
-import { getMostRecentEventData } from '../controller/event';
+import { getUpcomingEventData } from '../controller/event';
+import { Event } from '../../../src/typedefs/event';
 
-async function getMostRecentEventDataLocal(): Promise<any> {
-    const props = await getMostRecentEventData();
-    // const anotherOne = Promise.resolve(props);
+async function getUpcomingEventDataLocal(): Promise<any> {
+    const props = await getUpcomingEventData();
     return props;
 }
 
 function Dashboard() {
-    const [nextEvent, setNextEvent] = useState(null);
+    const [nextEvent, setNextEvent] = useState<Event | null>(null);
     useEffect(() => {
         async function getEvent() {
-            event = await getMostRecentEventDataLocal();
+            const event = await getUpcomingEventDataLocal();
             setNextEvent(event);
         }
         getEvent();
@@ -33,13 +33,10 @@ function Dashboard() {
                             nextEvent ? (
                                 <EventCard
                                     date={nextEvent.date}
-                                    name={nextEvent.event_name}
+                                    name={nextEvent.eventName}
                                 />
                             ) : (
-                                <EventCard
-                                    date="error"
-                                    name="error"
-                                />
+                                <div />
                             )
                         }
 
