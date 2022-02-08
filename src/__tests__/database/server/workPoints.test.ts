@@ -2,13 +2,13 @@ import { getWorkPointsByMember, getWorkPointsByMembership } from '../../../datab
 import mockQuery from './mockQuery';
 
 describe('getWorkPointsByMember()', () => {
-    it('Returns a single integer value', async () => {
+    it('Returns a valid WorkPoints', async () => {
         const memberId = 7;
         const year = 2021;
 
         const result = await getWorkPointsByMember(memberId, year);
         expect(mockQuery).toHaveBeenCalled();
-        expect(result).toBe(13);
+        expect(result.total).toBe(13);
     });
 
     it('Throws for internal server error', async () => {
@@ -37,13 +37,13 @@ describe('getWorkPointsByMember()', () => {
 });
 
 describe('getWorkPointsByMembership()', () => {
-    it('Returns a single integer value', async () => {
+    it('Returns a valid WorkPoints', async () => {
         const membershipId = 7;
         const year = 2021;
 
         const result = await getWorkPointsByMembership(membershipId, year);
         expect(mockQuery).toHaveBeenCalled();
-        expect(result).toBe(4);
+        expect(result.total).toBe(4);
     });
 
     it('Throws for internal server error', async () => {
