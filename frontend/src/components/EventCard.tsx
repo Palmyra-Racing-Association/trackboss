@@ -18,6 +18,7 @@ export default function EventCard(props: cardProps) {
     return (
         <Box
             onClick={navigateToCalendar}
+            cursor="pointer"
             bg="white"
             boxShadow="md"
             border="1px"
