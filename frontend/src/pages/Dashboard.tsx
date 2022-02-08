@@ -4,6 +4,7 @@ import theme from '../theme';
 import Header from '../components/Header';
 import WorkPointsCard from '../components/WorkPointsCard';
 import { getWorkPointsPercentage } from '../controller/workPoints';
+import GreetingText from '../components/GreetingText';
 
 async function getWorkPointsPercentageLocal() {
     const workPointsProps = await getWorkPointsPercentage();
@@ -24,6 +25,7 @@ function Dashboard() {
         <ChakraProvider theme={theme}>
             <VStack align="left" spacing="2em">
                 <Header title="Dashboard" activeButtonId={1} />
+                <GreetingText name="Martin" />
                 <Center>
                     <HStack>
                         <WorkPointsCard percent={percent} />
