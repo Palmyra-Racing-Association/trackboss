@@ -31,6 +31,14 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
     - name: Install modules
       run: npm ci
+    - name: Start MySQL service
+      run: sudo systemctl start mysql.service
+    - name: Configure database
+      run: |
+        cd database/mock_data
+        sed -i "s/-u root/-u root -proot/g" setup_user.sh
+        ./setup_user.sh
+        ./reset_db.sh
     - name: Run Jest on backend
       run: npm run ci-test
   jest-frontend:

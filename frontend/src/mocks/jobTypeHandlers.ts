@@ -19,7 +19,7 @@ const jobTypeHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ job_type_id: 1 }));
+        return res(ctx.status(201), ctx.json({ jobTypeId: 1 }));
     }),
 
     // getJobTypeList
@@ -31,14 +31,14 @@ const jobTypeHandlers = [
         if (token === 'Bearer Internal Server Error') {
             return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
         }
-        return res(ctx.status(200), ctx.json([{ job_type_id: 1 }, { job_type_id: 2 }]));
+        return res(ctx.status(200), ctx.json([{ jobTypeId: 1 }, { jobTypeId: 2 }]));
     }),
 
     // getJobType
     rest.get(`${process.env.REACT_APP_API_URL}/api/jobType/:jobTypeID`, (req, res, ctx) => {
         const { jobTypeID } = req.params;
         if (jobTypeID === '1') {
-            return res(ctx.status(200), ctx.json({ job_type_id: 1 }));
+            return res(ctx.status(200), ctx.json({ jobTypeId: 1 }));
         } if (jobTypeID === '-1') {
             return res(ctx.status(400), ctx.json({ reason: 'Bad request' }));
         } if (jobTypeID === '-2') {
@@ -67,7 +67,7 @@ const jobTypeHandlers = [
             return res(ctx.status(501), ctx.json({ reason: 'Internal Server Error' }));
         }
 
-        return res(ctx.status(201), ctx.json({ job_type_id: 1 }));
+        return res(ctx.status(201), ctx.json({ jobTypeId: 1 }));
     }),
 ];
 

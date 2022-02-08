@@ -5,8 +5,8 @@ const TAG_ROOT = '/api/event';
 
 const supertestServer = supertest(server);
 
-afterAll(() => {
-    server.close();
+afterAll((done) => {
+    server.close(done);
 });
 
 describe('All unimplemented event endpoints are reachable', () => {

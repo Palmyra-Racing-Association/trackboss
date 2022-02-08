@@ -7,7 +7,7 @@
         "test": "cross-env PORT=0 jest",
         "ci-test": "cross-env PORT=0 jest --ci --reporters $(pwd)/.github/jest-reporter.js",
         "dev": "concurrently \"npm run frontend\" \"npm run server\"",
-        "server": "nodemon src/server.ts",
+        "server": "nodemon --exec npx ts-node src/server.ts",
         "frontend": "cd frontend && npm start",
         "dependencies": "npx depcheck",
         "update": "npm install && cd frontend && npm install && cd ..",
@@ -24,7 +24,10 @@
     },
     "homepage": "https://github.com/Squeaky-Training-Wheels/clubmanager-2.0#readme",
     "dependencies": {
+        "@types/lodash": "^4.14.178",
         "express": "^4.17.1",
+        "lodash": "^4.17.21",
+        "mysql2": "^2.3.3",
         "winston": "^3.4.0"
     },
     "devDependencies": {

@@ -5,8 +5,8 @@ const TAG_ROOT = '/api/eventJob';
 
 const supertestServer = supertest(server);
 
-afterAll(() => {
-    server.close();
+afterAll((done) => {
+    server.close(done);
 });
 
 describe('All unimplemented eventJob endpoints are reachable', () => {
