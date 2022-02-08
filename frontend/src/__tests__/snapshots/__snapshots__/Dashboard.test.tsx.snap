@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`dashboard renders correctly 1`] = `
 Array [
   <div
     className="chakra-stack css-p747s7"
