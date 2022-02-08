@@ -1,4 +1,5 @@
 import { QueryOptions } from 'mysql2/promise';
+import { GET_WORK_POINTS_BY_MEMBERSHIP_SQL, GET_WORK_POINTS_BY_MEMBER_SQL } from '../../../database/workPoints';
 
 import {
     GET_BIKE_LIST_BY_MEMBERSHIP_SQL,
@@ -16,6 +17,7 @@ import {
     patchBikeResponse,
     deleteBikeResponse,
 } from './mockHelpers/bike';
+import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 
 const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
@@ -30,6 +32,10 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
             return patchBikeResponse(values[0]);
         case DELETE_BIKE_SQL:
             return deleteBikeResponse(values[0]);
+        case GET_WORK_POINTS_BY_MEMBER_SQL:
+            return getWorkPointsByMemberResponse(values);
+        case GET_WORK_POINTS_BY_MEMBERSHIP_SQL:
+            return getWorkPointsByMembershipResponse(values);
         default:
             return Promise.resolve();
     }

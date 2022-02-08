@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { RowDataPacket } from 'mysql2';
-import logger from 'src/logger';
+import logger from '../logger';
 import pool from './pool';
 
 export const GET_WORK_POINTS_BY_MEMBER_SQL =
@@ -18,7 +18,6 @@ export async function getWorkPointsByMember(memberId: number, year: number): Pro
         logger.error(`DB error getting work points for member: ${e}`);
         throw new Error('internal server error');
     }
-
     if (_.isEmpty(results)) {
         throw new Error('not found');
     }
