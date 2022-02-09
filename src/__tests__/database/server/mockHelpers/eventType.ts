@@ -11,7 +11,7 @@ export function getEventTypeResponse(id: number) {
         case 765:
             return Promise.resolve([[]]);
         case -100:
-            throw new Error('error message');
+            throw { errno: 0 };
         default:
             return Promise.resolve();
     }
@@ -19,10 +19,14 @@ export function getEventTypeResponse(id: number) {
 
 export function insertEventTypeResponse(type: string) {
     switch (type) {
-        case '-100':
-            throw new Error('error message');
         case 'special event':
             return Promise.resolve([{ insertId: 50 }]);
+        case '-100':
+            throw { errno: 0 };
+        case 'user erro':
+            throw { errno: 1452 };
+        case '-200':
+            throw new Error('this error should not happen');
         default:
             return Promise.resolve();
     }
@@ -34,8 +38,12 @@ export function patchEventTypeResponse(id: number) {
             return Promise.resolve([{ affectedRows: 1 }]);
         case 3000:
             return Promise.resolve([{ affectedRows: 0 }]);
+        case 4000:
+            throw { errno: 1451 };
         case -100:
-            throw new Error('error message');
+            throw { errno: 0 };
+        case -200:
+            throw new Error('this error should not happen');
         default:
             return Promise.resolve();
     }

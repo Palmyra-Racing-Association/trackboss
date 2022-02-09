@@ -20,9 +20,20 @@ export async function insertEventType(req: PostNewEventTypeRequest): Promise<num
     let result;
     try {
         [result] = await pool.query<OkPacket>(INSERT_EVENT_TYPE_SQL, values);
-    } catch (e) {
-        logger.error(`DB error inserting event type: ${e}`);
-        throw new Error('internal server error');
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error inserting event type in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error inserting event type: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
     }
 
     return result.insertId;
@@ -58,9 +69,21 @@ export async function patchEventType(id: number, req: PatchEventTypeRequest): Pr
     let result;
     try {
         [result] = await pool.query<OkPacket>(PATCH_EVENT_TYPE_SQL, values);
-    } catch (e) {
-        logger.error(`DB error patching event type: ${e}`);
-        throw new Error('internal server error');
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1451: // FK violation - referenced somewhere else
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error patching event type in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error patching event type: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
     }
 
     if (result.affectedRows < 1) {
