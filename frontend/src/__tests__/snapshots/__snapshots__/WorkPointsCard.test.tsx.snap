@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`workpoints card renders correctly 1`] = `
 <div
   className="css-1mkw5k2"
   onClick={[Function]}

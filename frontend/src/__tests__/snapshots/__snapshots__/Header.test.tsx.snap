@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly for Calendar 1`] = `
+exports[`page headers renders correctly for Calendar 1`] = `
 <div>
   <div
     className="css-108gr1"
@@ -84,7 +84,7 @@ exports[`renders correctly for Calendar 1`] = `
 </div>
 `;
 
-exports[`renders correctly for Dashboard 1`] = `
+exports[`page headers renders correctly for Dashboard 1`] = `
 <div>
   <div
     className="css-108gr1"
@@ -168,7 +168,7 @@ exports[`renders correctly for Dashboard 1`] = `
 </div>
 `;
 
-exports[`renders correctly for Member List 1`] = `
+exports[`page headers renders correctly for Member List 1`] = `
 <div>
   <div
     className="css-108gr1"
@@ -252,7 +252,7 @@ exports[`renders correctly for Member List 1`] = `
 </div>
 `;
 
-exports[`renders correctly for Settings 1`] = `
+exports[`page headers renders correctly for Settings 1`] = `
 <div>
   <div
     className="css-108gr1"

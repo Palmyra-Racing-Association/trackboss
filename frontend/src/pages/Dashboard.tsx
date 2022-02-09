@@ -3,6 +3,7 @@ import { Center, ChakraProvider, HStack, VStack } from '@chakra-ui/react';
 import theme from '../theme';
 import Header from '../components/Header';
 import WorkPointsCard from '../components/WorkPointsCard';
+import ImportantLinksCard from '../components/ImportantLinksCard';
 import EventCard from '../components/EventCard';
 import { getUpcomingEventData } from '../controller/event';
 import { Event } from '../../../src/typedefs/event';
@@ -59,7 +60,7 @@ function Dashboard() {
                                 <div />
                             )
                         }
-
+                        <ImportantLinksCard />
                     </HStack>
                 </Center>
             </VStack>
