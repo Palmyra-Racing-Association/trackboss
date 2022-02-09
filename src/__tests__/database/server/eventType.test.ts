@@ -1,5 +1,5 @@
 import { PatchEventTypeRequest } from 'src/typedefs/eventType';
-import { getEventType, insertEventType, patchEventType } from '../../../database/eventType';
+import { getEventType, getEventTypeList, insertEventType, patchEventType } from '../../../database/eventType';
 import mockQuery from './mockQuery';
 
 describe('insertEventType()', () => {
@@ -55,6 +55,14 @@ describe('getEventType()', () => {
         const eventTypeId = -100;
         await expect(getEventType(eventTypeId)).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('getEventTypeList()', () => {
+    it('Returns an unfiltered list of event types', async () => {
+        const results = await getEventTypeList();
+        expect(mockQuery).toHaveBeenCalled();
+        expect(results.length).toBeGreaterThan(1);
     });
 });
 

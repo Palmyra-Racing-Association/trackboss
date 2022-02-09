@@ -62,6 +62,26 @@ export async function getEventType(id: number): Promise<EventType> {
     };
 }
 
+export async function getEventTypeList(): Promise<EventType[]> {
+    const sql = GET_EVENT_TYPE_LIST_SQL;
+    const values: string[] = [];
+
+    let results;
+    try {
+        [results] = await pool.query<RowDataPacket[]>(sql, values);
+    } catch (e) {
+        logger.error(`DB error getting event type list: ${e}`);
+        throw new Error('internal server error');
+    }
+    return results.map((result) => ({
+        eventTypeId: result.event_type_id,
+        type: result.type,
+        lastModifiedBy: result.last_modified_by,
+        lastModifiedDate: result.last_modified_date,
+        active: result.active[0],
+    }));
+}
+
 export async function patchEventType(id: number, req: PatchEventTypeRequest): Promise<void> {
     const values = [id, req.type, req.active, req.modifiedBy];
 

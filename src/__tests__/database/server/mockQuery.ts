@@ -16,6 +16,7 @@ import {
 } from '../../../database/member';
 import { GET_WORK_POINTS_BY_MEMBERSHIP_SQL, GET_WORK_POINTS_BY_MEMBER_SQL } from '../../../database/workPoints';
 import {
+    GET_EVENT_TYPE_LIST_SQL,
     GET_EVENT_TYPE_SQL,
     INSERT_EVENT_TYPE_SQL,
     PATCH_EVENT_TYPE_SQL,
@@ -25,7 +26,12 @@ import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
 import * as memberHelpers from './mockHelpers/member';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
-import { getEventTypeResponse, insertEventTypeResponse, patchEventTypeResponse } from './mockHelpers/eventType';
+import {
+    getEventTypeResponse,
+    getEventTypeListResponse,
+    insertEventTypeResponse,
+    patchEventTypeResponse,
+} from './mockHelpers/eventType';
 
 const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
@@ -55,6 +61,8 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
             return getWorkPointsByMembershipResponse(values);
         case GET_EVENT_TYPE_SQL:
             return getEventTypeResponse(values[0]);
+        case GET_EVENT_TYPE_LIST_SQL:
+            return getEventTypeListResponse();
         case INSERT_EVENT_TYPE_SQL:
             return insertEventTypeResponse(values[0]);
         case PATCH_EVENT_TYPE_SQL:

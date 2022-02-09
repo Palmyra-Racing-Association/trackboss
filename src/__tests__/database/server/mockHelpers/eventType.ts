@@ -3,6 +3,37 @@
 // mock, that is sufficient because we only care about 'errno' and it's easier than
 // instantiating an implementor of NodeJS.ErrnoException to get that field
 
+export function getEventTypeListResponse() {
+    const eventTypeList = [
+        {
+            event_type_id: 1,
+            type: 'Race',
+            last_modified_date: '1/1/2020',
+            last_modified_by: 2,
+            active: [1],
+        }, {
+            event_type_id: 2,
+            type: 'Race Week',
+            last_modified_date: '4/1/2020',
+            last_modified_by: 3,
+            active: [1],
+        }, {
+            event_type_id: 3,
+            type: 'XO Race',
+            last_modified_date: '3/1/2020',
+            last_modified_by: 4,
+            active: [1],
+        }, {
+            event_type_id: 4,
+            type: 'Yearly Job',
+            last_modified_date: '2/1/2020',
+            last_modified_by: 5,
+            active: [1],
+        },
+    ];
+    return Promise.resolve([eventTypeList]);
+}
+
 export function getEventTypeResponse(id: number) {
     switch (id) {
         case 8:
