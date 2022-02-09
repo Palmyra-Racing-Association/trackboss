@@ -33,8 +33,10 @@ function Dashboard() {
         async function getData() {
             const per = await getWorkPointsPercentageLocal();
             const event = await getUpcomingEventDataLocal();
+            const name = await getNameLocal();
             setNextEvent(event);
             setPercent(per);
+            setMemberName(name);
         }
         getData();
     }, []);

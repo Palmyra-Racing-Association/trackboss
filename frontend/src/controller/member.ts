@@ -67,5 +67,5 @@ export async function getName() {
         name: 'Martin',
     };
 
-    return response;
+    return response.name;
 }
