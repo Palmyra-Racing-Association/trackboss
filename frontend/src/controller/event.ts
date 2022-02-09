@@ -32,18 +32,27 @@ export async function getCalendarEventList() {
     const upcomingEvents = [
         {
             title: 'Work Day',
-            start: new Date('2022-02-08'),
-            end: new Date('2022-02-09'),
+            start: new Date('2022-02-08T00:10:00'),
+            end: new Date('2022-02-09T00:10:00'),
+            type: 'Work',
         },
         {
             title: 'Race Day',
-            start: new Date('2022-02-11'),
-            end: new Date('2022-02-12'),
+            start: new Date('2022-02-11T00:10:00'),
+            end: new Date('2022-02-12T00:10:00'),
+            type: 'Race',
         },
         {
             title: 'Meeting',
-            start: new Date('2022-02-22'),
-            end: new Date('2022-02-23'),
+            start: new Date('2022-02-22T00:10:00'),
+            end: new Date('2022-02-23T00:10:00'),
+            type: 'Meeting',
+        },
+        {
+            title: 'Some other category',
+            start: new Date('2022-02-22T00:10:00'),
+            end: new Date('2022-02-23T00:10:00'),
+            type: 'Other',
         },
     ];
 

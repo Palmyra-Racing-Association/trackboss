@@ -26,7 +26,7 @@ function CalendarPage() {
     return (
         <ChakraProvider theme={theme}>
             <Header title="Calendar" activeButtonId={2} />
-            <Box p={5}>
+            <Box p={5} pt={20}>
                 <EventCalendar events={upcomingEvents} />
             </Box>
         </ChakraProvider>
