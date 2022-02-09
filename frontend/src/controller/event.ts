@@ -20,6 +20,36 @@ export async function createEvent(token: string, eventData: PostNewEventRequest)
     return response.json();
 }
 
+// TODO: this is a mocked response for frontend development, replace once API is completed
+export async function getCalendarEventList() {
+    // const upcomingEvents: GetEventListResponse = await getEventList('TestToken', todayString);
+    // if ('reason' in upcomingEvents) {
+    //     console.log('TODO: error handling?');
+    // } else {
+    //     convertEventsToCalendarFormat(upcomingEvents);
+    //     return upcomingEvents;
+    // }
+    const upcomingEvents = [
+        {
+            title: 'Work Day',
+            start: new Date('2022-02-08'),
+            end: new Date('2022-02-09'),
+        },
+        {
+            title: 'Race Day',
+            start: new Date('2022-02-11'),
+            end: new Date('2022-02-12'),
+        },
+        {
+            title: 'Meeting',
+            start: new Date('2022-02-22'),
+            end: new Date('2022-02-23'),
+        },
+    ];
+
+    return upcomingEvents;
+}
+
 export async function getEventList(token: string, listType?: string): Promise<GetEventListResponse> {
     if (listType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/list`, {

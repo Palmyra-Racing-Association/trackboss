@@ -48,7 +48,6 @@ function Dashboard() {
                                 <div />
                             )
                         }
-
                     </HStack>
                 </Center>
             </VStack>
