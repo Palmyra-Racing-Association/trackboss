@@ -10,13 +10,12 @@ export const GET_EVENT_TYPE_LIST_SQL =
 `SELECT event_type_id, type, active, last_modified_by, DATE_FORMAT(last_modified_date, '%Y-%m-%d') AS last_modified_date FROM event_type`;
 export const GET_EVENT_TYPE_SQL = `${GET_EVENT_TYPE_LIST_SQL} WHERE event_type_id = ?`;
 export const INSERT_EVENT_TYPE_SQL =
-    'INSERT INTO event_type (type, last_modified_by, last_modified_date, active) VALUES (?, ?, ?, 1)';
-export const PATCH_EVENT_TYPE_SQL = 'CALL sp_patch_event_type (?, ?, ?, ?, ?)';
+    'INSERT INTO event_type (type, last_modified_by, last_modified_date, active) VALUES (?, ?, CURDATE(), 1)';
+export const PATCH_EVENT_TYPE_SQL = 'CALL sp_patch_event_type (?, ?, ?, ?, CURDATE())';
 
 
 export async function insertEventType(req: PostNewEventTypeRequest): Promise<number> {
-    let today = new Date().toISOString().slice(0,10);
-    const values = [req.type, req.modifiedBy, today];
+    const values = [req.type, req.modifiedBy];
 
     let result;
     try {
@@ -54,8 +53,7 @@ export async function getEventType(id: number): Promise<EventType> {
 }
 
 export async function patchEventType(id: number, req: PatchEventTypeRequest): Promise<void> {
-    let today = new Date().toISOString().slice(0,10);
-    const values = [id, req.type, req.active, req.modifiedBy, today];
+    const values = [id, req.type, req.active, req.modifiedBy];
 
     let result;
     try {
