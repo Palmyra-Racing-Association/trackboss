@@ -1,4 +1,4 @@
-DELIMETER //
+DELIMITER //
 CREATE VIEW `v_work_points_by_membership` AS
     SELECT 
         ms.membership_id AS membership_id,
