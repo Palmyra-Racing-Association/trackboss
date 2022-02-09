@@ -12,7 +12,7 @@ const today = () => {
 };
 
 const CHECK_SQL = 'SELECT event_type_id, type, DATE_FORMAT(last_modified_date, "%Y-%m-%d") AS last_modified_date, ' +
-    'last_modified_by, active from event_type WHERE event_type_id = ?;'
+    'last_modified_by, active from event_type WHERE event_type_id = ?';
 
 afterAll(async () => {
     await pool.end();
@@ -39,7 +39,6 @@ describe('sp_patch_event_type()', () => {
         expect(checkResults[0].active[0]).toBe(values[2]);
     });
 
-
     it('Patches type field', async () => {
         // Original: 9, 'Ride Day', null, null, 1
         const eventTypeId = 9;
@@ -61,7 +60,6 @@ describe('sp_patch_event_type()', () => {
         expect(checkResults[0].last_modified_by).toBe(values[3]);
         expect(checkResults[0].active[0]).toBe(origValues[0].active[0]);
     });
-
 
     it('Patches active field', async () => {
         // Original: 5, 'Meeting', null, null, 1
@@ -122,5 +120,4 @@ describe('sp_patch_event_type()', () => {
         const [result] = await pool.query<OkPacket>(sql, values);
         expect(result.affectedRows).toBe(0);
     });
-
 });

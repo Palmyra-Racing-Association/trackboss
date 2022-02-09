@@ -5,14 +5,13 @@ import logger from '../logger';
 import pool from './pool';
 import { EventType, PatchEventTypeRequest, PostNewEventTypeRequest } from '../typedefs/eventType';
 
-
-export const GET_EVENT_TYPE_LIST_SQL = 
-`SELECT event_type_id, type, active, last_modified_by, DATE_FORMAT(last_modified_date, '%Y-%m-%d') AS last_modified_date FROM event_type`;
+export const GET_EVENT_TYPE_LIST_SQL =
+'SELECT event_type_id, type, active, last_modified_by,' +
+    'DATE_FORMAT(last_modified_date, "%Y-%m-%d") AS last_modified_date FROM event_type';
 export const GET_EVENT_TYPE_SQL = `${GET_EVENT_TYPE_LIST_SQL} WHERE event_type_id = ?`;
 export const INSERT_EVENT_TYPE_SQL =
     'INSERT INTO event_type (type, last_modified_by, last_modified_date, active) VALUES (?, ?, CURDATE(), 1)';
 export const PATCH_EVENT_TYPE_SQL = 'CALL sp_patch_event_type (?, ?, ?, ?, CURDATE())';
-
 
 export async function insertEventType(req: PostNewEventTypeRequest): Promise<number> {
     const values = [req.type, req.modifiedBy];

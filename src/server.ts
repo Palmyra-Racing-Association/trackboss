@@ -1,6 +1,5 @@
 import express from 'express';
 import api from './api/api';
-import { getEventType, insertEventType, patchEventType } from './database/eventType';
 import logger from './logger';
 
 const app = express();

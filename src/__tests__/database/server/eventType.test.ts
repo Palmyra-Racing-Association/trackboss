@@ -26,7 +26,7 @@ describe('insertEventType()', () => {
     });
 
     it('Throws unreachable error without errno field', async () => {
-        const request = { type: '-200', modifiedBy: 1};
+        const request = { type: '-200', modifiedBy: 1 };
         await expect(insertEventType(request)).rejects.toThrow('this error should not happen');
         expect(mockQuery).toHaveBeenCalled();
     });
@@ -67,7 +67,7 @@ describe('patchEventType()', () => {
     };
 
     it('Patches an event type with type field', async () => {
-        await testPatchWithObject({ type: '2000' , modifiedBy: 2});
+        await testPatchWithObject({ type: '2000', modifiedBy: 2 });
     });
 
     it('Patches an event type with active field', async () => {
@@ -80,25 +80,25 @@ describe('patchEventType()', () => {
 
     it('Throws for event type not found', async () => {
         const eventTypeId = 3000;
-        await expect(patchEventType(eventTypeId, { modifiedBy : 2 })).rejects.toThrow('not found');
+        await expect(patchEventType(eventTypeId, { modifiedBy: 2 })).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for user error', async () => {
         const bikeId = 4000;
-        await expect(patchEventType(bikeId, { modifiedBy : 2 })).rejects.toThrow('user input error');
+        await expect(patchEventType(bikeId, { modifiedBy: 2 })).rejects.toThrow('user input error');
         expect(mockQuery).toHaveBeenCalled();
-    })
+    });
 
     it('Throws for internal server error', async () => {
         const bikeId = -100;
-        await expect(patchEventType(bikeId, { modifiedBy : 2 })).rejects.toThrow('internal server error');
+        await expect(patchEventType(bikeId, { modifiedBy: 2 })).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws unreachable error without errno field', async () => {
         const bikeId = -200;
-        await expect(patchEventType(bikeId, { modifiedBy : 2 })).rejects.toThrow('this error should not happen');
+        await expect(patchEventType(bikeId, { modifiedBy: 2 })).rejects.toThrow('this error should not happen');
         expect(mockQuery).toHaveBeenCalled();
     });
 });

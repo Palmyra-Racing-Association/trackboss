@@ -27,7 +27,6 @@ import * as memberHelpers from './mockHelpers/member';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 import { getEventTypeResponse, insertEventTypeResponse, patchEventTypeResponse } from './mockHelpers/eventType';
 
-
 const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
         case INSERT_BIKE_SQL:

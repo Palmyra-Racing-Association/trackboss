@@ -1,3 +1,8 @@
+/* eslint-disable no-throw-literal */
+// ESLint doesn't like `throw { errno: # }` since it's not throwing an error, but for a
+// mock, that is sufficient because we only care about 'errno' and it's easier than
+// instantiating an implementor of NodeJS.ErrnoException to get that field
+
 export function getEventTypeResponse(id: number) {
     switch (id) {
         case 8:
@@ -6,7 +11,7 @@ export function getEventTypeResponse(id: number) {
                 type: 'Camp and Ride',
                 last_modified_date: '1/1/2020',
                 last_modified_by: 2,
-                active: [1]
+                active: [1],
             }]]);
         case 765:
             return Promise.resolve([[]]);
