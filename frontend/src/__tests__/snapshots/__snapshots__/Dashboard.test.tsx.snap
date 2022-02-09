@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`dashboard renders correctly 1`] = `
 Array [
   <div
     className="chakra-stack css-p747s7"
@@ -153,6 +153,76 @@ Array [
           </div>
         </div>
         <div />
+        <div
+          className="css-1z0glir"
+        >
+          <div
+            className="css-gmuwbf"
+          >
+            <div
+              className="chakra-stack css-nscsg6"
+            >
+              <h2
+                className="chakra-heading css-1dklj6k"
+              >
+                Important Links
+              </h2>
+              <hr
+                aria-orientation="horizontal"
+                className="chakra-divider css-svjswr"
+              />
+              <ul
+                className="css-1avoc21"
+                role="list"
+              >
+                <a
+                  className="chakra-link css-hdonle"
+                  href="https://palmyramx.com/pages/track-rules"
+                  target="_blank"
+                >
+                  <li
+                    className="css-81gbng"
+                  >
+                    Member Rules
+                  </li>
+                </a>
+                <a
+                  className="chakra-link css-hdonle"
+                  href="https://twitter.com/palmyramx"
+                  target="_blank"
+                >
+                  <li
+                    className="css-81gbng"
+                  >
+                    Twitter
+                  </li>
+                </a>
+                <a
+                  className="chakra-link css-hdonle"
+                  href="https://www.facebook.com/palmyramx/"
+                  target="_blank"
+                >
+                  <li
+                    className="css-81gbng"
+                  >
+                    Facebook
+                  </li>
+                </a>
+                <a
+                  className="chakra-link css-hdonle"
+                  href="https://www.instagram.com/palmyramx_hogback_hill/?hl=en"
+                  target="_blank"
+                >
+                  <li
+                    className="css-81gbng"
+                  >
+                    Instagram
+                  </li>
+                </a>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>,
