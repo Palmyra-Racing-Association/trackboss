@@ -3,9 +3,17 @@ import { Center, ChakraProvider, HStack, VStack } from '@chakra-ui/react';
 import theme from '../theme';
 import Header from '../components/Header';
 import WorkPointsCard from '../components/WorkPointsCard';
+import EventCard from '../components/EventCard';
+import { getUpcomingEventData } from '../controller/event';
+import { Event } from '../../../src/typedefs/event';
 import { getWorkPointsPercentage } from '../controller/workPoints';
 import GreetingText from '../components/GreetingText';
 import { getName } from '../controller/member';
+
+async function getUpcomingEventDataLocal(): Promise<any> {
+    const props = await getUpcomingEventData();
+    return props;
+}
 
 async function getWorkPointsPercentageLocal() {
     const workPointsProps = await getWorkPointsPercentage();
@@ -18,20 +26,17 @@ async function getNameLocal() {
 }
 
 function Dashboard() {
+    const [nextEvent, setNextEvent] = useState<Event | null >(null);
     const [percent, setPercent] = useState(0);
     const [memberName, setMemberName] = useState('');
     useEffect(() => {
-        async function getPercent() {
+        async function getData() {
             const per = await getWorkPointsPercentageLocal();
+            const event = await getUpcomingEventDataLocal();
+            setNextEvent(event);
             setPercent(per);
         }
-        getPercent();
-
-        async function getMemberName() {
-            const memProps = await getNameLocal();
-            setMemberName(memProps.name);
-        }
-        getMemberName();
+        getData();
     }, []);
 
     return (
@@ -42,6 +47,17 @@ function Dashboard() {
                 <Center>
                     <HStack>
                         <WorkPointsCard percent={percent} />
+                        {
+                            nextEvent ? (
+                                <EventCard
+                                    date={nextEvent.date}
+                                    name={nextEvent.eventName}
+                                />
+                            ) : (
+                                <div />
+                            )
+                        }
+
                     </HStack>
                 </Center>
             </VStack>

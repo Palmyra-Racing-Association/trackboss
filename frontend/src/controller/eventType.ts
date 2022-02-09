@@ -1,4 +1,4 @@
-import generateHeaders from './utils';
+import { generateHeaders } from './utils';
 import {
     GetEventTypeListResponse,
     GetEventTypeResponse,

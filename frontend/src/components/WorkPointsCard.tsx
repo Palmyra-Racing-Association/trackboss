@@ -17,6 +17,7 @@ export default function WorkPointsCard(props: cardProps) {
     return (
         <Box
             onClick={navigateToWorkPoints}
+            cursor="pointer"
             bg="white"
             boxShadow="md"
             border="1px"
@@ -24,7 +25,7 @@ export default function WorkPointsCard(props: cardProps) {
             p={3}
         >
             <Center>
-                <VStack p={0} boxSize="lg">
+                <VStack p={0} boxSize="md">
                     <GaugeChart
                         hideText
                         id="gauge-chart"

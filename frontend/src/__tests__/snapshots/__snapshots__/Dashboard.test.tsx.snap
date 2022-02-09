@@ -7,7 +7,7 @@ Array [
   >
     <div>
       <div
-        className="chakra-stack css-1f7d9aq"
+        className="css-arm2n8"
       >
         <div
           className="chakra-stack css-84zodg"
@@ -70,14 +70,20 @@ Array [
           </div>
         </div>
         <div
-          className="css-gmuwbf"
+          className="css-17xejub"
+        />
+        <div
+          className="css-0"
         >
           <h2
-            className="chakra-heading css-1ha5w2r"
+            className="chakra-heading css-1azmuzd"
           >
             Dashboard
           </h2>
         </div>
+        <div
+          className="css-17xejub"
+        />
       </div>
     </div>
     <div
@@ -102,14 +108,14 @@ Array [
         className="chakra-stack css-84zodg"
       >
         <div
-          className="css-9nem3t"
+          className="css-15ddyrp"
           onClick={[Function]}
         >
           <div
             className="css-gmuwbf"
           >
             <div
-              className="chakra-stack css-3l9tp3"
+              className="chakra-stack css-10j85wf"
             >
               <GaugeChart
                 colors={
@@ -146,6 +152,7 @@ Array [
             </div>
           </div>
         </div>
+        <div />
       </div>
     </div>
   </div>,

@@ -3,7 +3,7 @@
 exports[`renders correctly for Calendar 1`] = `
 <div>
   <div
-    className="chakra-stack css-1yllzyt"
+    className="css-108gr1"
   >
     <div
       className="chakra-stack css-84zodg"
@@ -66,14 +66,20 @@ exports[`renders correctly for Calendar 1`] = `
       </div>
     </div>
     <div
-      className="css-gmuwbf"
+      className="css-17xejub"
+    />
+    <div
+      className="css-0"
     >
       <h2
-        className="chakra-heading css-0"
+        className="chakra-heading css-1tdh55g"
       >
         Calendar
       </h2>
     </div>
+    <div
+      className="css-17xejub"
+    />
   </div>
 </div>
 `;
@@ -81,7 +87,7 @@ exports[`renders correctly for Calendar 1`] = `
 exports[`renders correctly for Dashboard 1`] = `
 <div>
   <div
-    className="chakra-stack css-1yllzyt"
+    className="css-108gr1"
   >
     <div
       className="chakra-stack css-84zodg"
@@ -144,14 +150,20 @@ exports[`renders correctly for Dashboard 1`] = `
       </div>
     </div>
     <div
-      className="css-gmuwbf"
+      className="css-17xejub"
+    />
+    <div
+      className="css-0"
     >
       <h2
-        className="chakra-heading css-0"
+        className="chakra-heading css-1tdh55g"
       >
         Dashboard
       </h2>
     </div>
+    <div
+      className="css-17xejub"
+    />
   </div>
 </div>
 `;
@@ -159,7 +171,7 @@ exports[`renders correctly for Dashboard 1`] = `
 exports[`renders correctly for Member List 1`] = `
 <div>
   <div
-    className="chakra-stack css-1yllzyt"
+    className="css-108gr1"
   >
     <div
       className="chakra-stack css-84zodg"
@@ -222,14 +234,20 @@ exports[`renders correctly for Member List 1`] = `
       </div>
     </div>
     <div
-      className="css-gmuwbf"
+      className="css-17xejub"
+    />
+    <div
+      className="css-0"
     >
       <h2
-        className="chakra-heading css-0"
+        className="chakra-heading css-1tdh55g"
       >
         Members
       </h2>
     </div>
+    <div
+      className="css-17xejub"
+    />
   </div>
 </div>
 `;
@@ -237,7 +255,7 @@ exports[`renders correctly for Member List 1`] = `
 exports[`renders correctly for Settings 1`] = `
 <div>
   <div
-    className="chakra-stack css-1yllzyt"
+    className="css-108gr1"
   >
     <div
       className="chakra-stack css-84zodg"
@@ -300,14 +318,20 @@ exports[`renders correctly for Settings 1`] = `
       </div>
     </div>
     <div
-      className="css-gmuwbf"
+      className="css-17xejub"
+    />
+    <div
+      className="css-0"
     >
       <h2
-        className="chakra-heading css-0"
+        className="chakra-heading css-1tdh55g"
       >
         General Info
       </h2>
     </div>
+    <div
+      className="css-17xejub"
+    />
   </div>
 </div>
 `;

@@ -399,8 +399,10 @@ paths:
           schema:
             type: string
             enum:
-              - boardMember
+              - admin
+              - membershipAdmin
               - member
+              - paidLaborer
       responses:
         200:
           description: OK
