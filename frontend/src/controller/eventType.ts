@@ -48,19 +48,19 @@ export async function getMockedEventTypeList() {
     return [
         {
             eventTypeId: 0,
-            type: "Race",
+            type: 'Race',
             active: true,
-            lastmodifiedDate: "2022-02-10",
-            lastModifiedBy: "Me :D"
+            lastmodifiedDate: '2022-02-10',
+            lastModifiedBy: 'Me :D',
         },
         {
             eventTypeId: 1,
-            type: "Meeting",
+            type: 'Meeting',
             active: true,
-            lastmodifiedDate: "2022-02-10",
-            lastModifiedBy: "Me :D"
+            lastmodifiedDate: '2022-02-10',
+            lastModifiedBy: 'Me :D',
         },
-        
+
     ];
 }
 
