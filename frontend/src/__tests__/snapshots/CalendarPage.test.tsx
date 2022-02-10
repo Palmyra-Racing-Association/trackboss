@@ -19,7 +19,7 @@ describe('calendar page', () => {
     it('renders correctly', () => {
         const cal = renderer.create(
             <BrowserRouter>
-                    <Header title="Calendar" activeButtonId={2} />
+                <Header title="Calendar" activeButtonId={2} />
                 <Box pl={20} pr={20} pt={20}>
                     <EventCalendar events={upcomingEvents} />
                 </Box>
