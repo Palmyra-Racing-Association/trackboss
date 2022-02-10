@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint-disable import/no-duplicates */
 import React, { useState, useEffect } from 'react';
 import { ChakraProvider, Box } from '@chakra-ui/react';
@@ -7,6 +8,7 @@ import Header from '../components/Header';
 import theme from '../theme';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getCalendarEventList } from '../controller/event';
+import CreateEventModal from '../components/CreateEventModal';
 
 async function getEventListLocal(): Promise<any> {
     const events = await getCalendarEventList();
@@ -22,7 +24,7 @@ function CalendarPage() {
         }
         getData();
     }, []);
-
+    /*
     return (
         <ChakraProvider theme={theme}>
             <Header title="Calendar" activeButtonId={2} />
@@ -31,6 +33,12 @@ function CalendarPage() {
             </Box>
         </ChakraProvider>
     );
+    */
+   return (
+       <ChakraProvider theme={theme}>
+           <CreateEventModal />
+       </ChakraProvider>
+   );
 }
 
 export default CalendarPage;
