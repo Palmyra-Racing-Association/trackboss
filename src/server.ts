@@ -1,6 +1,5 @@
 import express from 'express';
 import api from './api/api';
-import { getEvent, insertEvent, getEventList } from './database/event';
 import logger from './logger';
 
 const app = express();
