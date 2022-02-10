@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 import Header from '../../components/Header';
-import Dashboard from '../../pages/Dashboard';
 import EventCalendar from '../../components/EventCalendar';
 
 const upcomingEvents = [
@@ -20,10 +19,10 @@ describe('calendar page', () => {
     it('renders correctly', () => {
         const cal = renderer.create(
             <BrowserRouter>
-                <Header title="Calendar" activeButtonId={2} />
-            <Box pl={20} pr={20} pt={20}>
-                <EventCalendar events={upcomingEvents} />
-            </Box>
+                    <Header title="Calendar" activeButtonId={2} />
+                <Box pl={20} pr={20} pt={20}>
+                    <EventCalendar events={upcomingEvents} />
+                </Box>
             </BrowserRouter>,
         ).toJSON();
         expect(cal).toMatchSnapshot();
