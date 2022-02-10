@@ -10,9 +10,12 @@ CREATE PROCEDURE sp_register_membership(
     IN _address VARCHAR(255),
     IN _city VARCHAR(255),
     IN _state VARCHAR(255),
-    IN _zip VARCHAR(255)
+    IN _zip VARCHAR(255),
+    OUT _member_id INT,
+    OUT _membership_id INT
 )
 BEGIN
+    START TRANSACTION;
     INSERT INTO membership(
         status,
         cur_year_renewed,
@@ -36,6 +39,7 @@ BEGIN
         _state,
         _zip
     );
+    SET _membership_id = LAST_INSERT_ID();
 
     INSERT INTO member(
         membership_id,
@@ -50,7 +54,7 @@ BEGIN
         last_modified_date,
         active
     ) VALUES (
-        LAST_INSERT_ID(),
+        _membership_id,
         _member_type_id,
         _first_name,
         _last_name,
@@ -62,4 +66,6 @@ BEGIN
         CURDATE(),
         0
     );
+    SET _member_id = LAST_INSERT_ID();
+    COMMIT;
 END// 
