@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 import Header from '../../components/Header';
-import Dashboard from '../../pages/Dashboard';
 import EventCalendar from '../../components/EventCalendar';
 import CreateEventModal from '../../components/CreateEventModal';
 
