@@ -22,7 +22,7 @@ describe('sp_patch_event_type()', () => {
     it('Patches all fields', async () => {
         // Original: 8, 'Camp and Ride', null, null, 1
         const eventTypeId = 8;
-        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?, CURDATE())';
+        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?)';
         const values = [eventTypeId, 'Camp and Ride TEST', 1, 2];
 
         const [result] = await pool.query<OkPacket>(sql, values);
@@ -44,7 +44,7 @@ describe('sp_patch_event_type()', () => {
         const eventTypeId = 9;
         const [origValues] = await pool.query<RowDataPacket[]>(CHECK_SQL, [eventTypeId]);
 
-        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?, CURDATE())';
+        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?)';
         const values = [eventTypeId, 'Ride Day Test', null, 4];
 
         const [result] = await pool.query<OkPacket>(sql, values);
@@ -66,7 +66,7 @@ describe('sp_patch_event_type()', () => {
         const eventTypeId = 5;
         const [origValues] = await pool.query<RowDataPacket[]>(CHECK_SQL, [eventTypeId]);
 
-        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?, CURDATE())';
+        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?)';
         const values = [eventTypeId, null, 0, 2];
 
         const [result] = await pool.query<OkPacket>(sql, values);
@@ -88,8 +88,8 @@ describe('sp_patch_event_type()', () => {
         const eventTypeId = 1;
         const [origValues] = await pool.query<RowDataPacket[]>(CHECK_SQL, [eventTypeId]);
 
-        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?, ?)';
-        const values = [eventTypeId, null, null, null, null];
+        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?)';
+        const values = [eventTypeId, null, null, null];
 
         const [result] = await pool.query<OkPacket>(sql, values);
         expect(result.affectedRows).toBe(1);
@@ -106,7 +106,7 @@ describe('sp_patch_event_type()', () => {
     });
 
     it('Patches nothing without eventTypeId', async () => {
-        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?, ?)';
+        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?)';
         const values = [null, null, null, null, null];
 
         const [result] = await pool.query<OkPacket>(sql, values);
@@ -114,7 +114,7 @@ describe('sp_patch_event_type()', () => {
     });
 
     it('Patches nothing when eventTypeId not found', async () => {
-        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?, ?)';
+        const sql = 'CALL sp_patch_event_type(?, ?, ?, ?)';
         const values = [5000, null, null, null, null];
 
         const [result] = await pool.query<OkPacket>(sql, values);
