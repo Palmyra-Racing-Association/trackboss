@@ -60,7 +60,6 @@ export async function getMockedEventTypeList() {
             lastmodifiedDate: '2022-02-10',
             lastModifiedBy: 'Me :D',
         },
-
     ];
 }
 

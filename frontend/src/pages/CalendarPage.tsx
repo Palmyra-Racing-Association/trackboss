@@ -1,3 +1,5 @@
+/* eslint-disable */
+/* eslint-disable import/no-duplicates */
 import React, { useState, useEffect } from 'react';
 import { ChakraProvider, Box } from '@chakra-ui/react';
 import EventCalendar from '../components/EventCalendar';
@@ -24,8 +26,10 @@ function CalendarPage() {
     return (
         <ChakraProvider theme={theme}>
             <Header title="Calendar" activeButtonId={2} />
-            <CreateEventModal />
-            <Box pl={20} pr={20} pt={0} mt={0}>
+            <Box p={5} pb={0}>
+                <CreateEventModal />
+            </Box>
+            <Box p={5} pt={20}>
                 <EventCalendar events={upcomingEvents} />
             </Box>
         </ChakraProvider>
