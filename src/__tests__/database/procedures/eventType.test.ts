@@ -100,7 +100,7 @@ describe('sp_patch_event_type()', () => {
         expect(!_.isEmpty(checkResults));
         expect(checkResults[0].event_type_id).toBe(eventTypeId);
         expect(checkResults[0].type).toBe(origValues[0].type);
-        expect(checkResults[0].last_modified_date).toBe(origValues[0].last_modified_date);
+        expect(checkResults[0].last_modified_date).toBe(today());
         expect(checkResults[0].last_modified_by).toBe(origValues[0].last_modified_by);
         expect(checkResults[0].active[0]).toBe(origValues[0].active[0]);
     });
