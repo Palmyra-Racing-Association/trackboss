@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders all props correctly 1`] = `
+<div>
+  <button
+    className="chakra-button css-1igmqd6"
+    onClick={[Function]}
+    type="button"
+  >
+    Create New Event
+  </button>
+</div>
+`;

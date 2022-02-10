@@ -14,7 +14,7 @@ Array [
         >
           <button
             aria-label="Back"
-            className="chakra-button css-dic36v"
+            className="chakra-button css-76fq9n"
             onClick={[Function]}
             type="button"
           >
@@ -42,7 +42,7 @@ Array [
           <div>
             <button
               aria-label="Menu"
-              className="chakra-button css-10gjanl"
+              className="chakra-button css-1y85x9m"
               onClick={[Function]}
               type="button"
             >
@@ -76,7 +76,7 @@ Array [
           className="css-0"
         >
           <h2
-            className="chakra-heading css-1azmuzd"
+            className="chakra-heading css-1c7bccy"
           >
             Dashboard
           </h2>
@@ -123,7 +123,7 @@ Array [
                   You have completed
                 </p>
                 <p
-                  className="chakra-text css-sit8fr"
+                  className="chakra-text css-68kehq"
                 >
                   0
                   %
