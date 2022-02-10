@@ -26,7 +26,6 @@ export default function CreateEventModal() {
   return (
     <div>
       <Button onClick={onOpen}>Create New Event</Button>
-
       <Modal size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -37,9 +36,9 @@ export default function CreateEventModal() {
               <VStack align="left">
                 <Text>Event Name:</Text>
                 <Input 
-                placeholder='Name'
-                _placeholder={{ color: 'gray.100' }}
-                borderColor='gray.100'
+                  placeholder='Name'
+                  _placeholder={{ color: 'gray.100' }}
+                  borderColor='gray.100'
                  />
               </VStack>
               <VStack align="left">
@@ -58,10 +57,8 @@ export default function CreateEventModal() {
                 <Text>End Date/Time:</Text>
                 <DateTimePicker disableClock onChange={(date:Date) => setEndDateTime(date)} value={endDateTime}/>
               </VStack>
-              
             </SimpleGrid>
           </ModalBody>
-
           <ModalFooter>
             <Button variant="ghost" mr={3} onClick={onClose}>
               Close

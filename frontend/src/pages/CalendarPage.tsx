@@ -24,21 +24,15 @@ function CalendarPage() {
         }
         getData();
     }, []);
-    /*
     return (
         <ChakraProvider theme={theme}>
             <Header title="Calendar" activeButtonId={2} />
+            <CreateEventModal />
             <Box p={5} pt={20}>
                 <EventCalendar events={upcomingEvents} />
             </Box>
         </ChakraProvider>
     );
-    */
-   return (
-       <ChakraProvider theme={theme}>
-           <CreateEventModal />
-       </ChakraProvider>
-   );
 }
 
 export default CalendarPage;
