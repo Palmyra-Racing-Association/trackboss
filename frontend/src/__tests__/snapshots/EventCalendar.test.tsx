@@ -15,8 +15,7 @@ const upcomingEvents = [
     },
 ];
 
-jest.mock('react-big-calendar', () => 'Calendar');
-jest.mock('react-big-calendar', () => 'momentLocalizer');
+jest.mock('../../components/EventCalendar', () => 'EventCalendar');
 // jest.mock('react-big-calendar', () => ({ momentLocalizer: jest.fn(() => DateLocalizer) }));
 
 it('renders correctly', () => {
