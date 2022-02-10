@@ -18,6 +18,7 @@ import {
     Select,
   } from '@chakra-ui/react';
 import DateTimePicker from 'react-datetime-picker';
+import { makeEvent } from '../controller/event';
 import { getMockedEventTypeList } from '../controller/eventType';
  //TODO: Replace this with non-mocked function (getEventTypeList())
 
@@ -30,11 +31,17 @@ function generateEventTypeOptions(eventTypes: any[]) {
   return options;
 }
 
+async function handleClose(eventName: string, eventDescription: string, startDateTime: Date, endDateTime: Date, eventTypeId: number) {
+  await makeEvent(eventName, eventDescription, startDateTime, endDateTime, eventTypeId);
+}
+
 export default function CreateEventModal() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [startDateTime, setStartDateTime] = useState(new Date());
     const [endDateTime, setEndDateTime] = useState(new Date());
     const [eventName, setEventName] = useState('');
+    const [description, setDescription] = useState('')
+    const [eventTypeId, setEventTypeId] = useState(0);
     const[eventTypes, setEventTypes] = useState([{}]);
 
     useEffect(() => {
@@ -62,11 +69,25 @@ export default function CreateEventModal() {
                   placeholder='Name'
                   _placeholder={{ color: 'gray.100' }}
                   borderColor='gray.100'
+                  onChange={(e) => setEventName(e.target.value)}
+                 />
+              </VStack>
+              <VStack align="left">
+                <Text>Description:</Text>
+                <Input 
+                  placeholder='Description'
+                  _placeholder={{ color: 'gray.100' }}
+                  borderColor='gray.100'
+                  onChange={(e) => setDescription(e.target.value)}
                  />
               </VStack>
               <VStack align="left">
                 <Text>Label:</Text>
-                <Select _placeholder={{ color: 'gray.100' }} placeholder="Select Label...">
+                <Select 
+                  _placeholder={{ color: 'gray.100' }}
+                  placeholder="Select Label..."
+                  onChange={(e) => {setEventTypeId(parseInt(e.target.value))}}
+                >
                   {generateEventTypeOptions(eventTypes)}
                 </Select>
               </VStack>
@@ -81,10 +102,15 @@ export default function CreateEventModal() {
             </SimpleGrid>
           </ModalBody>
           <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
+            <Button variant="ghost" mr={3} onClick={() => {
+
+            }}>
               Close
             </Button>
-            <Button bgColor="orange" color="white">Create</Button>
+            <Button bgColor="orange" color="white" onClick={() => {
+              handleClose(eventName, description, startDateTime, endDateTime, eventTypeId);
+              onClose();
+            }}>Create</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
