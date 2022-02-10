@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly with Calendar selected 1`] = `
+exports[`hamburger menu renders correctly with Calendar selected 1`] = `
 <div
   className="chakra-stack css-84zodg"
 >
@@ -63,7 +63,7 @@ exports[`renders correctly with Calendar selected 1`] = `
 </div>
 `;
 
-exports[`renders correctly with Dashboard selected 1`] = `
+exports[`hamburger menu renders correctly with Dashboard selected 1`] = `
 <div
   className="chakra-stack css-84zodg"
 >
@@ -126,7 +126,7 @@ exports[`renders correctly with Dashboard selected 1`] = `
 </div>
 `;
 
-exports[`renders correctly with Members selected 1`] = `
+exports[`hamburger menu renders correctly with Members selected 1`] = `
 <div
   className="chakra-stack css-84zodg"
 >
@@ -189,7 +189,7 @@ exports[`renders correctly with Members selected 1`] = `
 </div>
 `;
 
-exports[`renders correctly with My Account selected 1`] = `
+exports[`hamburger menu renders correctly with My Account selected 1`] = `
 <div
   className="chakra-stack css-84zodg"
 >
@@ -252,7 +252,7 @@ exports[`renders correctly with My Account selected 1`] = `
 </div>
 `;
 
-exports[`renders correctly with no page selected 1`] = `
+exports[`hamburger menu renders correctly with no page selected 1`] = `
 <div
   className="chakra-stack css-84zodg"
 >
