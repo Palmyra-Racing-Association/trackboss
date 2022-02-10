@@ -3,7 +3,13 @@ import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
 import pool from './pool';
-import { Membership, PatchMembershipRequest, PostNewMembershipRequest } from '../typedefs/membership';
+import {
+    Membership,
+    PatchMembershipRequest,
+    PostNewMembershipRequest,
+    PostRegisterMembershipRequest,
+    Registration,
+} from '../typedefs/membership';
 
 // Map the API values for the membership statuses to the DB values
 const MEMBERSHIP_STATUS_MAP = new Map([
@@ -18,6 +24,13 @@ export const INSERT_MEMBERSHIP_SQL = 'INSERT INTO membership (membership_admin_i
     'view_online, renewal_sent, year_joined, address, city, state, zip, last_modified_date, last_modified_by) ' +
     'VALUES (?, "Active", 0, 1, 0, ?, ?, ?, ?, ?, CURDATE(), ?)';
 export const PATCH_MEMBERSHIP_SQL = 'CALL sp_patch_membership(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+export const REGISTERED_MEMBER_ID_OUT = '@member_id';
+export const REGISTERED_MEMBERSHIP_ID_OUT = '@membership_id';
+export const REGISTER_MEMBERSHIP_SQL = 'CALL sp_patch_membership(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ' +
+    `${REGISTERED_MEMBER_ID_OUT}, ${REGISTERED_MEMBERSHIP_ID_OUT})`;
+export const GET_REGISTERED_MEMBER_ID_SQL = `SELECT ${REGISTERED_MEMBER_ID_OUT}`;
+export const GET_REGISTRATION_SQL = 'SELECT member_type, first_name, last_name, phone_number, occupation, email, ' +
+    'birthdate, address, city, state, zip FROM v_registration WHERE member_id = ?';
 
 export async function insertMembership(req: PostNewMembershipRequest): Promise<number> {
     const values = [
@@ -158,4 +171,76 @@ export async function patchMembership(id: number, req: PatchMembershipRequest): 
     if (result.affectedRows < 1) {
         throw new Error('not found');
     }
+}
+
+export async function registerMembership(req: PostRegisterMembershipRequest): Promise<number> {
+    const values = [
+        req.memberTypeId,
+        req.firstName,
+        req.lastName,
+        req.phoneNumber,
+        req.occupation,
+        req.email,
+        req.birthdate,
+        req.address,
+        req.city,
+        req.state,
+        req.zip,
+    ];
+
+    try {
+        await pool.query<OkPacket>(REGISTER_MEMBERSHIP_SQL, values);
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error registering membership in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error registering membership: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
+    }
+
+    let results;
+    try {
+        [results] = await pool.query<RowDataPacket[]>(GET_REGISTERED_MEMBER_ID_SQL);
+    } catch (e) {
+        logger.error(`DB error getting member ID after registration: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    return results[0][REGISTERED_MEMBER_ID_OUT];
+}
+
+export async function getRegistration(memberId: number): Promise<Registration> {
+    let results;
+    try {
+        [results] = await pool.query<RowDataPacket[]>(GET_REGISTRATION_SQL, [memberId]);
+    } catch (e) {
+        logger.error(`DB error getting registration: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (_.isEmpty(results)) {
+        throw new Error('not found');
+    }
+
+    return {
+        memberType: results[0].member_type,
+        firstName: results[0].first_name,
+        lastName: results[0].last_name,
+        phoneNumber: results[0].phone_number,
+        occupation: results[0].occupation,
+        email: results[0].email,
+        birthdate: results[0].birthdate,
+        address: results[0].address,
+        city: results[0].city,
+        state: results[0].state,
+        zip: results[0].zip,
+    };
 }
