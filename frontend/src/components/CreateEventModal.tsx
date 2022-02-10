@@ -55,7 +55,7 @@ export default function CreateEventModal() {
 
   return (
     <div>
-      <Button  background="orange.300" color="white" onClick={onOpen}>Create New Event</Button>
+      <Button  ml={20} mt={5} mb={3} background="orange.300" color="white" onClick={onOpen}>Create New Event</Button>
       <Modal size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
