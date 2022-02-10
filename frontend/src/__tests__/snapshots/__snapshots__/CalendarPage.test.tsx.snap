@@ -84,7 +84,20 @@ Array [
     </div>
   </div>,
   <div
-    className="css-1auf30x"
+    className="css-soevlb"
+  >
+    <div>
+      <button
+        className="chakra-button css-1igmqd6"
+        onClick={[Function]}
+        type="button"
+      >
+        Create New Event
+      </button>
+    </div>
+  </div>,
+  <div
+    className="css-1qqmsec"
   >
     <EventCalendar
       events={
