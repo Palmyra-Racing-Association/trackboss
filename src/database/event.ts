@@ -6,10 +6,11 @@ import pool from './pool';
 import { Event, PatchEventRequest, PostNewEventRequest } from '../typedefs/event';
 
 export const INSERT_EVENT_SQL = 'CALL sp_event_job_generation(?, ?, ?, ?)';
-export const GET_EVENT_SQL = 'SELECT * FROM v_event WHERE event_id = ?';
-export const GET_EVENT_LIST_SQL = `${GET_EVENT_SQL} WHERE date > ? AND date < ?`;
-export const PATCH_EVENT_SQL = '';
-export const DELETE_EVENT_SQL = '';
+export const GET_EVENT_LIST_SQL = 'SELECT * FROM v_event';
+export const GET_EVENT_LIST_DATERANGE_SQL = `${GET_EVENT_LIST_SQL} WHERE date > ? AND date < ?`;
+export const GET_EVENT_SQL = `${GET_EVENT_LIST_SQL} WHERE event_id = ?`;
+export const PATCH_EVENT_SQL = 'CALL sp_patch_event(?, ?, ?, ?)';
+export const DELETE_EVENT_SQL = 'CALL sp_delete_event(?)';
 
 export async function insertEvent(req: PostNewEventRequest): Promise<number> {
     const values = [req.date, req.eventTypeId, req.eventName, req.eventDescription];
@@ -25,12 +26,24 @@ export async function insertEvent(req: PostNewEventRequest): Promise<number> {
     return result.insertId;
 }
 
-export async function getEventList(dateRange?: string): Promise<Event[]> {
+export async function getEventList(startDate?: string, endDate?: string): Promise<Event[]> {
     let sql;
     let values: string[];
-    if (typeof dateRange !== 'undefined') {
-        sql = GET_EVENT_LIST_SQL;
-        values = [dateRange];
+    let sDate: string;
+    let eDate: string;
+    if (typeof startDate !== 'undefined' || typeof endDate !== 'undefined') {
+        if (typeof startDate !== 'undefined') {
+            sDate = startDate;
+        } else {
+            sDate = '1990-01-01';
+        }
+        if (typeof endDate !== 'undefined') {
+            eDate = endDate;
+        } else {
+            eDate = '2999-01-01';
+        }
+        sql = GET_EVENT_LIST_DATERANGE_SQL;
+        values = [sDate, eDate];
     } else {
         sql = GET_EVENT_LIST_SQL;
         values = [];
@@ -79,7 +92,6 @@ export async function getEvent(id: number): Promise<Event> {
 
 export async function patchEvent(id: number, req: PatchEventRequest): Promise<void> {
     const values = [id, req.date, req.eventName, req.eventDescription];
-    // I dont think we should allow changing of event types?
 
     let result;
     try {
