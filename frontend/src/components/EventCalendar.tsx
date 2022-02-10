@@ -1,8 +1,9 @@
 import React from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import { Calendar, DateLocalizer, momentLocalizer } from 'react-big-calendar';
 import { Text, Flex, Spacer } from '@chakra-ui/react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import moment from 'moment';
+
 // import Event from '../../../src/typedefs/event';
 
 const Toolbar = require('react-big-calendar/lib/Toolbar');
@@ -13,8 +14,9 @@ interface EventCalendarProps {
     events: any[],
 }
 
+const localizer: DateLocalizer = momentLocalizer(moment);
+
 function EventCalendar(props: EventCalendarProps) {
-    const localizer = momentLocalizer(moment);
     return (
         <Calendar
             defaultView="month"

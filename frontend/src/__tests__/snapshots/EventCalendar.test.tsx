@@ -1,6 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
+import { Calendar, momentLocalizer, DateLocalizer } from 'react-big-calendar';
+import moment from 'moment';
 import EventCalendar from '../../components/EventCalendar';
 
 const upcomingEvents = [
@@ -12,7 +15,9 @@ const upcomingEvents = [
     },
 ];
 
-jest.mock('react-big-calendar', () => 'BigCalendar');
+jest.mock('react-big-calendar', () => 'Calendar');
+jest.mock('react-big-calendar', () => 'momentLocalizer');
+// jest.mock('react-big-calendar', () => ({ momentLocalizer: jest.fn(() => DateLocalizer) }));
 
 it('renders correctly', () => {
     const workPointsCard = renderer.create(
