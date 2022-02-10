@@ -2,7 +2,6 @@
 /* eslint-disable import/no-duplicates */
 import React, { useState, useEffect } from 'react';
 import { ChakraProvider, Box } from '@chakra-ui/react';
-// import { Event } from 'react-big-calendar';
 import EventCalendar from '../components/EventCalendar';
 import Header from '../components/Header';
 import theme from '../theme';
