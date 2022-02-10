@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -17,15 +17,38 @@ import {
     VStack,
     Select,
   } from '@chakra-ui/react';
-  import DateTimePicker from 'react-datetime-picker';
+import DateTimePicker from 'react-datetime-picker';
+import { getMockedEventTypeList } from '../controller/eventType';
+ //TODO: Replace this with non-mocked function (getEventTypeList())
+
+function generateEventTypeOptions(eventTypes: any[]) {
+  let options: any[] = [];
+  console.debug(eventTypes.length)
+  for(let i = 0; i < (eventTypes).length; i++) {
+    options.push(<option key={i} value={eventTypes[i].eventTypeId}>{eventTypes[i].type}</option>)
+  }
+  return options;
+}
 
 export default function CreateEventModal() {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [startDateTime, setStartDateTime] = useState(new Date());
     const [endDateTime, setEndDateTime] = useState(new Date());
+    const [eventName, setEventName] = useState('');
+    const[eventTypes, setEventTypes] = useState([{}]);
+
+    useEffect(() => {
+      async function getData() {
+          const types = await getMockedEventTypeList();
+          setEventTypes(types);
+      }
+      getData();
+    }, []);
+
+
   return (
     <div>
-      <Button onClick={onOpen}>Create New Event</Button>
+      <Button  background="orange.300" color="white" onClick={onOpen}>Create New Event</Button>
       <Modal size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -44,9 +67,7 @@ export default function CreateEventModal() {
               <VStack align="left">
                 <Text>Label:</Text>
                 <Select _placeholder={{ color: 'gray.100' }} placeholder="Select Label...">
-                  <option value="Race">Race</option>
-                  <option value="Meeting">Meeting</option>
-                  <option value="Job">Job</option>
+                  {generateEventTypeOptions(eventTypes)}
                 </Select>
               </VStack>
               <VStack align="left">
