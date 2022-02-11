@@ -2160,9 +2160,6 @@ paths:
         - boardMember
       summary: Update this board member
       description: >
-        The `boardMemberId` path parameter can either be a database ID or a
-        Cognito-provided UUID.
-        <br><br>
         The request body needs only contain the fields with data to be updated.
         If data in a field should not be updated, that field can be omitted from
         the request body.
@@ -2251,7 +2248,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/boardMember"
+                $ref: "#/components/schemas/boardMemberType"
         400:
           $ref: "#/components/responses/badRequestError"
         401:
