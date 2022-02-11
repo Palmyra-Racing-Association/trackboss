@@ -2141,9 +2141,6 @@ paths:
         - boardMember
       summary: Get this board member
       description: >
-        The `boardMemberId` path parameter can either be a database ID or a
-        Cognito-provided UUID.
-        <br><br>
         This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
       responses:
         200:
