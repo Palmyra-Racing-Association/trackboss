@@ -12,9 +12,11 @@ CREATE VIEW `v_membership` AS
         ms.state,
         ms.zip,
         DATE_FORMAT(ms.last_modified_date, '%Y-%m-%d') AS last_modified_date,
-        ms.last_modified_by
+        CONCAT(lmb.first_name, ' ', lmb.last_name) AS last_modified_by
     FROM
         membership ms
             LEFT JOIN
         member ma ON ms.membership_admin_id = ma.member_id
+            LEFT JOIN
+        member lmb ON ms.last_modified_by = lmb.member_id
 //

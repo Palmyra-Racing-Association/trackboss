@@ -111,7 +111,7 @@ describe('getMembership()', () => {
             'NT',
             '11111',
             '2022-02-08',
-            42,
+            'modifier',
         ];
 
         const result = await getMembership(membershipId);

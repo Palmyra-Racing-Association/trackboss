@@ -60,7 +60,7 @@ export function getMembershipResponse(id: number) {
                 state: 'NT',
                 zip: '11111',
                 last_modified_date: '2022-02-08',
-                last_modified_by: 42,
+                last_modified_by: 'modifier',
             }]]);
         case 765:
             return Promise.resolve([[]]);
