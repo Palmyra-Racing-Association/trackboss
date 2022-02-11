@@ -1,0 +1,193 @@
+import { deleteEvent, getEvent, insertEvent, patchEvent } from '../../../database/event';
+import { PatchEventRequest } from 'src/typedefs/event';
+import { getMember, getMemberList, insertMember, patchMember } from '../../../database/member';
+import mockQuery from './mockQuery';
+
+describe('insertEvent()', () => {
+    it('Inserts a single event', async () => {
+        const request = { date: '2020-05-05', eventName: 'test event', eventTypeId: 2, eventDescription: 'test' };
+        const result = await insertEvent(request);
+        expect(result).toBe(321);
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for user error', async () => {
+        const request = { date: '2020-05-05', eventName: '1452', eventTypeId: 2, eventDescription: 'test' };
+        await expect(insertEvent(request)).rejects.toThrow('user input error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error', async () => {
+        const request = { date: '2020-05-05', eventName: '-100', eventTypeId: 2, eventDescription: 'test' };
+        await expect(insertEvent(request)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws unreachable error without errno field', async () => {
+        const request = { date: '2020-05-05', eventName: '-200', eventTypeId: 2, eventDescription: 'test' };
+        await expect(insertEvent(request)).rejects.toThrow('this error should not happen');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+// describe('getMemberList()', () => {
+//     it('Returns an unfiltered list of members', async () => {
+//         const results = await getMemberList();
+//         expect(mockQuery).toHaveBeenCalled();
+//         expect(results.length).toBeGreaterThan(1);
+//     });
+
+//     it('Returns a filtered list of admins', async () => {
+//         const type = 'admin';
+//         const expResultType = 'Admin';
+
+//         const results = await getMemberList(type);
+//         expect(mockQuery).toHaveBeenCalled();
+//         results.forEach((result) => {
+//             expect(result.memberType).toBe(expResultType);
+//         });
+//     });
+
+//     it('Returns a filtered list of membership admins', async () => {
+//         const type = 'membershipAdmin';
+//         const expResultType = 'Membership Admin';
+
+//         const results = await getMemberList(type);
+//         expect(mockQuery).toHaveBeenCalled();
+//         results.forEach((result) => {
+//             expect(result.memberType).toBe(expResultType);
+//         });
+//     });
+
+//     it('Returns a filtered list of members', async () => {
+//         const type = 'member';
+//         const expResultType = 'Member';
+
+//         const results = await getMemberList(type);
+//         expect(mockQuery).toHaveBeenCalled();
+//         results.forEach((result) => {
+//             expect(result.memberType).toBe(expResultType);
+//         });
+//     });
+
+//     it('Returns a filtered list of paid laborers', async () => {
+//         const type = 'paidLaborer';
+//         const expResultType = 'Paid Laborer';
+
+//         const results = await getMemberList(type);
+//         expect(mockQuery).toHaveBeenCalled();
+//         results.forEach((result) => {
+//             expect(result.memberType).toBe(expResultType);
+//         });
+//     });
+
+//     it('Returns an empty list of members without error', async () => {
+//         const type = 'notARealType';
+//         const results = await getMemberList(type);
+//         expect(mockQuery).toHaveBeenCalled();
+//         expect(results.length).toBe(0);
+//     });
+
+//     it('Throws for internal server error', async () => {
+//         const type = 'ise';
+//         await expect(getMemberList(type)).rejects.toThrow('internal server error');
+//         expect(mockQuery).toHaveBeenCalled();
+//     });
+// });
+
+describe('getEvent()', () => {
+    it('Selects a single event', async () => {
+        const eventId = 10;
+        const origValues = [
+            10,
+            '2000-01-01',
+            2,
+            'Test',
+            'test desc',
+        ];
+        const result = await getEvent(eventId);
+        expect(mockQuery).toHaveBeenCalled();
+        expect(result.eventId).toBe(eventId);
+        // expect(result.eventType).toBe(origValues[1]);
+        expect(result.date).toBe(origValues[1]);
+        expect(result.eventName).toBe(origValues[3]);
+        expect(result.eventDescription).toBe(origValues[4]);
+    });
+
+    it('Throws for member not found', async () => {
+        const eventId = 765;
+        await expect(getEvent(eventId)).rejects.toThrow('not found');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error', async () => {
+        const eventId = -100;
+        await expect(getEvent(eventId)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('patchEvent()', () => {
+    const testPatchWithObject = async (req: PatchEventRequest) => {
+        const eventId = 42;
+        // no error means success
+        await patchEvent(eventId, req);
+        expect(mockQuery).toHaveBeenCalled();
+    };
+
+    it('Patches an event with date field', async () => {
+        await testPatchWithObject({ date: '2022-02-05' });
+    });
+
+    it('Patches an event with name field', async () => {
+        await testPatchWithObject({ eventName: 'test test' });
+    });
+
+    it('Patches an event with description field', async () => {
+        await testPatchWithObject({ eventDescription: 'testerville' });
+    });
+
+    it('Throws for user error', async () => {
+        const eventId = 1451;
+        await expect(patchEvent(eventId, { })).rejects.toThrow('user input error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for member not found', async () => {
+        const eventId = 3000;
+        await expect(patchEvent(eventId, { })).rejects.toThrow('not found');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error', async () => {
+        const eventId = -100;
+        await expect(patchEvent(eventId, { })).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws unreachable error without errno field', async () => {
+        const eventId = -200;
+        await expect(patchEvent(eventId, { })).rejects.toThrow('this error should not happen');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('deleteEvent()', () => {
+    it('deletes a single event', async () => {
+        const eventId = 50;
+        await deleteEvent(eventId);
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for user error', async () => {
+        const eventId = 5000;
+        await expect(deleteEvent(eventId)).rejects.toThrow('not found');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error', async () => {
+        const eventId = -100;
+        await expect(deleteEvent(eventId)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});

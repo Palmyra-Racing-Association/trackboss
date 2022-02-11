@@ -113,4 +113,9 @@ describe('sp_patch_bike()', () => {
         const [result] = await pool.query<OkPacket>(sql, values);
         expect(result.affectedRows).toBe(0);
     });
+
+    // need tests for
+    // moving the jobs days linked to event?
+    // sp_delete
+    // sp_event_job_gen
 });

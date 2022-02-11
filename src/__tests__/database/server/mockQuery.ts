@@ -15,10 +15,19 @@ import {
     INSERT_MEMBER_SQL,
     PATCH_MEMBER_SQL,
 } from '../../../database/member';
+import {
+    GET_EVENT_SQL,
+    GET_EVENT_LIST_SQL,
+    GET_EVENT_LIST_DATERANGE_SQL,
+    INSERT_EVENT_SQL,
+    PATCH_EVENT_SQL,
+    DELETE_EVENT_SQL,
+} from '../../../database/event';
 import { GET_WORK_POINTS_BY_MEMBERSHIP_SQL, GET_WORK_POINTS_BY_MEMBER_SQL } from '../../../database/workPoints';
 import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
 import * as memberHelpers from './mockHelpers/member';
+import * as eventHelpers from './mockHelpers/event';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 
 const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {
@@ -47,6 +56,17 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
             return getWorkPointsByMemberResponse(values);
         case GET_WORK_POINTS_BY_MEMBERSHIP_SQL:
             return getWorkPointsByMembershipResponse(values);
+        case GET_EVENT_SQL:
+            return eventHelpers.getEventResponse(values[0]);
+        case GET_EVENT_LIST_DATERANGE_SQL:
+        case GET_EVENT_LIST_SQL:
+            return eventHelpers.getEventListResponse(values[0]);
+        case INSERT_EVENT_SQL:
+            return eventHelpers.insertEventResponse(values[2]);
+        case PATCH_EVENT_SQL:
+            return eventHelpers.patchEventResponse(values[0]);
+        case DELETE_EVENT_SQL:
+            return eventHelpers.deleteEventResponse(values[0]);
         default:
             return Promise.resolve();
     }

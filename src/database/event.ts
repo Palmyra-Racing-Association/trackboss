@@ -18,9 +18,20 @@ export async function insertEvent(req: PostNewEventRequest): Promise<number> {
     let result;
     try {
         [result] = await pool.query<OkPacket>(INSERT_EVENT_SQL, values);
-    } catch (e) {
-        logger.error(`DB error inserting event: ${e}`);
-        throw new Error('internal server error');
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error inserting event in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error inserting event: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
     }
 
     return result.insertId;
@@ -96,9 +107,21 @@ export async function patchEvent(id: number, req: PatchEventRequest): Promise<vo
     let result;
     try {
         [result] = await pool.query<OkPacket>(PATCH_EVENT_SQL, values);
-    } catch (e) {
-        logger.error(`DB error patching bike: ${e}`);
-        throw new Error('internal server error');
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1451: // FK violation - referenced somewhere else
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error patching event in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error patching event: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
     }
 
     if (result.affectedRows < 1) {
