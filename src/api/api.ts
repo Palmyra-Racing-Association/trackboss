@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import bike from './bike';
 import billing from './billing';
+import boardMember from './boardMember';
+import boardMemberType from './boardMemberType';
 import event from './event';
 import eventJob from './eventJob';
 import eventType from './eventType';
@@ -24,5 +26,7 @@ api.use('/jobType', jobType);
 api.use('/workPoints', workPoints);
 api.use('/eventJob', eventJob);
 api.use('/billing', billing);
+api.use('/boardMember', boardMember);
+api.use('/boardMemberType', boardMemberType);
 
 export default api;
