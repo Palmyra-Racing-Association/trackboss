@@ -340,6 +340,8 @@ components:
           $ref: "#/components/schemas/string"
         year:
           $ref: "#/components/schemas/integer"
+        memberId:
+          $ref: "#/components/schemas/integer"
 security:
   - BearerAuth: [] 
 paths:
@@ -2164,9 +2166,7 @@ paths:
           application/json:
             schema:
               type: object
-              required:
-                - modifiedBy
-              minProperties: 2
+              minProperties: 1
               additionalProperties: false
               properties:
                 boardMemberTitleId:
@@ -2176,9 +2176,7 @@ paths:
                 memberId:
                   $ref: "#/components/schemas/integer"
             example:
-              email: newemail@gmail.com
-              phoneNumber: 585-123-4567
-              modifiedBy: 42
+              year: 2021
       responses:
         200:
           description: OK
