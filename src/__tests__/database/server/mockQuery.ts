@@ -26,12 +26,7 @@ import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
 import * as memberHelpers from './mockHelpers/member';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
-import {
-    getEventTypeResponse,
-    getEventTypeListResponse,
-    insertEventTypeResponse,
-    patchEventTypeResponse,
-} from './mockHelpers/eventType';
+import * as eventTypeHelpers from './mockHelpers/eventType';
 
 const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
@@ -60,13 +55,13 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
         case GET_WORK_POINTS_BY_MEMBERSHIP_SQL:
             return getWorkPointsByMembershipResponse(values);
         case GET_EVENT_TYPE_SQL:
-            return getEventTypeResponse(values[0]);
+            return eventTypeHelpers.getEventTypeResponse(values[0]);
         case GET_EVENT_TYPE_LIST_SQL:
-            return getEventTypeListResponse();
+            return eventTypeHelpers.getEventTypeListResponse();
         case INSERT_EVENT_TYPE_SQL:
-            return insertEventTypeResponse(values[0]);
+            return eventTypeHelpers.insertEventTypeResponse(values[0]);
         case PATCH_EVENT_TYPE_SQL:
-            return patchEventTypeResponse(values[0]);
+            return eventTypeHelpers.patchEventTypeResponse(values[0]);
         default:
             return Promise.resolve();
     }
