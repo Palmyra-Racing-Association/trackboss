@@ -2,7 +2,7 @@ DELIMITER //
 CREATE VIEW `v_registration` AS
     SELECT 
         m.member_id,
-        mt.type as member_type,
+        mt.type AS member_type,
         m.first_name,
         m.last_name,
         m.phone_number,
@@ -12,7 +12,7 @@ CREATE VIEW `v_registration` AS
         ms.address,
         ms.city,
         ms.state,
-        ms.zip,
+        ms.zip
     FROM
         member m
             LEFT JOIN
