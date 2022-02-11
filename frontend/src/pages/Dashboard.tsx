@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Button, Center, ChakraProvider, HStack, VStack } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { Center, ChakraProvider, HStack, VStack } from '@chakra-ui/react';
 import theme from '../theme';
 import Header from '../components/Header';
 import WorkPointsCard from '../components/WorkPointsCard';
@@ -10,7 +10,6 @@ import { Event } from '../../../src/typedefs/event';
 import { getWorkPointsPercentage } from '../controller/workPoints';
 import GreetingText from '../components/GreetingText';
 import { getName } from '../controller/member';
-import { UserContext } from '../contexts/UserContext';
 
 async function getUpcomingEventDataLocal(): Promise<any> {
     const props = await getUpcomingEventData();
@@ -31,8 +30,6 @@ function Dashboard() {
     const [nextEvent, setNextEvent] = useState<Event | null >(null);
     const [percent, setPercent] = useState(0);
     const [memberName, setMemberName] = useState('');
-    const { state, update } = useContext(UserContext);
-    console.log(state);
     useEffect(() => {
         async function getData() {
             const per = await getWorkPointsPercentageLocal();
@@ -64,9 +61,6 @@ function Dashboard() {
                             )
                         }
                         <ImportantLinksCard />
-                        <Button active onClick={() => update({ loggedIn: true, token: 'test' })}>
-                            Log In
-                        </Button>
                     </HStack>
                 </Center>
             </VStack>
