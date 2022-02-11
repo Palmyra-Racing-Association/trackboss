@@ -35,7 +35,7 @@ describe('insertEventType()', () => {
 describe('getEventType()', () => {
     it('Selects a single event type', async () => {
         const eventTypeId = 8;
-        const origValues = [eventTypeId, 'Camp and Ride', '1/1/2020', 2, 1];
+        const origValues = [eventTypeId, 'Camp and Ride', '1/1/2020', 2, 'Isobel Jennery'];
         const result = await getEventType(eventTypeId);
         expect(mockQuery).toHaveBeenCalled();
         expect(result.eventTypeId).toBe(eventTypeId);
