@@ -18,8 +18,11 @@ import {
     GET_MEMBERSHIP_LIST_BY_STATUS_SQL,
     GET_MEMBERSHIP_LIST_SQL,
     GET_MEMBERSHIP_SQL,
+    GET_REGISTERED_MEMBER_ID_SQL,
+    GET_REGISTRATION_SQL,
     INSERT_MEMBERSHIP_SQL,
     PATCH_MEMBERSHIP_SQL,
+    REGISTER_MEMBERSHIP_SQL,
 } from '../../../database/membership';
 import { GET_WORK_POINTS_BY_MEMBERSHIP_SQL, GET_WORK_POINTS_BY_MEMBER_SQL } from '../../../database/workPoints';
 import {
@@ -36,7 +39,7 @@ import * as membershipHelpers from './mockHelpers/membership';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 import * as eventTypeHelpers from './mockHelpers/eventType';
 
-const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {
+const mockQuery = jest.spyOn(pool, 'query').mockImplementation(async (sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
         case INSERT_BIKE_SQL:
             return bikeHelpers.insertBikeResponse(values[0]);
@@ -67,6 +70,12 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
             return membershipHelpers.getMembershipResponse(values[0]);
         case PATCH_MEMBERSHIP_SQL:
             return membershipHelpers.patchMembershipResponse(values[0]);
+        case REGISTER_MEMBERSHIP_SQL:
+            return membershipHelpers.registerMembershipResponse(values[0]);
+        case GET_REGISTERED_MEMBER_ID_SQL:
+            return membershipHelpers.getRegisteredMemberIdResponse();
+        case GET_REGISTRATION_SQL:
+            return membershipHelpers.getRegistrationResponse(values[0]);
         case GET_WORK_POINTS_BY_MEMBER_SQL:
             return getWorkPointsByMemberResponse(values);
         case GET_WORK_POINTS_BY_MEMBERSHIP_SQL:

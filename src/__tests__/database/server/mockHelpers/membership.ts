@@ -1,7 +1,19 @@
+/* eslint-disable no-await-in-loop */
+// This rule assumes I'm trying to do multiple async tasks at once, meaning
+// awaits in a loop would be inefficient. I do not want to do that here - I just
+// want to poll registeredMemberIdRead, and I want to wait a bit between each
+// poll.
+
 /* eslint-disable no-throw-literal */
 // ESLint doesn't like `throw { errno: # }` since it's not throwing an error, but for a
 // mock, that is sufficient because we only care about 'errno' and it's easier than
 // instantiating an implementor of NodeJS.ErrnoException to get that field
+
+import { Mutex } from 'async-mutex';
+
+const registeredMemberIdReadMutex = new Mutex();
+let registeredMemberId: number;
+let registeredMemberIdRead = true;
 
 export function getMembershipListResponse(values: string[]) {
     const membershipList = [
@@ -86,6 +98,93 @@ export function patchMembershipResponse(id: number) {
             throw { errno: 0 };
         case -200:
             throw new Error('this error should not happen');
+        default:
+            return Promise.resolve();
+    }
+}
+
+export async function registerMembershipResponse(memberTypeId: number) {
+    switch (memberTypeId) {
+        case 42: {
+            let release = await registeredMemberIdReadMutex.acquire();
+            try {
+                while (!registeredMemberIdRead) {
+                    release();
+                    await new Promise((r) => setTimeout(r, 500));
+                    release = await registeredMemberIdReadMutex.acquire();
+                }
+                registeredMemberId = 321;
+                registeredMemberIdRead = false;
+            } finally {
+                release();
+            }
+            return Promise.resolve();
+        }
+        case 1452:
+            throw { errno: 1452 };
+        case -100:
+            throw { errno: 0 };
+        case -101: {
+            let release = await registeredMemberIdReadMutex.acquire();
+            try {
+                while (!registeredMemberIdRead) {
+                    release();
+                    await new Promise((r) => setTimeout(r, 500));
+                    release = await registeredMemberIdReadMutex.acquire();
+                }
+                registeredMemberId = -101;
+                registeredMemberIdRead = false;
+            } finally {
+                release();
+            }
+            return Promise.resolve();
+        }
+        case -200:
+            throw new Error('this error should not happen');
+        default:
+            return Promise.resolve();
+    }
+}
+
+export async function getRegisteredMemberIdResponse() {
+    let release = await registeredMemberIdReadMutex.acquire();
+    try {
+        while (registeredMemberIdRead) {
+            release();
+            await new Promise((r) => setTimeout(r, 500));
+            release = await registeredMemberIdReadMutex.acquire();
+        }
+        if (registeredMemberId === -101) {
+            throw new Error('internal server error');
+        }
+        return Promise.resolve([[{ '@member_id': registeredMemberId }]]);
+    } finally {
+        registeredMemberIdRead = true;
+        release();
+    }
+}
+
+export function getRegistrationResponse(memberId: number) {
+    switch (memberId) {
+        case 18:
+            return Promise.resolve([[{
+                memberId,
+                memberType: 'member',
+                firstName: 'Testy',
+                lastName: 'Testington',
+                phoneNumber: '123-456-7890',
+                occupation: 'Involuntary Testing Entity',
+                email: 'em@il.com',
+                birthdate: '2022-02-08',
+                address: '1 Test St',
+                city: 'Rotester',
+                state: 'NT',
+                zip: '11111',
+            }]]);
+        case 765:
+            return Promise.resolve([[]]);
+        case -100:
+            throw new Error('error message');
         default:
             return Promise.resolve();
     }

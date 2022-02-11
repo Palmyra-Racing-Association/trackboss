@@ -1,5 +1,14 @@
+import _ from 'lodash';
+
 import { PatchMembershipRequest } from 'src/typedefs/membership';
-import { getMembership, getMembershipList, insertMembership, patchMembership } from '../../../database/membership';
+import {
+    getMembership,
+    getMembershipList,
+    getRegistration,
+    insertMembership,
+    patchMembership,
+    registerMembership,
+} from '../../../database/membership';
 import mockQuery from './mockQuery';
 
 describe('insertMembership()', () => {
@@ -199,6 +208,80 @@ describe('patchMembership()', () => {
     it('Throws unreachable error without errno field', async () => {
         const membershipId = -200;
         await expect(patchMembership(membershipId, { modifiedBy: 0 })).rejects.toThrow('this error should not happen');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('registerMembership()', () => {
+    it('Registers a single membership', async () => {
+        const request = { memberTypeId: 42 };
+
+        const result = await registerMembership(request);
+        expect(result).toBe(321);
+        expect(mockQuery).toHaveBeenCalledTimes(2);
+    });
+
+    it('Throws for user input error', async () => {
+        const request = { memberTypeId: 1452 };
+
+        await expect(registerMembership(request)).rejects.toThrow('user input error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error when registering', async () => {
+        const request = { memberTypeId: -100 };
+
+        await expect(registerMembership(request)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error when getting insert ID', async () => {
+        const request = { memberTypeId: -101 };
+
+        await expect(registerMembership(request)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalledTimes(2);
+    });
+
+    it('Throws unreachable error without errno field', async () => {
+        const request = { memberTypeId: -200 };
+
+        await expect(registerMembership(request)).rejects.toThrow('this error should not happen');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('getRegistration()', () => {
+    it('Selects a single registration', async () => {
+        const memberId = 18;
+        const expRegistration = {
+            memberId,
+            memberType: 'member',
+            firstName: 'Testy',
+            lastName: 'Testington',
+            phoneNumber: '123-456-7890',
+            occupation: 'Involuntary Testing Entity',
+            email: 'em@il.com',
+            birthdate: '2022-02-08',
+            address: '1 Test St',
+            city: 'Rotester',
+            state: 'NT',
+            zip: '11111',
+        };
+
+        const result = await getRegistration(memberId);
+        expect(mockQuery).toHaveBeenCalled();
+        expect(_.isEqual(result, expRegistration));
+    });
+
+    it('Throws for registration not found', async () => {
+        const registrationId = 765;
+        await expect(getRegistration(registrationId)).rejects.toThrow('not found');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error', async () => {
+        const registrationId = -100;
+        await expect(getRegistration(registrationId)).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 });
