@@ -6,7 +6,7 @@ import pool from './pool';
 import { Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
 
 // Map the API values for the member types to the DB values
-const MEMBER_TYPE_MAP = new Map([
+export const MEMBER_TYPE_MAP = new Map([
     ['admin', 'Admin'],
     ['membershipAdmin', 'Membership Admin'],
     ['member', 'Member'],
