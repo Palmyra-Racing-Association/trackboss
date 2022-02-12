@@ -75,7 +75,7 @@ describe('sp_patch_membership()', () => {
         const membershipId = 2;
         const [origValues] = await pool.query<RowDataPacket[]>(MEMBERSHIP_CHECK_SQL, [membershipId]);
 
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[1] = 24;
         values[10] = 42;
@@ -103,7 +103,7 @@ describe('sp_patch_membership()', () => {
         const membershipId = 3;
         const [origValues] = await pool.query<RowDataPacket[]>(MEMBERSHIP_CHECK_SQL, [membershipId]);
 
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[2] = 'Disabled';
         values[10] = 42;
@@ -131,7 +131,7 @@ describe('sp_patch_membership()', () => {
         const membershipId = 4;
         const [origValues] = await pool.query<RowDataPacket[]>(MEMBERSHIP_CHECK_SQL, [membershipId]);
 
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[3] = 1;
         values[10] = 42;
@@ -159,7 +159,7 @@ describe('sp_patch_membership()', () => {
         const membershipId = 5;
         const [origValues] = await pool.query<RowDataPacket[]>(MEMBERSHIP_CHECK_SQL, [membershipId]);
 
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[4] = 1;
         values[10] = 42;
@@ -187,7 +187,7 @@ describe('sp_patch_membership()', () => {
         const membershipId = 6;
         const [origValues] = await pool.query<RowDataPacket[]>(MEMBERSHIP_CHECK_SQL, [membershipId]);
 
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[5] = 2222;
         values[10] = 42;
@@ -215,7 +215,7 @@ describe('sp_patch_membership()', () => {
         const membershipId = 7;
         const [origValues] = await pool.query<RowDataPacket[]>(MEMBERSHIP_CHECK_SQL, [membershipId]);
 
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[6] = 'newAddress';
         values[10] = 42;
@@ -243,7 +243,7 @@ describe('sp_patch_membership()', () => {
         const membershipId = 8;
         const [origValues] = await pool.query<RowDataPacket[]>(MEMBERSHIP_CHECK_SQL, [membershipId]);
 
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[7] = 'newCity';
         values[10] = 42;
@@ -271,7 +271,7 @@ describe('sp_patch_membership()', () => {
         const membershipId = 9;
         const [origValues] = await pool.query<RowDataPacket[]>(MEMBERSHIP_CHECK_SQL, [membershipId]);
 
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[8] = 'newState';
         values[10] = 42;
@@ -299,7 +299,7 @@ describe('sp_patch_membership()', () => {
         const membershipId = 10;
         const [origValues] = await pool.query<RowDataPacket[]>(MEMBERSHIP_CHECK_SQL, [membershipId]);
 
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[9] = 'newZip';
         values[10] = 42;
@@ -325,7 +325,7 @@ describe('sp_patch_membership()', () => {
 
     it('Throws on improper user input', async () => {
         const membershipId = 13;
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = membershipId;
         values[10] = 0;
 
@@ -333,14 +333,14 @@ describe('sp_patch_membership()', () => {
     });
 
     it('Patches nothing without membershipId', async () => {
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
 
         const [result] = await pool.query<OkPacket>(PATCH_PROC_SQL, values);
         expect(result.affectedRows).toBe(0);
     });
 
     it('Patches nothing when membershipId not found', async () => {
-        const values = Array(13).fill(null);
+        const values = Array(11).fill(null);
         values[0] = 3000;
 
         const [result] = await pool.query<OkPacket>(PATCH_PROC_SQL, values);
