@@ -3,7 +3,7 @@
 // mock, that is sufficient because we only care about 'errno' and it's easier than
 // instantiating an implementor of NodeJS.ErrnoException to get that field
 
-export function getEventListResponse(values: number[]) {
+export function getEventListResponse(values: string[]) {
     const eventList = [
         {
             event_id: 10,
@@ -28,7 +28,10 @@ export function getEventListResponse(values: number[]) {
     if (values.length === 0) {
         return Promise.resolve([eventList]);
     }
-    return Promise.resolve([eventList]);
+    if (values[0] === '-100') {
+        throw new Error('error message');
+    }
+    return Promise.resolve([eventList.filter((event) => (event.date > values[0]) && (event.date < values[1]))]);
 }
 
 export function getEventResponse(id: number) {

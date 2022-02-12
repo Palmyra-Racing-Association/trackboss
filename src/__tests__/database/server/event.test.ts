@@ -1,6 +1,5 @@
-import { deleteEvent, getEvent, insertEvent, patchEvent } from '../../../database/event';
 import { PatchEventRequest } from 'src/typedefs/event';
-import { getMember, getMemberList, insertMember, patchMember } from '../../../database/member';
+import { deleteEvent, getEvent, getEventList, insertEvent, patchEvent } from '../../../database/event';
 import mockQuery from './mockQuery';
 
 describe('insertEvent()', () => {
@@ -30,70 +29,48 @@ describe('insertEvent()', () => {
     });
 });
 
-// describe('getMemberList()', () => {
-//     it('Returns an unfiltered list of members', async () => {
-//         const results = await getMemberList();
-//         expect(mockQuery).toHaveBeenCalled();
-//         expect(results.length).toBeGreaterThan(1);
-//     });
+describe('getEventList()', () => {
+    it('Returns an unfiltered list of events', async () => {
+        const results = await getEventList();
+        expect(mockQuery).toHaveBeenCalled();
+        expect(results.length).toBeGreaterThan(1);
+    });
 
-//     it('Returns a filtered list of admins', async () => {
-//         const type = 'admin';
-//         const expResultType = 'Admin';
+    it('Returns a filtered list of events on start time', async () => {
+        const start = '2002-01-01';
+        const results = await getEventList(start);
+        expect(mockQuery).toHaveBeenCalled();
+        expect(results.length).toBe(1);
+    });
 
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         results.forEach((result) => {
-//             expect(result.memberType).toBe(expResultType);
-//         });
-//     });
+    it('Returns a filtered list of events on end time', async () => {
+        const end = '2002-01-01';
+        const results = await getEventList(undefined, end);
+        expect(mockQuery).toHaveBeenCalled();
+        expect(results.length).toBe(2);
+    });
 
-//     it('Returns a filtered list of membership admins', async () => {
-//         const type = 'membershipAdmin';
-//         const expResultType = 'Membership Admin';
+    it('Returns a filtered list of events on start and end time', async () => {
+        const start = '2000-06-01';
+        const end = '2002-01-01';
+        const results = await getEventList(start, end);
+        expect(mockQuery).toHaveBeenCalled();
+        expect(results.length).toBe(1);
+    });
 
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         results.forEach((result) => {
-//             expect(result.memberType).toBe(expResultType);
-//         });
-//     });
+    it('Returns an empty list of events without error', async () => {
+        const start = '2060-01-01';
+        const results = await getEventList(start);
+        expect(mockQuery).toHaveBeenCalled();
+        expect(results.length).toBe(0);
+    });
 
-//     it('Returns a filtered list of members', async () => {
-//         const type = 'member';
-//         const expResultType = 'Member';
-
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         results.forEach((result) => {
-//             expect(result.memberType).toBe(expResultType);
-//         });
-//     });
-
-//     it('Returns a filtered list of paid laborers', async () => {
-//         const type = 'paidLaborer';
-//         const expResultType = 'Paid Laborer';
-
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         results.forEach((result) => {
-//             expect(result.memberType).toBe(expResultType);
-//         });
-//     });
-
-//     it('Returns an empty list of members without error', async () => {
-//         const type = 'notARealType';
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         expect(results.length).toBe(0);
-//     });
-
-//     it('Throws for internal server error', async () => {
-//         const type = 'ise';
-//         await expect(getMemberList(type)).rejects.toThrow('internal server error');
-//         expect(mockQuery).toHaveBeenCalled();
-//     });
-// });
+    it('Throws for internal server error', async () => {
+        const date = '-100';
+        await expect(getEventList(date)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
 
 describe('getEvent()', () => {
     it('Selects a single event', async () => {

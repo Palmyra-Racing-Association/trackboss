@@ -60,7 +60,7 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
             return eventHelpers.getEventResponse(values[0]);
         case GET_EVENT_LIST_DATERANGE_SQL:
         case GET_EVENT_LIST_SQL:
-            return eventHelpers.getEventListResponse(values[0]);
+            return eventHelpers.getEventListResponse(values);
         case INSERT_EVENT_SQL:
             return eventHelpers.insertEventResponse(values[2]);
         case PATCH_EVENT_SQL:
