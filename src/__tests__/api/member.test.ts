@@ -1,7 +1,7 @@
 import { Member } from 'src/typedefs/member';
 import supertest from 'supertest';
 import server from '../../server';
-import { memberList, mockGetMember, mockGetMemberList, mockInsertMember } from './mocks/member';
+import { memberList, mockGetMember, mockGetMemberList, mockInsertMember, mockPatchMember } from './mocks/member';
 
 const TAG_ROOT = '/api/member';
 
@@ -9,13 +9,6 @@ const supertestServer = supertest(server);
 
 afterAll((done) => {
     server.close(done);
-});
-
-describe('All unimplemented member endpoints are reachable', () => {
-    it('PATCH /member/:id is reachable', async () => {
-        const res = await supertestServer.patch(`${TAG_ROOT}/42`);
-        expect(res.status).toEqual(501);
-    });
 });
 
 describe('GET /member/list', () => {
@@ -122,5 +115,37 @@ describe('POST /member/new', () => {
         const member: Member = res.body;
         expect(member.memberId).toBe(memberList[memberList.length - 1].memberId);
         expect(member).toEqual(memberList[memberList.length - 1]);
+    });
+});
+
+describe('PATCH /member/:memberId', () => {
+    it('Returns 500 on internal server error', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/2`);
+        expect(mockPatchMember).toHaveBeenCalled();
+        expect(res.status).toBe(500);
+        expect(res.body.reason).toBe('internal server error');
+    });
+
+    it('Returns 400 on user input error', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/2`);
+        expect(mockPatchMember).toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('Successfully patches a member', async () => {
+        const res = await supertestServer
+            .patch(`${TAG_ROOT}/2`)
+            .send({ email: 'chan@kungfu.org' });
+        expect(res.status).toBe(200);
+        expect(res.body.memberId).toBe(2);
+        expect(res.body.email).toBe('chan@kungfu.org');
+    });
+
+    it('returns 404 when bad id is specified', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/17`);
+        expect(mockPatchMember).toHaveBeenCalled();
+        expect(res.status).toBe(404);
+        expect(res.body.reason).toBe('not found');
     });
 });

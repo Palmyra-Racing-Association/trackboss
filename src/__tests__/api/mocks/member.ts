@@ -1,6 +1,6 @@
-import _ from 'lodash';
+import _, { filter } from 'lodash';
 import * as member from '../../../database/member';
-import { Member, PostNewMemberRequest } from '../../../typedefs/member';
+import { Member, PatchMemberRequest, PostNewMemberRequest } from '../../../typedefs/member';
 
 export const memberList: Member[] = [
     {
@@ -135,4 +135,21 @@ export const mockGetMember = jest.spyOn(member, 'getMember').mockImplementationO
         throw new Error('not found');
     }
     return Promise.resolve(returnMemeber[0]);
+});
+
+export const mockPatchMember = jest.spyOn(member, 'patchMember').mockImplementationOnce((): Promise<void> => {
+    throw new Error('internal server error');
+}).mockImplementationOnce(async (): Promise<void> => {
+    throw new Error('user input error');
+}).mockImplementation(async (id: string, req: PatchMemberRequest): Promise<void> => {
+    // TODO: UUID CASE
+    const memberId = parseInt(id, 10);
+    const filtered = _.filter(memberList, (mem: Member) => mem.memberId === memberId);
+    if (filtered.length === 0) {
+        throw new Error('not found');
+    }
+    memberList[memberId] = {
+        ...memberList[memberId],
+        ...req,
+    };
 });

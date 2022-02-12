@@ -137,7 +137,7 @@ export async function getMember(id: string): Promise<Member> {
     };
 }
 
-export async function patchMember(id: number, req: PatchMemberRequest): Promise<void> {
+export async function patchMember(id: string, req: PatchMemberRequest): Promise<void> {
     const values = [
         id,
         req.membershipId,
