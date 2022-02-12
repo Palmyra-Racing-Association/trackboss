@@ -97,3 +97,16 @@ export const mockGetMemberList =
         }
         return Promise.resolve(members);
     });
+
+export const mockGetMember = jest.spyOn(member, 'getMember').mockImplementationOnce((): Promise<Member> => {
+    throw new Error('internal server error');
+}).mockImplementation((id: string): Promise<Member> => {
+    let returnMemeber: Member[] = [];
+    // TODO: UUID CASE
+    const memberId = parseInt(id, 10);
+    returnMemeber = _.filter(memberList, (mem: Member) => mem.memberId === memberId);
+    if (returnMemeber.length === 0) {
+        throw new Error('not found');
+    }
+    return Promise.resolve(returnMemeber[0]);
+});

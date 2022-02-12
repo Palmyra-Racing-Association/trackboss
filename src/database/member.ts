@@ -100,7 +100,7 @@ export async function getMemberList(type?: string): Promise<Member[]> {
     }));
 }
 
-export async function getMember(id: number): Promise<Member> {
+export async function getMember(id: string): Promise<Member> {
     const values = [id];
 
     let results;

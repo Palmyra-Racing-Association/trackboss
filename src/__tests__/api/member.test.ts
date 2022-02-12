@@ -1,7 +1,7 @@
 import { Member } from 'src/typedefs/member';
 import supertest from 'supertest';
 import server from '../../server';
-import { memberList, mockGetMemberList } from './mocks/member';
+import { memberList, mockGetMember, mockGetMemberList } from './mocks/member';
 
 const TAG_ROOT = '/api/member';
 
@@ -11,14 +11,16 @@ afterAll((done) => {
     server.close(done);
 });
 
+const testISE = async (path: string, mock: jest.SpyInstance) => {
+    const res = await supertestServer.get(`${TAG_ROOT}/${path}`);
+    expect(mock).toHaveBeenCalled();
+    expect(res.status).toBe(500);
+    expect(res.body.reason).toBe('internal server error');
+};
+
 describe('All unimplemented member endpoints are reachable', () => {
     it('POST /member/new is reachable', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`);
-        expect(res.status).toEqual(501);
-    });
-
-    it('GET /member/:id is reachable', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/42`);
         expect(res.status).toEqual(501);
     });
 
@@ -30,10 +32,7 @@ describe('All unimplemented member endpoints are reachable', () => {
 
 describe('GET /member/list', () => {
     it('Returns 500 on Internal Server Error', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/list`);
-        expect(mockGetMemberList).toHaveBeenCalled();
-        expect(res.status).toBe(500);
-        expect(res.body.reason).toBe('internal server error');
+        await testISE('list', mockGetMemberList);
     });
 
     it('Gets the unfiltered list', async () => {
@@ -79,5 +78,26 @@ describe('GET /member/list', () => {
         expect(mockGetMemberList).toHaveBeenCalledTimes(0);
         expect(res.status).toBe(400);
         expect(res.body.reason).toBe('invalid role specified');
+    });
+});
+
+describe('GET /member/:memberId', () => {
+    it('Returns 500 on Internal Server Error', async () => {
+        await testISE('3', mockGetMember);
+    });
+
+    it('GETs the correct member', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/2`);
+        expect(mockGetMember).toHaveBeenCalled();
+        expect(res.status).toBe(200);
+        const member: Member = res.body;
+        expect(member).toEqual(memberList[1]);
+    });
+
+    it('Returns 404 when no data found', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/7`);
+        expect(mockGetMember).toHaveBeenCalled();
+        expect(res.status).toBe(404);
+        expect(res.body.reason).toBe('not found');
     });
 });
