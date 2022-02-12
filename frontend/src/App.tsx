@@ -11,8 +11,9 @@ const App =() => {
     const { state, update } = useContext(UserContext);
     useEffect(() => {
         if (!state.loggedIn) {
-            const token = location.hash.split("#id_token=")[1]
-            if (token) {
+            const hash = location.hash.split("#id_token=")[1]
+            if (hash) {
+                const token = hash.split('&')[0]
                 console.log('logging in')
                 update({ loggedIn: true, token })
             } else {
