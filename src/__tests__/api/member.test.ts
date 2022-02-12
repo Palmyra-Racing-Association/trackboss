@@ -1,7 +1,7 @@
 import { Member } from 'src/typedefs/member';
 import supertest from 'supertest';
 import server from '../../server';
-import { memberList, mockGetMember, mockGetMemberList } from './mocks/member';
+import { memberList, mockGetMember, mockGetMemberList, mockInsertMember } from './mocks/member';
 
 const TAG_ROOT = '/api/member';
 
@@ -11,19 +11,7 @@ afterAll((done) => {
     server.close(done);
 });
 
-const testISE = async (path: string, mock: jest.SpyInstance) => {
-    const res = await supertestServer.get(`${TAG_ROOT}/${path}`);
-    expect(mock).toHaveBeenCalled();
-    expect(res.status).toBe(500);
-    expect(res.body.reason).toBe('internal server error');
-};
-
 describe('All unimplemented member endpoints are reachable', () => {
-    it('POST /member/new is reachable', async () => {
-        const res = await supertestServer.post(`${TAG_ROOT}/new`);
-        expect(res.status).toEqual(501);
-    });
-
     it('PATCH /member/:id is reachable', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/42`);
         expect(res.status).toEqual(501);
@@ -32,7 +20,10 @@ describe('All unimplemented member endpoints are reachable', () => {
 
 describe('GET /member/list', () => {
     it('Returns 500 on Internal Server Error', async () => {
-        await testISE('list', mockGetMemberList);
+        const res = await supertestServer.get(`${TAG_ROOT}/list`);
+        expect(mockGetMemberList).toHaveBeenCalled();
+        expect(res.status).toBe(500);
+        expect(res.body.reason).toBe('internal server error');
     });
 
     it('Gets the unfiltered list', async () => {
@@ -83,7 +74,10 @@ describe('GET /member/list', () => {
 
 describe('GET /member/:memberId', () => {
     it('Returns 500 on Internal Server Error', async () => {
-        await testISE('3', mockGetMember);
+        const res = await supertestServer.get(`${TAG_ROOT}/3`);
+        expect(mockGetMember).toHaveBeenCalled();
+        expect(res.status).toBe(500);
+        expect(res.body.reason).toBe('internal server error');
     });
 
     it('GETs the correct member', async () => {
@@ -91,7 +85,7 @@ describe('GET /member/:memberId', () => {
         expect(mockGetMember).toHaveBeenCalled();
         expect(res.status).toBe(200);
         const member: Member = res.body;
-        expect(member).toEqual(memberList[1]);
+        expect(member).toEqual(memberList[2]);
     });
 
     it('Returns 404 when no data found', async () => {
@@ -99,5 +93,34 @@ describe('GET /member/:memberId', () => {
         expect(mockGetMember).toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
+    });
+});
+
+describe('POST /member/new', () => {
+    it('Returns 500 on internal server error', async () => {
+        const res = await supertestServer.post(`${TAG_ROOT}/new`);
+        expect(mockInsertMember).toHaveBeenCalled();
+        expect(res.status).toBe(500);
+        expect(res.body.reason).toBe('internal server error');
+    });
+
+    it('successfully inserts a member', async () => {
+        const res = await supertestServer
+            .post(`${TAG_ROOT}/new`)
+            .send({
+                uuid: '54f',
+                firstName: 'Newton',
+                lastName: 'Member',
+                phoneNumber: '999-999-5264',
+                dateJoined: '2022-02-12',
+                birthdate: '1984-06-14',
+                occupation: 'Tester',
+                email: 'newton@codetesters.com',
+            });
+        expect(mockInsertMember).toHaveBeenCalled();
+        expect(res.status).toBe(201);
+        const member: Member = res.body;
+        expect(member.memberId).toBe(memberList[memberList.length - 1].memberId);
+        expect(member).toEqual(memberList[memberList.length - 1]);
     });
 });

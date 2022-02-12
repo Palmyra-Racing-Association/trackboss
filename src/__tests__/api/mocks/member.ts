@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import * as member from '../../../database/member';
-import { Member } from '../../../typedefs/member';
+import { Member, PostNewMemberRequest } from '../../../typedefs/member';
 
 export const memberList: Member[] = [
     {
-        memberId: 1,
+        memberId: 0,
         membershipAdmin: 'Joe Blow',
         uuid: '7b',
         active: true,
@@ -24,7 +24,7 @@ export const memberList: Member[] = [
         lastModifiedBy: 'Joe Blow',
     },
     {
-        memberId: 2,
+        memberId: 1,
         membershipAdmin: 'Guy Fieri',
         uuid: '12c',
         active: true,
@@ -44,7 +44,7 @@ export const memberList: Member[] = [
         lastModifiedBy: 'Joe Blow',
     },
     {
-        memberId: 3,
+        memberId: 2,
         membershipAdmin: 'Guy Fieri',
         uuid: '28m',
         active: true,
@@ -64,7 +64,7 @@ export const memberList: Member[] = [
         lastModifiedBy: 'Joe Blow',
     },
     {
-        memberId: 4,
+        memberId: 3,
         membershipAdmin: '',
         uuid: '007',
         active: true,
@@ -84,6 +84,32 @@ export const memberList: Member[] = [
         lastModifiedBy: 'Joe Blow',
     },
 ];
+
+export const mockInsertMember = jest.spyOn(member, 'insertMember').mockImplementationOnce((): Promise<number> => {
+    throw new Error('internal server error');
+}).mockImplementation((req: PostNewMemberRequest): Promise<number> => {
+    const newMember = {
+        uuid: req.uuid as string,
+        firstName: req.firstName as string,
+        lastName: req.lastName as string,
+        phoneNumber: req.phoneNumber as string,
+        dateJoined: req.dateJoined as string,
+        birthdate: req.birthdate as string,
+        occupation: req.occupation as string,
+        email: req.email as string,
+        memberId: memberList.length,
+        active: true,
+        membershipAdmin: '',
+        memberType: '',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        lastModifiedBy: '',
+        lastModifiedDate: '2022-02-12',
+    };
+    return Promise.resolve(memberList.push(newMember) - 1);
+});
 
 export const mockGetMemberList =
     jest.spyOn(member, 'getMemberList').mockImplementationOnce((): Promise<Member[]> => {

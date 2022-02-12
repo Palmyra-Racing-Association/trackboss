@@ -1,11 +1,27 @@
 import { Request, Response, Router } from 'express';
-import { getMember, getMemberList, MEMBER_TYPE_MAP } from '../database/member';
-import { GetMemberListResponse, GetMemberResponse, Member } from '../typedefs/member';
+import { getMember, getMemberList, insertMember, MEMBER_TYPE_MAP } from '../database/member';
+import {
+    GetMemberListResponse,
+    GetMemberResponse,
+    Member,
+    PostNewMemberResponse,
+} from '../typedefs/member';
 
 const member = Router();
 
-member.post('/new', (req: Request, res: Response) => {
-    res.status(501).send();
+member.post('/new', async (req: Request, res: Response) => {
+    // TODO: check auth
+    let response: PostNewMemberResponse;
+    try {
+        const insertId = await insertMember(req.body);
+        response = await getMember(`${insertId}`);
+        res.status(201);
+    } catch (e: any) {
+        console.log(e);
+        res.status(500);
+        response = { reason: 'internal server error' };
+    }
+    res.send(response);
 });
 
 member.get('/list', async (req: Request, res: Response) => {
@@ -34,6 +50,7 @@ member.get('/:memberId', async (req: Request, res: Response) => {
     try {
         const { memberId } = req.params;
         response = await getMember(memberId);
+        res.status(200);
     } catch (e: any) {
         if (e.message === 'not found') {
             res.status(404);
