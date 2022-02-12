@@ -119,3 +119,25 @@ describe('sp_patch_bike()', () => {
     // sp_delete
     // sp_event_job_gen
 });
+
+describe('sp_delete_event()', () => {
+    it('deletes an event', async () => {
+        const eventId = 5;
+        const sql = 'CALL sp_delete_event(?)';
+        const values = [eventId];
+        const [result] = await pool.query<OkPacket>(sql, values);
+        expect(result.affectedRows).toBe(1);
+
+        const checkValues = [eventId];
+        const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, checkValues);
+        expect(_.isEmpty(checkResults));
+    });
+
+    it('delete a non-existing event', async () => {
+        const eventId = 500;
+        const sql = 'CALL sp_delete_event(?)';
+        const values = [eventId];
+        const [result] = await pool.query<OkPacket>(sql, values);
+        expect(result.affectedRows).toBe(0);
+    });
+});
