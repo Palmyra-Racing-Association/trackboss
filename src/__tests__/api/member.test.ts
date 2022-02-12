@@ -97,6 +97,13 @@ describe('POST /member/new', () => {
         expect(res.body.reason).toBe('internal server error');
     });
 
+    it('Returns 400 on bad input', async () => {
+        const res = await supertestServer.post(`${TAG_ROOT}/new`);
+        expect(mockInsertMember).toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
     it('successfully inserts a member', async () => {
         const res = await supertestServer
             .post(`${TAG_ROOT}/new`)
