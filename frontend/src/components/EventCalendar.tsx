@@ -127,7 +127,6 @@ function EventCalendar(props: EventCalendarProps) {
                     <SelectedEventModal
                         isOpen={isViewEventOpen}
                         onClose={onViewEventClose}
-                        // this info will only be used if a *job* is selected
                         selectedEvent={selectedEvent}
                         onSignUpOpen={onSignUpOpen}
                         attendeesList={eventAttendees}
