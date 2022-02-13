@@ -1,0 +1,153 @@
+import _ from 'lodash';
+import { OkPacket, RowDataPacket } from 'mysql2';
+
+import { Job, PatchJobRequest, PostNewJobRequest } from 'src/typedefs/job';
+
+import logger from '../logger';
+import pool from './pool';
+
+export const GET_JOB_LIST_SQL = 'SELECT * FROM v_job';
+export const GET_JOB_SQL = `${GET_JOB_LIST_SQL} WHERE job_id = ?`;
+export const GET_JOB_LIST_FILTER_SQL = ''; // DO THIS STILL
+export const INSERT_JOB_SQL = 'INSERT INTO job (member_id, event_id, job_type_id, job_date, last_modified_date, ' +
+     'verified, verified_date, points_awarded, paid, paid_date, last_modified_by) ' +
+     'VALUES (?, ?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?)';
+export const PATCH_JOB_SQL = 'CALL sp_patch_job(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+export const DELETE_JOB_SQL = 'DELETE FROM job WHERE job_id = ?';
+
+export async function insertJob(req: PostNewJobRequest): Promise<number> {
+    const values = [req.memberId, req.eventId, req.jobTypeId, req.jobDate, req.verified, req.verifiedDate,
+        req.pointsAwarded, req.paid, req.paidDate, req.modifiedBy];
+
+    let result;
+    try {
+        [result] = await pool.query<OkPacket>(INSERT_JOB_SQL, values);
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error inserting job in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error inserting job: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
+    }
+
+    return result.insertId;
+}
+
+export async function getJobList(membershipId?: number): Promise<Job[]> {
+    let sql;
+    let values: number[];
+    if (typeof membershipId !== 'undefined') {
+        sql = GET_JOB_LIST_FILTER_SQL; // STILL NEED TO WRITE THIS PREPARED STATEMENT
+        values = [membershipId];
+    } else {
+        sql = GET_JOB_LIST_SQL;
+        values = [];
+    }
+
+    let results;
+    try {
+        [results] = await pool.query<RowDataPacket[]>(sql, values);
+    } catch (e) {
+        logger.error(`DB error getting job list: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    return results.map((result) => ({
+        jobId: result.job_id,
+        member: result.member,
+        event: result.event,
+        jobDate: result.job_date,
+        jobType: result.job_type,
+        verified: result.verified[0],
+        verifiedDate: result.verified_date,
+        pointsAwarded: result.points_awarded,
+        paid: result.verified[0],
+        paidDate: result.paid_date,
+        lastModifiedDate: result.last_modified_date,
+        lastModifiedBy: result.last_modified_by,
+    }));
+}
+
+export async function getJob(id: number): Promise<Job> {
+    const values = [id];
+
+    let results;
+    try {
+        [results] = await pool.query<RowDataPacket[]>(GET_JOB_SQL, values);
+    } catch (e) {
+        logger.error(`DB error getting job: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (_.isEmpty(results)) {
+        throw new Error('not found');
+    }
+
+    return {
+        jobId: results[0].job_id,
+        member: results[0].member,
+        event: results[0].event,
+        jobDate: results[0].job_date,
+        jobType: results[0].job_type,
+        verified: results[0].verified[0],
+        verifiedDate: results[0].verified_date,
+        pointsAwarded: results[0].points_awarded,
+        paid: results[0].paid[0],
+        paidDate: results[0].paid_date,
+        lastModifiedDate: results[0].last_modified_date,
+        lastModifiedBy: results[0].last_modified_by,
+    };
+}
+
+export async function patchJob(id: number, req: PatchJobRequest): Promise<void> {
+    const values = [id, req.memberId, req.eventId, req.jobTypeId, req.jobDate,
+        req.pointsAwarded, req.verified, req.paid, req.modifiedBy];
+
+    let result;
+    try {
+        [result] = await pool.query<OkPacket>(PATCH_JOB_SQL, values);
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1451: // FK violation - referenced somewhere else
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error patching member in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error patching member: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+}
+
+export async function deleteJob(id: number): Promise<void> {
+    const values = [id];
+
+    let result;
+    try {
+        [result] = await pool.query<OkPacket>(DELETE_JOB_SQL, values);
+    } catch (e) {
+        logger.error(`DB error deleting job: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+}

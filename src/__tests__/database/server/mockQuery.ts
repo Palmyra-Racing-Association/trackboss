@@ -21,12 +21,20 @@ import {
     INSERT_EVENT_TYPE_SQL,
     PATCH_EVENT_TYPE_SQL,
 } from '../../../database/eventType';
+import {
+    GET_JOB_LIST_SQL,
+    GET_JOB_SQL,
+    INSERT_JOB_SQL,
+    PATCH_JOB_SQL,
+    DELETE_JOB_SQL
+} from '../../../database/job';
 
 import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
 import * as memberHelpers from './mockHelpers/member';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 import * as eventTypeHelpers from './mockHelpers/eventType';
+import * as jobHelpers from './mockHelpers/job';
 
 const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
@@ -62,6 +70,14 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
             return eventTypeHelpers.insertEventTypeResponse(values[0]);
         case PATCH_EVENT_TYPE_SQL:
             return eventTypeHelpers.patchEventTypeResponse(values[0]);
+        case GET_JOB_SQL:
+            return jobHelpers.getJobResponse(values[0]);
+        case INSERT_JOB_SQL:
+            return jobHelpers.insertJobResponse(values[0]);
+        case PATCH_JOB_SQL:
+            return jobHelpers.patchJobResponse(values[0]);
+        case DELETE_JOB_SQL:
+            return jobHelpers.deleteJobResponse(values[0]);
         default:
             return Promise.resolve();
     }
