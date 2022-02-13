@@ -1,40 +1,72 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
     Modal,
     ModalOverlay,
     ModalContent,
     ModalCloseButton,
-    useDisclosure,
     Button,
-    Center,
     Divider,
     Heading,
-    ModalBody,
     ModalFooter,
     SimpleGrid,
-    VStack,
-    Text,
 
 } from '@chakra-ui/react';
-import DateTimePicker from 'react-datetime-picker';
-import { makeEvent } from '../controller/event';
-import { getMockedEventTypeList } from '../controller/eventType';
-import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
 
 interface modalProps {
   isOpen: boolean,
   onClose: () => void,
+  attendeesList: any[],
+  familyMembers: any[],
+}
+
+function signUp(attendingFamily: any[], member: any) {
+    // Call controller to sign up, then once it confirms...
+    return attendingFamily.concat(member);
 }
 
 export default function SignUpModal(props: modalProps) {
+    const [attendingFamily, setAttendingFamily] = useState<any>([]);
+    useEffect(() => {
+        async function setAttendance() {
+            props.familyMembers.forEach((member) => {
+                if (props.attendeesList.some((attendee: any) => JSON.stringify(member) === JSON.stringify(attendee))) {
+                    attendingFamily.push(member);
+                }
+            });
+            setAttendingFamily(attendingFamily);
+        }
+        setAttendance();
+    }, []);
+
     return (
         <Modal size="xl" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
             <ModalContent>
-                TESTING
-                <Divider />
+                <Heading pl={2} pr={2} textAlign="left">Select members to sign up</Heading>
+                <Divider mb={5} />
                 <ModalCloseButton />
+                <SimpleGrid spacing={2} columns={3}>
+                    {
+                        props.familyMembers.map((member) => (
+                            <Button
+                                onClick={
+                                    () => {
+                                        setAttendingFamily(signUp(attendingFamily, member));
+                                    }
+                                }
+                                m={3}
+                                backgroundColor={
+                                    attendingFamily.includes(member)
+                                        ? 'orange.300' : 'grey.300'
+                                }
+                                _hover={{ bg: 'orange.100' }}
+                            >
+                                {member.name}
+                            </Button>
+                        ))
+                    }
+                </SimpleGrid>
+                <Divider />
                 <ModalFooter>
                     <Button
                         variant="ghost"

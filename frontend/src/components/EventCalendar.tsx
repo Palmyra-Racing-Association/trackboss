@@ -11,6 +11,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import SignUpModal from './SignUpModal';
 import { getJobAttendees } from '../controller/job';
+import { getFamilyMembers } from '../controller/member';
 // import Event from '../../../src/typedefs/event';
 
 const Toolbar = require('react-big-calendar/lib/Toolbar');
@@ -28,16 +29,24 @@ async function getSelectedJobAttendees(): Promise<any> {
     return attendees;
 }
 
+async function getCurrentFamilyMembers(): Promise<any> {
+    const currentFamilyMembers = await getFamilyMembers();
+    return currentFamilyMembers;
+}
+
 function EventCalendar(props: EventCalendarProps) {
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
     const [selectedEvent, setSelectedEvent] = useState<any>();
-    const [eventAttendees, setAttendees] = useState([]);
+    const [eventAttendees, setAttendees] = useState<any>();
+    const [familyMembers, setFamilyMembers] = useState<any>();
 
     useEffect(() => {
         async function getData() {
             const attendees = await getSelectedJobAttendees();
+            const currentFamilyMembers = await getCurrentFamilyMembers();
             setAttendees(attendees);
+            setFamilyMembers(currentFamilyMembers);
         }
         getData();
     }, []);
@@ -113,19 +122,30 @@ function EventCalendar(props: EventCalendarProps) {
                     }
                 }
             />
-            <SelectedEventModal
-                isOpen={isViewEventOpen}
-                onClose={onViewEventClose}
-                // this info will only be used if a *job* is selected
-                selectedJob={selectedEvent}
-                onSignUpOpen={onSignUpOpen}
-                attendeesList={eventAttendees}
-                admin
-            />
-            <SignUpModal
-                isOpen={isSignUpOpen}
-                onClose={onSignUpClose}
-            />
+            {
+                selectedEvent && eventAttendees && (
+                    <SelectedEventModal
+                        isOpen={isViewEventOpen}
+                        onClose={onViewEventClose}
+                        // this info will only be used if a *job* is selected
+                        selectedEvent={selectedEvent}
+                        onSignUpOpen={onSignUpOpen}
+                        attendeesList={eventAttendees}
+                        admin
+                    />
+                )
+            }
+            {
+                familyMembers && eventAttendees && (
+                    <SignUpModal
+                        isOpen={isSignUpOpen}
+                        onClose={onSignUpClose}
+                        attendeesList={eventAttendees}
+                        familyMembers={familyMembers}
+                    />
+                )
+            }
+
         </div>
     );
 }

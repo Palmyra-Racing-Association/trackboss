@@ -16,14 +16,15 @@ import {
     Text,
     ListItem,
     UnorderedList,
-
 } from '@chakra-ui/react';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
+// import { deleteJob } from '../controller/job';
+// import { deleteEvent } from '../controller/event';
 
 interface modalProps {
   isOpen: boolean,
   onClose: () => void,
-  selectedJob: any,
+  selectedEvent: any,
   onSignUpOpen: () => void;
   attendeesList: any[], // TODO this should match our typing
   admin: boolean
@@ -34,108 +35,122 @@ async function handleSignUp(selectedJob: any) {
     console.log(selectedJob);
 }
 
+async function deleteEventLocal(event: any) {
+    // if (event.type === 'work') {
+    //     await deleteJob('TestingToken', event);
+    // } else {
+    //     await deleteEvent('TestingToken', event);
+    // }
+    // eslint-disable-next-line no-console
+    console.log(event);
+    // Update state?
+}
+
 export default function SelectedEventModal(props: modalProps) {
-    if (props.selectedJob && props.attendeesList) {
-        return (
-            <Modal size="xl" isOpen={props.isOpen} onClose={props.onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <Heading
-                        textAlign="center"
-                        pl={2}
-                        pt={2}
-                        color="orange.400"
-                    >
-                        {getEventMonthDaySpan(props.selectedJob.start, props.selectedJob.end)}
-                    </Heading>
-                    <ModalBody>
-                        <Text fontSize="2xl" textAlign="center">
-                            {props.selectedJob.title}
-                        </Text>
-                        <Text fontSize="xl" textAlign="center">
-                            {getEventStartAndEndTime(props.selectedJob.start, props.selectedJob.end)}
-                        </Text>
-                    </ModalBody>
-                    {
-                        props.selectedJob.workPoints && (
-                            <SimpleGrid columns={2}>
-                                <Center>
-                                    <VStack spacing={1}>
-                                        <Text pr={8} fontSize="xl">Going:</Text>
-                                        <Divider />
-                                        {/* TODO: Should we handle a case with many attendees? (10+) */}
-                                        <UnorderedList>
-                                            {
-                                                props.attendeesList.map((attendee) => (
-                                                    <ListItem>{attendee.name}</ListItem>
-                                                ))
-                                            }
-                                        </UnorderedList>
+    return (
+        <Modal size="xl" isOpen={props.isOpen} onClose={props.onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <Heading
+                    textAlign="center"
+                    pl={2}
+                    pt={2}
+                    color="orange.400"
+                >
+                    {getEventMonthDaySpan(props.selectedEvent.start, props.selectedEvent.end)}
+                </Heading>
+                <ModalBody>
+                    <Text fontSize="2xl" textAlign="center">
+                        {props.selectedEvent.title}
+                    </Text>
+                    <Text fontSize="xl" textAlign="center">
+                        {getEventStartAndEndTime(props.selectedEvent.start, props.selectedEvent.end)}
+                    </Text>
+                </ModalBody>
+                {
+                    props.selectedEvent.workPoints && (
+                        <SimpleGrid columns={2}>
+                            <Center>
+                                <VStack spacing={1}>
+                                    <Text pr={8} fontSize="xl">Going:</Text>
+                                    <Divider />
+                                    {/* TODO: Should we handle a case with many attendees? (10+) */}
+                                    <UnorderedList>
                                         {
-                                            props.admin && (
-                                                <Button
-                                                    as="u"
-                                                    color="orange.300"
-                                                    textStyle="underline"
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={
-                                                        () => [
-                                                            props.onClose(),
-                                                            props.onSignUpOpen(),
-                                                        ]
-                                                    }
-                                                >
-                                                    Family Sign Ups
-                                                </Button>
-                                            )
+                                            props.attendeesList.map((attendee) => (
+                                                <ListItem>{attendee.name}</ListItem>
+                                            ))
                                         }
-                                    </VStack>
-                                </Center>
-                                <Center>
-                                    <HStack spacing={0}>
-                                        <Text fontSize="xl">Work Points:</Text>
-                                        <Text pl={2} color="orange.400" fontSize="3xl">3</Text>
-                                    </HStack>
-                                </Center>
-                            </SimpleGrid>
+                                    </UnorderedList>
+                                    {
+                                        props.admin && (
+                                            <Button
+                                                as="u"
+                                                color="orange.300"
+                                                textStyle="underline"
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={
+                                                    () => [
+                                                        props.onClose(),
+                                                        props.onSignUpOpen(),
+                                                    ]
+                                                }
+                                            >
+                                                Family Sign Ups
+                                            </Button>
+                                        )
+                                    }
+                                </VStack>
+                            </Center>
+                            <Center>
+                                <HStack spacing={0}>
+                                    <Text fontSize="xl">Work Points:</Text>
+                                    <Text pl={2} color="orange.400" fontSize="3xl">3</Text>
+                                </HStack>
+                            </Center>
+                        </SimpleGrid>
+                    )
+                }
+                <Divider />
+                <ModalCloseButton />
+                <ModalFooter>
+                    {
+                        props.admin && (
+                            <Button
+                                mr={3}
+                                size="sm"
+                                variant="ghost"
+                                color="red"
+                                onClick={
+                                    () => {
+                                        deleteEventLocal(props.selectedEvent);
+                                        props.onClose();
+                                    }
+                                }
+                            >
+                                Delete
+                            </Button>
                         )
                     }
-                    <Divider />
-                    <ModalCloseButton />
-                    <ModalFooter>
-                        <Button
-                            variant="ghost"
-                            mr={3}
-                            size="sm"
-                            onClick={
-                                () => {
-                                    props.onClose();
+                    {
+                        props.selectedEvent.type === 'job' && (
+                            <Button
+                                bgColor="orange"
+                                color="white"
+                                onClick={
+                                    () => [
+                                        handleSignUp(props.selectedEvent),
+                                        props.onClose(),
+                                    ]
                                 }
-                            }
-                        >
-                            Close
-                        </Button>
-                        {
-                            props.selectedJob.type === 'job' && (
-                                <Button
-                                    bgColor="orange"
-                                    color="white"
-                                    onClick={
-                                        () => [
-                                            handleSignUp(props.selectedJob),
-                                            props.onClose(),
-                                        ]
-                                    }
-                                >
-                                    Sign Up
-                                </Button>
-                            )
-                        }
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        );
-    }
-    return <div />;
+                            >
+                                Sign Up
+                            </Button>
+                        )
+                    }
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    );
 }

@@ -39,6 +39,9 @@ export async function getFamilyMembers() {
         {
             name: 'Elvis',
         },
+        {
+            name: 'Ringo Starr',
+        },
     ];
 }
 
