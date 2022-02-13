@@ -27,6 +27,21 @@ export async function getMember(token: string, memberId: number): Promise<GetMem
     return response.json();
 }
 
+// TODO: this is a mock response, redo when API is completed
+export async function getFamilyMembers() {
+    return [
+        {
+            name: 'Billy Joel',
+        },
+        {
+            name: 'Jimmi Hendrix',
+        },
+        {
+            name: 'Elvis',
+        },
+    ];
+}
+
 export async function getMemberList(token: string, listType?: string): Promise<GetMemberListResponse> {
     if (listType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/list?status=${listType}`, {

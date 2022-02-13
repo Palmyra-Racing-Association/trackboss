@@ -22,6 +22,7 @@ export async function createEvent(token: string, eventData: PostNewEventRequest)
 
 // TODO: this is a mocked response for frontend development, replace once API is complete
 export async function makeEvent(name: string, description: string, start: Date, end: Date, typeId: number) {
+    // eslint-disable-next-line no-console
     console.debug({
         date: start,
         eventTypeId: typeId,
@@ -52,6 +53,27 @@ export async function getCalendarEventList() {
             start: new Date('2022-02-11T03:10:00'),
             end: new Date('2022-02-12T14:10:00'),
             type: 'race',
+        },
+        {
+            title: 'Work Day',
+            start: new Date('2022-02-11T03:10:00'),
+            end: new Date('2022-02-12T14:10:00'),
+            workPoints: 3,
+            type: 'job',
+        },
+        {
+            title: 'Work Day',
+            start: new Date('2022-02-11T03:10:00'),
+            end: new Date('2022-02-12T14:10:00'),
+            workPoints: 3,
+            type: 'job',
+        },
+        {
+            title: 'Work Day',
+            start: new Date('2022-02-11T03:10:00'),
+            end: new Date('2022-02-12T14:10:00'),
+            workPoints: 3,
+            type: 'job',
         },
         {
             title: 'Meeting',

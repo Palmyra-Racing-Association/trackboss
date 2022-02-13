@@ -1,6 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, momentLocalizer } from 'react-big-calendar';
 import {
@@ -8,20 +6,11 @@ import {
     Flex,
     Spacer,
     useDisclosure,
-    Button, Heading,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    Divider,
-    ModalOverlay,
-    SimpleGrid,
-    Center,
-    VStack,
 } from '@chakra-ui/react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { getEventStartAndEndTime, getEventMonthDaySpan } from '../controller/utils';
+import SelectedEventModal from './SelectedEventModal';
+import SignUpModal from './SignUpModal';
+import { getJobAttendees } from '../controller/job';
 // import Event from '../../../src/typedefs/event';
 
 const Toolbar = require('react-big-calendar/lib/Toolbar');
@@ -34,84 +23,24 @@ interface EventCalendarProps {
 
 const localizer: DateLocalizer = momentLocalizer(moment);
 
-function eventInfoModal(admin: boolean, selectedEvent: any, onClose: () => void) {
-    if (selectedEvent) {
-        return (
-            <div>
-                <ModalContent>
-                    <Heading
-                        textAlign="center"
-                        pl={2}
-                        pt={2}
-                        color="orange.400"
-                    >
-                        {getEventMonthDaySpan(selectedEvent.start, selectedEvent.end)}
-                    </Heading>
-                    <ModalBody>
-                        <Text fontSize="2xl" textAlign="center">
-                            {selectedEvent.title}
-                        </Text>
-                        <Text fontSize="xl" textAlign="center">
-                            {getEventStartAndEndTime(selectedEvent.start, selectedEvent.end)}
-                        </Text>
-                    </ModalBody>
-                    {
-                        selectedEvent.workPoints && (
-                            <SimpleGrid columns={2}>
-                                <Center>
-                                    <Text>Test</Text>
-                                </Center>
-                                <Center>
-                                    <VStack spacing={0}>
-                                        <Text fontSize="xl">Work Points</Text>
-                                        <Text color="orange.400" fontSize="3xl">3</Text>
-                                    </VStack>
-                                </Center>
-                            </SimpleGrid>
-                        )
-                    }
-                    <Divider />
-                    <ModalCloseButton />
-                    <ModalFooter>
-                        <Button
-                            variant="ghost"
-                            mr={3}
-                            size="sm"
-                            onClick={
-                                () => {
-                                    onClose();
-                                }
-                            }
-                        >
-                            Close
-                        </Button>
-                        {
-                            selectedEvent.type === 'job' && (
-                                <Button
-                                    bgColor="orange"
-                                    color="white"
-                                    onClick={
-                                        () => {
-                                            // handleSignUp();
-                                            onClose();
-                                        }
-                                    }
-                                >
-                                    Create
-                                </Button>
-                            )
-                        }
-
-                    </ModalFooter>
-                </ModalContent>
-            </div>
-        );
-    }
-    return <div />;
+async function getSelectedJobAttendees(): Promise<any> {
+    const attendees = await getJobAttendees();
+    return attendees;
 }
+
 function EventCalendar(props: EventCalendarProps) {
-    const { onClose, isOpen, onOpen } = useDisclosure();
+    const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
+    const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
     const [selectedEvent, setSelectedEvent] = useState<any>();
+    const [eventAttendees, setAttendees] = useState([]);
+
+    useEffect(() => {
+        async function getData() {
+            const attendees = await getSelectedJobAttendees();
+            setAttendees(attendees);
+        }
+        getData();
+    }, []);
 
     return (
         <div>
@@ -121,8 +50,8 @@ function EventCalendar(props: EventCalendarProps) {
                 selected={selectedEvent}
                 onSelectEvent={
                     (event) => {
-                        setSelectedEvent(event as any);
-                        onOpen();
+                        setSelectedEvent(event);
+                        onViewEventOpen();
                     }
                 }
                 localizer={localizer}
@@ -184,10 +113,19 @@ function EventCalendar(props: EventCalendarProps) {
                     }
                 }
             />
-            <Modal size="md" isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                { eventInfoModal(true, selectedEvent, onClose) }
-            </Modal>
+            <SelectedEventModal
+                isOpen={isViewEventOpen}
+                onClose={onViewEventClose}
+                // this info will only be used if a *job* is selected
+                selectedJob={selectedEvent}
+                onSignUpOpen={onSignUpOpen}
+                attendeesList={eventAttendees}
+                admin
+            />
+            <SignUpModal
+                isOpen={isSignUpOpen}
+                onClose={onSignUpClose}
+            />
         </div>
     );
 }

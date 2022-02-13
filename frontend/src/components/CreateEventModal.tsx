@@ -136,4 +136,3 @@ export default function CreateEventModal() {
         </div>
     );
 }
->>>>>>> e9546dd474c8dc68a4748fe182cccef0fdca1b50
