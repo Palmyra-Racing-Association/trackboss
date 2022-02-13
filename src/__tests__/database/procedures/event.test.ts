@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { isEmpty } from 'lodash';
 import mysql, { OkPacket, RowDataPacket } from 'mysql2/promise';
 
 import config from './config';
@@ -12,7 +12,7 @@ afterAll(async () => {
     await pool.end();
 });
 
-describe('sp_patch_bike()', () => {
+describe('sp_patch_event()', () => {
     it('Patches all fields', async () => {
         const eventId = 5;
         const sql = 'CALL sp_patch_event(?, ?, ?, ?)';
@@ -113,11 +113,32 @@ describe('sp_patch_bike()', () => {
         const [result] = await pool.query<OkPacket>(sql, values);
         expect(result.affectedRows).toBe(0);
     });
+    // moving the jobs days linked to event? this is gonna be bad with job_day_number
+});
 
-    // need tests for
-    // moving the jobs days linked to event?
-    // sp_delete
-    // sp_event_job_gen
+describe('sp_event_job_generation()', async () => {
+    it('patch generates jobs', async () => {
+        const date = '2000-10-10';
+        const eventTypeId = 3;
+
+        const sql = 'CALL sp_event_job_generation(?, ?, ?, ?)';
+        const checkJobSql = 'SELECT COUNT(*) as cnt FROM job;';
+        const checkEventSql = 'SELECT COUNT(*) as cnt FROM event;';
+        const values = [date, eventTypeId, 'event job test', 'testing for event job'];
+
+        const [beforeJobTotal] = await pool.query<RowDataPacket[]>(checkJobSql, []);
+        const [beforeEventTotal] = await pool.query<RowDataPacket[]>(checkEventSql, []);
+        await pool.query<OkPacket>(sql, values);
+        const [afterJobTotal] = await pool.query<RowDataPacket[]>(checkJobSql, []);
+        const [afterEventTotal] = await pool.query<RowDataPacket[]>(checkEventSql, []);
+
+        const howManyJobsSql = 'select SUM(count) as cnt from event_job ' +
+        'where event_type_id = ? group by event_type_id';
+        const [result1] = await pool.query<RowDataPacket[]>(howManyJobsSql, [eventTypeId]);
+
+        expect(afterEventTotal[0].cnt - beforeEventTotal[0].cnt).toBe(1);
+        expect(afterJobTotal[0].cnt - beforeJobTotal[0].cnt).toBe(+result1[0].cnt);
+    });
 });
 
 describe('sp_delete_event()', () => {
@@ -131,6 +152,10 @@ describe('sp_delete_event()', () => {
         const checkValues = [eventId];
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, checkValues);
         expect(_.isEmpty(checkResults));
+
+        const checkSql = 'SELECT * FROM job where event_id = ?;';
+        const [checkJobResults] = await pool.query<RowDataPacket[]>(checkSql, values);
+        expect(_.isEmpty(checkJobResults));
     });
 
     it('delete a non-existing event', async () => {
