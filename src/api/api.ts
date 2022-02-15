@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser';
 import { Router } from 'express';
 import bike from './bike';
 import billing from './billing';
@@ -15,6 +16,7 @@ import workPoints from './workPoints';
 
 const api = Router();
 
+api.use(bodyParser.json());
 api.use('/member', member);
 api.use('/memberType', memberType);
 api.use('/membership', membership);
