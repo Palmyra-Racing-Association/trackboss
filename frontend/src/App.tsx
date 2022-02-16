@@ -6,7 +6,7 @@ import MemberListPage from './pages/MemberListPage';
 import Settings from './pages/Settings';
 import CalendarPage from './pages/CalendarPage';
 
-const App = () => {
+export function App() {
     const { state, update } = useContext(UserContext);
     const location = useLocation();
     useEffect(() => {
@@ -32,9 +32,9 @@ const App = () => {
             <Route path="settings" element={<Settings />} />
         </Routes>
     );
-};
+}
 
-export default function AppWrapper() {
+export function AppWrapper() {
     return (
         <UserContextProvider>
             <App />
