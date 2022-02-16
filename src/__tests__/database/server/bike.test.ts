@@ -1,6 +1,6 @@
 import { PatchBikeRequest } from 'src/typedefs/bike';
 import { getBike, getBikeList, insertBike, patchBike, deleteBike } from '../../../database/bike';
-import mockQuery from './mockQuery';
+import { mockQuery } from './mockQuery';
 
 describe('insertBike()', () => {
     it('Inserts a single bike', async () => {

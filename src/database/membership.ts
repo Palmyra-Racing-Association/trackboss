@@ -26,7 +26,7 @@ export const INSERT_MEMBERSHIP_SQL = 'INSERT INTO membership (membership_admin_i
 export const PATCH_MEMBERSHIP_SQL = 'CALL sp_patch_membership(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 export const REGISTERED_MEMBER_ID_OUT = '@member_id';
 export const REGISTERED_MEMBERSHIP_ID_OUT = '@membership_id';
-export const REGISTER_MEMBERSHIP_SQL = 'CALL sp_patch_membership(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ' +
+export const REGISTER_MEMBERSHIP_SQL = 'CALL sp_register_membership(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ' +
     `${REGISTERED_MEMBER_ID_OUT}, ${REGISTERED_MEMBERSHIP_ID_OUT})`;
 export const GET_REGISTERED_MEMBER_ID_SQL = `SELECT ${REGISTERED_MEMBER_ID_OUT}`;
 export const GET_REGISTRATION_SQL = 'SELECT member_type, first_name, last_name, phone_number, occupation, email, ' +
@@ -188,33 +188,40 @@ export async function registerMembership(req: PostRegisterMembershipRequest): Pr
         req.zip,
     ];
 
+    // Use a single connection for sequential queries with SQL variables
+    // (variables are session-scoped)
+    const conn = await pool.getConnection();
     try {
-        await pool.query<OkPacket>(REGISTER_MEMBERSHIP_SQL, values);
-    } catch (e: any) {
-        if ('errno' in e) {
-            switch (e.errno) {
-                case 1452: // FK violation - referenced is missing
-                    logger.error(`User error registering membership in DB: ${e}`);
-                    throw new Error('user input error');
-                default:
-                    logger.error(`DB error registering membership: ${e}`);
-                    throw new Error('internal server error');
+        try {
+            await conn.query<OkPacket>(REGISTER_MEMBERSHIP_SQL, values);
+        } catch (e: any) {
+            if ('errno' in e) {
+                switch (e.errno) {
+                    case 1452: // FK violation - referenced is missing
+                        logger.error(`User error registering membership in DB: ${e}`);
+                        throw new Error('user input error');
+                    default:
+                        logger.error(`DB error registering membership: ${e}`);
+                        throw new Error('internal server error');
+                }
+            } else {
+                // this should not happen - errors from query should always have 'errno' field
+                throw e;
             }
-        } else {
-            // this should not happen - errors from query should always have 'errno' field
-            throw e;
         }
-    }
 
-    let results;
-    try {
-        [results] = await pool.query<RowDataPacket[]>(GET_REGISTERED_MEMBER_ID_SQL);
-    } catch (e) {
-        logger.error(`DB error getting member ID after registration: ${e}`);
-        throw new Error('internal server error');
-    }
+        let results;
+        try {
+            [results] = await conn.query<RowDataPacket[]>(GET_REGISTERED_MEMBER_ID_SQL);
+        } catch (e) {
+            logger.error(`DB error getting member ID after registration: ${e}`);
+            throw new Error('internal server error');
+        }
 
-    return results[0][REGISTERED_MEMBER_ID_OUT];
+        return results[0][REGISTERED_MEMBER_ID_OUT];
+    } finally {
+        conn.release();
+    }
 }
 
 export async function getRegistration(memberId: number): Promise<Registration> {

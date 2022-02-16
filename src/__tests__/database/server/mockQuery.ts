@@ -1,4 +1,6 @@
-import { QueryOptions } from 'mysql2/promise';
+import { PoolConnection, QueryOptions } from 'mysql2/promise';
+import { mock } from 'jest-mock-extended';
+
 import {
     GET_BIKE_LIST_BY_MEMBERSHIP_SQL,
     GET_BIKE_LIST_SQL,
@@ -39,7 +41,7 @@ import * as membershipHelpers from './mockHelpers/membership';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 import * as eventTypeHelpers from './mockHelpers/eventType';
 
-const mockQuery = jest.spyOn(pool, 'query').mockImplementation(async (sql: QueryOptions, values: any): Promise<any> => {
+const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
         case INSERT_BIKE_SQL:
             return bikeHelpers.insertBikeResponse(values[0]);
@@ -91,6 +93,14 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation(async (sql: Query
         default:
             return Promise.resolve();
     }
-});
+};
 
-export default mockQuery;
+const generateMockConnQuery = () => {
+    const mockedType = mock<PoolConnection>();
+    jest.spyOn(pool, 'getConnection').mockResolvedValue(mockedType);
+    return mockedType.query.mockImplementation(mockQueryImplementation);
+};
+
+export const mockQuery = jest.spyOn(pool, 'query').mockImplementation(mockQueryImplementation);
+
+export const mockConnQuery = generateMockConnQuery();

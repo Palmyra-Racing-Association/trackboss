@@ -9,7 +9,7 @@ import {
     patchMembership,
     registerMembership,
 } from '../../../database/membership';
-import mockQuery from './mockQuery';
+import { mockConnQuery, mockQuery } from './mockQuery';
 
 describe('insertMembership()', () => {
     it('Inserts a single membership', async () => {
@@ -218,35 +218,35 @@ describe('registerMembership()', () => {
 
         const result = await registerMembership(request);
         expect(result).toBe(321);
-        expect(mockQuery).toHaveBeenCalledTimes(2);
+        expect(mockConnQuery).toHaveBeenCalledTimes(2);
     });
 
     it('Throws for user input error', async () => {
         const request = { memberTypeId: 1452 };
 
         await expect(registerMembership(request)).rejects.toThrow('user input error');
-        expect(mockQuery).toHaveBeenCalled();
+        expect(mockConnQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error when registering', async () => {
         const request = { memberTypeId: -100 };
 
         await expect(registerMembership(request)).rejects.toThrow('internal server error');
-        expect(mockQuery).toHaveBeenCalled();
+        expect(mockConnQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error when getting insert ID', async () => {
         const request = { memberTypeId: -101 };
 
         await expect(registerMembership(request)).rejects.toThrow('internal server error');
-        expect(mockQuery).toHaveBeenCalledTimes(2);
+        expect(mockConnQuery).toHaveBeenCalledTimes(2);
     });
 
     it('Throws unreachable error without errno field', async () => {
         const request = { memberTypeId: -200 };
 
         await expect(registerMembership(request)).rejects.toThrow('this error should not happen');
-        expect(mockQuery).toHaveBeenCalled();
+        expect(mockConnQuery).toHaveBeenCalled();
     });
 });
 
