@@ -74,4 +74,4 @@ const eventTypeHandlers = [
     }),
 ];
 
-export { eventTypeHandlers as default };
+export default eventTypeHandlers;

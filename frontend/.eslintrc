@@ -59,7 +59,8 @@
                 }],
                 "import/no-extraneous-dependencies": ["error", {
                     "devDependencies": ["**/*.test.*", "**/setupTests.ts"]
-                }]
+                }],
+                "import/no-relative-packages": "off"
             }
         }
     ],
