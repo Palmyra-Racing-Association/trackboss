@@ -8,11 +8,11 @@ IN _event_description VARCHAR(255)
 )
 BEGIN
 	SELECT date, event_name, event_description
-    INTO @date, @event_name, @event_description
+    INTO @cur_date, @cur_event_name, @cur_event_description
     FROM event e
     WHERE event_id = _event_id;
 	
-	SELECT DATEDIFF(IFNULL(_date, @date), @date) INTO @date_dif;
+	SELECT DATEDIFF(IFNULL(_date, @cur_date), @cur_date) INTO @date_dif;
     
 	UPDATE job SET
 		job_date = DATE_ADD(job_date, INTERVAL @date_dif DAY),
@@ -20,8 +20,8 @@ BEGIN
 	WHERE event_id = _event_id;
     
     UPDATE event SET
-		date = IFNULL(_date, @date),
-        event_name = IFNULL(_event_name, @event_name),
-        event_description = IFNULL(_event_description, @event_description)
+		date = IFNULL(_date, @cur_date),
+        event_name = IFNULL(_event_name, @cur_event_name),
+        event_description = IFNULL(_event_description, @cur_event_description)
 	WHERE event_id = _event_id;
 END//
