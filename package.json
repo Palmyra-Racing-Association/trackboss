@@ -50,7 +50,7 @@
         "eslint-import-resolver-typescript": "^2.5.0",
         "eslint-plugin-import": "^2.24.2",
         "jest-mock-extended": "^2.0.4",
-        "jest": "27.5.1",
+        "jest": "^27.5.1",
         "nodemon": "^2.0.13",
         "supertest": "^6.2.2",
         "ts-node": "^10.2.1",
