@@ -34,7 +34,33 @@ export function getMemberListResponse(values: string[]) {
     return Promise.resolve([memberList.filter((member) => member.member_type === values[0])]);
 }
 
-export function getMemberResponse(id: number) {
+export function getMemberResponse(searchParam: string) {
+    const id = parseInt(searchParam, 10);
+    if (Number.isNaN(id)) {
+        if (searchParam === 'thisIsAUuid') {
+            return Promise.resolve([[{
+                member_id: 18,
+                membership_admin: 'membershipAdmin',
+                uuid: 'thisIsAUuid',
+                active: [1],
+                member_type: 'Member',
+                first_name: 'Test',
+                last_name: 'Testerson',
+                phone_number: '123-456-7890',
+                occupation: 'Ephemeral Testing Entity',
+                email: 'tester@testing.ts',
+                birthdate: '2022-02-07',
+                date_joined: '2022-02-07',
+                address: '1 Test St',
+                city: 'Rotester',
+                state: 'NT',
+                zip: '11111',
+                last_modified_date: '2022-02-07',
+                last_modified_by: 42,
+            }]]);
+        }
+        return Promise.resolve();
+    }
     switch (id) {
         case 18:
             return Promise.resolve([[{

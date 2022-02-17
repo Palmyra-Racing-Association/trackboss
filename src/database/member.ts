@@ -15,6 +15,7 @@ export const MEMBER_TYPE_MAP = new Map([
 export const GET_MEMBER_LIST_SQL = 'SELECT * FROM v_member';
 export const GET_MEMBER_LIST_BY_TYPE_SQL = `${GET_MEMBER_LIST_SQL} WHERE member_type = ?`;
 export const GET_MEMBER_SQL = `${GET_MEMBER_LIST_SQL} WHERE member_id = ?`;
+export const GET_MEMBER_UUID_SQL = `${GET_MEMBER_LIST_BY_TYPE_SQL} WHERE uuid = ?`;
 export const INSERT_MEMBER_SQL = 'INSERT INTO member (membership_id, uuid, member_type_id, first_name, last_name, ' +
     'phone_number, occupation, email, birthdate, date_joined, last_modified_date, last_modified_by, active) ' +
     'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?, 1)';
@@ -100,12 +101,22 @@ export async function getMemberList(type?: string): Promise<Member[]> {
     }));
 }
 
-export async function getMember(id: string): Promise<Member> {
-    const values = [id];
-
+export async function getMember(searchParam: string): Promise<Member> {
+    const id = parseInt(searchParam, 10);
+    let sql;
+    let values;
     let results;
+    if (Number.isNaN(id)) {
+        // uuid search
+        values = [searchParam];
+        sql = GET_MEMBER_UUID_SQL;
+    } else {
+        values = [id];
+        sql = GET_MEMBER_SQL;
+    }
+
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_MEMBER_SQL, values);
+        [results] = await pool.query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting member: ${e}`);
         throw new Error('internal server error');
