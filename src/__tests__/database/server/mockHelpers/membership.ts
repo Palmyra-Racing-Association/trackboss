@@ -110,7 +110,9 @@ export async function registerMembershipResponse(memberTypeId: number) {
             try {
                 while (!registeredMemberIdRead) {
                     release();
-                    await new Promise((r) => setTimeout(r, 500));
+                    await new Promise((r) => {
+                        setTimeout(r, 500);
+                    });
                     release = await registeredMemberIdReadMutex.acquire();
                 }
                 registeredMemberId = 321;
@@ -129,7 +131,9 @@ export async function registerMembershipResponse(memberTypeId: number) {
             try {
                 while (!registeredMemberIdRead) {
                     release();
-                    await new Promise((r) => setTimeout(r, 500));
+                    await new Promise((r) => {
+                        setTimeout(r, 500);
+                    });
                     release = await registeredMemberIdReadMutex.acquire();
                 }
                 registeredMemberId = -101;
@@ -151,7 +155,10 @@ export async function getRegisteredMemberIdResponse() {
     try {
         while (registeredMemberIdRead) {
             release();
-            await new Promise((r) => setTimeout(r, 500));
+            const newLocal = 500;
+            await new Promise((r) => {
+                setTimeout(r, newLocal);
+            });
             release = await registeredMemberIdReadMutex.acquire();
         }
         if (registeredMemberId === -101) {
