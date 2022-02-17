@@ -153,8 +153,7 @@ export async function getRegisteredMemberIdResponse() {
     try {
         while (registeredMemberIdRead) {
             release();
-            const newLocal = 500;
-            await setTimeout(newLocal);
+            await setTimeout(500);
             release = await registeredMemberIdReadMutex.acquire();
         }
         if (registeredMemberId === -101) {
