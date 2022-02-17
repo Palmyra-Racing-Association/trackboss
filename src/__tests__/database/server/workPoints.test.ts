@@ -1,5 +1,5 @@
 import { getWorkPointsByMember, getWorkPointsByMembership } from '../../../database/workPoints';
-import mockQuery from './mockQuery';
+import { mockQuery } from './mockQuery';
 
 describe('getWorkPointsByMember()', () => {
     it('Returns a valid WorkPoints', async () => {
