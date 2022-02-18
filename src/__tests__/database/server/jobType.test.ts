@@ -92,7 +92,7 @@ describe('patchJobType()', () => {
         await testPatchWithObject({ active: false, modifiedBy: 2 });
     });
 
-    it('Patches a job type with type and active field', async () => {
+    it('Patches a job type with title and active field', async () => {
         await testPatchWithObject({ title: 'Test', active: true, modifiedBy: 1 });
     });
 
