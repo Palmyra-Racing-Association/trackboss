@@ -20,6 +20,10 @@ const createVerifier = () => {
     });
 };
 
+const destroyVerifier = () => {
+    verifier = null;
+};
+
 const verify = async (token: string) => {
     if (!verifier) {
         throw new Error('Attempted to use verifier before it was created');
@@ -37,4 +41,4 @@ const verify = async (token: string) => {
     }
 };
 
-export { createVerifier, verify };
+export { createVerifier, destroyVerifier, verify };
