@@ -204,7 +204,7 @@ describe('getMember()', () => {
 
 describe('patchMember()', () => {
     const testPatchWithObject = async (req: PatchMemberRequest) => {
-        const memberId = '42';
+        const memberId = 42;
         // no error means success
         await patchMember(memberId, req);
         expect(mockQuery).toHaveBeenCalled();
@@ -255,25 +255,25 @@ describe('patchMember()', () => {
     });
 
     it('Throws for user error', async () => {
-        const memberId = '1451';
+        const memberId = 1451;
         await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('user input error');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for member not found', async () => {
-        const memberId = '3000';
+        const memberId = 3000;
         await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error', async () => {
-        const memberId = '-100';
+        const memberId = -100;
         await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws unreachable error without errno field', async () => {
-        const memberId = '-200';
+        const memberId = -200;
         await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('this error should not happen');
         expect(mockQuery).toHaveBeenCalled();
     });
