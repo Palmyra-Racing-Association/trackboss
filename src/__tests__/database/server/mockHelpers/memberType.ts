@@ -16,7 +16,7 @@ export function getMemberTypeListResponse() {
         }, {
             member_type_id: 3,
             type: 'Test Subject',
-            base_dues_amt: 3,
+            base_dues_amt: 100,
         }, {
             member_type_id: 4,
             type: 'Test Subject',
