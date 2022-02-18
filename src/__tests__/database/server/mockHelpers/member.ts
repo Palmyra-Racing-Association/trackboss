@@ -107,17 +107,17 @@ export function insertMemberResponse(membershipId: number) {
     }
 }
 
-export function patchMemberResponse(id: number) {
+export function patchMemberResponse(id: string) {
     switch (id) {
-        case 42:
+        case '42':
             return Promise.resolve([{ affectedRows: 1 }]);
-        case 3000:
+        case '3000':
             return Promise.resolve([{ affectedRows: 0 }]);
-        case 1451:
+        case '1451':
             throw { errno: 1451 };
-        case -100:
+        case '-100':
             throw { errno: 0 };
-        case -200:
+        case '-200':
             throw new Error('this error should not happen');
         default:
             return Promise.resolve();
