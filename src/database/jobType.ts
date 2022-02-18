@@ -107,6 +107,7 @@ export async function getJobTypeList(): Promise<JobType[]> {
 
 export async function patchJobType(id: number, req: PatchJobTypeRequest): Promise<void> {
     const values = [
+        id,
         req.title,
         req.pointValue,
         req.cashValue,
