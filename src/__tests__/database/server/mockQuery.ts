@@ -33,6 +33,12 @@ import {
     INSERT_EVENT_TYPE_SQL,
     PATCH_EVENT_TYPE_SQL,
 } from '../../../database/eventType';
+import {
+    GET_JOB_TYPE_LIST_SQL,
+    GET_JOB_TYPE_SQL,
+    INSERT_JOB_TYPE_SQL,
+    PATCH_JOB_TYPE_SQL,
+} from '../../../database/jobType';
 
 import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
@@ -40,6 +46,7 @@ import * as memberHelpers from './mockHelpers/member';
 import * as membershipHelpers from './mockHelpers/membership';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 import * as eventTypeHelpers from './mockHelpers/eventType';
+import * as jobTypeHelpers from './mockHelpers/jobType';
 
 const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
@@ -90,6 +97,14 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return eventTypeHelpers.insertEventTypeResponse(values[0]);
         case PATCH_EVENT_TYPE_SQL:
             return eventTypeHelpers.patchEventTypeResponse(values[0]);
+        case GET_JOB_TYPE_SQL:
+            return jobTypeHelpers.getJobTypeResponse(values[0]);
+        case GET_JOB_TYPE_LIST_SQL:
+            return jobTypeHelpers.getJobTypeListResponse();
+        case INSERT_JOB_TYPE_SQL:
+            return jobTypeHelpers.insertJobTypeResponse(values[0]);
+        case PATCH_JOB_TYPE_SQL:
+            return jobTypeHelpers.patchJobTypeResponse(values[0]);
         default:
             return Promise.resolve();
     }
