@@ -6,6 +6,8 @@ import Header from '../../components/Header';
 import Dashboard from '../../pages/Dashboard';
 import EventCalendar from '../../components/EventCalendar';
 
+Date.now = jest.fn(() => 1487076708000);
+
 const upcomingEvents = [
     {
         title: 'Test Event',
