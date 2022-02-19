@@ -1,5 +1,5 @@
 import 'dotenv/config'; // need env to be properly configured
-import { createVerifier, destroyVerifier, verify } from '../../util/auth';
+import { checkHeader, createVerifier, destroyVerifier, HeaderCheck, verify } from '../../util/auth';
 import { createSpy, mockedPayloadType, mockInvalidToken } from './authMocks';
 
 let actualPoolId: string | undefined;
@@ -57,5 +57,28 @@ describe('verify()', () => {
         expect(createSpy).toHaveBeenCalled();
         const payload = await verify('validtoken');
         expect(payload).toEqual(mockedPayloadType);
+    });
+});
+
+describe('checkHeader()', () => {
+    it('returns invalid with missing grant', () => {
+        const check: HeaderCheck = checkHeader();
+        expect(check.valid).toBeFalsy();
+        expect(check.reason).toBe('Missing authorization grant in header');
+    });
+    it('returns invlaid with an invalid structure', () => {
+        const check: HeaderCheck = checkHeader('bad');
+        expect(check.valid).toBeFalsy();
+        expect(check.reason).toBe('Authorization grant in header has invalid structure');
+    });
+    it('returns invlaid with an bad token type', () => {
+        const check: HeaderCheck = checkHeader('Bad Token');
+        expect(check.valid).toBeFalsy();
+        expect(check.reason).toBe('Incorrect token type in authorization grant');
+    });
+    it('returns valid with correct structure', () => {
+        const check: HeaderCheck = checkHeader('Bearer Token');
+        expect(check.valid);
+        expect(check.reason).toBe('');
     });
 });

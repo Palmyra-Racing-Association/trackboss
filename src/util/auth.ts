@@ -41,4 +41,37 @@ const verify = async (token: string) => {
     }
 };
 
-export { createVerifier, destroyVerifier, verify };
+export type HeaderCheck = {
+    valid: boolean,
+    reason: string,
+    token: string
+};
+
+const checkHeader = (header?: string): HeaderCheck => {
+    let valid;
+    let reason = '';
+    let token = '';
+    if (typeof header === 'undefined') {
+        return {
+            valid: false,
+            reason: 'Missing authorization grant in header',
+            token: '',
+        };
+    }
+    const parts = header.split(' ');
+    const [type, headerToken] = parts;
+    if (parts.length !== 2) {
+        valid = false;
+        reason = 'Authorization grant in header has invalid structure';
+    } else if (type !== 'Bearer') {
+        valid = false;
+        reason = 'Incorrect token type in authorization grant';
+    } else {
+        valid = true;
+        reason = '';
+        [token] = headerToken;
+    }
+    return { valid, reason, token };
+};
+
+export { checkHeader, createVerifier, destroyVerifier, verify };

@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser';
 import { Request, Response, Router } from 'express';
 import { getMember } from '../database/member';
-import { verify } from '../util/auth';
+import { checkHeader, verify } from '../util/auth';
 import bike from './bike';
 import billing from './billing';
 import boardMember from './boardMember';
@@ -23,20 +23,13 @@ api.use(bodyParser.json());
 api.get('/me', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response;
-    if (typeof authorization === 'undefined') {
-        res.status(401).send({ reason: 'Missing authorization grant in header' });
-        return;
-    }
-    const parts = authorization.split(' ');
-    if (parts.length !== 2) {
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
         res.status(401);
-        response = { reason: 'Authorization grant in header has invalid structure' };
-    } else if (parts[0] !== 'Bearer') {
-        res.status(401);
-        response = { reason: 'Incorrect token type in authorization grant' };
+        response = { reason: headerCheck.reason };
     } else {
         try {
-            const payload = await verify(parts[1]);
+            const payload = await verify(headerCheck.token);
             const uuid = payload['cognito:username'];
             try {
                 response = await getMember(uuid);
@@ -54,8 +47,8 @@ api.get('/me', async (req: Request, res: Response) => {
             res.status(401);
             response = { reason: 'Invalid token' };
         }
-        res.send(response);
     }
+    res.send(response);
 });
 
 api.use('/member', member);
