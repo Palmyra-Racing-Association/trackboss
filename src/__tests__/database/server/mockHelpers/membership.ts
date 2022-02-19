@@ -10,6 +10,8 @@
 // instantiating an implementor of NodeJS.ErrnoException to get that field
 
 import { Mutex } from 'async-mutex';
+// eslint-disable-next-line import/no-unresolved
+import { setTimeout } from 'timers/promises';
 
 const registeredMemberIdReadMutex = new Mutex();
 let registeredMemberId: number;
@@ -110,7 +112,7 @@ export async function registerMembershipResponse(memberTypeId: number) {
             try {
                 while (!registeredMemberIdRead) {
                     release();
-                    await new Promise((r) => setTimeout(r, 500));
+                    await setTimeout(500);
                     release = await registeredMemberIdReadMutex.acquire();
                 }
                 registeredMemberId = 321;
@@ -129,7 +131,7 @@ export async function registerMembershipResponse(memberTypeId: number) {
             try {
                 while (!registeredMemberIdRead) {
                     release();
-                    await new Promise((r) => setTimeout(r, 500));
+                    await setTimeout(500);
                     release = await registeredMemberIdReadMutex.acquire();
                 }
                 registeredMemberId = -101;
@@ -151,7 +153,7 @@ export async function getRegisteredMemberIdResponse() {
     try {
         while (registeredMemberIdRead) {
             release();
-            await new Promise((r) => setTimeout(r, 500));
+            await setTimeout(500);
             release = await registeredMemberIdReadMutex.acquire();
         }
         if (registeredMemberId === -101) {
