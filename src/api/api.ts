@@ -35,6 +35,7 @@ api.get('/me', async (req: Request, res: Response) => {
                 response = await getMember(uuid);
                 res.status(200);
             } catch (e: any) {
+                console.log(e);
                 if (e.message === 'not found') {
                     res.status(404);
                     response = { reason: 'not found' };

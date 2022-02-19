@@ -69,7 +69,7 @@ const checkHeader = (header?: string): HeaderCheck => {
     } else {
         valid = true;
         reason = '';
-        [token] = headerToken;
+        token = headerToken;
     }
     return { valid, reason, token };
 };

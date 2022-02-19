@@ -80,5 +80,6 @@ describe('checkHeader()', () => {
         const check: HeaderCheck = checkHeader('Bearer Token');
         expect(check.valid);
         expect(check.reason).toBe('');
+        expect(check.token).toBe('Token');
     });
 });
