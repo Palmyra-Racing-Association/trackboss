@@ -41,13 +41,18 @@ describe('getEventList()', () => {
         const results = await getEventList(start);
         expect(mockQuery).toHaveBeenCalled();
         expect(results.length).toBe(1);
+        results.forEach((result) => {
+            expect(Date.parse(result.date) > Date.parse(start));
+        });
     });
 
     it('Returns a filtered list of events on end time', async () => {
         const end = '2002-01-01';
         const results = await getEventList(undefined, end);
         expect(mockQuery).toHaveBeenCalled();
-        expect(results.length).toBe(2);
+        results.forEach((result) => {
+            expect(Date.parse(result.date) < Date.parse(end));
+        });
     });
 
     it('Returns a filtered list of events on start and end time', async () => {
@@ -56,6 +61,9 @@ describe('getEventList()', () => {
         const results = await getEventList(start, end);
         expect(mockQuery).toHaveBeenCalled();
         expect(results.length).toBe(1);
+        results.forEach((result) => {
+            expect(Date.parse(start) < Date.parse(result.date) && Date.parse(result.date) < Date.parse(end));
+        });
     });
 
     it('Returns an empty list of events without error', async () => {

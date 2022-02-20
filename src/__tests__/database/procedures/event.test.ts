@@ -16,12 +16,11 @@ describe('sp_patch_event()', () => {
     it('Patches all fields', async () => {
         const eventId = 5;
         const sql = 'CALL sp_patch_event(?, ?, ?, ?)';
-        const values = [eventId, '2022-02-11', 'Free Rider', 'Test Patch'];
-        const [result] = await pool.query<OkPacket>(sql, values);
-        expect(result.affectedRows).toBe(1);
-
+        const values = [eventId, '2021-03-15', 'Free Rider', 'Test Patch'];
+        await pool.query<OkPacket>(sql, values);
         const checkValues = [eventId];
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, checkValues);
+
         expect(!_.isEmpty(checkResults));
         expect(checkResults[0].event_id).toBe(eventId);
         expect(checkResults[0].date).toBe(values[1]);
@@ -34,13 +33,12 @@ describe('sp_patch_event()', () => {
         const origValues = [eventId, '2022-01-11', 'Harescrambler', 'test harescrambler job generation!'];
         const sql = 'CALL sp_patch_event(?, ?, ?, ?)';
         const values = [eventId, '2022-02-11', null, null];
-        const [result] = await pool.query<OkPacket>(sql, values);
-        expect(result.affectedRows).toBe(1);
+        await pool.query<OkPacket>(sql, values);
 
-        const checkValues = [eventId];
-        const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, checkValues);
+        const checkSqlDateChange = 'SELECT * FROM event where event_name = ?;';
+        const [checkResults] = await pool.query<RowDataPacket[]>(checkSqlDateChange, origValues[2]);
         expect(!_.isEmpty(checkResults));
-        expect(checkResults[0].event_id).toBe(eventId);
+        expect(checkResults[0].event_id).toBeGreaterThan(eventId);
         expect(checkResults[0].date).toBe(values[1]);
         expect(checkResults[0].event_name).toBe(origValues[2]);
         expect(checkResults[0].event_description).toBe(origValues[3]);
