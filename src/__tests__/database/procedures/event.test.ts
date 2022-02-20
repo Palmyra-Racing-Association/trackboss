@@ -35,7 +35,8 @@ describe('sp_patch_event()', () => {
         const values = [eventId, '2022-02-11', null, null];
         await pool.query<OkPacket>(sql, values);
 
-        const checkSqlDateChange = 'SELECT * FROM event where event_name = ?;';
+        const checkSqlDateChange = 'SELECT event_id, DATE_FORMAT(date, "%Y-%m-%d") AS date, ' +
+        'event_type_id, event_name, event_description FROM event where event_name = ?;';
         const [checkResults] = await pool.query<RowDataPacket[]>(checkSqlDateChange, origValues[2]);
         expect(!_.isEmpty(checkResults));
         expect(checkResults[0].event_id).toBeGreaterThan(eventId);
