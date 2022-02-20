@@ -10,12 +10,12 @@ export type GetMemberTypeRequest = {};
 
 export type GetMemberTypeResponse = MemberType | ErrorResponse;
 
-export type PatchMemberRequest = {
+export type PatchMemberTypeRequest = {
     type?: string,
     baseDuesAmt?: number
 };
 
-export type PatchMemberResponse = MemberType | ErrorResponse;
+export type PatchMemberTypeResponse = MemberType | ErrorResponse;
 
 export type GetMemberTypeListRequest = {};
 

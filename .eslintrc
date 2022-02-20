@@ -49,8 +49,9 @@
                     "tsx": "never"
                 }],
                 "import/no-extraneous-dependencies": ["error", {
-                    "devDependencies": ["**/*.test.*", "**/setupTests.ts"]
-                }]
+                    "devDependencies": ["**/*.test.*", "**/setupTests.ts", "**/__tests__/**/*"]
+                }],
+                "function-paren-newline": ["error", "multiline"]
             }
         }
     ],

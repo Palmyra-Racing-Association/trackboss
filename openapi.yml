@@ -34,6 +34,12 @@ tags:
   - name: billing
     description: >
       Handling billing calculation, distribution, payment, and retrieval.
+  - name: boardMember
+    description: >
+      Creating, updating, and getting boardMembers
+  - name: boardMemberType
+    description: >
+      Creating, updating, and getting boardMemberTypes
 components:
   securitySchemes:
     BearerAuth:
@@ -328,6 +334,25 @@ components:
           $ref: "#/components/schemas/date"
         curYearPaid:
           type: boolean
+    boardMember:
+      type: object
+      properties:
+        boardId:
+          $ref: "#/components/schemas/integer"
+        title:
+          $ref: "#/components/schemas/string"
+        year:
+          $ref: "#/components/schemas/integer"
+        memberId:
+          $ref: "#/components/schemas/integer"
+    boardMemberType:
+      type: object
+      properties:
+        boardTitleId:
+          $ref: "#/components/schemas/integer"
+        title:
+          $ref: "#/components/schemas/string"
+
 security:
   - BearerAuth: [] 
 paths:
@@ -2034,5 +2059,311 @@ paths:
           $ref: "#/components/responses/unauthorizedError"
         403:
           $ref: "#/components/responses/forbiddenError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+
+  # boardMember
+  /api/boardMember/new:
+    post:
+      tags:
+        - boardMember
+      summary: Create a new boardMember
+      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - boardMemberTitleId
+                - year
+                - memberId
+              additionalProperties: false
+              properties:
+                boardMemberTitleId:
+                  $ref: "#/components/schemas/integer"
+                year:
+                  $ref: "#/components/schemas/number"
+                memberId:
+                  $ref: "#/components/schemas/number"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/boardMember"
+        400:
+          $ref: "#/components/responses/badRequestError"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        403:
+          $ref: "#/components/responses/forbiddenError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+  /api/boardMember/list:
+    get:
+      tags:
+        - boardMember
+      summary: Get all board members
+      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      parameters:
+        - name: year
+          in: query
+          description: "Optional: filter board members by a specific year"
+          schema:
+            type: integer
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/boardMember"
+        400:
+          $ref: "#/components/responses/badRequestError"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+  /api/boardMember/{boardMemberID}:
+    parameters:
+      - name: boardMemberID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - boardMember
+      summary: Get this board member
+      description: >
+        This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/boardMember"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        404:
+          $ref: "#/components/responses/notFoundError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+    patch:
+      tags:
+        - boardMember
+      summary: Update this board member
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+        <br><br>
+        This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                boardMemberTitleId:
+                  $ref: "#/components/schemas/integer"
+                year:
+                  $ref: "#/components/schemas/integer"
+                memberId:
+                  $ref: "#/components/schemas/integer"
+            example:
+              year: 2021
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/boardMember"
+        400:
+          $ref: "#/components/responses/badRequestError"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        403:
+          $ref: "#/components/responses/forbiddenError"
+        404:
+          $ref: "#/components/responses/notFoundError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+    delete:
+      tags:
+        - boardMember
+      summary: Delete this board member instance
+      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  boardMemberId:
+                    $ref: "#/components/schemas/integer"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        403:
+          $ref: "#/components/responses/forbiddenError"
+        404:
+          $ref: "#/components/responses/notFoundError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+  
+  # boardMemberType
+  /api/boardMemberType/new:
+    post:
+      tags:
+        - boardMemberType
+      summary: Create a new boardMemberType
+      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              additionalProperties: false
+              properties:
+                title:
+                  $ref: "#/components/schemas/string"
+      responses:
+        201:
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/boardMemberType"
+        400:
+          $ref: "#/components/responses/badRequestError"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        403:
+          $ref: "#/components/responses/forbiddenError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+  /api/boardMemberType/list:
+    get:
+      tags:
+        - boardMemberType
+      summary: Get all board member types
+      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/boardMemberType"
+        400:
+          $ref: "#/components/responses/badRequestError"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+  /api/boardMember/{boardMemberTypeID}:
+    parameters:
+      - name: boardMemberTypeID
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - boardMemberType
+      summary: Get this board member type
+      description: >
+        This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/boardMemberType"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        404:
+          $ref: "#/components/responses/notFoundError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+    patch:
+      tags:
+        - boardMemberType
+      summary: Update this board member type
+      description: >
+        The request body needs only contain the fields with data to be updated.
+        If data in a field should not be updated, that field can be omitted from
+        the request body.
+        <br><br>
+        This endpoint requires an `Authorization: Bearer` header with a JWT ID token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              minProperties: 1
+              additionalProperties: false
+              properties:
+                title:
+                  $ref: "#/components/schemas/string"
+            example:
+              title: "President"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/boardMemberType"
+        400:
+          $ref: "#/components/responses/badRequestError"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        403:
+          $ref: "#/components/responses/forbiddenError"
+        404:
+          $ref: "#/components/responses/notFoundError"
+        500:
+          $ref: "#/components/responses/internalServerError"
+    delete:
+      tags:
+        - boardMemberType
+      summary: Delete this board member type instance
+      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  boardMemberTypeId:
+                    $ref: "#/components/schemas/integer"
+        401:
+          $ref: "#/components/responses/unauthorizedError"
+        403:
+          $ref: "#/components/responses/forbiddenError"
+        404:
+          $ref: "#/components/responses/notFoundError"
         500:
           $ref: "#/components/responses/internalServerError"

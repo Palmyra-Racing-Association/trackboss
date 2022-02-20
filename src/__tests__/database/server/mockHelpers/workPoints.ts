@@ -11,7 +11,8 @@ export function getWorkPointsByMemberResponse(values: number[]) {
 
     const filterList =
         (memberId: number, year: number) => _.filter(
-            pointsList, (points) => points.member_id === memberId && points.year === year,
+            pointsList,
+            (points) => points.member_id === memberId && points.year === year,
         );
 
     if (values[0] < 0) {
@@ -30,7 +31,8 @@ export function getWorkPointsByMembershipResponse(values: number[]) {
     ];
     const filterList =
     (memberId: number, year: number) => _.filter(
-        pointsList, (points) => points.membership_id === memberId && points.year === year,
+        pointsList,
+        (points) => points.membership_id === memberId && points.year === year,
     );
 
     if (values[0] < 0) {
