@@ -81,4 +81,4 @@ const billingHandlers = [
         return res(ctx.status(500), ctx.json({ reason: 'Internal Server Error' }));
     }),
 ];
-export { billingHandlers as default };
+export default billingHandlers;

@@ -89,4 +89,4 @@ const bikeHandlers = [
     }),
 ];
 
-export { bikeHandlers as default };
+export default bikeHandlers;

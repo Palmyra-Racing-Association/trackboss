@@ -1,6 +1,6 @@
 import { PatchMemberRequest } from 'src/typedefs/member';
 import { getMember, getMemberList, insertMember, patchMember } from '../../../database/member';
-import mockQuery from './mockQuery';
+import { mockQuery } from './mockQuery';
 
 describe('insertMember()', () => {
     it('Inserts a single member', async () => {

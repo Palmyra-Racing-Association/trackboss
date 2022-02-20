@@ -6,7 +6,7 @@ import pool from './pool';
 import { Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
 
 // Map the API values for the member types to the DB values
-const MEMBER_TYPE_MAP = new Map([
+export const MEMBER_TYPE_MAP = new Map([
     ['admin', 'Admin'],
     ['membershipAdmin', 'Membership Admin'],
     ['member', 'Member'],
@@ -100,7 +100,7 @@ export async function getMemberList(type?: string): Promise<Member[]> {
     }));
 }
 
-export async function getMember(id: number): Promise<Member> {
+export async function getMember(id: string): Promise<Member> {
     const values = [id];
 
     let results;
@@ -137,7 +137,7 @@ export async function getMember(id: number): Promise<Member> {
     };
 }
 
-export async function patchMember(id: number, req: PatchMemberRequest): Promise<void> {
+export async function patchMember(id: string, req: PatchMemberRequest): Promise<void> {
     const values = [
         id,
         req.membershipId,
