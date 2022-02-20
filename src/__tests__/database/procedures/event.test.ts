@@ -1,4 +1,4 @@
-import _, { isEmpty } from 'lodash';
+import _ from 'lodash';
 import mysql, { OkPacket, RowDataPacket } from 'mysql2/promise';
 
 import config from './config';
