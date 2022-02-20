@@ -6,7 +6,6 @@ import renderer from 'react-test-renderer';
 import Header from '../../components/Header';
 import EventCalendar from '../../components/EventCalendar';
 
-
 // TODO: Fix after feature freeze
 
 /*
