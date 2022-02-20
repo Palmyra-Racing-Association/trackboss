@@ -1,6 +1,6 @@
 /* eslint-disable radix */
 export function generateHeaders(token: string, range?: string): Headers {
-    if (typeof range !== 'undefined') {
+    if (typeof range === 'undefined') {
         return new Headers({
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,

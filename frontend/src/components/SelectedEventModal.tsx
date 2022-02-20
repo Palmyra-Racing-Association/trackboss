@@ -14,8 +14,8 @@ import {
     HStack,
     VStack,
     Text,
-    ListItem,
-    UnorderedList,
+    // ListItem,
+    // UnorderedList,
 } from '@chakra-ui/react';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
 // import { deleteJob } from '../controller/job';
@@ -26,7 +26,7 @@ interface modalProps {
   onClose: () => void,
   selectedEvent: any,
   onSignUpOpen: () => void;
-  attendeesList: any[], // TODO this should match our typing
+  // attendeesList: any[], // TODO this should match our typing
   admin: boolean
 }
 
@@ -48,7 +48,7 @@ async function deleteEventLocal(event: any) {
 
 export default function SelectedEventModal(props: modalProps) {
     return (
-        <Modal size="xl" isOpen={props.isOpen} onClose={props.onClose}>
+        <Modal size="lg" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
             <ModalContent>
                 <Heading
@@ -69,19 +69,25 @@ export default function SelectedEventModal(props: modalProps) {
                 </ModalBody>
                 {
                     props.selectedEvent.workPoints && (
-                        <SimpleGrid columns={2}>
+                        <SimpleGrid columns={1}>
+                            <Center>
+                                <HStack spacing={0}>
+                                    <Text fontSize="xl">Work Points:</Text>
+                                    <Text pl={2} color="orange.400" fontSize="3xl">3</Text>
+                                </HStack>
+                            </Center>
                             <Center>
                                 <VStack spacing={1}>
-                                    <Text pr={8} fontSize="xl">Going:</Text>
-                                    <Divider />
+                                    {/* <Text pr={8} fontSize="xl">Going:</Text> */}
+                                    {/* <Divider /> */}
                                     {/* TODO: Should we handle a case with many attendees? (10+) */}
-                                    <UnorderedList>
+                                    {/* <UnorderedList>
                                         {
                                             props.attendeesList.map((attendee) => (
                                                 <ListItem>{attendee.name}</ListItem>
                                             ))
                                         }
-                                    </UnorderedList>
+                                    </UnorderedList> */}
                                     {
                                         props.admin && (
                                             <Button
@@ -102,12 +108,6 @@ export default function SelectedEventModal(props: modalProps) {
                                         )
                                     }
                                 </VStack>
-                            </Center>
-                            <Center>
-                                <HStack spacing={0}>
-                                    <Text fontSize="xl">Work Points:</Text>
-                                    <Text pl={2} color="orange.400" fontSize="3xl">3</Text>
-                                </HStack>
                             </Center>
                         </SimpleGrid>
                     )

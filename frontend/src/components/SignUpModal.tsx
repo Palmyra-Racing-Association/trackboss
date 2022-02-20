@@ -20,7 +20,7 @@ interface modalProps {
 }
 
 function signUp(attendingFamily: any[], member: any) {
-    // Call controller to sign up, then once it confirms...
+    // Call controller to sign up member, then once it confirms...
     return attendingFamily.concat(member);
 }
 
@@ -29,6 +29,8 @@ export default function SignUpModal(props: modalProps) {
     useEffect(() => {
         async function setAttendance() {
             props.familyMembers.forEach((member) => {
+                // If the family member is attending the event, then add them to the list of attendingFamily
+                // (make their button orange)
                 if (props.attendeesList.some((attendee: any) => JSON.stringify(member) === JSON.stringify(attendee))) {
                     attendingFamily.push(member);
                 }
@@ -49,6 +51,7 @@ export default function SignUpModal(props: modalProps) {
                     {
                         props.familyMembers.map((member) => (
                             <Button
+                                key={member.member_id}
                                 onClick={
                                     () => {
                                         setAttendingFamily(signUp(attendingFamily, member));

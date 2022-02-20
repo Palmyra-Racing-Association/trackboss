@@ -31,15 +31,19 @@ export async function getMember(token: string, memberId: number): Promise<GetMem
 export async function getFamilyMembers() {
     return [
         {
+            member_id: 1,
             name: 'Billy Joel',
         },
         {
+            member_id: 2,
             name: 'Jimmi Hendrix',
         },
         {
+            member_id: 3,
             name: 'Elvis',
         },
         {
+            member_id: 4,
             name: 'Ringo Starr',
         },
     ];

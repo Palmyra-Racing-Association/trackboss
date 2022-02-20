@@ -129,8 +129,8 @@ function EventCalendar(props: EventCalendarProps) {
                         onClose={onViewEventClose}
                         selectedEvent={selectedEvent}
                         onSignUpOpen={onSignUpOpen}
-                        attendeesList={eventAttendees}
-                        admin
+                        // attendeesList={eventAttendees}
+                        admin={false}
                     />
                 )
             }
