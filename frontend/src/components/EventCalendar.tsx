@@ -47,7 +47,7 @@ function EventCalendar(props: EventCalendarProps) {
             style={{ height: '70vh' }}
             components={
                 {
-                    // eslint-disable-next-line no-shadow
+                    // eslint-disable-next-line
                     toolbar: ({ localizer, ...props }, children) => (
                         <Toolbar
                             // eslint-disable-next-line react/jsx-props-no-spreading
