@@ -112,7 +112,6 @@ describe('sp_patch_event()', () => {
         const [result] = await pool.query<OkPacket>(sql, values);
         expect(result.affectedRows).toBe(0);
     });
-    // moving the jobs days linked to event? this is gonna be bad with job_day_number
 });
 
 describe('sp_event_job_generation()', async () => {

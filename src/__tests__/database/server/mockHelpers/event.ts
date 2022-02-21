@@ -40,7 +40,7 @@ export function getEventResponse(id: number) {
             return Promise.resolve([[{
                 event_id: 10,
                 date: '2000-01-01',
-                event_type_id: 2,
+                event_type: 'THE test event',
                 event_name: 'Test',
                 event_description: 'test desc',
             }]]);

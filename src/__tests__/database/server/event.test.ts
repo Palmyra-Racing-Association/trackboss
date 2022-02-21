@@ -86,15 +86,15 @@ describe('getEvent()', () => {
         const origValues = [
             10,
             '2000-01-01',
-            2,
+            'THE test event',
             'Test',
             'test desc',
         ];
         const result = await getEvent(eventId);
         expect(mockQuery).toHaveBeenCalled();
         expect(result.eventId).toBe(eventId);
-        // expect(result.eventType).toBe(origValues[1]);
         expect(result.date).toBe(origValues[1]);
+        expect(result.eventType).toBe(origValues[2]);
         expect(result.eventName).toBe(origValues[3]);
         expect(result.eventDescription).toBe(origValues[4]);
     });

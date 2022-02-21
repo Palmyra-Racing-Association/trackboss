@@ -7,7 +7,7 @@ import { Event, PatchEventRequest, PostNewEventRequest } from '../typedefs/event
 
 export const INSERT_EVENT_SQL = 'CALL sp_event_job_generation(?, ?, ?, ?)';
 export const GET_EVENT_LIST_SQL = 'SELECT * FROM v_event';
-export const GET_EVENT_LIST_DATERANGE_SQL = `${GET_EVENT_LIST_SQL} WHERE date > ? AND date < ?`;
+export const GET_EVENT_LIST_DATERANGE_SQL = `${GET_EVENT_LIST_SQL} WHERE date >= ? AND date <= ?`;
 export const GET_EVENT_SQL = `${GET_EVENT_LIST_SQL} WHERE event_id = ?`;
 export const PATCH_EVENT_SQL = 'CALL sp_patch_event(?, ?, ?, ?)';
 export const DELETE_EVENT_SQL = 'CALL sp_delete_event(?)';
