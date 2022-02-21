@@ -14,7 +14,7 @@ BEGIN
 	
 	SELECT DATEDIFF(IFNULL(_date, @cur_date), @cur_date) INTO @date_dif;
 	
-	IF(@date_dif > 0) THEN
+	IF(@date_dif != 0) THEN
 			CALL sp_delete_event(_event_id);
 			CALL sp_event_job_generation(IFNULL(_date, @cur_date), @cur_event_type_id, IFNULL(_event_name, @cur_event_name), IFNULL(_event_description, @cur_event_description));
 	END IF;
