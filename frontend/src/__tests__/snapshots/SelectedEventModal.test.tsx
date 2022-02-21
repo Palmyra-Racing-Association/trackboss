@@ -29,15 +29,29 @@ const selectedEvent = {
 };
 
 describe('selected event modal', () => {
-    it('renders all props correctly', () => {
+    it('renders all props correctly as admin', () => {
         const modal = renderer.create(
             <SelectedEventModal
                 isOpen
                 onClose={onViewEventClose}
                 selectedEvent={selectedEvent}
                 onSignUpOpen={onSignUpOpen}
-                attendeesList={eventAttendees}
+                // attendeesList={eventAttendees}
                 admin
+            />,
+        ).toJSON();
+        expect(modal).toMatchSnapshot();
+    });
+
+    it('renders all props correctly as not admin', () => {
+        const modal = renderer.create(
+            <SelectedEventModal
+                isOpen
+                onClose={onViewEventClose}
+                selectedEvent={selectedEvent}
+                onSignUpOpen={onSignUpOpen}
+                // attendeesList={eventAttendees}
+                admin={false}
             />,
         ).toJSON();
         expect(modal).toMatchSnapshot();

@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`selected event modal renders all props correctly 1`] = `<span />`;
+exports[`selected event modal renders all props correctly as admin 1`] = `<span />`;
+
+exports[`selected event modal renders all props correctly as not admin 1`] = `<span />`;
