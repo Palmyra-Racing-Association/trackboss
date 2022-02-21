@@ -31,7 +31,7 @@ BEGIN
 			leave getEventJob;
 		END IF;
         
-        SET @K = 0; # This counter is to handle count from event_job
+        SET @K = 1; # This counter is to handle count from event_job
 		lab1: REPEAT
         
         SELECT job_day_number INTO @JobDayNumber FROM job_type WHERE job_type_id = cur_job_type; #Get the JobDayNumber(this was taken from Alan DB)

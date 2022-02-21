@@ -17,6 +17,14 @@ import {
     PATCH_MEMBER_SQL,
 } from '../../../database/member';
 import {
+    GET_EVENT_SQL,
+    GET_EVENT_LIST_SQL,
+    GET_EVENT_LIST_DATERANGE_SQL,
+    INSERT_EVENT_SQL,
+    PATCH_EVENT_SQL,
+    DELETE_EVENT_SQL,
+} from '../../../database/event';
+import {
     GET_MEMBERSHIP_LIST_BY_STATUS_SQL,
     GET_MEMBERSHIP_LIST_SQL,
     GET_MEMBERSHIP_SQL,
@@ -48,6 +56,7 @@ import {
 import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
 import * as memberHelpers from './mockHelpers/member';
+import * as eventHelpers from './mockHelpers/event';
 import * as membershipHelpers from './mockHelpers/membership';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 import * as eventTypeHelpers from './mockHelpers/eventType';
@@ -95,6 +104,17 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return getWorkPointsByMemberResponse(values);
         case GET_WORK_POINTS_BY_MEMBERSHIP_SQL:
             return getWorkPointsByMembershipResponse(values);
+        case GET_EVENT_SQL:
+            return eventHelpers.getEventResponse(values[0]);
+        case GET_EVENT_LIST_DATERANGE_SQL:
+        case GET_EVENT_LIST_SQL:
+            return eventHelpers.getEventListResponse(values);
+        case INSERT_EVENT_SQL:
+            return eventHelpers.insertEventResponse(values[2]);
+        case PATCH_EVENT_SQL:
+            return eventHelpers.patchEventResponse(values[0]);
+        case DELETE_EVENT_SQL:
+            return eventHelpers.deleteEventResponse(values[0]);
         case GET_EVENT_TYPE_SQL:
             return eventTypeHelpers.getEventTypeResponse(values[0]);
         case GET_EVENT_TYPE_LIST_SQL:
