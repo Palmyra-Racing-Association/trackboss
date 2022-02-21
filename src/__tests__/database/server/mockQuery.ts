@@ -24,7 +24,7 @@ import {
     PATCH_EVENT_SQL,
     DELETE_EVENT_SQL,
 } from '../../../database/event';
-  import {
+import {
     GET_MEMBERSHIP_LIST_BY_STATUS_SQL,
     GET_MEMBERSHIP_LIST_SQL,
     GET_MEMBERSHIP_SQL,
