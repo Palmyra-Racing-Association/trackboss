@@ -100,7 +100,7 @@ describe('insertJob()', () => {
 //     });
 // });
 
-describe('getMember()', () => {
+describe('getJob()', () => {
     it('Selects a single job', async () => {
         const jobId = 18;
         const origValues = [
@@ -147,39 +147,39 @@ describe('getMember()', () => {
     });
 });
 
-describe('patchMember()', () => {
+describe('patchJob()', () => {
     const testPatchWithObject = async (req: PatchJobRequest) => {
         const jobId = 42;
         // no error means success
-        await patchMember(jobId, req);
+        await patchJob(jobId, req);
         expect(mockQuery).toHaveBeenCalled();
     };
 
-    it('Patches a member with memberId field', async () => {
-        await testPatchWithObject({ memberId: 0, modifiedBy: 0 });
+    it('Patches a job with memberId field', async () => {
+        await testPatchWithObject({ memberId: 2, modifiedBy: 0 });
     });
 
-    it('Patches a member with eventId field', async () => {
-        await testPatchWithObject({ eventId: '', modifiedBy: 0 });
+    it('Patches a job with eventId field', async () => {
+        await testPatchWithObject({ eventId: 2, modifiedBy: 0 });
     });
 
-    it('Patches a member with jobTypeId field', async () => {
-        await testPatchWithObject({ active: false, modifiedBy: 0 });
+    it('Patches a job with jobTypeId field', async () => {
+        await testPatchWithObject({ jobTypeId: 2, modifiedBy: 0 });
     });
 
-    it('Patches a member with jobDate field', async () => {
+    it('Patches a job with jobDate field', async () => {
         await testPatchWithObject({ jobDate: '1999-09-09', modifiedBy: 0 });
     });
 
-    it('Patches a member with points awarded field', async () => {
+    it('Patches a job with points awarded field', async () => {
         await testPatchWithObject({ pointsAwarded: 2, modifiedBy: 0 });
     });
 
-    it('Patches a member with verified field', async () => {
+    it('Patches a job with verified field', async () => {
         await testPatchWithObject({ verified: true, modifiedBy: 0 });
     });
 
-    it('Patches a member with paid field', async () => {
+    it('Patches a job with paid field', async () => {
         await testPatchWithObject({ paid: true, modifiedBy: 0 });
     });
 
