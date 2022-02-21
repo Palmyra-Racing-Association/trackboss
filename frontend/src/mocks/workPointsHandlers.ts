@@ -31,4 +31,4 @@ const workPointsHandlers = [
     }),
 ];
 
-export { workPointsHandlers as default };
+export default workPointsHandlers;

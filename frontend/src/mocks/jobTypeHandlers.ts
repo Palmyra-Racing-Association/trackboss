@@ -71,4 +71,4 @@ const jobTypeHandlers = [
     }),
 ];
 
-export { jobTypeHandlers as default };
+export default jobTypeHandlers;

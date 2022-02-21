@@ -88,4 +88,4 @@ const eventHandlers = [
         return res(ctx.status(201), ctx.json({ eventId: 1 }));
     }),
 ];
-export { eventHandlers as default };
+export default eventHandlers;

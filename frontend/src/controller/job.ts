@@ -22,13 +22,11 @@ export async function createJob(token: string, jobData: PostNewJobRequest): Prom
 
 export async function getJobList(token: string, queryType?: string, filterType?: string): Promise<GetJobListResponse> {
     if (queryType && filterType) {
-        const response = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/job/list?${queryType}=${filterType}`, {
-                method: 'GET',
-                mode: 'no-cors',
-                headers: generateHeaders(token),
-            },
-        );
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/list?${queryType}=${filterType}`, {
+            method: 'GET',
+            mode: 'no-cors',
+            headers: generateHeaders(token),
+        });
         return response.json();
     }
     // // else
