@@ -1,6 +1,6 @@
 import { PatchEventRequest } from 'src/typedefs/event';
 import { deleteEvent, getEvent, getEventList, insertEvent, patchEvent } from '../../../database/event';
-import mockQuery from './mockQuery';
+import { mockQuery } from './mockQuery';
 
 describe('insertEvent()', () => {
     it('Inserts a single event', async () => {
