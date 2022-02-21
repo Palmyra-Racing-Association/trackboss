@@ -14,7 +14,7 @@ import { getJobAttendees } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
 // import Event from '../../../src/typedefs/event';
 
-const Toolbar = require('react-big-calendar/lib/Toolbar');
+const Toolbar = React.memo(require('react-big-calendar/lib/Toolbar'));
 
 interface EventCalendarProps {
     // This <any> will be replaced with our own Event Typedef, once it has all the attributes we need here
