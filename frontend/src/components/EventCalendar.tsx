@@ -130,7 +130,7 @@ function EventCalendar(props: EventCalendarProps) {
                         selectedEvent={selectedEvent}
                         onSignUpOpen={onSignUpOpen}
                         // attendeesList={eventAttendees}
-                        admin={false}
+                        admin
                     />
                 )
             }
