@@ -62,27 +62,27 @@ export async function getJobList(
                 dynamicSql += 'member IS NULL AND ';
             }
         }
-        if (verificationStatus) {
+        if (typeof verificationStatus !== 'undefined') {
             dynamicSql += 'verified = ? AND ';
             values[counter++] = verificationStatus;
         }
-        if (memberId) {
+        if (typeof memberId !== 'undefined') {
             dynamicSql += 'member_id = ? AND ';
             values[counter++] = memberId;
         }
-        if (membershipId) {
+        if (typeof membershipId !== 'undefined') {
             dynamicSql += 'membership_id = ? AND ';
             values[counter++] = membershipId;
         }
-        if (eventId) {
+        if (typeof eventId !== 'undefined') {
             dynamicSql += 'event_id = ? AND ';
             values[counter++] = eventId;
         }
-        if (startDate) {
+        if (typeof startDate !== 'undefined') {
             dynamicSql += 'job_date >= ? AND ';
             values[counter++] = startDate;
         }
-        if (endDate) {
+        if (typeof endDate !== 'undefined') {
             dynamicSql += 'job_date <= ? AND ';
             values[counter++] = endDate;
         }

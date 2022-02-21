@@ -14,7 +14,7 @@ const server = app.listen(port, () => {
 });
 
 const fn = async () => {
-    logger.info(`${JSON.stringify(await getJobList(1, 1, undefined, undefined, 1, '2020-01-10', '2020-02-10'))}`);
+    logger.info(`${JSON.stringify(await getJobList(0, 1, undefined, undefined, 1, '2020-01-10'))}`);
 };
 
 fn();
