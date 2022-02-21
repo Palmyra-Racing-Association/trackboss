@@ -144,7 +144,6 @@ function EventCalendar(props: EventCalendarProps) {
                     />
                 )
             }
-
         </div>
     );
 }

@@ -11,15 +11,6 @@ function onSignUpOpen() {
     // a void function
 }
 
-const eventAttendees = [
-    {
-        name: 'testing',
-    },
-    {
-        name: 'testing again',
-    },
-];
-
 const selectedEvent = {
     eventId: 0,
     date: '2022-02-07',
@@ -36,7 +27,6 @@ describe('selected event modal', () => {
                 onClose={onViewEventClose}
                 selectedEvent={selectedEvent}
                 onSignUpOpen={onSignUpOpen}
-                // attendeesList={eventAttendees}
                 admin
             />,
         ).toJSON();
@@ -50,7 +40,6 @@ describe('selected event modal', () => {
                 onClose={onViewEventClose}
                 selectedEvent={selectedEvent}
                 onSignUpOpen={onSignUpOpen}
-                // attendeesList={eventAttendees}
                 admin={false}
             />,
         ).toJSON();
