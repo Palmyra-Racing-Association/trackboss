@@ -1061,7 +1061,7 @@ paths:
         - name: Range
           in: header
           description: |
-            Optional: filter events by a specific timeframe.
+            Optional: filter events by a specific timeframe (inclusive).
             Format is one of:
             - `YYYYMMDD-YYYYMMDD`
             - `YYYYMMDD-`

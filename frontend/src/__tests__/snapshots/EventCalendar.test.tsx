@@ -7,7 +7,6 @@ import moment from 'moment';
 import EventCalendar from '../../components/EventCalendar';
 
 // TODO: Fix after feature freeze
-
 /*
 const upcomingEvents = [
     {

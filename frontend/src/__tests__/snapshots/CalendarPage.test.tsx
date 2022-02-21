@@ -5,12 +5,10 @@ import { BrowserRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 import Header from '../../components/Header';
 import EventCalendar from '../../components/EventCalendar';
+import CreateEventModal from '../../components/CreateEventModal';
 
 // TODO: Fix after feature freeze
-
 /*
-Date.now = jest.fn(() => 1487076708000);
-
 const upcomingEvents = [
     {
         title: 'Test Event',
@@ -26,7 +24,10 @@ describe('calendar page', () => {
         const cal = renderer.create(
             <BrowserRouter>
                 <Header title="Calendar" activeButtonId={2} />
-                <Box pl={20} pr={20} pt={20}>
+                <Box p={5} pb={0}>
+                    <CreateEventModal />
+                </Box>
+                <Box p={5} pt={20}>
                     <EventCalendar events={upcomingEvents} />
                 </Box>
             </BrowserRouter>,
