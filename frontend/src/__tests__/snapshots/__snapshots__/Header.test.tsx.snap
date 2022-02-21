@@ -72,7 +72,7 @@ exports[`page headers renders correctly for Calendar 1`] = `
       className="css-0"
     >
       <h2
-        className="chakra-heading css-1tdh55g"
+        className="chakra-heading css-10o0cdp"
       >
         Calendar
       </h2>
@@ -156,7 +156,7 @@ exports[`page headers renders correctly for Dashboard 1`] = `
       className="css-0"
     >
       <h2
-        className="chakra-heading css-1tdh55g"
+        className="chakra-heading css-10o0cdp"
       >
         Dashboard
       </h2>
@@ -240,7 +240,7 @@ exports[`page headers renders correctly for Member List 1`] = `
       className="css-0"
     >
       <h2
-        className="chakra-heading css-1tdh55g"
+        className="chakra-heading css-10o0cdp"
       >
         Members
       </h2>
@@ -324,7 +324,7 @@ exports[`page headers renders correctly for Settings 1`] = `
       className="css-0"
     >
       <h2
-        className="chakra-heading css-1tdh55g"
+        className="chakra-heading css-10o0cdp"
       >
         General Info
       </h2>

@@ -20,6 +20,56 @@ export async function createEvent(token: string, eventData: PostNewEventRequest)
     return response.json();
 }
 
+// TODO: this is a mocked response for frontend development, replace once API is complete
+export async function makeEvent(name: string, description: string, start: Date, end: Date, typeId: number) {
+    // eslint-disable-next-line
+    console.debug({
+        date: start,
+        eventTypeId: typeId,
+        eventName: name,
+        eventDescription: description,
+    });
+}
+
+// TODO: this is a mocked response for frontend development, replace once API is completed
+export async function getCalendarEventList() {
+    // const upcomingEvents: GetEventListResponse = await getEventList('TestToken', todayString);
+    // if ('reason' in upcomingEvents) {
+    //     console.log('TODO: error handling?');
+    // } else {
+    //     convertEventsToCalendarFormat(upcomingEvents);
+    //     return upcomingEvents;
+    // }
+    const upcomingEvents = [
+        {
+            title: 'Work Day',
+            start: new Date('2022-02-08T00:10:00'),
+            end: new Date('2022-02-09T00:10:00'),
+            type: 'Work',
+        },
+        {
+            title: 'Race Day',
+            start: new Date('2022-02-11T00:10:00'),
+            end: new Date('2022-02-12T00:10:00'),
+            type: 'Race',
+        },
+        {
+            title: 'Meeting',
+            start: new Date('2022-02-22T00:10:00'),
+            end: new Date('2022-02-23T00:10:00'),
+            type: 'Meeting',
+        },
+        {
+            title: 'Some other category',
+            start: new Date('2022-02-22T00:10:00'),
+            end: new Date('2022-02-23T00:10:00'),
+            type: 'Other',
+        },
+    ];
+
+    return upcomingEvents;
+}
+
 export async function getEventList(token: string, listType?: string): Promise<GetEventListResponse> {
     if (listType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/list`, {

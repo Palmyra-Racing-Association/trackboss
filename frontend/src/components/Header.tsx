@@ -20,7 +20,7 @@ export default function Header(props:pageProps) {
                 <HamburgerMenu activeButtonId={props.activeButtonId} />
                 <Spacer />
                 <Box>
-                    <Heading pr={33} size="3xl">{props.title}</Heading>
+                    <Heading pr={90} size="3xl">{props.title}</Heading>
                 </Box>
                 <Spacer />
             </Flex>
