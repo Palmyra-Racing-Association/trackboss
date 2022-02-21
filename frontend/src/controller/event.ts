@@ -20,7 +20,6 @@ export async function createEvent(token: string, eventData: PostNewEventRequest)
     return response.json();
 }
 
-
 // TODO: this is a mocked response for frontend development, replace once API is complete
 export async function makeEvent(name: string, description: string, start: Date, end: Date, typeId: number) {
     // eslint-disable-next-line
