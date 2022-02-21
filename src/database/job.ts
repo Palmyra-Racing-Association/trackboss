@@ -41,12 +41,52 @@ export async function insertJob(req: PostNewJobRequest): Promise<number> {
     return result.insertId;
 }
 
-export async function getJobList(membershipId?: number): Promise<Job[]> {
+export async function getJobList(
+    assignmentStatus?:number,
+    verificationStatus?:number,
+    memberId?:number,
+    membershipId?: number,
+    eventId?: number,
+    startDate?:string,
+    endDate?:string,
+): Promise<Job[]> {
     let sql;
-    let values: number[];
-    if (typeof membershipId !== 'undefined') {
-        sql = GET_JOB_LIST_FILTER_SQL; // STILL NEED TO WRITE THIS PREPARED STATEMENT
-        values = [membershipId];
+    let values: any[] = [];
+    if (assignmentStatus || verificationStatus || memberId || membershipId || eventId || startDate || endDate) {
+        let dynamicSql: string = ' WHERE ';
+        let counter: number = 0;
+        if (typeof assignmentStatus !== 'undefined') {
+            if (assignmentStatus === 1) {
+                dynamicSql += 'member IS NOT NULL AND ';
+            } else {
+                dynamicSql += 'member IS NULL AND ';
+            }
+        }
+        if (verificationStatus) {
+            dynamicSql += 'verified = ? AND ';
+            values[counter++] = verificationStatus;
+        }
+        if (memberId) {
+            dynamicSql += 'member_id = ? AND ';
+            values[counter++] = memberId;
+        }
+        if (membershipId) {
+            dynamicSql += 'membership_id = ? AND ';
+            values[counter++] = membershipId;
+        }
+        if (eventId) {
+            dynamicSql += 'event_id = ? AND ';
+            values[counter++] = eventId;
+        }
+        if (startDate) {
+            dynamicSql += 'job_date >= ? AND ';
+            values[counter++] = startDate;
+        }
+        if (endDate) {
+            dynamicSql += 'job_date <= ? AND ';
+            values[counter++] = endDate;
+        }
+        sql = GET_JOB_LIST_SQL + dynamicSql.slice(0, -4); // Slice the trailing AND
     } else {
         sql = GET_JOB_LIST_SQL;
         values = [];

@@ -26,7 +26,7 @@ import {
     GET_JOB_SQL,
     INSERT_JOB_SQL,
     PATCH_JOB_SQL,
-    DELETE_JOB_SQL
+    DELETE_JOB_SQL,
 } from '../../../database/job';
 
 import pool from '../../../database/pool';

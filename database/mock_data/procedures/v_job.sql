@@ -4,7 +4,10 @@ CREATE VIEW `v_job` AS
     SELECT
 		j.job_id,
 		CONCAT(m.first_name, ' ', m.last_name) AS member,
+		m.member_id,
+		m.membership_id,
 		e.event_name as event,
+		e.event_id,
 		j.job_date,
 		jt.title as job_type,
 		j.verified,

@@ -189,7 +189,7 @@ describe('patchJob()', () => {
         expect(mockQuery).toHaveBeenCalled();
     });
 
-    it('Throws for member not found', async () => {
+    it('Throws for job not found', async () => {
         const jobId = 3000;
         await expect(patchJob(jobId, { modifiedBy: 0 })).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
@@ -203,7 +203,7 @@ describe('patchJob()', () => {
 
     it('Throws unreachable error without errno field', async () => {
         const memberId = -200;
-        await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('this error should not happen');
+        await expect(patchJob(memberId, { modifiedBy: 0 })).rejects.toThrow('this error should not happen');
         expect(mockQuery).toHaveBeenCalled();
     });
 });
