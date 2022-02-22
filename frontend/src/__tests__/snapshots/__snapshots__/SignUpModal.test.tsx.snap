@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`sign up modal renders all props correctly 1`] = `<span />`;
