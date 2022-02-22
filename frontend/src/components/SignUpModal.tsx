@@ -24,6 +24,13 @@ function signUp(attendingFamily: any[], member: any) {
     return attendingFamily.concat(member);
 }
 
+function undoSignUp(attendingFamily: any[], member: any) {
+    // Call the controller to un-sign up, then once it confirms...
+    const index = attendingFamily.indexOf(member);
+    const unsignedMember = attendingFamily[index];
+    return attendingFamily.filter((m) => m.member_id !== unsignedMember.member_id);
+}
+
 export default function SignUpModal(props: modalProps) {
     const [attendingFamily, setAttendingFamily] = useState<any>([]);
     useEffect(() => {
@@ -53,8 +60,12 @@ export default function SignUpModal(props: modalProps) {
                             <Button
                                 key={member.member_id}
                                 onClick={
-                                    () => {
-                                        setAttendingFamily(signUp(attendingFamily, member));
+                                    async () => {
+                                        if (attendingFamily.includes(member)) {
+                                            await setAttendingFamily(undoSignUp(attendingFamily, member));
+                                        } else {
+                                            await setAttendingFamily(signUp(attendingFamily, member));
+                                        }
                                     }
                                 }
                                 m={3}
