@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, momentLocalizer } from 'react-big-calendar';
@@ -14,15 +17,15 @@ import { getJobAttendees } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
 // import Event from '../../../src/typedefs/event';
 
-const Toolbar = React.memo(require('react-big-calendar/lib/Toolbar'));
+const RenderToolbar = require('react-big-calendar/lib/Toolbar');
+
+const localizer: DateLocalizer = momentLocalizer(moment);
 
 interface EventCalendarProps {
     // This <any> will be replaced with our own Event Typedef, once it has all the attributes we need here
     // events: Event[],
     events: any[],
 }
-
-const localizer: DateLocalizer = momentLocalizer(moment);
 
 async function getSelectedJobAttendees(): Promise<any> {
     const attendees = await getJobAttendees();
@@ -34,7 +37,7 @@ async function getCurrentFamilyMembers(): Promise<any> {
     return currentFamilyMembers;
 }
 
-function EventCalendar(props: EventCalendarProps) {
+export default function EventCalendar(props: EventCalendarProps) {
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
     const [selectedEvent, setSelectedEvent] = useState<any>();
@@ -87,10 +90,8 @@ function EventCalendar(props: EventCalendarProps) {
                 style={{ height: '70vh' }}
                 components={
                     {
-                    // eslint-disable-next-line no-shadow
-                        toolbar: ({ localizer, ...props }, children) => (
-                            <Toolbar
-                            // eslint-disable-next-line react/jsx-props-no-spreading
+                        toolbar: React.memo(({ localizer, ...props }, children) => (
+                            <RenderToolbar
                                 {...props}
                                 localizer={
                                     {
@@ -117,8 +118,8 @@ function EventCalendar(props: EventCalendarProps) {
                                 }
                             >
                                 {children}
-                            </Toolbar>
-                        ),
+                            </RenderToolbar>
+                        )),
                     }
                 }
             />
@@ -147,5 +148,3 @@ function EventCalendar(props: EventCalendarProps) {
         </div>
     );
 }
-
-export default EventCalendar;
