@@ -15,7 +15,6 @@ const columns: any = [
 
 async function getFormattedMemberListLocal() {
     const response = await getFormattedMemberList('test');
-    console.debug(response);
     return response;
 }
 
@@ -45,16 +44,20 @@ function MemberList() {
         getData();
     }, []);
     return (
-        <DataTable
-            columns={columns}
-            data={cells}
-            fixedHeaderScrollHeight="300px"
-            highlightOnHover
-            pagination
-            responsive
-            subHeaderWrap
-            customStyles={customStyles}
-        />
+        <div data-testid="table"> 
+            <DataTable
+                columns={columns}
+                data={cells}
+                fixedHeaderScrollHeight="300px"
+                highlightOnHover
+                pagination
+                responsive
+                subHeaderWrap
+                customStyles={customStyles}
+            />
+        </div>
+
+        
     );
 }
 

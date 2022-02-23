@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Member List component renders correctly 1`] = `
+<div
+  data-testid="table"
+>
+  <div
+    className="sc-dlVxhl fSQziN"
+  >
+    <div
+      className="sc-fKVqWL XlRpR"
+    >
+      <div
+        className="sc-bdvvtL hLGqlg rdt_Table"
+        disabled={false}
+        role="table"
+      >
+        <div
+          className="sc-iwjdpV kntihR"
+        >
+          <div
+            style={
+              Object {
+                "padding": "24px",
+              }
+            }
+          >
+            There are no records to display
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
