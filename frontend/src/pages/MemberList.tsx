@@ -10,7 +10,7 @@ const member: Member = {
     memberId: 1,
     membershipAdmin: 'true',
     active: true,
-    memberType: 'board',
+    memberType: 'admin',
     firstName: 'test',
     lastName: 'member',
     phoneNumber: '1234',

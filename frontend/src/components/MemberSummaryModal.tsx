@@ -1,6 +1,5 @@
-/* eslint-disable max-len */
-/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
 import {
     Modal,
@@ -26,7 +25,6 @@ import {
 } from '@chakra-ui/react';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
-import memberHandlers from '../mocks/memberHandlers';
 
 interface modalProps {
     memberInfo: Member,
@@ -35,8 +33,27 @@ interface modalProps {
     // admin: boolean, // TODO: this will come from state
 }
 
-async function handlePatchMember(name: string | undefined, email: string | undefined, phone: string | undefined) {
-    // const updatedMember = await patchMember()
+async function handleNewBoardMember(memberInfo: Member, editedBoardMember: string) {
+    // const currentYear = new Date().getFullYear();
+    // const boardRoleId = getBoardRoleId(editedBoardMember); // Util method?
+    // const response = await newBoardMember(currentYear,boardRoleId, memberInfo.memberId);
+    // return response;
+}
+
+async function handlePatchMemberType(memberInfo: Member, editedMemberType: string) {
+    // const updatedMember = await patchMember(editedMemberType, memberInfo.memberId)
+    // if (updatedMember.reason) {
+    //   there was an error, show error message
+    // }
+}
+
+async function handlePatchMemberContactInfo(
+    memberInfo: Member,
+    name: string | undefined,
+    email: string | undefined,
+    phone: string | undefined,
+) {
+    // const updatedMember = await patchMember(name, email, phone, memberInfo.memberId)
     // if (updatedMember.reason) {
     //      there was an error, show error message
     // }
@@ -68,7 +85,7 @@ async function handlePatchMember(name: string | undefined, email: string | undef
 export default function MemberSummaryModal(props: modalProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [memberInfo, setMemberInfo] = useState<Member>();
-    const [family, setFamily] = useState<Member[]>();
+    // const [family, setFamily] = useState<Member[]>();
     const [bikes, setBikes] = useState<Bike[]>();
 
     const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>();
@@ -79,18 +96,18 @@ export default function MemberSummaryModal(props: modalProps) {
     const [editedPhone, setEditedPhone] = useState<string>('');
 
     const [editedMemberType, setEditedMemberType] = useState<string>('');
-    const [editedMemberOccupation, setEditedMemberOccupation] = useState<string>('');
+    const [editedBoardMember, setEditedBoardMember] = useState<string>('');
 
     const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
     const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
     const handleEditedPhoneChange = (event: { target: { value: any; }; }) => setEditedPhone(event.target.value);
-
-    const handleEditedMemberOccupation = (event: { target: { value: any; }; }) => setEditedMemberOccupation(event.target.value);
+    const handleEditedBoardMember = (event: { target: { value: any; }; }) => setEditedBoardMember(event.target.value);
 
     useEffect(() => {
         async function setModalData() {
             setMemberInfo(props.memberInfo);
-            setFamily(props.memberFamily);
+            setEditedMemberType(props.memberInfo.memberType);
+            // setFamily(props.memberFamily);
             setBikes(props.memberBikes);
             setEditingMemberInfo(false);
             setEditingMemberRole(false);
@@ -169,7 +186,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                             color="green"
                                                             onClick={
                                                                 async () => {
-                                                                    setMemberInfo(await handlePatchMember(editedName, editedEmail, editedPhone));
+                                                                    setMemberInfo(await handlePatchMemberContactInfo(memberInfo, editedName, editedEmail, editedPhone));
                                                                     setEditingMemberInfo(false);
                                                                     setEditingMemberRole(false);
                                                                 }
@@ -256,32 +273,54 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 <VStack align="left">
                                                     <ButtonGroup size="sm" isAttached variant="outline">
                                                         <Button
+                                                            onClick={
+                                                                async () => {
+                                                                    if (editedMemberType !== 'member') {
+                                                                        await setEditedMemberType('member');
+                                                                    }
+                                                                }
+                                                            }
                                                             mr="-px"
-                                                            backgroundColor={memberInfo.memberType === 'member' ? 'blue' : ''}
+                                                            backgroundColor={editedMemberType === 'member' ? 'blue' : ''}
                                                         >
                                                             Member
                                                         </Button>
                                                         <Button
+                                                            onClick={
+                                                                async () => {
+                                                                    if (editedMemberType !== 'admin') {
+                                                                        await setEditedMemberType('admin');
+                                                                    }
+                                                                }
+                                                            }
                                                             mr="-px"
-                                                            backgroundColor={memberInfo.memberType === 'admin' ? 'blue' : ''}
+                                                            backgroundColor={editedMemberType === 'admin' ? 'blue' : ''}
                                                         >
                                                             Admin
                                                         </Button>
                                                         <Button
+                                                            onClick={
+                                                                async () => {
+                                                                    if (editedMemberType !== 'board') {
+                                                                        await setEditedMemberType('board');
+                                                                    }
+                                                                }
+                                                            }
                                                             mr="-px"
-                                                            backgroundColor={memberInfo.memberType === 'board' ? 'blue' : ''}
+                                                            backgroundColor={editedMemberType === 'board' ? 'blue' : ''}
                                                         >
                                                             Board
                                                         </Button>
                                                     </ButtonGroup>
                                                     <Select
-                                                        disabled={memberInfo.memberType !== 'board'}
+                                                        disabled={editedMemberType !== 'board'}
                                                         variant="outline"
                                                         size="xs"
                                                         placeholder={memberInfo.occupation}
-                                                        value={editedMemberOccupation}
-                                                        onChange={handleEditedMemberOccupation}
+                                                        value={editedBoardMember}
+                                                        onChange={handleEditedBoardMember}
                                                     >
+                                                        {/* TODO: need the actual roles here */}
                                                         <option value="president">president</option>
                                                         <option value="vice president">vice president</option>
                                                         <option value="secretary">secretary</option>
@@ -293,11 +332,11 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         color="green"
                                                         onClick={
                                                             async () => {
-                                                                // setMemberInfo(await handlePatchMember(undefined, undefined, undefined, ));
-                                                                console.log(editedMemberOccupation);
-                                                                if (editedMemberOccupation !== '') {
-                                                                    // patch boardMember
-                                                                    console.log(editedMemberOccupation);
+                                                                if (editedBoardMember !== '') {
+                                                                    await handleNewBoardMember(memberInfo, editedBoardMember);
+                                                                }
+                                                                if (memberInfo.memberType !== editedMemberType) {
+                                                                    await handlePatchMemberType(memberInfo, editedMemberType);
                                                                 }
                                                                 setEditingMemberRole(false);
                                                                 setEditingMemberInfo(false);
@@ -356,7 +395,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 }
                                             >
                                                 De-Activate Member
-
                                             </Button>
                                         </HStack>
                                         <Button
@@ -370,7 +408,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                 </SimpleGrid>
                             )
                         }
-
                     </ModalBody>
                 </ModalContent>
             </Modal>
