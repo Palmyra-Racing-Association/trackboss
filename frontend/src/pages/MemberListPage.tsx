@@ -1,10 +1,11 @@
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
 import theme from '../theme';
 import Header from '../components/Header';
 import MemberSummaryModal from '../components/MemberSummaryModal';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
+import MemberList from '../components/MemberList';
 
 const member: Member = {
     memberId: 1,
@@ -80,13 +81,16 @@ const memberBikes: Bike[] = [
     },
 ];
 
-function MemberList() {
+function MemberListPage() {
     return (
         <ChakraProvider theme={theme}>
             <Header title="Members" activeButtonId={3} />
             <MemberSummaryModal memberInfo={member} memberFamily={memberFamily} memberBikes={memberBikes} />
+            <Box pt="3em">
+                <MemberList />
+            </Box>
         </ChakraProvider>
     );
 }
 
-export default MemberList;
+export default MemberListPage;

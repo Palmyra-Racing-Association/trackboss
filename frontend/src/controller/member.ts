@@ -91,3 +91,44 @@ export async function getName() {
 
     return response.name;
 }
+
+// this api call is mocked
+// TODO: replace with getMemberList() call when api is done
+
+// eslint-disable-next-line no-unused-vars
+export async function getFormattedMemberList(token: string) {
+    // const response =  getMemberList(token);
+    const response = [
+        {
+            memberId: 1,
+            memberType: 'Admin',
+            firstName: 'Alan',
+            lastName: 'Delimon',
+        },
+        {
+            memberId: 2,
+            memberType: 'Member',
+            firstName: 'Martin',
+            lastName: 'Smith',
+        },
+        {
+            memberId: 3,
+            memberType: 'President',
+            firstName: 'Jimmy',
+            lastName: 'Hendrix',
+        },
+    ];
+
+    const formattedResponse: any = [];
+
+    response.forEach((member) => {
+        const formattedMember = {
+            id: member.memberId,
+            name: `${member.firstName} ${member.lastName}`,
+            role: member.memberType,
+        };
+        formattedResponse.push(formattedMember);
+    });
+    console.debug(formattedResponse);
+    return formattedResponse;
+}
