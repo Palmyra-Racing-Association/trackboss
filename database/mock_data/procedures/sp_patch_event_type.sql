@@ -7,8 +7,8 @@ IN _active BIT,
 IN _modified_by INT
 )
 BEGIN
-SELECT type, active, last_modified_by
-    INTO @cur_type, @cur_active, @cur_last_modified_by
+SELECT type, active
+    INTO @cur_type, @cur_active
     FROM event_type b
     WHERE event_type_id = _event_type_id;
     
