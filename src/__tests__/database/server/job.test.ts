@@ -1,7 +1,5 @@
 import { PatchJobRequest } from 'src/typedefs/job';
 import { getJob, getJobList, insertJob, patchJob, deleteJob } from '../../../database/job';
-
-import { getMember, getMemberList, insertMember, patchMember } from '../../../database/member';
 import mockQuery from './mockQuery';
 
 describe('insertJob()', () => {
@@ -35,70 +33,100 @@ describe('insertJob()', () => {
     });
 });
 
-// describe('getMemberList()', () => {
-//     it('Returns an unfiltered list of members', async () => {
-//         const results = await getMemberList();
-//         expect(mockQuery).toHaveBeenCalled();
-//         expect(results.length).toBeGreaterThan(1);
-//     });
-
-//     it('Returns a filtered list of admins', async () => {
-//         const type = 'admin';
-//         const expResultType = 'Admin';
-
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         results.forEach((result) => {
-//             expect(result.memberType).toBe(expResultType);
-//         });
-//     });
-
-//     it('Returns a filtered list of membership admins', async () => {
-//         const type = 'membershipAdmin';
-//         const expResultType = 'Membership Admin';
-
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         results.forEach((result) => {
-//             expect(result.memberType).toBe(expResultType);
-//         });
-//     });
-
-//     it('Returns a filtered list of members', async () => {
-//         const type = 'member';
-//         const expResultType = 'Member';
-
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         results.forEach((result) => {
-//             expect(result.memberType).toBe(expResultType);
-//         });
-//     });
-
-//     it('Returns a filtered list of paid laborers', async () => {
-//         const type = 'paidLaborer';
-//         const expResultType = 'Paid Laborer';
-
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         results.forEach((result) => {
-//             expect(result.memberType).toBe(expResultType);
-//         });
-//     });
-
-//     it('Returns an empty list of members without error', async () => {
-//         const type = 'notARealType';
-//         const results = await getMemberList(type);
-//         expect(mockQuery).toHaveBeenCalled();
-//         expect(results.length).toBe(0);
-//     });
-
-//     it('Throws for internal server error', async () => {
-//         const type = 'ise';
-//         await expect(getMemberList(type)).rejects.toThrow('internal server error');
-//         expect(mockQuery).toHaveBeenCalled();
-//     });
-// });
+describe('getJobList()', () => {
+    it('Returns an unfiltered list of jobs', async () => {
+        const results = await getJobList({});
+        expect(mockQuery).toHaveBeenCalled();
+        expect(results.length).toBeGreaterThan(1);
+    });
+    it('Returns a filtered list of jobs by assignment status', async () => {
+        const getListRequestFilters: any = {
+            assignmentStatus: '1',
+        };
+        const results = await getJobList(getListRequestFilters);
+        expect(mockQuery).toHaveBeenCalled();
+        results.forEach((result) => {
+            expect(result.member).toBeDefined();
+        });
+    });
+    it('Returns a filtered list of jobs by verification status', async () => {
+        const getListRequestFilters: any = {
+            verificationStatus: '0',
+        };
+        const results = await getJobList(getListRequestFilters);
+        expect(mockQuery).toHaveBeenCalled();
+        results.forEach((result) => {
+            expect(result.verified).toBe(false);
+        });
+    });
+    it('Returns a filtered list of jobs by member', async () => {
+        // Member 50 is 'Doctor Tester' in the mock
+        const expectedName = 'Doctor Tester';
+        const getListRequestFilters: any = {
+            memberId: '50',
+        };
+        const results = await getJobList(getListRequestFilters);
+        expect(mockQuery).toHaveBeenCalled();
+        results.forEach((result) => {
+            expect(result.member).toBe(expectedName);
+        });
+    });
+    it('Returns a filtered list of jobs by membership_id', async () => {
+        // Membership 600 only has jobs done by 'Doctor Tester' in the mock
+        const expectedName = 'Doctor Tester';
+        const getListRequestFilters: any = {
+            membershipId: '600',
+        };
+        const results = await getJobList(getListRequestFilters);
+        expect(mockQuery).toHaveBeenCalled();
+        results.forEach((result) => {
+            expect(result.member).toBe(expectedName);
+        });
+    });
+    it('Returns a filtered list of jobs by event_id', async () => {
+        // Event 100 is 'The MAIN Event!' in the mock
+        const expectedName = 'The MAIN Event!';
+        const getListRequestFilters: any = {
+            eventId: '100',
+        };
+        const results = await getJobList(getListRequestFilters);
+        expect(mockQuery).toHaveBeenCalled();
+        results.forEach((result) => {
+            expect(result.event).toBe(expectedName);
+        });
+    });
+    it('Returns a filtered list of jobs by startDate', async () => {
+        const date = '2021-01-01';
+        const getListRequestFilters: any = {
+            verificationStatus: '200',
+            startDate: date,
+        };
+        const results = await getJobList(getListRequestFilters);
+        expect(mockQuery).toHaveBeenCalled();
+        results.forEach((result) => {
+            expect(Date.parse(result.jobDate)).toBeGreaterThan(Date.parse(date));
+        });
+    });
+    it('Returns a filtered list of jobs by endDate', async () => {
+        const date = '2022-01-01';
+        const getListRequestFilters: any = {
+            verificationStatus: '201',
+            endDate: date,
+        };
+        const results = await getJobList(getListRequestFilters);
+        expect(mockQuery).toHaveBeenCalled();
+        results.forEach((result) => {
+            expect(Date.parse(result.jobDate)).toBeLessThanOrEqual(Date.parse(date));
+        });
+    });
+    it('Throws for internal server error', async () => {
+        const getListRequestFilters: any = {
+            verificationStatus: '-100',
+        };
+        await expect(getJobList(getListRequestFilters)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
 
 describe('getJob()', () => {
     it('Selects a single job', async () => {

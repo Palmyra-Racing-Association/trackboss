@@ -62,3 +62,13 @@ export type DeleteJobResponse = DeletedJob | ErrorResponse
 export type GetJobListRequest = {}
 
 export type GetJobListResponse = Job[] | ErrorResponse
+
+export type GetJobListRequestFilters = {
+    assignmentStatus?:number,
+    verificationStatus?:number,
+    memberId?:number,
+    membershipId?: number,
+    eventId?: number,
+    startDate?:string,
+    endDate?:string,
+}

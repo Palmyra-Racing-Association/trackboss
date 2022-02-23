@@ -72,6 +72,8 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
             return eventTypeHelpers.patchEventTypeResponse(values[0]);
         case GET_JOB_SQL:
             return jobHelpers.getJobResponse(values[0]);
+        case GET_JOB_LIST_SQL:
+            return jobHelpers.getJobListResponse(values);
         case INSERT_JOB_SQL:
             return jobHelpers.insertJobResponse(values[0]);
         case PATCH_JOB_SQL:
@@ -79,6 +81,11 @@ const mockQuery = jest.spyOn(pool, 'query').mockImplementation((sql: QueryOption
         case DELETE_JOB_SQL:
             return jobHelpers.deleteJobResponse(values[0]);
         default:
+            // We need to run this check in our default as our dynamic SQL does not directly
+            // Match any of our prebuilt SQL statements
+            if (String(sql).includes(GET_JOB_LIST_SQL)) {
+                return jobHelpers.getJobListResponse(values);
+            }
             return Promise.resolve();
     }
 });

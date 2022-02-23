@@ -3,36 +3,98 @@
 // mock, that is sufficient because we only care about 'errno' and it's easier than
 // instantiating an implementor of NodeJS.ErrnoException to get that field
 
-// export function getJobListResponse(values: string[]) {
-//     const memberList = [
-//         {
-//             member_id: 1,
-//             member_type: 'Admin',
-//             active: [1],
-//         }, {
-//             member_id: 2,
-//             member_type: 'Membership Admin',
-//             active: [1],
-//         }, {
-//             member_id: 3,
-//             member_type: 'Member',
-//             active: [1],
-//         }, {
-//             member_id: 4,
-//             member_type: 'Paid Laborer',
-//             active: [1],
-//         },
-//     ];
-
-//     if (values.length === 0) {
-//         return Promise.resolve([memberList]);
-//     }
-//     if (values[0] === 'ise') {
-//         throw new Error('error message');
-//     }
-
-//     return Promise.resolve([memberList.filter((member) => member.member_type === values[0])]);
-// }
+export function getJobListResponse(values: string[]) {
+    const jobList = [
+        {
+            job_id: 18,
+            member: 'Doctor Tester',
+            member_id: 50,
+            membership_id: 600,
+            event: 'The MAIN Event!',
+            event_id: 100,
+            job_date: '2021-12-28',
+            job_type: 'Gate Watcher',
+            verified: [1],
+            verified_date: '2022-02-07',
+            points_awarded: '3',
+            paid: [0],
+            paid_date: null,
+            last_modified_date: '2022-02-07',
+            last_modified_by: 'Bob Tes',
+        }, {
+            job_id: 19,
+            member: 'Testy Testerson',
+            member_id: 6,
+            membership_id: 3,
+            event: 'The second Event!',
+            event_id: 101,
+            job_date: '2022-12-28',
+            job_type: 'Waterer',
+            verified: [0],
+            verified_date: null,
+            points_awarded: null,
+            paid: [0],
+            paid_date: null,
+            last_modified_date: '2022-02-07',
+            last_modified_by: 'Bob Tes',
+        }, {
+            job_id: 20,
+            member: null,
+            member_id: null,
+            membership_id: null,
+            event: 'The MAIN Event!',
+            event_id: 100,
+            job_date: '2020-03-22',
+            job_type: 'Gate Watcher',
+            verified: [0],
+            verified_date: null,
+            points_awarded: null,
+            paid: [0],
+            paid_date: null,
+            last_modified_date: '2022-02-07',
+            last_modified_by: 'Bob Tes',
+        }, {
+            job_id: 21,
+            member: 'Doctor Tester',
+            member_id: 50,
+            membership_id: 600,
+            event: 'The MAIN Event!',
+            event_id: 100,
+            job_date: '2021-12-28',
+            job_type: 'Gate Watcher',
+            verified: [1],
+            verified_date: '2022-02-07',
+            points_awarded: '3',
+            paid: [0],
+            paid_date: null,
+            last_modified_date: '2022-02-07',
+            last_modified_by: 'Bob Tes',
+        },
+    ];
+    if (values.length === 0) {
+        return Promise.resolve([jobList]);
+    }
+    switch (values[0]) {
+        case '-100':
+            throw new Error('error message');
+        case '1':
+            return Promise.resolve([jobList.filter((job) => job.member)]);
+        case '0':
+            return Promise.resolve([jobList.filter((job) => job.verified === [0])]);
+        case '50':
+            return Promise.resolve([jobList.filter((job) => job.member_id === 50)]);
+        case '100':
+            return Promise.resolve([jobList.filter((job) => job.event_id === 100)]);
+        case '600':
+            return Promise.resolve([jobList.filter((job) => job.membership_id === 600)]);
+        case '200':
+            return Promise.resolve([jobList.filter((job) => Date.parse(job.job_date) >= Date.parse(values[1]))]);
+        case '201':
+            return Promise.resolve([jobList.filter((job) => Date.parse(job.job_date) <= Date.parse(values[1]))]);
+        default:
+            return Promise.resolve();
+    }
+}
 
 export function getJobResponse(id: number) {
     switch (id) {

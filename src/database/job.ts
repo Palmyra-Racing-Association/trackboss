@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
-import { Job, PatchJobRequest, PostNewJobRequest } from 'src/typedefs/job';
+import { Job, PatchJobRequest, PostNewJobRequest, GetJobListRequestFilters } from 'src/typedefs/job';
 
 import logger from '../logger';
 import pool from './pool';
@@ -41,50 +41,42 @@ export async function insertJob(req: PostNewJobRequest): Promise<number> {
     return result.insertId;
 }
 
-export async function getJobList(
-    assignmentStatus?:number,
-    verificationStatus?:number,
-    memberId?:number,
-    membershipId?: number,
-    eventId?: number,
-    startDate?:string,
-    endDate?:string,
-): Promise<Job[]> {
+export async function getJobList(filters: GetJobListRequestFilters): Promise<Job[]> {
     let sql;
     let values: any[] = [];
-    if (assignmentStatus || verificationStatus || memberId || membershipId || eventId || startDate || endDate) {
+    if (!_.isEmpty(filters)) {
         let dynamicSql: string = ' WHERE ';
         let counter: number = 0;
-        if (typeof assignmentStatus !== 'undefined') {
-            if (assignmentStatus === 1) {
+        if (typeof filters.assignmentStatus !== 'undefined') {
+            if (filters.assignmentStatus === 1) {
                 dynamicSql += 'member IS NOT NULL AND ';
             } else {
                 dynamicSql += 'member IS NULL AND ';
             }
         }
-        if (typeof verificationStatus !== 'undefined') {
+        if (typeof filters.verificationStatus !== 'undefined') {
             dynamicSql += 'verified = ? AND ';
-            values[counter++] = verificationStatus;
+            values[counter++] = filters.verificationStatus;
         }
-        if (typeof memberId !== 'undefined') {
+        if (typeof filters.memberId !== 'undefined') {
             dynamicSql += 'member_id = ? AND ';
-            values[counter++] = memberId;
+            values[counter++] = filters.memberId;
         }
-        if (typeof membershipId !== 'undefined') {
+        if (typeof filters.membershipId !== 'undefined') {
             dynamicSql += 'membership_id = ? AND ';
-            values[counter++] = membershipId;
+            values[counter++] = filters.membershipId;
         }
-        if (typeof eventId !== 'undefined') {
+        if (typeof filters.eventId !== 'undefined') {
             dynamicSql += 'event_id = ? AND ';
-            values[counter++] = eventId;
+            values[counter++] = filters.eventId;
         }
-        if (typeof startDate !== 'undefined') {
+        if (typeof filters.startDate !== 'undefined') {
             dynamicSql += 'job_date >= ? AND ';
-            values[counter++] = startDate;
+            values[counter++] = filters.startDate;
         }
-        if (typeof endDate !== 'undefined') {
+        if (typeof filters.endDate !== 'undefined') {
             dynamicSql += 'job_date <= ? AND ';
-            values[counter++] = endDate;
+            values[counter++] = filters.endDate;
         }
         sql = GET_JOB_LIST_SQL + dynamicSql.slice(0, -4); // Slice the trailing AND
     } else {
