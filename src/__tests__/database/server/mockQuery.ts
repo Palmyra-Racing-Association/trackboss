@@ -58,6 +58,14 @@ import {
     INSERT_EVENT_JOB_SQL,
     PATCH_EVENT_JOB_SQL,
 } from '../../../database/eventJob';
+import {
+    DELETE_BOARD_MEMBER_SQL,
+    GET_BOARD_MEMBER_LIST_SQL,
+    GET_BOARD_MEMBER_SQL,
+    GET_BOARD_MEMBER_YEAR_SQL,
+    INSERT_BOARD_MEMBER_SQL,
+    PATCH_BOARD_MEMBER_SQL,
+} from '../../../database/boardMember';
 
 import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
@@ -69,6 +77,7 @@ import * as eventTypeHelpers from './mockHelpers/eventType';
 import * as jobTypeHelpers from './mockHelpers/jobType';
 import { getMemberTypeListResponse, getMemberTypeResponse, patchMemberTypeResponse } from './mockHelpers/memberType';
 import * as eventJobHelpers from './mockHelpers/eventJob';
+import * as boardMemberHelpers from './mockHelpers/boardMember';
 
 const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
@@ -152,6 +161,18 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return eventJobHelpers.patchEventJobResponse(values[0]);
         case DELETE_EVENT_JOB_SQL:
             return eventJobHelpers.deleteEventJobResponse(values[0]);
+        case GET_BOARD_MEMBER_SQL:
+            return boardMemberHelpers.getBoardMemberResponse(values[0]);
+        case GET_BOARD_MEMBER_LIST_SQL:
+            return boardMemberHelpers.getBoardMemberListResponse(values);
+        case GET_BOARD_MEMBER_YEAR_SQL:
+            return boardMemberHelpers.getBoardMemberListResponse(values);
+        case INSERT_BOARD_MEMBER_SQL:
+            return boardMemberHelpers.insertBoardMemberResponse(values[0]);
+        case PATCH_BOARD_MEMBER_SQL:
+            return boardMemberHelpers.patchBoardMemberResponse(values[0]);
+        case DELETE_BOARD_MEMBER_SQL:
+            return boardMemberHelpers.deleteBoardMemberResponse(values[0]);
         default:
             return Promise.resolve();
     }

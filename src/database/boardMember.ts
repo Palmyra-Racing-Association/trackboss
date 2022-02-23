@@ -45,7 +45,7 @@ export async function getBoardMemberList(year?: string): Promise<boardMember[]> 
         sql = GET_BOARD_MEMBER_YEAR_SQL;
         values = [year];
     } else {
-        sql = GET_BOARD_MEMBER_SQL;
+        sql = GET_BOARD_MEMBER_LIST_SQL;
         values = [];
     }
 
