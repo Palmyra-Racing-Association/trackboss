@@ -64,7 +64,7 @@ test('getByMember returns total with valid id', async () => {
 
 test('getByMember returns 400', async () => {
     const token = 'TestingToken';
-    const res = await getByMembership(token, -1);
+    const res = await getByMember(token, -1);
     if ('reason' in res) {
         expect(res.reason).toEqual('Bad request');
     } else {
@@ -74,7 +74,7 @@ test('getByMember returns 400', async () => {
 
 test('getByMember returns 401', async () => {
     const token = 'TestingToken';
-    const res = await getByMembership(token, -2);
+    const res = await getByMember(token, -2);
     if ('reason' in res) {
         expect(res.reason).toEqual('Unauthorized');
     } else {
@@ -84,7 +84,7 @@ test('getByMember returns 401', async () => {
 
 test('getByMember returns 404', async () => {
     const token = 'TestingToken';
-    const res = await getByMembership(token, -3);
+    const res = await getByMember(token, -3);
     if ('reason' in res) {
         expect(res.reason).toEqual('Not Found');
     } else {
@@ -94,7 +94,7 @@ test('getByMember returns 404', async () => {
 
 test('getByMember returns 500', async () => {
     const token = 'TestingToken';
-    const res = await getByMembership(token, -4);
+    const res = await getByMember(token, -4);
     if ('reason' in res) {
         expect(res.reason).toEqual('Internal Server Error');
     } else {

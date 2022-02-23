@@ -54,7 +54,6 @@ export default function CreateEventModal() {
         }
         getData();
     }, []);
-
     return (
         <div>
             <Button background="orange.300" color="white" onClick={onOpen}>Create New Event</Button>
