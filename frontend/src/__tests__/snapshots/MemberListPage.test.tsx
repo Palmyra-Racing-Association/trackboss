@@ -8,7 +8,7 @@ describe('Member List Page', () => {
         const page = renderer.create(
             <BrowserRouter>
                 <MemberListPage />
-            </BrowserRouter>
+            </BrowserRouter>,
         ).toJSON();
         expect(page).toMatchSnapshot();
     });

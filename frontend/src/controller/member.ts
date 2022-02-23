@@ -184,6 +184,5 @@ export async function getFormattedMemberList(token: string) {
         };
         formattedResponse.push(formattedMember);
     });
-    console.debug(formattedResponse);
     return formattedResponse;
 }
