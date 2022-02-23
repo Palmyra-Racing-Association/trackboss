@@ -154,6 +154,7 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
         case GET_MEMBER_TYPE_LIST_SQL:
             return getMemberTypeListResponse();
         case PATCH_MEMBER_TYPE_SQL:
+            return patchMemberTypeResponse(values[0]);
         default:
             // We need to run this check in our default as our dynamic SQL does not directly
             // Match any of our prebuilt SQL statements

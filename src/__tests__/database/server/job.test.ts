@@ -1,6 +1,6 @@
 import { PatchJobRequest } from 'src/typedefs/job';
 import { getJob, getJobList, insertJob, patchJob, deleteJob } from '../../../database/job';
-import mockQuery from './mockQuery';
+import { mockQuery } from './mockQuery';
 
 describe('insertJob()', () => {
     it('Inserts a single job', async () => {
