@@ -13,8 +13,8 @@ const columns: any = [
     },
 ];
 
-async function getFormattedMemberListLocal() {
-    const response = await getFormattedMemberList('test');
+function getFormattedMemberListLocal() {
+    const response = getFormattedMemberList('test');
     return response;
 }
 
@@ -39,11 +39,17 @@ const customStyles = {
     },
 };
 
+interface Member {
+    id: number,
+    name: string,
+    role: string,
+}
+
 function MemberList() {
-    const [cells, setCells] = useState([]);
+    const [cells, setCells] = useState([] as Member[]);
     useEffect(() => {
         async function getData() {
-            const c: any = await getFormattedMemberListLocal();
+            const c: Member[] = getFormattedMemberListLocal();
             setCells(c);
         }
         getData();

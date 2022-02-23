@@ -1,10 +1,13 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import renderer, { act } from 'react-test-renderer';
 import MemberList from '../../components/MemberList';
 
 describe('Member List component', () => {
     it('renders correctly', () => {
-        const list = renderer.create(<MemberList />).toJSON();
-        expect(list).toMatchSnapshot();
+        let list;
+        act(() => {
+            list = renderer.create(<MemberList />)
+        });
+        expect(list.toJSON()).toMatchSnapshot();
     });
 });

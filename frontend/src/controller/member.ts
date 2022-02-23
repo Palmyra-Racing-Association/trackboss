@@ -95,8 +95,14 @@ export async function getName() {
 // this api call is mocked
 // TODO: replace with getMemberList() call when api is done
 
+interface Member {
+    id: number,
+    name: string,
+    role: string,
+}
+
 // eslint-disable-next-line no-unused-vars
-export async function getFormattedMemberList(token: string) {
+export function getFormattedMemberList(token: string): Member[] {
     // const response =  getMemberList(token);
     const response = [
         {
@@ -174,15 +180,13 @@ export async function getFormattedMemberList(token: string) {
 
     ];
 
-    const formattedResponse: any = [];
-
-    response.forEach((member) => {
-        const formattedMember = {
+    const formattedResponse = response.map((member) => (
+        {
             id: member.memberId,
             name: `${member.firstName} ${member.lastName}`,
             role: member.memberType,
-        };
-        formattedResponse.push(formattedMember);
-    });
+        }
+    ));
+
     return formattedResponse;
 }
