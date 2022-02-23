@@ -298,6 +298,6 @@ test('updateMember returns internal server error', async () => {
 });
 
 it('Mocked FormatMemberList call returns correct data', () => {
-    const response = getFormattedMemberList("Test");
+    const response = getFormattedMemberList('Test');
     expect(response.length).toBeGreaterThan(0);
 });

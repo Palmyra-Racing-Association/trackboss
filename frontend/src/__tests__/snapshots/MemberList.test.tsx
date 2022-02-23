@@ -6,7 +6,7 @@ describe('Member List component', () => {
     it('renders correctly', () => {
         let list;
         act(() => {
-            list = renderer.create(<MemberList />)
+            list = renderer.create(<MemberList />);
         });
         expect(list.toJSON()).toMatchSnapshot();
     });
