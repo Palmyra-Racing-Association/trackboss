@@ -60,8 +60,6 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
                 if (member.memberType !== 'Admin') {
                     // check that they have permission to act on this
                     const validActors = await getValidActors(actingAs);
-                    console.log(`valid actors for member ${actingAs} ${validActors}`);
-                    console.log(`attempting to verify ${member.memberId} acting as ${actingAs}`);
                     if (!validActors.includes(member.memberId)) {
                         throw new Error('Not Authorized');
                     }
