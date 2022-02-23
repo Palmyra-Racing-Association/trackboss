@@ -19,17 +19,22 @@ async function getFormattedMemberListLocal() {
 }
 
 const customStyles = {
+    rows: {
+        style: {
+            minHeight: '72px',
+        },
+    },
     headCells: {
         style: {
             paddingTop: '3em',
-            fontSize: '2.5em',
+            fontSize: '3.5em',
             backgroundColor: '#f9f9f9',
             color: '#626262',
         },
     },
     cells: {
         style: {
-            fontSize: '1.5em',
+            fontSize: '2.5em',
         },
     },
 };
