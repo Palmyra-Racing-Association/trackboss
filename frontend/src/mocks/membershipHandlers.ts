@@ -96,4 +96,4 @@ const membershipHandlers = [
     }),
 ];
 
-export { membershipHandlers as default };
+export default membershipHandlers;

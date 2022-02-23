@@ -71,4 +71,4 @@ const eventJobHandlers = [
     }),
 ];
 
-export { eventJobHandlers as default };
+export default eventJobHandlers;

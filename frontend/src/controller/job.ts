@@ -22,13 +22,11 @@ export async function createJob(token: string, jobData: PostNewJobRequest): Prom
 
 export async function getJobList(token: string, queryType?: string, filterType?: string): Promise<GetJobListResponse> {
     if (queryType && filterType) {
-        const response = await fetch(
-            `${process.env.REACT_APP_API_URL}/api/job/list?${queryType}=${filterType}`, {
-                method: 'GET',
-                mode: 'no-cors',
-                headers: generateHeaders(token),
-            },
-        );
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/list?${queryType}=${filterType}`, {
+            method: 'GET',
+            mode: 'no-cors',
+            headers: generateHeaders(token),
+        });
         return response.json();
     }
     // // else
@@ -47,6 +45,24 @@ export async function getJob(token: string, jobID: number): Promise<GetJobRespon
         headers: generateHeaders(token),
     });
     return response.json();
+}
+
+// TODO: this is a mocked response, redo once API is complete
+export async function getJobAttendees() {
+    return [
+        {
+            name: 'Bob Dylan',
+        },
+        {
+            name: 'Billy Joel',
+        },
+        {
+            name: 'Jimi Hendrix',
+        },
+        {
+            name: 'John Lennon',
+        },
+    ];
 }
 
 export async function updateJob(token: string, jobID: number, jobData: PatchJobRequest): Promise<PatchJobResponse> {

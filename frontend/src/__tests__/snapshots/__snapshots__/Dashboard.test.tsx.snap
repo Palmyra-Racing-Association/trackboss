@@ -14,7 +14,7 @@ Array [
         >
           <button
             aria-label="Back"
-            className="chakra-button css-dic36v"
+            className="chakra-button css-76fq9n"
             onClick={[Function]}
             type="button"
           >
@@ -42,7 +42,7 @@ Array [
           <div>
             <button
               aria-label="Menu"
-              className="chakra-button css-10gjanl"
+              className="chakra-button css-1y85x9m"
               onClick={[Function]}
               type="button"
             >
@@ -76,7 +76,7 @@ Array [
           className="css-0"
         >
           <h2
-            className="chakra-heading css-1azmuzd"
+            className="chakra-heading css-1c7bccy"
           >
             Dashboard
           </h2>
@@ -94,7 +94,7 @@ Array [
       >
         Hi, 
         <h2
-          className="chakra-heading css-1gdua51"
+          className="chakra-heading css-ws1u8n"
         >
           
           !
@@ -138,7 +138,7 @@ Array [
                   You have completed
                 </p>
                 <p
-                  className="chakra-text css-sit8fr"
+                  className="chakra-text css-68kehq"
                 >
                   0
                   %
@@ -176,7 +176,7 @@ Array [
                 role="list"
               >
                 <a
-                  className="chakra-link css-hdonle"
+                  className="chakra-link css-k6vkpw"
                   href="https://palmyramx.com/pages/track-rules"
                   target="_blank"
                 >
@@ -187,7 +187,7 @@ Array [
                   </li>
                 </a>
                 <a
-                  className="chakra-link css-hdonle"
+                  className="chakra-link css-k6vkpw"
                   href="https://twitter.com/palmyramx"
                   target="_blank"
                 >
@@ -198,7 +198,7 @@ Array [
                   </li>
                 </a>
                 <a
-                  className="chakra-link css-hdonle"
+                  className="chakra-link css-k6vkpw"
                   href="https://www.facebook.com/palmyramx/"
                   target="_blank"
                 >
@@ -209,7 +209,7 @@ Array [
                   </li>
                 </a>
                 <a
-                  className="chakra-link css-hdonle"
+                  className="chakra-link css-k6vkpw"
                   href="https://www.instagram.com/palmyramx_hogback_hill/?hl=en"
                   target="_blank"
                 >

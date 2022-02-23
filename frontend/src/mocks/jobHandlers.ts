@@ -102,4 +102,4 @@ const jobHandlers = [
     }),
 ];
 
-export { jobHandlers as default };
+export default jobHandlers;
