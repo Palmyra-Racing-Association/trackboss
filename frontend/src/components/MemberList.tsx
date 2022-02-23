@@ -44,7 +44,7 @@ function MemberList() {
         getData();
     }, []);
     return (
-        <div data-testid="table"> 
+        <div data-testid="table">
             <DataTable
                 columns={columns}
                 data={cells}
@@ -56,8 +56,6 @@ function MemberList() {
                 customStyles={customStyles}
             />
         </div>
-
-        
     );
 }
 
