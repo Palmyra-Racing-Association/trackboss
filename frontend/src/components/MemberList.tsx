@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { getFormattedMemberList } from '../controller/member';
-/* eslint-disable */
 
 const columns: any = [
     {
@@ -16,23 +15,26 @@ const columns: any = [
 
 async function getFormattedMemberListLocal() {
     const response = await getFormattedMemberList('test');
-    console.debug(response);
     return response;
-};
-
+}
 
 const customStyles = {
+    rows: {
+        style: {
+            minHeight: '72px',
+        },
+    },
     headCells: {
         style: {
             paddingTop: '3em',
-            fontSize: '2.5em',
+            fontSize: '3.5em',
             backgroundColor: '#f9f9f9',
             color: '#626262',
         },
     },
     cells: {
         style: {
-            fontSize: '1.5em',
+            fontSize: '2.5em',
         },
     },
 };
@@ -47,16 +49,18 @@ function MemberList() {
         getData();
     }, []);
     return (
-        <DataTable
-            columns={columns}
-            data={cells}
-            fixedHeaderScrollHeight="300px"
-            highlightOnHover
-            pagination
-            responsive
-            subHeaderWrap
-            customStyles={customStyles}
-        />
+        <div data-testid="table">
+            <DataTable
+                columns={columns}
+                data={cells}
+                fixedHeaderScrollHeight="300px"
+                highlightOnHover
+                pagination
+                responsive
+                subHeaderWrap
+                customStyles={customStyles}
+            />
+        </div>
     );
 }
 

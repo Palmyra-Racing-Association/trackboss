@@ -117,6 +117,61 @@ export async function getFormattedMemberList(token: string) {
             firstName: 'Jimmy',
             lastName: 'Hendrix',
         },
+        {
+            memberId: 4,
+            memberType: 'Secretary',
+            firstName: 'Brandon',
+            lastName: 'Sanderson',
+        },
+        {
+            memberId: 5,
+            memberType: 'Member',
+            firstName: 'Marianna',
+            lastName: 'Moreno',
+        },
+        {
+            memberId: 6,
+            memberType: 'Member',
+            firstName: 'Kason',
+            lastName: 'Rosales',
+        },
+        {
+            memberId: 7,
+            memberType: 'Member',
+            firstName: 'Opal',
+            lastName: 'Wormald',
+        },
+        {
+            memberId: 8,
+            memberType: 'Member',
+            firstName: 'Cerys',
+            lastName: 'Mcpherson',
+        },
+        {
+            memberId: 9,
+            memberType: 'Member',
+            firstName: 'Lewys',
+            lastName: 'Cope',
+        },
+        {
+            memberId: 10,
+            memberType: 'Member',
+            firstName: 'Salim',
+            lastName: 'Stafford',
+        },
+        {
+            memberId: 11,
+            memberType: 'Admin',
+            firstName: 'Taha',
+            lastName: 'Davila',
+        },
+        {
+            memberId: 12,
+            memberType: 'Member',
+            firstName: 'Hari',
+            lastName: 'Acevedo',
+        },
+
     ];
 
     const formattedResponse: any = [];
@@ -129,6 +184,5 @@ export async function getFormattedMemberList(token: string) {
         };
         formattedResponse.push(formattedMember);
     });
-    console.debug(formattedResponse);
     return formattedResponse;
 }
