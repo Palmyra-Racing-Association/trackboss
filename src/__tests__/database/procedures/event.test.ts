@@ -115,7 +115,7 @@ describe('sp_patch_event()', () => {
 });
 
 describe('sp_event_job_generation()', () => {
-    it('patch generates jobs', async () => {
+    it('generates jobs', async () => {
         const date = '2000-10-10';
         const eventTypeId = 3;
 
