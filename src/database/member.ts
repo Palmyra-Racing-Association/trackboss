@@ -20,6 +20,9 @@ export const INSERT_MEMBER_SQL = 'INSERT INTO member (membership_id, uuid, membe
     'phone_number, occupation, email, birthdate, date_joined, last_modified_date, last_modified_by, active) ' +
     'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?, 1)';
 export const PATCH_MEMBER_SQL = 'CALL sp_patch_member(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+export const GET_VALID_ACTORS_SQL = 'select member_id from pradb.member m where member_id=? or (m.member_type_id=2 ' +
+    'and m.member_id=(select ms.membership_admin_id from pradb.member m left join pradb.membership ms on ' +
+    'm.membership_id=ms.membership_id where member_id=?)) or m.member_type_id=1';
 
 export async function insertMember(req: PostNewMemberRequest): Promise<number> {
     const values = [
@@ -102,7 +105,7 @@ export async function getMemberList(type?: string): Promise<Member[]> {
 }
 
 export async function getMember(searchParam: string): Promise<Member> {
-    const id = parseInt(searchParam, 10);
+    const id = Number(searchParam);
     let sql;
     let values;
     let results;
@@ -188,4 +191,19 @@ export async function patchMember(id: string, req: PatchMemberRequest): Promise<
     if (result.affectedRows < 1) {
         throw new Error('not found');
     }
+}
+
+export async function getValidActors(member: number): Promise<number[]> {
+    const values = [member, member];
+    let results;
+    try {
+        [results] = await pool.query<RowDataPacket[]>(GET_VALID_ACTORS_SQL, values);
+    } catch (e) {
+        logger.error(`DB error getting valid actors: ${e}`);
+        throw new Error('internal server error');
+    }
+    if (_.isEmpty(results)) {
+        throw new Error('not found');
+    }
+    return _.map(results, (result) => result.member_id);
 }

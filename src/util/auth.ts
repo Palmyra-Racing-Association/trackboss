@@ -1,5 +1,6 @@
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import { CognitoJwtVerifierSingleUserPool } from 'aws-jwt-verify/cognito-verifier';
+import { getMember, getValidActors } from '../database/member';
 import logger from '../logger';
 
 let verifier: CognitoJwtVerifierSingleUserPool<{ userPoolId: string; tokenUse: 'id'; clientId: string; }> | null;
@@ -24,19 +25,58 @@ const destroyVerifier = () => {
     verifier = null;
 };
 
-const verify = async (token: string) => {
+const verify = async (token: string, permissionLevel?: string, targetActingAs?: number) => {
     if (!verifier) {
         throw new Error('Attempted to use verifier before it was created');
     }
     try {
-        // eslint-disable-next-line max-len
-        // const token = 'eyJraWQiOiJsODNDWStqWndmZWdwXC9WcGk3S3ZRNFg2TjA1VlloanpQT09OVnE0NGRUZz0iLCJhbGciOiJSUzI1NiJ9.eyJhdF9oYXNoIjoiZDc0MkE4aEJPU2tHbHNZdm1XbkgydyIsInN1YiI6IjZlOTliM2ZkLTU3NzEtNDQ4NC04MDRjLTJhNDJmODA3ZTM2NSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9YUlZYTDFmUUYiLCJjb2duaXRvOnVzZXJuYW1lIjoiNmU5OWIzZmQtNTc3MS00NDg0LTgwNGMtMmE0MmY4MDdlMzY1IiwiYXVkIjoiM3E3aWxlODBkMnFrNGJndDc1YWY5Njg0YnEiLCJldmVudF9pZCI6IjJjODMxNDNkLWFmMjktNDlkYS1hZDZiLTQ1ZWM3NWFlNGY0NCIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjQ1MTI3MjkwLCJleHAiOjE2NDUxMzA4OTAsImlhdCI6MTY0NTEyNzI5MCwianRpIjoiZjE1YmVlMGUtODBiMy00YWNmLTkzMTEtZGZiODFlNmU1YWMwIiwiZW1haWwiOiJjanM4NDg3QHJpdC5lZHUifQ.geQ0rDkQW_fVLE72yGfPxq_NYsngRSFduBvUGHleQicy31IjPMU72tRELFQcvooJ7qqFH5wK8SO9w3wjoA455HTP3lc5ji6ps87t044Qd_Azgxzds_tSi-nzBh5Ep605MVEF4FSNjZsEbFnPrg2pY8Fll0xPmv1qkCBsJbfrI2tm1wLDKl0_IuspseOz1Rc_nMY1p5eyZdgUH_LJtVh7PRrcqjZYMbZyha2WZxgatsOfpNErIcY9Y86tCnJGTx_YWbuYEqCRpb8v1NOTfhkdfVp6diUiDo5cofXk1GlsMLlwlc2egUjYC22Im2LcEazxWVW1dDmq-GJbXkJvc2djWA';
         const payload = await verifier.verify(token);
+        if (permissionLevel) {
+            const member = await getMember(payload['cognito:username']);
+            let actingAs = targetActingAs;
+            if (typeof actingAs === 'undefined') {
+                actingAs = member.memberId;
+            }
+            if (permissionLevel === 'Admin') {
+                if (member.memberType !== 'Admin') {
+                    throw new Error('Not Authorized');
+                }
+            } else if (permissionLevel === 'Membership Admin') {
+                if (member.memberType !== 'Admin') {
+                    if (member.memberType === 'Membership Admin') {
+                        // make sure they have permission to act on this
+                        const validActors: number[] = await getValidActors(actingAs);
+                        if (!validActors.includes(member.memberId)) {
+                            throw new Error('Not Authorized');
+                        }
+                    } else {
+                        throw new Error('Not Authorized');
+                    }
+                }
+            } else if (permissionLevel === 'Member') {
+                if (member.memberType === 'Paid Laborer') {
+                    throw new Error('Not Authorized');
+                }
+                if (member.memberType !== 'Admin') {
+                    // check that they have permission to act on this
+                    const validActors = await getValidActors(actingAs);
+                    console.log(`valid actors for member ${actingAs} ${validActors}`);
+                    console.log(`attempting to verify ${member.memberId} acting as ${actingAs}`);
+                    if (!validActors.includes(member.memberId)) {
+                        throw new Error('Not Authorized');
+                    }
+                }
+            }
+        }
         logger.info(JSON.stringify(payload));
         return payload;
-    } catch (e) {
+    } catch (e: any) {
         logger.error('invalid token');
         logger.error(e);
+        // console.log(e);
+        if (e.message === 'Not Authorized') {
+            throw new Error('Not Authorized');
+        }
         throw new Error('Authorization Failed');
     }
 };

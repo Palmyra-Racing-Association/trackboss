@@ -16,6 +16,7 @@ import {
     INSERT_MEMBER_SQL,
     PATCH_MEMBER_SQL,
     GET_MEMBER_UUID_SQL,
+    GET_VALID_ACTORS_SQL,
 } from '../../../database/member';
 import {
     GET_EVENT_SQL,
@@ -87,6 +88,8 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return memberHelpers.getMemberResponse(values[0]);
         case PATCH_MEMBER_SQL:
             return memberHelpers.patchMemberResponse(values[0]);
+        case GET_VALID_ACTORS_SQL:
+            return memberHelpers.getValidActorsResponse(values[0]);
         case INSERT_MEMBERSHIP_SQL:
             return membershipHelpers.insertMembershipResponse(values[0]);
         case GET_MEMBERSHIP_LIST_BY_STATUS_SQL:

@@ -1,5 +1,5 @@
 import { PatchMemberRequest } from 'src/typedefs/member';
-import { getMember, getMemberList, insertMember, patchMember } from '../../../database/member';
+import { getMember, getMemberList, getValidActors, insertMember, patchMember } from '../../../database/member';
 import { mockQuery } from './mockQuery';
 
 describe('insertMember()', () => {
@@ -102,7 +102,7 @@ describe('getMember()', () => {
     it('Selects a single member by id', async () => {
         const memberId = '18';
         const origValues = [
-            parseInt(memberId, 10),
+            Number(memberId),
             'membershipAdmin',
             'thisIsAUuid',
             1,
@@ -124,7 +124,7 @@ describe('getMember()', () => {
 
         const result = await getMember(memberId);
         expect(mockQuery).toHaveBeenCalled();
-        expect(result.memberId).toBe(parseInt(memberId, 10));
+        expect(result.memberId).toBe(Number(memberId));
         expect(result.membershipAdmin).toBe(origValues[1]);
         expect(result.uuid).toBe(origValues[2]);
         expect(result.active).toBe(origValues[3]);
@@ -149,7 +149,7 @@ describe('getMember()', () => {
         const origValues = [
             18,
             'membershipAdmin',
-            parseInt(memberId, 10),
+            Number(memberId),
             1,
             'Member',
             'Test',
@@ -275,6 +275,21 @@ describe('patchMember()', () => {
     it('Throws unreachable error without errno field', async () => {
         const memberId = '-200';
         await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('this error should not happen');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('getValidActors', () => {
+    it('selects the correct actors', async () => {
+        const validActors = await getValidActors(0);
+        expect(validActors.length).toBe(2);
+        expect(validActors[0]).toBe(0);
+        expect(validActors[1]).toBe(2);
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('throws not found', async () => {
+        await expect(getValidActors(1)).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 });

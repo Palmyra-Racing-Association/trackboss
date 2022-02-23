@@ -35,7 +35,7 @@ export function getMemberListResponse(values: string[]) {
 }
 
 export function getMemberResponse(searchParam: string) {
-    const id = parseInt(searchParam, 10);
+    const id = Number(searchParam);
     if (Number.isNaN(id)) {
         if (searchParam === 'thisIsAUuid') {
             return Promise.resolve([[{
@@ -119,6 +119,22 @@ export function patchMemberResponse(id: string) {
             throw { errno: 0 };
         case '-200':
             throw new Error('this error should not happen');
+        default:
+            return Promise.resolve();
+    }
+}
+
+export function getValidActorsResponse(id: number) {
+    switch (id) {
+        case 0:
+            return Promise.resolve([[{
+                member_id: 0,
+            },
+            {
+                member_id: 2,
+            }]]);
+        case 1:
+            return Promise.resolve([[]]);
         default:
             return Promise.resolve();
     }
