@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { getFormattedMemberList } from '../controller/member';
-/* eslint-disable */
 
 const columns: any = [
     {
@@ -18,8 +17,7 @@ async function getFormattedMemberListLocal() {
     const response = await getFormattedMemberList('test');
     console.debug(response);
     return response;
-};
-
+}
 
 const customStyles = {
     headCells: {
