@@ -8,13 +8,13 @@ IN _modified_by INT
 )
 BEGIN
 SELECT type, active, last_modified_by
-    INTO @type, @active, @last_modified_by
+    INTO @cur_type, @cur_active, @cur_last_modified_by
     FROM event_type b
     WHERE event_type_id = _event_type_id;
     
     UPDATE event_type SET
-		type = IFNULL(_type, @type),
-        active = IFNULL(_active, @active),
+		type = IFNULL(_type, @cur_type),
+        active = IFNULL(_active, @cur_active),
         last_modified_by = _modified_by,
 		last_modified_date = CURDATE()
 	WHERE event_type_id = _event_type_id;

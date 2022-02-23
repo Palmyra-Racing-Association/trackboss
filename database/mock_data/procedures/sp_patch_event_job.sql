@@ -8,13 +8,13 @@ CREATE PROCEDURE `sp_patch_event_job`(
 )
 BEGIN
 SELECT event_type_id, job_type_id, count
-    INTO @event_type_id, @job_type_id, @count
+    INTO @cur_event_type_id, @cur_job_type_id, @cur_count
     FROM event_job ej
     WHERE event_job_id = _event_job_id;
     
     UPDATE event_job SET
-		event_type_id = IFNULL(_event_type_id, @event_type_id),
-        job_type_id = IFNULL(_job_type_id, @job_type_id),
-        count = IFNULL(_count, @count)
+		event_type_id = IFNULL(_event_type_id, @cur_event_type_id),
+        job_type_id = IFNULL(_job_type_id, @cur_job_type_id),
+        count = IFNULL(_count, @cur_count)
 	WHERE event_job_id = _event_job_id;
 END//
