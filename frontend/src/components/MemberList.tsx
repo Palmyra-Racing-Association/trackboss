@@ -6,60 +6,66 @@ import { Member } from '../../../src/typedefs/member';
 import { getFormattedMemberList } from '../controller/member';
 import MemberSummaryModal from './MemberSummaryModal';
 
-const memberFamily: Member[] = [
-    {
-        memberId: 1,
-        membershipAdmin: 'true',
-        active: true,
-        memberType: 'member',
-        firstName: 'test',
-        lastName: 'member',
-        phoneNumber: '1234',
-        email: 'user@example.com',
-        uuid: '',
-        occupation: '',
-        birthdate: '',
-        dateJoined: '',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        lastModifiedDate: '',
-        lastModifiedBy: '',
-    },
-    {
-        memberId: 2,
-        membershipAdmin: 'string',
-        active: true,
-        memberType: 'member',
-        firstName: 'Jon',
-        lastName: 'Smith',
-        phoneNumber: '1234',
-        email: 'user@example.com',
-        uuid: '',
-        occupation: '',
-        birthdate: '',
-        dateJoined: '',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        lastModifiedDate: '',
-        lastModifiedBy: '',
-    },
-];
+function getMemberFamilyLocal() {
+    // const response = getMembersByMembership()
+    const memberFamily: Member[] = [
+        {
+            memberId: 1,
+            membershipAdmin: 'true',
+            active: true,
+            memberType: 'member',
+            firstName: 'test',
+            lastName: 'member',
+            phoneNumber: '1234',
+            email: 'user@example.com',
+            uuid: '',
+            occupation: '',
+            birthdate: '',
+            dateJoined: '',
+            address: '',
+            city: '',
+            state: '',
+            zip: '',
+            lastModifiedDate: '',
+            lastModifiedBy: '',
+        },
+        {
+            memberId: 2,
+            membershipAdmin: 'string',
+            active: true,
+            memberType: 'member',
+            firstName: 'Jon',
+            lastName: 'Smith',
+            phoneNumber: '1234',
+            email: 'user@example.com',
+            uuid: '',
+            occupation: '',
+            birthdate: '',
+            dateJoined: '',
+            address: '',
+            city: '',
+            state: '',
+            zip: '',
+            lastModifiedDate: '',
+            lastModifiedBy: '',
+        },
+    ];
+    return memberFamily;
+}
 
-const memberBikes: Bike[] = [
-    {
-        bikeId: 0,
-        year: '2012',
-        make: 'honda',
-        model: 'shitbox',
-        membershipAdmin: 'string',
-    },
-];
-// eslint-disable-next-line spaced-comment
-////////////////////////////////////////
+function getMemberBikesLocal() {
+    // const response = getBikes()
+    const memberBikes: Bike[] = [
+        {
+            bikeId: 0,
+            year: '2012',
+            make: 'honda',
+            model: 'rust-bucket',
+            membershipAdmin: 'string',
+        },
+    ];
+    return memberBikes;
+}
 
 const columns: any = [
     {
@@ -72,10 +78,8 @@ const columns: any = [
     },
 ];
 
-// TODO this will break if async, should come in from parent (page) as a prop
 function getFormattedMemberListLocal() {
-    const response = getFormattedMemberList('test');
-    // console.log(response);
+    const response = getFormattedMemberList('TestToken');
     return response;
 }
 
@@ -126,7 +130,6 @@ function MemberList() {
                 onRowClicked={
                     async (row: Member) => {
                         await setSelectedMember(row);
-                        // console.log(selectedMember);
                         onOpen();
                     }
                 }
@@ -137,8 +140,8 @@ function MemberList() {
                         isOpen={isOpen}
                         onClose={onClose}
                         memberInfo={selectedMember}
-                        memberFamily={memberFamily}
-                        memberBikes={memberBikes}
+                        memberFamily={getMemberFamilyLocal()}
+                        memberBikes={getMemberBikesLocal()}
                     />
                 )
             }

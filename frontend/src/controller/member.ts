@@ -84,7 +84,6 @@ export async function updateMember(
 
 // this is a mocked api call
 // TODO: change this when the api is done
-
 export async function getName() {
     const response = {
         name: 'Martin',
@@ -95,7 +94,6 @@ export async function getName() {
 
 // this api call is mocked
 // TODO: replace with getMemberList() call when api is done
-
 // eslint-disable-next-line no-unused-vars
 export function getFormattedMemberList(token: string): Member[] {
     // const response =  getMemberList(token);
@@ -341,11 +339,6 @@ export function getFormattedMemberList(token: string): Member[] {
             lastModifiedBy: '',
         },
     ];
-
-    // const formattedResponse: any = [];
-    // response.forEach((member) => {
-    //     member.name = `${member.firstName} ${member.lastName}`;
-    // });
 
     return response;
 }

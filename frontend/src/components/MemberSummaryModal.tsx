@@ -111,7 +111,7 @@ export default function MemberSummaryModal(props: modalProps) {
             setBikes(props.memberBikes);
         }
         setModalData();
-    });
+    }, [props.memberInfo, props.memberInfo.memberType]);
 
     return (
         <div>
