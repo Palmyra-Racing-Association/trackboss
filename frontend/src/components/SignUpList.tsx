@@ -24,7 +24,7 @@ const columns: any = [
 ];
 
 interface SignUpProps {
-    date: string,
+    date: string | undefined,
 }
 
 interface Worker {

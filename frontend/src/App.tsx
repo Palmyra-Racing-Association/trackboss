@@ -14,7 +14,7 @@ export default function App() {
                 <Route path="calendar" element={<CalendarPage />} />
                 <Route path="members" element={<MemberListPage />} />
                 <Route path="settings" element={<Settings />} />
-                <Route path="signups/:date" element={<SignUpPage />} />
+                <Route path="calendar/signups/:date" element={<SignUpPage />} />
             </Routes>
     );
 }

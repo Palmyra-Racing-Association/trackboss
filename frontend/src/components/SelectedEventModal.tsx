@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
     Modal,
     ModalOverlay,
@@ -18,7 +19,6 @@ import {
     // UnorderedList,
 } from '@chakra-ui/react';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
-import { Link } from 'react-router-dom';
 // import { deleteJob } from '../controller/job';
 // import { deleteEvent } from '../controller/event';
 
@@ -118,7 +118,12 @@ export default function SelectedEventModal(props: modalProps) {
                 <ModalFooter>
                     {
                         props.admin && (
-                            <Link to={`signups/${props.selectedEvent.start}`} state={{ date: props.selectedEvent.start }}>View Sign Ups</Link>
+                            <Link
+                                to={`signups/${(props.selectedEvent.start).toISOString().split('T')[0]}`}
+                                state={{ date: props.selectedEvent.start }}
+                            >
+                                View Sign Ups
+                            </Link>
                         )
                     }
                     {

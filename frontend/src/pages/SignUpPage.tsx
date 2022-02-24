@@ -1,19 +1,20 @@
 import React from 'react';
-import { Box, Heading } from '@chakra-ui/react';
+import { useParams } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react';
 import Header from '../components/Header';
-import { RouteComponentProps } from 'react-router-dom';
+import SignUpList from '../components/SignUpList';
+import theme from '../theme';
 
 type pageParams = {
     date: string,
 };
 
-export default function SignUpPage({ match }: RouteComponentProps<pageParams>) {
-    return(
-        <Box>
-            <Header title={`Sign Ups (${match.params.date})`} activeButtonId={2}/>
-            <Heading>{match.params.date}</Heading>
-
-        </Box>
+export default function SignUpPage() {
+    const { date } = useParams<pageParams>();
+    return (
+        <ChakraProvider theme={theme}>
+            <Header title={`Sign Ups (${date})`} activeButtonId={2} />
+            <SignUpList date={date} />
+        </ChakraProvider>
     );
-
 }
