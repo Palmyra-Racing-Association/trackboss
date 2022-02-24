@@ -17,11 +17,11 @@ export type WorkPointThreshold = {
     threshold: number
 }
 
-export type GetWorkPointThresholdRequest = {}
+export type GetWorkPointThresholdRequest = Record<string, never>
 
 export type GetWorkPointThresholdResponse = WorkPointThreshold | ErrorResponse
 
-export type GetBillListRequest = {}
+export type GetBillListRequest = Record<string, never>
 
 // Used only for the backend: API layer -> DB layer communication
 export type GetBillListRequestFilters = {
@@ -32,7 +32,7 @@ export type GetBillListRequestFilters = {
 
 export type GetBillListResponse = Bill[] | ErrorResponse
 
-export type PostCalculateBillsRequest = {}
+export type PostCalculateBillsRequest = Record<string, never>
 
 export type PostCalculateBillsResponse = Bill[] | ErrorResponse
 
@@ -43,10 +43,10 @@ export type GenerateSingleBillRequest = {
     membershipId: number
 }
 
-export type GetMembershipBillListRequest = {}
+export type GetMembershipBillListRequest = Record<string, never>
 
 export type GetMembershipBillListResponse = Bill[] | ErrorResponse
 
-export type PostPayBillRequest = {}
+export type PostPayBillRequest = Record<string, never>
 
-export type PostPayBillResponse = {} | ErrorResponse
+export type PostPayBillResponse = Record<string, never> | ErrorResponse
