@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { getFormattedSignUpList } from '../controller/job';
@@ -19,13 +18,9 @@ const columns: any = [
         minWidth: '10em',
         style: {
             paddingRight: '2em',
-        }
+        },
     },
 ];
-
-interface SignUpProps {
-    date: string | undefined,
-}
 
 interface Worker {
     name: string,
@@ -60,7 +55,7 @@ const customStyles = {
     },
 };
 
-function SignUpList(props: SignUpProps) {
+function SignUpList() {
     const [cells, setCells] = useState([] as Worker[]);
     useEffect(() => {
         async function getData() {

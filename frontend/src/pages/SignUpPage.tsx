@@ -14,7 +14,7 @@ export default function SignUpPage() {
     return (
         <ChakraProvider theme={theme}>
             <Header title={`Sign Ups (${date})`} activeButtonId={2} />
-            <SignUpList date={date} />
+            <SignUpList />
         </ChakraProvider>
     );
 }
