@@ -10,14 +10,14 @@ export type GetBoardMemberTypeRequest = {};
 export type GetBoardMemberTypeResponse = boardMemberType | ErrorResponse;
 
 export type PostNewBoardMemberTypeRequest = {
-    title: number
+    title: string
 }
 
 export type PostNewBoardMemberTypeResponse = boardMemberType | ErrorResponse;
 
 export type PatchBoardMemberTypeRequest = {
     boardTypeId: number,
-    title: number
+    title: string
 };
 
 export type PatchBoardMemberTypeResponse = boardMemberType | ErrorResponse;

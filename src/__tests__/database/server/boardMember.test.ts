@@ -1,5 +1,11 @@
-import { deleteBoardMember, getBoardMember, getBoardMemberList, insertBoardMember, patchBoardMember } from '../../../database/boardMember';
-import { PatchBoardMemberRequest } from 'src/typedefs/boardMember';
+import {
+    deleteBoardMember,
+    getBoardMember,
+    getBoardMemberList,
+    insertBoardMember,
+    patchBoardMember,
+} from '../../../database/boardMember';
+import { PatchBoardMemberRequest } from '../../../typedefs/boardMember';
 import { mockQuery } from './mockQuery';
 
 describe('insertBoardMember()', () => {
@@ -76,7 +82,7 @@ describe('getBoardMember()', () => {
         expect(result.memberId).toBe(origValues[3]);
     });
 
-    it('Throws for member not found', async () => {
+    it('Throws for boardMember not found', async () => {
         const boardId = 765;
         await expect(getBoardMember(boardId)).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
@@ -89,7 +95,7 @@ describe('getBoardMember()', () => {
     });
 });
 
-describe('patchEvent()', () => {
+describe('patchBoardMember()', () => {
     const testPatchWithObject = async (req: PatchBoardMemberRequest) => {
         const boardId = 42;
         // no error means success
