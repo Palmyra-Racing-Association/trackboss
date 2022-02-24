@@ -1,13 +1,16 @@
 import React, { createContext } from 'react';
+import { Member } from '../../../src/typedefs/member';
 
 interface UserContextInterface {
     loggedIn: boolean,
     token: string,
+    user: Member | undefined,
 }
 
 export const initialUserContext: UserContextInterface = {
     loggedIn: false,
     token: '',
+    user: undefined,
 };
 
 type UpdateType = React.Dispatch<
@@ -20,9 +23,9 @@ export const UserContext = createContext({
     update: defaultUpdate,
 });
 
-export const UserContextProvider = (props: React.PropsWithChildren<{}>) => {
+export function UserContextProvider(props: React.PropsWithChildren<{}>) {
     const [state, update] = React.useState(initialUserContext);
-    // this ignore is necessary to allow this to render correctly
-    // eslint-disable-next-line react/jsx-props-no-spreading
+    // this disable is necessary to allow this to render correctly
+    // eslint-disable-next-line
     return <UserContext.Provider value={{ state, update }} {...props} />;
-};
+}

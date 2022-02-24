@@ -5,16 +5,21 @@ import Dashboard from './pages/Dashboard';
 import MemberListPage from './pages/MemberListPage';
 import Settings from './pages/Settings';
 import CalendarPage from './pages/CalendarPage';
+import me from './controller/api';
 
 export function App() {
     const { state, update } = useContext(UserContext);
     const location = useLocation();
     useEffect(() => {
+        async function updateState(token: string) {
+            const user = await me(token);
+            update({ loggedIn: true, token, user });
+        }
         if (!state.loggedIn) {
             const hash = location.hash.split('#id_token=')[1];
             if (hash) {
                 const token = hash.split('&')[0];
-                update({ loggedIn: true, token });
+                updateState(token);
             } else {
                 // this is the only reasonable way to do this other than repeated string concatenation
                 // eslint-disable-next-line max-len
