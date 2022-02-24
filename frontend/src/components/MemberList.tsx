@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unused-prop-types */
 import { useDisclosure } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { createRef, RefObject, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Bike } from '../../../src/typedefs/bike';
 import { Member } from '../../../src/typedefs/member';
@@ -106,6 +108,8 @@ const customStyles = {
 };
 
 function MemberList() {
+    const testRef = createRef<HTMLDivElement>();
+
     const { onClose, isOpen, onOpen } = useDisclosure();
     const [selectedMember, setSelectedMember] = useState<Member>();
     const [cells, setCells] = useState<Member[]>([]);
@@ -117,7 +121,7 @@ function MemberList() {
         getData();
     }, []);
     return (
-        <div data-testid="table">
+        <div data-testid="table" ref={testRef}>
             <DataTable
                 columns={columns}
                 data={cells}
@@ -149,4 +153,16 @@ function MemberList() {
     );
 }
 
-export default MemberList;
+// eslint-disable-next-line max-len
+// const FunctionalComponentToPrint = React.forwardRef<HTMLDivElement, {}>((props, ref) => <MemberList ref={ref} />);
+interface fakeProps {}
+
+const FunctionalComponentToPrint = React.forwardRef<HTMLDivElement, fakeProps>(
+    (props, ref) => (
+        <div ref={ref}>
+            <MemberList />
+        </div>
+    ),
+);
+
+export default FunctionalComponentToPrint;

@@ -7,13 +7,14 @@ import MemberSummaryModal from '../components/MemberSummaryModal';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
 import MemberList from '../components/MemberList';
+import ExamplePrint from '../components/ReactToPrint';
 
 function MemberListPage() {
     return (
         <ChakraProvider theme={theme}>
             <Header title="Members" activeButtonId={3} />
             <Box mt={0} pt={0}>
-                <MemberList />
+                <ExamplePrint />
             </Box>
         </ChakraProvider>
     );
