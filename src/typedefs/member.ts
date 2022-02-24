@@ -37,7 +37,7 @@ export type PostNewMemberRequest = {
 
 export type PostNewMemberResponse = Member | ErrorResponse;
 
-export type GetMemberRequest = {};
+export type GetMemberRequest = Record<string, never>;
 
 export type GetMemberResponse = Member | ErrorResponse;
 
@@ -58,6 +58,6 @@ export type PatchMemberRequest = {
 
 export type PatchMemberResponse = Member | ErrorResponse;
 
-export type GetMemberListRequest = {}
+export type GetMemberListRequest = Record<string, never>
 
 export type GetMemberListResponse = Member[] | ErrorResponse;

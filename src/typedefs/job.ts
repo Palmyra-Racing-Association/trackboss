@@ -34,7 +34,7 @@ export type PostNewJobRequest = {
 
 export type PostNewJobResponse = Job | ErrorResponse
 
-export type GetJobRequest = {}
+export type GetJobRequest = Record<string, never>
 
 export type GetJobResponse = Job | ErrorResponse
 
@@ -51,15 +51,15 @@ export type PatchJobRequest = {
 
 export type PatchJobResponse = Job | ErrorResponse
 
-export type PostCloneJobRequest = {}
+export type PostCloneJobRequest = Record<string, never>
 
 export type PostCloneJobResponse = Job | ErrorResponse
 
-export type DeleteJobRequest = {}
+export type DeleteJobRequest = Record<string, never>
 
 export type DeleteJobResponse = DeletedJob | ErrorResponse
 
-export type GetJobListRequest = {}
+export type GetJobListRequest = Record<string, never>
 
 export type GetJobListResponse = Job[] | ErrorResponse
 

@@ -44,8 +44,8 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
     let sql;
     let values: any[] = [];
     if (!_.isEmpty(filters)) {
-        let dynamicSql: string = ' WHERE ';
-        let counter: number = 0;
+        let dynamicSql = ' WHERE ';
+        let counter = 0;
         if (typeof filters.assignmentStatus !== 'undefined') {
             if (filters.assignmentStatus === 1) {
                 dynamicSql += 'member IS NOT NULL AND ';

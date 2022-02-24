@@ -15,7 +15,7 @@ export type PostNewEventTypeRequest = {
 
 export type PostNewEventTypeResponse = EventType | ErrorResponse
 
-export type GetEventTypeRequest = {}
+export type GetEventTypeRequest = Record<string, never>
 
 export type GetEventTypeResponse = EventType | ErrorResponse
 
@@ -27,6 +27,6 @@ export type PatchEventTypeRequest = {
 
 export type PatchEventTypeResponse = EventType | ErrorResponse
 
-export type GetEventTypeListRequest = {}
+export type GetEventTypeListRequest = Record<string, never>
 
 export type GetEventTypeListResponse = EventType[] | ErrorResponse
