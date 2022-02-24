@@ -34,29 +34,38 @@ export function getMemberListResponse(values: string[]) {
     return Promise.resolve([memberList.filter((member) => member.member_type === values[0])]);
 }
 
-export function getMemberResponse(id: number) {
+const returnMember = {
+    member_id: 18,
+    membership_admin: 'membershipAdmin',
+    uuid: 'thisIsAUuid',
+    active: [1],
+    member_type: 'Member',
+    first_name: 'Test',
+    last_name: 'Testerson',
+    phone_number: '123-456-7890',
+    occupation: 'Ephemeral Testing Entity',
+    email: 'tester@testing.ts',
+    birthdate: '2022-02-07',
+    date_joined: '2022-02-07',
+    address: '1 Test St',
+    city: 'Rotester',
+    state: 'NT',
+    zip: '11111',
+    last_modified_date: '2022-02-07',
+    last_modified_by: 42,
+};
+
+export function getMemberResponse(searchParam: string) {
+    const id = Number(searchParam);
+    if (Number.isNaN(id)) {
+        if (searchParam === 'thisIsAUuid') {
+            return Promise.resolve([[returnMember]]);
+        }
+        return Promise.resolve();
+    }
     switch (id) {
         case 18:
-            return Promise.resolve([[{
-                member_id: 18,
-                membership_admin: 'membershipAdmin',
-                uuid: 'thisIsAUuid',
-                active: [1],
-                member_type: 'Member',
-                first_name: 'Test',
-                last_name: 'Testerson',
-                phone_number: '123-456-7890',
-                occupation: 'Ephemeral Testing Entity',
-                email: 'tester@testing.ts',
-                birthdate: '2022-02-07',
-                date_joined: '2022-02-07',
-                address: '1 Test St',
-                city: 'Rotester',
-                state: 'NT',
-                zip: '11111',
-                last_modified_date: '2022-02-07',
-                last_modified_by: 42,
-            }]]);
+            return Promise.resolve([[returnMember]]);
         case 765:
             return Promise.resolve([[]]);
         case -100:
@@ -81,18 +90,34 @@ export function insertMemberResponse(membershipId: number) {
     }
 }
 
-export function patchMemberResponse(id: number) {
+export function patchMemberResponse(id: string) {
     switch (id) {
-        case 42:
+        case '42':
             return Promise.resolve([{ affectedRows: 1 }]);
-        case 3000:
+        case '3000':
             return Promise.resolve([{ affectedRows: 0 }]);
-        case 1451:
+        case '1451':
             throw { errno: 1451 };
-        case -100:
+        case '-100':
             throw { errno: 0 };
-        case -200:
+        case '-200':
             throw new Error('this error should not happen');
+        default:
+            return Promise.resolve();
+    }
+}
+
+export function getValidActorsResponse(id: number) {
+    switch (id) {
+        case 0:
+            return Promise.resolve([[{
+                member_id: 0,
+            },
+            {
+                member_id: 2,
+            }]]);
+        case 1:
+            return Promise.resolve([[]]);
         default:
             return Promise.resolve();
     }
