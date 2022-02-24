@@ -1344,6 +1344,14 @@ paths:
                   $ref: "#/components/schemas/number"
                 modifiedBy:
                   $ref: "#/components/schemas/integer"
+                verified:
+                  type: boolean
+                verifiedDate:
+                  $ref: "#/components/schemas/date"
+                paid:
+                  type: boolean
+                paidDate:
+                  $ref: "#/components/schemas/date"
       responses:
         201:
           description: Created
