@@ -1,12 +1,12 @@
 import React from 'react';
 import renderer, { act, ReactTestRenderer } from 'react-test-renderer';
-import MemberList from '../../components/MemberList';
+import SignUpList from '../../components/SignUpList';
 
-describe('Member List component', () => {
+describe('SignUpList component', () => {
     it('renders correctly', () => {
         let list: ReactTestRenderer;
         act(() => {
-            list = renderer.create(<MemberList />);
+            list = renderer.create(<SignUpList date="2022-02-11"/>);
         });
         
         expect(list!.toJSON()).toMatchSnapshot();

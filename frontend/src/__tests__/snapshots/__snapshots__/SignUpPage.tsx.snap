@@ -1,0 +1,906 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignUpList component renders correctly 1`] = `
+Array [
+  <div>
+    <div
+      className="css-arm2n8"
+    >
+      <div
+        className="chakra-stack css-84zodg"
+      >
+        <button
+          aria-label="Back"
+          className="chakra-button css-76fq9n"
+          onClick={[Function]}
+          type="button"
+        >
+          <svg
+            aria-hidden={true}
+            fill="currentColor"
+            focusable={false}
+            height="lg"
+            stroke="currentColor"
+            strokeWidth="0"
+            style={
+              Object {
+                "color": undefined,
+              }
+            }
+            viewBox="0 0 512 512"
+            width="lg"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M217.9 256L345 129c9.4-9.4 9.4-24.6 0-33.9-9.4-9.4-24.6-9.3-34 0L167 239c-9.1 9.1-9.3 23.7-.7 33.1L310.9 417c4.7 4.7 10.9 7 17 7s12.3-2.3 17-7c9.4-9.4 9.4-24.6 0-33.9L217.9 256z"
+            />
+          </svg>
+        </button>
+        <div>
+          <button
+            aria-label="Menu"
+            className="chakra-button css-1y85x9m"
+            onClick={[Function]}
+            type="button"
+          >
+            <svg
+              aria-hidden={true}
+              fill="currentColor"
+              focusable={false}
+              height="1em"
+              stroke="currentColor"
+              strokeWidth="0"
+              style={
+                Object {
+                  "color": undefined,
+                }
+              }
+              viewBox="0 0 1024 1024"
+              width="1em"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M904 160H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0 624H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8zm0-312H120c-4.4 0-8 3.6-8 8v64c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-64c0-4.4-3.6-8-8-8z"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div
+        className="css-17xejub"
+      />
+      <div
+        className="css-0"
+      >
+        <h2
+          className="chakra-heading css-1c7bccy"
+        >
+          Sign Ups (undefined)
+        </h2>
+      </div>
+      <div
+        className="css-17xejub"
+      />
+    </div>
+  </div>,
+  <div
+    data-testid="table"
+  >
+    <div
+      className="sc-dlVxhl fSQziN"
+    >
+      <div
+        className="sc-fKVqWL XlRpR"
+      >
+        <div
+          className="sc-bdvvtL hLGqlg rdt_Table"
+          disabled={false}
+          role="table"
+        >
+          <div
+            className="sc-gsDKAQ fbhklE rdt_TableHead"
+            role="rowgroup"
+          >
+            <div
+              className="sc-dkPtRN hCBnvI rdt_TableHeadRow"
+              role="row"
+            >
+              <div
+                className="sc-hKwDye sc-eCImPb sc-iqseJM hFfXd fvAeSn iwmeYY rdt_TableCol"
+                data-column-id={1}
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+              >
+                <div
+                  className="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                  data-column-id={1}
+                  data-sort-id={1}
+                  disabled={true}
+                  role="columnheader"
+                  tabIndex={0}
+                >
+                  <div
+                    className="sc-egiyK lnndaO"
+                    data-column-id={1}
+                  >
+                    Name
+                  </div>
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-iqseJM hFfXd fvAeSn iwmeYY rdt_TableCol"
+                data-column-id={2}
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+              >
+                <div
+                  className="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                  data-column-id={2}
+                  data-sort-id={2}
+                  disabled={true}
+                  role="columnheader"
+                  tabIndex={0}
+                >
+                  <div
+                    className="sc-egiyK lnndaO"
+                    data-column-id={2}
+                  >
+                    Job
+                  </div>
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-iqseJM hFfXd dKJxny crHzxA rdt_TableCol"
+                data-column-id={3}
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+              />
+            </div>
+          </div>
+          <div
+            className="sc-hGPBjI fuBVgf rdt_TableBody"
+            role="rowgroup"
+          >
+            <div
+              className="sc-jrQzAO kyAlCz rdt_TableRow"
+              id="row-0"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              role="row"
+              selected={false}
+              style={Object {}}
+            >
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={1}
+                data-tag="allowRowEvents"
+                id="cell-1-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Alan Delimon
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={2}
+                data-tag="allowRowEvents"
+                id="cell-2-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Rock Picking
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+                data-column-id={3}
+                data-tag={null}
+                id="cell-3-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <button
+                  className="chakra-button css-1xgxy35"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Verified
+                </button>
+              </div>
+            </div>
+            <div
+              className="sc-jrQzAO kyAlCz rdt_TableRow"
+              id="row-1"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              role="row"
+              selected={false}
+              style={Object {}}
+            >
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={1}
+                data-tag="allowRowEvents"
+                id="cell-1-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Alfie Hurst
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={2}
+                data-tag="allowRowEvents"
+                id="cell-2-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Rock Picking
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+                data-column-id={3}
+                data-tag={null}
+                id="cell-3-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <button
+                  className="chakra-button css-1m92m86"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
+            <div
+              className="sc-jrQzAO kyAlCz rdt_TableRow"
+              id="row-2"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              role="row"
+              selected={false}
+              style={Object {}}
+            >
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={1}
+                data-tag="allowRowEvents"
+                id="cell-1-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Zion Lake
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={2}
+                data-tag="allowRowEvents"
+                id="cell-2-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Rock Picking
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+                data-column-id={3}
+                data-tag={null}
+                id="cell-3-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <button
+                  className="chakra-button css-1m92m86"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
+            <div
+              className="sc-jrQzAO kyAlCz rdt_TableRow"
+              id="row-3"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              role="row"
+              selected={false}
+              style={Object {}}
+            >
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={1}
+                data-tag="allowRowEvents"
+                id="cell-1-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Rianna Ellwood
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={2}
+                data-tag="allowRowEvents"
+                id="cell-2-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Track Watering
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+                data-column-id={3}
+                data-tag={null}
+                id="cell-3-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <button
+                  className="chakra-button css-1m92m86"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
+            <div
+              className="sc-jrQzAO kyAlCz rdt_TableRow"
+              id="row-4"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              role="row"
+              selected={false}
+              style={Object {}}
+            >
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={1}
+                data-tag="allowRowEvents"
+                id="cell-1-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Raisa Rollins
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={2}
+                data-tag="allowRowEvents"
+                id="cell-2-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Track Watering
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+                data-column-id={3}
+                data-tag={null}
+                id="cell-3-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <button
+                  className="chakra-button css-1m92m86"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
+            <div
+              className="sc-jrQzAO kyAlCz rdt_TableRow"
+              id="row-5"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              role="row"
+              selected={false}
+              style={Object {}}
+            >
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={1}
+                data-tag="allowRowEvents"
+                id="cell-1-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Eli Akhtar
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={2}
+                data-tag="allowRowEvents"
+                id="cell-2-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Track Watering
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+                data-column-id={3}
+                data-tag={null}
+                id="cell-3-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <button
+                  className="chakra-button css-1m92m86"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
+            <div
+              className="sc-jrQzAO kyAlCz rdt_TableRow"
+              id="row-6"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              role="row"
+              selected={false}
+              style={Object {}}
+            >
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={1}
+                data-tag="allowRowEvents"
+                id="cell-1-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Stella Craig
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={2}
+                data-tag="allowRowEvents"
+                id="cell-2-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Lawn Mowing
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+                data-column-id={3}
+                data-tag={null}
+                id="cell-3-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <button
+                  className="chakra-button css-1m92m86"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
+            <div
+              className="sc-jrQzAO kyAlCz rdt_TableRow"
+              id="row-7"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              role="row"
+              selected={false}
+              style={Object {}}
+            >
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={1}
+                data-tag="allowRowEvents"
+                id="cell-1-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Hudson Naylor
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+                data-column-id={2}
+                data-tag="allowRowEvents"
+                id="cell-2-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <div
+                  data-tag="allowRowEvents"
+                >
+                  Lawn Mowing
+                </div>
+              </div>
+              <div
+                className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+                data-column-id={3}
+                data-tag={null}
+                id="cell-3-undefined"
+                onDragEnd={[Function]}
+                onDragEnter={[Function]}
+                onDragLeave={[Function]}
+                onDragOver={[Function]}
+                onDragStart={[Function]}
+                role="gridcell"
+                style={Object {}}
+              >
+                <button
+                  className="chakra-button css-1m92m86"
+                  onClick={[Function]}
+                  type="button"
+                >
+                  Verify
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <nav
+        className="sc-iJKOTD bhoXfZ rdt_Pagination"
+      >
+        <span
+          className="sc-bYoBSM sc-ikJyIC fXzwgx bWTWQu"
+        >
+          Rows per page:
+        </span>
+        <div
+          className="sc-llYSUQ fQmYxz"
+        >
+          <select
+            aria-label="Rows per page:"
+            className="sc-cxpSdN fWWeYy"
+            defaultValue={10}
+            onChange={[Function]}
+          >
+            <option
+              value={10}
+            >
+              10
+            </option>
+            <option
+              value={15}
+            >
+              15
+            </option>
+            <option
+              value={20}
+            >
+              20
+            </option>
+            <option
+              value={25}
+            >
+              25
+            </option>
+            <option
+              value={30}
+            >
+              30
+            </option>
+          </select>
+          <svg
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 10l5 5 5-5z"
+            />
+            <path
+              d="M0 0h24v24H0z"
+              fill="none"
+            />
+          </svg>
+        </div>
+        <span
+          className="sc-bYoBSM sc-kLwhqv fXzwgx emVwZU"
+        >
+          1-8 of 8
+        </span>
+        <div
+          className="sc-ezbkAF kNbUsB"
+        >
+          <button
+            aria-disabled={true}
+            aria-label="First Page"
+            className="sc-giYglK gPLhoV"
+            disabled={true}
+            id="pagination-first-page"
+            onClick={[Function]}
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              height="24"
+              role="presentation"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18.41 16.59L13.82 12l4.59-4.59L17 6l-6 6 6 6zM6 6h2v12H6z"
+              />
+              <path
+                d="M24 24H0V0h24v24z"
+                fill="none"
+              />
+            </svg>
+          </button>
+          <button
+            aria-disabled={true}
+            aria-label="Previous Page"
+            className="sc-giYglK gPLhoV"
+            disabled={true}
+            id="pagination-previous-page"
+            onClick={[Function]}
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              height="24"
+              role="presentation"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"
+              />
+              <path
+                d="M0 0h24v24H0z"
+                fill="none"
+              />
+            </svg>
+          </button>
+          <button
+            aria-disabled={true}
+            aria-label="Next Page"
+            className="sc-giYglK gPLhoV"
+            disabled={true}
+            id="pagination-next-page"
+            onClick={[Function]}
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              height="24"
+              role="presentation"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+              />
+              <path
+                d="M0 0h24v24H0z"
+                fill="none"
+              />
+            </svg>
+          </button>
+          <button
+            aria-disabled={true}
+            aria-label="Last Page"
+            className="sc-giYglK gPLhoV"
+            disabled={true}
+            id="pagination-last-page"
+            onClick={[Function]}
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              height="24"
+              role="presentation"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5.59 7.41L10.18 12l-4.59 4.59L7 18l6-6-6-6zM16 6h2v12h-2z"
+              />
+              <path
+                d="M0 0h24v24H0V0z"
+                fill="none"
+              />
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </div>,
+  <span />,
+]
+`;
