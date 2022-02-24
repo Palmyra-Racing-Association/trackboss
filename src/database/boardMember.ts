@@ -23,10 +23,10 @@ export async function insertBoardMember(req: PostNewBoardMemberRequest): Promise
         if ('errno' in e) {
             switch (e.errno) {
                 case 1452: // FK violation - referenced is missing
-                    logger.error(`User error inserting event in DB: ${e}`);
+                    logger.error(`User error inserting board member in DB: ${e}`);
                     throw new Error('user input error');
                 default:
-                    logger.error(`DB error inserting event: ${e}`);
+                    logger.error(`DB error inserting board member: ${e}`);
                     throw new Error('internal server error');
             }
         } else {
