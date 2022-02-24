@@ -15,6 +15,8 @@ import {
     GET_MEMBER_SQL,
     INSERT_MEMBER_SQL,
     PATCH_MEMBER_SQL,
+    GET_MEMBER_UUID_SQL,
+    GET_VALID_ACTORS_SQL,
 } from '../../../database/member';
 import {
     GET_EVENT_SQL,
@@ -42,6 +44,13 @@ import {
     PATCH_EVENT_TYPE_SQL,
 } from '../../../database/eventType';
 import {
+    GET_JOB_LIST_SQL,
+    GET_JOB_SQL,
+    INSERT_JOB_SQL,
+    PATCH_JOB_SQL,
+    DELETE_JOB_SQL,
+} from '../../../database/job';
+import {
     GET_JOB_TYPE_LIST_SQL,
     GET_JOB_TYPE_SQL,
     INSERT_JOB_TYPE_SQL,
@@ -66,6 +75,7 @@ import * as eventHelpers from './mockHelpers/event';
 import * as membershipHelpers from './mockHelpers/membership';
 import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from './mockHelpers/workPoints';
 import * as eventTypeHelpers from './mockHelpers/eventType';
+import * as jobHelpers from './mockHelpers/job';
 import * as jobTypeHelpers from './mockHelpers/jobType';
 import { getMemberTypeListResponse, getMemberTypeResponse, patchMemberTypeResponse } from './mockHelpers/memberType';
 import * as eventJobHelpers from './mockHelpers/eventJob';
@@ -88,10 +98,13 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
         case GET_MEMBER_LIST_BY_TYPE_SQL:
         case GET_MEMBER_LIST_SQL:
             return memberHelpers.getMemberListResponse(values);
+        case GET_MEMBER_UUID_SQL:
         case GET_MEMBER_SQL:
             return memberHelpers.getMemberResponse(values[0]);
         case PATCH_MEMBER_SQL:
             return memberHelpers.patchMemberResponse(values[0]);
+        case GET_VALID_ACTORS_SQL:
+            return memberHelpers.getValidActorsResponse(values[0]);
         case INSERT_MEMBERSHIP_SQL:
             return membershipHelpers.insertMembershipResponse(values[0]);
         case GET_MEMBERSHIP_LIST_BY_STATUS_SQL:
@@ -130,6 +143,16 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return eventTypeHelpers.insertEventTypeResponse(values[0]);
         case PATCH_EVENT_TYPE_SQL:
             return eventTypeHelpers.patchEventTypeResponse(values[0]);
+        case GET_JOB_SQL:
+            return jobHelpers.getJobResponse(values[0]);
+        case GET_JOB_LIST_SQL:
+            return jobHelpers.getJobListResponse(values);
+        case INSERT_JOB_SQL:
+            return jobHelpers.insertJobResponse(values[0]);
+        case PATCH_JOB_SQL:
+            return jobHelpers.patchJobResponse(values[0]);
+        case DELETE_JOB_SQL:
+            return jobHelpers.deleteJobResponse(values[0]);
         case GET_JOB_TYPE_SQL:
             return jobTypeHelpers.getJobTypeResponse(values[0]);
         case GET_JOB_TYPE_LIST_SQL:
@@ -153,6 +176,11 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
         case DELETE_EVENT_JOB_SQL:
             return eventJobHelpers.deleteEventJobResponse(values[0]);
         default:
+            // We need to run this check in our default as our dynamic SQL does not directly
+            // Match any of our prebuilt SQL statements
+            if (String(sql).includes(GET_JOB_LIST_SQL)) {
+                return jobHelpers.getJobListResponse(values);
+            }
             return Promise.resolve();
     }
 };

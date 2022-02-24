@@ -1,5 +1,5 @@
 import { PatchMemberRequest } from 'src/typedefs/member';
-import { getMember, getMemberList, insertMember, patchMember } from '../../../database/member';
+import { getMember, getMemberList, getValidActors, insertMember, patchMember } from '../../../database/member';
 import { mockQuery } from './mockQuery';
 
 describe('insertMember()', () => {
@@ -99,10 +99,10 @@ describe('getMemberList()', () => {
 });
 
 describe('getMember()', () => {
-    it('Selects a single member', async () => {
-        const memberId = 18;
+    it('Selects a single member by id', async () => {
+        const memberId = '18';
         const origValues = [
-            memberId,
+            Number(memberId),
             'membershipAdmin',
             'thisIsAUuid',
             1,
@@ -124,7 +124,7 @@ describe('getMember()', () => {
 
         const result = await getMember(memberId);
         expect(mockQuery).toHaveBeenCalled();
-        expect(result.memberId).toBe(memberId);
+        expect(result.memberId).toBe(Number(memberId));
         expect(result.membershipAdmin).toBe(origValues[1]);
         expect(result.uuid).toBe(origValues[2]);
         expect(result.active).toBe(origValues[3]);
@@ -144,14 +144,59 @@ describe('getMember()', () => {
         expect(result.lastModifiedBy).toBe(origValues[17]);
     });
 
+    it('Selects a single member by uuid', async () => {
+        const memberId = 'thisIsAUuid';
+        const origValues = [
+            18,
+            'membershipAdmin',
+            Number(memberId),
+            1,
+            'Member',
+            'Test',
+            'Testerson',
+            '123-456-7890',
+            'Ephemeral Testing Entity',
+            'tester@testing.ts',
+            '2022-02-07',
+            '2022-02-07',
+            '1 Test St',
+            'Rotester',
+            'NT',
+            '11111',
+            '2022-02-07',
+            42,
+        ];
+
+        const result = await getMember(memberId);
+        expect(mockQuery).toHaveBeenCalled();
+        expect(result.memberId).toBe(origValues[0]);
+        expect(result.membershipAdmin).toBe(origValues[1]);
+        expect(result.uuid).toBe(memberId);
+        expect(result.active).toBe(origValues[3]);
+        expect(result.memberType).toBe(origValues[4]);
+        expect(result.firstName).toBe(origValues[5]);
+        expect(result.lastName).toBe(origValues[6]);
+        expect(result.phoneNumber).toBe(origValues[7]);
+        expect(result.occupation).toBe(origValues[8]);
+        expect(result.email).toBe(origValues[9]);
+        expect(result.birthdate).toBe(origValues[10]);
+        expect(result.dateJoined).toBe(origValues[11]);
+        expect(result.address).toBe(origValues[12]);
+        expect(result.city).toBe(origValues[13]);
+        expect(result.state).toBe(origValues[14]);
+        expect(result.zip).toBe(origValues[15]);
+        expect(result.lastModifiedDate).toBe(origValues[16]);
+        expect(result.lastModifiedBy).toBe(origValues[17]);
+    });
+
     it('Throws for member not found', async () => {
-        const memberId = 765;
+        const memberId = '765';
         await expect(getMember(memberId)).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error', async () => {
-        const memberId = -100;
+        const memberId = '-100';
         await expect(getMember(memberId)).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
@@ -159,7 +204,7 @@ describe('getMember()', () => {
 
 describe('patchMember()', () => {
     const testPatchWithObject = async (req: PatchMemberRequest) => {
-        const memberId = 42;
+        const memberId = '42';
         // no error means success
         await patchMember(memberId, req);
         expect(mockQuery).toHaveBeenCalled();
@@ -210,26 +255,41 @@ describe('patchMember()', () => {
     });
 
     it('Throws for user error', async () => {
-        const memberId = 1451;
+        const memberId = '1451';
         await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('user input error');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for member not found', async () => {
-        const memberId = 3000;
+        const memberId = '3000';
         await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error', async () => {
-        const memberId = -100;
+        const memberId = '-100';
         await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws unreachable error without errno field', async () => {
-        const memberId = -200;
+        const memberId = '-200';
         await expect(patchMember(memberId, { modifiedBy: 0 })).rejects.toThrow('this error should not happen');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('getValidActors', () => {
+    it('selects the correct actors', async () => {
+        const validActors = await getValidActors(0);
+        expect(validActors.length).toBe(2);
+        expect(validActors[0]).toBe(0);
+        expect(validActors[1]).toBe(2);
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('throws not found', async () => {
+        await expect(getValidActors(1)).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 });

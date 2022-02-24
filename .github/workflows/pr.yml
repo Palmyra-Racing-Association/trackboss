@@ -40,6 +40,9 @@ jobs:
         ./setup_user.sh
         ./reset_db.sh
     - name: Run Jest on backend
+      env:
+        COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+        COGNITO_POOL_ID: ${{ secrets.COGNITO_POOL_ID }}
       run: npm run ci-test
   jest-frontend:
     runs-on: ubuntu-latest

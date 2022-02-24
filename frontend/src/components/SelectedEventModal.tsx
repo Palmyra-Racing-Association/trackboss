@@ -49,7 +49,7 @@ async function deleteEventLocal(event: any) {
 
 export default function SelectedEventModal(props: modalProps) {
     return (
-        <Modal size="lg" isOpen={props.isOpen} onClose={props.onClose}>
+        <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
             <ModalContent>
                 <Heading
