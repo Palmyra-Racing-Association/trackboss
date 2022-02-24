@@ -7,7 +7,7 @@ import { Bill, GenerateSingleBillRequest, GetBillListRequestFilters, WorkPointTh
 
 export const GET_BILL_LIST_SQL = 'SELECT * FROM v_bill';
 export const GET_THRESHOLD_SQL = 'SELECT * FROM point_threshold WHERE year = ?';
-export const INSERT_BILL_SQL =
+export const GENERATE_BILL_SQL =
     'INSERT INTO member_bill (generated_date, year, amount, amount_with_fee, membership_id, emailed_bill, ' +
     'cur_year_paid) VALUES (CURDATE(), YEAR(CURDATE(), ?, ?, ?, NULL, 0))';
 export const PATCH_BILL_SQL = 'CALL sp_patch_bill (?, ?, ?)';
@@ -17,7 +17,7 @@ export async function generateBill(req: GenerateSingleBillRequest): Promise<numb
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_BILL_SQL, values);
+        [result] = await pool.query<OkPacket>(GENERATE_BILL_SQL, values);
     } catch (e) {
         // FK violations are technically possible, but membership IDs should only have
         // been recently grabbed from the database anyway - no chance for user error
@@ -53,8 +53,8 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
     let sql;
     let values: any[] = [];
     if (!_.isEmpty(filters)) {
-        let dynamicSql: string = ' WHERE ';
-        let counter: number = 0;
+        let dynamicSql = ' WHERE ';
+        let counter = 0;
         if (typeof filters.membershipId !== 'undefined') {
             dynamicSql += 'membership_id = ? AND ';
             values[counter++] = filters.membershipId;

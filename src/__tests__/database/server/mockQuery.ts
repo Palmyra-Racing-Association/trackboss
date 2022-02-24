@@ -67,6 +67,12 @@ import {
     INSERT_EVENT_JOB_SQL,
     PATCH_EVENT_JOB_SQL,
 } from '../../../database/eventJob';
+import {
+    GENERATE_BILL_SQL,
+    GET_BILL_LIST_SQL,
+    GET_THRESHOLD_SQL,
+    PATCH_BILL_SQL,
+} from '../../../database/billing';
 
 import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
@@ -79,9 +85,11 @@ import * as jobHelpers from './mockHelpers/job';
 import * as jobTypeHelpers from './mockHelpers/jobType';
 import { getMemberTypeListResponse, getMemberTypeResponse, patchMemberTypeResponse } from './mockHelpers/memberType';
 import * as eventJobHelpers from './mockHelpers/eventJob';
+import * as billingHelpers from './mockHelpers/billing';
 
 const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<any> => {
-    switch (String(sql)) {
+    const sqlString = String(sql);
+    switch (sqlString) {
         case INSERT_BIKE_SQL:
             return bikeHelpers.insertBikeResponse(values[0]);
         case GET_BIKE_LIST_BY_MEMBERSHIP_SQL:
@@ -175,11 +183,22 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return eventJobHelpers.patchEventJobResponse(values[0]);
         case DELETE_EVENT_JOB_SQL:
             return eventJobHelpers.deleteEventJobResponse(values[0]);
+        case GET_BILL_LIST_SQL:
+            return billingHelpers.getBillListResponse(values);
+        case GENERATE_BILL_SQL:
+            return billingHelpers.generateBillResponse(values[0]);
+        case PATCH_BILL_SQL:
+            return billingHelpers.patchBillResponse(values[0]);
+        case GET_THRESHOLD_SQL:
+            return billingHelpers.getWorkPointThresholdResponse(values[0]);
         default:
             // We need to run this check in our default as our dynamic SQL does not directly
             // Match any of our prebuilt SQL statements
-            if (String(sql).includes(GET_JOB_LIST_SQL)) {
+            if (sqlString.includes(GET_JOB_LIST_SQL)) {
                 return jobHelpers.getJobListResponse(values);
+            }
+            if (sqlString.includes(GET_BILL_LIST_SQL)) {
+                return billingHelpers.getBillListResponse(values);
             }
             return Promise.resolve();
     }
