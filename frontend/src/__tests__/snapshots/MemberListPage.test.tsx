@@ -1,11 +1,11 @@
 import React from 'react';
-import renderer, { act } from 'react-test-renderer';
+import renderer, { act, ReactTestRenderer } from 'react-test-renderer';
 import { BrowserRouter } from 'react-router-dom';
 import MemberListPage from '../../pages/MemberListPage';
 
 describe('Member List Page', () => {
     it('renders correctly', () => {
-        let page;
+        let page: ReactTestRenderer;
         act(() => {
             page = renderer.create(
                 <BrowserRouter>
@@ -13,6 +13,6 @@ describe('Member List Page', () => {
                 </BrowserRouter>,
             );
         });
-        expect(page.toJSON()).toMatchSnapshot();
+        expect(page!.toJSON()).toMatchSnapshot();
     });
 });
