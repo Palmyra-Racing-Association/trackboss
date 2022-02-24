@@ -12,7 +12,7 @@ const createVerifier = () => {
     }
     if (!process.env.COGNITO_CLIENT_ID) {
         logger.error('No Cognito Client ID in environment');
-        throw new Error('Auth setup failed to due missing client ID');
+        throw new Error('Auth setup failed due to missing client ID');
     }
     verifier = CognitoJwtVerifier.create({
         userPoolId: process.env.COGNITO_POOL_ID,
@@ -39,7 +39,7 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
             }
             if (permissionLevel === 'Admin') {
                 if (member.memberType !== 'Admin') {
-                    throw new Error('Not Authorized');
+                    throw new Error('Forbidden');
                 }
             } else if (permissionLevel === 'Membership Admin') {
                 if (member.memberType !== 'Admin') {
@@ -47,21 +47,21 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
                         // make sure they have permission to act on this
                         const validActors: number[] = await getValidActors(actingAs);
                         if (!validActors.includes(member.memberId)) {
-                            throw new Error('Not Authorized');
+                            throw new Error('Forbidden');
                         }
                     } else {
-                        throw new Error('Not Authorized');
+                        throw new Error('Forbidden');
                     }
                 }
             } else if (permissionLevel === 'Member') {
                 if (member.memberType === 'Paid Laborer') {
-                    throw new Error('Not Authorized');
+                    throw new Error('Forbidden');
                 }
                 if (member.memberType !== 'Admin') {
                     // check that they have permission to act on this
                     const validActors = await getValidActors(actingAs);
                     if (!validActors.includes(member.memberId)) {
-                        throw new Error('Not Authorized');
+                        throw new Error('Forbidden');
                     }
                 }
             }
@@ -71,8 +71,9 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
     } catch (e: any) {
         logger.error('invalid token');
         logger.error(e);
-        if (e.message === 'Not Authorized') {
-            throw new Error('Not Authorized');
+        // console.log(e);
+        if (e.message === 'Forbidden') {
+            throw new Error('Forbidden');
         }
         throw new Error('Authorization Failed');
     }

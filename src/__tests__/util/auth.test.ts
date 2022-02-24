@@ -91,7 +91,7 @@ describe('verify()', () => {
 
     it('fails for membership admin-admin', async () => {
         createVerifier();
-        await expect(verify('membershipAdmin', 'Admin')).rejects.toThrow('Not Authorized');
+        await expect(verify('membershipAdmin', 'Admin')).rejects.toThrow('Forbidden');
         expect(mockGetValidActors).not.toHaveBeenCalled();
         expect(mockGetMember).toHaveBeenCalled();
     });
@@ -105,7 +105,7 @@ describe('verify()', () => {
 
     it('fails for membership admin-membership admin on different membership', async () => {
         createVerifier();
-        await expect(verify('membershipAdmin', 'Membership Admin', 0)).rejects.toThrow('Not Authorized');
+        await expect(verify('membershipAdmin', 'Membership Admin', 0)).rejects.toThrow('Forbidden');
         expect(mockGetValidActors).toHaveBeenCalled();
         expect(mockGetMember).toHaveBeenCalled();
     });
@@ -133,14 +133,14 @@ describe('verify()', () => {
 
     it('fails for member-admin', async () => {
         createVerifier();
-        await expect(verify('member', 'Admin')).rejects.toThrow('Not Authorized');
+        await expect(verify('member', 'Admin')).rejects.toThrow('Forbidden');
         expect(mockGetValidActors).not.toHaveBeenCalled();
         expect(mockGetMember).toHaveBeenCalled();
     });
 
     it('fails for member-membership admin', async () => {
         createVerifier();
-        await expect(verify('member', 'Membership Admin')).rejects.toThrow('Not Authorized');
+        await expect(verify('member', 'Membership Admin')).rejects.toThrow('Forbidden');
         expect(mockGetValidActors).not.toHaveBeenCalled();
         expect(mockGetMember).toHaveBeenCalled();
     });
@@ -154,7 +154,7 @@ describe('verify()', () => {
 
     it('fails for member-member on other member', async () => {
         createVerifier();
-        await expect(verify('member', 'Member', 0)).rejects.toThrow('Not Authorized');
+        await expect(verify('member', 'Member', 0)).rejects.toThrow('Forbidden');
         expect(mockGetValidActors).toHaveBeenCalled();
         expect(mockGetMember).toHaveBeenCalled();
     });
@@ -168,21 +168,21 @@ describe('verify()', () => {
 
     it('fails for laborer-admin', async () => {
         createVerifier();
-        await expect(verify('laborer', 'Admin')).rejects.toThrow('Not Authorized');
+        await expect(verify('laborer', 'Admin')).rejects.toThrow('Forbidden');
         expect(mockGetValidActors).not.toHaveBeenCalled();
         expect(mockGetMember).toHaveBeenCalled();
     });
 
     it('fails for laborer-membership admin', async () => {
         createVerifier();
-        await expect(verify('laborer', 'Membership Admin')).rejects.toThrow('Not Authorized');
+        await expect(verify('laborer', 'Membership Admin')).rejects.toThrow('Forbidden');
         expect(mockGetValidActors).not.toHaveBeenCalled();
         expect(mockGetMember).toHaveBeenCalled();
     });
 
     it('fails for laborer-member', async () => {
         createVerifier();
-        await expect(verify('laborer', 'Member')).rejects.toThrow('Not Authorized');
+        await expect(verify('laborer', 'Member')).rejects.toThrow('Forbidden');
         expect(mockGetValidActors).not.toHaveBeenCalled();
         expect(mockGetMember).toHaveBeenCalled();
     });

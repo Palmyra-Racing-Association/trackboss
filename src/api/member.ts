@@ -31,7 +31,7 @@ member.post('/new', async (req: Request, res: Response) => {
             } else if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
-            } else if (e.message === 'Not Authorized') {
+            } else if (e.message === 'Forbidden') {
                 res.status(403);
                 response = { reason: 'forbidden' };
             } else {
@@ -131,7 +131,7 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
             } else if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
-            } else if (e.message === 'Not Authorized') {
+            } else if (e.message === 'Forbidden') {
                 res.status(403);
                 response = { reason: 'forbidden' };
             } else {
