@@ -71,7 +71,6 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
     } catch (e: any) {
         logger.error('invalid token');
         logger.error(e);
-        // console.log(e);
         if (e.message === 'Forbidden') {
             throw new Error('Forbidden');
         }
