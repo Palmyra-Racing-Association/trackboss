@@ -15,6 +15,8 @@ import {
     GET_MEMBER_SQL,
     INSERT_MEMBER_SQL,
     PATCH_MEMBER_SQL,
+    GET_MEMBER_UUID_SQL,
+    GET_VALID_ACTORS_SQL,
 } from '../../../database/member';
 import {
     GET_EVENT_SQL,
@@ -52,6 +54,12 @@ import {
     GET_MEMBER_TYPE_SQL,
     PATCH_MEMBER_TYPE_SQL,
 } from '../../../database/memberType';
+import {
+    GET_EVENT_JOB_SQL,
+    DELETE_EVENT_JOB_SQL,
+    INSERT_EVENT_JOB_SQL,
+    PATCH_EVENT_JOB_SQL,
+} from '../../../database/eventJob';
 
 import pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
@@ -62,6 +70,7 @@ import { getWorkPointsByMemberResponse, getWorkPointsByMembershipResponse } from
 import * as eventTypeHelpers from './mockHelpers/eventType';
 import * as jobTypeHelpers from './mockHelpers/jobType';
 import { getMemberTypeListResponse, getMemberTypeResponse, patchMemberTypeResponse } from './mockHelpers/memberType';
+import * as eventJobHelpers from './mockHelpers/eventJob';
 
 const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<any> => {
     switch (String(sql)) {
@@ -81,10 +90,13 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
         case GET_MEMBER_LIST_BY_TYPE_SQL:
         case GET_MEMBER_LIST_SQL:
             return memberHelpers.getMemberListResponse(values);
+        case GET_MEMBER_UUID_SQL:
         case GET_MEMBER_SQL:
             return memberHelpers.getMemberResponse(values[0]);
         case PATCH_MEMBER_SQL:
             return memberHelpers.patchMemberResponse(values[0]);
+        case GET_VALID_ACTORS_SQL:
+            return memberHelpers.getValidActorsResponse(values[0]);
         case INSERT_MEMBERSHIP_SQL:
             return membershipHelpers.insertMembershipResponse(values[0]);
         case GET_MEMBERSHIP_LIST_BY_STATUS_SQL:
@@ -137,6 +149,14 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return getMemberTypeListResponse();
         case PATCH_MEMBER_TYPE_SQL:
             return patchMemberTypeResponse(values[0]);
+        case GET_EVENT_JOB_SQL:
+            return eventJobHelpers.getEventJobResponse(values[0]);
+        case INSERT_EVENT_JOB_SQL:
+            return eventJobHelpers.insertEventJobResponse(values[0]);
+        case PATCH_EVENT_JOB_SQL:
+            return eventJobHelpers.patchEventJobResponse(values[0]);
+        case DELETE_EVENT_JOB_SQL:
+            return eventJobHelpers.deleteEventJobResponse(values[0]);
         default:
             return Promise.resolve();
     }

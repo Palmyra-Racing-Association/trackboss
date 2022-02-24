@@ -64,7 +64,7 @@ const memberBikes: Bike[] = [
 const columns: any = [
     {
         name: 'Name',
-        selector: (row: Member) => row.firstName,
+        selector: (row: Member) => `${row.firstName} ${row.lastName}`,
     },
     {
         name: 'Role',
@@ -72,8 +72,9 @@ const columns: any = [
     },
 ];
 
-async function getFormattedMemberListLocal() {
-    const response = await getFormattedMemberList('test');
+// TODO this will break if async, should come in from parent (page) as a prop
+function getFormattedMemberListLocal() {
+    const response = getFormattedMemberList('test');
     // console.log(response);
     return response;
 }
@@ -103,11 +104,10 @@ const customStyles = {
 function MemberList() {
     const { onClose, isOpen, onOpen } = useDisclosure();
     const [selectedMember, setSelectedMember] = useState<Member>();
-    const [cells, setCells] = useState([]);
-
+    const [cells, setCells] = useState<Member[]>([]);
     useEffect(() => {
         async function getData() {
-            const c: any = await getFormattedMemberListLocal();
+            const c: Member[] = getFormattedMemberListLocal();
             setCells(c);
         }
         getData();

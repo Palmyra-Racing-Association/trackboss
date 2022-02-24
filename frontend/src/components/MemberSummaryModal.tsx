@@ -9,7 +9,6 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
-    useDisclosure,
     Text,
     SimpleGrid,
     Heading,
@@ -22,8 +21,6 @@ import {
     ButtonGroup,
     Input,
     Select,
-    ModalFooter,
-    StatHelpText,
 } from '@chakra-ui/react';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
@@ -67,10 +64,10 @@ async function handlePatchMemberContactInfo(
         membershipAdmin: 'true',
         active: true,
         memberType: 'member',
-        firstName: '',
-        lastName: 'gottem',
+        firstName: 'Updated',
+        lastName: 'Member',
         phoneNumber: '0987',
-        email: 'gottem@example.com',
+        email: 'updatedMember@example.com',
         uuid: '',
         occupation: '',
         birthdate: '',
@@ -87,7 +84,6 @@ async function handlePatchMemberContactInfo(
 }
 
 export default function MemberSummaryModal(props: modalProps) {
-    // const { isOpen, onOpen, onClose } = useDisclosure();
     const [selectedMember, setSelectedMember] = useState<Member>();
     // const [family, setFamily] = useState<Member[]>();
     const [bikes, setBikes] = useState<Bike[]>();
@@ -115,7 +111,7 @@ export default function MemberSummaryModal(props: modalProps) {
             setBikes(props.memberBikes);
         }
         setModalData();
-    }, []);
+    });
 
     return (
         <div>

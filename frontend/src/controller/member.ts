@@ -97,7 +97,7 @@ export async function getName() {
 // TODO: replace with getMemberList() call when api is done
 
 // eslint-disable-next-line no-unused-vars
-export async function getFormattedMemberList(token: string) {
+export function getFormattedMemberList(token: string): Member[] {
     // const response =  getMemberList(token);
     const response: Member[] = [
         {

@@ -356,6 +356,23 @@ components:
 security:
   - BearerAuth: [] 
 paths:
+  /api/me:
+      get:
+        summary: Get the member data for the currently logged in member, based on the JWT ID token included in the request.
+        description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+        responses:
+          200:
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/member"
+          401:
+            $ref: "#/components/responses/unauthorizedError"
+          404:
+            $ref: "#/components/responses/notFoundError"
+          500:
+            $ref: "#/components/responses/internalServerError"
   # member
   /api/member/new:
     post:
