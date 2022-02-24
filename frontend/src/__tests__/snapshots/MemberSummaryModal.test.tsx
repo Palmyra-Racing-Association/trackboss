@@ -1,8 +1,6 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import '@testing-library/jest-dom/extend-expect';
-import { BrowserRouter } from 'react-router-dom';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import MemberSummaryModal from '../../components/MemberSummaryModal';
 import { Member } from '../../../../src/typedefs/member';
 import { Bike } from '../../../../src/typedefs/bike';
