@@ -6,9 +6,8 @@ describe('VerifyButton component', () => {
     it('renders correctly', () => {
         let button: ReactTestRenderer;
         act(() => {
-            button = renderer.create(<VerifyButton verified={true}/>);
+            button = renderer.create(<VerifyButton verified />);
         });
-        
         expect(button!.toJSON()).toMatchSnapshot();
     });
 });

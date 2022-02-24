@@ -8,7 +8,6 @@ describe('Member List component', () => {
         act(() => {
             list = renderer.create(<MemberList />);
         });
-        
         expect(list!.toJSON()).toMatchSnapshot();
     });
 });

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SignUpList component renders correctly 1`] = `
+exports[`SignUp page renders correctly 1`] = `
 Array [
   <div>
     <div

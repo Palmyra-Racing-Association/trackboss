@@ -6,9 +6,8 @@ describe('SignUpList component', () => {
     it('renders correctly', () => {
         let list: ReactTestRenderer;
         act(() => {
-            list = renderer.create(<SignUpList date="2022-02-11"/>);
+            list = renderer.create(<SignUpList date="2022-02-11" />);
         });
-        
         expect(list!.toJSON()).toMatchSnapshot();
     });
 });

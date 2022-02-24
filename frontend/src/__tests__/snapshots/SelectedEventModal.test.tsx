@@ -1,8 +1,8 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 import '@testing-library/jest-dom/extend-expect';
 import SelectedEventModal from '../../components/SelectedEventModal';
-import { BrowserRouter } from 'react-router-dom';
 
 function onViewEventClose() {
     // a void function
@@ -43,7 +43,7 @@ describe('selected event modal', () => {
                     onSignUpOpen={onSignUpOpen}
                     admin={false}
                 />
-            </BrowserRouter>
+            </BrowserRouter>,
         ).toJSON();
         expect(modal).toMatchSnapshot();
     });
