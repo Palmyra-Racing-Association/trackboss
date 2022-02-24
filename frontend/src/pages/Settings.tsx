@@ -10,7 +10,6 @@ function Settings() {
     return (
         <ChakraProvider theme={theme}>
             <Header title="General Info" activeButtonId={4} />
-            <SignUpList />
         </ChakraProvider>
     );
 }

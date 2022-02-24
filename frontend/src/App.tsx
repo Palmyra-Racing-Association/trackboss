@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import MemberListPage from './pages/MemberListPage';
 import Settings from './pages/Settings';
 import CalendarPage from './pages/CalendarPage';
+import SignUpPage from './pages/SignUpPage';
 
 export default function App() {
     return (
@@ -13,6 +14,7 @@ export default function App() {
                 <Route path="calendar" element={<CalendarPage />} />
                 <Route path="members" element={<MemberListPage />} />
                 <Route path="settings" element={<Settings />} />
+                <Route path="signups/:date" element={<SignUpPage />} />
             </Routes>
     );
 }

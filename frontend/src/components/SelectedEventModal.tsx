@@ -18,6 +18,7 @@ import {
     // UnorderedList,
 } from '@chakra-ui/react';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
+import { Link } from 'react-router-dom';
 // import { deleteJob } from '../controller/job';
 // import { deleteEvent } from '../controller/event';
 
@@ -115,6 +116,11 @@ export default function SelectedEventModal(props: modalProps) {
                 <Divider />
                 <ModalCloseButton />
                 <ModalFooter>
+                    {
+                        props.admin && (
+                            <Link to={`signups/${props.selectedEvent.start}`} state={{ date: props.selectedEvent.start }}>View Sign Ups</Link>
+                        )
+                    }
                     {
                         props.admin && (
                             <Button

@@ -1,11 +1,7 @@
 /* eslint-disable */
-
-import { propNames } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { RowState } from 'react-data-table-component/dist/src/DataTable/types';
 import { getFormattedSignUpList } from '../controller/job';
-import reportWebVitals from '../reportWebVitals';
 import VerifyButton from './VerifyButton';
 
 const columns: any = [
@@ -26,6 +22,10 @@ const columns: any = [
         }
     },
 ];
+
+interface SignUpProps {
+    date: string,
+}
 
 interface Worker {
     name: string,
@@ -60,8 +60,7 @@ const customStyles = {
     },
 };
 
-
-function SignUpList() {
+function SignUpList(props: SignUpProps) {
     const [cells, setCells] = useState([] as Worker[]);
     useEffect(() => {
         async function getData() {
