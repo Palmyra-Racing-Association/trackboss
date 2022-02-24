@@ -24,11 +24,6 @@ describe('All unimplemented bike endpoints are reachable', () => {
         expect(res.status).toEqual(501);
     });
 
-    it('GET /bike/:id is reachable', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/42`);
-        expect(res.status).toEqual(501);
-    });
-
     it('PATCH /bike/:id is reachable', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/42`);
         expect(res.status).toEqual(501);
@@ -37,6 +32,45 @@ describe('All unimplemented bike endpoints are reachable', () => {
     it('DELETE /bike/:id is reachable', async () => {
         const res = await supertestServer.delete(`${TAG_ROOT}/42`);
         expect(res.status).toEqual(501);
+    });
+});
+
+describe('GET /bike/:bikeId', () => {
+    it('Returns 500 on Internal Server Error', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/400`).set('Authorization', 'Bearer validtoken');
+        expect(mockGetBike).toHaveBeenCalled();
+        expect(res.status).toBe(500);
+        expect(res.body.reason).toBe('internal server error');
+    });
+
+    it('Returns 401 for no token', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/2`);
+        expect(mockGetBike).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('Missing authorization grant in header');
+    });
+
+    it('Returns 401 for invalid token', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/2`).set('Authorization', 'Bearer invalidtoken');
+        expect(mockInvalidToken).toHaveBeenCalled();
+        expect(mockGetBike).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('not authorized');
+    });
+
+    it('GETs the correct bike', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/1`).set('Authorization', 'Bearer validtoken');
+        expect(mockGetBike).toHaveBeenCalled();
+        expect(res.status).toBe(200);
+        const bike: Bike = res.body;
+        expect(bike).toEqual(bikeList[1]);
+    });
+
+    it('Returns 404 when no data found', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/7`).set('Authorization', 'Bearer validtoken');
+        expect(mockGetBike).toHaveBeenCalled();
+        expect(res.status).toBe(404);
+        expect(res.body.reason).toBe('not found');
     });
 });
 
