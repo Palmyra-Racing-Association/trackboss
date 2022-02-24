@@ -24,7 +24,7 @@ exports[`Member List component renders correctly 1`] = `
             role="row"
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-iqseJM hFfXd fvAeSn iwmeYY rdt_TableCol"
+              className="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
               data-column-id={1}
               onDragEnd={[Function]}
               onDragEnter={[Function]}
@@ -49,7 +49,7 @@ exports[`Member List component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-iqseJM hFfXd fvAeSn iwmeYY rdt_TableCol"
+              className="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
               data-column-id={2}
               onDragEnd={[Function]}
               onDragEnter={[Function]}
@@ -80,8 +80,8 @@ exports[`Member List component renders correctly 1`] = `
           role="rowgroup"
         >
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
-            id="row-1"
+            className="sc-jrQzAO kCxImp rdt_TableRow"
+            id="row-0"
             onClick={[Function]}
             onDoubleClick={[Function]}
             role="row"
@@ -89,10 +89,10 @@ exports[`Member List component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
-              id="cell-1-1"
+              id="cell-1-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -108,10 +108,10 @@ exports[`Member List component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
-              id="cell-2-1"
+              id="cell-2-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -123,12 +123,60 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Admin
+                admin
               </div>
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jrQzAO kCxImp rdt_TableRow"
+            id="row-1"
+            onClick={[Function]}
+            onDoubleClick={[Function]}
+            role="row"
+            selected={false}
+            style={Object {}}
+          >
+            <div
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+              data-column-id={1}
+              data-tag="allowRowEvents"
+              id="cell-1-undefined"
+              onDragEnd={[Function]}
+              onDragEnter={[Function]}
+              onDragLeave={[Function]}
+              onDragOver={[Function]}
+              onDragStart={[Function]}
+              role="gridcell"
+              style={Object {}}
+            >
+              <div
+                data-tag="allowRowEvents"
+              >
+                John Smith
+              </div>
+            </div>
+            <div
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+              data-column-id={2}
+              data-tag="allowRowEvents"
+              id="cell-2-undefined"
+              onDragEnd={[Function]}
+              onDragEnter={[Function]}
+              onDragLeave={[Function]}
+              onDragOver={[Function]}
+              onDragStart={[Function]}
+              role="gridcell"
+              style={Object {}}
+            >
+              <div
+                data-tag="allowRowEvents"
+              >
+                member
+              </div>
+            </div>
+          </div>
+          <div
+            className="sc-jrQzAO kCxImp rdt_TableRow"
             id="row-2"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -137,10 +185,10 @@ exports[`Member List component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
-              id="cell-1-2"
+              id="cell-1-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -152,14 +200,14 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Martin Smith
+                Sarah Connors
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
-              id="cell-2-2"
+              id="cell-2-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -171,12 +219,12 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Member
+                admin
               </div>
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jrQzAO kCxImp rdt_TableRow"
             id="row-3"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -185,10 +233,10 @@ exports[`Member List component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
-              id="cell-1-3"
+              id="cell-1-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -200,14 +248,14 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Jimmy Hendrix
+                Jim Smith
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
-              id="cell-2-3"
+              id="cell-2-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -219,12 +267,12 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                President
+                member
               </div>
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jrQzAO kCxImp rdt_TableRow"
             id="row-4"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -233,10 +281,10 @@ exports[`Member List component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
-              id="cell-1-4"
+              id="cell-1-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -248,14 +296,14 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Brandon Sanderson
+                Jane Smith
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
-              id="cell-2-4"
+              id="cell-2-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -267,12 +315,12 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Secretary
+                member
               </div>
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jrQzAO kCxImp rdt_TableRow"
             id="row-5"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -281,10 +329,10 @@ exports[`Member List component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
-              id="cell-1-5"
+              id="cell-1-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -296,14 +344,14 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Marianna Moreno
+                Jannet Smith
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
-              id="cell-2-5"
+              id="cell-2-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -315,12 +363,12 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Member
+                member
               </div>
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jrQzAO kCxImp rdt_TableRow"
             id="row-6"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -329,10 +377,10 @@ exports[`Member List component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
-              id="cell-1-6"
+              id="cell-1-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -344,14 +392,14 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Kason Rosales
+                Alan Delimon
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
-              id="cell-2-6"
+              id="cell-2-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -363,12 +411,12 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Member
+                admin
               </div>
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jrQzAO kCxImp rdt_TableRow"
             id="row-7"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -377,10 +425,10 @@ exports[`Member List component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
-              id="cell-1-7"
+              id="cell-1-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -392,14 +440,14 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Opal Wormald
+                John Smith
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
-              id="cell-2-7"
+              id="cell-2-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -411,12 +459,12 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Member
+                member
               </div>
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jrQzAO kCxImp rdt_TableRow"
             id="row-8"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -425,10 +473,10 @@ exports[`Member List component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
-              id="cell-1-8"
+              id="cell-1-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -440,14 +488,14 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Cerys Mcpherson
+                Sarah Connors
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
-              id="cell-2-8"
+              id="cell-2-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -459,12 +507,12 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Member
+                admin
               </div>
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jrQzAO kCxImp rdt_TableRow"
             id="row-9"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -473,10 +521,10 @@ exports[`Member List component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
-              id="cell-1-9"
+              id="cell-1-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -488,14 +536,14 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Lewys Cope
+                Jim Smith
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
-              id="cell-2-9"
+              id="cell-2-undefined"
               onDragEnd={[Function]}
               onDragEnter={[Function]}
               onDragLeave={[Function]}
@@ -507,55 +555,7 @@ exports[`Member List component renders correctly 1`] = `
               <div
                 data-tag="allowRowEvents"
               >
-                Member
-              </div>
-            </div>
-          </div>
-          <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
-            id="row-10"
-            onClick={[Function]}
-            onDoubleClick={[Function]}
-            role="row"
-            selected={false}
-            style={Object {}}
-          >
-            <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
-              data-column-id={1}
-              data-tag="allowRowEvents"
-              id="cell-1-10"
-              onDragEnd={[Function]}
-              onDragEnter={[Function]}
-              onDragLeave={[Function]}
-              onDragOver={[Function]}
-              onDragStart={[Function]}
-              role="gridcell"
-              style={Object {}}
-            >
-              <div
-                data-tag="allowRowEvents"
-              >
-                Salim Stafford
-              </div>
-            </div>
-            <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
-              data-column-id={2}
-              data-tag="allowRowEvents"
-              id="cell-2-10"
-              onDragEnd={[Function]}
-              onDragEnter={[Function]}
-              onDragLeave={[Function]}
-              onDragOver={[Function]}
-              onDragStart={[Function]}
-              role="gridcell"
-              style={Object {}}
-            >
-              <div
-                data-tag="allowRowEvents"
-              >
-                Member
+                member
               </div>
             </div>
           </div>
