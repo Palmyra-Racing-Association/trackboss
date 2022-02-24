@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { extendTheme } from '@chakra-ui/react';
 
 export default extendTheme({
@@ -40,5 +41,19 @@ export default extendTheme({
     fonts: {
         heading: 'Russo One, sans-serif',
         body: 'Roboto, sans-serif',
+    },
+    components: {
+        Button: {
+            variants: {
+                'verified': {
+                    bg: 'green',
+                    color: 'white',
+                },
+                'unverified': {
+                    bg: 'red',
+                    color: 'white',
+                }
+            },
+        },
     },
 });

@@ -4,10 +4,11 @@ import MemberList from '../../components/MemberList';
 
 describe('Member List component', () => {
     it('renders correctly', () => {
-        let list;
+        let list: TestRenderer;
         act(() => {
             list = renderer.create(<MemberList />);
         });
-        expect(list.toJSON()).toMatchSnapshot();
+        
+        expect(list!.toJSON()).toMatchSnapshot();
     });
 });
