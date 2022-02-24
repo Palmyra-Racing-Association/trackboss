@@ -80,6 +80,8 @@ export function getJobListResponse(values: string[]) {
         case '1':
             return Promise.resolve([jobList.filter((job) => job.member)]);
         case '0':
+            return Promise.resolve([jobList.filter((job) => job.member_id === null)]);
+        case '2':
             return Promise.resolve([jobList.filter((job) => job.verified === [0])]);
         case '50':
             return Promise.resolve([jobList.filter((job) => job.member_id === 50)]);

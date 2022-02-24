@@ -8,7 +8,6 @@ import pool from './pool';
 
 export const GET_JOB_LIST_SQL = 'SELECT * FROM v_job';
 export const GET_JOB_SQL = `${GET_JOB_LIST_SQL} WHERE job_id = ?`;
-export const GET_JOB_LIST_FILTER_SQL = ''; // DO THIS STILL
 export const INSERT_JOB_SQL = 'INSERT INTO job (member_id, event_id, job_type_id, job_date, last_modified_date, ' +
      'verified, verified_date, points_awarded, paid, paid_date, last_modified_by) ' +
      'VALUES (?, ?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?)';

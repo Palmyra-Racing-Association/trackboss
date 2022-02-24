@@ -41,7 +41,8 @@ describe('getJobList()', () => {
     });
     it('Returns a filtered list of jobs by assignment status', async () => {
         const getListRequestFilters: any = {
-            assignmentStatus: '1',
+            assignmentStatus: 1,
+            verificationStatus: '1',
         };
         const results = await getJobList(getListRequestFilters);
         expect(mockQuery).toHaveBeenCalled();
@@ -49,9 +50,20 @@ describe('getJobList()', () => {
             expect(result.member).toBeDefined();
         });
     });
+    it('Returns a filtered list of jobs by assignment status', async () => {
+        const getListRequestFilters: any = {
+            assignmentStatus: 0,
+            verificationStatus: '0',
+        };
+        const results = await getJobList(getListRequestFilters);
+        expect(mockQuery).toHaveBeenCalled();
+        results.forEach((result) => {
+            expect(result.member).toBeNull();
+        });
+    });
     it('Returns a filtered list of jobs by verification status', async () => {
         const getListRequestFilters: any = {
-            verificationStatus: '0',
+            verificationStatus: '2',
         };
         const results = await getJobList(getListRequestFilters);
         expect(mockQuery).toHaveBeenCalled();
