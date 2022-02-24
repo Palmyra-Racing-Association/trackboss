@@ -22,11 +22,15 @@ import {
     ButtonGroup,
     Input,
     Select,
+    ModalFooter,
+    StatHelpText,
 } from '@chakra-ui/react';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
 
 interface modalProps {
+    isOpen: boolean,
+    onClose: () => void,
     memberInfo: Member,
     memberFamily: Member[],
     memberBikes: Bike[],
@@ -83,13 +87,13 @@ async function handlePatchMemberContactInfo(
 }
 
 export default function MemberSummaryModal(props: modalProps) {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [memberInfo, setMemberInfo] = useState<Member>();
+    // const { isOpen, onOpen, onClose } = useDisclosure();
+    const [selectedMember, setSelectedMember] = useState<Member>();
     // const [family, setFamily] = useState<Member[]>();
     const [bikes, setBikes] = useState<Bike[]>();
 
-    const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>();
-    const [editingMemberRole, setEditingMemberRole] = useState<boolean>();
+    const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
+    const [editingMemberRole, setEditingMemberRole] = useState<boolean>(false);
 
     const [editedName, setEditedName] = useState<string>('');
     const [editedEmail, setEditedEmail] = useState<string>('');
@@ -105,20 +109,22 @@ export default function MemberSummaryModal(props: modalProps) {
 
     useEffect(() => {
         async function setModalData() {
-            setMemberInfo(props.memberInfo);
+            setSelectedMember(props.memberInfo);
             setEditedMemberType(props.memberInfo.memberType);
             // setFamily(props.memberFamily);
             setBikes(props.memberBikes);
-            setEditingMemberInfo(false);
-            setEditingMemberRole(false);
         }
         setModalData();
     }, []);
 
     return (
         <div>
-            <Button background="orange.300" color="white" onClick={onOpen}>Member Summary Modal</Button>
-            <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+            <Modal
+                isCentered
+                size="xl"
+                isOpen={props.isOpen}
+                onClose={props.onClose}
+            >
                 <ModalOverlay />
                 <ModalContent pb={5}>
                     <ModalHeader><Heading textAlign="center">Member Summary</Heading></ModalHeader>
@@ -126,13 +132,13 @@ export default function MemberSummaryModal(props: modalProps) {
                     <ModalCloseButton />
                     <ModalBody>
                         {
-                            memberInfo && bikes && (
+                            selectedMember && bikes && (
                                 <SimpleGrid columns={2} spacing={4}>
                                     <VStack borderRightWidth={1} borderRightColor="light-grey" align="left">
                                         <HStack>
                                             <Text textAlign="left" fontSize="3xl" fontWeight="bold">Contact Info</Text>
                                             {
-                                                memberInfo.membershipAdmin === 'true' && (
+                                                selectedMember.membershipAdmin === 'true' && (
                                                     <Button
                                                         textDecoration="underline"
                                                         color="orange"
@@ -162,19 +168,19 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 editingMemberInfo ? (
                                                     <VStack ml="-65px" align="left">
                                                         <Input
-                                                            placeholder={`${memberInfo.firstName} ${props.memberInfo.lastName}`}
+                                                            placeholder={`${selectedMember.firstName} ${selectedMember.lastName}`}
                                                             value={editedName}
                                                             onChange={handleEditedNameChange}
                                                             size="xs"
                                                         />
                                                         <Input
-                                                            placeholder={memberInfo.email}
+                                                            placeholder={selectedMember.email}
                                                             value={editedEmail}
                                                             onChange={handleEditedEmailChange}
                                                             size="xs"
                                                         />
                                                         <Input
-                                                            placeholder={memberInfo.phoneNumber}
+                                                            placeholder={selectedMember.phoneNumber}
                                                             value={editedPhone}
                                                             onChange={handleEditedPhoneChange}
                                                             size="xs"
@@ -186,7 +192,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                             color="green"
                                                             onClick={
                                                                 async () => {
-                                                                    setMemberInfo(await handlePatchMemberContactInfo(memberInfo, editedName, editedEmail, editedPhone));
+                                                                    setSelectedMember(await handlePatchMemberContactInfo(selectedMember, editedName, editedEmail, editedPhone));
                                                                     setEditingMemberInfo(false);
                                                                     setEditingMemberRole(false);
                                                                 }
@@ -198,10 +204,10 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 ) : (
                                                     <VStack ml="-65px" align="left">
                                                         <Text>
-                                                            {`${memberInfo.firstName} ${props.memberInfo.lastName}`}
+                                                            {`${selectedMember.firstName} ${selectedMember.lastName}`}
                                                         </Text>
-                                                        <Text>{memberInfo.email}</Text>
-                                                        <Text>{memberInfo.phoneNumber}</Text>
+                                                        <Text>{selectedMember.email}</Text>
+                                                        <Text>{selectedMember.phoneNumber}</Text>
                                                     </VStack>
                                                 )
                                             }
@@ -224,7 +230,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                         <UnorderedList pl={10}>
                                             {
                                                 props.memberFamily.map((member) => (
-                                                    member.memberId === memberInfo.memberId ? <ListItem>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
+                                                    member.memberId === selectedMember.memberId ? <ListItem>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
                                                         : <ListItem>{`${member.firstName} ${member.lastName}`}</ListItem>
                                                 ))
                                             }
@@ -248,7 +254,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 Roles
                                             </Text>
                                             {
-                                                memberInfo.membershipAdmin === 'true' && (
+                                                selectedMember.membershipAdmin === 'true' && (
                                                     <Button
                                                         textDecoration="underline"
                                                         color="orange"
@@ -316,7 +322,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         disabled={editedMemberType !== 'board'}
                                                         variant="outline"
                                                         size="xs"
-                                                        placeholder={memberInfo.occupation}
+                                                        placeholder={selectedMember.occupation}
                                                         value={editedBoardMember}
                                                         onChange={handleEditedBoardMember}
                                                     >
@@ -333,10 +339,10 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         onClick={
                                                             async () => {
                                                                 if (editedBoardMember !== '') {
-                                                                    await handleNewBoardMember(memberInfo, editedBoardMember);
+                                                                    await handleNewBoardMember(selectedMember, editedBoardMember);
                                                                 }
-                                                                if (memberInfo.memberType !== editedMemberType) {
-                                                                    await handlePatchMemberType(memberInfo, editedMemberType);
+                                                                if (selectedMember.memberType !== editedMemberType) {
+                                                                    await handlePatchMemberType(selectedMember, editedMemberType);
                                                                 }
                                                                 setEditingMemberRole(false);
                                                                 setEditingMemberInfo(false);
@@ -350,20 +356,20 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 <ButtonGroup size="sm" isAttached variant="outline">
                                                     <Button
                                                         mr="-px"
-                                                        backgroundColor={memberInfo.memberType === 'member' ? 'blue' : ''}
+                                                        backgroundColor={selectedMember.memberType === 'member' ? 'blue' : ''}
                                                     >
                                                         Member
                                                     </Button>
                                                     <Button
                                                         userSelect="none"
                                                         mr="-px"
-                                                        backgroundColor={memberInfo.memberType === 'admin' ? 'blue' : ''}
+                                                        backgroundColor={selectedMember.memberType === 'admin' ? 'blue' : ''}
                                                     >
                                                         Admin
                                                     </Button>
                                                     <Button
                                                         mr="-px"
-                                                        backgroundColor={memberInfo.memberType === 'board' ? 'blue' : ''}
+                                                        backgroundColor={selectedMember.memberType === 'board' ? 'blue' : ''}
                                                     >
                                                         Board
                                                     </Button>
@@ -372,7 +378,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                         }
                                         <Container pt={20} mb={20} />
                                         <Text textAlign="left" fontSize="3xl" fontWeight="bold">Actions</Text>
-                                        <HStack size="lg">
+                                        <HStack align="left">
                                             <Button
                                                 variant="outline"
                                                 style={
