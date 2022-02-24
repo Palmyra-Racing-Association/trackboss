@@ -1,14 +1,18 @@
 import React from 'react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
 import theme from '../theme';
 import Header from '../components/Header';
+import MemberList from '../components/MemberList';
 
-function MemberList() {
+function MemberListPage() {
     return (
         <ChakraProvider theme={theme}>
             <Header title="Members" activeButtonId={3} />
+            <Box pt="3em">
+                <MemberList />
+            </Box>
         </ChakraProvider>
     );
 }
 
-export default MemberList;
+export default MemberListPage;

@@ -91,3 +91,102 @@ export async function getName() {
 
     return response.name;
 }
+
+// this api call is mocked
+// TODO: replace with getMemberList() call when api is done
+
+interface Member {
+    id: number,
+    name: string,
+    role: string,
+}
+
+// eslint-disable-next-line no-unused-vars
+export function getFormattedMemberList(token: string): Member[] {
+    // const response =  getMemberList(token);
+    const response = [
+        {
+            memberId: 1,
+            memberType: 'Admin',
+            firstName: 'Alan',
+            lastName: 'Delimon',
+        },
+        {
+            memberId: 2,
+            memberType: 'Member',
+            firstName: 'Martin',
+            lastName: 'Smith',
+        },
+        {
+            memberId: 3,
+            memberType: 'President',
+            firstName: 'Jimmy',
+            lastName: 'Hendrix',
+        },
+        {
+            memberId: 4,
+            memberType: 'Secretary',
+            firstName: 'Brandon',
+            lastName: 'Sanderson',
+        },
+        {
+            memberId: 5,
+            memberType: 'Member',
+            firstName: 'Marianna',
+            lastName: 'Moreno',
+        },
+        {
+            memberId: 6,
+            memberType: 'Member',
+            firstName: 'Kason',
+            lastName: 'Rosales',
+        },
+        {
+            memberId: 7,
+            memberType: 'Member',
+            firstName: 'Opal',
+            lastName: 'Wormald',
+        },
+        {
+            memberId: 8,
+            memberType: 'Member',
+            firstName: 'Cerys',
+            lastName: 'Mcpherson',
+        },
+        {
+            memberId: 9,
+            memberType: 'Member',
+            firstName: 'Lewys',
+            lastName: 'Cope',
+        },
+        {
+            memberId: 10,
+            memberType: 'Member',
+            firstName: 'Salim',
+            lastName: 'Stafford',
+        },
+        {
+            memberId: 11,
+            memberType: 'Admin',
+            firstName: 'Taha',
+            lastName: 'Davila',
+        },
+        {
+            memberId: 12,
+            memberType: 'Member',
+            firstName: 'Hari',
+            lastName: 'Acevedo',
+        },
+
+    ];
+
+    const formattedResponse = response.map((member) => (
+        {
+            id: member.memberId,
+            name: `${member.firstName} ${member.lastName}`,
+            role: member.memberType,
+        }
+    ));
+
+    return formattedResponse;
+}
