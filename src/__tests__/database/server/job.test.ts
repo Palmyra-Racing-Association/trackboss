@@ -50,7 +50,7 @@ describe('getJobList()', () => {
             expect(result.member).toBeDefined();
         });
     });
-    it('Returns a filtered list of jobs by assignment status', async () => {
+    it('Returns a filtered list of jobs by unassigned status', async () => {
         const getListRequestFilters: any = {
             assignmentStatus: 0,
             verificationStatus: '0',
