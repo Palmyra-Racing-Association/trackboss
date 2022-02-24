@@ -48,7 +48,7 @@ export default function SignUpModal(props: modalProps) {
     }, []);
 
     return (
-        <Modal size="xl" isOpen={props.isOpen} onClose={props.onClose}>
+        <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
             <ModalContent>
                 <Heading pl={2} pr={2} textAlign="left">Select members to sign up</Heading>
