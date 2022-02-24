@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
-import { getBike, insertBike } from '../database/bike';
-import { GetBikeResponse, PostNewBikeResponse } from '../typedefs/bike';
+import { getBike, getBikeList, insertBike } from '../database/bike';
+import { Bike, GetBikeListResponse, GetBikeResponse, PostNewBikeResponse } from '../typedefs/bike';
 import { checkHeader, verify } from '../util/auth';
 
 const bike = Router();
@@ -37,8 +37,37 @@ bike.post('/new', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-bike.get('/list', (req: Request, res: Response) => {
-    res.status(501).send();
+bike.get('/list', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: GetBikeListResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            let filterMembership: number | undefined = Number(req.query.membershipID);
+            if (Number.isNaN(filterMembership)) {
+                filterMembership = undefined;
+            }
+            const bikeList: Bike[] = await getBikeList(filterMembership);
+            res.status(200);
+            response = bikeList;
+        } catch (e: any) {
+            if (e.message === 'user input error') {
+                res.status(400);
+                response = { reason: 'bad request' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
 });
 
 bike.get('/:bikeId', async (req: Request, res: Response) => {

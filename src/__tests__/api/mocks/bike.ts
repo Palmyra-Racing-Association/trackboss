@@ -46,3 +46,17 @@ export const mockGetBike = jest.spyOn(bike, 'getBike').mockImplementation((bikeI
     }
     return Promise.resolve(returnBike[0]);
 });
+
+export const mockGetBikeList = jest.spyOn(bike, 'getBikeList').mockImplementationOnce(() => {
+    throw new Error('internal server error');
+}).mockImplementation((membershipId?: number): Promise<Bike[]> => {
+    let bikes: Bike[] = [];
+    if (typeof membershipId === 'undefined') {
+        bikes = bikeList;
+    } else if (membershipId === 0) {
+        bikes = _.filter(bikeList, (b: Bike) => b.membershipAdmin === 'Guy Fieri');
+    } else if (membershipId === 1) {
+        bikes = _.filter(bikeList, (b: Bike) => b.membershipAdmin === 'Joe Blow');
+    }
+    return Promise.resolve(bikes);
+});

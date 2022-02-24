@@ -1,8 +1,8 @@
 import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
-import { mockInvalidToken, mockVerifyAdmin, mockVerifyMember } from '../util/authMocks';
-import { bikeList, mockGetBike, mockInsertBike } from './mocks/bike';
+import { mockInvalidToken, mockValidToken, mockVerifyAdmin, mockVerifyMember } from '../util/authMocks';
+import { bikeList, mockGetBike, mockGetBikeList, mockInsertBike } from './mocks/bike';
 import { mockGetMember } from './mocks/member';
 import { Bike } from '../../typedefs/bike';
 
@@ -18,12 +18,53 @@ afterAll((done) => {
     server.close(done);
 });
 
-describe('All unimplemented bike endpoints are reachable', () => {
-    it('GET /bike/list is reachable', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/list`);
-        expect(res.status).toEqual(501);
+describe('GET /member/list', () => {
+    it('Returns 500 on Internal Server Error', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer validtoken');
+        expect(res.status).toBe(500);
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(mockGetBikeList).toHaveBeenCalled();
+        expect(res.body.reason).toBe('internal server error');
     });
 
+    it('Returns 401 for no token', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/list`);
+        expect(mockGetBikeList).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('Missing authorization grant in header');
+    });
+
+    it('Returns 401 for invalid token', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer invalidtoken');
+        expect(mockInvalidToken).toHaveBeenCalled();
+        expect(mockGetBikeList).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('not authorized');
+    });
+
+    it('Gets the unfiltered list', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer validtoken');
+        expect(mockGetBikeList).toHaveBeenCalled();
+        expect(res.status).toBe(200);
+        const bikes: Bike[] = res.body;
+        expect(bikes.length).toBe(bikeList.length);
+        expect(bikes[0]).toEqual(bikeList[0]);
+        expect(bikes[1]).toEqual(bikeList[1]);
+    });
+
+    it('Correctly filters by membershipId', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?membershipID=0`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockGetBikeList).toHaveBeenCalled();
+        expect(res.status).toBe(200);
+        const bikes: Bike[] = res.body;
+        expect(bikes.length).toBe(1);
+        expect(bikes[0]).toEqual(bikeList[0]);
+    });
+});
+
+describe('All unimplemented bike endpoints are reachable', () => {
     it('PATCH /bike/:id is reachable', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/42`);
         expect(res.status).toEqual(501);
