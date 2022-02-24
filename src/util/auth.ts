@@ -8,11 +8,11 @@ let verifier: CognitoJwtVerifierSingleUserPool<{ userPoolId: string; tokenUse: '
 const createVerifier = () => {
     if (!process.env.COGNITO_POOL_ID) {
         logger.error('No Cognito User Pool ID specified in environment');
-        throw new Error('Auth setup failed to missing pool ID');
+        throw new Error('Auth setup failed due to missing pool ID');
     }
     if (!process.env.COGNITO_CLIENT_ID) {
         logger.error('No Cognito Client ID in environment');
-        throw new Error('Auth setup failed to missing client ID');
+        throw new Error('Auth setup failed to due missing client ID');
     }
     verifier = CognitoJwtVerifier.create({
         userPoolId: process.env.COGNITO_POOL_ID,
@@ -71,7 +71,6 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
     } catch (e: any) {
         logger.error('invalid token');
         logger.error(e);
-        // console.log(e);
         if (e.message === 'Not Authorized') {
             throw new Error('Not Authorized');
         }

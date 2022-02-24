@@ -24,14 +24,14 @@ describe('setupVerifier()', () => {
         process.env.COGNITO_POOL_ID = '';
         expect(() => {
             createVerifier();
-        }).toThrow('Auth setup failed to missing pool ID');
+        }).toThrow('Auth setup failed due to missing pool ID');
     });
 
     it('errors without client id', () => {
         process.env.COGNITO_CLIENT_ID = '';
         expect(() => {
             createVerifier();
-        }).toThrow('Auth setup failed to missing client ID');
+        }).toThrow('Auth setup failed due to missing client ID');
     });
 
     it('successfully loads', () => {
