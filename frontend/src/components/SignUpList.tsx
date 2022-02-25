@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createRef, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { getFormattedSignUpList } from '../controller/job';
 import VerifyButton from './VerifyButton';
@@ -42,7 +42,7 @@ const customStyles = {
     },
     headCells: {
         style: {
-            paddingTop: '3em',
+            paddingTop: '2em',
             fontSize: '3.5em',
             backgroundColor: '#f9f9f9',
             color: '#626262',
@@ -56,6 +56,8 @@ const customStyles = {
 };
 
 function SignUpList() {
+    const signUpListRef = createRef<HTMLDivElement>();
+
     const [cells, setCells] = useState([] as Worker[]);
     useEffect(() => {
         async function getData() {
@@ -65,7 +67,7 @@ function SignUpList() {
         getData();
     }, []);
     return (
-        <div data-testid="table">
+        <div data-testid="table" ref={signUpListRef}>
             <DataTable
                 columns={columns}
                 data={cells}
@@ -80,4 +82,13 @@ function SignUpList() {
     );
 }
 
-export default SignUpList;
+// The empty props here are needed so that the forwardRef can match its params to the correct types
+const FunctionalComponentToPrint = React.forwardRef<HTMLDivElement>(
+    (props, ref) => (
+        <div ref={ref}>
+            <SignUpList />
+        </div>
+    ),
+);
+
+export default FunctionalComponentToPrint;

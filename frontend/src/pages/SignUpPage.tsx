@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import Header from '../components/Header';
-import SignUpList from '../components/SignUpList';
+import ReactToPrint from '../components/ReactToPrint';
 import theme from '../theme';
 
 type pageParams = {
@@ -14,7 +14,8 @@ export default function SignUpPage() {
     return (
         <ChakraProvider theme={theme}>
             <Header title={`Sign Ups (${date})`} activeButtonId={2} />
-            <SignUpList />
+            {/* ReacToPrint wraps the SignUpList component, to allow printing */}
+            <ReactToPrint />
         </ChakraProvider>
     );
 }

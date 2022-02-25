@@ -107,9 +107,7 @@ const customStyles = {
     },
 };
 
-function MemberList() {
-    const testRef = createRef<HTMLDivElement>();
-
+export default function MemberList() {
     const { onClose, isOpen, onOpen } = useDisclosure();
     const [selectedMember, setSelectedMember] = useState<Member>();
     const [cells, setCells] = useState<Member[]>([]);
@@ -121,7 +119,7 @@ function MemberList() {
         getData();
     }, []);
     return (
-        <div data-testid="table" ref={testRef}>
+        <div>
             <DataTable
                 columns={columns}
                 data={cells}
@@ -152,17 +150,3 @@ function MemberList() {
         </div>
     );
 }
-
-// eslint-disable-next-line max-len
-// const FunctionalComponentToPrint = React.forwardRef<HTMLDivElement, {}>((props, ref) => <MemberList ref={ref} />);
-interface fakeProps {}
-
-const FunctionalComponentToPrint = React.forwardRef<HTMLDivElement, fakeProps>(
-    (props, ref) => (
-        <div ref={ref}>
-            <MemberList />
-        </div>
-    ),
-);
-
-export default FunctionalComponentToPrint;
