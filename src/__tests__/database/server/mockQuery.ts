@@ -82,7 +82,7 @@ import {
     INSERT_BOARD_MEMBER_TYPE_SQL,
     PATCH_BOARD_MEMBER_TYPE_SQL,
 } from '../../../database/boardMemberType';
- import {
+import {
     GENERATE_BILL_SQL,
     GET_BILL_LIST_SQL,
     GET_THRESHOLD_SQL,
