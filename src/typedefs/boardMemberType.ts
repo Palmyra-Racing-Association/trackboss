@@ -5,7 +5,7 @@ export type boardMemberType = {
     title: string,
 }
 
-export type GetBoardMemberTypeRequest = {};
+export type GetBoardMemberTypeRequest = Record<string, never>;
 
 export type GetBoardMemberTypeResponse = boardMemberType | ErrorResponse;
 
@@ -22,6 +22,6 @@ export type PatchBoardMemberTypeRequest = {
 
 export type PatchBoardMemberTypeResponse = boardMemberType | ErrorResponse;
 
-export type GetBoardMemberTypeListRequest = {};
+export type GetBoardMemberTypeListRequest = Record<string, never>;
 
 export type GetBoardMemberTypeListResponse = boardMemberType[] | ErrorResponse;
