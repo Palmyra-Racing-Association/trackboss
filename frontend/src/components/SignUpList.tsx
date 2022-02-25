@@ -1,5 +1,7 @@
-import React, { createRef, useEffect, useState } from 'react';
+import { IconButton } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import { BsPrinter } from 'react-icons/bs';
 import { getFormattedSignUpList } from '../controller/job';
 import VerifyButton from './VerifyButton';
 
@@ -55,9 +57,12 @@ const customStyles = {
     },
 };
 
-function SignUpList() {
-    const signUpListRef = createRef<HTMLDivElement>();
+const paginationComponentOptions = {
+    selectAllRowsItem: true,
+    selectAllRowsItemText: 'All Rows',
+};
 
+export default function SignUpList() {
     const [cells, setCells] = useState([] as Worker[]);
     useEffect(() => {
         async function getData() {
@@ -67,13 +72,23 @@ function SignUpList() {
         getData();
     }, []);
     return (
-        <div data-testid="table" ref={signUpListRef}>
+        <div data-testid="table">
+            <IconButton
+                mt={5}
+                size="lg"
+                aria-label="Print"
+                background="orange.300"
+                color="white"
+                onClick={() => window.print()}
+                icon={<BsPrinter />}
+            />
             <DataTable
                 columns={columns}
                 data={cells}
                 fixedHeaderScrollHeight="300px"
                 highlightOnHover
                 pagination
+                paginationComponentOptions={paginationComponentOptions}
                 responsive
                 subHeaderWrap
                 customStyles={customStyles}
@@ -81,14 +96,3 @@ function SignUpList() {
         </div>
     );
 }
-
-// The empty props here are needed so that the forwardRef can match its params to the correct types
-const FunctionalComponentToPrint = React.forwardRef<HTMLDivElement>(
-    (props, ref) => (
-        <div ref={ref}>
-            <SignUpList />
-        </div>
-    ),
-);
-
-export default FunctionalComponentToPrint;
