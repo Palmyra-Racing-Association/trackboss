@@ -75,3 +75,12 @@ export const mockPatchBike = jest.spyOn(bike, 'patchBike').mockImplementationOnc
         ...req,
     };
 });
+
+export const mockDeleteBike = jest.spyOn(bike, 'deleteBike').mockImplementationOnce(() => {
+    throw new Error('internal server');
+}).mockImplementation(async (bikeId: number): Promise<void> => {
+    const deleted = _.remove(bikeList, (b: Bike) => b.bikeId === bikeId);
+    if (deleted.length === 0) {
+        throw new Error('not found');
+    }
+});

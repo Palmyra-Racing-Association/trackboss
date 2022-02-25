@@ -1,6 +1,13 @@
 import { Request, Response, Router } from 'express';
-import { getBike, getBikeList, insertBike, patchBike } from '../database/bike';
-import { Bike, GetBikeListResponse, GetBikeResponse, PatchBikeResponse, PostNewBikeResponse } from '../typedefs/bike';
+import { deleteBike, getBike, getBikeList, insertBike, patchBike } from '../database/bike';
+import {
+    Bike,
+    DeleteBikeResponse,
+    GetBikeListResponse,
+    GetBikeResponse,
+    PatchBikeResponse,
+    PostNewBikeResponse,
+} from '../typedefs/bike';
 import { checkHeader, verify } from '../util/auth';
 
 const bike = Router();
@@ -70,7 +77,7 @@ bike.get('/list', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-bike.get('/:bikeId', async (req: Request, res: Response) => {
+bike.get('/:bikeID', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: GetBikeResponse;
     const headerCheck = checkHeader(authorization);
@@ -80,8 +87,8 @@ bike.get('/:bikeId', async (req: Request, res: Response) => {
     } else {
         try {
             await verify(headerCheck.token);
-            const { bikeId } = req.params;
-            response = await getBike(Number(bikeId));
+            const { bikeID } = req.params;
+            response = await getBike(Number(bikeID));
             res.status(200);
         } catch (e: any) {
             if (e.message === 'not found') {
@@ -99,7 +106,7 @@ bike.get('/:bikeId', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-bike.patch('/:bikeId', async (req: Request, res: Response) => {
+bike.patch('/:bikeID', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: PatchBikeResponse;
     const headerCheck = checkHeader(authorization);
@@ -108,8 +115,8 @@ bike.patch('/:bikeId', async (req: Request, res: Response) => {
         response = { reason: headerCheck.reason };
     } else {
         try {
-            const { bikeId } = req.params;
-            const bikeIdNum = Number(bikeId);
+            const { bikeID } = req.params;
+            const bikeIdNum = Number(bikeID);
             if (Number.isNaN(bikeIdNum)) {
                 throw new Error('user input error');
             }
@@ -139,8 +146,44 @@ bike.patch('/:bikeId', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-bike.delete('/:bikeID', (req: Request, res: Response) => {
-    res.status(501).send();
+bike.delete('/:bikeID', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: DeleteBikeResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            const { bikeID } = req.params;
+            const bikeIdNum = Number(bikeID);
+            if (Number.isNaN(bikeIdNum)) {
+                throw new Error('not found');
+            }
+            await verify(headerCheck.token, 'Membership Admin');
+            await deleteBike(bikeIdNum);
+            response = { bikeId: bikeIdNum };
+            res.status(200);
+        } catch (e: any) {
+            if (e.message === 'user input error') {
+                res.status(400);
+                response = { reason: 'bad request' };
+            } else if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'Forbidden') {
+                res.status(403);
+                response = { reason: 'forbidden' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
 });
 
 export default bike;

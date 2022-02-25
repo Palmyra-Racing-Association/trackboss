@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
 import { mockInvalidToken, mockValidToken, mockVerifyAdmin, mockVerifyMember } from '../util/authMocks';
-import { bikeList, mockGetBike, mockGetBikeList, mockInsertBike, mockPatchBike } from './mocks/bike';
+import { bikeList, mockDeleteBike, mockGetBike, mockGetBikeList, mockInsertBike, mockPatchBike } from './mocks/bike';
 import { mockGetMember } from './mocks/member';
 import { Bike } from '../../typedefs/bike';
 
@@ -61,13 +61,6 @@ describe('GET /member/list', () => {
         const bikes: Bike[] = res.body;
         expect(bikes.length).toBe(1);
         expect(bikes[0]).toEqual(bikeList[0]);
-    });
-});
-
-describe('All unimplemented bike endpoints are reachable', () => {
-    it('DELETE /bike/:id is reachable', async () => {
-        const res = await supertestServer.delete(`${TAG_ROOT}/42`);
-        expect(res.status).toEqual(501);
     });
 });
 
@@ -213,7 +206,7 @@ describe('PATCH /bike/:bikeId', () => {
         const res = await supertestServer
             .patch(`${TAG_ROOT}/0`)
             .set('Authorization', 'Bearer laborer')
-            .send({ email: 'chan@kungfu.org' });
+            .send({ make: 'newMake' });
         expect(res.status).toBe(403);
         expect(mockPatchBike).not.toHaveBeenCalled();
     });
@@ -221,6 +214,46 @@ describe('PATCH /bike/:bikeId', () => {
     it('returns 404 when bad id is specified', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/17`).set('Authorization', 'Bearer admin');
         expect(mockPatchBike).toHaveBeenCalled();
+        expect(res.status).toBe(404);
+        expect(res.body.reason).toBe('not found');
+    });
+});
+
+describe('DELETE /bike/:bikeId', () => {
+    it('Returns 500 on internal server error', async () => {
+        const res = await supertestServer.delete(`${TAG_ROOT}/0`).set('Authorization', 'Bearer admin');
+        expect(mockDeleteBike).toHaveBeenCalled();
+        expect(res.status).toBe(500);
+        expect(res.body.reason).toBe('internal server error');
+    });
+
+    it('Returns 404 on unparseable id', async () => {
+        const res = await supertestServer.delete(`${TAG_ROOT}/q`).set('Authorization', 'Bearer admin');
+        expect(mockDeleteBike).not.toHaveBeenCalled();
+        expect(res.status).toBe(404);
+        expect(res.body.reason).toBe('not found');
+    });
+
+    it('Successfully deletes a bike', async () => {
+        const res = await supertestServer
+            .delete(`${TAG_ROOT}/0`)
+            .set('Authorization', 'Bearer admin');
+        expect(mockDeleteBike).toHaveBeenCalled();
+        expect(res.status).toBe(200);
+        expect(res.body.bikeId).toBe(0);
+    });
+
+    it('returns 403 for insufficient permissions', async () => {
+        const res = await supertestServer
+            .delete(`${TAG_ROOT}/0`)
+            .set('Authorization', 'Bearer laborer');
+        expect(res.status).toBe(403);
+        expect(mockDeleteBike).not.toHaveBeenCalled();
+    });
+
+    it('returns 404 when bad id is specified', async () => {
+        const res = await supertestServer.delete(`${TAG_ROOT}/17`).set('Authorization', 'Bearer admin');
+        expect(mockDeleteBike).toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
     });

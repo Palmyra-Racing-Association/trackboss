@@ -929,9 +929,9 @@ paths:
           $ref: "#/components/responses/unauthorizedError"
         500:
           $ref: "#/components/responses/internalServerError"
-  /api/bike/{bikeId}:
+  /api/bike/{bikeID}:
     parameters:
-      - name: bikeId
+      - name: bikeID
         in: path
         required: true
         schema:
