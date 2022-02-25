@@ -42,6 +42,16 @@ describe('GET /member/list', () => {
         expect(res.body.reason).toBe('not authorized');
     });
 
+    it('Returns 400 for unparseable filter', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?membershipID=q`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(mockGetBikeList).not.toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
     it('Gets the unfiltered list', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer validtoken');
         expect(mockGetBikeList).toHaveBeenCalled();

@@ -54,15 +54,24 @@ bike.get('/list', async (req: Request, res: Response) => {
     } else {
         try {
             await verify(headerCheck.token);
-            let filterMembership: number | undefined = Number(req.query.membershipID);
-            if (Number.isNaN(filterMembership)) {
+            const id = req.query.membershipID;
+            let filterMembership: number | undefined;
+            if (typeof id === 'undefined') {
                 filterMembership = undefined;
+            } else {
+                filterMembership = Number(id);
+                if (Number.isNaN(filterMembership)) {
+                    throw new Error('user input error');
+                }
             }
             const bikeList: Bike[] = await getBikeList(filterMembership);
             res.status(200);
             response = bikeList;
         } catch (e: any) {
-            if (e.message === 'Authorization Failed') {
+            if (e.message === 'user input error') {
+                res.status(400);
+                response = { reason: 'bad request' };
+            } else if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
             } else {
