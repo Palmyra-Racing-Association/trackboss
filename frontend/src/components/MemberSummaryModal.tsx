@@ -114,103 +114,102 @@ export default function MemberSummaryModal(props: modalProps) {
     }, [props.memberInfo, props.memberInfo.memberType]);
 
     return (
-        <div>
-            <Modal
-                isCentered
-                size="xl"
-                isOpen={props.isOpen}
-                onClose={props.onClose}
-            >
-                <ModalOverlay />
-                <ModalContent pb={5}>
-                    <ModalHeader><Heading textAlign="center">Member Summary</Heading></ModalHeader>
-                    <Divider />
-                    <ModalCloseButton />
-                    <ModalBody>
-                        {
-                            selectedMember && bikes && (
-                                <SimpleGrid columns={2} spacing={4}>
-                                    <VStack borderRightWidth={1} borderRightColor="light-grey" align="left">
-                                        <HStack>
-                                            <Text textAlign="left" fontSize="3xl" fontWeight="bold">Contact Info</Text>
-                                            {
-                                                selectedMember.membershipAdmin === 'true' && (
+        <Modal
+            isCentered
+            size="xl"
+            isOpen={props.isOpen}
+            onClose={props.onClose}
+        >
+            <ModalOverlay />
+            <ModalContent pb={5}>
+                <ModalHeader><Heading textAlign="center">Member Summary</Heading></ModalHeader>
+                <Divider />
+                <ModalCloseButton />
+                <ModalBody>
+                    {
+                        selectedMember && bikes && (
+                            <SimpleGrid columns={2} spacing={4}>
+                                <VStack borderRightWidth={1} borderRightColor="light-grey" align="left">
+                                    <HStack>
+                                        <Text textAlign="left" fontSize="3xl" fontWeight="bold">Contact Info</Text>
+                                        {
+                                            selectedMember.membershipAdmin === 'true' && (
+                                                <Button
+                                                    textDecoration="underline"
+                                                    color="orange"
+                                                    variant="ghost"
+                                                    onClick={
+                                                        () => {
+                                                            if (editingMemberInfo) {
+                                                                setEditingMemberInfo(false);
+                                                            } else {
+                                                                setEditingMemberInfo(true);
+                                                            }
+                                                        }
+                                                    }
+                                                >
+                                                    Edit
+                                                </Button>
+                                            )
+                                        }
+                                    </HStack>
+                                    <SimpleGrid pb={4} columns={2}>
+                                        <VStack maxWidth={40} spacing={2} align="left">
+                                            <Text fontWeight="bold">Name:</Text>
+                                            <Text fontWeight="bold">Email:</Text>
+                                            <Text fontWeight="bold">Phone:</Text>
+                                        </VStack>
+                                        {
+                                            editingMemberInfo ? (
+                                                <VStack ml="-65px" align="left">
+                                                    <Input
+                                                        placeholder={`${selectedMember.firstName} ${selectedMember.lastName}`}
+                                                        value={editedName}
+                                                        onChange={handleEditedNameChange}
+                                                        size="xs"
+                                                    />
+                                                    <Input
+                                                        placeholder={selectedMember.email}
+                                                        value={editedEmail}
+                                                        onChange={handleEditedEmailChange}
+                                                        size="xs"
+                                                    />
+                                                    <Input
+                                                        placeholder={selectedMember.phoneNumber}
+                                                        value={editedPhone}
+                                                        onChange={handleEditedPhoneChange}
+                                                        size="xs"
+                                                    />
                                                     <Button
-                                                        textDecoration="underline"
-                                                        color="orange"
-                                                        variant="ghost"
+                                                        ml={10}
+                                                        variant="outline"
+                                                        size="xs"
+                                                        color="green"
                                                         onClick={
-                                                            () => {
-                                                                if (editingMemberInfo) {
-                                                                    setEditingMemberInfo(false);
-                                                                } else {
-                                                                    setEditingMemberInfo(true);
-                                                                }
+                                                            async () => {
+                                                                setSelectedMember(await handlePatchMemberContactInfo(selectedMember, editedName, editedEmail, editedPhone));
+                                                                setEditingMemberInfo(false);
+                                                                setEditingMemberRole(false);
                                                             }
                                                         }
                                                     >
-                                                        Edit
+                                                        Save
                                                     </Button>
-                                                )
-                                            }
-                                        </HStack>
-                                        <SimpleGrid pb={4} columns={2}>
-                                            <VStack maxWidth={40} spacing={2} align="left">
-                                                <Text fontWeight="bold">Name:</Text>
-                                                <Text fontWeight="bold">Email:</Text>
-                                                <Text fontWeight="bold">Phone:</Text>
-                                            </VStack>
-                                            {
-                                                editingMemberInfo ? (
-                                                    <VStack ml="-65px" align="left">
-                                                        <Input
-                                                            placeholder={`${selectedMember.firstName} ${selectedMember.lastName}`}
-                                                            value={editedName}
-                                                            onChange={handleEditedNameChange}
-                                                            size="xs"
-                                                        />
-                                                        <Input
-                                                            placeholder={selectedMember.email}
-                                                            value={editedEmail}
-                                                            onChange={handleEditedEmailChange}
-                                                            size="xs"
-                                                        />
-                                                        <Input
-                                                            placeholder={selectedMember.phoneNumber}
-                                                            value={editedPhone}
-                                                            onChange={handleEditedPhoneChange}
-                                                            size="xs"
-                                                        />
-                                                        <Button
-                                                            ml={10}
-                                                            variant="outline"
-                                                            size="xs"
-                                                            color="green"
-                                                            onClick={
-                                                                async () => {
-                                                                    setSelectedMember(await handlePatchMemberContactInfo(selectedMember, editedName, editedEmail, editedPhone));
-                                                                    setEditingMemberInfo(false);
-                                                                    setEditingMemberRole(false);
-                                                                }
-                                                            }
-                                                        >
-                                                            Save
-                                                        </Button>
-                                                    </VStack>
-                                                ) : (
-                                                    <VStack ml="-65px" align="left">
-                                                        <Text>
-                                                            {`${selectedMember.firstName} ${selectedMember.lastName}`}
-                                                        </Text>
-                                                        <Text>{selectedMember.email}</Text>
-                                                        <Text>{selectedMember.phoneNumber}</Text>
-                                                    </VStack>
-                                                )
-                                            }
-                                        </SimpleGrid>
-                                        <HStack>
-                                            <Text textAlign="left" fontSize="3xl" fontWeight="bold">Family</Text>
-                                            {/* {
+                                                </VStack>
+                                            ) : (
+                                                <VStack ml="-65px" align="left">
+                                                    <Text>
+                                                        {`${selectedMember.firstName} ${selectedMember.lastName}`}
+                                                    </Text>
+                                                    <Text>{selectedMember.email}</Text>
+                                                    <Text>{selectedMember.phoneNumber}</Text>
+                                                </VStack>
+                                            )
+                                        }
+                                    </SimpleGrid>
+                                    <HStack>
+                                        <Text textAlign="left" fontSize="3xl" fontWeight="bold">Family</Text>
+                                        {/* {
                                                 memberInfo.membershipAdmin === 'true' && (
                                                     <Button
                                                         textDecoration="underline"
@@ -221,198 +220,197 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     </Button>
                                                 )
                                             } */}
-                                        </HStack>
-                                        <Text textAlign="left" fontSize="1xl" fontWeight="bold">Members</Text>
-                                        <UnorderedList pl={10}>
-                                            {
-                                                props.memberFamily.map((member) => (
-                                                    member.memberId === selectedMember.memberId ? <ListItem>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
-                                                        : <ListItem>{`${member.firstName} ${member.lastName}`}</ListItem>
-                                                ))
-                                            }
-                                        </UnorderedList>
-                                        <Text textAlign="left" fontSize="1xl" fontWeight="bold">Bikes</Text>
-                                        <UnorderedList pl={10}>
-                                            {
-                                                props.memberBikes.map((bike) => (
-                                                    <ListItem>{`${bike.year}, ${bike.make} ${bike.model}`}</ListItem>
-                                                ))
-                                            }
-                                        </UnorderedList>
-                                    </VStack>
-                                    <VStack align="left">
-                                        <HStack>
-                                            <Text
-                                                textAlign="left"
-                                                fontSize="3xl"
-                                                fontWeight="bold"
-                                            >
-                                                Roles
-                                            </Text>
-                                            {
-                                                selectedMember.membershipAdmin === 'true' && (
-                                                    <Button
-                                                        textDecoration="underline"
-                                                        color="orange"
-                                                        variant="ghost"
-                                                        onClick={
-                                                            () => {
-                                                                if (editingMemberRole) {
-                                                                    setEditingMemberRole(false);
-                                                                } else {
-                                                                    setEditingMemberRole(true);
-                                                                }
-                                                            }
-                                                        }
-                                                    >
-                                                        Edit
-                                                    </Button>
-                                                )
-                                            }
-                                        </HStack>
+                                    </HStack>
+                                    <Text textAlign="left" fontSize="1xl" fontWeight="bold">Members</Text>
+                                    <UnorderedList pl={10}>
                                         {
-                                            editingMemberRole ? (
-                                                <VStack align="left">
-                                                    <ButtonGroup size="sm" isAttached variant="outline">
-                                                        <Button
-                                                            onClick={
-                                                                async () => {
-                                                                    if (editedMemberType !== 'member') {
-                                                                        await setEditedMemberType('member');
-                                                                    }
-                                                                }
-                                                            }
-                                                            mr="-px"
-                                                            backgroundColor={editedMemberType === 'member' ? 'blue' : ''}
-                                                        >
-                                                            Member
-                                                        </Button>
-                                                        <Button
-                                                            onClick={
-                                                                async () => {
-                                                                    if (editedMemberType !== 'admin') {
-                                                                        await setEditedMemberType('admin');
-                                                                    }
-                                                                }
-                                                            }
-                                                            mr="-px"
-                                                            backgroundColor={editedMemberType === 'admin' ? 'blue' : ''}
-                                                        >
-                                                            Admin
-                                                        </Button>
-                                                        <Button
-                                                            onClick={
-                                                                async () => {
-                                                                    if (editedMemberType !== 'board') {
-                                                                        await setEditedMemberType('board');
-                                                                    }
-                                                                }
-                                                            }
-                                                            mr="-px"
-                                                            backgroundColor={editedMemberType === 'board' ? 'blue' : ''}
-                                                        >
-                                                            Board
-                                                        </Button>
-                                                    </ButtonGroup>
-                                                    <Select
-                                                        disabled={editedMemberType !== 'board'}
-                                                        variant="outline"
-                                                        size="xs"
-                                                        placeholder={selectedMember.occupation}
-                                                        value={editedBoardMember}
-                                                        onChange={handleEditedBoardMember}
-                                                    >
-                                                        {/* TODO: need the actual roles here */}
-                                                        <option value="president">president</option>
-                                                        <option value="vice president">vice president</option>
-                                                        <option value="secretary">secretary</option>
-                                                    </Select>
-                                                    <Button
-                                                        ml={10}
-                                                        variant="outline"
-                                                        size="xs"
-                                                        color="green"
-                                                        onClick={
-                                                            async () => {
-                                                                if (editedBoardMember !== '') {
-                                                                    await handleNewBoardMember(selectedMember, editedBoardMember);
-                                                                }
-                                                                if (selectedMember.memberType !== editedMemberType) {
-                                                                    await handlePatchMemberType(selectedMember, editedMemberType);
-                                                                }
+                                            props.memberFamily.map((member) => (
+                                                member.memberId === selectedMember.memberId ? <ListItem>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
+                                                    : <ListItem>{`${member.firstName} ${member.lastName}`}</ListItem>
+                                            ))
+                                        }
+                                    </UnorderedList>
+                                    <Text textAlign="left" fontSize="1xl" fontWeight="bold">Bikes</Text>
+                                    <UnorderedList pl={10}>
+                                        {
+                                            props.memberBikes.map((bike) => (
+                                                <ListItem>{`${bike.year}, ${bike.make} ${bike.model}`}</ListItem>
+                                            ))
+                                        }
+                                    </UnorderedList>
+                                </VStack>
+                                <VStack align="left">
+                                    <HStack>
+                                        <Text
+                                            textAlign="left"
+                                            fontSize="3xl"
+                                            fontWeight="bold"
+                                        >
+                                            Roles
+                                        </Text>
+                                        {
+                                            selectedMember.membershipAdmin === 'true' && (
+                                                <Button
+                                                    textDecoration="underline"
+                                                    color="orange"
+                                                    variant="ghost"
+                                                    onClick={
+                                                        () => {
+                                                            if (editingMemberRole) {
                                                                 setEditingMemberRole(false);
-                                                                setEditingMemberInfo(false);
+                                                            } else {
+                                                                setEditingMemberRole(true);
                                                             }
                                                         }
-                                                    >
-                                                        Save
-                                                    </Button>
-                                                </VStack>
-                                            ) : (
+                                                    }
+                                                >
+                                                    Edit
+                                                </Button>
+                                            )
+                                        }
+                                    </HStack>
+                                    {
+                                        editingMemberRole ? (
+                                            <VStack align="left">
                                                 <ButtonGroup size="sm" isAttached variant="outline">
                                                     <Button
+                                                        onClick={
+                                                            async () => {
+                                                                if (editedMemberType !== 'member') {
+                                                                    await setEditedMemberType('member');
+                                                                }
+                                                            }
+                                                        }
                                                         mr="-px"
-                                                        backgroundColor={selectedMember.memberType === 'member' ? 'blue' : ''}
+                                                        backgroundColor={editedMemberType === 'member' ? 'blue' : ''}
                                                     >
                                                         Member
                                                     </Button>
                                                     <Button
-                                                        userSelect="none"
+                                                        onClick={
+                                                            async () => {
+                                                                if (editedMemberType !== 'admin') {
+                                                                    await setEditedMemberType('admin');
+                                                                }
+                                                            }
+                                                        }
                                                         mr="-px"
-                                                        backgroundColor={selectedMember.memberType === 'admin' ? 'blue' : ''}
+                                                        backgroundColor={editedMemberType === 'admin' ? 'blue' : ''}
                                                     >
                                                         Admin
                                                     </Button>
                                                     <Button
+                                                        onClick={
+                                                            async () => {
+                                                                if (editedMemberType !== 'board') {
+                                                                    await setEditedMemberType('board');
+                                                                }
+                                                            }
+                                                        }
                                                         mr="-px"
-                                                        backgroundColor={selectedMember.memberType === 'board' ? 'blue' : ''}
+                                                        backgroundColor={editedMemberType === 'board' ? 'blue' : ''}
                                                     >
                                                         Board
                                                     </Button>
                                                 </ButtonGroup>
-                                            )
-                                        }
-                                        <Container pt={20} mb={20} />
-                                        <Text textAlign="left" fontSize="3xl" fontWeight="bold">Actions</Text>
-                                        <HStack align="left">
-                                            <Button
-                                                variant="outline"
-                                                style={
-                                                    {
-                                                        whiteSpace: 'normal',
-                                                        wordWrap: 'break-word',
+                                                <Select
+                                                    disabled={editedMemberType !== 'board'}
+                                                    variant="outline"
+                                                    size="xs"
+                                                    placeholder={selectedMember.occupation}
+                                                    value={editedBoardMember}
+                                                    onChange={handleEditedBoardMember}
+                                                >
+                                                    {/* TODO: need the actual roles here */}
+                                                    <option value="president">president</option>
+                                                    <option value="vice president">vice president</option>
+                                                    <option value="secretary">secretary</option>
+                                                </Select>
+                                                <Button
+                                                    ml={10}
+                                                    variant="outline"
+                                                    size="xs"
+                                                    color="green"
+                                                    onClick={
+                                                        async () => {
+                                                            if (editedBoardMember !== '') {
+                                                                await handleNewBoardMember(selectedMember, editedBoardMember);
+                                                            }
+                                                            if (selectedMember.memberType !== editedMemberType) {
+                                                                await handlePatchMemberType(selectedMember, editedMemberType);
+                                                            }
+                                                            setEditingMemberRole(false);
+                                                            setEditingMemberInfo(false);
+                                                        }
                                                     }
-                                                }
-                                            >
-                                                Assign To Event
-                                            </Button>
-                                            <Button
-                                                backgroundColor="red"
-                                                variant="outline"
-                                                style={
-                                                    {
-                                                        whiteSpace: 'normal',
-                                                        wordWrap: 'break-word',
-                                                    }
-                                                }
-                                            >
-                                                De-Activate Member
-                                            </Button>
-                                        </HStack>
+                                                >
+                                                    Save
+                                                </Button>
+                                            </VStack>
+                                        ) : (
+                                            <ButtonGroup size="sm" isAttached variant="outline">
+                                                <Button
+                                                    mr="-px"
+                                                    backgroundColor={selectedMember.memberType === 'member' ? 'blue' : ''}
+                                                >
+                                                    Member
+                                                </Button>
+                                                <Button
+                                                    userSelect="none"
+                                                    mr="-px"
+                                                    backgroundColor={selectedMember.memberType === 'admin' ? 'blue' : ''}
+                                                >
+                                                    Admin
+                                                </Button>
+                                                <Button
+                                                    mr="-px"
+                                                    backgroundColor={selectedMember.memberType === 'board' ? 'blue' : ''}
+                                                >
+                                                    Board
+                                                </Button>
+                                            </ButtonGroup>
+                                        )
+                                    }
+                                    <Container pt={20} mb={20} />
+                                    <Text textAlign="left" fontSize="3xl" fontWeight="bold">Actions</Text>
+                                    <HStack align="left">
                                         <Button
-                                            textDecoration="underline"
-                                            color="orange"
-                                            variant="ghost"
+                                            variant="outline"
+                                            style={
+                                                {
+                                                    whiteSpace: 'normal',
+                                                    wordWrap: 'break-word',
+                                                }
+                                            }
                                         >
-                                            Reset Password
+                                            Assign To Event
                                         </Button>
-                                    </VStack>
-                                </SimpleGrid>
-                            )
-                        }
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
-        </div>
+                                        <Button
+                                            backgroundColor="red"
+                                            variant="outline"
+                                            style={
+                                                {
+                                                    whiteSpace: 'normal',
+                                                    wordWrap: 'break-word',
+                                                }
+                                            }
+                                        >
+                                            De-Activate Member
+                                        </Button>
+                                    </HStack>
+                                    <Button
+                                        textDecoration="underline"
+                                        color="orange"
+                                        variant="ghost"
+                                    >
+                                        Reset Password
+                                    </Button>
+                                </VStack>
+                            </SimpleGrid>
+                        )
+                    }
+                </ModalBody>
+            </ModalContent>
+        </Modal>
     );
 }
