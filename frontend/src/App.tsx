@@ -36,19 +36,13 @@ export function App() {
             <Route path="calendar" element={<CalendarPage />} />
             <Route path="members" element={<MemberListPage />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="calendar/signups/:date" element={<SignUpPage />} />
         </Routes>
     );
 }
 
 export function AppWrapper() {
     return (
-            <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="calendar" element={<CalendarPage />} />
-                <Route path="members" element={<MemberListPage />} />
-                <Route path="settings" element={<Settings />} />
-                <Route path="calendar/signups/:date" element={<SignUpPage />} />
-            </Routes>
         <UserContextProvider>
             <App />
         </UserContextProvider>
