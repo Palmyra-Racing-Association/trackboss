@@ -62,10 +62,7 @@ bike.get('/list', async (req: Request, res: Response) => {
             res.status(200);
             response = bikeList;
         } catch (e: any) {
-            if (e.message === 'user input error') {
-                res.status(400);
-                response = { reason: 'bad request' };
-            } else if (e.message === 'Authorization Failed') {
+            if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
             } else {
@@ -165,10 +162,7 @@ bike.delete('/:bikeID', async (req: Request, res: Response) => {
             response = { bikeId: bikeIdNum };
             res.status(200);
         } catch (e: any) {
-            if (e.message === 'user input error') {
-                res.status(400);
-                response = { reason: 'bad request' };
-            } else if (e.message === 'not found') {
+            if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
             } else if (e.message === 'Authorization Failed') {

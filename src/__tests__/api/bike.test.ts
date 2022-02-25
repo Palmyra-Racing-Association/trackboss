@@ -178,6 +178,21 @@ describe('PATCH /bike/:bikeId', () => {
         expect(res.body.reason).toBe('internal server error');
     });
 
+    it('Returns 401 for no token', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/0`);
+        expect(mockDeleteBike).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('Missing authorization grant in header');
+    });
+
+    it('Returns 401 for invalid token', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/0`).set('Authorization', 'Bearer invalidtoken');
+        expect(mockInvalidToken).toHaveBeenCalled();
+        expect(mockDeleteBike).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('not authorized');
+    });
+
     it('Returns 400 on user input error', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/0`).set('Authorization', 'Bearer admin');
         expect(mockPatchBike).toHaveBeenCalled();
@@ -225,6 +240,21 @@ describe('DELETE /bike/:bikeId', () => {
         expect(mockDeleteBike).toHaveBeenCalled();
         expect(res.status).toBe(500);
         expect(res.body.reason).toBe('internal server error');
+    });
+
+    it('Returns 401 for no token', async () => {
+        const res = await supertestServer.delete(`${TAG_ROOT}/0`);
+        expect(mockDeleteBike).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('Missing authorization grant in header');
+    });
+
+    it('Returns 401 for invalid token', async () => {
+        const res = await supertestServer.delete(`${TAG_ROOT}/0`).set('Authorization', 'Bearer invalidtoken');
+        expect(mockInvalidToken).toHaveBeenCalled();
+        expect(mockDeleteBike).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('not authorized');
     });
 
     it('Returns 404 on unparseable id', async () => {
