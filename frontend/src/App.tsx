@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import MemberListPage from './pages/MemberListPage';
 import Settings from './pages/Settings';
 import CalendarPage from './pages/CalendarPage';
+import SignUpPage from './pages/SignUpPage';
 import me from './controller/api';
 
 export function App() {
@@ -35,6 +36,7 @@ export function App() {
             <Route path="calendar" element={<CalendarPage />} />
             <Route path="members" element={<MemberListPage />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="calendar/signups/:date" element={<SignUpPage />} />
         </Routes>
     );
 }

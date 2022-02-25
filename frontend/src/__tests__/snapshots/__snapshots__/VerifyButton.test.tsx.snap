@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VerifyButton component renders correctly 1`] = `
+<button
+  className="chakra-button css-5c2176"
+  onClick={[Function]}
+  type="button"
+>
+  Verified
+</button>
+`;

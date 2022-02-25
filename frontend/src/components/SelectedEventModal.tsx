@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
     Modal,
     ModalOverlay,
@@ -115,6 +116,16 @@ export default function SelectedEventModal(props: modalProps) {
                 <Divider />
                 <ModalCloseButton />
                 <ModalFooter>
+                    {
+                        props.admin && (
+                            <Link
+                                to={`signups/${(props.selectedEvent.start).toISOString().split('T')[0]}`}
+                                state={{ date: props.selectedEvent.start }}
+                            >
+                                View Sign Ups
+                            </Link>
+                        )
+                    }
                     {
                         props.admin && (
                             <Button
