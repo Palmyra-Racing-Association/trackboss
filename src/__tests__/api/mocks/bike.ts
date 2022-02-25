@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as bike from '../../../database/bike';
-import { Bike, PostNewBikeRequest } from '../../../typedefs/bike';
+import { Bike, PatchBikeRequest, PostNewBikeRequest } from '../../../typedefs/bike';
 
 export const bikeList: Bike[] = [
     {
@@ -59,4 +59,19 @@ export const mockGetBikeList = jest.spyOn(bike, 'getBikeList').mockImplementatio
         bikes = _.filter(bikeList, (b: Bike) => b.membershipAdmin === 'Joe Blow');
     }
     return Promise.resolve(bikes);
+});
+
+export const mockPatchBike = jest.spyOn(bike, 'patchBike').mockImplementationOnce(() => {
+    throw new Error('internal server');
+}).mockImplementationOnce(async (): Promise<void> => {
+    throw new Error('user input error');
+}).mockImplementation(async (bikeId: number, req: PatchBikeRequest): Promise<void> => {
+    const filtered = _.filter(bikeList, (b: Bike) => b.bikeId === bikeId);
+    if (filtered.length === 0) {
+        throw new Error('not found');
+    }
+    bikeList[bikeId] = {
+        ...bikeList[bikeId],
+        ...req,
+    };
 });

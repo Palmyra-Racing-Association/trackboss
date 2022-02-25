@@ -2,7 +2,7 @@ import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
 import { mockInvalidToken, mockValidToken, mockVerifyAdmin, mockVerifyMember } from '../util/authMocks';
-import { bikeList, mockGetBike, mockGetBikeList, mockInsertBike } from './mocks/bike';
+import { bikeList, mockGetBike, mockGetBikeList, mockInsertBike, mockPatchBike } from './mocks/bike';
 import { mockGetMember } from './mocks/member';
 import { Bike } from '../../typedefs/bike';
 
@@ -65,11 +65,6 @@ describe('GET /member/list', () => {
 });
 
 describe('All unimplemented bike endpoints are reachable', () => {
-    it('PATCH /bike/:id is reachable', async () => {
-        const res = await supertestServer.patch(`${TAG_ROOT}/42`);
-        expect(res.status).toEqual(501);
-    });
-
     it('DELETE /bike/:id is reachable', async () => {
         const res = await supertestServer.delete(`${TAG_ROOT}/42`);
         expect(res.status).toEqual(501);
@@ -179,5 +174,54 @@ describe('POST /bike/new', () => {
         const bike: Bike = res.body;
         expect(bike.bikeId).toBe(bikeList[bikeList.length - 1].bikeId);
         expect(bike).toEqual(bikeList[bikeList.length - 1]);
+    });
+});
+
+describe('PATCH /bike/:bikeId', () => {
+    it('Returns 500 on internal server error', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/0`).set('Authorization', 'Bearer admin');
+        expect(mockPatchBike).toHaveBeenCalled();
+        expect(res.status).toBe(500);
+        expect(res.body.reason).toBe('internal server error');
+    });
+
+    it('Returns 400 on user input error', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/0`).set('Authorization', 'Bearer admin');
+        expect(mockPatchBike).toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('Returns 400 on bad id', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/q`).set('Authorization', 'Bearer admin');
+        expect(mockPatchBike).not.toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('Successfully patches a bike', async () => {
+        const res = await supertestServer
+            .patch(`${TAG_ROOT}/0`)
+            .set('Authorization', 'Bearer admin')
+            .send({ make: 'newMake' });
+        expect(res.status).toBe(200);
+        expect(res.body.bikeId).toBe(0);
+        expect(res.body.make).toBe('newMake');
+    });
+
+    it('returns 403 for insufficient permissions', async () => {
+        const res = await supertestServer
+            .patch(`${TAG_ROOT}/0`)
+            .set('Authorization', 'Bearer laborer')
+            .send({ email: 'chan@kungfu.org' });
+        expect(res.status).toBe(403);
+        expect(mockPatchBike).not.toHaveBeenCalled();
+    });
+
+    it('returns 404 when bad id is specified', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/17`).set('Authorization', 'Bearer admin');
+        expect(mockPatchBike).toHaveBeenCalled();
+        expect(res.status).toBe(404);
+        expect(res.body.reason).toBe('not found');
     });
 });
