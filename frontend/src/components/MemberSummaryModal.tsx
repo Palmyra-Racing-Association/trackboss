@@ -24,6 +24,7 @@ import {
 } from '@chakra-ui/react';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
+import memberHandlers from '../mocks/memberHandlers';
 
 interface modalProps {
     isOpen: boolean,
@@ -225,8 +226,9 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <UnorderedList pl={10}>
                                         {
                                             props.memberFamily.map((member) => (
-                                                member.memberId === selectedMember.memberId ? <ListItem>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
-                                                    : <ListItem>{`${member.firstName} ${member.lastName}`}</ListItem>
+
+                                                member.memberId === selectedMember.memberId ? <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
+                                                    : <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName}`}</ListItem>
                                             ))
                                         }
                                     </UnorderedList>
@@ -234,7 +236,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <UnorderedList pl={10}>
                                         {
                                             props.memberBikes.map((bike) => (
-                                                <ListItem>{`${bike.year}, ${bike.make} ${bike.model}`}</ListItem>
+                                                <ListItem key={bike.bikeId}>{`${bike.year}, ${bike.make} ${bike.model}`}</ListItem>
                                             ))
                                         }
                                     </UnorderedList>

@@ -21,7 +21,7 @@ export type PostNewBikeRequest = {
 
 export type PostNewBikeResponse = Bike | ErrorResponse
 
-export type GetBikeRequest = {}
+export type GetBikeRequest = Record<string, never>
 
 export type GetBikeResponse = Bike | ErrorResponse
 
@@ -34,10 +34,10 @@ export type PatchBikeRequest = {
 
 export type PatchBikeResponse = Bike | ErrorResponse
 
-export type DeleteBikeRequest = {}
+export type DeleteBikeRequest = Record<string, never>
 
 export type DeleteBikeResponse = DeletedBike | ErrorResponse
 
-export type GetBikeListRequest = {}
+export type GetBikeListRequest = Record<string, never>
 
 export type GetBikeListResponse = Bike[] | ErrorResponse

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
     Modal,
     ModalOverlay,
@@ -48,7 +49,7 @@ async function deleteEventLocal(event: any) {
 
 export default function SelectedEventModal(props: modalProps) {
     return (
-        <Modal size="lg" isOpen={props.isOpen} onClose={props.onClose}>
+        <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
             <ModalContent>
                 <Heading
@@ -115,6 +116,16 @@ export default function SelectedEventModal(props: modalProps) {
                 <Divider />
                 <ModalCloseButton />
                 <ModalFooter>
+                    {
+                        props.admin && (
+                            <Link
+                                to={`signups/${(props.selectedEvent.start).toISOString().split('T')[0]}`}
+                                state={{ date: props.selectedEvent.start }}
+                            >
+                                View Sign Ups
+                            </Link>
+                        )
+                    }
                     {
                         props.admin && (
                             <Button

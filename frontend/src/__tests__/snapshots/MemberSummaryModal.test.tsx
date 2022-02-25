@@ -1,9 +1,13 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import '@testing-library/jest-dom/extend-expect';
+import { render } from '@testing-library/react';
 import MemberSummaryModal from '../../components/MemberSummaryModal';
 import { Member } from '../../../../src/typedefs/member';
 import { Bike } from '../../../../src/typedefs/bike';
+
+function onClose() {
+    // void function
+}
 
 const member: Member = {
     memberId: 1,
@@ -79,11 +83,26 @@ const memberBikes: Bike[] = [
     },
 ];
 
+// Necessary to mock the chakra-ui modal portal, so that the renderer can target the modal instead of the page
+const divWithChildrenMock = (children: any, identifier: any) => <div data-testId={identifier}>{children}</div>;
+jest.mock('@chakra-ui/react', () => (
+    {
+        ...jest.requireActual('@chakra-ui/react'),
+        PortalManager: jest.fn(({ children }) => divWithChildrenMock(children, 'portal')),
+    }
+));
+
 describe('member summary modal', () => {
     it('renders all props correctly', () => {
-        const modal = renderer.create(
-            <MemberSummaryModal memberInfo={member} memberFamily={memberFamily} memberBikes={memberBikes} />,
-        ).toJSON();
+        const modal = render(
+            <MemberSummaryModal
+                isOpen
+                onClose={onClose}
+                memberInfo={member}
+                memberFamily={memberFamily}
+                memberBikes={memberBikes}
+            />,
+        );
         expect(modal).toMatchSnapshot();
     });
 });

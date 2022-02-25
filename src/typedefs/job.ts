@@ -25,12 +25,16 @@ export type PostNewJobRequest = {
     jobTypeId: number,
     jobDate?: string,
     pointsAwarded?: number,
+    verified?: boolean,
+    verifiedDate? : string,
+    paid?: boolean,
+    paidDate?: string,
     modifiedBy: number
 }
 
 export type PostNewJobResponse = Job | ErrorResponse
 
-export type GetJobRequest = {}
+export type GetJobRequest = Record<string, never>
 
 export type GetJobResponse = Job | ErrorResponse
 
@@ -39,6 +43,7 @@ export type PatchJobRequest = {
     eventId?: number,
     jobTypeId?: number,
     jobDate?: string,
+    pointsAwarded?: number,
     verified?: boolean,
     paid?: boolean,
     modifiedBy: number
@@ -46,14 +51,24 @@ export type PatchJobRequest = {
 
 export type PatchJobResponse = Job | ErrorResponse
 
-export type PostCloneJobRequest = {}
+export type PostCloneJobRequest = Record<string, never>
 
 export type PostCloneJobResponse = Job | ErrorResponse
 
-export type DeleteJobRequest = {}
+export type DeleteJobRequest = Record<string, never>
 
 export type DeleteJobResponse = DeletedJob | ErrorResponse
 
-export type GetJobListRequest = {}
+export type GetJobListRequest = Record<string, never>
 
 export type GetJobListResponse = Job[] | ErrorResponse
+
+export type GetJobListRequestFilters = {
+    assignmentStatus?:number,
+    verificationStatus?:number,
+    memberId?:number,
+    membershipId?: number,
+    eventId?: number,
+    startDate?:string,
+    endDate?:string,
+}
