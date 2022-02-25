@@ -6,7 +6,7 @@ export type MemberType = {
     baseDuesAmt: number
 }
 
-export type GetMemberTypeRequest = {};
+export type GetMemberTypeRequest = Record<string, never>;
 
 export type GetMemberTypeResponse = MemberType | ErrorResponse;
 
@@ -17,6 +17,6 @@ export type PatchMemberTypeRequest = {
 
 export type PatchMemberTypeResponse = MemberType | ErrorResponse;
 
-export type GetMemberTypeListRequest = {};
+export type GetMemberTypeListRequest = Record<string, never>;
 
 export type GetMemberTypeListResponse = MemberType[] | ErrorResponse;

@@ -41,7 +41,7 @@ export type PostNewMembershipRequest = {
 
 export type PostNewMembershipResponse = Membership | ErrorResponse
 
-export type GetMembershipRequest = {}
+export type GetMembershipRequest = Record<string, never>
 
 export type GetMembershipResponse = Membership | ErrorResponse
 
@@ -60,7 +60,7 @@ export type PatchMembershipRequest = {
 
 export type PatchMembershipResponse = Membership | ErrorResponse
 
-export type GetMembershipListRequest = {}
+export type GetMembershipListRequest = Record<string, never>
 
 export type GetMembershipListResponse = Membership[] | ErrorResponse
 

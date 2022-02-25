@@ -19,7 +19,7 @@ export type PostNewEventJobRequest = {
 
 export type PostNewEventJobResponse = EventJob | ErrorResponse
 
-export type GetEventJobRequest = {}
+export type GetEventJobRequest = Record<string, never>
 
 export type GetEventJobResponse = EventJob | ErrorResponse
 
@@ -31,6 +31,6 @@ export type PatchEventJobRequest = {
 
 export type PatchEventJobResponse = EventJob | ErrorResponse
 
-export type DeleteEventJobRequest = {}
+export type DeleteEventJobRequest = Record<string, never>
 
 export type DeleteEventJobResponse = DeletedEventJob | ErrorResponse

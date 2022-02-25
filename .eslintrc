@@ -1,6 +1,9 @@
 {
     "root": true,
-    "extends": "airbnb-base",
+    "extends": [
+        "airbnb-base",
+        "plugin:@typescript-eslint/recommended"
+    ],
     "parser": "@typescript-eslint/parser",
     "plugins": ["@typescript-eslint", "import"],
     "settings": {
@@ -42,6 +45,7 @@
                 "linebreak-style": ["off"],
                 "no-use-before-define": ["off"],
                 "@typescript-eslint/no-use-before-define": ["error"],
+                "@typescript-eslint/no-explicit-any": ["off"],
                 "import/extensions": ["error", {
                     "js": "never",
                     "jsx": "never",

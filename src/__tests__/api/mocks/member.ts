@@ -66,7 +66,7 @@ export const memberList: Member[] = [
     {
         memberId: 3,
         membershipAdmin: '',
-        uuid: '007',
+        uuid: 'oo7',
         active: true,
         memberType: 'Paid Laborer',
         firstName: 'James',
@@ -126,13 +126,17 @@ export const mockGetMemberList =
         return Promise.resolve(members);
     });
 
-export const mockGetMember = jest.spyOn(member, 'getMember').mockImplementationOnce((): Promise<Member> => {
-    throw new Error('internal server error');
-}).mockImplementation((id: string): Promise<Member> => {
+export const mockGetMember = jest.spyOn(member, 'getMember').mockImplementation((id: string): Promise<Member> => {
     let returnMemeber: Member[] = [];
-    // TODO: UUID CASE
-    const memberId = parseInt(id, 10);
-    returnMemeber = _.filter(memberList, (mem: Member) => mem.memberId === memberId);
+    const memberId = Number(id);
+    if (Number.isNaN(memberId)) {
+        returnMemeber = _.filter(memberList, (mem: Member) => mem.uuid === id);
+    } else {
+        if (memberId === 400) {
+            throw new Error('internal server error');
+        }
+        returnMemeber = _.filter(memberList, (mem: Member) => mem.memberId === memberId);
+    }
     if (returnMemeber.length === 0) {
         throw new Error('not found');
     }
@@ -144,9 +148,13 @@ export const mockPatchMember = jest.spyOn(member, 'patchMember').mockImplementat
 }).mockImplementationOnce(async (): Promise<void> => {
     throw new Error('user input error');
 }).mockImplementation(async (id: string, req: PatchMemberRequest): Promise<void> => {
-    // TODO: UUID CASE
-    const memberId = parseInt(id, 10);
-    const filtered = _.filter(memberList, (mem: Member) => mem.memberId === memberId);
+    const memberId = Number(id);
+    let filtered;
+    if (Number.isNaN(memberId)) {
+        filtered = _.filter(memberList, (mem: Member) => mem.uuid === id);
+    } else {
+        filtered = _.filter(memberList, (mem: Member) => mem.memberId === memberId);
+    }
     if (filtered.length === 0) {
         throw new Error('not found');
     }
@@ -155,3 +163,19 @@ export const mockPatchMember = jest.spyOn(member, 'patchMember').mockImplementat
         ...req,
     };
 });
+
+export const mockGetValidActors = jest.spyOn(member, 'getValidActors')
+    .mockImplementation((memberId: number): Promise<number[]> => {
+        switch (memberId) {
+            case 0:
+                return Promise.resolve([0]);
+            case 1:
+                return Promise.resolve([0, 1]);
+            case 2:
+                return Promise.resolve([0, 1, 2]);
+            case 3:
+                return Promise.resolve([0, 3]);
+            default:
+                return Promise.resolve([]);
+        }
+    });
