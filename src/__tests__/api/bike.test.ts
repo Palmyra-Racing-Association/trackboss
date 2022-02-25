@@ -185,11 +185,11 @@ describe('PATCH /bike/:bikeId', () => {
         expect(res.body.reason).toBe('bad request');
     });
 
-    it('Returns 400 on bad id', async () => {
+    it('Returns 404 on unparseable id', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/q`).set('Authorization', 'Bearer admin');
         expect(mockPatchBike).not.toHaveBeenCalled();
-        expect(res.status).toBe(400);
-        expect(res.body.reason).toBe('bad request');
+        expect(res.status).toBe(404);
+        expect(res.body.reason).toBe('not found');
     });
 
     it('Successfully patches a bike', async () => {

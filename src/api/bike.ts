@@ -118,7 +118,7 @@ bike.patch('/:bikeID', async (req: Request, res: Response) => {
             const { bikeID } = req.params;
             const bikeIdNum = Number(bikeID);
             if (Number.isNaN(bikeIdNum)) {
-                throw new Error('user input error');
+                throw new Error('not found');
             }
             await verify(headerCheck.token, 'Membership Admin');
             await patchBike(bikeIdNum, req.body);
