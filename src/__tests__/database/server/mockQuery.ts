@@ -68,6 +68,21 @@ import {
     PATCH_EVENT_JOB_SQL,
 } from '../../../database/eventJob';
 import {
+    DELETE_BOARD_MEMBER_SQL,
+    GET_BOARD_MEMBER_LIST_SQL,
+    GET_BOARD_MEMBER_SQL,
+    GET_BOARD_MEMBER_YEAR_SQL,
+    INSERT_BOARD_MEMBER_SQL,
+    PATCH_BOARD_MEMBER_SQL,
+} from '../../../database/boardMember';
+import {
+    DELETE_BOARD_MEMBER_TYPE_SQL,
+    GET_BOARD_MEMBER_TYPE_LIST_SQL,
+    GET_BOARD_MEMBER_TYPE_SQL,
+    INSERT_BOARD_MEMBER_TYPE_SQL,
+    PATCH_BOARD_MEMBER_TYPE_SQL,
+} from '../../../database/boardMemberType';
+import {
     GENERATE_BILL_SQL,
     GET_BILL_LIST_SQL,
     GET_THRESHOLD_SQL,
@@ -85,6 +100,8 @@ import * as jobHelpers from './mockHelpers/job';
 import * as jobTypeHelpers from './mockHelpers/jobType';
 import { getMemberTypeListResponse, getMemberTypeResponse, patchMemberTypeResponse } from './mockHelpers/memberType';
 import * as eventJobHelpers from './mockHelpers/eventJob';
+import * as boardMemberHelpers from './mockHelpers/boardMember';
+import * as boardMemberTypeHelpers from './mockHelpers/boardMemberType';
 import * as billingHelpers from './mockHelpers/billing';
 
 const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<any> => {
@@ -183,6 +200,28 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return eventJobHelpers.patchEventJobResponse(values[0]);
         case DELETE_EVENT_JOB_SQL:
             return eventJobHelpers.deleteEventJobResponse(values[0]);
+        case GET_BOARD_MEMBER_SQL:
+            return boardMemberHelpers.getBoardMemberResponse(values[0]);
+        case GET_BOARD_MEMBER_LIST_SQL:
+            return boardMemberHelpers.getBoardMemberListResponse(values);
+        case GET_BOARD_MEMBER_YEAR_SQL:
+            return boardMemberHelpers.getBoardMemberListResponse(values);
+        case INSERT_BOARD_MEMBER_SQL:
+            return boardMemberHelpers.insertBoardMemberResponse(values[0]);
+        case PATCH_BOARD_MEMBER_SQL:
+            return boardMemberHelpers.patchBoardMemberResponse(values[0]);
+        case DELETE_BOARD_MEMBER_SQL:
+            return boardMemberHelpers.deleteBoardMemberResponse(values[0]);
+        case GET_BOARD_MEMBER_TYPE_SQL:
+            return boardMemberTypeHelpers.getBoardMemberTypeResponse(values[0]);
+        case GET_BOARD_MEMBER_TYPE_LIST_SQL:
+            return boardMemberTypeHelpers.getBoardMemberListTypeResponse();
+        case INSERT_BOARD_MEMBER_TYPE_SQL:
+            return boardMemberTypeHelpers.insertBoardMemberTypeResponse(values[0]);
+        case PATCH_BOARD_MEMBER_TYPE_SQL:
+            return boardMemberTypeHelpers.patchBoardMemberTypeResponse(values[0]);
+        case DELETE_BOARD_MEMBER_TYPE_SQL:
+            return boardMemberTypeHelpers.deleteBoardMemberTypeResponse(values[0]);
         case GET_BILL_LIST_SQL:
             return billingHelpers.getBillListResponse(values);
         case GENERATE_BILL_SQL:

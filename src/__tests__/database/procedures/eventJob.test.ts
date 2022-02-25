@@ -43,9 +43,9 @@ describe('sp_patch_event_job()', () => {
 
         const values = Array(4).fill(null);
         values[0] = eventJobId;
-        values[1] = 3;
+        values[1] = 4;
 
-        expResults[0].event_type_id = 3;
+        expResults[0].event_type_id = 4;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
