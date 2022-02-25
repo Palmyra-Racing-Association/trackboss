@@ -48,7 +48,7 @@ components:
       bearerFormat: JWT
   responses:
     badRequestError:
-      description: "Bad Request: Request body is missing or invalid"
+      description: "Bad Request: Request body or supplied parameters are missing or invalid"
       content:
         application/json:
           schema:
@@ -925,6 +925,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/bike"
+        400:
+          $ref: "#/components/responses/badRequestError"
         401:
           $ref: "#/components/responses/unauthorizedError"
         500:

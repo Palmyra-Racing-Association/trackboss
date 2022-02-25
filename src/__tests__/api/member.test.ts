@@ -101,7 +101,7 @@ describe('GET /member/:memberId', () => {
 
     it('Returns 401 for no token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/2`);
-        expect(mockGetMemberList).not.toHaveBeenCalled();
+        expect(mockGetMember).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
@@ -109,7 +109,7 @@ describe('GET /member/:memberId', () => {
     it('Returns 401 for invalid token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/2`).set('Authorization', 'Bearer invalidtoken');
         expect(mockInvalidToken).toHaveBeenCalled();
-        expect(mockGetMemberList).not.toHaveBeenCalled();
+        expect(mockGetMember).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('not authorized');
     });
@@ -148,7 +148,7 @@ describe('POST /member/new', () => {
     it('Returns 401 for no token', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`);
         expect(res.status).toBe(401);
-        expect(mockGetMemberList).not.toHaveBeenCalled();
+        expect(mockInsertMember).not.toHaveBeenCalled();
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
 
@@ -156,7 +156,7 @@ describe('POST /member/new', () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`).set('Authorization', 'Bearer invalidtoken');
         expect(res.status).toBe(401);
         expect(mockInvalidToken).toHaveBeenCalled();
-        expect(mockGetMemberList).not.toHaveBeenCalled();
+        expect(mockInsertMember).not.toHaveBeenCalled();
         expect(res.body.reason).toBe('not authorized');
     });
 
