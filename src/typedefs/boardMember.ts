@@ -7,7 +7,7 @@ export type boardMember = {
     memberId: number
 }
 
-export type GetBoardMemberRequest = {};
+export type GetBoardMemberRequest = Record<string, never>;
 
 export type GetBoardMemberResponse = boardMember | ErrorResponse;
 
@@ -27,6 +27,6 @@ export type PatchBoardMemberRequest = {
 
 export type PatchBoardMemberResponse = boardMember | ErrorResponse;
 
-export type GetBoardMemberListRequest = {};
+export type GetBoardMemberListRequest = Record<string, never>;
 
 export type GetBoardMemberListResponse = boardMember[] | ErrorResponse;
