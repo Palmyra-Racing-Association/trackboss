@@ -48,7 +48,7 @@ components:
       bearerFormat: JWT
   responses:
     badRequestError:
-      description: "Bad Request: Request body or supplied paramers are missing or invalid"
+      description: "Bad Request: Request body or supplied parameters are missing or invalid"
       content:
         application/json:
           schema:
