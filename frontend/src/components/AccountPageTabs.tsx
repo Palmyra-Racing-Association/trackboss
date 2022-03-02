@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import {
     Button,
-    useDisclosure,
     VStack,
     StackDivider,
     Grid,
@@ -16,7 +14,6 @@ import { IoMdBriefcase } from 'react-icons/io';
 
 export default function HamburgerMenu() {
     const [activeButton, setActiveButton] = useState<Number>(1);
-    const [pageComponent, setPageComponent] = useState<Function>();
 
     return (
         <Grid
