@@ -13,7 +13,7 @@ BEGIN
     FROM event e
     WHERE event_id = _event_id;
 	
-	SELECT DATEDIFF(IFNULL(_start_date, @cur_start_date), @cur_start_date) INTO @date_dif;
+	SELECT TIMEDIFF(IFNULL(_start_date, @cur_start_date), @cur_start_date) INTO @date_dif;
 	
 	IF(@date_dif != 0) THEN
 			CALL sp_delete_event(_event_id);
@@ -22,6 +22,7 @@ BEGIN
     
 	IF(@date_dif = 0) THEN
 		UPDATE event SET
+			end_date = IFNULL(_end_date, @cur_end_date),
 			event_name = IFNULL(_event_name, @cur_event_name),
 			event_description = IFNULL(_event_description, @cur_event_description)
 		WHERE event_id = _event_id;
