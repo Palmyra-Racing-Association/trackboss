@@ -2,7 +2,7 @@ DELIMITER //
 CREATE VIEW `v_work_points_by_membership` AS
     SELECT 
         ms.membership_id AS membership_id,
-        YEAR(job_date) AS year,
+        YEAR(job_start_date) AS year,
         SUM(j.points_awarded) AS total_points
     FROM
         job j

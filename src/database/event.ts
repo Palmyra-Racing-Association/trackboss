@@ -5,15 +5,15 @@ import logger from '../logger';
 import pool from './pool';
 import { Event, PatchEventRequest, PostNewEventRequest } from '../typedefs/event';
 
-export const INSERT_EVENT_SQL = 'CALL sp_event_job_generation(?, ?, ?, ?)';
+export const INSERT_EVENT_SQL = 'CALL sp_event_job_generation(?, ?, ?, ?, ?)';
 export const GET_EVENT_LIST_SQL = 'SELECT * FROM v_event';
 export const GET_EVENT_LIST_DATERANGE_SQL = `${GET_EVENT_LIST_SQL} WHERE date >= ? AND date <= ?`;
 export const GET_EVENT_SQL = `${GET_EVENT_LIST_SQL} WHERE event_id = ?`;
-export const PATCH_EVENT_SQL = 'CALL sp_patch_event(?, ?, ?, ?)';
+export const PATCH_EVENT_SQL = 'CALL sp_patch_event(?, ?, ?, ?, ?)';
 export const DELETE_EVENT_SQL = 'CALL sp_delete_event(?)';
 
 export async function insertEvent(req: PostNewEventRequest): Promise<number> {
-    const values = [req.date, req.eventTypeId, req.eventName, req.eventDescription];
+    const values = [req.startDate, req.endDate, req.eventTypeId, req.eventName, req.eventDescription];
 
     let result;
     try {
@@ -70,9 +70,10 @@ export async function getEventList(startDate?: string, endDate?: string): Promis
 
     return results.map((result) => ({
         eventId: result.event_id,
-        date: result.date,
+        start: result.start,
+        end: result.end,
         eventType: result.event_type,
-        eventName: result.event_name,
+        title: result.title,
         eventDescription: result.event_description,
     }));
 }
@@ -94,15 +95,16 @@ export async function getEvent(id: number): Promise<Event> {
 
     return {
         eventId: results[0].event_id,
-        date: results[0].date,
+        start: results[0].start,
+        end: results[0].end,
         eventType: results[0].event_type,
-        eventName: results[0].event_name,
+        title: results[0].title,
         eventDescription: results[0].event_description,
     };
 }
 
 export async function patchEvent(id: number, req: PatchEventRequest): Promise<void> {
-    const values = [id, req.date, req.eventName, req.eventDescription];
+    const values = [id, req.startDate, req.endDate, req.eventName, req.eventDescription];
 
     let result;
     try {

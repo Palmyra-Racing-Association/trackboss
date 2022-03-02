@@ -8,15 +8,15 @@ import pool from './pool';
 
 export const GET_JOB_LIST_SQL = 'SELECT * FROM v_job';
 export const GET_JOB_SQL = `${GET_JOB_LIST_SQL} WHERE job_id = ?`;
-export const INSERT_JOB_SQL = 'INSERT INTO job (member_id, event_id, job_type_id, job_date, last_modified_date, ' +
-     'verified, verified_date, points_awarded, paid, paid_date, last_modified_by) ' +
-     'VALUES (?, ?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?)';
-export const PATCH_JOB_SQL = 'CALL sp_patch_job(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+export const INSERT_JOB_SQL = 'INSERT INTO job (member_id, event_id, job_type_id, job_start_date, job_end_date, ' +
+     ' last_modified_date, verified, verified_date, points_awarded, paid, paid_date, last_modified_by) ' +
+     'VALUES (?, ?, ?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?)';
+export const PATCH_JOB_SQL = 'CALL sp_patch_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 export const DELETE_JOB_SQL = 'DELETE FROM job WHERE job_id = ?';
 
 export async function insertJob(req: PostNewJobRequest): Promise<number> {
-    const values = [req.memberId, req.eventId, req.jobTypeId, req.jobDate, req.verified, req.verifiedDate,
-        req.pointsAwarded, req.paid, req.paidDate, req.modifiedBy];
+    const values = [req.memberId, req.eventId, req.jobTypeId, req.jobStartDate, req.jobEndDate, req.verified,
+        req.verifiedDate, req.pointsAwarded, req.paid, req.paidDate, req.modifiedBy];
 
     let result;
     try {
@@ -95,8 +95,9 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         jobId: result.job_id,
         member: result.member,
         event: result.event,
-        jobDate: result.job_date,
-        jobType: result.job_type,
+        start: result.job_start,
+        end: result.job_end,
+        title: result.title,
         verified: result.verified[0],
         verifiedDate: result.verified_date,
         pointsAwarded: result.points_awarded,
@@ -126,8 +127,9 @@ export async function getJob(id: number): Promise<Job> {
         jobId: results[0].job_id,
         member: results[0].member,
         event: results[0].event,
-        jobDate: results[0].job_date,
-        jobType: results[0].job_type,
+        start: results[0].start,
+        end: results[0].end,
+        title: results[0].title,
         verified: results[0].verified[0],
         verifiedDate: results[0].verified_date,
         pointsAwarded: results[0].points_awarded,
@@ -139,7 +141,7 @@ export async function getJob(id: number): Promise<Job> {
 }
 
 export async function patchJob(id: number, req: PatchJobRequest): Promise<void> {
-    const values = [id, req.memberId, req.eventId, req.jobTypeId, req.jobDate,
+    const values = [id, req.memberId, req.eventId, req.jobTypeId, req.jobStartDate, req.jobEndDate,
         req.pointsAwarded, req.verified, req.paid, req.modifiedBy];
 
     let result;

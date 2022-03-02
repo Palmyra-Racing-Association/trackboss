@@ -85,7 +85,8 @@ describe('getEvent()', () => {
         const eventId = 10;
         const origValues = [
             10,
-            '2000-01-01',
+            '2001-01-01T08:00:00',
+            '2001-01-02T08:00:00',
             'THE test event',
             'Test',
             'test desc',
@@ -93,10 +94,11 @@ describe('getEvent()', () => {
         const result = await getEvent(eventId);
         expect(mockQuery).toHaveBeenCalled();
         expect(result.eventId).toBe(eventId);
-        expect(result.date).toBe(origValues[1]);
-        expect(result.eventType).toBe(origValues[2]);
-        expect(result.eventName).toBe(origValues[3]);
-        expect(result.eventDescription).toBe(origValues[4]);
+        expect(result.start).toBe(origValues[1]);
+        expect(result.end).toBe(origValues[2]);
+        expect(result.eventType).toBe(origValues[3]);
+        expect(result.title).toBe(origValues[4]);
+        expect(result.eventDescription).toBe(origValues[5]);
     });
 
     it('Throws for member not found', async () => {
@@ -120,8 +122,11 @@ describe('patchEvent()', () => {
         expect(mockQuery).toHaveBeenCalled();
     };
 
-    it('Patches an event with date field', async () => {
-        await testPatchWithObject({ date: '2022-02-05' });
+    it('Patches an event with start date field', async () => {
+        await testPatchWithObject({ startDate: '2022-02-05' });
+    });
+    it('Patches an event with end date field', async () => {
+        await testPatchWithObject({ endDate: '2022-02-05' });
     });
 
     it('Patches an event with name field', async () => {
