@@ -12,8 +12,9 @@ export function getJobListResponse(values: string[]) {
             membership_id: 600,
             event: 'The MAIN Event!',
             event_id: 100,
-            job_date: '2021-12-28',
-            job_type: 'Gate Watcher',
+            start: '2021-12-28 07:00:00',
+            end: '2021-12-28 15:00:00',
+            title: 'Gate Watcher',
             verified: [1],
             verified_date: '2022-02-07',
             points_awarded: '3',
@@ -28,8 +29,9 @@ export function getJobListResponse(values: string[]) {
             membership_id: 3,
             event: 'The second Event!',
             event_id: 101,
-            job_date: '2022-12-28',
-            job_type: 'Waterer',
+            start: '2022-12-28 06:00:00',
+            end: '2022-12-28 18:00:00',
+            title: 'Waterer',
             verified: [0],
             verified_date: null,
             points_awarded: null,
@@ -44,8 +46,9 @@ export function getJobListResponse(values: string[]) {
             membership_id: null,
             event: 'The MAIN Event!',
             event_id: 100,
-            job_date: '2020-03-22',
-            job_type: 'Gate Watcher',
+            start: '2020-03-22 12:00:00',
+            end: '2020-03-22 19:00:00',
+            title: 'Gate Watcher',
             verified: [0],
             verified_date: null,
             points_awarded: null,
@@ -60,8 +63,9 @@ export function getJobListResponse(values: string[]) {
             membership_id: 600,
             event: 'The MAIN Event!',
             event_id: 100,
-            job_date: '2021-12-28',
-            job_type: 'Gate Watcher',
+            start: '2021-12-28 07:00:00',
+            end: '2021-12-28 17:00:00',
+            title: 'Gate Watcher',
             verified: [1],
             verified_date: '2022-02-07',
             points_awarded: '3',
@@ -90,9 +94,9 @@ export function getJobListResponse(values: string[]) {
         case '600':
             return Promise.resolve([jobList.filter((job) => job.membership_id === 600)]);
         case '200':
-            return Promise.resolve([jobList.filter((job) => Date.parse(job.job_date) >= Date.parse(values[1]))]);
+            return Promise.resolve([jobList.filter((job) => Date.parse(job.job_start_date) >= Date.parse(values[1]))]);
         case '201':
-            return Promise.resolve([jobList.filter((job) => Date.parse(job.job_date) <= Date.parse(values[1]))]);
+            return Promise.resolve([jobList.filter((job) => Date.parse(job.job_start_date) <= Date.parse(values[1]))]);
         default:
             return Promise.resolve();
     }
@@ -105,8 +109,9 @@ export function getJobResponse(id: number) {
                 job_id: 18,
                 member: 'Doctor Tester',
                 event: 'The MAIN Event!',
-                job_date: '2021-12-28',
-                job_type: 'Gate Watcher',
+                start: '2021-12-28 08:00:00',
+                end: '2021-12-28 18:00:00',
+                title: 'Gate Watcher',
                 verified: [1],
                 verified_date: '2022-02-07',
                 points_awarded: '3',

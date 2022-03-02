@@ -116,7 +116,7 @@ describe('getJobList()', () => {
         const results = await getJobList(getListRequestFilters);
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
-            expect(Date.parse(result.jobDate)).toBeGreaterThan(Date.parse(date));
+            expect(Date.parse(result.start)).toBeGreaterThan(Date.parse(date));
         });
     });
     it('Returns a filtered list of jobs by endDate', async () => {
@@ -128,7 +128,7 @@ describe('getJobList()', () => {
         const results = await getJobList(getListRequestFilters);
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
-            expect(Date.parse(result.jobDate)).toBeLessThanOrEqual(Date.parse(date));
+            expect(Date.parse(result.start)).toBeLessThanOrEqual(Date.parse(date));
         });
     });
     it('Throws for internal server error', async () => {
@@ -147,7 +147,8 @@ describe('getJob()', () => {
             jobId,
             'Doctor Tester',
             'The MAIN Event!',
-            '2021-12-28',
+            '2021-12-28 08:00:00',
+            '2021-12-28 18:00:00',
             'Gate Watcher',
             1,
             '2022-02-07',
@@ -163,15 +164,16 @@ describe('getJob()', () => {
         expect(result.jobId).toBe(jobId);
         expect(result.member).toBe(origValues[1]);
         expect(result.event).toBe(origValues[2]);
-        expect(result.jobDate).toBe(origValues[3]);
-        expect(result.jobType).toBe(origValues[4]);
-        expect(result.verified).toBe(origValues[5]);
-        expect(result.verifiedDate).toBe(origValues[6]);
-        expect(result.pointsAwarded).toBe(origValues[7]);
-        expect(result.paid).toBe(origValues[8]);
-        expect(result.paidDate).toBe(origValues[9]);
-        expect(result.lastModifiedDate).toBe(origValues[10]);
-        expect(result.lastModifiedBy).toBe(origValues[11]);
+        expect(result.start).toBe(origValues[3]);
+        expect(result.end).toBe(origValues[4]);
+        expect(result.title).toBe(origValues[5]);
+        expect(result.verified).toBe(origValues[6]);
+        expect(result.verifiedDate).toBe(origValues[7]);
+        expect(result.pointsAwarded).toBe(origValues[8]);
+        expect(result.paid).toBe(origValues[9]);
+        expect(result.paidDate).toBe(origValues[10]);
+        expect(result.lastModifiedDate).toBe(origValues[11]);
+        expect(result.lastModifiedBy).toBe(origValues[12]);
     });
 
     it('Throws for member not found', async () => {
@@ -207,8 +209,12 @@ describe('patchJob()', () => {
         await testPatchWithObject({ jobTypeId: 2, modifiedBy: 0 });
     });
 
-    it('Patches a job with jobDate field', async () => {
-        await testPatchWithObject({ jobDate: '1999-09-09', modifiedBy: 0 });
+    it('Patches a job with jobStartDate field', async () => {
+        await testPatchWithObject({ jobStartDate: '1999-09-09', modifiedBy: 0 });
+    });
+
+    it('Patches a job with jobEndDate field', async () => {
+        await testPatchWithObject({ jobEndDate: '1999-09-09', modifiedBy: 0 });
     });
 
     it('Patches a job with points awarded field', async () => {

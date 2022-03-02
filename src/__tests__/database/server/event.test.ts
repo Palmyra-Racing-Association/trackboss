@@ -4,26 +4,32 @@ import { mockQuery } from './mockQuery';
 
 describe('insertEvent()', () => {
     it('Inserts a single event', async () => {
-        const request = { date: '2020-05-05', eventName: 'test event', eventTypeId: 2, eventDescription: 'test' };
+        const request = {
+            startDate: '2020-05-05',
+            endDate: '2020-05-06',
+            eventName: 'test event',
+            eventTypeId: 2,
+            eventDescription: 'test',
+        };
         const result = await insertEvent(request);
         expect(result).toBe(321);
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for user error', async () => {
-        const request = { date: '2020-05-05', eventName: '1452', eventTypeId: 2, eventDescription: 'test' };
+        const request = { startDate: '2020-05-05', eventName: '1452', eventTypeId: 2, eventDescription: 'test' };
         await expect(insertEvent(request)).rejects.toThrow('user input error');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error', async () => {
-        const request = { date: '2020-05-05', eventName: '-100', eventTypeId: 2, eventDescription: 'test' };
+        const request = { startDate: '2020-05-05', eventName: '-100', eventTypeId: 2, eventDescription: 'test' };
         await expect(insertEvent(request)).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws unreachable error without errno field', async () => {
-        const request = { date: '2020-05-05', eventName: '-200', eventTypeId: 2, eventDescription: 'test' };
+        const request = { startDate: '2020-05-05', eventName: '-200', eventTypeId: 2, eventDescription: 'test' };
         await expect(insertEvent(request)).rejects.toThrow('this error should not happen');
         expect(mockQuery).toHaveBeenCalled();
     });
@@ -42,7 +48,7 @@ describe('getEventList()', () => {
         expect(mockQuery).toHaveBeenCalled();
         expect(results.length).toBe(1);
         results.forEach((result) => {
-            expect(Date.parse(result.date) > Date.parse(start));
+            expect(Date.parse(result.start) > Date.parse(start));
         });
     });
 
@@ -51,7 +57,7 @@ describe('getEventList()', () => {
         const results = await getEventList(undefined, end);
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
-            expect(Date.parse(result.date) < Date.parse(end));
+            expect(Date.parse(result.start) < Date.parse(end));
         });
     });
 
@@ -62,7 +68,7 @@ describe('getEventList()', () => {
         expect(mockQuery).toHaveBeenCalled();
         expect(results.length).toBe(1);
         results.forEach((result) => {
-            expect(Date.parse(start) < Date.parse(result.date) && Date.parse(result.date) < Date.parse(end));
+            expect(Date.parse(start) < Date.parse(result.start) && Date.parse(result.start) < Date.parse(end));
         });
     });
 
