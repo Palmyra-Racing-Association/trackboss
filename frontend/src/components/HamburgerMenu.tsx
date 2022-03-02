@@ -55,6 +55,7 @@ export default function HamburgerMenu(props:pageProps) {
                         <DrawerBody padding="0">
                             <VStack width="100%" divider={<StackDivider borderColor="gray.300" />} spacing="0">
                                 <Button
+                                    justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
                                     fontSize="6xl"
@@ -76,6 +77,7 @@ export default function HamburgerMenu(props:pageProps) {
                                     <Link to="/">Dashboard</Link>
                                 </Button>
                                 <Button
+                                    justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
                                     fontSize="6xl"
@@ -97,6 +99,7 @@ export default function HamburgerMenu(props:pageProps) {
                                     <Link to="/calendar">Calendar</Link>
                                 </Button>
                                 <Button
+                                    justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
                                     fontSize="6xl"
@@ -118,6 +121,7 @@ export default function HamburgerMenu(props:pageProps) {
                                     <Link to="/members">Members</Link>
                                 </Button>
                                 <Button
+                                    justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
                                     fontSize="6xl"

@@ -43,8 +43,8 @@
         "eslint-config-airbnb": "^19.0.4",
         "eslint-plugin-jsx-a11y": "^6.4.1",
         "jest": "^27.5.1",
-        "jest-watch-typeahead": "^1.0.0",
         "jest-location-mock": "^1.0.9",
+        "jest-watch-typeahead": "^1.0.0",
         "react-test-renderer": "^17.0.2",
         "typescript": "^4.4.3"
     },
