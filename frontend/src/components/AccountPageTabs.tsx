@@ -11,6 +11,29 @@ import {
 import { BsWrench, BsFillPeopleFill } from 'react-icons/bs';
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { IoMdBriefcase } from 'react-icons/io';
+import GeneralInfo from './GeneralInfo';
+import { Member } from '../../../src/typedefs/member';
+
+const member: Member = {
+    memberId: 1,
+    membershipAdmin: 'true',
+    active: true,
+    memberType: 'admin',
+    firstName: 'Alan',
+    lastName: 'Delimon',
+    phoneNumber: '1',
+    email: 'user@example.com',
+    uuid: '',
+    occupation: '',
+    birthdate: '',
+    dateJoined: 'August 12, 2006',
+    address: '',
+    city: '',
+    state: '',
+    zip: '',
+    lastModifiedDate: '',
+    lastModifiedBy: '',
+};
 
 export default function HamburgerMenu() {
     const [activeButton, setActiveButton] = useState<Number>(1);
@@ -141,9 +164,7 @@ export default function HamburgerMenu() {
             <GridItem colSpan={3}>
                 {
                     activeButton === 1 && (
-                        <Center>
-                            General Info Component
-                        </Center>
+                        <GeneralInfo member={member} />
                     )
                 }
                 {
