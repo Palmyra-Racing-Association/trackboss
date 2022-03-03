@@ -26,9 +26,16 @@ const member: Member = {
 };
 
 describe('general info', () => {
-    it('renders all props correctly', () => {
+    it('renders all props correctly as admin', () => {
         const modal = render(
-            <GeneralInfo member={member} />,
+            <GeneralInfo member={member} admin />,
+        );
+        expect(modal).toMatchSnapshot();
+    });
+
+    it('renders all props correctly as not admin', () => {
+        const modal = render(
+            <GeneralInfo member={member} admin={false} />,
         );
         expect(modal).toMatchSnapshot();
     });

@@ -164,7 +164,7 @@ export default function HamburgerMenu() {
             <GridItem colSpan={3}>
                 {
                     activeButton === 1 && (
-                        <GeneralInfo member={member} />
+                        <GeneralInfo member={member} admin />
                     )
                 }
                 {

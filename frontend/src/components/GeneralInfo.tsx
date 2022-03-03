@@ -7,18 +7,16 @@ import {
     Heading,
     VStack,
     HStack,
-    IconButton,
     Divider,
     SimpleGrid,
     Button,
     Input,
 } from '@chakra-ui/react';
-import { GoKebabVertical } from 'react-icons/go';
-import { useNavigate } from 'react-router-dom';
 import { Member } from '../../../src/typedefs/member';
 
 interface cardProps {
     member: Member,
+    admin: boolean,
 }
 
 async function handlePatchMemberContactInfo(
@@ -78,24 +76,28 @@ export default function GeneralInfo(props: cardProps) {
         <VStack mt={25}>
             <HStack>
                 <Heading>General Information</Heading>
-                <Button
-                    mr={400}
-                    textDecoration="underline"
-                    color="orange"
-                    variant="ghost"
-                    size="lg"
-                    onClick={
-                        () => {
-                            if (editingMemberInfo) {
-                                setEditingMemberInfo(false);
-                            } else {
-                                setEditingMemberInfo(true);
+                {
+                    props.admin && (
+                        <Button
+                            mr={400}
+                            textDecoration="underline"
+                            color="orange"
+                            variant="ghost"
+                            size="lg"
+                            onClick={
+                                () => {
+                                    if (editingMemberInfo) {
+                                        setEditingMemberInfo(false);
+                                    } else {
+                                        setEditingMemberInfo(true);
+                                    }
+                                }
                             }
-                        }
-                    }
-                >
-                    Edit
-                </Button>
+                        >
+                            Edit
+                        </Button>
+                    )
+                }
             </HStack>
             <Divider />
             {
