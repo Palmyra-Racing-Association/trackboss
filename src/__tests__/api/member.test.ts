@@ -1,9 +1,9 @@
-import { Member } from 'src/typedefs/member';
 import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
 import { mockInvalidToken, mockValidToken, mockVerifyAdmin, mockVerifyMember } from '../util/authMocks';
 import { memberList, mockGetMember, mockGetMemberList, mockInsertMember, mockPatchMember } from './mocks/member';
+import { Member } from '../../typedefs/member';
 
 const TAG_ROOT = '/api/member';
 

@@ -1,9 +1,10 @@
-import { MemberType } from 'src/typedefs/memberType';
 import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
 import { mockInvalidToken, mockValidToken, mockVerifyAdmin } from '../util/authMocks';
 import { memberTypeList, mockGetMemberType, mockGetMemberTypeList, mockPatchMemberType } from './mocks/memberType';
+import { MemberType } from '../../typedefs/memberType';
+import { mockGetMember } from './mocks/member';
 
 const TAG_ROOT = '/api/memberType';
 
@@ -94,15 +95,17 @@ describe('GET /memberType/:memebrTypeId', () => {
 describe('PATCH /memberType/:memberTypeId', () => {
     it('Returns 500 on internal server error', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/2`).set('Authorization', 'Bearer admin');
+        expect(mockGetMember).toHaveBeenCalled();
         expect(mockVerifyAdmin).toHaveBeenCalled();
-        // expect(mockPatchMemberType).toHaveBeenCalled();
+        expect(mockPatchMemberType).toHaveBeenCalled();
         expect(res.status).toBe(500);
         expect(res.body.reason).toBe('internal server error');
     });
 
     it('Returns 400 on user input error', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/2`).set('Authorization', 'Bearer admin');
-        // expect(mockPatchMemberType).toHaveBeenCalled();
+        expect(mockPatchMemberType).toHaveBeenCalled();
+        expect(mockGetMember).toHaveBeenCalled();
         expect(res.status).toBe(400);
         expect(res.body.reason).toBe('bad request');
     });
@@ -112,7 +115,8 @@ describe('PATCH /memberType/:memberTypeId', () => {
             .patch(`${TAG_ROOT}/2`)
             .set('Authorization', 'Bearer admin')
             .send({ baseDuesAmount: 100 });
-        // expect(mockPatchMemberType).toHaveBeenCalled();
+        expect(mockGetMember).toHaveBeenCalled();
+        expect(mockPatchMemberType).toHaveBeenCalled();
         expect(res.status).toBe(200);
         expect(res.body.memberTypeId).toBe(2);
         expect(res.body.baseDuesAmount).toBe(100);
@@ -129,6 +133,7 @@ describe('PATCH /memberType/:memberTypeId', () => {
 
     it('returns 404 when bad id is specified', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/17`).set('Authorization', 'Bearer admin');
+        expect(mockGetMember).toHaveBeenCalled();
         expect(mockPatchMemberType).toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
