@@ -53,7 +53,7 @@ describe('GET /memberType/list', () => {
     });
 });
 
-describe('GET /memberType/:memebrTypeId', () => {
+describe('GET /memberType/:memberTypeId', () => {
     it('Returns 500 on Internal Server Error', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/400`).set('Authorization', 'Bearer validtoken');
         expect(mockGetMemberType).toHaveBeenCalled();
@@ -108,6 +108,21 @@ describe('PATCH /memberType/:memberTypeId', () => {
         expect(mockGetMember).toHaveBeenCalled();
         expect(res.status).toBe(400);
         expect(res.body.reason).toBe('bad request');
+    });
+
+    it('Returns 401 for no token', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/list`);
+        expect(mockPatchMemberType).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('Missing authorization grant in header');
+    });
+
+    it('Returns 401 for invalid token', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/0`).set('Authorization', 'Bearer invalidtoken');
+        expect(mockInvalidToken).toHaveBeenCalled();
+        expect(mockPatchMemberType).not.toHaveBeenCalled();
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('not authorized');
     });
 
     it('Successfully patches a member type', async () => {
