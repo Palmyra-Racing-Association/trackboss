@@ -2,8 +2,8 @@ import { MemberType } from 'src/typedefs/memberType';
 import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
-import { mockInvalidToken, mockValidToken } from '../util/authMocks';
-import { memberTypeList, mockGetMemberType, mockGetMemberTypeList } from './mocks/memberType';
+import { mockInvalidToken, mockValidToken, mockVerifyAdmin } from '../util/authMocks';
+import { memberTypeList, mockGetMemberType, mockGetMemberTypeList, mockPatchMemberType } from './mocks/memberType';
 
 const TAG_ROOT = '/api/memberType';
 
@@ -15,13 +15,6 @@ beforeAll(() => {
 
 afterAll((done) => {
     server.close(done);
-});
-
-describe('All unimplemented memberType endpoints are reachable', () => {
-    it('PATCH /memberType/:id is reachable', async () => {
-        const res = await supertestServer.patch(`${TAG_ROOT}/42`);
-        expect(res.status).toEqual(501);
-    });
 });
 
 describe('GET /memberType/list', () => {
@@ -82,7 +75,7 @@ describe('GET /memberType/:memebrTypeId', () => {
         expect(res.body.reason).toBe('not authorized');
     });
 
-    it('GETs the correct memebr type', async () => {
+    it('GETs the correct member type', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/1`).set('Authorization', 'Bearer validtoken');
         expect(mockGetMemberType).toHaveBeenCalled();
         expect(res.status).toBe(200);
@@ -93,6 +86,50 @@ describe('GET /memberType/:memebrTypeId', () => {
     it('Returns 404 when no data found', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/7`).set('Authorization', 'Bearer validtoken');
         expect(mockGetMemberType).toHaveBeenCalled();
+        expect(res.status).toBe(404);
+        expect(res.body.reason).toBe('not found');
+    });
+});
+
+describe('PATCH /memberType/:memberTypeId', () => {
+    it('Returns 500 on internal server error', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/2`).set('Authorization', 'Bearer admin');
+        expect(mockVerifyAdmin).toHaveBeenCalled();
+        // expect(mockPatchMemberType).toHaveBeenCalled();
+        expect(res.status).toBe(500);
+        expect(res.body.reason).toBe('internal server error');
+    });
+
+    it('Returns 400 on user input error', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/2`).set('Authorization', 'Bearer admin');
+        // expect(mockPatchMemberType).toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('Successfully patches a member type', async () => {
+        const res = await supertestServer
+            .patch(`${TAG_ROOT}/2`)
+            .set('Authorization', 'Bearer admin')
+            .send({ baseDuesAmount: 100 });
+        // expect(mockPatchMemberType).toHaveBeenCalled();
+        expect(res.status).toBe(200);
+        expect(res.body.memberTypeId).toBe(2);
+        expect(res.body.baseDuesAmount).toBe(100);
+    });
+
+    it('returns 403 for insufficient permissions', async () => {
+        const res = await supertestServer
+            .patch(`${TAG_ROOT}/2`)
+            .set('Authorization', 'Bearer laborer')
+            .send({ baseDuesAmount: 100 });
+        expect(res.status).toBe(403);
+        expect(mockPatchMemberType).not.toHaveBeenCalled();
+    });
+
+    it('returns 404 when bad id is specified', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/17`).set('Authorization', 'Bearer admin');
+        expect(mockPatchMemberType).toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
     });

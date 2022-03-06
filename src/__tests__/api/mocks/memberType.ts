@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as memberType from '../../../database/memberType';
-import { MemberType } from '../../../typedefs/memberType';
+import { MemberType, PatchMemberTypeRequest } from '../../../typedefs/memberType';
 
 export const memberTypeList: MemberType[] = [
     {
@@ -40,4 +40,19 @@ export const mockGetMemberType = jest.spyOn(memberType, 'getMemberType').mockImp
         throw new Error('not found');
     }
     return Promise.resolve(returnType[0]);
+});
+
+export const mockPatchMemberType = jest.spyOn(memberType, 'patchMemberType').mockImplementationOnce(() => {
+    throw new Error('internal server');
+}).mockImplementationOnce(async (): Promise<void> => {
+    throw new Error('user input error');
+}).mockImplementation(async (memberTypeId: number, req: PatchMemberTypeRequest): Promise<void> => {
+    const filtered = _.filter(memberTypeList, (m: MemberType) => m.memberTypeId === memberTypeId);
+    if (filtered.length === 0) {
+        throw new Error('not found');
+    }
+    memberTypeList[memberTypeId] = {
+        ...memberTypeList[memberTypeId],
+        ...req,
+    };
 });
