@@ -1,0 +1,170 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`account page tabs renders correctly 1`] = `
+<div
+  className="css-134nbkf"
+>
+  <div
+    className="css-1xwmfp1"
+  >
+    <div
+      className="chakra-stack css-4qgjo8"
+    >
+      <button
+        className="chakra-button css-1u15uie"
+        data-active=""
+        id="1"
+        onClick={[Function]}
+        type="button"
+      >
+        General Info
+        <span
+          className="chakra-button__icon css-1hzyiq5"
+        >
+          <svg
+            aria-hidden={true}
+            fill="currentColor"
+            focusable={false}
+            height="1em"
+            stroke="currentColor"
+            strokeWidth="0"
+            style={
+              Object {
+                "color": undefined,
+              }
+            }
+            viewBox="0 0 16 16"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"
+            />
+          </svg>
+        </span>
+      </button>
+      <div
+        className="chakra-stack__divider css-8uh2hy"
+      />
+      <button
+        className="chakra-button css-b1jtre"
+        id="2"
+        onClick={[Function]}
+        type="button"
+      >
+        Family & Bikes
+        <span
+          className="chakra-button__icon css-1hzyiq5"
+        >
+          <svg
+            aria-hidden={true}
+            fill="currentColor"
+            focusable={false}
+            height="1em"
+            stroke="currentColor"
+            strokeWidth="0"
+            style={
+              Object {
+                "color": undefined,
+              }
+            }
+            viewBox="0 0 16 16"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7zm4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+            />
+            <path
+              d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"
+              fillRule="evenodd"
+            />
+            <path
+              d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"
+            />
+          </svg>
+        </span>
+      </button>
+      <div
+        className="chakra-stack__divider css-8uh2hy"
+      />
+      <button
+        className="chakra-button css-1u15uie"
+        id="3"
+        onClick={[Function]}
+        type="button"
+      >
+        Work Point History
+        <span
+          className="chakra-button__icon css-1hzyiq5"
+        >
+          <svg
+            aria-hidden={true}
+            fill="currentColor"
+            focusable={false}
+            height="1em"
+            stroke="currentColor"
+            strokeWidth="0"
+            style={
+              Object {
+                "color": undefined,
+              }
+            }
+            viewBox="0 0 512 512"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M352 144v-39.6C352 82 334 64 311.6 64H200.4C178 64 160 82 160 104.4V144H48v263.6C48 430 66 448 88.4 448h335.2c22.4 0 40.4-18 40.4-40.4V144H352zm-40 0H200v-40h112v40z"
+            />
+          </svg>
+        </span>
+      </button>
+      <div
+        className="chakra-stack__divider css-8uh2hy"
+      />
+      <button
+        className="chakra-button css-1u15uie"
+        id="4"
+        onClick={[Function]}
+        type="button"
+      >
+        Dues & Waivers
+        <span
+          className="chakra-button__icon css-1hzyiq5"
+        >
+          <svg
+            aria-hidden={true}
+            fill="currentColor"
+            focusable={false}
+            height="1em"
+            stroke="currentColor"
+            strokeWidth="0"
+            style={
+              Object {
+                "color": undefined,
+              }
+            }
+            viewBox="0 0 640 512"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M352 288h-16v-88c0-4.42-3.58-8-8-8h-13.58c-4.74 0-9.37 1.4-13.31 4.03l-15.33 10.22a7.994 7.994 0 0 0-2.22 11.09l8.88 13.31a7.994 7.994 0 0 0 11.09 2.22l.47-.31V288h-16c-4.42 0-8 3.58-8 8v16c0 4.42 3.58 8 8 8h64c4.42 0 8-3.58 8-8v-16c0-4.42-3.58-8-8-8zM608 64H32C14.33 64 0 78.33 0 96v320c0 17.67 14.33 32 32 32h576c17.67 0 32-14.33 32-32V96c0-17.67-14.33-32-32-32zM48 400v-64c35.35 0 64 28.65 64 64H48zm0-224v-64h64c0 35.35-28.65 64-64 64zm272 192c-53.02 0-96-50.15-96-112 0-61.86 42.98-112 96-112s96 50.14 96 112c0 61.87-43 112-96 112zm272 32h-64c0-35.35 28.65-64 64-64v64zm0-224c-35.35 0-64-28.65-64-64h64v64z"
+            />
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+  <div
+    className="css-rklm6r"
+  >
+    <div
+      className="css-gmuwbf"
+    >
+      General Info Component
+    </div>
+  </div>
+</div>
+`;

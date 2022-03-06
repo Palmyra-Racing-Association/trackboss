@@ -124,6 +124,7 @@ export default function SelectedEventModal(props: modalProps) {
                             >
                                 View Sign Ups
                             </Link>
+
                         )
                     }
                     {
