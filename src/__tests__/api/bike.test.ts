@@ -18,7 +18,7 @@ afterAll((done) => {
     server.close(done);
 });
 
-describe('GET /member/list', () => {
+describe('GET /bike/list', () => {
     it('Returns 500 on Internal Server Error', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(500);
