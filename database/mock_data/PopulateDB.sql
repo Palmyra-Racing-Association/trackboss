@@ -325,19 +325,19 @@ insert into board_member(year, member_id, board_title_id) VALUES (2022, 14, 9);
 
 
 ### job_type ###
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Race Director',3,0,6,1,1,1,1);
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Race Director',3,0,6,1,1,1,1, "08:00", "14:00");
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Scoring',3,125,6,1,1,1,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Sign up/Tower Help (7am-4:30pm)',3,0,6,1,1,1,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Saturday Night Gate 5pm-10pm',1.5,NULL,5,0,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Sunday Front Gate 6:45a - 3p',3,0,6,0,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Sunday Front Gate 9a - 12a',1,NULL,6,0,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Sunday Front Gate 7:30a - 10:30a',1,0,6,0,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Sunday Front Gate 12-3',1,0,6,0,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Course Marshall/Sweeper  - Morning (7:30am - 12pm)',3,0,6,0,1,1,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Course Marshall/Sweeper - Afternoon (11:30am - 5pm)',3,0,6,0,1,1,1);
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Sign up/Tower Help (7am-4:30pm)',3,0,6,1,1,1,1, "07:00", "16:30");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Saturday Night Gate 5pm-10pm',1.5,NULL,5,0,1,0,1, "17:00", "22:00");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Sunday Front Gate 6:45a - 3p',3,0,6,0,1,0,1, "06:45", "15:00");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Sunday Front Gate 9a - 12a',1,NULL,6,0,1,0,1, "09:00", "12:00");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Sunday Front Gate 7:30a - 10:30a',1,0,6,0,1,0,1, "07:30", "10:30");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Sunday Front Gate 12-3',1,0,6,0,1,0,1, "12:00", "15:00");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Course Marshall/Sweeper  - Morning (7:30am - 12pm)',3,0,6,0,1,1,1, "07:30", "12:00");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Course Marshall/Sweeper - Afternoon (11:30am - 5pm)',3,0,6,0,1,1,1, "11:30", "17:00");
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Facility Cleanup',1,NULL,6,0,1,0,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Monday Cleanup Crew',3,0,7,0,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('50cc Track - Sunday 9-3',2,0,6,0,1,0,1);
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('50cc Track - Sunday 9-3',2,0,6,0,1,0,1, "09:00", "15:00");
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('President',3,150,6,1,1,1,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Scoring (front gate help first)',3,125,6,1,1,1,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Head Scorer/District Sign up',3,125,6,1,1,1,1);
@@ -348,10 +348,10 @@ insert into job_type(title,point_value,cash_value,job_day_number,reserved,online
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Mini Track Head Guy/Starter',2,0,6,0,1,0,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Mini Track -Finish Line flagger/start gate',2,0,6,0,1,0,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Mini Track Flagger',2,0,6,0,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Front Gate 8-12',1.5,0,5,0,0,1,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Front/Back Gate 6:45am - 10am (scorer  - this job first)',0,0,6,1,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Front/Back Gate 9-1',1.5,50,6,0,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Front Gate 12-3',1,0,6,0,1,0,1);
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Front Gate 8-12',1.5,0,5,0,0,1,1, "08:00", "12:00");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Front/Back Gate 6:45am - 10am (scorer  - this job first)',0,0,6,1,1,0,1, "06:45", "10:00");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Front/Back Gate 9-1',1.5,50,6,0,1,0,1, "09:00", "13:00");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Front Gate 12-3',1,0,6,0,1,0,1, "12:00", "15:00");
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Head Flagger',4,80,6,1,1,1,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Flagger 1 - Flyoff',4,80,6,0,1,1,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Flagger 2 - Step Up',4,80,6,0,1,1,1);
@@ -371,10 +371,10 @@ insert into job_type(title,point_value,cash_value,job_day_number,reserved,online
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Bathroom Maintenance',2,0,6,0,1,0,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Announcer',3,250,6,0,1,0,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('ESMX Racing Ref',0,100,6,1,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Sat. Front gate 3-7',1.5,0,5,0,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Sat. Front gate 7-11',1.5,0,5,0,1,0,1);
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Sat. Front gate 3-7',1.5,0,5,0,1,0,1, "15:00", "19:00");
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Sat. Front gate 7-11',1.5,0,5,0,1,0,1, "19:00", "23:00");
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('District Signup Saturday',0,40,5,1,1,0,1);
-insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Saturday Signup 5p-7p',1,0,5,0,1,0,1);
+insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active, start_time, end_time) VALUES ('Saturday Signup 5p-7p',1,0,5,0,1,0,1, "15:00", "17:00");
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Saturday Night Watering',2,0,5,0,1,0,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Friday Night Watering',2,0,4,0,1,0,1);
 insert into job_type(title,point_value,cash_value,job_day_number,reserved,online,meal_ticket, active) VALUES ('Rock Picking',2,0,2,0,0,0,1);

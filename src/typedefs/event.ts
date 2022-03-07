@@ -2,9 +2,10 @@ import { ErrorResponse } from './errorResponse';
 
 export type Event = {
     eventId: number,
-    date: string,
+    start: string,
+    end: string,
     eventType: string,
-    eventName: string,
+    title: string,
     eventDescription: string
 }
 
@@ -13,7 +14,8 @@ export type DeletedEvent = {
 }
 
 export type PostNewEventRequest = {
-    date?: string,
+    startDate?: string,
+    endDate?: string,
     eventTypeId: number,
     eventName?: string,
     eventDescription?: string
@@ -26,7 +28,8 @@ export type GetEventRequest = Record<string, never>
 export type GetEventResponse = Event | ErrorResponse
 
 export type PatchEventRequest = {
-    date?: string,
+    startDate?: string,
+    endDate?: string,
     eventTypeId?: number,
     eventName?: string,
     eventDescription?: string

@@ -7,21 +7,24 @@ export function getEventListResponse(values: string[]) {
     const eventList = [
         {
             event_id: 10,
-            date: '2000-01-01',
+            start: '2000-01-01T08:00:00',
+            end: '2000-01-02T08:00:00',
             event_type_id: 2,
-            event_name: 'Test',
+            title: 'Test',
             event_description: 'test desc',
         }, {
             event_id: 11,
-            date: '2001-01-01',
+            start: '2001-01-01T08:00:00',
+            end: '2001-01-02T08:00:00',
             event_type_id: 6,
-            event_name: 'Testville',
+            title: 'Testville',
             event_description: 'foobar',
         }, {
             event_id: 12,
-            date: '2005-01-01',
+            start: '2005-10-01T08:00:00',
+            end: '2005-10-02T08:00:00',
             event_type_id: 4,
-            event_name: 'Testerson',
+            title: 'Testerson',
             event_description: 'test description',
         },
     ];
@@ -31,7 +34,7 @@ export function getEventListResponse(values: string[]) {
     if (values[0] === '-100') {
         throw new Error('error message');
     }
-    return Promise.resolve([eventList.filter((event) => (event.date > values[0]) && (event.date < values[1]))]);
+    return Promise.resolve([eventList.filter((event) => (event.start > values[0]) && (event.start < values[1]))]);
 }
 
 export function getEventResponse(id: number) {
@@ -39,9 +42,10 @@ export function getEventResponse(id: number) {
         case 10:
             return Promise.resolve([[{
                 event_id: 10,
-                date: '2000-01-01',
+                start: '2001-01-01T08:00:00',
+                end: '2001-01-02T08:00:00',
                 event_type: 'THE test event',
-                event_name: 'Test',
+                title: 'Test',
                 event_description: 'test desc',
             }]]);
         case 765:

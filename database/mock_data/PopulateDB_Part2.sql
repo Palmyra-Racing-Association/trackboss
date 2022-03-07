@@ -1,10 +1,10 @@
 ### GEN THE JOBS
-CALL sp_event_job_generation('2020-02-01', 1, 'The First Race', 'test first race!');
-CALL sp_event_job_generation('2021-05-15', 3, 'XO Race','Test XO Race Job Generation');
-CALL sp_event_job_generation('2022-02-01', 5, 'Yearly Meeting', 'test meeting!');
-CALL sp_event_job_generation('2022-01-11', 6, 'Harescrambler', 'test harescrambler job generation!');
-CALL sp_event_job_generation('2021-03-15', 9, 'Free Ride Day!', 'Test Ride Day!');
-CALL sp_event_job_generation('2022-01-01', 1, '2022 first race', 'test race generation!');
+CALL sp_event_job_generation('2020-02-01T08:00:00', '2020-02-02T16:00:00', 1, 'The First Race', 'test first race!');
+CALL sp_event_job_generation('2021-05-15T10:00:00', '2021-05-19T10:00:00', 3, 'XO Race','Test XO Race Job Generation');
+CALL sp_event_job_generation('2022-02-01T09:00:00', '2022-02-01T15:00:00', 5, 'Yearly Meeting', 'test meeting!');
+CALL sp_event_job_generation('2022-01-11T08:00:00', '2022-01-13T08:00:00', 6, 'Harescrambler', 'test harescrambler job generation!');
+CALL sp_event_job_generation('2021-03-15T15:00:00', '2021-03-15T20:00:00', 9, 'Free Ride Day!', 'Test Ride Day!');
+CALL sp_event_job_generation('2022-01-01T08:00:00', '2022-01-01T16:00:00', 1, '2022 first race', 'test race generation!');
 ###
 
 # Assign members to the jobs
@@ -15,8 +15,8 @@ update job j
 left join job_type jt on j.job_type_id = jt.job_type_id
 left join member m on j.member_id = m.member_id
 left join member_types mt on m.member_type_id = mt.member_type_id
-set verified = 1, verified_date = date_add(j.job_date, INTERVAL 14 DAY), points_awarded =  CASE WHEN (j.job_id % 10 < 8) THEN jt.point_value ELSE jt.point_value / 2 END, 
-j.last_modified_date = date_add(j.job_date, INTERVAL 14 DAY), j.last_modified_by = 1
+set verified = 1, verified_date = date_add(j.job_start_date, INTERVAL 14 DAY), points_awarded =  CASE WHEN (j.job_id % 10 < 8) THEN jt.point_value ELSE jt.point_value / 2 END, 
+j.last_modified_date = date_add(j.job_start_date, INTERVAL 14 DAY), j.last_modified_by = 1
 where ((j.job_id % 10 + 1) > 1) AND mt.type != 'paid laborer';
 
 

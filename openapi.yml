@@ -100,6 +100,9 @@ components:
     date:
       type: string
       format: date
+    date-time:
+      type: string
+      format: date-time
     email:
       type: string
       format: email
@@ -227,11 +230,13 @@ components:
       properties:
         eventId:
           $ref: "#/components/schemas/integer"
-        date:
-          $ref: "#/components/schemas/date"
+        start:
+          $ref: "#/components/schemas/date-time"
+        end:
+          $ref: "#/components/schemas/date-time"
         eventType:
           $ref: "#/components/schemas/string"
-        eventName:
+        title:
           $ref: "#/components/schemas/string"
         eventDescription:
           $ref: "#/components/schemas/string"
@@ -257,9 +262,11 @@ components:
           $ref: "#/components/schemas/string"
         event:
           $ref: "#/components/schemas/string"
-        jobDate:
-          $ref: "#/components/schemas/date"
-        jobType:
+        start:
+          $ref: "#/components/schemas/date-time"
+        end:
+          $ref: "#/components/schemas/date-time"
+        title:
           $ref: "#/components/schemas/string"
         verified:
           type: boolean
@@ -1047,8 +1054,10 @@ paths:
             schema:
               type: object
               properties:
-                date:
-                  $ref: "#/components/schemas/date"
+                startDate:
+                  $ref: "#/components/schemas/date-time"
+                endDate:
+                  $ref: "#/components/schemas/date-time"
                 eventTypeId:
                   $ref: "#/components/schemas/integer"
                 eventName:
@@ -1154,8 +1163,10 @@ paths:
               minProperties: 1
               additionalProperties: false
               properties:
-                date:
-                  $ref: "#/components/schemas/date"
+                startDate:
+                  $ref: "#/components/schemas/date-time"
+                endDate:
+                  $ref: "#/components/schemas/date-time"
                 eventTypeId:
                   $ref: "#/components/schemas/integer"
                 eventName:
@@ -1348,7 +1359,6 @@ paths:
               type: object
               required:
                 - jobTypeId
-                - jobDate
                 - modifiedBy
               properties:
                 memberId:
@@ -1357,8 +1367,10 @@ paths:
                   $ref: "#/components/schemas/integer"
                 jobTypeId:
                   $ref: "#/components/schemas/integer"
-                jobDate:
-                  $ref: "#/components/schemas/date"
+                jobStartDate:
+                  $ref: "#/components/schemas/date-time"
+                jobEndDate:
+                  $ref: "#/components/schemas/date-time"
                 pointsAwarded:
                   $ref: "#/components/schemas/number"
                 modifiedBy:
@@ -1515,8 +1527,10 @@ paths:
                   $ref: "#/components/schemas/integer"
                 jobTypeId:
                   $ref: "#/components/schemas/integer"
-                jobDate:
-                  $ref: "#/components/schemas/date"
+                jobStartDate:
+                  $ref: "#/components/schemas/date-time"
+                jobEndDate:
+                  $ref: "#/components/schemas/date-time"
                 verified:
                   type: boolean
                 paid:

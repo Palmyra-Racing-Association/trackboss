@@ -155,7 +155,7 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
         case GET_EVENT_LIST_SQL:
             return eventHelpers.getEventListResponse(values);
         case INSERT_EVENT_SQL:
-            return eventHelpers.insertEventResponse(values[2]);
+            return eventHelpers.insertEventResponse(values[3]);
         case PATCH_EVENT_SQL:
             return eventHelpers.patchEventResponse(values[0]);
         case DELETE_EVENT_SQL:
