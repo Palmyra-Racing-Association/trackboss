@@ -19,15 +19,16 @@ interface modalProps {
   isOpen: boolean,
   onClose: () => void,
   bikeToEdit: Bike,
-  // editBike: void,
+  // eslint-disable-next-line no-unused-vars
+  editBike: (bikeToEdit: Bike, year: string, make: string, model: string) => void,
 }
 
 export default function EditBikesModal(props: modalProps) {
     const [bike, setBike] = useState<Bike>();
 
-    const [bikeYear, setBikeYear] = useState<string>();
-    const [bikeMake, setBikeMake] = useState<string>();
-    const [bikeModel, setBikeModel] = useState<string>();
+    const [bikeYear, setBikeYear] = useState<string>('');
+    const [bikeMake, setBikeMake] = useState<string>('');
+    const [bikeModel, setBikeModel] = useState<string>('');
 
     const handleEditedBikeYear = (event: { target: { value: any; }; }) => setBikeYear(event.target.value);
     const handleEditedBikeMake = (event: { target: { value: any; }; }) => setBikeMake(event.target.value);
@@ -47,38 +48,45 @@ export default function EditBikesModal(props: modalProps) {
                 <Heading pl={2} pr={2} textAlign="center">
                     Edit this bike
                 </Heading>
-                <Text>
+                <Text fontSize="2xl" textAlign="center">
                     Current Bike Info:
                     {' '}
-                    {`${bike?.year} ${bike?.make} ${bike?.model}`}
+                    {`${bike?.year}, ${bike?.make} ${bike?.model}`}
                 </Text>
                 <Divider mb={5} />
                 <ModalCloseButton />
-                <VStack align="left">
+                <VStack
+                    align="left"
+                    mr={5}
+                    ml={5}
+                >
                     <Input
+                        variant="outline"
                         placeholder="Bike year"
                         value={bikeYear}
                         onChange={handleEditedBikeYear}
-                        size="xs"
+                        size="md"
                     />
                     <Input
+                        variant="outline"
                         placeholder="Bike Make"
                         value={bikeMake}
                         onChange={handleEditedBikeMake}
-                        size="xs"
+                        size="md"
                     />
                     <Input
+                        variant="outline"
                         placeholder="Bike Model"
                         value={bikeModel}
                         onChange={handleEditedBikeModel}
-                        size="xs"
+                        size="md"
                     />
                 </VStack>
                 <ModalFooter>
                     <Button
                         variant="ghost"
                         mr={3}
-                        size="sm"
+                        size="lg"
                         onClick={
                             () => {
                                 props.onClose();
@@ -88,11 +96,13 @@ export default function EditBikesModal(props: modalProps) {
                         Close
                     </Button>
                     <Button
+                        color="green"
                         variant="ghost"
                         mr={3}
-                        size="sm"
+                        size="lg"
                         onClick={
                             () => {
+                                props.editBike(props.bikeToEdit, bikeYear, bikeMake, bikeModel);
                                 props.onClose();
                             }
                         }

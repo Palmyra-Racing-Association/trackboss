@@ -103,6 +103,15 @@ export default function GeneralInfo(props: cardProps) {
         }
     }
 
+    function editBike(editedBike: Bike, bikeYear: string, bikeMake: string, bikeModel: string) {
+        // call controller and await response, if successful...
+        const index = memberBikes.indexOf(editedBike);
+        memberBikes[index].year = bikeYear;
+        memberBikes[index].make = bikeMake;
+        memberBikes[index].model = bikeModel;
+        setMemberBikes(memberBikes);
+    }
+
     useEffect(() => {
         async function setMemberData() {
             setMemberFamily(props.memberFamily);
@@ -266,6 +275,8 @@ export default function GeneralInfo(props: cardProps) {
                         isOpen={isEditBikeOpen}
                         onClose={onEditBikeClose}
                         bikeToEdit={bikeToEdit}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        editBike={editBike}
                     />
                 )
             }
