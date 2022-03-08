@@ -1,68 +1,27 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
-    Box,
-    Center,
-    Text,
     Heading,
     VStack,
     HStack,
     Divider,
     SimpleGrid,
     Button,
-    Input,
-    OrderedList,
     UnorderedList,
     ListItem,
     useDisclosure,
 } from '@chakra-ui/react';
-import { FaBitbucket } from 'react-icons/fa';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
-import bikeHandlers from '../mocks/bikeHandlers';
 import DeleteAlert from './DeleteAlert';
 import EditBikesModal from './EditBikesModal';
+import AddFamilyModal from './AddFamilyModal';
+import AddBikeModal from './AddBikeModal';
+import { getFormattedMemberList } from '../controller/member';
 
 interface cardProps {
-    // member: Member,
     memberFamily: Member[],
     memberBikes: Bike[],
     admin: boolean,
-}
-
-async function handlePatchMemberContactInfo(
-    memberInfo: Member,
-    name: string | undefined,
-    email: string | undefined,
-    phone: string | undefined,
-) {
-    // const updatedMember = await patchMember(name, email, phone, memberInfo.memberId)
-    // if (updatedMember.reason) {
-    //      there was an error, show error message
-    // }
-
-    const updatedMember: Member = {
-        memberId: 1,
-        membershipAdmin: 'true',
-        active: true,
-        memberType: 'member',
-        firstName: 'Updated',
-        lastName: 'Member',
-        phoneNumber: '0987',
-        email: 'updatedMember@example.com',
-        uuid: '',
-        occupation: '',
-        birthdate: '',
-        dateJoined: 'August 12, 2006',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        lastModifiedDate: '',
-        lastModifiedBy: '',
-    };
-
-    return updatedMember;
 }
 
 export default function GeneralInfo(props: cardProps) {
@@ -79,13 +38,6 @@ export default function GeneralInfo(props: cardProps) {
     const [memberToRemove, setMemberToRemove] = useState<Member>();
     const [bikeToRemove, setBikeToRemove] = useState<Bike>();
     const [bikeToEdit, setBikeToEdit] = useState<Bike>();
-
-    // const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
-    // const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
-
-    // const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
-    // const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
-    // const handleEditedPhoneChange = (event: { target: { value: any; }; }) => setEditedPhone(event.target.value);
 
     function removeFamilyMember() {
         // call controller and await response, if successful...
@@ -112,6 +64,34 @@ export default function GeneralInfo(props: cardProps) {
         setMemberBikes(memberBikes);
     }
 
+    function addMember(firstName: string, lastName: string, email: string) {
+        const members = getFormattedMemberList('TestToken');
+        const memberToAdd = members.find(
+            (mem) => mem.firstName === firstName &&
+            mem.lastName === lastName &&
+            mem.email === email,
+        );
+        if (memberToAdd) {
+            // call controller to add member to membership
+            // if successful
+            setMemberFamily(memberFamily.concat(memberToAdd));
+        }
+    }
+
+    function addBike(year: string, make: string, model: string) {
+        // call controller to add bike
+        // const newBike = addBike(memberShipId, year, make, model)
+        // if successful
+        const newBike: Bike = {
+            bikeId: 3,
+            year,
+            make,
+            model,
+            membershipAdmin: 'me',
+        };
+        setMemberBikes(memberBikes.concat(newBike));
+    }
+
     useEffect(() => {
         async function setMemberData() {
             setMemberFamily(props.memberFamily);
@@ -133,6 +113,11 @@ export default function GeneralInfo(props: cardProps) {
                                 color="orange"
                                 variant="ghost"
                                 size="lg"
+                                onClick={
+                                    () => {
+                                        onAddFamilyOpen();
+                                    }
+                                }
                             >
                                 Add
                             </Button>
@@ -186,6 +171,11 @@ export default function GeneralInfo(props: cardProps) {
                                 color="orange"
                                 variant="ghost"
                                 size="lg"
+                                onClick={
+                                    () => {
+                                        onAddBikeOpen();
+                                    }
+                                }
                             >
                                 Add
                             </Button>
@@ -277,6 +267,26 @@ export default function GeneralInfo(props: cardProps) {
                         bikeToEdit={bikeToEdit}
                         // eslint-disable-next-line react/jsx-no-bind
                         editBike={editBike}
+                    />
+                )
+            }
+            {
+                isAddFamilyOpen && (
+                    <AddFamilyModal
+                        isOpen={isAddFamilyOpen}
+                        onClose={onAddFamilyClose}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        addMember={addMember}
+                    />
+                )
+            }
+            {
+                isAddBikeOpen && (
+                    <AddBikeModal
+                        isOpen={isAddBikeOpen}
+                        onClose={onAddBikeClose}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        addBike={addBike}
                     />
                 )
             }

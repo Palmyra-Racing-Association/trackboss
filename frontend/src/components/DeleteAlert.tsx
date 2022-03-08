@@ -16,7 +16,7 @@ interface alertProps {
   removeMethod: () => void,
 }
 
-export default function RemoveFamilyAlert(props: alertProps) {
+export default function DeleteAlert(props: alertProps) {
     return (
         <Modal isCentered size="md" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
