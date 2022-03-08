@@ -12,7 +12,9 @@ import { BsWrench, BsFillPeopleFill } from 'react-icons/bs';
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { IoMdBriefcase } from 'react-icons/io';
 import GeneralInfo from './GeneralInfo';
+import FamilyAndBikes from './FamilyAndBikes';
 import { Member } from '../../../src/typedefs/member';
+import { Bike } from '../../../src/typedefs/bike';
 
 const member: Member = {
     memberId: 1,
@@ -34,6 +36,66 @@ const member: Member = {
     lastModifiedDate: '',
     lastModifiedBy: '',
 };
+
+const memberFamily: Member[] = [
+    {
+        memberId: 1,
+        membershipAdmin: 'true',
+        active: true,
+        memberType: 'admin',
+        firstName: 'John',
+        lastName: 'Smith',
+        phoneNumber: '1',
+        email: 'user@example.com',
+        uuid: '',
+        occupation: '',
+        birthdate: '',
+        dateJoined: 'August 12, 2006',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        lastModifiedDate: '',
+        lastModifiedBy: '',
+    },
+    {
+        memberId: 2,
+        membershipAdmin: 'true',
+        active: true,
+        memberType: 'admin',
+        firstName: 'Jane',
+        lastName: 'Smith',
+        phoneNumber: '2',
+        email: 'user@example.com',
+        uuid: '',
+        occupation: '',
+        birthdate: '',
+        dateJoined: 'August 12, 2006',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        lastModifiedDate: '',
+        lastModifiedBy: '',
+    },
+];
+
+const memberBikes: Bike[] = [
+    {
+        bikeId: 1,
+        year: '2012',
+        make: 'honda',
+        model: 'rust-bucket',
+        membershipAdmin: 'string',
+    },
+    {
+        bikeId: 2,
+        year: '2022',
+        make: 'yamaha',
+        model: '',
+        membershipAdmin: 'string',
+    },
+];
 
 export default function HamburgerMenu() {
     const [activeButton, setActiveButton] = useState<Number>(1);
@@ -169,9 +231,7 @@ export default function HamburgerMenu() {
                 }
                 {
                     activeButton === 2 && (
-                        <Center>
-                            Family And Bikes Component
-                        </Center>
+                        <FamilyAndBikes memberBikes={memberBikes} memberFamily={memberFamily} admin />
                     )
                 }
                 {
