@@ -13,7 +13,7 @@ import {
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
 import DeleteAlert from './DeleteAlert';
-import EditBikesModal from './EditBikesModal';
+import EditBikesModal from './EditBikeModal';
 import AddFamilyModal from './AddFamilyModal';
 import AddBikeModal from './AddBikeModal';
 import { getFormattedMemberList } from '../controller/member';
