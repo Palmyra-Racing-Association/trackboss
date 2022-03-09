@@ -1,21 +1,137 @@
 import { Request, Response, Router } from 'express';
+import { checkHeader, verify } from '../util/auth';
+import {
+    GetEventTypeListResponse,
+    GetEventTypeResponse,
+    EventType,
+    PatchEventTypeResponse,
+    PostNewEventTypeResponse,
+} from '../typedefs/eventType';
+import { insertEventType, getEventType, getEventTypeList, patchEventType } from '../database/eventType';
 
 const eventType = Router();
 
-eventType.post('/new', (req: Request, res: Response) => {
-    res.status(501).send();
+eventType.post('/new', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: PostNewEventTypeResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token, 'Admin');
+            const insertId = await insertEventType(req.body);
+            response = await getEventType(insertId);
+            res.status(201);
+        } catch (e: any) {
+            if (e.message === 'user input error') {
+                res.status(400);
+                response = { reason: 'bad request' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'Forbidden') {
+                res.status(403);
+                response = { reason: 'forbidden' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
 });
 
-eventType.get('/list', (req: Request, res: Response) => {
-    res.status(501).send();
+eventType.get('/list', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: GetEventTypeListResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const eventTypeList: EventType[] = await getEventTypeList();
+            res.status(200);
+            response = eventTypeList;
+        } catch (e: any) {
+            if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+        res.send(response);
+    }
 });
 
-eventType.get('/:eventTypeID', (req: Request, res: Response) => {
-    res.status(501).send();
+eventType.get('/:eventTypeID', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: GetEventTypeResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const { eventTypeID } = req.params;
+            response = await getEventType(Number(eventTypeID));
+            res.status(200);
+        } catch (e: any) {
+            if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+        res.send(response);
+    }
 });
 
-eventType.patch('/:eventTypeID', (req: Request, res: Response) => {
-    res.status(501).send();
+eventType.patch('/:eventTypeID', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: PatchEventTypeResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            const { eventTypeID } = req.params;
+            await verify(headerCheck.token, 'Admin');
+            await patchEventType(Number(eventTypeID), req.body);
+            response = await getEventType(Number(eventTypeID));
+            res.status(200);
+        } catch (e: any) {
+            if (e.message === 'user input error') {
+                res.status(400);
+                response = { reason: 'bad request' };
+            } else if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'Forbidden') {
+                res.status(403);
+                response = { reason: 'forbidden' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
 });
 
 export default eventType;
