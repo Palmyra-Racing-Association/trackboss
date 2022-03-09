@@ -4,17 +4,16 @@ import logger from '../logger';
 const CONN_LIMIT = 10;
 const QUEUE_LIMIT = 0;
 
+// Singleton database connection pool
 let pool: Pool | undefined;
 
-// Build the database connection pool
-//
-// But first: check that all the vars are present and accounted for - otherwise
-// the server will seem to run fine... until a DB query is attempted at who
-// knows when
-//
-// (exported as its own function for testing purposes)
 export function getPool(): Pool {
     if (!pool) {
+        // Gotta build it
+
+        // BUT FIRST: check that all the vars are present and accounted for -
+        // otherwise the server will seem to run fine... until a DB query is
+        // attempted at who knows when and it crashes
         const { MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB } = process.env;
         [MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB].forEach((envVar) => {
             if (!envVar) {
