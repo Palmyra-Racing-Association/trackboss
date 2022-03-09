@@ -17,8 +17,7 @@ export async function insertBike(req: PostNewBikeRequest): Promise<number> {
 
     let result;
     try {
-        const pool = getPool();
-        [result] = await pool.query<OkPacket>(INSERT_BIKE_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_BIKE_SQL, values);
     } catch (e) {
         logger.error(`DB error inserting bike: ${e}`);
         throw new Error('internal server error');
