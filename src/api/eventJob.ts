@@ -1,21 +1,151 @@
 import { Request, Response, Router } from 'express';
+import { deleteEventJob, getEventJob, insertEventJob, patchEventJob } from '../database/eventJob';
+import {
+    DeleteEventJobResponse,
+    GetEventJobResponse,
+    PatchEventJobResponse,
+    PostNewEventJobResponse,
+} from '../typedefs/eventJob';
+import { checkHeader, verify } from '../util/auth';
 
 const eventJob = Router();
 
-eventJob.post('/new', (req: Request, res: Response) => {
-    res.status(501).send();
+eventJob.post('/new', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: PostNewEventJobResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token, 'Admin');
+            const insertId = await insertEventJob(req.body);
+            response = await getEventJob(insertId);
+            res.status(201);
+        } catch (e: any) {
+            if (e.message === 'user input error') {
+                res.status(400);
+                response = { reason: 'bad request' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'Forbidden') {
+                res.status(403);
+                response = { reason: 'forbidden' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
 });
 
-eventJob.get('/:eventJobID', (req: Request, res: Response) => {
-    res.status(501).send();
+eventJob.get('/:eventJobID', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: GetEventJobResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const { eventJobID } = req.params;
+            response = await getEventJob(Number(eventJobID));
+            res.status(200);
+        } catch (e: any) {
+            if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
 });
 
-eventJob.patch('/:eventJobID', (req: Request, res: Response) => {
-    res.status(501).send();
+eventJob.patch('/:eventJobID', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: PatchEventJobResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            const { eventJobID } = req.params;
+            const eventJobIdNum = Number(eventJobID);
+            if (Number.isNaN(eventJobIdNum)) {
+                throw new Error('not found');
+            }
+            await verify(headerCheck.token, 'Admin');
+            await patchEventJob(eventJobIdNum, req.body);
+            response = await getEventJob(eventJobIdNum);
+            res.status(200);
+        } catch (e: any) {
+            if (e.message === 'user input error') {
+                res.status(400);
+                response = { reason: 'bad request' };
+            } else if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'Forbidden') {
+                res.status(403);
+                response = { reason: 'forbidden' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
 });
 
-eventJob.delete('/:eventJobID', (req: Request, res: Response) => {
-    res.status(501).send();
+eventJob.delete('/:eventJobID', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: DeleteEventJobResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            const { eventJobID } = req.params;
+            const eventJobIdNum = Number(eventJobID);
+            if (Number.isNaN(eventJobIdNum)) {
+                throw new Error('not found');
+            }
+            await verify(headerCheck.token, 'Admin');
+            await deleteEventJob(eventJobIdNum);
+            response = { eventJobId: eventJobIdNum };
+            res.status(200);
+        } catch (e: any) {
+            if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'Forbidden') {
+                res.status(403);
+                response = { reason: 'forbidden' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
 });
 
 export default eventJob;
