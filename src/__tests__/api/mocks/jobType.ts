@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as jobType from '../../../database/jobType';
-import { JobType, PatchJobTypeRequest } from '../../../typedefs/jobType';
+import { JobType, PatchJobTypeRequest, PostNewJobTypeRequest } from '../../../typedefs/jobType';
 
 export const jobTypeList: JobType[] = [
     {
@@ -65,17 +65,17 @@ export const mockInsertJobType = jest.spyOn(jobType, 'insertJobType').mockImplem
     throw new Error('internal server error');
 }).mockImplementationOnce((): Promise<number> => {
     throw new Error('user input error');
-}).mockImplementation((): Promise<number> => {
+}).mockImplementation((req: PostNewJobTypeRequest): Promise<number> => {
     const newJobType = {
         jobTypeId: 4,
-        title: 'job type 4',
-        pointValue: 0,
-        cashValue: 0,
-        jobDayNumber: 0,
-        reserved: true,
-        online: true,
-        mealTicket: true,
-        sortOrder: 0,
+        title: req.title,
+        pointValue: req.pointValue || 0,
+        cashValue: req.cashValue || 0,
+        jobDayNumber: req.jobDayNumber || 0,
+        reserved: req.reserved,
+        online: req.online,
+        mealTicket: req.mealTicket,
+        sortOrder: req.sortOrder || 0,
         active: true,
         lastModifiedDate: '2022-03-08',
         lastModifiedBy: 'He Who Writes the Tests',
