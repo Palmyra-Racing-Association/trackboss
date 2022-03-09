@@ -4,7 +4,7 @@ import 'dotenv/config';
 // use defaults if they're missing - makes life easier
 const config = {
     host: process.env.MYSQL_HOST || 'localhost',
-    user: process.env.MYSQL_USERD || 'dev',
+    user: process.env.MYSQL_USER || 'dev',
     password: process.env.MYSQL_PASS || 'devpass',
     database: process.env.MYSQL_DB || 'pradb',
     waitForConnections: true,
