@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import _ from 'lodash';
 
 import { PatchMemberTypeRequest } from 'src/typedefs/memberType';

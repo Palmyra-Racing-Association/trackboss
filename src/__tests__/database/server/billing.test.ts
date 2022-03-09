@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import _ from 'lodash';
 
 import { Bill, GetBillListRequestFilters } from 'src/typedefs/bill';

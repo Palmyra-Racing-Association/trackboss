@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { PatchBikeRequest } from 'src/typedefs/bike';
 import { getBike, getBikeList, insertBike, patchBike, deleteBike } from '../../../database/bike';
 import { mockQuery } from './mockQuery';

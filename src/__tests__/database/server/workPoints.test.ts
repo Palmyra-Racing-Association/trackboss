@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { getWorkPointsByMember, getWorkPointsByMembership } from '../../../database/workPoints';
 import { mockQuery } from './mockQuery';
 

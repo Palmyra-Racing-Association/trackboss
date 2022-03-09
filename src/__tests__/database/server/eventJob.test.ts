@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import _ from 'lodash';
 
 import { PatchEventJobRequest } from 'src/typedefs/eventJob';

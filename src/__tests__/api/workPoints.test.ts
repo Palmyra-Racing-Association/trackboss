@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import _ from 'lodash';
 import supertest from 'supertest';
 import { createVerifier } from '../../util/auth';

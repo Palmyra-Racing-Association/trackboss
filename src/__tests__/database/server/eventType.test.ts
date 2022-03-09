@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { PatchEventTypeRequest } from 'src/typedefs/eventType';
 import { getEventType, getEventTypeList, insertEventType, patchEventType } from '../../../database/eventType';
 import { mockQuery } from './mockQuery';
