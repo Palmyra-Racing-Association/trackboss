@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 import { EventType, PatchEventTypeRequest, PostNewEventTypeRequest } from '../typedefs/eventType';
 
 export const GET_EVENT_TYPE_LIST_SQL =
@@ -17,7 +17,7 @@ export async function insertEventType(req: PostNewEventTypeRequest): Promise<num
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_EVENT_TYPE_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_EVENT_TYPE_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -42,7 +42,7 @@ export async function getEventType(id: number): Promise<EventType> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_EVENT_TYPE_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_EVENT_TYPE_SQL, values);
     } catch (e) {
         logger.error(`DB error getting event type: ${e}`);
         throw new Error('internal server error');
@@ -67,7 +67,7 @@ export async function getEventTypeList(): Promise<EventType[]> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting event type list: ${e}`);
         throw new Error('internal server error');
@@ -86,7 +86,7 @@ export async function patchEventType(id: number, req: PatchEventTypeRequest): Pr
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_EVENT_TYPE_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_EVENT_TYPE_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {

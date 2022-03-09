@@ -7,7 +7,7 @@ import {
 } from 'src/typedefs/boardMemberType';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 
 export const INSERT_BOARD_MEMBER_TYPE_SQL = 'INSERT INTO board_member_title(title) VALUES (?)';
 export const GET_BOARD_MEMBER_TYPE_LIST_SQL = 'SELECT * FROM board_member_title';
@@ -20,7 +20,7 @@ export async function insertBoardMemberType(req: PostNewBoardMemberTypeRequest):
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_BOARD_MEMBER_TYPE_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_BOARD_MEMBER_TYPE_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -46,7 +46,7 @@ export async function getBoardMemberTypeList(): Promise<boardMemberType[]> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting board member type list: ${e}`);
         throw new Error('internal server error');
@@ -63,7 +63,7 @@ export async function getBoardMemberType(id: number): Promise<boardMemberType> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_BOARD_MEMBER_TYPE_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_BOARD_MEMBER_TYPE_SQL, values);
     } catch (e) {
         logger.error(`DB error getting board member type: ${e}`);
         throw new Error('internal server error');
@@ -84,7 +84,7 @@ export async function patchBoardMemberType(id: number, req: PatchBoardMemberType
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_BOARD_MEMBER_TYPE_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_BOARD_MEMBER_TYPE_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -112,7 +112,7 @@ export async function deleteBoardMemberType(id: number): Promise<void> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(DELETE_BOARD_MEMBER_TYPE_SQL, values);
+        [result] = await getPool().query<OkPacket>(DELETE_BOARD_MEMBER_TYPE_SQL, values);
     } catch (e) {
         logger.error(`DB error deleting board member type: ${e}`);
         throw new Error('internal server error');

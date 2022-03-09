@@ -1,4 +1,4 @@
-import { PoolConnection, QueryOptions } from 'mysql2/promise';
+import { Pool, PoolConnection, QueryOptions } from 'mysql2/promise';
 import { mock } from 'jest-mock-extended';
 
 import {
@@ -89,7 +89,7 @@ import {
     PATCH_BILL_SQL,
 } from '../../../database/billing';
 
-import pool from '../../../database/pool';
+import * as pool from '../../../database/pool';
 import * as bikeHelpers from './mockHelpers/bike';
 import * as memberHelpers from './mockHelpers/member';
 import * as eventHelpers from './mockHelpers/event';
@@ -243,12 +243,11 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
     }
 };
 
-const generateMockConnQuery = () => {
-    const mockedType = mock<PoolConnection>();
-    jest.spyOn(pool, 'getConnection').mockResolvedValue(mockedType);
-    return mockedType.query.mockImplementation(mockQueryImplementation);
-};
+const mockPool = mock<Pool>();
+const mockConn = mock<PoolConnection>();
+jest.spyOn(pool, 'getPool').mockReturnValue(mockPool);
+mockPool.getConnection.mockResolvedValue(mockConn);
 
-export const mockQuery = jest.spyOn(pool, 'query').mockImplementation(mockQueryImplementation);
+export const mockQuery = mockPool.query.mockImplementation(mockQueryImplementation);
 
-export const mockConnQuery = generateMockConnQuery();
+export const mockConnQuery = mockConn.query.mockImplementation(mockQueryImplementation);

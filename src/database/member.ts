@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 import { Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
 
 // Map the API values for the member types to the DB values
@@ -41,7 +41,7 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_MEMBER_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_MEMBER_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -76,7 +76,7 @@ export async function getMemberList(type?: string): Promise<Member[]> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting member list: ${e}`);
         throw new Error('internal server error');
@@ -119,7 +119,7 @@ export async function getMember(searchParam: string): Promise<Member> {
     }
 
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting member: ${e}`);
         throw new Error('internal server error');
@@ -170,7 +170,7 @@ export async function patchMember(id: string, req: PatchMemberRequest): Promise<
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_MEMBER_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_MEMBER_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -197,7 +197,7 @@ export async function getValidActors(member: number): Promise<number[]> {
     const values = [member, member];
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_VALID_ACTORS_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_VALID_ACTORS_SQL, values);
     } catch (e) {
         logger.error(`DB error getting valid actors: ${e}`);
         throw new Error('internal server error');

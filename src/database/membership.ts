@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 import {
     Membership,
     PatchMembershipRequest,
@@ -45,7 +45,7 @@ export async function insertMembership(req: PostNewMembershipRequest): Promise<n
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_MEMBERSHIP_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_MEMBERSHIP_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -80,7 +80,7 @@ export async function getMembershipList(status?: string): Promise<Membership[]> 
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting membership list: ${e}`);
         throw new Error('internal server error');
@@ -107,7 +107,7 @@ export async function getMembership(id: number): Promise<Membership> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_MEMBERSHIP_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_MEMBERSHIP_SQL, values);
     } catch (e) {
         logger.error(`DB error getting membership: ${e}`);
         throw new Error('internal server error');
@@ -150,7 +150,7 @@ export async function patchMembership(id: number, req: PatchMembershipRequest): 
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_MEMBERSHIP_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_MEMBERSHIP_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -190,7 +190,7 @@ export async function registerMembership(req: PostRegisterMembershipRequest): Pr
 
     // Use a single connection for sequential queries with SQL variables
     // (variables are session-scoped)
-    const conn = await pool.getConnection();
+    const conn = await getPool().getConnection();
     try {
         try {
             await conn.query<OkPacket>(REGISTER_MEMBERSHIP_SQL, values);
@@ -227,7 +227,7 @@ export async function registerMembership(req: PostRegisterMembershipRequest): Pr
 export async function getRegistration(memberId: number): Promise<Registration> {
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_REGISTRATION_SQL, [memberId]);
+        [results] = await getPool().query<RowDataPacket[]>(GET_REGISTRATION_SQL, [memberId]);
     } catch (e) {
         logger.error(`DB error getting registration: ${e}`);
         throw new Error('internal server error');
