@@ -8,8 +8,8 @@ const config = {
     password: process.env.MYSQL_PASS || 'devpass',
     database: process.env.MYSQL_DB || 'pradb',
     waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
+    connectionLimit: Number(process.env.MYSQL_CONN_LIMIT) || 10,
+    queueLimit: Number(process.env.MYSQL_QUEUE_LIMIT) || 0,
 };
 
 export default config;

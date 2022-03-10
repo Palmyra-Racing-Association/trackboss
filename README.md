@@ -21,4 +21,14 @@ In order for the server to function, it requires a `.env` file at the top level 
   - This variable is the password of the user to interact with the database
   - For development, we've been using `devpass`
 
-`PORT` can also be included in the file, but defaults to `8080` if not present.
+Additionally, the following values are optional:
+
+- `PORT`
+  - The port the server will be listening on
+  - Default: `8080`
+- `MYSQL_CONN_LIMIT`
+  - The maximum number of active connections the server can maintain with the database at any one time
+  - Default: `10`
+- `MYSQL_QUEUE_LIMIT`
+  - The maximum number of server tasks that can wait for an active connection to the database if they are all in use
+  - Default: `0` (which in this case actually means "unlimited" - see [here](https://github.com/mysqljs/mysql#pool-options))
