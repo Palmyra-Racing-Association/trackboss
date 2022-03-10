@@ -156,6 +156,7 @@ describe('POST /membership/new', () => {
         expect(mockInsertMembership).toHaveBeenCalled();
         expect(res.body.reason).toBe('internal server error');
     });
+
     it('Returns 400 on bad input', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`).set('Authorization', 'Bearer admin');
         expect(res.status).toBe(400);
@@ -214,6 +215,7 @@ describe('POST /membership/register', () => {
         expect(mockRegisterMembership).toHaveBeenCalled();
         expect(res.body.reason).toBe('internal server error');
     });
+
     it('Returns 400 on bad input', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/register`);
         expect(res.status).toBe(400);
