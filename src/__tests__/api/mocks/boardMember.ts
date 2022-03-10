@@ -1,24 +1,24 @@
 import _ from 'lodash';
-import { BoardMember, PostNewBoardMemberRequest } from '../../../typedefs/boardMember';
+import { BoardMember, PatchBoardMemberRequest, PostNewBoardMemberRequest } from '../../../typedefs/boardMember';
 import * as boardMember from '../../../database/boardMember';
 
 export const boardMemberList: BoardMember[] = [
     {
         boardId: 0,
         title: 'President',
-        year: 2022,
+        year: '2022',
         memberId: 0,
     },
     {
         boardId: 1,
-        title: 'President',
-        year: 2022,
+        title: 'Secretary',
+        year: '2022',
         memberId: 1,
     },
     {
         boardId: 2,
         title: 'President',
-        year: 2022,
+        year: '2021',
         memberId: 2,
     },
 ];
@@ -52,12 +52,49 @@ export const mockInsertBoardMember = jest.spyOn(boardMember, 'insertBoardMember'
 export const mockGetBoardMember = jest.spyOn(boardMember, 'getBoardMember')
     .mockImplementation((id: number): Promise<BoardMember> => {
         let returnMemeber: BoardMember[] = [];
-        // if (id === 400) {
-        //     throw new Error('internal server error');
-        // }
+        if (id === 400) {
+            throw new Error('internal server error');
+        }
         returnMemeber = _.filter(boardMemberList, (mem: BoardMember) => mem.boardId === id);
         if (returnMemeber.length === 0) {
             throw new Error('not found');
         }
         return Promise.resolve(returnMemeber[0]);
     });
+
+export const mockGetBoardMemberList =
+    jest.spyOn(boardMember, 'getBoardMemberList').mockImplementationOnce((): Promise<BoardMember[]> => {
+        throw new Error('internal server error');
+    }).mockImplementation((year?: string): Promise<BoardMember[]> => {
+        let board: BoardMember[];
+        if (typeof year === 'undefined') {
+            board = boardMemberList;
+        } else {
+            board = _.filter(boardMemberList, (mem: BoardMember) => mem.year === year);
+        }
+        return Promise.resolve(board);
+    });
+
+export const mockPatchBoardMember = jest.spyOn(boardMember, 'patchBoardMember').mockImplementationOnce(() => {
+    throw new Error('internal server');
+}).mockImplementationOnce(async (): Promise<void> => {
+    throw new Error('user input error');
+}).mockImplementation(async (boardId: number, req: PatchBoardMemberRequest): Promise<void> => {
+    const filtered = _.filter(boardMemberList, (mem: BoardMember) => mem.boardId === boardId);
+    if (filtered.length === 0) {
+        throw new Error('not found');
+    }
+    boardMemberList[boardId] = {
+        ...boardMemberList[boardId],
+        ...req,
+    };
+});
+
+export const mockDeleteBoardMember = jest.spyOn(boardMember, 'deleteBoardMember').mockImplementationOnce(() => {
+    throw new Error('internal server');
+}).mockImplementation(async (boardId: number): Promise<void> => {
+    const deleted = _.remove(boardMemberList, (mem: BoardMember) => mem.boardId === boardId);
+    if (deleted.length === 0) {
+        throw new Error('not found');
+    }
+});

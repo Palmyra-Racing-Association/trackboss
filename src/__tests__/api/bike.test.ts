@@ -190,7 +190,7 @@ describe('PATCH /bike/:bikeId', () => {
 
     it('Returns 401 for no token', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/0`);
-        expect(mockDeleteBike).not.toHaveBeenCalled();
+        expect(mockPatchBike).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
@@ -198,7 +198,7 @@ describe('PATCH /bike/:bikeId', () => {
     it('Returns 401 for invalid token', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/0`).set('Authorization', 'Bearer invalidtoken');
         expect(mockInvalidToken).toHaveBeenCalled();
-        expect(mockDeleteBike).not.toHaveBeenCalled();
+        expect(mockPatchBike).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('not authorized');
     });
