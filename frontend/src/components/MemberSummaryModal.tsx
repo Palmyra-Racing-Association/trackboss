@@ -226,6 +226,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <UnorderedList pl={10}>
                                         {
                                             props.memberFamily.map((member) => (
+
                                                 member.memberId === selectedMember.memberId ? <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
                                                     : <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName}`}</ListItem>
                                             ))

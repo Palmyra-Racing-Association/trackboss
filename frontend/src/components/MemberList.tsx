@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/no-unused-prop-types */
 import { useDisclosure } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { createRef, RefObject, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Bike } from '../../../src/typedefs/bike';
 import { Member } from '../../../src/typedefs/member';
@@ -105,7 +107,7 @@ const customStyles = {
     },
 };
 
-function MemberList() {
+export default function MemberList() {
     const { onClose, isOpen, onOpen } = useDisclosure();
     const [selectedMember, setSelectedMember] = useState<Member>();
     const [cells, setCells] = useState<Member[]>([]);
@@ -117,7 +119,7 @@ function MemberList() {
         getData();
     }, []);
     return (
-        <div data-testid="table">
+        <div>
             <DataTable
                 columns={columns}
                 data={cells}
@@ -148,5 +150,3 @@ function MemberList() {
         </div>
     );
 }
-
-export default MemberList;

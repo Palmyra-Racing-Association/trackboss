@@ -4,6 +4,36 @@ exports[`SignUpList component renders correctly 1`] = `
 <div
   data-testid="table"
 >
+  <button
+    aria-label="Print"
+    className="chakra-button css-4bawsc"
+    onClick={[Function]}
+    type="button"
+  >
+    <svg
+      aria-hidden={true}
+      fill="currentColor"
+      focusable={false}
+      height="1em"
+      stroke="currentColor"
+      strokeWidth="0"
+      style={
+        Object {
+          "color": undefined,
+        }
+      }
+      viewBox="0 0 16 16"
+      width="1em"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"
+      />
+      <path
+        d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"
+      />
+    </svg>
+  </button>
   <div
     className="sc-dlVxhl fSQziN"
   >
@@ -24,7 +54,7 @@ exports[`SignUpList component renders correctly 1`] = `
             role="row"
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-iqseJM hFfXd fvAeSn iwmeYY rdt_TableCol"
+              className="sc-hKwDye sc-eCImPb sc-iqseJM MoAup fvAeSn iwmeYY rdt_TableCol"
               data-column-id={1}
               onDragEnd={[Function]}
               onDragEnter={[Function]}
@@ -49,7 +79,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-iqseJM hFfXd fvAeSn iwmeYY rdt_TableCol"
+              className="sc-hKwDye sc-eCImPb sc-iqseJM MoAup fvAeSn iwmeYY rdt_TableCol"
               data-column-id={2}
               onDragEnd={[Function]}
               onDragEnter={[Function]}
@@ -74,7 +104,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-iqseJM hFfXd dKJxny crHzxA rdt_TableCol"
+              className="sc-hKwDye sc-eCImPb sc-iqseJM MoAup dKJxny crHzxA rdt_TableCol"
               data-column-id={3}
               onDragEnd={[Function]}
               onDragEnter={[Function]}
@@ -640,6 +670,144 @@ exports[`SignUpList component renders correctly 1`] = `
               </button>
             </div>
           </div>
+          <div
+            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            id="row-8"
+            onClick={[Function]}
+            onDoubleClick={[Function]}
+            role="row"
+            selected={false}
+            style={Object {}}
+          >
+            <div
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              data-column-id={1}
+              data-tag="allowRowEvents"
+              id="cell-1-undefined"
+              onDragEnd={[Function]}
+              onDragEnter={[Function]}
+              onDragLeave={[Function]}
+              onDragOver={[Function]}
+              onDragStart={[Function]}
+              role="gridcell"
+              style={Object {}}
+            >
+              <div
+                data-tag="allowRowEvents"
+              >
+                Stella Craig
+              </div>
+            </div>
+            <div
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              data-column-id={2}
+              data-tag="allowRowEvents"
+              id="cell-2-undefined"
+              onDragEnd={[Function]}
+              onDragEnter={[Function]}
+              onDragLeave={[Function]}
+              onDragOver={[Function]}
+              onDragStart={[Function]}
+              role="gridcell"
+              style={Object {}}
+            >
+              <div
+                data-tag="allowRowEvents"
+              >
+                Lawn Mowing
+              </div>
+            </div>
+            <div
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              data-column-id={3}
+              data-tag={null}
+              id="cell-3-undefined"
+              onDragEnd={[Function]}
+              onDragEnter={[Function]}
+              onDragLeave={[Function]}
+              onDragOver={[Function]}
+              onDragStart={[Function]}
+              role="gridcell"
+              style={Object {}}
+            >
+              <button
+                className="chakra-button css-5c2176"
+                onClick={[Function]}
+                type="button"
+              >
+                Verify
+              </button>
+            </div>
+          </div>
+          <div
+            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            id="row-9"
+            onClick={[Function]}
+            onDoubleClick={[Function]}
+            role="row"
+            selected={false}
+            style={Object {}}
+          >
+            <div
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              data-column-id={1}
+              data-tag="allowRowEvents"
+              id="cell-1-undefined"
+              onDragEnd={[Function]}
+              onDragEnter={[Function]}
+              onDragLeave={[Function]}
+              onDragOver={[Function]}
+              onDragStart={[Function]}
+              role="gridcell"
+              style={Object {}}
+            >
+              <div
+                data-tag="allowRowEvents"
+              >
+                Hudson Naylor
+              </div>
+            </div>
+            <div
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              data-column-id={2}
+              data-tag="allowRowEvents"
+              id="cell-2-undefined"
+              onDragEnd={[Function]}
+              onDragEnter={[Function]}
+              onDragLeave={[Function]}
+              onDragOver={[Function]}
+              onDragStart={[Function]}
+              role="gridcell"
+              style={Object {}}
+            >
+              <div
+                data-tag="allowRowEvents"
+              >
+                Lawn Mowing
+              </div>
+            </div>
+            <div
+              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              data-column-id={3}
+              data-tag={null}
+              id="cell-3-undefined"
+              onDragEnd={[Function]}
+              onDragEnter={[Function]}
+              onDragLeave={[Function]}
+              onDragOver={[Function]}
+              onDragStart={[Function]}
+              role="gridcell"
+              style={Object {}}
+            >
+              <button
+                className="chakra-button css-5c2176"
+                onClick={[Function]}
+                type="button"
+              >
+                Verify
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -687,6 +855,11 @@ exports[`SignUpList component renders correctly 1`] = `
           >
             30
           </option>
+          <option
+            value={24}
+          >
+            All Rows
+          </option>
         </select>
         <svg
           height="24"
@@ -706,7 +879,7 @@ exports[`SignUpList component renders correctly 1`] = `
       <span
         className="sc-bYoBSM sc-kLwhqv fXzwgx emVwZU"
       >
-        1-8 of 8
+        1-10 of 24
       </span>
       <div
         className="sc-ezbkAF kNbUsB"
@@ -764,10 +937,10 @@ exports[`SignUpList component renders correctly 1`] = `
           </svg>
         </button>
         <button
-          aria-disabled={true}
+          aria-disabled={false}
           aria-label="Next Page"
           className="sc-giYglK gPLhoV"
-          disabled={true}
+          disabled={false}
           id="pagination-next-page"
           onClick={[Function]}
           type="button"
@@ -790,10 +963,10 @@ exports[`SignUpList component renders correctly 1`] = `
           </svg>
         </button>
         <button
-          aria-disabled={true}
+          aria-disabled={false}
           aria-label="Last Page"
           className="sc-giYglK gPLhoV"
-          disabled={true}
+          disabled={false}
           id="pagination-last-page"
           onClick={[Function]}
           type="button"
