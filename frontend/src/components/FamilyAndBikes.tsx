@@ -16,7 +16,6 @@ import DeleteAlert from './DeleteAlert';
 import EditBikesModal from './EditBikeModal';
 import AddFamilyModal from './AddFamilyModal';
 import AddBikeModal from './AddBikeModal';
-import { getFormattedMemberList } from '../controller/member';
 
 interface cardProps {
     memberFamily: Member[],
@@ -62,20 +61,6 @@ export default function GeneralInfo(props: cardProps) {
         memberBikes[index].make = bikeMake;
         memberBikes[index].model = bikeModel;
         setMemberBikes(memberBikes);
-    }
-
-    function addMember(firstName: string, lastName: string, email: string) {
-        const members = getFormattedMemberList('TestToken');
-        const memberToAdd = members.find(
-            (mem) => mem.firstName === firstName &&
-            mem.lastName === lastName &&
-            mem.email === email,
-        );
-        if (memberToAdd) {
-            // call controller to add member to membership
-            // if successful
-            setMemberFamily(memberFamily.concat(memberToAdd));
-        }
     }
 
     function addBike(year: string, make: string, model: string) {
@@ -275,8 +260,6 @@ export default function GeneralInfo(props: cardProps) {
                     <AddFamilyModal
                         isOpen={isAddFamilyOpen}
                         onClose={onAddFamilyClose}
-                        // eslint-disable-next-line react/jsx-no-bind
-                        addMember={addMember}
                     />
                 )
             }

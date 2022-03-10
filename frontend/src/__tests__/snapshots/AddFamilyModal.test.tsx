@@ -3,10 +3,6 @@ import { BrowserRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 import AddFamilyModal from '../../components/AddFamilyModal';
 
-function add() {
-    // void function
-}
-
 function onClose() {
     // void function
 }
@@ -24,7 +20,7 @@ describe('add member modal', () => {
     it('renders correctly', () => {
         const header = renderer.create(
             <BrowserRouter>
-                <AddFamilyModal isOpen onClose={onClose} addMember={add} />
+                <AddFamilyModal isOpen onClose={onClose} />
             </BrowserRouter>,
         ).toJSON();
         expect(header).toMatchSnapshot();
