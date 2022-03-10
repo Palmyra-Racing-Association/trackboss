@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
-import { boardMember, PatchBoardMemberRequest, PostNewBoardMemberRequest } from 'src/typedefs/boardMember';
+import { BoardMember, PatchBoardMemberRequest, PostNewBoardMemberRequest } from 'src/typedefs/boardMember';
 
 import logger from '../logger';
 import { getPool } from './pool';
@@ -38,7 +38,7 @@ export async function insertBoardMember(req: PostNewBoardMemberRequest): Promise
     return result.insertId;
 }
 
-export async function getBoardMemberList(year?: string): Promise<boardMember[]> {
+export async function getBoardMemberList(year?: string): Promise<BoardMember[]> {
     let sql;
     let values: string[];
     if (typeof year !== 'undefined') {
@@ -65,7 +65,7 @@ export async function getBoardMemberList(year?: string): Promise<boardMember[]> 
     }));
 }
 
-export async function getBoardMember(id: number): Promise<boardMember> {
+export async function getBoardMember(id: number): Promise<BoardMember> {
     const values = [id];
 
     let results;

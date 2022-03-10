@@ -2164,8 +2164,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/boardMember"
-        400:
-          $ref: "#/components/responses/badRequestError"
         401:
           $ref: "#/components/responses/unauthorizedError"
         500:
@@ -2319,7 +2317,7 @@ paths:
           $ref: "#/components/responses/unauthorizedError"
         500:
           $ref: "#/components/responses/internalServerError"
-  /api/boardMember/{boardMemberTypeID}:
+  /api/boardMemberType/{boardMemberTypeID}:
     parameters:
       - name: boardMemberTypeID
         in: path
