@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 import { Bike, PatchBikeRequest, PostNewBikeRequest } from '../typedefs/bike';
 
 export const GET_BIKE_LIST_SQL = 'SELECT bike_id, year, make, model, membership_admin FROM v_bike';
@@ -17,7 +17,7 @@ export async function insertBike(req: PostNewBikeRequest): Promise<number> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_BIKE_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_BIKE_SQL, values);
     } catch (e) {
         logger.error(`DB error inserting bike: ${e}`);
         throw new Error('internal server error');
@@ -39,7 +39,7 @@ export async function getBikeList(membershipId?: number): Promise<Bike[]> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting bike list: ${e}`);
         throw new Error('internal server error');
@@ -59,7 +59,7 @@ export async function getBike(id: number): Promise<Bike> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_BIKE_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_BIKE_SQL, values);
     } catch (e) {
         logger.error(`DB error getting bike: ${e}`);
         throw new Error('internal server error');
@@ -83,7 +83,7 @@ export async function patchBike(id: number, req: PatchBikeRequest): Promise<void
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_BIKE_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_BIKE_SQL, values);
     } catch (e) {
         logger.error(`DB error patching bike: ${e}`);
         throw new Error('internal server error');
@@ -99,7 +99,7 @@ export async function deleteBike(id: number): Promise<void> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(DELETE_BIKE_SQL, values);
+        [result] = await getPool().query<OkPacket>(DELETE_BIKE_SQL, values);
     } catch (e) {
         logger.error(`DB error deleting bike: ${e}`);
         throw new Error('internal server error');

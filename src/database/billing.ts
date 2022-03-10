@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 import { Bill, GenerateSingleBillRequest, GetBillListRequestFilters, WorkPointThreshold } from '../typedefs/bill';
 
 export const GET_BILL_LIST_SQL = 'SELECT * FROM v_bill';
@@ -17,7 +17,7 @@ export async function generateBill(req: GenerateSingleBillRequest): Promise<numb
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(GENERATE_BILL_SQL, values);
+        [result] = await getPool().query<OkPacket>(GENERATE_BILL_SQL, values);
     } catch (e) {
         // FK violations are technically possible, but membership IDs should only have
         // been recently grabbed from the database anyway - no chance for user error
@@ -33,7 +33,7 @@ export async function getWorkPointThreshold(year: number): Promise<WorkPointThre
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_THRESHOLD_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_THRESHOLD_SQL, values);
     } catch (e) {
         logger.error(`DB error getting work point threshold: ${e}`);
         throw new Error('internal server error');
@@ -79,7 +79,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting bill list: ${e}`);
         throw new Error('internal server error');
@@ -100,7 +100,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
 export async function markBillEmailed(id: number): Promise<void> {
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_BILL_SQL, [id, 'CURDATE()', null]);
+        [result] = await getPool().query<OkPacket>(PATCH_BILL_SQL, [id, 'CURDATE()', null]);
     } catch (e) {
         logger.error(`DB error marking bill as emailed: ${e}`);
         throw new Error('internal server error');
@@ -114,7 +114,7 @@ export async function markBillEmailed(id: number): Promise<void> {
 export async function markBillPaid(id: number): Promise<void> {
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_BILL_SQL, [id, null, 1]);
+        [result] = await getPool().query<OkPacket>(PATCH_BILL_SQL, [id, null, 1]);
     } catch (e) {
         logger.error(`DB error marking bill as paid: ${e}`);
         throw new Error('internal server error');

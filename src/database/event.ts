@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 import { Event, PatchEventRequest, PostNewEventRequest } from '../typedefs/event';
 
 export const INSERT_EVENT_SQL = 'CALL sp_event_job_generation(?, ?, ?, ?, ?)';
@@ -17,7 +17,7 @@ export async function insertEvent(req: PostNewEventRequest): Promise<number> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_EVENT_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_EVENT_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -62,7 +62,7 @@ export async function getEventList(startDate?: string, endDate?: string): Promis
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting event list: ${e}`);
         throw new Error('internal server error');
@@ -83,7 +83,7 @@ export async function getEvent(id: number): Promise<Event> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_EVENT_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_EVENT_SQL, values);
     } catch (e) {
         logger.error(`DB error getting event: ${e}`);
         throw new Error('internal server error');
@@ -108,7 +108,7 @@ export async function patchEvent(id: number, req: PatchEventRequest): Promise<vo
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_EVENT_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_EVENT_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -136,7 +136,7 @@ export async function deleteEvent(id: number): Promise<void> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(DELETE_EVENT_SQL, values);
+        [result] = await getPool().query<OkPacket>(DELETE_EVENT_SQL, values);
     } catch (e) {
         logger.error(`DB error deleting event: ${e}`);
         throw new Error('internal server error');

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 import { EventJob, PatchEventJobRequest, PostNewEventJobRequest } from '../typedefs/eventJob';
 
 export const GET_EVENT_JOB_SQL = 'SELECT * FROM v_event_job WHERE event_job_id = ?';
@@ -15,7 +15,7 @@ export async function insertEventJob(req: PostNewEventJobRequest): Promise<numbe
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_EVENT_JOB_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_EVENT_JOB_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -40,7 +40,7 @@ export async function getEventJob(id: number): Promise<EventJob> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_EVENT_JOB_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_EVENT_JOB_SQL, values);
     } catch (e) {
         logger.error(`DB error getting event-job: ${e}`);
         throw new Error('internal server error');
@@ -63,7 +63,7 @@ export async function patchEventJob(id: number, req: PatchEventJobRequest): Prom
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_EVENT_JOB_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_EVENT_JOB_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -91,7 +91,7 @@ export async function deleteEventJob(id: number): Promise<void> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(DELETE_EVENT_JOB_SQL, values);
+        [result] = await getPool().query<OkPacket>(DELETE_EVENT_JOB_SQL, values);
     } catch (e) {
         logger.error(`DB error deleting event-job: ${e}`);
         throw new Error('internal server error');

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 import { JobType, PatchJobTypeRequest, PostNewJobTypeRequest } from '../typedefs/jobType';
 
 export const GET_JOB_TYPE_LIST_SQL = 'SELECT * FROM v_job_type';
@@ -27,7 +27,7 @@ export async function insertJobType(req: PostNewJobTypeRequest): Promise<number>
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_JOB_TYPE_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_JOB_TYPE_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -52,7 +52,7 @@ export async function getJobType(id: number): Promise<JobType> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_JOB_TYPE_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_JOB_TYPE_SQL, values);
     } catch (e) {
         logger.error(`DB error getting job type: ${e}`);
         throw new Error('internal server error');
@@ -84,7 +84,7 @@ export async function getJobTypeList(): Promise<JobType[]> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting job type list: ${e}`);
         throw new Error('internal server error');
@@ -122,7 +122,7 @@ export async function patchJobType(id: number, req: PatchJobTypeRequest): Promis
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_JOB_TYPE_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_JOB_TYPE_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {

@@ -4,7 +4,7 @@ import { OkPacket, RowDataPacket } from 'mysql2';
 import { Job, PatchJobRequest, PostNewJobRequest, GetJobListRequestFilters } from 'src/typedefs/job';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 
 export const GET_JOB_LIST_SQL = 'SELECT * FROM v_job';
 export const GET_JOB_SQL = `${GET_JOB_LIST_SQL} WHERE job_id = ?`;
@@ -20,7 +20,7 @@ export async function insertJob(req: PostNewJobRequest): Promise<number> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_JOB_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_JOB_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -85,7 +85,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting job list: ${e}`);
         throw new Error('internal server error');
@@ -113,7 +113,7 @@ export async function getJob(id: number): Promise<Job> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_JOB_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_JOB_SQL, values);
     } catch (e) {
         logger.error(`DB error getting job: ${e}`);
         throw new Error('internal server error');
@@ -146,7 +146,7 @@ export async function patchJob(id: number, req: PatchJobRequest): Promise<void> 
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_JOB_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_JOB_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -174,7 +174,7 @@ export async function deleteJob(id: number): Promise<void> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(DELETE_JOB_SQL, values);
+        [result] = await getPool().query<OkPacket>(DELETE_JOB_SQL, values);
     } catch (e) {
         logger.error(`DB error deleting job: ${e}`);
         throw new Error('internal server error');

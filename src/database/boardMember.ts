@@ -3,7 +3,7 @@ import { OkPacket, RowDataPacket } from 'mysql2';
 import { boardMember, PatchBoardMemberRequest, PostNewBoardMemberRequest } from 'src/typedefs/boardMember';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 
 export const INSERT_BOARD_MEMBER_SQL =
     'INSERT INTO board_member(year, member_id, board_title_id) VALUES (?, ?, ?)';
@@ -18,7 +18,7 @@ export async function insertBoardMember(req: PostNewBoardMemberRequest): Promise
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(INSERT_BOARD_MEMBER_SQL, values);
+        [result] = await getPool().query<OkPacket>(INSERT_BOARD_MEMBER_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -51,7 +51,7 @@ export async function getBoardMemberList(year?: string): Promise<boardMember[]> 
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting board member list: ${e}`);
         throw new Error('internal server error');
@@ -70,7 +70,7 @@ export async function getBoardMember(id: number): Promise<boardMember> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_BOARD_MEMBER_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_BOARD_MEMBER_SQL, values);
     } catch (e) {
         logger.error(`DB error getting board member: ${e}`);
         throw new Error('internal server error');
@@ -93,7 +93,7 @@ export async function patchBoardMember(id: number, req: PatchBoardMemberRequest)
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_BOARD_MEMBER_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_BOARD_MEMBER_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -121,7 +121,7 @@ export async function deleteBoardMember(id: number): Promise<void> {
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(DELETE_BOARD_MEMBER_SQL, values);
+        [result] = await getPool().query<OkPacket>(DELETE_BOARD_MEMBER_SQL, values);
     } catch (e) {
         logger.error(`DB error deleting board member: ${e}`);
         throw new Error('internal server error');

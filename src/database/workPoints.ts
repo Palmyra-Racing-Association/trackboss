@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { RowDataPacket } from 'mysql2';
 import { WorkPoints } from 'src/typedefs/workPoints';
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 
 export const GET_WORK_POINTS_BY_MEMBER_SQL =
     'select total_points from v_work_points_by_member where member_id = ? and year = ?';
@@ -14,7 +14,7 @@ export async function getWorkPointsByMember(memberId: number, year: number): Pro
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_WORK_POINTS_BY_MEMBER_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_WORK_POINTS_BY_MEMBER_SQL, values);
     } catch (e) {
         logger.error(`DB error getting work points for member: ${e}`);
         throw new Error('internal server error');
@@ -33,7 +33,7 @@ export async function getWorkPointsByMembership(membershipId: number, year: numb
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_WORK_POINTS_BY_MEMBERSHIP_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_WORK_POINTS_BY_MEMBERSHIP_SQL, values);
     } catch (e) {
         logger.error(`DB error getting work points for membership: ${e}`);
         throw new Error('internal server error');

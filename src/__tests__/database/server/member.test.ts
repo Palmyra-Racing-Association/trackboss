@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { PatchMemberRequest } from 'src/typedefs/member';
 import { getMember, getMemberList, getValidActors, insertMember, patchMember } from '../../../database/member';
 import { mockQuery } from './mockQuery';

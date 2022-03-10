@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import _ from 'lodash';
 
 import { PatchMembershipRequest } from 'src/typedefs/membership';

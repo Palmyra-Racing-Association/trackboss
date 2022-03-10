@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
-import pool from './pool';
+import { getPool } from './pool';
 import { MemberType, PatchMemberTypeRequest } from '../typedefs/memberType';
 
 export const GET_MEMBER_TYPE_LIST_SQL = 'SELECT * FROM v_member_type';
@@ -14,7 +14,7 @@ export async function getMemberType(id: number): Promise<MemberType> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(GET_MEMBER_TYPE_SQL, values);
+        [results] = await getPool().query<RowDataPacket[]>(GET_MEMBER_TYPE_SQL, values);
     } catch (e) {
         logger.error(`DB error getting member type: ${e}`);
         throw new Error('internal server error');
@@ -37,7 +37,7 @@ export async function getMemberTypeList(): Promise<MemberType[]> {
 
     let results;
     try {
-        [results] = await pool.query<RowDataPacket[]>(sql, values);
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting member type list: ${e}`);
         throw new Error('internal server error');
@@ -54,7 +54,7 @@ export async function patchMemberType(id: number, req: PatchMemberTypeRequest): 
 
     let result;
     try {
-        [result] = await pool.query<OkPacket>(PATCH_MEMBER_TYPE_SQL, values);
+        [result] = await getPool().query<OkPacket>(PATCH_MEMBER_TYPE_SQL, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
