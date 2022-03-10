@@ -69,9 +69,6 @@ membership.get('/list', async (req: Request, res: Response) => {
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
-            } else if (e.message === 'Forbidden') {
-                res.status(403);
-                response = { reason: 'forbidden' };
             } else {
                 res.status(500);
                 response = { reason: 'internal server error' };

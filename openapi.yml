@@ -726,8 +726,6 @@ paths:
                   $ref: "#/components/schemas/membership"
         401:
           $ref: "#/components/responses/unauthorizedError"
-        403:
-          $ref: "#/components/responses/forbiddenError"
         500:
           $ref: "#/components/responses/internalServerError"
   /api/membership/register:
