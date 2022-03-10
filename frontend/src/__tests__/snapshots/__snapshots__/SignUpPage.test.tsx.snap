@@ -139,7 +139,7 @@ Array [
                 role="row"
               >
                 <div
-                  className="sc-hKwDye sc-eCImPb sc-iqseJM jOqWMo fvAeSn iwmeYY rdt_TableCol"
+                  className="sc-hKwDye sc-eCImPb sc-iqseJM MoAup fvAeSn iwmeYY rdt_TableCol"
                   data-column-id={1}
                   onDragEnd={[Function]}
                   onDragEnter={[Function]}
@@ -164,7 +164,7 @@ Array [
                   </div>
                 </div>
                 <div
-                  className="sc-hKwDye sc-eCImPb sc-iqseJM jOqWMo fvAeSn iwmeYY rdt_TableCol"
+                  className="sc-hKwDye sc-eCImPb sc-iqseJM MoAup fvAeSn iwmeYY rdt_TableCol"
                   data-column-id={2}
                   onDragEnd={[Function]}
                   onDragEnter={[Function]}
@@ -189,7 +189,7 @@ Array [
                   </div>
                 </div>
                 <div
-                  className="sc-hKwDye sc-eCImPb sc-iqseJM jOqWMo dKJxny crHzxA rdt_TableCol"
+                  className="sc-hKwDye sc-eCImPb sc-iqseJM MoAup dKJxny crHzxA rdt_TableCol"
                   data-column-id={3}
                   onDragEnd={[Function]}
                   onDragEnter={[Function]}

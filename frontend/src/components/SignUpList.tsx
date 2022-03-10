@@ -1,4 +1,4 @@
-import { IconButton } from '@chakra-ui/react';
+import { IconButton, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsPrinter } from 'react-icons/bs';
@@ -17,6 +17,24 @@ const columns: any = [
     {
         button: true,
         cell: (row: { verified: boolean }) => (<VerifyButton verified={row.verified} />),
+        minWidth: '10em',
+        style: {
+            paddingRight: '2em',
+        },
+    },
+];
+
+const printingColumns: any = [
+    {
+        name: 'Name',
+        selector: (row: { name: string; }) => row.name,
+    },
+    {
+        name: 'Job',
+        selector: (row: { job: string; }) => row.job,
+    },
+    {
+        cell: () => (<Text align="right" fontSize="xl">Sign Here: __________________</Text>),
         minWidth: '10em',
         style: {
             paddingRight: '2em',
@@ -45,7 +63,8 @@ const customStyles = {
     headCells: {
         style: {
             paddingTop: '2em',
-            fontSize: '3.5em',
+            fontSize: '2.7em',
+            fontWeight: 'bold',
             backgroundColor: '#f9f9f9',
             color: '#626262',
         },
@@ -64,6 +83,8 @@ const paginationComponentOptions = {
 
 export default function SignUpList() {
     const [cells, setCells] = useState([] as Worker[]);
+    const [printing, setPrinting] = useState<boolean>(false);
+
     useEffect(() => {
         async function getData() {
             const formattedResponse = getFormattedSignUpListLocal();
@@ -79,11 +100,22 @@ export default function SignUpList() {
                 aria-label="Print"
                 background="orange.300"
                 color="white"
-                onClick={() => window.print()}
+                onClick={
+                    () => {
+                        setPrinting(true);
+                        setTimeout(() => {
+                            // Allows the data table to re-render before the print window opens
+                            window.print();
+                        }, 0);
+                        window.onafterprint = function () {
+                            setPrinting(false);
+                        };
+                    }
+                }
                 icon={<BsPrinter />}
             />
             <DataTable
-                columns={columns}
+                columns={printing ? printingColumns : columns}
                 data={cells}
                 fixedHeaderScrollHeight="300px"
                 highlightOnHover
