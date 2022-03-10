@@ -1,6 +1,5 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-shadow */
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, momentLocalizer } from 'react-big-calendar';
@@ -92,6 +91,7 @@ export default function EventCalendar(props: EventCalendarProps) {
                     {
                         toolbar: React.memo(({ localizer, ...props }, children) => (
                             <RenderToolbar
+                                // eslint-disable-next-line react/jsx-props-no-spreading
                                 {...props}
                                 localizer={
                                     {

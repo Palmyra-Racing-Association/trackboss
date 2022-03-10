@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -21,7 +21,10 @@ import {
     ButtonGroup,
     Input,
     Select,
+    useToast,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../contexts/UserContext';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
 import memberHandlers from '../mocks/memberHandlers';
@@ -47,6 +50,14 @@ async function handlePatchMemberType(memberInfo: Member, editedMemberType: strin
     // if (updatedMember.reason) {
     //   there was an error, show error message
     // }
+}
+
+async function deactivateMember(memberInfo: Member) {
+    // const response = await patchMember()
+    // if (response.reason) {
+    //   there was an error, show error message
+    // }
+    return true; // to indicate success
 }
 
 async function handlePatchMemberContactInfo(
@@ -85,8 +96,16 @@ async function handlePatchMemberContactInfo(
 }
 
 export default function MemberSummaryModal(props: modalProps) {
+    const toast = useToast();
+    const navigate = useNavigate();
+    const navigateToCalendar = () => {
+        const path = '/calendar';
+        navigate(path);
+    };
+
+    const { state, update } = useContext(UserContext);
+
     const [selectedMember, setSelectedMember] = useState<Member>();
-    // const [family, setFamily] = useState<Member[]>();
     const [bikes, setBikes] = useState<Bike[]>();
 
     const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
@@ -108,7 +127,6 @@ export default function MemberSummaryModal(props: modalProps) {
         async function setModalData() {
             setSelectedMember(props.memberInfo);
             setEditedMemberType(props.memberInfo.memberType);
-            // setFamily(props.memberFamily);
             setBikes(props.memberBikes);
         }
         setModalData();
@@ -210,17 +228,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                     </SimpleGrid>
                                     <HStack>
                                         <Text textAlign="left" fontSize="3xl" fontWeight="bold">Family</Text>
-                                        {/* {
-                                                memberInfo.membershipAdmin === 'true' && (
-                                                    <Button
-                                                        textDecoration="underline"
-                                                        color="orange"
-                                                        variant="ghost"
-                                                    >
-                                                        Edit
-                                                    </Button>
-                                                )
-                                            } */}
                                     </HStack>
                                     <Text textAlign="left" fontSize="1xl" fontWeight="bold">Members</Text>
                                     <UnorderedList pl={10}>
@@ -373,39 +380,69 @@ export default function MemberSummaryModal(props: modalProps) {
                                         )
                                     }
                                     <Container pt={20} mb={20} />
-                                    <Text textAlign="left" fontSize="3xl" fontWeight="bold">Actions</Text>
-                                    <HStack align="left">
-                                        <Button
-                                            variant="outline"
-                                            style={
-                                                {
-                                                    whiteSpace: 'normal',
-                                                    wordWrap: 'break-word',
-                                                }
-                                            }
-                                        >
-                                            Assign To Event
-                                        </Button>
-                                        <Button
-                                            backgroundColor="red"
-                                            variant="outline"
-                                            style={
-                                                {
-                                                    whiteSpace: 'normal',
-                                                    wordWrap: 'break-word',
-                                                }
-                                            }
-                                        >
-                                            De-Activate Member
-                                        </Button>
-                                    </HStack>
-                                    <Button
-                                        textDecoration="underline"
-                                        color="orange"
-                                        variant="ghost"
-                                    >
-                                        Reset Password
-                                    </Button>
+                                    {
+                                        selectedMember.membershipAdmin === 'true' && (
+                                            <VStack align="left">
+                                                <Text textAlign="left" fontSize="3xl" fontWeight="bold">Actions</Text>
+                                                <HStack align="left">
+                                                    <Button
+                                                        variant="outline"
+                                                        style={
+                                                            {
+                                                                whiteSpace: 'normal',
+                                                                wordWrap: 'break-word',
+                                                            }
+                                                        }
+                                                        onClick={
+                                                            () => {
+                                                                navigateToCalendar();
+                                                                // Sign in as the selected user (to sign them up for events), and store the original user as storedUser
+                                                                update({ loggedIn: true, token: state.token, user: selectedMember, storedUser: state.user });
+                                                            }
+                                                        }
+                                                    >
+                                                        Assign To Event
+                                                    </Button>
+                                                    <Button
+                                                        backgroundColor="red"
+                                                        variant="outline"
+                                                        style={
+                                                            {
+                                                                whiteSpace: 'normal',
+                                                                wordWrap: 'break-word',
+                                                            }
+                                                        }
+                                                        onClick={
+                                                            async () => {
+                                                                const res = await deactivateMember(selectedMember);
+                                                                toast({
+                                                                    variant: 'subtle',
+                                                                    title: res ? 'Member Deactivated.' : 'Action Failed',
+                                                                    status: res ? 'success' : 'error',
+                                                                    duration: 3000,
+                                                                    isClosable: true,
+                                                                });
+                                                            }
+                                                        }
+                                                    >
+                                                        De-Activate Member
+                                                    </Button>
+                                                </HStack>
+                                                {/* <Button
+                                                    textDecoration="underline"
+                                                    color="orange"
+                                                    variant="ghost"
+                                                    onClick={
+                                                        () => {
+
+                                                        }
+                                                    }
+                                                >
+                                                    Reset Password
+                                                </Button> */}
+                                            </VStack>
+                                        )
+                                    }
                                 </VStack>
                             </SimpleGrid>
                         )

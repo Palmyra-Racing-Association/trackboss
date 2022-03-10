@@ -1,6 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import MemberSummaryModal from '../../components/MemberSummaryModal';
 import { Member } from '../../../../src/typedefs/member';
 import { Bike } from '../../../../src/typedefs/bike';
@@ -95,13 +96,17 @@ jest.mock('@chakra-ui/react', () => (
 describe('member summary modal', () => {
     it('renders all props correctly', () => {
         const modal = render(
-            <MemberSummaryModal
-                isOpen
-                onClose={onClose}
-                memberInfo={member}
-                memberFamily={memberFamily}
-                memberBikes={memberBikes}
-            />,
+            <BrowserRouter>
+                <MemberSummaryModal
+                    isOpen
+                    onClose={onClose}
+                    memberInfo={member}
+                    memberFamily={memberFamily}
+                    memberBikes={memberBikes}
+                />
+                ,
+            </BrowserRouter>,
+
         );
         expect(modal).toMatchSnapshot();
     });
