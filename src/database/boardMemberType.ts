@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
 import {
-    boardMemberType,
+    BoardMemberType,
     PostNewBoardMemberTypeRequest,
     PatchBoardMemberTypeRequest,
 } from 'src/typedefs/boardMemberType';
@@ -40,7 +40,7 @@ export async function insertBoardMemberType(req: PostNewBoardMemberTypeRequest):
     return result.insertId;
 }
 
-export async function getBoardMemberTypeList(): Promise<boardMemberType[]> {
+export async function getBoardMemberTypeList(): Promise<BoardMemberType[]> {
     const sql = GET_BOARD_MEMBER_TYPE_LIST_SQL;
     const values: string[] = [];
 
@@ -58,7 +58,7 @@ export async function getBoardMemberTypeList(): Promise<boardMemberType[]> {
     }));
 }
 
-export async function getBoardMemberType(id: number): Promise<boardMemberType> {
+export async function getBoardMemberType(id: number): Promise<BoardMemberType> {
     const values = [id];
 
     let results;
