@@ -6,19 +6,19 @@ export const boardMemberList: BoardMember[] = [
     {
         boardId: 0,
         title: 'President',
-        year: '2022',
+        year: 2022,
         memberId: 0,
     },
     {
         boardId: 1,
         title: 'Secretary',
-        year: '2022',
+        year: 2022,
         memberId: 1,
     },
     {
         boardId: 2,
         title: 'President',
-        year: '2021',
+        year: 2021,
         memberId: 2,
     },
 ];
@@ -70,7 +70,7 @@ export const mockGetBoardMemberList =
         if (typeof year === 'undefined') {
             board = boardMemberList;
         } else {
-            board = _.filter(boardMemberList, (mem: BoardMember) => mem.year === year);
+            board = _.filter(boardMemberList, (mem: BoardMember) => mem.year === Number(year));
         }
         return Promise.resolve(board);
     });
