@@ -17,6 +17,7 @@ describe('getPool()', () => {
         process.env.MYSQL_QUEUE_LIMIT = '1';
         expect(getPool).not.toThrowError();
     });
+
     it('Succeeds in creation with only required env vars', () => {
         expect(getPool).not.toThrowError();
     });
