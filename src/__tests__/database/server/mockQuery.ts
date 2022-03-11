@@ -11,7 +11,6 @@ import {
 } from '../../../database/bike';
 import {
     GET_MEMBER_LIST_SQL,
-    GET_MEMBER_LIST_BY_TYPE_SQL,
     GET_MEMBER_SQL,
     INSERT_MEMBER_SQL,
     PATCH_MEMBER_SQL,
@@ -120,7 +119,6 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return bikeHelpers.deleteBikeResponse(values[0]);
         case INSERT_MEMBER_SQL:
             return memberHelpers.insertMemberResponse(values[0]);
-        case GET_MEMBER_LIST_BY_TYPE_SQL:
         case GET_MEMBER_LIST_SQL:
             return memberHelpers.getMemberListResponse(values);
         case GET_MEMBER_UUID_SQL:
@@ -238,6 +236,9 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             }
             if (sqlString.includes(GET_BILL_LIST_SQL)) {
                 return billingHelpers.getBillListResponse(values);
+            }
+            if (sqlString.includes(GET_MEMBER_LIST_SQL)) {
+                return memberHelpers.getMemberListResponse(values);
             }
             return Promise.resolve();
     }

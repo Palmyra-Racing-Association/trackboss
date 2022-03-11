@@ -36,7 +36,7 @@ describe('insertMember()', () => {
 
 describe('getMemberList()', () => {
     it('Returns an unfiltered list of members', async () => {
-        const results = await getMemberList();
+        const results = await getMemberList({});
         expect(mockQuery).toHaveBeenCalled();
         expect(results.length).toBeGreaterThan(1);
     });
@@ -45,7 +45,7 @@ describe('getMemberList()', () => {
         const type = 'admin';
         const expResultType = 'Admin';
 
-        const results = await getMemberList(type);
+        const results = await getMemberList({ type });
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
             expect(result.memberType).toBe(expResultType);
@@ -56,7 +56,7 @@ describe('getMemberList()', () => {
         const type = 'membershipAdmin';
         const expResultType = 'Membership Admin';
 
-        const results = await getMemberList(type);
+        const results = await getMemberList({ type });
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
             expect(result.memberType).toBe(expResultType);
@@ -67,7 +67,7 @@ describe('getMemberList()', () => {
         const type = 'member';
         const expResultType = 'Member';
 
-        const results = await getMemberList(type);
+        const results = await getMemberList({ type });
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
             expect(result.memberType).toBe(expResultType);
@@ -78,7 +78,7 @@ describe('getMemberList()', () => {
         const type = 'paidLaborer';
         const expResultType = 'Paid Laborer';
 
-        const results = await getMemberList(type);
+        const results = await getMemberList({ type });
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
             expect(result.memberType).toBe(expResultType);
@@ -87,14 +87,14 @@ describe('getMemberList()', () => {
 
     it('Returns an empty list of members without error', async () => {
         const type = 'notARealType';
-        const results = await getMemberList(type);
+        const results = await getMemberList({ type });
         expect(mockQuery).toHaveBeenCalled();
         expect(results.length).toBe(0);
     });
 
     it('Throws for internal server error', async () => {
         const type = 'ise';
-        await expect(getMemberList(type)).rejects.toThrow('internal server error');
+        await expect(getMemberList({ type })).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 });
