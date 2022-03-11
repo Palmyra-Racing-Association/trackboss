@@ -1,7 +1,7 @@
-import { IconButton, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, IconButton, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { BsPrinter } from 'react-icons/bs';
+import { BsPrinter, BsSearch } from 'react-icons/bs';
 import { getFormattedSignUpList } from '../controller/job';
 import VerifyButton from './VerifyButton';
 
@@ -84,36 +84,62 @@ const paginationComponentOptions = {
 export default function SignUpList() {
     const [cells, setCells] = useState([] as Worker[]);
     const [printing, setPrinting] = useState<boolean>(false);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [allCells, setAllCells] = useState<Worker[]>([]);
 
     useEffect(() => {
         async function getData() {
             const formattedResponse = getFormattedSignUpListLocal();
             setCells(formattedResponse);
+            setAllCells(formattedResponse);
         }
         getData();
     }, []);
+
+    useEffect(() => {
+        if (searchTerm === '') {
+            setCells(allCells);
+        } else {
+            const newCells =
+                allCells.filter((cell: Worker) => cell.name.toLowerCase().includes(searchTerm.toLowerCase()));
+            setCells(newCells);
+        }
+    }, [searchTerm, allCells]);
     return (
         <div data-testid="table">
-            <IconButton
-                mt={5}
-                size="lg"
-                aria-label="Print"
-                background="orange.300"
-                color="white"
-                onClick={
-                    () => {
-                        setPrinting(true);
-                        setTimeout(() => {
-                            // Allows the data table to re-render before the print window opens
-                            window.print();
-                        }, 0);
-                        window.onafterprint = function () {
-                            setPrinting(false);
-                        };
-                    }
-                }
-                icon={<BsPrinter />}
-            />
+            <Center>
+                <Flex mt={5}>
+                    <Box>
+                        <InputGroup>
+                            <InputLeftElement pointerEvents="none">
+                                <BsSearch color="gray.300" />
+                            </InputLeftElement>
+                            <Input size="lg" placeholder="Search..." onChange={(e) => setSearchTerm(e.target.value)} />
+                        </InputGroup>
+                    </Box>
+                    <Box pl={5}>
+                        <IconButton
+                            size="lg"
+                            aria-label="Print"
+                            background="orange.300"
+                            color="white"
+                            onClick={
+                                () => {
+                                    setPrinting(true);
+                                    setTimeout(() => {
+                                        // Allows the data table to re-render before the print window opens
+                                        window.print();
+                                    }, 0);
+                                    window.onafterprint = () => {
+                                        setPrinting(false);
+                                    };
+                                }
+                            }
+                            icon={<BsPrinter />}
+                        />
+                    </Box>
+                </Flex>
+            </Center>
             <DataTable
                 columns={printing ? printingColumns : columns}
                 data={cells}
