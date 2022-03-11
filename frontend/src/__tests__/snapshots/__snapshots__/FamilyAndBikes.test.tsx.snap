@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`family and bikes renders all props correctly as admin 1`] = `[Function]`;
+
+exports[`family and bikes renders all props correctly as not admin 1`] = `[Function]`;
