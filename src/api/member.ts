@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import { checkHeader, verify } from '../util/auth';
 import { getMember, getMemberList, insertMember, MEMBER_TYPE_MAP, patchMember } from '../database/member';
 import {
-    GetmemberListFilters,
+    GetMemberListFilters,
     GetMemberListResponse,
     GetMemberResponse,
     Member,
@@ -57,7 +57,7 @@ member.get('/list', async (req: Request, res: Response) => {
             const filterRole: string | undefined = req.query.role as string;
             const membershipFilter: string | undefined = req.query.membershipId as string;
             const membershipNum = Number(membershipFilter);
-            const filters: GetmemberListFilters = {};
+            const filters: GetMemberListFilters = {};
             if (!MEMBER_TYPE_MAP.has(filterRole) && typeof filterRole !== 'undefined') {
                 res.status(400);
                 response = { reason: 'invalid role specified' };

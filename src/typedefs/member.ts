@@ -62,7 +62,7 @@ export type GetMemberListRequest = Record<string, never>
 
 export type GetMemberListResponse = Member[] | ErrorResponse;
 
-export type GetmemberListFilters = {
+export type GetMemberListFilters = {
     type?: string,
     membershipId?: number
 }

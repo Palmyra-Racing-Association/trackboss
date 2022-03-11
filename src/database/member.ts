@@ -3,7 +3,7 @@ import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
 import { getPool } from './pool';
-import { GetmemberListFilters, Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
+import { GetMemberListFilters, Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
 
 // Map the API values for the member types to the DB values
 export const MEMBER_TYPE_MAP = new Map([
@@ -60,7 +60,7 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
     return result.insertId;
 }
 
-export async function getMemberList(filters: GetmemberListFilters): Promise<Member[]> {
+export async function getMemberList(filters: GetMemberListFilters): Promise<Member[]> {
     let sql;
     let values: any[] = [];
     if (!_.isEmpty(filters)) {

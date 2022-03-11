@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as member from '../../../database/member';
-import { GetmemberListFilters, Member, PatchMemberRequest, PostNewMemberRequest } from '../../../typedefs/member';
+import { GetMemberListFilters, Member, PatchMemberRequest, PostNewMemberRequest } from '../../../typedefs/member';
 
 export const memberList: Member[] = [
     {
@@ -116,7 +116,7 @@ export const mockInsertMember = jest.spyOn(member, 'insertMember').mockImplement
 export const mockGetMemberList =
     jest.spyOn(member, 'getMemberList').mockImplementationOnce((): Promise<Member[]> => {
         throw new Error('internal server error');
-    }).mockImplementation((filters: GetmemberListFilters): Promise<Member[]> => {
+    }).mockImplementation((filters: GetMemberListFilters): Promise<Member[]> => {
         let members: Member[] = memberList;
         const { type, membershipId } = filters;
         if (typeof type !== 'undefined') {
