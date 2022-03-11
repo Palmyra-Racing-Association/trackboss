@@ -201,10 +201,11 @@ describe('POST /event/new', () => {
             .post(`${TAG_ROOT}/new`)
             .set('Authorization', 'Bearer member')
             .send({
-                eventId: 0,
-                title: 'President',
-                year: 2021,
-                memberId: 0,
+                start: '2022-12-12 9:00:00',
+                end: '2022-12-14 22:00:00',
+                eventType: 'race',
+                title: 'Big Testing Event 4',
+                eventDescription: 'i ran out of things to say',
             });
         expect(mockVerifyMember).toHaveBeenCalled();
         expect(mockInsertEvent).not.toHaveBeenCalled();
@@ -213,14 +214,16 @@ describe('POST /event/new', () => {
         expect(res.body.reason).toBe('forbidden');
     });
 
-    it('successfully inserts a member', async () => {
+    it('successfully inserts an event', async () => {
         const res = await supertestServer
             .post(`${TAG_ROOT}/new`)
             .set('Authorization', 'Bearer admin')
             .send({
-                title: 0,
-                year: 2021,
-                memberId: 0,
+                start: '2022-12-12 9:00:00',
+                end: '2022-12-14 22:00:00',
+                eventType: 'race',
+                title: 'Big Testing Event 4',
+                eventDescription: 'i ran out of things to say',
             });
         expect(mockInsertEvent).toHaveBeenCalled();
         expect(mockVerifyAdmin).toHaveBeenCalled();
@@ -269,21 +272,21 @@ describe('PATCH /event/:eventId', () => {
         expect(res.body.reason).toBe('not found');
     });
 
-    it('Successfully patches a event member', async () => {
+    it('Successfully patches an event', async () => {
         const res = await supertestServer
             .patch(`${TAG_ROOT}/0`)
             .set('Authorization', 'Bearer admin')
-            .send({ year: '2023' });
+            .send({ type: 'fire' });
         expect(res.status).toBe(200);
         expect(res.body.eventId).toBe(0);
-        expect(res.body.year).toBe('2023');
+        expect(res.body.type).toBe('fire');
     });
 
     it('returns 403 for insufficient permissions', async () => {
         const res = await supertestServer
             .patch(`${TAG_ROOT}/0`)
             .set('Authorization', 'Bearer laborer')
-            .send({ make: 'newMake' });
+            .send({ type: 'ghost' });
         expect(res.status).toBe(403);
         expect(mockPatchEvent).not.toHaveBeenCalled();
     });
@@ -326,7 +329,7 @@ describe('DELETE /event/:eventId', () => {
         expect(res.body.reason).toBe('not found');
     });
 
-    it('Successfully deletes a event member', async () => {
+    it('Successfully deletes an event', async () => {
         const res = await supertestServer
             .delete(`${TAG_ROOT}/0`)
             .set('Authorization', 'Bearer admin');

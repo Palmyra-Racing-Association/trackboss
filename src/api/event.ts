@@ -98,7 +98,6 @@ event.get('/list', async (req: Request, res: Response) => {
                     }
                     res.status(206);
                 }
-                res.status(206);
             }
             response = eventList;
         } catch (e: any) {

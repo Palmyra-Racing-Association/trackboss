@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { isAfter, isBefore } from 'date-fns';
+import { compareAsc } from 'date-fns';
 import { Event, PatchEventRequest, PostNewEventRequest } from '../../../typedefs/event';
 import * as event from '../../../database/event';
 
@@ -72,18 +72,12 @@ export const mockGetEventList =
     jest.spyOn(event, 'getEventList').mockImplementationOnce((): Promise<Event[]> => {
         throw new Error('internal server error');
     }).mockImplementation((startDate?: string, endDate?: string): Promise<Event[]> => {
-        let events: Event[];
-        // these conditions are a little wonky since ts can't seem to figure out the implicit status of variable types
-        // in else clauses
-        if (typeof startDate === 'undefined' && typeof endDate !== 'undefined') {
-            events = _.filter(eventList, (ev: Event) => isBefore(new Date(ev.start), new Date(endDate)));
-        } else if (typeof endDate === 'undefined' && typeof startDate !== 'undefined') {
-            events = _.filter(eventList, (ev: Event) => isAfter(new Date(ev.start), new Date(startDate)));
-        } else if (typeof startDate !== 'undefined' && typeof endDate !== 'undefined') {
-            events = _.filter(eventList, (ev: Event) => isBefore(new Date(ev.start), new Date(endDate)) &&
-                isAfter(new Date(ev.start), new Date(startDate)));
-        } else {
-            events = eventList;
+        let events: Event[] = eventList;
+        if (typeof startDate !== 'undefined') {
+            events = _.filter(events, (ev: Event) => compareAsc(new Date(ev.start), new Date(startDate)) >= 0);
+        }
+        if (typeof endDate !== 'undefined') {
+            events = _.filter(events, (ev: Event) => compareAsc(new Date(ev.start), new Date(endDate)) <= 0);
         }
         return Promise.resolve(events);
     });
