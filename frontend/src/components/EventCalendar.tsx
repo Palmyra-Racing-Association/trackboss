@@ -1,5 +1,5 @@
+// Note: eslint disables in this file needed for react-big-calendar to render properly
 /* eslint-disable no-shadow */
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, momentLocalizer } from 'react-big-calendar';
@@ -89,6 +89,7 @@ export default function EventCalendar(props: EventCalendarProps) {
                 style={{ height: '70vh' }}
                 components={
                     {
+                        // eslint-disable-next-line react/prop-types
                         toolbar: React.memo(({ localizer, ...props }, children) => (
                             <RenderToolbar
                                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -96,6 +97,7 @@ export default function EventCalendar(props: EventCalendarProps) {
                                 localizer={
                                     {
                                         messages: {
+                                            // eslint-disable-next-line react/prop-types
                                             ...localizer.messages,
                                         },
                                     }

@@ -18,13 +18,25 @@ interface pageProps {
 }
 
 export default function Header(props:pageProps) {
+    const { state, update } = useContext(UserContext);
+
     const navigate = useNavigate();
     const navigateToMembers = () => {
         const path = '/members';
         navigate(path);
     };
 
-    const { state, update } = useContext(UserContext);
+    function handleReturnToAccount() {
+        navigateToMembers();
+        const originalUser = state.storedUser;
+        // Return to the original user, and clear the storedUser
+        update({
+            loggedIn: true,
+            token: state.token,
+            user: originalUser,
+            storedUser: undefined,
+        });
+    }
 
     return (
         <div>
@@ -46,7 +58,7 @@ export default function Header(props:pageProps) {
                             color="white"
                             fontSize="xl"
                         >
-                            Currently acting as :
+                            Currently acting as:
                             {' '}
                             { `${state.user?.firstName} ${state.user?.lastName}`}
                         </Text>
@@ -58,19 +70,8 @@ export default function Header(props:pageProps) {
                             size="md"
                             variant="outline"
                             color="white"
-                            onClick={
-                                () => {
-                                    navigateToMembers();
-                                    const originalUser = state.storedUser;
-                                    // Return to the original user, and clear the storedUser
-                                    update({
-                                        loggedIn: true,
-                                        token: state.token,
-                                        user: originalUser,
-                                        storedUser: undefined,
-                                    });
-                                }
-                            }
+                            // eslint-disable-next-line react/jsx-no-bind
+                            onClick={handleReturnToAccount}
                         >
                             RETURN TO YOUR PROFILE
                         </Button>
