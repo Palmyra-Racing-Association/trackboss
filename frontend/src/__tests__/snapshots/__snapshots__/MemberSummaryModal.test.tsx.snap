@@ -5,8 +5,6 @@ Object {
   "asFragment": [Function],
   "baseElement": <body>
     <div
-      aria-hidden="true"
-      data-aria-hidden="true"
       id="chakra-toast-portal"
     >
       <ul
@@ -34,29 +32,20 @@ Object {
         style="position: fixed; z-index: 5500; pointer-events: none; display: flex; flex-direction: column;"
       />
     </div>
-    <div
-      aria-hidden="true"
-      data-aria-hidden="true"
-    />
+    <div />
     <div
       class="chakra-portal"
     >
       <div
-        aria-hidden="true"
         class="chakra-modal__overlay css-13d1tkw"
-        data-aria-hidden="true"
         style="opacity: 0;"
       />
       <div
-        aria-hidden="true"
-        data-aria-hidden="true"
         data-focus-guard="true"
         style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
         tabindex="0"
       />
       <div
-        aria-hidden="true"
-        data-aria-hidden="true"
         data-focus-guard="true"
         style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
         tabindex="1"
@@ -301,18 +290,13 @@ Object {
         </div>
       </div>
       <div
-        aria-hidden="true"
-        data-aria-hidden="true"
         data-focus-guard="true"
         style="width: 1px; height: 0px; padding: 0px; overflow: hidden; position: fixed; top: 1px; left: 1px;"
         tabindex="0"
       />
     </div>
   </body>,
-  "container": <div
-    aria-hidden="true"
-    data-aria-hidden="true"
-  />,
+  "container": <div />,
   "debug": [Function],
   "findAllByAltText": [Function],
   "findAllByDisplayValue": [Function],
