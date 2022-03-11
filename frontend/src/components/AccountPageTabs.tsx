@@ -13,6 +13,7 @@ import { FaMoneyBillAlt } from 'react-icons/fa';
 import { IoMdBriefcase } from 'react-icons/io';
 import GeneralInfo from './GeneralInfo';
 import { Member } from '../../../src/typedefs/member';
+import WorkPointsHistory from './WorkPointsHistory';
 
 const member: Member = {
     memberId: 1,
@@ -176,9 +177,7 @@ export default function HamburgerMenu() {
                 }
                 {
                     activeButton === 3 && (
-                        <Center>
-                            Work Points History Component
-                        </Center>
+                        <WorkPointsHistory />
                     )
                 }
                 {

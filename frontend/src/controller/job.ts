@@ -38,6 +38,16 @@ export async function getJobList(token: string, queryType?: string, filterType?:
     return response.json();
 }
 
+export function getFormattedJobList() {
+    return [
+        {
+            start: 'Sept 12',
+            title: 'Track Watering',
+            pointsAwarded: '20',
+        },
+    ];
+}
+
 export async function getJob(token: string, jobID: number): Promise<GetJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'GET',
