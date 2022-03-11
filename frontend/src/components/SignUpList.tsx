@@ -97,7 +97,6 @@ export default function SignUpList() {
     }, []);
 
     useEffect(() => {
-        console.log(searchTerm);
         const newCells = allCells.filter((cell: Worker) => cell.name.toLowerCase().includes(searchTerm.toLowerCase()));
         setCells(newCells);
     }, [searchTerm]);
