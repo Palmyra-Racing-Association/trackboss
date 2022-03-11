@@ -1,7 +1,7 @@
-import { Box, HStack, IconButton, Input, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, HStack, IconButton, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { BsPrinter } from 'react-icons/bs';
+import { BsPrinter, BsSearch } from 'react-icons/bs';
 import { getFormattedSignUpList } from '../controller/job';
 import VerifyButton from './VerifyButton';
 
@@ -102,33 +102,39 @@ export default function SignUpList() {
     }, [searchTerm]);
     return (
         <div data-testid="table">
-            <HStack>
-                <Box>
-                    <IconButton
-                        mt={5}
-                        size="lg"
-                        aria-label="Print"
-                        background="orange.300"
-                        color="white"
-                        onClick={
-                            () => {
-                                setPrinting(true);
-                                setTimeout(() => {
-                                    // Allows the data table to re-render before the print window opens
-                                    window.print();
-                                }, 0);
-                                window.onafterprint = function () {
-                                    setPrinting(false);
-                                };
+            <Center>
+                <Flex mt={5}>
+                    <Box>
+                        <InputGroup>
+                            <InputLeftElement pointerEvents="none">
+                                <BsSearch color="gray.300" />
+                            </InputLeftElement>
+                            <Input size="lg" placeholder="Search..." onChange={(e) => setSearchTerm(e.target.value)} />
+                        </InputGroup>
+                    </Box>
+                    <Box>
+                        <IconButton
+                            size="lg"
+                            aria-label="Print"
+                            background="orange.300"
+                            color="white"
+                            onClick={
+                                () => {
+                                    setPrinting(true);
+                                    setTimeout(() => {
+                                        // Allows the data table to re-render before the print window opens
+                                        window.print();
+                                    }, 0);
+                                    window.onafterprint = function () {
+                                        setPrinting(false);
+                                    };
+                                }
                             }
-                        }
-                        icon={<BsPrinter />}
-                    />
-                </Box>
-                <Box>
-                    <Input placeholder="Search" onChange={(e) => setSearchTerm(e.target.value)} />
-                </Box>
-            </HStack>
+                            icon={<BsPrinter />}
+                        />
+                    </Box>
+                </Flex>
+            </Center>
             <DataTable
                 columns={printing ? printingColumns : columns}
                 data={cells}
