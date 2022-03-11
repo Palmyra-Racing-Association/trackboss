@@ -3,7 +3,7 @@ import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
 import { getPool } from './pool';
-import { Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
+import { GetmemberListFilters, Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
 
 // Map the API values for the member types to the DB values
 export const MEMBER_TYPE_MAP = new Map([
@@ -13,7 +13,6 @@ export const MEMBER_TYPE_MAP = new Map([
     ['paidLaborer', 'Paid Laborer'],
 ]);
 export const GET_MEMBER_LIST_SQL = 'SELECT * FROM v_member';
-export const GET_MEMBER_LIST_BY_TYPE_SQL = `${GET_MEMBER_LIST_SQL} WHERE member_type = ?`;
 export const GET_MEMBER_SQL = `${GET_MEMBER_LIST_SQL} WHERE member_id = ?`;
 export const GET_MEMBER_UUID_SQL = `${GET_MEMBER_LIST_SQL} WHERE uuid = ?`;
 export const INSERT_MEMBER_SQL = 'INSERT INTO member (membership_id, uuid, member_type_id, first_name, last_name, ' +
@@ -61,14 +60,23 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
     return result.insertId;
 }
 
-export async function getMemberList(type?: string): Promise<Member[]> {
+export async function getMemberList(filters: GetmemberListFilters): Promise<Member[]> {
     let sql;
-    let values: string[];
-    if (typeof type !== 'undefined') {
-        sql = GET_MEMBER_LIST_BY_TYPE_SQL;
-        // if type is not in the map, it won't hurt to throw it in
-        // anyway (and this makes testing easier)
-        values = [MEMBER_TYPE_MAP.get(type) || type];
+    let values: any[] = [];
+    if (!_.isEmpty(filters)) {
+        let dynamicSql = ' WHERE ';
+        let counter = 0;
+        if (typeof filters.type !== 'undefined') {
+            dynamicSql += 'member_type = ? AND ';
+            // if type is not in the map, it won't hurt to throw it in
+            // anyway (and this makes testing easier)
+            values[counter++] = MEMBER_TYPE_MAP.get(filters.type) || filters.type;
+        }
+        if (typeof filters.membershipId !== 'undefined') {
+            dynamicSql += 'membership_id = ? AND ';
+            values[counter++] = filters.membershipId;
+        }
+        sql = GET_MEMBER_LIST_SQL + dynamicSql.slice(0, -4); // slice the trailing AND
     } else {
         sql = GET_MEMBER_LIST_SQL;
         values = [];

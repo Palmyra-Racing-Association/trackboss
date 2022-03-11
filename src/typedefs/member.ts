@@ -61,3 +61,8 @@ export type PatchMemberResponse = Member | ErrorResponse;
 export type GetMemberListRequest = Record<string, never>
 
 export type GetMemberListResponse = Member[] | ErrorResponse;
+
+export type GetmemberListFilters = {
+    type?: string,
+    membershipId?: number
+}

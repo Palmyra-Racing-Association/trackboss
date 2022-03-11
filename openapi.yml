@@ -452,6 +452,11 @@ paths:
               - membershipAdmin
               - member
               - paidLaborer
+        - name: membershipId
+          in: query
+          description: "Optional: filter members by a membership ID"
+          schema:
+            type: number
       responses:
         200:
           description: OK

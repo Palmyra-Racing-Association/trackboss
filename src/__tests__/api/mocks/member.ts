@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as member from '../../../database/member';
-import { Member, PatchMemberRequest, PostNewMemberRequest } from '../../../typedefs/member';
+import { GetmemberListFilters, Member, PatchMemberRequest, PostNewMemberRequest } from '../../../typedefs/member';
 
 export const memberList: Member[] = [
     {
@@ -116,12 +116,23 @@ export const mockInsertMember = jest.spyOn(member, 'insertMember').mockImplement
 export const mockGetMemberList =
     jest.spyOn(member, 'getMemberList').mockImplementationOnce((): Promise<Member[]> => {
         throw new Error('internal server error');
-    }).mockImplementation((type?: string): Promise<Member[]> => {
-        let members: Member[];
-        if (typeof type === 'undefined') {
-            members = memberList;
-        } else {
-            members = _.filter(memberList, (mem: Member) => mem.memberType === member.MEMBER_TYPE_MAP.get(type));
+    }).mockImplementation((filters: GetmemberListFilters): Promise<Member[]> => {
+        let members: Member[] = memberList;
+        const { type, membershipId } = filters;
+        if (typeof type !== 'undefined') {
+            members = _.filter(
+                members,
+                (mem: Member) => mem.memberType === member.MEMBER_TYPE_MAP.get(type),
+            );
+        }
+        if (typeof membershipId !== 'undefined') {
+            let targetAdmin: string;
+            if (membershipId === 0) {
+                targetAdmin = 'Joe Blow';
+            } else {
+                targetAdmin = 'Guy Fieri';
+            }
+            members = _.filter(members, (mem: Member) => mem.membershipAdmin === targetAdmin);
         }
         return Promise.resolve(members);
     });
