@@ -9,29 +9,24 @@ afterAll((done) => {
     server.close(done);
 });
 
-describe('All unimplemented billing endpoints are reachable', () => {
+describe('All implemented (but untested) billing endpoints are reachable', () => {
     it('GET /billing/yearlyWorkPointThreshold is reachable', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/yearlyWorkPointThreshold`);
-        expect(res.status).toEqual(501);
+        await supertestServer.get(`${TAG_ROOT}/yearlyWorkPointThreshold`);
     });
 
     it('GET /billing/list is reachable', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/list`);
-        expect(res.status).toEqual(501);
+        await supertestServer.get(`${TAG_ROOT}/list`);
     });
 
     it('GET /billing/:id is reachable', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/42`);
-        expect(res.status).toEqual(501);
+        await supertestServer.get(`${TAG_ROOT}/42`);
     });
 
     it('POST /billing/:id is reachable', async () => {
-        const res = await supertestServer.post(`${TAG_ROOT}/42`);
-        expect(res.status).toEqual(501);
+        await supertestServer.post(`${TAG_ROOT}/42`);
     });
 
     it('POST /billing is reachable', async () => {
-        const res = await supertestServer.post(`${TAG_ROOT}`);
-        expect(res.status).toEqual(501);
+        await supertestServer.post(`${TAG_ROOT}`);
     });
 });
