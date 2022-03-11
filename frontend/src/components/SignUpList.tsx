@@ -98,11 +98,13 @@ export default function SignUpList() {
 
     useEffect(() => {
         if (searchTerm === '') {
-            return;
+            setCells(allCells);
+        } else {
+            const newCells =
+                allCells.filter((cell: Worker) => cell.name.toLowerCase().includes(searchTerm.toLowerCase()));
+            setCells(newCells);
         }
-        const newCells = allCells.filter((cell: Worker) => cell.name.toLowerCase().includes(searchTerm.toLowerCase()));
-        setCells(newCells);
-    }, [searchTerm]);
+    }, [searchTerm, allCells]);
     return (
         <div data-testid="table">
             <Center>
