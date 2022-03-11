@@ -1,4 +1,4 @@
-import { Box, Center, Flex, HStack, IconButton, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, IconButton, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsPrinter, BsSearch } from 'react-icons/bs';
@@ -97,6 +97,9 @@ export default function SignUpList() {
     }, []);
 
     useEffect(() => {
+        if (searchTerm === '') {
+            return;
+        }
         const newCells = allCells.filter((cell: Worker) => cell.name.toLowerCase().includes(searchTerm.toLowerCase()));
         setCells(newCells);
     }, [searchTerm]);
@@ -112,7 +115,7 @@ export default function SignUpList() {
                             <Input size="lg" placeholder="Search..." onChange={(e) => setSearchTerm(e.target.value)} />
                         </InputGroup>
                     </Box>
-                    <Box>
+                    <Box pl={5}>
                         <IconButton
                             size="lg"
                             aria-label="Print"
@@ -125,7 +128,7 @@ export default function SignUpList() {
                                         // Allows the data table to re-render before the print window opens
                                         window.print();
                                     }, 0);
-                                    window.onafterprint = function () {
+                                    window.onafterprint = () => {
                                         setPrinting(false);
                                     };
                                 }
