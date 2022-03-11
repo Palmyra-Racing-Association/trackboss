@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import _ from 'lodash';
 import {
     GetJobListResponse,
     PostNewJobResponse,
@@ -11,7 +12,6 @@ import {
 import { checkHeader, verify } from '../util/auth';
 
 import { insertJob, getJob, getJobList, patchJob, deleteJob } from '../database/job';
-import _ from 'lodash';
 
 const job = Router();
 
