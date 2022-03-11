@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { checkHeader, verify } from '../util/auth';
 import { getMember, getMemberList, insertMember, MEMBER_TYPE_MAP, patchMember } from '../database/member';
 import {
+    GetMemberListFilters,
     GetMemberListResponse,
     GetMemberResponse,
     Member,
@@ -54,11 +55,23 @@ member.get('/list', async (req: Request, res: Response) => {
         try {
             await verify(headerCheck.token);
             const filterRole: string | undefined = req.query.role as string;
+            const membershipFilter: string | undefined = req.query.membershipId as string;
+            const membershipNum = Number(membershipFilter);
+            const filters: GetMemberListFilters = {};
             if (!MEMBER_TYPE_MAP.has(filterRole) && typeof filterRole !== 'undefined') {
                 res.status(400);
                 response = { reason: 'invalid role specified' };
+            } else if (Number.isNaN(membershipNum) && typeof membershipFilter !== 'undefined') {
+                res.status(400);
+                response = { reason: 'invalid membership id' };
             } else {
-                const memberList: Member[] = await getMemberList(filterRole);
+                if (typeof filterRole !== 'undefined') {
+                    filters.type = filterRole;
+                }
+                if (typeof membershipFilter !== 'undefined') {
+                    filters.membershipId = membershipNum;
+                }
+                const memberList: Member[] = await getMemberList(filters);
                 res.status(200);
                 response = memberList;
             }
