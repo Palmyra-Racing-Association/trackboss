@@ -1,8 +1,6 @@
-// Note: eslint disables in this file needed for react-big-calendar to render properly
-/* eslint-disable no-shadow */
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { Calendar, DateLocalizer, momentLocalizer } from 'react-big-calendar';
+import { Calendar, DateLocalizer, Messages, momentLocalizer, View, ViewsProps } from 'react-big-calendar';
 import {
     Text,
     Flex,
@@ -25,6 +23,23 @@ interface EventCalendarProps {
     // events: Event[],
     events: any[],
 }
+
+interface CustomToolbarProps {
+    date: Date,
+    view: View,
+    views: ViewsProps<any, never>,
+    label: string,
+}
+
+const customMessages: Messages = {
+    next: 'Next',
+    previous: 'Previous',
+    today: 'Today',
+    day: 'Day',
+    week: 'Week',
+    month: 'Month',
+    agenda: 'Agenda',
+};
 
 async function getSelectedJobAttendees(): Promise<any> {
     const attendees = await getJobAttendees();
@@ -89,16 +104,15 @@ export default function EventCalendar(props: EventCalendarProps) {
                 style={{ height: '70vh' }}
                 components={
                     {
-                        // eslint-disable-next-line react/prop-types
-                        toolbar: React.memo(({ localizer, ...props }, children) => (
+                        toolbar: React.memo((toolbarProps: CustomToolbarProps, children) => (
                             <RenderToolbar
+                                // Necessary for the custom toolbar to render properly
                                 // eslint-disable-next-line react/jsx-props-no-spreading
-                                {...props}
+                                {...toolbarProps}
                                 localizer={
                                     {
                                         messages: {
-                                            // eslint-disable-next-line react/prop-types
-                                            ...localizer.messages,
+                                            ...customMessages,
                                         },
                                     }
                                 }
@@ -111,8 +125,7 @@ export default function EventCalendar(props: EventCalendarProps) {
                                                 fontWeight={30}
                                                 fontSize="3xl"
                                             >
-                                                {/* eslint-disable-next-line react/prop-types */}
-                                                {props.label}
+                                                {toolbarProps.label}
                                             </Text>
                                             <Spacer />
                                         </Flex>

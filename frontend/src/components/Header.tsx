@@ -26,18 +26,6 @@ export default function Header(props:pageProps) {
         navigate(path);
     };
 
-    function handleReturnToAccount() {
-        navigateToMembers();
-        const originalUser = state.storedUser;
-        // Return to the original user, and clear the storedUser
-        update({
-            loggedIn: true,
-            token: state.token,
-            user: originalUser,
-            storedUser: undefined,
-        });
-    }
-
     return (
         <div>
             <Flex bg="white" boxShadow="lg" padding="6">
@@ -70,8 +58,19 @@ export default function Header(props:pageProps) {
                             size="md"
                             variant="outline"
                             color="white"
-                            // eslint-disable-next-line react/jsx-no-bind
-                            onClick={handleReturnToAccount}
+                            onClick={
+                                () => {
+                                    navigateToMembers();
+                                    const originalUser = state.storedUser;
+                                    // Return to the original user, and clear the storedUser
+                                    update({
+                                        loggedIn: true,
+                                        token: state.token,
+                                        user: originalUser,
+                                        storedUser: undefined,
+                                    });
+                                }
+                            }
                         >
                             RETURN TO YOUR PROFILE
                         </Button>
