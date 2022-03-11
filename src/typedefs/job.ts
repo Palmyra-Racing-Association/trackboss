@@ -2,16 +2,16 @@ import { ErrorResponse } from './errorResponse';
 
 export type Job = {
     jobId: number,
-    member: string,
+    member?: string,
     event: string,
     start: string,
     end: string,
     title: string,
     verified: boolean,
-    verifiedDate: string,
+    verifiedDate?: string,
     pointsAwarded: number,
     paid: boolean,
-    paidDate: string,
+    paidDate?: string,
     lastModifiedDate: string,
     lastModifiedBy: string
 }
