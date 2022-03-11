@@ -1,9 +1,9 @@
 import { Request, Response, Router } from 'express';
 import _ from 'lodash';
 // import { format } from 'date-fns';
-import { getBaseDues, getMembershipList } from 'src/database/membership';
-import { getWorkPointsByMembership } from 'src/database/workPoints';
-import logger from 'src/logger';
+import { getBaseDues, getMembershipList } from '../database/membership';
+import { getWorkPointsByMembership } from '../database/workPoints';
+import logger from '../logger';
 import { generateBill, getBillList, getWorkPointThreshold, markBillPaid } from '../database/billing';
 import {
     Bill,
