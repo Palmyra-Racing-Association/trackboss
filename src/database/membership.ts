@@ -17,6 +17,7 @@ const MEMBERSHIP_STATUS_MAP = new Map([
     ['inactive', 'Disabled'],
     ['pending', 'Pending'],
 ]);
+export const GET_BASE_DUES_SQL = 'SELECT base_dues_amt FROM v_membership_base_dues WHERE membership_id = ?';
 export const GET_MEMBERSHIP_LIST_SQL = 'SELECT * FROM v_membership';
 export const GET_MEMBERSHIP_LIST_BY_STATUS_SQL = `${GET_MEMBERSHIP_LIST_SQL} WHERE status = ?`;
 export const GET_MEMBERSHIP_SQL = `${GET_MEMBERSHIP_LIST_SQL} WHERE membership_id = ?`;
@@ -250,4 +251,22 @@ export async function getRegistration(memberId: number): Promise<Registration> {
         state: results[0].state,
         zip: results[0].zip,
     };
+}
+
+export async function getBaseDues(membershipId: number): Promise<number> {
+    const values = [membershipId];
+
+    let result;
+    try {
+        [result] = await getPool().query<RowDataPacket[]>(GET_BASE_DUES_SQL, values);
+    } catch (e) {
+        logger.error(`DB error getting membership's base dues: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (_.isEmpty(result)) {
+        throw new Error('not found');
+    }
+
+    return result[0].base_dues_amt;
 }
