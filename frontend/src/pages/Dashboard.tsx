@@ -53,8 +53,8 @@ function Dashboard() {
                         {
                             nextEvent ? (
                                 <EventCard
-                                    date={nextEvent.date}
-                                    name={nextEvent.eventName}
+                                    date={nextEvent.start}
+                                    name={nextEvent.title}
                                 />
                             ) : (
                                 <div />

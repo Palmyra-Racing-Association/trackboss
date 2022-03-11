@@ -5,12 +5,14 @@ interface UserContextInterface {
     loggedIn: boolean,
     token: string,
     user: Member | undefined,
+    storedUser: Member | undefined,
 }
 
 export const initialUserContext: UserContextInterface = {
     loggedIn: false,
     token: '',
     user: undefined,
+    storedUser: undefined,
 };
 
 type UpdateType = React.Dispatch<
