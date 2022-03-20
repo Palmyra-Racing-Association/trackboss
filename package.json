@@ -4,8 +4,10 @@
     "description": "Palmyra Racing Associate Club Management application backend",
     "main": "server.ts",
     "scripts": {
-        "test": "cross-env PORT=0 jest",
-        "ci-test": "cross-env PORT=0 jest --ci --reporters $(pwd)/.github/jest-reporter.js",
+        "unit-test": "cross-env PORT=0 jest --testPathIgnorePatterns=integration",
+        "integration-test": "cross-env PORT=0 jest --testPathPattern=integration",
+        "ci-unit-test": "cross-env PORT=0 jest --ci --testPathIgnorePatterns=integration --reporters $(pwd)/.github/jest-reporter.js",
+        "ci-integration-test": "cross-env PORT=0 jest --ci --reporters $(pwd)/.github/jest-reporter.js --testPathPattern=integration",
         "dev": "concurrently \"npm run frontend\" \"npm run server\"",
         "server": "nodemon --exec npx ts-node src/server.ts",
         "frontend": "cd frontend && npm start",
