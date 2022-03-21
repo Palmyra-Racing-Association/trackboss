@@ -11,6 +11,7 @@
         "dev": "concurrently \"npm run frontend\" \"npm run server\"",
         "server": "nodemon --exec npx ts-node src/server.ts",
         "frontend": "cd frontend && npm start",
+        "build": "rm -rf dist && tsc --project tsconfig.json",
         "dependencies": "npx depcheck",
         "update": "npm install && cd frontend && npm install && cd ..",
         "hard-update": "rm package-lock.json && rm -rf node_modules/ && cd frontend && rm package-lock.json && rm -rf node_modules/ && cd .. && npm run update"
