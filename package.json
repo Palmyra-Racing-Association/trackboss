@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Palmyra Racing Associate Club Management application backend",
     "main": "server.ts",
+    "bin": "build/server.js",
     "scripts": {
         "unit-test": "cross-env PORT=0 jest --testPathIgnorePatterns=integration",
         "integration-test": "cross-env PORT=0 jest --testPathPattern=integration",
@@ -11,7 +12,8 @@
         "dev": "concurrently \"npm run frontend\" \"npm run server\"",
         "server": "nodemon --exec npx ts-node src/server.ts",
         "frontend": "cd frontend && npm start",
-        "build": "rm -rf dist && tsc --project tsconfig.json",
+        "build": "rm -rf build && tsc --project tsconfig.json",
+        "dist": "pkg --compress GZip .",
         "dependencies": "npx depcheck",
         "update": "npm install && cd frontend && npm install && cd ..",
         "hard-update": "rm package-lock.json && rm -rf node_modules/ && cd frontend && rm package-lock.json && rm -rf node_modules/ && cd .. && npm run update"
@@ -26,6 +28,11 @@
         "url": "https://github.com/Squeaky-Training-Wheels/clubmanager-2.0/issues"
     },
     "homepage": "https://github.com/Squeaky-Training-Wheels/clubmanager-2.0#readme",
+    "pkg": {
+        "scripts": "build/**/*.js",
+        "targets": [ "node16-linux", "node16-macos" ],
+        "outputPath": "dist"
+    },
     "dependencies": {
         "@types/body-parser": "^1.19.2",
         "@types/lodash": "^4.14.178",
@@ -59,6 +66,7 @@
         "jest": "^27.5.1",
         "jest-mock-extended": "^2.0.4",
         "nodemon": "^2.0.13",
+        "pkg": "^5.5.2",
         "supertest": "^6.2.2",
         "ts-node": "^10.2.1",
         "typescript": "^4.4.3"
