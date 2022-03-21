@@ -20,6 +20,8 @@ jobs:
       run: npm ci
     - name: Run TS Build
       run: npm run build
+    - name: Create Distributable
+      run: npm run dist
     - name: Create Artifact
       uses: actions/upload-artifact@v3
       with:
