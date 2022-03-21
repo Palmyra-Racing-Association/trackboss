@@ -25,4 +25,22 @@ jobs:
       with:
           name: backend-build
           path: dist
+  frontend-build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Specify Node version
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: Install modules
+      run: cd frontend && npm ci
+    - name: Run Frontend Build
+      run: npm run build
+    - name: Create Artifact
+      uses: actions/upload-artifact@v3
+      with:
+          name: frontend-build
+          path: frontend/build
 
