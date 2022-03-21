@@ -37,7 +37,7 @@ jobs:
     - name: Install modules
       run: cd frontend && npm ci
     - name: Run Frontend Build
-      run: npm run build
+      run: cd frontend && npm run build
     - name: Create Artifact
       uses: actions/upload-artifact@v3
       with:
