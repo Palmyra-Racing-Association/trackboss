@@ -13,8 +13,6 @@ afterAll((done) => {
 });
 
 describe('GET /me', () => {
-    // these two test cases are sufficient to establish that the underlying method is
-    // being called and the reason is being passed correctly
     it('Returns 401 and correct reason with no grant', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/me`);
         expect(res.status).toBe(401);
@@ -44,7 +42,4 @@ describe('GET /me', () => {
         expect(res.body.uuid).toBe('7b');
         expect(res.body.memberId).toBe(95);
     });
-    // 404 and 500 error cases from the database are not covered here
-    // but use identical syntax to all other API calls
-    // Additionally, 404 should never happen, but the mocks exist should we want to test
 });
