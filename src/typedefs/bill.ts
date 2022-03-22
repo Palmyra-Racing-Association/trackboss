@@ -8,7 +8,7 @@ export type Bill = {
     amountWithFee: number,
     membershipAdmin: string,
     membershipAdminEmail: string,
-    emailedBill: string,
+    emailedBill?: string, // undefined if not emailed, date otherwise
     curYearPaid: boolean
 }
 
