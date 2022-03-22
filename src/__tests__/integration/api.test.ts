@@ -37,7 +37,7 @@ describe('GET /me', () => {
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
     });
-    it('Returns returns a valid member with a valid token', async () => {
+    it('Returns a valid member with a valid token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/me`).set('Authorization', 'Bearer admin');
         expect(res.status).toBe(200);
         expect(mockVerifyAdmin).toHaveBeenCalled();
