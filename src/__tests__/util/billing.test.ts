@@ -219,6 +219,7 @@ describe('generateNewBills()', () => {
     });
 });
 
+// TODO: un-skip this when emailing bills is implemented
 describe.skip('emailBills()', () => {
     it('Emails bills correctly', async () => {
         const generatedBills = [{
