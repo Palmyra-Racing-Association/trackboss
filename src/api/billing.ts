@@ -2,7 +2,6 @@ import { Request, Response, Router } from 'express';
 import _ from 'lodash';
 // import { format } from 'date-fns';
 import { getMembershipList } from '../database/membership';
-import logger from '../logger';
 import { getBillList, getWorkPointThreshold, markBillPaid } from '../database/billing';
 import {
     Bill,
@@ -172,17 +171,12 @@ billing.post('/', async (req: Request, res: Response) => {
         try {
             await verify(headerCheck.token, 'Admin');
             const curYear = new Date().getFullYear();
-            logger.info('getMembershipList');
             const membershipList = await getMembershipList('active');
-            logger.info('getWorkPointThreshold');
             const { threshold } = await getWorkPointThreshold(curYear);
             // to protect against generating duplicate bills
-            logger.info('getBillList');
             const preGeneratedBills = await getBillList({ year: curYear });
 
-            logger.info('generateNewBills');
             let generatedBills = await generateNewBills(membershipList, preGeneratedBills, threshold, curYear);
-            logger.info('emailBills');
             generatedBills = await emailBills(generatedBills);
 
             res.status(201);
