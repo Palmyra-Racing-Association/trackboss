@@ -4,10 +4,15 @@ import { mockInvalidToken, mockVerifyAdmin, mockVerifyMember } from '../util/aut
 import server from '../../server';
 import { destroyPool } from '../../database/pool';
 import { Member } from '../../typedefs/member';
+import { createVerifier } from '../../util/auth';
 
 const TAG_ROOT = '/api/member';
 
 const supertestServer = supertest(server);
+
+beforeAll(() => {
+    createVerifier();
+});
 
 afterAll((done) => {
     server.close(done);

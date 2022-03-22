@@ -2,10 +2,15 @@ import supertest from 'supertest';
 import { mockVerifyAdmin, mockVerifyNonexistent } from '../util/authMocks';
 import server from '../../server';
 import { destroyPool } from '../../database/pool';
+import { createVerifier } from '../../util/auth';
 
 const TAG_ROOT = '/api';
 
 const supertestServer = supertest(server);
+
+beforeAll(() => {
+    createVerifier();
+});
 
 afterAll((done) => {
     server.close(done);
