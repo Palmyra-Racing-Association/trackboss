@@ -96,10 +96,6 @@ describe('GET /billing/yearlyWorkPointThreshold', () => {
 });
 
 describe('GET /billing/list', () => {
-    beforeAll(() => {
-        mockGetBillList.mockClear();
-    });
-
     it('Returns 500 on Internal Server Error', async () => {
         const res = await supertestServer
             .get(`${TAG_ROOT}/list?paymentStatus=ise`)
