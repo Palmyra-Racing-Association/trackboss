@@ -129,12 +129,6 @@ Object {
                     >
                       Contact Info
                     </p>
-                    <button
-                      class="chakra-button css-1nyyi7e"
-                      type="button"
-                    >
-                      Edit
-                    </button>
                   </div>
                   <div
                     class="css-1upvmvh"
@@ -234,12 +228,6 @@ Object {
                     >
                       Roles
                     </p>
-                    <button
-                      class="chakra-button css-1nyyi7e"
-                      type="button"
-                    >
-                      Edit
-                    </button>
                   </div>
                   <div
                     class="chakra-button__group css-1ayoy1w"
@@ -267,33 +255,6 @@ Object {
                   <div
                     class="chakra-container css-1g82ixg"
                   />
-                  <div
-                    class="chakra-stack css-xtejj8"
-                  >
-                    <p
-                      class="chakra-text css-4ampwm"
-                    >
-                      Actions
-                    </p>
-                    <div
-                      class="chakra-stack css-a03k66"
-                    >
-                      <button
-                        class="chakra-button css-5c2176"
-                        style="white-space: normal; word-wrap: break-word;"
-                        type="button"
-                      >
-                        Assign To Event
-                      </button>
-                      <button
-                        class="chakra-button css-1tq7btk"
-                        style="white-space: normal; word-wrap: break-word;"
-                        type="button"
-                      >
-                        De-Activate Member
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
