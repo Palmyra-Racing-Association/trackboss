@@ -20,14 +20,12 @@ describe('GET /member/list', () => {
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
-
     it('Returns 401 for invalid token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer invalidtoken');
         expect(mockInvalidToken).toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('not authorized');
     });
-
     it('Gets the unfiltered list', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
@@ -52,7 +50,6 @@ describe('GET /member/list', () => {
         expect(members.length).toBe(13);
         _.forEach(members, (member: Member) => expect(member.memberType).toBe('Admin'));
     });
-
     it('Correctly filters by role Membership Admin', async () => {
         const res = await supertestServer
             .get(`${TAG_ROOT}/list?role=membershipAdmin`)
@@ -62,7 +59,6 @@ describe('GET /member/list', () => {
         expect(members.length).toBe(47);
         _.forEach(members, (member: Member) => expect(member.memberType).toBe('Membership Admin'));
     });
-
     it('Correctly filters by role Member', async () => {
         const res = await supertestServer
             .get(`${TAG_ROOT}/list?role=member`)
@@ -72,7 +68,6 @@ describe('GET /member/list', () => {
         expect(members.length).toBe(21);
         _.forEach(members, (member: Member) => expect(member.memberType).toBe('Member'));
     });
-
     it('Correctly filters by role Paid Laborer', async () => {
         const res = await supertestServer
             .get(`${TAG_ROOT}/list?role=paidLaborer`)
@@ -82,13 +77,41 @@ describe('GET /member/list', () => {
         expect(members.length).toBe(19);
         _.forEach(members, (member: Member) => expect(member.memberType).toBe('Paid Laborer'));
     });
-
     it('Returns 400 for invalid role', async () => {
         const res = await supertestServer
             .get(`${TAG_ROOT}/list?role=invalid`)
             .set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(400);
         expect(res.body.reason).toBe('invalid role specified');
+    });
+    it('Correctly filters by membership', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?membershipId=4`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(res.status).toBe(200);
+        const list: Member[] = res.body;
+        expect(list.length).toBe(4);
+        expect(list[0].memberId).toBe(3);
+        expect(list[1].memberId).toBe(41);
+        expect(list[2].memberId).toBe(53);
+        expect(list[3].memberId).toBe(91);
+    });
+    it('Correctly filters with both filter types', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?membershipId=4&role=membershipAdmin`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(res.status).toBe(200);
+        const list: Member[] = res.body;
+        expect(list.length).toBe(2);
+        expect(list[0].memberId).toBe(41);
+        expect(list[1].memberId).toBe(53);
+    });
+    it('Retruns 400 for invalid membership id', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?membershipId=iamabadmembershipid`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('invalid membership id');
     });
 });
 
@@ -98,14 +121,12 @@ describe('GET /member/:memberId', () => {
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
-
     it('Returns 401 for invalid token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/2`).set('Authorization', 'Bearer invalidtoken');
         expect(mockInvalidToken).toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('not authorized');
     });
-
     it('GETs the correct member', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/3`).set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
@@ -122,7 +143,6 @@ describe('GET /member/:memberId', () => {
         expect(member.dateJoined).toBe('2016-07-03');
         expect(member.active);
     });
-
     it('Returns 404 when no data found', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/1046`).set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(404);
@@ -136,20 +156,17 @@ describe('POST /member/new', () => {
         expect(res.status).toBe(400);
         expect(res.body.reason).toBe('bad request');
     });
-
     it('Returns 401 for no token', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`);
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
-
     it('Returns 401 for invalid token', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/new`).set('Authorization', 'Bearer invalidtoken');
         expect(res.status).toBe(401);
         expect(mockInvalidToken).toHaveBeenCalled();
         expect(res.body.reason).toBe('not authorized');
     });
-
     it('returns 403 for insufficient permissions', async () => {
         const res = await supertestServer
             .post(`${TAG_ROOT}/new`)
@@ -168,7 +185,6 @@ describe('POST /member/new', () => {
         expect(res.status).toBe(403);
         expect(res.body.reason).toBe('forbidden');
     });
-
     it('successfully inserts a member', async () => {
         const newMember = {
             uuid: '54f',
@@ -202,12 +218,22 @@ describe('POST /member/new', () => {
 });
 
 describe('PATCH /member/:memberId', () => {
+    it('Returns 401 for no token', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/2`);
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('Missing authorization grant in header');
+    });
+    it('Returns 401 for invalid token', async () => {
+        const res = await supertestServer.patch(`${TAG_ROOT}/2`).set('Authorization', 'Bearer invalidtoken');
+        expect(res.status).toBe(401);
+        expect(mockInvalidToken).toHaveBeenCalled();
+        expect(res.body.reason).toBe('not authorized');
+    });
     it('Returns 400 on user input error', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/2`).set('Authorization', 'Bearer admin');
         expect(res.status).toBe(400);
         expect(res.body.reason).toBe('bad request');
     });
-
     it('Successfully patches a member', async () => {
         const res = await supertestServer
             .patch(`${TAG_ROOT}/2`)
@@ -217,7 +243,6 @@ describe('PATCH /member/:memberId', () => {
         expect(res.body.memberId).toBe(2);
         expect(res.body.email).toBe('chan@kungfu.org');
     });
-
     it('returns 403 for insufficient permissions', async () => {
         const res = await supertestServer
             .patch(`${TAG_ROOT}/2`)
@@ -225,7 +250,6 @@ describe('PATCH /member/:memberId', () => {
             .send({ email: 'chan@kungfu.org' });
         expect(res.status).toBe(403);
     });
-
     it('returns 404 when bad id is specified', async () => {
         const res = await supertestServer
             .patch(`${TAG_ROOT}/1074`)

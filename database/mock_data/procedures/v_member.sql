@@ -2,6 +2,7 @@ DELIMITER //
 CREATE VIEW `v_member` AS
     SELECT 
         m.member_id,
+        m.membership_id,
         m.first_name,
         m.last_name,
         CONCAT(ma.first_name, ' ', ma.last_name) AS membership_admin,
