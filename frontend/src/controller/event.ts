@@ -37,67 +37,6 @@ export async function makeEvent(name: string, description: string, start: Date, 
     });
 }
 
-// TODO: this is a mocked response for frontend development, replace once API is completed
-export async function getCalendarEventList() {
-    // const upcomingEvents: GetEventListResponse = await getEventList('TestToken', todayString);
-    // if ('reason' in upcomingEvents) {
-    //     console.log('TODO: error handling?');
-    // } else {
-    //     convertEventsToCalendarFormat(upcomingEvents);
-    //     return upcomingEvents;
-    // }
-    const upcomingEvents = [
-        {
-            title: 'Work Day',
-            start: new Date('2022-02-08T12:00:00'),
-            end: new Date('2022-02-09T15:50:00'),
-            workPoints: 3,
-            type: 'job',
-        },
-        {
-            title: 'Race Day',
-            start: new Date('2022-02-11T03:10:00'),
-            end: new Date('2022-02-12T14:10:00'),
-            type: 'race',
-        },
-        {
-            title: 'Work Day',
-            start: new Date('2022-02-11T03:10:00'),
-            end: new Date('2022-02-12T14:10:00'),
-            workPoints: 3,
-            type: 'job',
-        },
-        {
-            title: 'Work Day',
-            start: new Date('2022-02-11T03:10:00'),
-            end: new Date('2022-02-12T14:10:00'),
-            workPoints: 3,
-            type: 'job',
-        },
-        {
-            title: 'Work Day',
-            start: new Date('2022-02-11T03:10:00'),
-            end: new Date('2022-02-12T14:10:00'),
-            workPoints: 3,
-            type: 'job',
-        },
-        {
-            title: 'Meeting',
-            start: new Date('2022-02-22T15:30:00'),
-            end: new Date('2022-02-22T12:00:00'),
-            type: 'meeting',
-        },
-        {
-            title: 'Some other category',
-            start: new Date('2022-02-22T00:10:00'),
-            end: new Date('2022-02-23T00:10:00'),
-            type: 'other',
-        },
-    ];
-
-    return upcomingEvents;
-}
-
 export async function getEventList(token: string, listType?: string): Promise<GetEventListResponse> {
     if (listType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/list`, {
@@ -114,6 +53,16 @@ export async function getEventList(token: string, listType?: string): Promise<Ge
         headers: generateHeaders(token),
     });
     return response.json();
+}
+
+export async function getCalendarEvents(token: string) {
+    const calendarEvents = await getEventList(token);
+    if (isEventList(calendarEvents)) {
+        return calendarEvents;
+    }
+
+    // else
+    return undefined;
 }
 
 export async function getUpcomingEventData(token: string, listType: string) {

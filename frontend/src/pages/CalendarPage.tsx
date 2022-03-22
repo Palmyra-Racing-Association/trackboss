@@ -1,26 +1,40 @@
 /* eslint-disable */
 /* eslint-disable import/no-duplicates */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
 import { ChakraProvider, Box } from '@chakra-ui/react';
 import EventCalendar from '../components/EventCalendar';
 import Header from '../components/Header';
 import theme from '../theme';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { getCalendarEventList } from '../controller/event';
+import { getCalendarEvents } from '../controller/event';
+import { getCalendarJobs } from '../controller/job'; 
 import CreateEventModal from '../components/CreateEventModal';
+import { Event } from '../../../src/typedefs/event';
+import { Job } from '../../../src/typedefs/job';
 
-// TODO: should we also be getting all jobs and displaying them as well?
-async function getEventListLocal(): Promise<any> {
-    const events = await getCalendarEventList();
-    return events;
+async function getCalendarEventsLocal(token: string) {
+    const events = await getCalendarEvents(token)
+    const jobs = await getCalendarJobs(token);
+
+    const calendarEvents: Array<Job | Event> = [];
+    if (events && jobs) {
+        console.log(jobs[0]);
+        console.log(events[0])
+        calendarEvents.push(events[0]);
+        calendarEvents.push(jobs[0]);
+    }
+    
+    return calendarEvents;
 }
 
 function CalendarPage() {
-    const [upcomingEvents, setEvents] = useState([]);
+    const { state } = useContext(UserContext);
+    // 'any' is needed here for the calendar to render properly
+    const [upcomingEvents, setEvents] = useState<any[]>();
     useEffect(() => {
         async function getData() {
-            const events = await getEventListLocal();
-            setEvents(events);
+            setEvents(await getCalendarEventsLocal(state.token));
         }
         getData();
     }, []);
@@ -31,7 +45,11 @@ function CalendarPage() {
                 <CreateEventModal />
             </Box>
             <Box p={5} pt={3} pl={10} pr={10}>
-                <EventCalendar events={upcomingEvents} />
+                {
+                    upcomingEvents && (
+                        <EventCalendar events={upcomingEvents} />
+                    )
+                }
             </Box>
         </ChakraProvider>
     );

@@ -1,14 +1,14 @@
 ### GEN THE JOBS
-CALL sp_event_job_generation('2022-02-01T08:00:00', '2020-02-02T16:00:00', 1, 'The First Race', 'test first race!');
-CALL sp_event_job_generation('2022-05-15T10:00:00', '2021-05-19T10:00:00', 3, 'XO Race','Test XO Race Job Generation');
-CALL sp_event_job_generation('2022-02-01T09:00:00', '2022-02-01T15:00:00', 5, 'Yearly Meeting', 'test meeting!');
-CALL sp_event_job_generation('2022-01-11T08:00:00', '2022-01-13T08:00:00', 6, 'Harescrambler', 'test harescrambler job generation!');
-CALL sp_event_job_generation('2022-03-15T15:00:00', '2021-03-15T20:00:00', 9, 'Free Ride Day!', 'Test Ride Day!');
-CALL sp_event_job_generation('2022-01-01T08:00:00', '2022-01-01T16:00:00', 1, '2022 first race', 'test race generation!');
+CALL sp_event_job_generation('2022-04-01T08:00:00', '2022-04-02T16:00:00', 1, 'The First Race', 'test first race!');
+CALL sp_event_job_generation('2022-03-15T10:00:00', '2022-03-19T10:00:00', 3, 'XO Race','Test XO Race Job Generation');
+CALL sp_event_job_generation('2022-03-01T09:00:00', '2022-03-01T15:00:00', 5, 'Yearly Meeting', 'test meeting!');
+CALL sp_event_job_generation('2022-03-05T08:00:00', '2022-03-07T08:00:00', 6, 'Harescrambler', 'test harescrambler job generation!');
+CALL sp_event_job_generation('2022-03-15T15:00:00', '2022-03-15T20:00:00', 9, 'Free Ride Day!', 'Test Ride Day!');
+CALL sp_event_job_generation('2022-02-01T08:00:00', '2022-02-01T16:00:00', 1, '2022 First Race', 'test race generation!');
 ###
 
 # Assign members to the jobs
-update job set member_id = (job_id % 101 + 1); -- simple way to assign randomly members to jobs ( 100 is how many members we have )
+update job set member_id = (job_id % 101 + 1); -- simple way to assign randomly members to jobs ( 101 is how many members we have )
 
 # THIS TO VERIFY 80% of jobs, giving 1-1 points, not verifying paid laborers
 update job j
@@ -30,4 +30,6 @@ update member m
 left join membership ms on m.membership_id = ms.membership_id
 set membership_admin_id = m.member_id
 where m.member_type_id = 2;
+
+CALL sp_event_job_generation('2022-04-01T08:00:00', '2022-04-01T16:00:00', 1, '2022 Last Race', 'test empty event');
 
