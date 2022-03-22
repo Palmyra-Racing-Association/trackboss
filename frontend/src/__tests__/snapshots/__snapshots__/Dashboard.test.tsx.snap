@@ -93,52 +93,6 @@ Array [
         className="chakra-stack css-84zodg"
       >
         <div
-          className="css-15ddyrp"
-          onClick={[Function]}
-        >
-          <div
-            className="css-gmuwbf"
-          >
-            <div
-              className="chakra-stack css-10j85wf"
-            >
-              <GaugeChart
-                colors={
-                  Array [
-                    "#FF9F46",
-                    "#76CE6F",
-                  ]
-                }
-                hideText={true}
-                id="gauge-chart"
-                nrOfLevels={20}
-                percent={0.67}
-              />
-              <div
-                className="chakra-stack css-jp20jv"
-              >
-                <p
-                  className="chakra-text css-1srjgni"
-                >
-                  You have completed
-                </p>
-                <p
-                  className="chakra-text css-68kehq"
-                >
-                  0
-                  %
-                </p>
-                <p
-                  className="chakra-text css-1bsg0uq"
-                >
-                  of this year's work points
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div />
-        <div
           className="css-1z0glir"
         >
           <div

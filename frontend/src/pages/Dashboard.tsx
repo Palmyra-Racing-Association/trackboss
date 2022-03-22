@@ -11,29 +11,27 @@ import { Event } from '../../../src/typedefs/event';
 import { getWorkPointsPercentage } from '../controller/workPoints';
 import GreetingText from '../components/GreetingText';
 
-async function getUpcomingEventDataLocal(): Promise<any> {
-    const props = await getUpcomingEventData();
+async function getUpcomingEventDataLocal(token: string): Promise<Event | undefined> {
+    // Creates a string with today's date in YYYYMMDD format
+    const now = new Date();
+    const nowString = now.toISOString().slice(0, 10).replace(/-/g, '');
+    const props = await getUpcomingEventData(token, `${nowString}-`);
     return props;
-}
-
-async function getWorkPointsPercentageLocal() {
-    const workPointsProps = await getWorkPointsPercentage();
-    return workPointsProps;
 }
 
 function Dashboard() {
     const { state } = useContext(UserContext);
-    const [nextEvent, setNextEvent] = useState<Event | null >(null);
-    const [percent, setPercent] = useState(0);
+    const [nextEvent, setNextEvent] = useState<Event>();
+    const [percent, setPercent] = useState<number>();
     useEffect(() => {
         async function getData() {
-            const per = await getWorkPointsPercentageLocal();
-            const event = await getUpcomingEventDataLocal();
-            setNextEvent(event);
-            setPercent(per);
+            if (state.user) {
+                setPercent(await getWorkPointsPercentage(state.token, state.user.memberId));
+            }
+            setNextEvent(await getUpcomingEventDataLocal(state.token));
         }
         getData();
-    }, []);
+    }, [state.user]);
 
     return (
         <ChakraProvider theme={theme}>
@@ -46,15 +44,17 @@ function Dashboard() {
                 }
                 <Center>
                     <HStack>
-                        <WorkPointsCard percent={percent} />
                         {
-                            nextEvent ? (
+                            percent && (
+                                <WorkPointsCard percent={percent} />
+                            )
+                        }
+                        {
+                            nextEvent && (
                                 <EventCard
                                     date={nextEvent.start}
                                     name={nextEvent.title}
                                 />
-                            ) : (
-                                <div />
                             )
                         }
                         <ImportantLinksCard />
