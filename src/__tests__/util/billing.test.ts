@@ -1,15 +1,20 @@
 import { format } from 'date-fns';
 import { Bill } from '../../typedefs/bill';
 import { WorkPoints } from '../../typedefs/workPoints';
-import { mockGetBillList } from '../api/mocks/billing';
+import { mockEmailBills, mockGenerateNewBills, mockGetBillList } from '../api/mocks/billing';
 import { generateNewBills, emailBills } from '../../util/billing';
 import * as billing from '../../database/billing';
-import * as dbMembership from '../../database/membership';
-import * as dbWorkPoints from '../../database/workPoints';
+import * as membership from '../../database/membership';
+import * as workPoints from '../../database/workPoints';
 
 export const mockGenerateBill = jest.spyOn(billing, 'generateBill').mockImplementation();
 
 export const mockMarkBillEmailed = jest.spyOn(billing, 'markBillEmailed').mockImplementation();
+
+beforeAll(() => {
+    mockGenerateNewBills.mockRestore();
+    mockEmailBills.mockRestore();
+});
 
 describe('generateNewBills()', () => {
     it('Calculates nonzero bill amount and fee correctly', async () => {
@@ -37,10 +42,10 @@ describe('generateNewBills()', () => {
         const expOwedWithFee = 750; // TODO: change if fee is added
 
         const mockGetBaseDues = jest
-            .spyOn(dbMembership, 'getBaseDues')
+            .spyOn(membership, 'getBaseDues')
             .mockImplementation(async (): Promise<number> => baseDues);
         const mockGetWorkPointsByMembership = jest
-            .spyOn(dbWorkPoints, 'getWorkPointsByMembership')
+            .spyOn(workPoints, 'getWorkPointsByMembership')
             .mockImplementation(async (): Promise<WorkPoints> => ({ total: earned }));
 
         // ignore the output from generateNewBills because mockGetBillList will
@@ -81,10 +86,10 @@ describe('generateNewBills()', () => {
         const expOwedWithFee = 0; // TODO: change if fee is added
 
         const mockGetBaseDues = jest
-            .spyOn(dbMembership, 'getBaseDues')
+            .spyOn(membership, 'getBaseDues')
             .mockImplementation(async (): Promise<number> => baseDues);
         const mockGetWorkPointsByMembership = jest
-            .spyOn(dbWorkPoints, 'getWorkPointsByMembership')
+            .spyOn(workPoints, 'getWorkPointsByMembership')
             .mockImplementation(async (): Promise<WorkPoints> => ({ total: earned }));
 
         // ignore the output from generateNewBills because mockGetBillList will
@@ -145,10 +150,10 @@ describe('generateNewBills()', () => {
         const earned = 125;
 
         const mockGetBaseDues = jest
-            .spyOn(dbMembership, 'getBaseDues')
+            .spyOn(membership, 'getBaseDues')
             .mockImplementation(async (): Promise<number> => baseDues);
         const mockGetWorkPointsByMembership = jest
-            .spyOn(dbWorkPoints, 'getWorkPointsByMembership')
+            .spyOn(workPoints, 'getWorkPointsByMembership')
             .mockImplementation(async (): Promise<WorkPoints> => ({ total: earned }));
 
         const results = await generateNewBills(membershipList, preGeneratedBills, threshold, year);
@@ -195,11 +200,11 @@ describe('generateNewBills()', () => {
         const earned = 125;
 
         const mockGetBaseDues = jest
-            .spyOn(dbMembership, 'getBaseDues')
+            .spyOn(membership, 'getBaseDues')
             .mockImplementationOnce(() => { throw new Error('intentional test design'); })
             .mockImplementation(async (): Promise<number> => baseDues);
         const mockGetWorkPointsByMembership = jest
-            .spyOn(dbWorkPoints, 'getWorkPointsByMembership')
+            .spyOn(workPoints, 'getWorkPointsByMembership')
             .mockImplementation(async (): Promise<WorkPoints> => ({ total: earned }));
 
         // ignore the output from generateNewBills because mockGetBillList will

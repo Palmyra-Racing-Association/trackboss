@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { Bill, GetBillListRequestFilters, WorkPointThreshold } from 'src/typedefs/bill';
 import { Membership } from 'src/typedefs/membership';
 import * as billing from '../../../database/billing';
+import * as billingUtil from '../../../util/billing';
 
 export const billList: Bill[] = [
     {
@@ -151,3 +152,24 @@ export const membershipList: Membership[] = [
         lastModifiedBy: 'Lurge Geocas',
     },
 ];
+
+export const mockGenerateNewBills = jest
+    .spyOn(billingUtil, 'generateNewBills')
+    .mockImplementation(async (): Promise<Bill[]> => Promise.resolve([{
+        billId: 0,
+        generatedDate: '2022-03-21',
+        year: 2022,
+        amount: 100,
+        amountWithFee: 101,
+        membershipAdmin: 'Jimbus Gimbus',
+        membershipAdminEmail: 'em@il.com',
+        emailedBill: undefined,
+        curYearPaid: true,
+    }]));
+
+export const mockEmailBills = jest
+    .spyOn(billingUtil, 'emailBills')
+    .mockImplementation(async (generatedBills: Bill[]): Promise<Bill[]> => {
+        generatedBills.forEach((bill) => { bill.emailedBill = '2022-03-21'; });
+        return Promise.resolve(generatedBills);
+    });

@@ -4,6 +4,8 @@ import server from '../../server';
 import { createVerifier } from '../../util/auth';
 import {
     billList,
+    mockEmailBills,
+    mockGenerateNewBills,
     mockGetBillList,
     mockGetThreshold,
     mockMarkBillPaid,
@@ -17,7 +19,6 @@ import {
 } from '../util/authMocks';
 import { Bill, WorkPointThreshold } from '../../typedefs/bill';
 import { mockGetMember } from './mocks/member';
-import * as billingUtil from '../../util/billing';
 import { mockGetMembershipList } from './mocks/membership';
 
 const TAG_ROOT = '/api/billing';
@@ -385,26 +386,6 @@ describe('POST /billing/', () => {
             emailedBill: '2022-03-21',
             curYearPaid: true,
         }];
-
-        const mockGenerateNewBills = jest
-            .spyOn(billingUtil, 'generateNewBills')
-            .mockImplementation(async (): Promise<Bill[]> => Promise.resolve([{
-                billId: 0,
-                generatedDate: '2022-03-21',
-                year: 2022,
-                amount: 100,
-                amountWithFee: 101,
-                membershipAdmin: 'Jimbus Gimbus',
-                membershipAdminEmail: 'em@il.com',
-                emailedBill: undefined,
-                curYearPaid: true,
-            }]));
-        const mockEmailBills = jest
-            .spyOn(billingUtil, 'emailBills')
-            .mockImplementation(async (generatedBills: Bill[]): Promise<Bill[]> => {
-                generatedBills.forEach((bill) => { bill.emailedBill = '2022-03-21'; });
-                return Promise.resolve(generatedBills);
-            });
 
         const res = await supertestServer.post(`${TAG_ROOT}/`).set('Authorization', 'Bearer admin');
         expect(res.status).toBe(201);
