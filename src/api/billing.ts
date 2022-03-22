@@ -1,10 +1,9 @@
 import { Request, Response, Router } from 'express';
 import _ from 'lodash';
 // import { format } from 'date-fns';
-import { getBaseDues, getMembershipList } from '../database/membership';
-import { getWorkPointsByMembership } from '../database/workPoints';
+import { getMembershipList } from '../database/membership';
 import logger from '../logger';
-import { generateBill, getBillList, getWorkPointThreshold, markBillPaid } from '../database/billing';
+import { getBillList, getWorkPointThreshold, markBillPaid } from '../database/billing';
 import {
     Bill,
     GetBillListResponse,
@@ -14,12 +13,13 @@ import {
     PostPayBillResponse,
 } from '../typedefs/bill';
 import { checkHeader, verify } from '../util/auth';
+import { emailBills, generateNewBills } from '../util/billing';
 
 //
-// TODO: Emails are not sent for generated bills (line 206)
+// TODO: Emails are not sent for generated bills (see emailBills helper function in util)
 // (also uncomment the import on line 3)
 //
-// TODO: No fee calculated for bills (line 190)
+// TODO: No fee calculated for bills (see generateNewBills helper function in util)
 //
 
 const billing = Router();
@@ -69,10 +69,7 @@ billing.get('/list', async (req: Request, res: Response) => {
             res.status(200);
             response = billingList;
         } catch (e: any) {
-            if (e.message === 'user input error') {
-                res.status(400);
-                response = { reason: 'bad request' };
-            } else if (e.message === 'Authorization Failed') {
+            if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
             } else if (e.message === 'Forbidden') {
@@ -101,7 +98,13 @@ billing.get('/:membershipID', async (req: Request, res: Response) => {
             if (Number.isNaN(membershipId)) {
                 throw new Error('not found');
             }
-            response = await getBillList({ membershipId });
+
+            const results = await getBillList({ membershipId });
+            if (_.isEmpty(results)) {
+                throw new Error('not found');
+            }
+
+            response = results;
             res.status(200);
         } catch (e: any) {
             if (e.message === 'Authorization Failed') {
@@ -122,7 +125,7 @@ billing.get('/:membershipID', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-billing.post('/new', async (req: Request, res: Response) => {
+billing.post('/:membershipID', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: PostPayBillResponse;
     const headerCheck = checkHeader(authorization);
@@ -169,54 +172,18 @@ billing.post('/', async (req: Request, res: Response) => {
         try {
             await verify(headerCheck.token, 'Admin');
             const curYear = new Date().getFullYear();
+            logger.info('getMembershipList');
             const membershipList = await getMembershipList('active');
+            logger.info('getWorkPointThreshold');
             const { threshold } = await getWorkPointThreshold(curYear);
             // to protect against generating duplicate bills
+            logger.info('getBillList');
             const preGeneratedBills = await getBillList({ year: curYear });
 
-            // generate new bills for each active membership
-            membershipList.forEach(async (membership) => {
-                // only generate a bill if one hasn't already been generated
-                if (typeof _.find(
-                    preGeneratedBills,
-                    (bill) => bill.membershipAdmin === membership.membershipAdmin,
-                ) === 'undefined') {
-                    try {
-                        const baseDues = await getBaseDues(membership.membershipId);
-                        const earned = (await getWorkPointsByMembership(membership.membershipId, curYear)).total;
-                        const owed = (1 - earned / threshold) * baseDues;
-                        await generateBill({
-                            amount: owed,
-                            amountWithFee: owed, // TODO: what's the fee?
-                            membershipId: membership.membershipId,
-                        });
-                    } catch (e) {
-                        // generate more bills even if this one failed
-                        logger.error(`Failed to generate bill for membership with ID ${membership.membershipId}: ${e}`);
-                    }
-                }
-            });
-
-            // all bills have been generated, so now email all of them
-            const generatedBills = await getBillList({ year: curYear });
-            generatedBills.forEach(async (bill) => {
-                // prevent sending duplicate emails for pre-generated bills
-                if (typeof bill.emailedBill === 'undefined') {
-                    try {
-                        //
-                        // TODO: send the email
-                        //
-                        // // (gonna need to import this fn from '../database/billing')
-                        // await markBillEmailed(bill.billId);
-                        // // update our local copy of the bill
-                        // bill.emailedBill = format(new Date(), 'yyyy-MM-dd');
-                        throw new Error('sending emails is unimplemented!');
-                    } catch (e) {
-                        // send more emails even if this one failed
-                        logger.error(`Failed to email bill ${bill.billId} to ${bill.membershipAdminEmail}: ${e}`);
-                    }
-                }
-            });
+            logger.info('generateNewBills');
+            let generatedBills = await generateNewBills(membershipList, preGeneratedBills, threshold, curYear);
+            logger.info('emailBills');
+            generatedBills = await emailBills(generatedBills);
 
             res.status(201);
             response = generatedBills;
