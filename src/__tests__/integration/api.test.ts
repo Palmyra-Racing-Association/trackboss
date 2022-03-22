@@ -1,5 +1,5 @@
 import supertest from 'supertest';
-import { mockVerifyAdmin } from '../util/authMocks';
+import { mockVerifyAdmin, mockVerifyNonexistent } from '../util/authMocks';
 import server from '../../server';
 import { destroyPool } from '../../database/pool';
 
@@ -33,6 +33,7 @@ describe('GET /me', () => {
     });
     it('Returns 404 and correct reason with nonexistent member', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/me`).set('Authorization', 'Bearer nonexistent');
+        expect(mockVerifyNonexistent).toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
     });
