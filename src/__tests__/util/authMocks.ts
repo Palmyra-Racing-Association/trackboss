@@ -37,5 +37,4 @@ mockedPayloadNonexistent['cognito:username'] = 'ff1';
 export const mockVerifyNonexistent =
     mockedType.verify.calledWith('nonexistent').mockResolvedValue(mockedPayloadNonexistent);
 
-
 export const createSpy = jest.spyOn(CognitoJwtVerifier, 'create').mockImplementation(() => mockedType);
