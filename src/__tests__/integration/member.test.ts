@@ -1,5 +1,6 @@
+import _ from 'lodash';
 import supertest from 'supertest';
-import { mockInvalidToken, mockValidToken, mockVerifyAdmin, mockVerifyMember } from '../util/authMocks';
+import { mockInvalidToken, mockVerifyAdmin, mockVerifyMember } from '../util/authMocks';
 import server from '../../server';
 import { destroyPool } from '../../database/pool';
 import { Member } from '../../typedefs/member';
@@ -32,10 +33,14 @@ describe('GET /member/list', () => {
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
         expect(members.length).toBe(100);
-        // expect(members[0]).toEqual(memberList[0]);
-        // expect(members[1]).toEqual(memberList[1]);
-        // expect(members[2]).toEqual(memberList[2]);
-        // expect(members[3]).toEqual(memberList[3]);
+        expect(members[0].memberId).toBe(1);
+        expect(members[0].firstName).toBe('Squeak');
+        expect(members[0].lastName).toBe('Trainywhel');
+        expect(members[0].memberType).toBe('Admin');
+        expect(members[61].memberId).toBe(62);
+        expect(members[61].firstName).toBe('Birdie');
+        expect(members[61].lastName).toBe('Corradini');
+        expect(members[61].memberType).toBe('Membership Admin');
     });
 
     it('Correctly filters by role Admin', async () => {
@@ -45,6 +50,7 @@ describe('GET /member/list', () => {
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
         expect(members.length).toBe(13);
+        _.forEach(members, (member: Member) => expect(member.memberType).toBe('Admin'));
     });
 
     it('Correctly filters by role Membership Admin', async () => {
@@ -54,6 +60,7 @@ describe('GET /member/list', () => {
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
         expect(members.length).toBe(47);
+        _.forEach(members, (member: Member) => expect(member.memberType).toBe('Membership Admin'));
     });
 
     it('Correctly filters by role Member', async () => {
@@ -63,6 +70,7 @@ describe('GET /member/list', () => {
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
         expect(members.length).toBe(21);
+        _.forEach(members, (member: Member) => expect(member.memberType).toBe('Member'));
     });
 
     it('Correctly filters by role Paid Laborer', async () => {
@@ -72,13 +80,13 @@ describe('GET /member/list', () => {
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
         expect(members.length).toBe(19);
+        _.forEach(members, (member: Member) => expect(member.memberType).toBe('Paid Laborer'));
     });
 
     it('Returns 400 for invalid role', async () => {
         const res = await supertestServer
             .get(`${TAG_ROOT}/list?role=invalid`)
             .set('Authorization', 'Bearer validtoken');
-        // the api should not query the database in this case, and thus the mock should not be called
         expect(res.status).toBe(400);
         expect(res.body.reason).toBe('invalid role specified');
     });
@@ -99,10 +107,20 @@ describe('GET /member/:memberId', () => {
     });
 
     it('GETs the correct member', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/2`).set('Authorization', 'Bearer validtoken');
+        const res = await supertestServer.get(`${TAG_ROOT}/3`).set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
         const member: Member = res.body;
-        // expect(member).toEqual(memberList[2]);
+        expect(member.memberId).toBe(3);
+        expect(member.membershipAdmin).toBe('Perry Spencley');
+        expect(member.memberType).toBe('Member');
+        expect(member.firstName).toBe('Grace');
+        expect(member.lastName).toBe('Lovekin');
+        expect(member.phoneNumber).toBe('955-144-3168');
+        expect(member.occupation).toBe('Marketing Manager');
+        expect(member.email).toBe('glovekin1@ameblo.jp');
+        expect(member.birthdate).toBe('1954-08-20');
+        expect(member.dateJoined).toBe('2016-07-03');
+        expect(member.active);
     });
 
     it('Returns 404 when no data found', async () => {
@@ -152,25 +170,34 @@ describe('POST /member/new', () => {
     });
 
     it('successfully inserts a member', async () => {
+        const newMember = {
+            uuid: '54f',
+            firstName: 'Newton',
+            lastName: 'Member',
+            phoneNumber: '999-999-5264',
+            dateJoined: '2022-02-12',
+            birthdate: '1984-06-14',
+            occupation: 'Tester',
+            email: 'newton@codetesters.com',
+            memberTypeId: 1,
+        };
         const res = await supertestServer
             .post(`${TAG_ROOT}/new`)
             .set('Authorization', 'Bearer admin')
-            .send({
-                uuid: '54f',
-                firstName: 'Newton',
-                lastName: 'Member',
-                phoneNumber: '999-999-5264',
-                dateJoined: '2022-02-12',
-                birthdate: '1984-06-14',
-                occupation: 'Tester',
-                email: 'newton@codetesters.com',
-                memberTypeId: 1,
-            });
+            .send(newMember);
         expect(mockVerifyAdmin).toHaveBeenCalled();
         expect(res.status).toBe(201);
         const member: Member = res.body;
         expect(member.memberId).toBe(101);
-        // expect(member).toEqual(memberList[memberList.length - 1]);
+        expect(member.memberType).toBe('Admin');
+        expect(member.uuid).toBe(newMember.uuid);
+        expect(member.firstName).toBe(newMember.firstName);
+        expect(member.lastName).toBe(newMember.lastName);
+        expect(member.phoneNumber).toBe(newMember.phoneNumber);
+        expect(member.dateJoined).toBe(newMember.dateJoined);
+        expect(member.birthdate).toBe(newMember.birthdate);
+        expect(member.occupation).toBe(newMember.occupation);
+        expect(member.email).toBe(newMember.email);
     });
 });
 
