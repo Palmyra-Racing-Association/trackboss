@@ -20,7 +20,7 @@ import AddBikeModal from './AddBikeModal';
 interface cardProps {
     memberFamily: Member[],
     memberBikes: Bike[],
-    admin: Boolean
+    admin: boolean
 }
 
 export default function GeneralInfo(props: cardProps) {
