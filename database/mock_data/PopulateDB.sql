@@ -146,6 +146,8 @@ insert into member (member_type_id, first_name, last_name, phone_number, occupat
 insert into member (member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values (3, 'Vasilis', 'Mertel', '561-878-3783', 'Developer II', 'vmertel2o@parallels.com', '1976-11-30', '2019-02-03', 1);
 insert into member (member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values (3, 'Kathie', 'O''Scannill', '760-880-8632', 'Tax Accountant', 'koscannill2p@myspace.com', '2009-12-18', '2020-10-15', 1);
 insert into member (member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values (2, 'Patin', 'Lelliott', '913-810-0953', 'Senior Financial Analyst', 'plelliott2q@multiply.com', '2005-12-11', '2018-05-19', 1);
+insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('6d817fa9-dca1-4f95-bd0a-e3c5c52d5639', 1, 'Elijah', 'Parrish', '315-396-2469', 'Senior Software Dev', 'elijah.parrish321@gmail.com', '2005-12-11', '2018-05-19', 1);
+
 
 
 ### membership ###

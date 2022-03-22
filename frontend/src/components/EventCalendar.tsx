@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, Messages, momentLocalizer, View, ViewsProps } from 'react-big-calendar';
 import {
@@ -10,6 +10,7 @@ import {
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import SignUpModal from './SignUpModal';
+import { UserContext } from '../contexts/UserContext';
 import { getJobAttendees } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
 // import Event from '../../../src/typedefs/event';
@@ -52,6 +53,7 @@ async function getCurrentFamilyMembers(): Promise<any> {
 }
 
 export default function EventCalendar(props: EventCalendarProps) {
+    const { state } = useContext(UserContext);
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
     const [selectedEvent, setSelectedEvent] = useState<any>();
@@ -146,7 +148,7 @@ export default function EventCalendar(props: EventCalendarProps) {
                         selectedEvent={selectedEvent}
                         onSignUpOpen={onSignUpOpen}
                         // attendeesList={eventAttendees}
-                        admin
+                        admin={state.user?.memberType === 'Admin'}
                     />
                 )
             }

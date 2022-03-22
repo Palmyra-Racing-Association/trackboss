@@ -6,37 +6,14 @@ import MemberListPage from './pages/MemberListPage';
 import Settings from './pages/Settings';
 import CalendarPage from './pages/CalendarPage';
 import SignUpPage from './pages/SignUpPage';
-// import me from './controller/api';
-import { Member } from '../../src/typedefs/member';
-
-const testUser: Member = {
-    memberId: 0,
-    membershipAdmin: 'string',
-    uuid: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    active: true,
-    memberType: 'Admin',
-    firstName: 'Test',
-    lastName: 'User',
-    phoneNumber: 'string',
-    occupation: 'string',
-    email: 'user@example.com',
-    birthdate: '2022-03-09',
-    dateJoined: '2022-03-09',
-    address: 'string',
-    city: 'string',
-    state: 'string',
-    zip: 'string',
-    lastModifiedDate: '2022-03-09',
-    lastModifiedBy: 'string',
-};
+import me from './controller/api';
 
 export function App() {
     const { state, update } = useContext(UserContext);
     const location = useLocation();
     useEffect(() => {
         async function updateState(token: string) {
-            // const user = await me(token);
-            const user = testUser; // using temporarily for frontend dev
+            const user = await me(token);
             update({ loggedIn: true, token, user, storedUser: undefined });
         }
         if (!state.loggedIn) {
