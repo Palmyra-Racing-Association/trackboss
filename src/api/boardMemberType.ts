@@ -76,7 +76,7 @@ boardMemberType.get('/list', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-boardMemberType.get('/:boardMemberId', async (req: Request, res: Response) => {
+boardMemberType.get('/:boardMemberTypeId', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: GetBoardMemberTypeResponse;
     const headerCheck = checkHeader(authorization);
@@ -86,8 +86,8 @@ boardMemberType.get('/:boardMemberId', async (req: Request, res: Response) => {
     } else {
         try {
             await verify(headerCheck.token);
-            const { boardMemberId } = req.params;
-            const id = Number(boardMemberId);
+            const { boardMemberTypeId } = req.params;
+            const id = Number(boardMemberTypeId);
             if (Number.isNaN(id)) {
                 throw new Error('not found');
             }
@@ -109,7 +109,7 @@ boardMemberType.get('/:boardMemberId', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-boardMemberType.patch('/:boardMemberId', async (req: Request, res: Response) => {
+boardMemberType.patch('/:boardMemberTypeId', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: PatchBoardMemberTypeResponse;
     const headerCheck = checkHeader(authorization);
@@ -118,8 +118,8 @@ boardMemberType.patch('/:boardMemberId', async (req: Request, res: Response) => 
         response = { reason: headerCheck.reason };
     } else {
         try {
-            const { boardMemberId } = req.params;
-            const id = Number(boardMemberId);
+            const { boardMemberTypeId } = req.params;
+            const id = Number(boardMemberTypeId);
             if (Number.isNaN(id)) {
                 throw new Error('not found');
             }
@@ -149,7 +149,7 @@ boardMemberType.patch('/:boardMemberId', async (req: Request, res: Response) => 
     res.send(response);
 });
 
-boardMemberType.delete('/:boardMemberId', async (req: Request, res: Response) => {
+boardMemberType.delete('/:boardMemberTypeId', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: DeleteBoardMemberTypeResponse;
     const headerCheck = checkHeader(authorization);
@@ -158,8 +158,8 @@ boardMemberType.delete('/:boardMemberId', async (req: Request, res: Response) =>
         response = { reason: headerCheck.reason };
     } else {
         try {
-            const { boardMemberId } = req.params;
-            const id = Number(boardMemberId);
+            const { boardMemberTypeId } = req.params;
+            const id = Number(boardMemberTypeId);
             if (Number.isNaN(id)) {
                 throw new Error('not found');
             }

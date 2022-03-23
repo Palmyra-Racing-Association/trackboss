@@ -25,6 +25,7 @@ insert into board_member_title(title) VALUES ('Board Member');
 insert into board_member_title(title) VALUES ('Distant Rider Rep.');
 insert into board_member_title(title) VALUES ('Director of Data and Automation');
 insert into board_member_title(title) VALUES ('Public Relations');
+insert into board_member_title(title) VALUES ('TEST FOR DELETE');
 
 
 ### riding_area_status ###
