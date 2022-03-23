@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import _ from 'lodash';
 
-import { PatchMemberTypeRequest } from 'src/typedefs/memberType';
+import { PatchMemberTypeRequest } from '../../../typedefs/memberType';
 import { getMemberType, getMemberTypeList, patchMemberType } from '../../../database/memberType';
 import { mockQuery } from './mockQuery';
 
@@ -60,25 +60,19 @@ describe('patchMemberType()', () => {
 
     it('Throws for member type not found', async () => {
         const memberTypeId = 3000;
-        await expect(patchMemberType(memberTypeId, {})).rejects.toThrow('not found');
+        await expect(patchMemberType(memberTypeId, { type: 'New Type' })).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for user error', async () => {
         const memberTypeId = 4000;
         await expect(patchMemberType(memberTypeId, {})).rejects.toThrow('user input error');
-        expect(mockQuery).toHaveBeenCalled();
+        expect(mockQuery).not.toHaveBeenCalled();
     });
 
     it('Throws for internal server error', async () => {
         const memberTypeId = -100;
-        await expect(patchMemberType(memberTypeId, {})).rejects.toThrow('internal server error');
-        expect(mockQuery).toHaveBeenCalled();
-    });
-
-    it('Throws unreachable error without errno field', async () => {
-        const memberTypeId = -200;
-        await expect(patchMemberType(memberTypeId, {})).rejects.toThrow('this error should not happen');
+        await expect(patchMemberType(memberTypeId, { type: 'New Type' })).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 });

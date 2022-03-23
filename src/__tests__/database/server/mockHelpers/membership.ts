@@ -191,3 +191,16 @@ export function getRegistrationResponse(memberId: number) {
             return Promise.resolve();
     }
 }
+
+export function getBaseDuesResponse(id: number) {
+    switch (id) {
+        case 18:
+            return Promise.resolve([[{ base_dues_amt: 500 }]]);
+        case 765:
+            return Promise.resolve([[]]);
+        case -100:
+            throw new Error('error message');
+        default:
+            return Promise.resolve();
+    }
+}

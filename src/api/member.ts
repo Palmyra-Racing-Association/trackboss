@@ -76,10 +76,7 @@ member.get('/list', async (req: Request, res: Response) => {
                 response = memberList;
             }
         } catch (e: any) {
-            if (e.message === 'user input error') {
-                res.status(400);
-                response = { reason: 'bad request' };
-            } else if (e.message === 'Authorization Failed') {
+            if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
             } else {

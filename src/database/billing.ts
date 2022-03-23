@@ -9,7 +9,7 @@ export const GET_BILL_LIST_SQL = 'SELECT * FROM v_bill';
 export const GET_THRESHOLD_SQL = 'SELECT * FROM point_threshold WHERE year = ?';
 export const GENERATE_BILL_SQL =
     'INSERT INTO member_bill (generated_date, year, amount, amount_with_fee, membership_id, emailed_bill, ' +
-    'cur_year_paid) VALUES (CURDATE(), YEAR(CURDATE(), ?, ?, ?, NULL, 0))';
+    'cur_year_paid) VALUES (CURDATE(), YEAR(CURDATE()), ?, ?, ?, NULL, 0)';
 export const PATCH_BILL_SQL = 'CALL sp_patch_bill (?, ?, ?)';
 
 export async function generateBill(req: GenerateSingleBillRequest): Promise<number> {
@@ -52,7 +52,7 @@ export async function getWorkPointThreshold(year: number): Promise<WorkPointThre
 export async function getBillList(filters: GetBillListRequestFilters): Promise<Bill[]> {
     let sql;
     let values: any[] = [];
-    if (!_.isEmpty(filters)) {
+    if (_.values(filters).find((filter) => typeof filter !== 'undefined')) {
         let dynamicSql = ' WHERE ';
         let counter = 0;
         if (typeof filters.membershipId !== 'undefined') {
@@ -93,7 +93,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         membershipAdmin: result.membership_admin,
         membershipAdminEmail: result.membership_admin_email,
         emailedBill: result.emailed_bill,
-        curYearPaid: result.cur_year_paid,
+        curYearPaid: !!result.cur_year_paid[0],
     }));
 }
 

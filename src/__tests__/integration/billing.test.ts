@@ -3,14 +3,6 @@ import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
 import {
-    billList,
-    mockEmailBills,
-    mockGenerateNewBills,
-    mockGetBillList,
-    mockGetThreshold,
-    mockMarkBillPaid,
-} from './mocks/billing';
-import {
     mockInvalidToken,
     mockValidToken,
     mockVerifyAdmin,
@@ -18,8 +10,7 @@ import {
     mockVerifyMembershipAdmin,
 } from '../util/authMocks';
 import { Bill, WorkPointThreshold } from '../../typedefs/bill';
-import { mockGetMember } from './mocks/member';
-import { mockGetMembershipList } from './mocks/membership';
+import { destroyPool } from '../../database/pool';
 
 const TAG_ROOT = '/api/billing';
 
@@ -30,23 +21,13 @@ beforeAll(() => {
 });
 
 afterAll((done) => {
+    destroyPool();
     server.close(done);
 });
 
 describe('GET /billing/yearlyWorkPointThreshold', () => {
-    it('Returns 500 on Internal Server Error', async () => {
-        const res = await supertestServer
-            .get(`${TAG_ROOT}/yearlyWorkPointThreshold`)
-            .set('Authorization', 'Bearer validtoken');
-        expect(mockValidToken).toHaveBeenCalled();
-        expect(mockGetThreshold).toHaveBeenCalled();
-        expect(res.status).toBe(500);
-        expect(res.body.reason).toBe('internal server error');
-    });
-
     it('Returns 401 for no token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/yearlyWorkPointThreshold`);
-        expect(mockGetThreshold).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
@@ -56,7 +37,6 @@ describe('GET /billing/yearlyWorkPointThreshold', () => {
             .get(`${TAG_ROOT}/yearlyWorkPointThreshold`)
             .set('Authorization', 'Bearer invalidtoken');
         expect(mockInvalidToken).toHaveBeenCalled();
-        expect(mockGetThreshold).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('not authorized');
     });
@@ -66,7 +46,6 @@ describe('GET /billing/yearlyWorkPointThreshold', () => {
             .get(`${TAG_ROOT}/yearlyWorkPointThreshold`)
             .set('Authorization', 'Bearer validtoken');
         expect(mockValidToken).toHaveBeenCalled();
-        expect(mockGetThreshold).toHaveBeenCalled();
         expect(res.status).toBe(200);
         const wpt: WorkPointThreshold = res.body;
         expect(wpt.year).toEqual(new Date().getFullYear());
@@ -77,19 +56,17 @@ describe('GET /billing/yearlyWorkPointThreshold', () => {
             .get(`${TAG_ROOT}/yearlyWorkPointThreshold?year=bwahahaFearMeForIAmString`)
             .set('Authorization', 'Bearer validtoken');
         expect(mockValidToken).toHaveBeenCalled();
-        expect(mockGetThreshold).toHaveBeenCalled();
         expect(res.status).toBe(200);
         const wpt: WorkPointThreshold = res.body;
         expect(wpt.year).toEqual(new Date().getFullYear());
     });
 
     it('Gets the correct threshold with query', async () => {
-        const year = 1976;
+        const year = 2020;
         const res = await supertestServer
             .get(`${TAG_ROOT}/yearlyWorkPointThreshold?year=${year}`)
             .set('Authorization', 'Bearer validtoken');
         expect(mockValidToken).toHaveBeenCalled();
-        expect(mockGetThreshold).toHaveBeenCalled();
         expect(res.status).toBe(200);
         const wpt: WorkPointThreshold = res.body;
         expect(wpt.year).toEqual(year);
@@ -97,20 +74,8 @@ describe('GET /billing/yearlyWorkPointThreshold', () => {
 });
 
 describe('GET /billing/list', () => {
-    it('Returns 500 on Internal Server Error', async () => {
-        const res = await supertestServer
-            .get(`${TAG_ROOT}/list?paymentStatus=ise`)
-            .set('Authorization', 'Bearer admin');
-        expect(res.status).toBe(500);
-        expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
-        expect(res.body.reason).toBe('internal server error');
-    });
-
     it('Returns 401 for no token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`);
-        expect(mockGetBillList).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
@@ -118,7 +83,6 @@ describe('GET /billing/list', () => {
     it('Returns 401 for invalid token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer invalidtoken');
         expect(mockInvalidToken).toHaveBeenCalled();
-        expect(mockGetBillList).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('not authorized');
     });
@@ -126,20 +90,16 @@ describe('GET /billing/list', () => {
     it('Returns 403 for insufficient permissions', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer member');
         expect(mockVerifyMember).toHaveBeenCalled();
-        expect(mockVerifyAdmin).not.toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(res.status).toBe(403);
         expect(res.body.reason).toBe('forbidden');
+        expect(res.status).toBe(403);
     });
 
     it('Gets the unfiltered list', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer admin');
         expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        const result: Bill[] = res.body;
-        expect(_.isEqual(result, billList)).toBeTruthy();
+        const results: Bill[] = res.body;
+        expect(results.length).toBe(117);
     });
 
     it('Correctly filters by paid status', async () => {
@@ -147,12 +107,11 @@ describe('GET /billing/list', () => {
             .get(`${TAG_ROOT}/list?paymentStatus=paid`)
             .set('Authorization', 'Bearer admin');
         expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        const result: Bill[] = res.body;
-        result.forEach((b: Bill) => {
-            expect(b.curYearPaid).toBeTruthy();
+        const results: Bill[] = res.body;
+        expect(results.length).toBeGreaterThan(0);
+        results.forEach((b: Bill) => {
+            expect(b.curYearPaid).toBe(true);
         });
     });
 
@@ -161,12 +120,11 @@ describe('GET /billing/list', () => {
             .get(`${TAG_ROOT}/list?paymentStatus=outstanding`)
             .set('Authorization', 'Bearer admin');
         expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        const result: Bill[] = res.body;
-        result.forEach((b: Bill) => {
-            expect(b.curYearPaid).toBeFalsy();
+        const results: Bill[] = res.body;
+        expect(results.length).toBeGreaterThan(0);
+        results.forEach((b: Bill) => {
+            expect(b.curYearPaid).toBe(false);
         });
     });
 
@@ -175,11 +133,9 @@ describe('GET /billing/list', () => {
             .get(`${TAG_ROOT}/list?paymentStatus=incorrect`)
             .set('Authorization', 'Bearer admin');
         expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        const result: Bill[] = res.body;
-        expect(_.isEqual(result, billList)).toBeTruthy();
+        const results: Bill[] = res.body;
+        expect(results.length).toBe(117);
     });
 
     it('Correctly filters by year', async () => {
@@ -188,11 +144,10 @@ describe('GET /billing/list', () => {
             .get(`${TAG_ROOT}/list?year=${year}`)
             .set('Authorization', 'Bearer admin');
         expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        const result: Bill[] = res.body;
-        result.forEach((b: Bill) => {
+        const results: Bill[] = res.body;
+        expect(results.length).toBeGreaterThan(0);
+        results.forEach((b: Bill) => {
             expect(b.year).toBe(year);
         });
     });
@@ -202,29 +157,15 @@ describe('GET /billing/list', () => {
             .get(`${TAG_ROOT}/list?year=incorrect`)
             .set('Authorization', 'Bearer admin');
         expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        const result: Bill[] = res.body;
-        expect(_.isEqual(result, billList)).toBeTruthy();
+        const results: Bill[] = res.body;
+        expect(results.length).toBe(117);
     });
 });
 
 describe('GET /billing/:membershipID', () => {
-    it('Returns 500 on Internal Server Error', async () => {
-        const res = await supertestServer
-            .get(`${TAG_ROOT}/500`)
-            .set('Authorization', 'Bearer membershipAdmin');
-        expect(res.status).toBe(500);
-        expect(mockVerifyMembershipAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
-        expect(res.body.reason).toBe('internal server error');
-    });
-
     it('Returns 401 for no token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/0`);
-        expect(mockGetBillList).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
@@ -232,7 +173,6 @@ describe('GET /billing/:membershipID', () => {
     it('Returns 401 for invalid token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/0`).set('Authorization', 'Bearer invalidtoken');
         expect(mockInvalidToken).toHaveBeenCalled();
-        expect(mockGetBillList).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('not authorized');
     });
@@ -241,7 +181,6 @@ describe('GET /billing/:membershipID', () => {
         const res = await supertestServer.get(`${TAG_ROOT}/0`).set('Authorization', 'Bearer member');
         expect(mockVerifyMember).toHaveBeenCalled();
         expect(mockVerifyMembershipAdmin).not.toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
         expect(res.status).toBe(403);
         expect(res.body.reason).toBe('forbidden');
     });
@@ -249,8 +188,6 @@ describe('GET /billing/:membershipID', () => {
     it('Returns 404 for membershipId not found', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/9999`).set('Authorization', 'Bearer membershipAdmin');
         expect(mockVerifyMembershipAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
     });
@@ -260,39 +197,26 @@ describe('GET /billing/:membershipID', () => {
             .get(`${TAG_ROOT}/Jimbus%20Gimbus`)
             .set('Authorization', 'Bearer membershipAdmin');
         expect(mockVerifyMembershipAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).not.toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
     });
 
     it('Gets the list', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/0`).set('Authorization', 'Bearer membershipAdmin');
-        expect(mockVerifyMembershipAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
+        const res = await supertestServer.get(`${TAG_ROOT}/1`).set('Authorization', 'Bearer admin');
+        expect(mockVerifyAdmin).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        const result: Bill[] = res.body;
-        result.forEach((b: Bill) => {
-            expect(b.membershipAdmin).toBe('Jimbus Gimbus');
+        const results: Bill[] = res.body;
+        expect(results.length).toBeGreaterThan(0);
+        results.forEach((b: Bill) => {
+            expect(b.membershipAdmin).toBe('Patin Lelliott');
         });
     });
 });
 
 describe('POST /billing/:membershipID', () => {
-    it('Returns 500 on internal server error', async () => {
-        const res = await supertestServer.post(`${TAG_ROOT}/0`).set('Authorization', 'Bearer admin');
-        expect(res.status).toBe(500);
-        expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockMarkBillPaid).toHaveBeenCalled();
-        expect(res.body.reason).toBe('internal server error');
-    });
-
     it('Returns 401 for no token', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/0`);
         expect(res.status).toBe(401);
-        expect(mockMarkBillPaid).not.toHaveBeenCalled();
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
 
@@ -300,7 +224,6 @@ describe('POST /billing/:membershipID', () => {
         const res = await supertestServer.post(`${TAG_ROOT}/0`).set('Authorization', 'Bearer invalidtoken');
         expect(res.status).toBe(401);
         expect(mockInvalidToken).toHaveBeenCalled();
-        expect(mockMarkBillPaid).not.toHaveBeenCalled();
         expect(res.body.reason).toBe('not authorized');
     });
 
@@ -315,8 +238,6 @@ describe('POST /billing/:membershipID', () => {
     it('Returns 404 for membershipID not found', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/9999`).set('Authorization', 'Bearer membershipAdmin');
         expect(mockVerifyMembershipAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockMarkBillPaid).toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
     });
@@ -326,35 +247,21 @@ describe('POST /billing/:membershipID', () => {
             .post(`${TAG_ROOT}/Jimbus%20Gimbus`)
             .set('Authorization', 'Bearer membershipAdmin');
         expect(mockVerifyMembershipAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockMarkBillPaid).not.toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
     });
 
     it('Marks a bill as paid', async () => {
-        const res = await supertestServer.post(`${TAG_ROOT}/0`).set('Authorization', 'Bearer membershipAdmin');
+        const res = await supertestServer.post(`${TAG_ROOT}/95`).set('Authorization', 'Bearer membershipAdmin');
         expect(mockVerifyMembershipAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockMarkBillPaid).toHaveBeenCalled();
         expect(res.status).toBe(200);
     });
 });
 
 describe('POST /billing/', () => {
-    it('Returns 500 on internal server error', async () => {
-        const res = await supertestServer.post(`${TAG_ROOT}/`).set('Authorization', 'Bearer admin');
-        expect(res.status).toBe(500);
-        expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetMembershipList).toHaveBeenCalled();
-        expect(res.body.reason).toBe('internal server error');
-    });
-
     it('Returns 401 for no token', async () => {
         const res = await supertestServer.post(`${TAG_ROOT}/`);
         expect(res.status).toBe(401);
-        expect(mockMarkBillPaid).not.toHaveBeenCalled();
         expect(res.body.reason).toBe('Missing authorization grant in header');
     });
 
@@ -362,7 +269,6 @@ describe('POST /billing/', () => {
         const res = await supertestServer.post(`${TAG_ROOT}/`).set('Authorization', 'Bearer invalidtoken');
         expect(res.status).toBe(401);
         expect(mockInvalidToken).toHaveBeenCalled();
-        expect(mockMarkBillPaid).not.toHaveBeenCalled();
         expect(res.body.reason).toBe('not authorized');
     });
 
@@ -375,28 +281,17 @@ describe('POST /billing/', () => {
     });
 
     it('Generates all-new bills', async () => {
-        const expResult = [{
-            billId: 0,
-            generatedDate: '2022-03-21',
-            year: 2022,
-            amount: 100,
-            amountWithFee: 101,
-            membershipAdmin: 'Jimbus Gimbus',
-            membershipAdminEmail: 'em@il.com',
-            emailedBill: '2022-03-21',
-            curYearPaid: true,
-        }];
+        const preRes = await supertestServer
+            .get(`${TAG_ROOT}/list?year=${new Date().getFullYear()}`)
+            .set('Authorization', 'Bearer admin');
+        const preGeneratedBills: Bill[] = preRes.body;
+        expect(preGeneratedBills.length).toBeGreaterThan(0);
 
         const res = await supertestServer.post(`${TAG_ROOT}/`).set('Authorization', 'Bearer admin');
         expect(res.status).toBe(201);
-        expect(mockVerifyAdmin).toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(mockGetMembershipList).toHaveBeenCalled();
-        expect(mockGetThreshold).toHaveBeenCalled();
-        expect(mockGetBillList).toHaveBeenCalled();
-        expect(mockGenerateNewBills).toHaveBeenCalled();
-        expect(mockEmailBills).toHaveBeenCalled();
+        expect(mockVerifyAdmin).toHaveBeenCalledTimes(2);
         const result: Bill[] = res.body;
-        expect(_.isEqual(result, expResult)).toBeTruthy();
+        expect(result.length).toBeGreaterThan(0);
+        expect(_.intersectionWith(result, preGeneratedBills, _.isEqual).length).toBe(0);
     });
 });

@@ -42,6 +42,7 @@
         "@types/react-router-dom": "^5.3.3",
         "@types/react-test-renderer": "^17.0.1",
         "eslint-config-airbnb": "^19.0.4",
+        "eslint-import-resolver-typescript": "^2.5.0",
         "eslint-plugin-jsx-a11y": "^6.4.1",
         "jest": "^27.5.1",
         "jest-location-mock": "^1.0.9",
@@ -51,7 +52,7 @@
     },
     "scripts": {
         "start": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" REACT_APP_AUTH_URL=\"https://palmyramx-test.auth.us-east-1.amazoncognito.com\" REACT_APP_CLIENT_ID=3q7ile80d2qk4bgt75af9684bq react-scripts start",
-        "build": "cross-env REACT_APP_API_URL=\"https://apps.palmyramx.com\" react-scripts build",
+        "build": "REACT_APP_API_URL=\"https://apps.palmyramx.com\" react-scripts build",
         "test": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" REACT_APP_AUTH_URL=\"https://palmyramx-test.auth.us-east-1.amazoncognito.com\" REACT_APP_CLIENT_ID=3q7ile80d2qk4bgt75af9684bq react-scripts test",
         "ci-test": "REACT_APP_API_URL=\"http://localhost:8080\" REACT_APP_AUTH_URL=\"https://palmyramx-test.auth.us-east-1.amazoncognito.com\" REACT_APP_CLIENT_ID=3q7ile80d2qk4bgt75af9684bq react-scripts test --reporters $(pwd)/../.github/jest-reporter.js",
         "eject": "react-scripts eject",

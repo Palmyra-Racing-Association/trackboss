@@ -67,6 +67,10 @@ jobs:
       env:
         COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
         COGNITO_POOL_ID: ${{ secrets.COGNITO_POOL_ID }}
+        MYSQL_DB: pradb
+        MYSQL_HOST: localhost
+        MYSQL_USER: dev
+        MYSQL_PASS: devpass
       run: npm run ci-integration-test
   jest-frontend:
     runs-on: ubuntu-latest

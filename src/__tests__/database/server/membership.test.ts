@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import { PatchMembershipRequest } from 'src/typedefs/membership';
 import {
+    getBaseDues,
     getMembership,
     getMembershipList,
     getRegistration,
@@ -104,8 +105,8 @@ describe('getMembership()', () => {
             membershipId,
             'membershipAdmin',
             'Active',
-            0,
-            0,
+            false,
+            false,
             2022,
             '1 Test St',
             'Rotester',
@@ -283,6 +284,28 @@ describe('getRegistration()', () => {
     it('Throws for internal server error', async () => {
         const registrationId = -100;
         await expect(getRegistration(registrationId)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+});
+
+describe('getBaseDues()', () => {
+    it('Selects a single membership', async () => {
+        const membershipId = 18;
+
+        const result = await getBaseDues(membershipId);
+        expect(mockQuery).toHaveBeenCalled();
+        expect(result).toBe(500);
+    });
+
+    it('Throws for membership not found', async () => {
+        const membershipId = 765;
+        await expect(getBaseDues(membershipId)).rejects.toThrow('not found');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error', async () => {
+        const membershipId = -100;
+        await expect(getBaseDues(membershipId)).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 });
