@@ -1,5 +1,4 @@
-import { generateHeaders, getEventMonthDay } from './utils';
-// import { getTodaysDate } from './utils';
+import { generateHeaders, getEventMonthDay, getTimeOfDay } from './utils';
 import {
     DeleteEventResponse,
     GetEventListResponse,
@@ -116,16 +115,15 @@ export async function getEventList(token: string, listType?: string): Promise<Ge
     return response.json();
 }
 
-export async function getUpcomingEventData(token: string, listType: string) {
+export async function getEventCardProps(token: string, listType: string) {
     const upcomingEvents = await getEventList(token, listType);
 
     if (isEventList(upcomingEvents)) {
         // + symbol here converts the dates to numbers, to allow for arithmetic comparison
         upcomingEvents.sort((e1: Event, e2: Event) => +new Date(e1.start) - +new Date(e2.start));
-
         const formattedEventDate = getEventMonthDay(upcomingEvents[0].start);
-        upcomingEvents[0].start = formattedEventDate;
-        return upcomingEvents[0];
+        const formattedEventTime = getTimeOfDay(upcomingEvents[0].start);
+        return { title: upcomingEvents[0].title, start: formattedEventDate, time: formattedEventTime };
     }
 
     // else

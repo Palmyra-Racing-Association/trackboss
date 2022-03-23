@@ -51,7 +51,6 @@ event.post('/new', async (req: Request, res: Response) => {
 });
 
 event.get('/list', async (req: Request, res: Response) => {
-    console.log('over here');
     const { authorization } = req.headers;
     let response: GetEventListResponse;
     const headerCheck = checkHeader(authorization);
@@ -63,7 +62,6 @@ event.get('/list', async (req: Request, res: Response) => {
         const year = Number(dateString.slice(0, 4));
         const month = Number(dateString.slice(4, 6));
         const day = Number(dateString.slice(6, 8));
-        console.log({ year, month, day });
         if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) {
             valid = false;
         }
@@ -76,7 +74,6 @@ event.get('/list', async (req: Request, res: Response) => {
         try {
             await verify(headerCheck.token);
             const { range } = req.headers;
-            console.log(range);
             let eventList: Event[];
             if (typeof range === 'undefined') {
                 eventList = await getEventList();

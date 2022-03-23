@@ -58,9 +58,7 @@ exports[`event card renders all props correctly 1`] = `
       </p>
       <p
         className="chakra-text css-1gjuw9l"
-      >
-        Starts at 5pm
-      </p>
+      />
       <p
         className="chakra-text css-1gjuw9l"
       >
