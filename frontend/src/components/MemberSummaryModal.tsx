@@ -152,7 +152,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <HStack>
                                         <Text textAlign="left" fontSize="3xl" fontWeight="bold">Contact Info</Text>
                                         {
-                                            selectedMember.membershipAdmin === 'true' && (
+                                            state.user?.memberType === 'Admin' && (
                                                 <Button
                                                     textDecoration="underline"
                                                     color="orange"
@@ -258,7 +258,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                             Roles
                                         </Text>
                                         {
-                                            selectedMember.membershipAdmin === 'true' && (
+                                            state.user?.memberType === 'Admin' && (
                                                 <Button
                                                     textDecoration="underline"
                                                     color="orange"
@@ -382,7 +382,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     }
                                     <Container pt={20} mb={20} />
                                     {
-                                        selectedMember.membershipAdmin === 'true' && (
+                                        state.user?.memberType === 'Admin' && (
                                             <VStack align="left">
                                                 <Text textAlign="left" fontSize="3xl" fontWeight="bold">Actions</Text>
                                                 <HStack align="left">

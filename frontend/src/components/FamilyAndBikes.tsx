@@ -20,7 +20,7 @@ import AddBikeModal from './AddBikeModal';
 interface cardProps {
     memberFamily: Member[],
     memberBikes: Bike[],
-    admin: boolean,
+    admin: boolean
 }
 
 export default function GeneralInfo(props: cardProps) {
@@ -177,7 +177,7 @@ export default function GeneralInfo(props: cardProps) {
                                         <ListItem
                                             ml={10}
                                             fontSize="3xl"
-                                            width={400}
+                                            width={375}
                                         >
                                             {` ${bike.year}, ${bike.make} ${bike.model}`}
                                         </ListItem>

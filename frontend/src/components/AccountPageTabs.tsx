@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     Button,
     VStack,
@@ -11,32 +11,12 @@ import {
 import { BsWrench, BsFillPeopleFill } from 'react-icons/bs';
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { IoMdBriefcase } from 'react-icons/io';
+import { UserContext } from '../contexts/UserContext';
 import GeneralInfo from './GeneralInfo';
 import FamilyAndBikes from './FamilyAndBikes';
 import { Member } from '../../../src/typedefs/member';
 import WorkPointsHistory from './WorkPointsHistory';
 import { Bike } from '../../../src/typedefs/bike';
-
-const member: Member = {
-    memberId: 1,
-    membershipAdmin: 'true',
-    active: true,
-    memberType: 'admin',
-    firstName: 'Alan',
-    lastName: 'Delimon',
-    phoneNumber: '1',
-    email: 'user@example.com',
-    uuid: '',
-    occupation: '',
-    birthdate: '',
-    dateJoined: 'August 12, 2006',
-    address: '',
-    city: '',
-    state: '',
-    zip: '',
-    lastModifiedDate: '',
-    lastModifiedBy: '',
-};
 
 const memberFamily: Member[] = [
     {
@@ -99,6 +79,7 @@ const memberBikes: Bike[] = [
 ];
 
 export default function HamburgerMenu() {
+    const { state } = useContext(UserContext);
     const [activeButton, setActiveButton] = useState<Number>(1);
 
     return (
@@ -226,22 +207,26 @@ export default function HamburgerMenu() {
             </GridItem>
             <GridItem colSpan={3}>
                 {
-                    activeButton === 1 && (
-                        <GeneralInfo member={member} admin />
+                    activeButton === 1 && state.user && (
+                        <GeneralInfo user={state.user} />
                     )
                 }
                 {
-                    activeButton === 2 && (
-                        <FamilyAndBikes memberBikes={memberBikes} memberFamily={memberFamily} admin />
+                    activeButton === 2 && state.user && (
+                        <FamilyAndBikes
+                            memberBikes={memberBikes}
+                            memberFamily={memberFamily}
+                            admin={state.user.memberType === 'Admin'}
+                        />
                     )
                 }
                 {
-                    activeButton === 3 && (
+                    activeButton === 3 && state.user && (
                         <WorkPointsHistory />
                     )
                 }
                 {
-                    activeButton === 4 && (
+                    activeButton === 4 && state.user && (
                         <Center>
                             Dues And Waivers Component
                         </Center>

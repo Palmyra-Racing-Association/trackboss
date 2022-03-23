@@ -159,31 +159,6 @@ exports[`account page tabs renders correctly 1`] = `
   </div>
   <div
     className="css-rklm6r"
-  >
-    <div
-      className="chakra-stack css-rtxd0z"
-    >
-      <div
-        className="chakra-stack css-84zodg"
-      >
-        <h2
-          className="chakra-heading css-0"
-        >
-          General Information
-        </h2>
-        <button
-          className="chakra-button css-aab1vq"
-          onClick={[Function]}
-          type="button"
-        >
-          Edit
-        </button>
-      </div>
-      <hr
-        aria-orientation="horizontal"
-        className="chakra-divider css-1upb9tn"
-      />
-    </div>
-  </div>
+  />
 </div>
 `;

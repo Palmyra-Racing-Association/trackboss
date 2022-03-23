@@ -15,8 +15,7 @@ import {
 import { Member } from '../../../src/typedefs/member';
 
 interface cardProps {
-    member: Member,
-    admin: boolean,
+    user: Member,
 }
 
 async function handlePatchMemberContactInfo(
@@ -67,17 +66,17 @@ export default function GeneralInfo(props: cardProps) {
 
     useEffect(() => {
         async function setMemberData() {
-            setMemberInfo(props.member);
+            setMemberInfo(props.user);
         }
         setMemberData();
-    }, [props.member]);
+    }, [props.user]);
 
     return (
         <VStack mt={25}>
             <HStack>
                 <Heading>General Information</Heading>
                 {
-                    props.admin && (
+                    props.user.memberType === 'Admin' && (
                         <Button
                             mr={400}
                             textDecoration="underline"
