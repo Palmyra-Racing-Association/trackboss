@@ -47,23 +47,33 @@ function Dashboard() {
             <VStack align="left" spacing="2em">
                 <Header title="Dashboard" activeButtonId={1} />
                 {
-                    state.user && (
+                    state.user ? (
                         <GreetingText name={`${state.user?.firstName} ${state.user?.lastName}`} />
+                    ) : (
+                        <GreetingText name={`${''} ${''}`} />
                     )
                 }
                 <Center>
                     <HStack>
                         {
-                            percent && (
+                            percent ? (
                                 <WorkPointsCard percent={percent} />
+                            ) : (
+                                <WorkPointsCard percent={0} />
                             )
                         }
                         {
-                            eventCardProps && (
+                            eventCardProps ? (
                                 <EventCard
                                     date={eventCardProps.start}
                                     startTime={eventCardProps.time}
                                     name={eventCardProps.title}
+                                />
+                            ) : (
+                                <EventCard
+                                    date=""
+                                    startTime=""
+                                    name=""
                                 />
                             )
                         }

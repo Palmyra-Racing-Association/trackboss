@@ -4,11 +4,6 @@ import { GetMemberWorkPointsResponse } from '../typedefs/workPoints';
 import { checkHeader, verify } from '../util/auth';
 
 const workPoints = Router();
-workPoints.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', '*');
-    next();
-});
 
 type ParsedInputs = { id: number, year: number };
 

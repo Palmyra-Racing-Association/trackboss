@@ -27,7 +27,7 @@ export function getTodaysDate() {
 export function getEventMonthDay(date: string) {
     const eventDate = new Date(date).toString();
     const dateArray = eventDate.split(' ');
-    const formattedDate = `${dateArray[2]} ${dateArray[1]}`;
+    const formattedDate = `${dateArray[1]} ${dateArray[2]}`;
     return formattedDate;
 }
 
@@ -49,7 +49,7 @@ export function getEventMonthDaySpan(start: string, end: string) {
     const formattedStartDate = `${startStringArray[2]} ${startStringArray[1]}`;
     const formattedEndDate = `${endStringArray[2]} ${endStringArray[1]}`;
 
-    // if the event starts and ends on the same day, only return that date
+    // if the event starts and ends on the same day, only return tgetEventMonthDayhat date
     if (singleDayEvent(start, end)) {
         return formattedStartDate;
     }

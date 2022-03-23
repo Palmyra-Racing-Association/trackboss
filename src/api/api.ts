@@ -1,6 +1,5 @@
 import bodyParser from 'body-parser';
 import { Request, Response, Router } from 'express';
-import cors from 'cors';
 import { getMember } from '../database/member';
 import { checkHeader, verify } from '../util/auth';
 import bike from './bike';
@@ -20,7 +19,13 @@ import workPoints from './workPoints';
 const api = Router();
 
 api.use(bodyParser.json());
-api.use(cors());
+api.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', '*');
+    next();
+});
+
+api.use(bodyParser.json());
 
 api.get('/me', async (req: Request, res: Response) => {
     const { authorization } = req.headers;

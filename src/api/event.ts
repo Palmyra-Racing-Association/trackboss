@@ -12,11 +12,6 @@ import {
 import { checkHeader, verify } from '../util/auth';
 
 const event = Router();
-event.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', '*');
-    next();
-});
 
 event.post('/new', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
