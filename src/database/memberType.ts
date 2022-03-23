@@ -50,6 +50,10 @@ export async function getMemberTypeList(): Promise<MemberType[]> {
 }
 
 export async function patchMemberType(id: number, req: PatchMemberTypeRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
+
     const values = [id, req.type, req.baseDuesAmt];
 
     let result;
