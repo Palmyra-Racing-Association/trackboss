@@ -89,9 +89,137 @@ Array [
     <div
       className="css-gmuwbf"
     >
+      <h2
+        className="chakra-heading css-1i61012"
+      >
+        Hi, 
+        <h2
+          className="chakra-heading css-ws1u8n"
+        >
+           
+          !
+        </h2>
+      </h2>
+    </div>
+    <div
+      className="css-gmuwbf"
+    >
       <div
         className="chakra-stack css-84zodg"
       >
+        <div
+          className="css-15ddyrp"
+          onClick={[Function]}
+        >
+          <div
+            className="css-gmuwbf"
+          >
+            <div
+              className="chakra-stack css-10j85wf"
+            >
+              <GaugeChart
+                colors={
+                  Array [
+                    "#FF9F46",
+                    "#76CE6F",
+                  ]
+                }
+                hideText={true}
+                id="gauge-chart"
+                nrOfLevels={20}
+                percent={0}
+              />
+              <div
+                className="chakra-stack css-jp20jv"
+              >
+                <p
+                  className="chakra-text css-1srjgni"
+                >
+                  You have completed
+                </p>
+                <p
+                  className="chakra-text css-68kehq"
+                >
+                  0
+                  %
+                </p>
+                <p
+                  className="chakra-text css-1bsg0uq"
+                >
+                  of this year's work points
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="css-13ixl7l"
+          onClick={[Function]}
+        >
+          <div
+            className="css-gmuwbf"
+          >
+            <div
+              className="chakra-stack css-10j85wf"
+            >
+              <div
+                className="chakra-stack css-84zodg"
+              >
+                <button
+                  aria-label="Calendar"
+                  className="chakra-button css-ozg1ic"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden={true}
+                    fill="currentColor"
+                    focusable={false}
+                    height="1em"
+                    stroke="currentColor"
+                    strokeWidth="0"
+                    style={
+                      Object {
+                        "color": undefined,
+                      }
+                    }
+                    viewBox="0 0 3 16"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M0 2.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0zm0 5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0zM1.5 14a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+                      fillRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <h2
+                  className="chakra-heading css-1smtq8o"
+                >
+                  Next Event
+                </h2>
+              </div>
+              <hr
+                aria-orientation="horizontal"
+                className="chakra-divider css-svjswr"
+              />
+              <p
+                className="chakra-text css-ykwwr6"
+              >
+                
+              </p>
+              <p
+                className="chakra-text css-1bsg0uq"
+              >
+                
+              </p>
+              <p
+                className="chakra-text css-1bsg0uq"
+              >
+                
+              </p>
+            </div>
+          </div>
+        </div>
         <div
           className="css-1z0glir"
         >
