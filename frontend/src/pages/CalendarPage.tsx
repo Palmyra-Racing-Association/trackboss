@@ -1,20 +1,18 @@
-/* eslint-disable */
-/* eslint-disable import/no-duplicates */
 import React, { useState, useEffect, useContext } from 'react';
+import { Box, ChakraProvider } from '@chakra-ui/react';
 import { UserContext } from '../contexts/UserContext';
-import { ChakraProvider, Box } from '@chakra-ui/react';
 import EventCalendar from '../components/EventCalendar';
 import Header from '../components/Header';
 import theme from '../theme';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getCalendarEvents } from '../controller/event';
-import { getCalendarJobs } from '../controller/job'; 
+import { getCalendarJobs } from '../controller/job';
 import CreateEventModal from '../components/CreateEventModal';
 import { Event } from '../../../src/typedefs/event';
 import { Job } from '../../../src/typedefs/job';
 
 async function getCalendarEventsLocal(token: string) {
-    const events = await getCalendarEvents(token)
+    const events = await getCalendarEvents(token);
     const jobs = await getCalendarJobs(token);
 
     let calendarEvents: Array<Job | Event> = [];
@@ -22,8 +20,7 @@ async function getCalendarEventsLocal(token: string) {
         calendarEvents = calendarEvents.concat(events);
         calendarEvents = calendarEvents.concat(jobs);
     }
-    console.log(calendarEvents);
-    
+
     return calendarEvents;
 }
 
@@ -46,7 +43,7 @@ function CalendarPage() {
             <Box p={5} pt={3} pl={10} pr={10}>
                 {
                     upcomingEvents && (
-                        <EventCalendar events={upcomingEvents} />
+                        <EventCalendar calendarEvents={upcomingEvents} />
                     )
                 }
             </Box>

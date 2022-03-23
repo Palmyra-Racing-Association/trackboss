@@ -14,13 +14,14 @@ import { UserContext } from '../contexts/UserContext';
 import { getJobAttendees } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
 import { Event } from '../../../src/typedefs/event';
+import { Job } from '../../../src/typedefs/job';
 
 const RenderToolbar = require('react-big-calendar/lib/Toolbar');
 
 const localizer: DateLocalizer = momentLocalizer(moment);
 
 interface EventCalendarProps {
-    events: Event[],
+    calendarEvents: Array<Job | Event>,
 }
 
 interface CustomToolbarProps {
@@ -54,9 +55,29 @@ export default function EventCalendar(props: EventCalendarProps) {
     const { state } = useContext(UserContext);
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
-    const [selectedEvent, setSelectedEvent] = useState<any>();
+    const [selectedEvent, setSelectedEvent] = useState<Job | Event>();
     const [eventAttendees, setAttendees] = useState<any>();
     const [familyMembers, setFamilyMembers] = useState<any>();
+    const [calendarEvents, setCalendarEvents] = useState<Array<Job | Event>>([]);
+
+    function isEvent(calendarEvent: Event | Job): calendarEvent is Event {
+        if ((calendarEvent as Event).eventType) {
+            return true;
+        }
+        // else, its a Job
+        return false;
+    }
+
+    function deleteEvent() {
+        // call controller and await response, if successful...
+        if (selectedEvent && isEvent(selectedEvent)) {
+            const newCalendarEvents = calendarEvents.filter((e: any) => e.eventType !== selectedEvent?.eventType);
+            setCalendarEvents(newCalendarEvents);
+        } else {
+            const newCalendarEvents = calendarEvents.filter((e: any) => e.jobId !== selectedEvent?.jobId);
+            setCalendarEvents(newCalendarEvents);
+        }
+    }
 
     useEffect(() => {
         async function getData() {
@@ -64,6 +85,7 @@ export default function EventCalendar(props: EventCalendarProps) {
             const currentFamilyMembers = await getCurrentFamilyMembers();
             setAttendees(attendees);
             setFamilyMembers(currentFamilyMembers);
+            setCalendarEvents(props.calendarEvents);
         }
         getData();
     }, []);
@@ -72,46 +94,47 @@ export default function EventCalendar(props: EventCalendarProps) {
         <div>
             <Calendar
                 defaultView="month"
-                events={props.events}
+                events={calendarEvents}
                 selected={selectedEvent}
                 onSelectEvent={
-                    (event) => {
-                        setSelectedEvent(event);
+                    (calendarEvent) => {
+                        setSelectedEvent(calendarEvent);
                         onViewEventOpen();
                     }
                 }
                 localizer={localizer}
                 eventPropGetter={
-                    (event) => {
+                    (calendarEvent) => {
                         const newStyle = {
                             backgroundColor: 'lightgrey',
                             color: 'black',
                         };
-                        if (event.eventType) {
-                            if (event.eventType === 'Meeting') {
+                        if (isEvent(calendarEvent)) {
+                            if (calendarEvent.eventType === 'Meeting') {
                                 newStyle.backgroundColor = '#76CE6F';
                             } else if (
-                                event.eventType === 'Yearly Job' ||
-                                event.eventType === 'Work Day') {
+                                calendarEvent.eventType === 'Yearly Job' ||
+                                calendarEvent.eventType === 'Work Day') {
                                 newStyle.backgroundColor = '#68A9FF';
                             } else if (
-                                event.eventType === 'Race' ||
-                                event.eventType === 'Race Week' ||
-                                event.eventType === 'XO Race' ||
-                                event.eventType === 'Harescramble') {
+                                calendarEvent.eventType === 'Race' ||
+                                calendarEvent.eventType === 'Race Week' ||
+                                calendarEvent.eventType === 'XO Race' ||
+                                calendarEvent.eventType === 'Harescramble') {
                                 newStyle.backgroundColor = '#EE6439';
-                            } else {
+                            } else if (
+                                calendarEvent.eventType === 'Camp and Ride' ||
+                                calendarEvent.eventType === 'Ride Day') {
                                 newStyle.backgroundColor = 'lightgrey';
+                            } else { // its a Job
+                                newStyle.backgroundColor = '#68A4FF';
                             }
                             return {
                                 style: newStyle,
                             };
                         }
-                        // sets all jobs to blue
-                        newStyle.backgroundColor = '#68A4FF';
-                        return {
-                            style: newStyle,
-                        };
+                        // unreachable
+                        return {};
                     }
                 }
                 style={{ height: '70vh' }}
@@ -152,13 +175,16 @@ export default function EventCalendar(props: EventCalendarProps) {
                 }
             />
             {
-                selectedEvent && eventAttendees && (
+                selectedEvent && (
                     <SelectedEventModal
                         isOpen={isViewEventOpen}
                         onClose={onViewEventClose}
                         selectedEvent={selectedEvent}
                         onSignUpOpen={onSignUpOpen}
                         admin={state.user?.memberType === 'Admin'}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        deleteEvent={deleteEvent}
+                        // signUpForEvent={signUpForEvent}
                     />
                 )
             }

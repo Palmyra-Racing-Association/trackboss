@@ -15,36 +15,16 @@ import {
     HStack,
     VStack,
     Text,
-    // ListItem,
-    // UnorderedList,
 } from '@chakra-ui/react';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
-// import { deleteJob } from '../controller/job';
-// import { deleteEvent } from '../controller/event';
 
 interface modalProps {
   isOpen: boolean,
   onClose: () => void,
   selectedEvent: any,
   onSignUpOpen: () => void;
-  // attendeesList: any[], // TODO this should match our typing
-  admin: boolean
-}
-
-async function handleSignUp(selectedJob: any) {
-    // eslint-disable-next-line no-console
-    console.log(selectedJob);
-}
-
-async function deleteEventLocal(event: any) {
-    // if (event.type === 'work') {
-    //     await deleteJob('TestingToken', event);
-    // } else {
-    //     await deleteEvent('TestingToken', event);
-    // }
-    // eslint-disable-next-line no-console
-    console.log(event);
-    // Update state?
+  admin: boolean;
+  deleteEvent: () => void;
 }
 
 export default function SelectedEventModal(props: modalProps) {
@@ -79,16 +59,6 @@ export default function SelectedEventModal(props: modalProps) {
                             </Center>
                             <Center>
                                 <VStack spacing={1}>
-                                    {/* <Text pr={8} fontSize="xl">Going:</Text> */}
-                                    {/* <Divider /> */}
-                                    {/* TODO: Should we handle a case with many attendees? (10+) */}
-                                    {/* <UnorderedList>
-                                        {
-                                            props.attendeesList.map((attendee) => (
-                                                <ListItem>{attendee.name}</ListItem>
-                                            ))
-                                        }
-                                    </UnorderedList> */}
                                     {
                                         props.admin && (
                                             <Button
@@ -136,7 +106,7 @@ export default function SelectedEventModal(props: modalProps) {
                                 color="red"
                                 onClick={
                                     () => {
-                                        deleteEventLocal(props.selectedEvent);
+                                        props.deleteEvent();
                                         props.onClose();
                                     }
                                 }
@@ -152,7 +122,7 @@ export default function SelectedEventModal(props: modalProps) {
                                 color="white"
                                 onClick={
                                     () => [
-                                        handleSignUp(props.selectedEvent),
+                                        // handleSignUp(props.selectedEvent),
                                         props.onClose(),
                                     ]
                                 }
