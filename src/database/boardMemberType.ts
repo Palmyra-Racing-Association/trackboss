@@ -16,8 +16,10 @@ export const PATCH_BOARD_MEMBER_TYPE_SQL = 'UPDATE board_member_title SET title 
 export const DELETE_BOARD_MEMBER_TYPE_SQL = 'DELETE FROM board_member_title where board_title_id = ?';
 
 export async function insertBoardMemberType(req: PostNewBoardMemberTypeRequest): Promise<number> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [req.title];
-
     let result;
     try {
         [result] = await getPool().query<OkPacket>(INSERT_BOARD_MEMBER_TYPE_SQL, values);
@@ -80,7 +82,10 @@ export async function getBoardMemberType(id: number): Promise<BoardMemberType> {
 }
 
 export async function patchBoardMemberType(id: number, req: PatchBoardMemberTypeRequest): Promise<void> {
-    const values = [id, req.title];
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
+    const values = [req.title, id];
 
     let result;
     try {

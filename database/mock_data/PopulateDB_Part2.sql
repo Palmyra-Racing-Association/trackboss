@@ -31,3 +31,4 @@ left join membership ms on m.membership_id = ms.membership_id
 set membership_admin_id = m.member_id
 where m.member_type_id = 2;
 
+insert into board_member_title(title) VALUES ('TEST FOR DELETE');
