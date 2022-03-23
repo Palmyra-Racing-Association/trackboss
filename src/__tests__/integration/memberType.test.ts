@@ -3,6 +3,7 @@ import server from '../../server';
 import { createVerifier } from '../../util/auth';
 import { mockInvalidToken } from '../util/authMocks';
 import { MemberType } from '../../typedefs/memberType';
+import { destroyPool } from '../../database/pool';
 
 const TAG_ROOT = '/api/memberType';
 
@@ -14,6 +15,7 @@ beforeAll(() => {
 
 afterAll((done) => {
     server.close(done);
+    destroyPool();
 });
 
 describe('GET /memberType/list', () => {
