@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
@@ -139,7 +138,7 @@ describe('GET /billing/list', () => {
         expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(200);
         const result: Bill[] = res.body;
-        expect(_.isEqual(result, billList)).toBeTruthy();
+        expect(result).toEqual(billList);
     });
 
     it('Correctly filters by paid status', async () => {
@@ -179,7 +178,7 @@ describe('GET /billing/list', () => {
         expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(200);
         const result: Bill[] = res.body;
-        expect(_.isEqual(result, billList)).toBeTruthy();
+        expect(result).toEqual(billList);
     });
 
     it('Correctly filters by year', async () => {
@@ -206,7 +205,7 @@ describe('GET /billing/list', () => {
         expect(mockGetBillList).toHaveBeenCalled();
         expect(res.status).toBe(200);
         const result: Bill[] = res.body;
-        expect(_.isEqual(result, billList)).toBeTruthy();
+        expect(result).toEqual(billList);
     });
 });
 
@@ -397,6 +396,6 @@ describe('POST /billing/', () => {
         expect(mockGenerateNewBills).toHaveBeenCalled();
         expect(mockEmailBills).toHaveBeenCalled();
         const result: Bill[] = res.body;
-        expect(_.isEqual(result, expResult)).toBeTruthy();
+        expect(result).toEqual(expResult);
     });
 });

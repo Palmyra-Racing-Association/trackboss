@@ -170,11 +170,10 @@ export function getRegistrationResponse(memberId: number) {
     switch (memberId) {
         case 18:
             return Promise.resolve([[{
-                memberId,
-                memberType: 'member',
-                firstName: 'Testy',
-                lastName: 'Testington',
-                phoneNumber: '123-456-7890',
+                member_type: 'member',
+                first_name: 'Testy',
+                last_name: 'Testington',
+                phone_number: '123-456-7890',
                 occupation: 'Involuntary Testing Entity',
                 email: 'em@il.com',
                 birthdate: '2022-02-08',

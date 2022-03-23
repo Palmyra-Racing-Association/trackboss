@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Buffer } from 'buffer';
 import mysql, { OkPacket, RowDataPacket } from 'mysql2/promise';
 
 import config from './config';
@@ -7,7 +8,8 @@ const pool = mysql.createPool(config);
 
 const PROC_SQL = 'CALL sp_patch_bill(?, ?, ?)';
 const CHECK_SQL = 'SELECT bill_id, DATE_FORMAT(mb.generated_date, "%Y-%m-%d") AS generated_date, year, amount, ' +
-    'amount_with_fee, membership_id, emailed_bill, cur_year_paid FROM member_bill mb WHERE bill_id = ?';
+    'amount_with_fee, membership_id, DATE_FORMAT(mb.emailed_bill, "%Y-%m-%d") AS emailed_bill, cur_year_paid ' +
+    'FROM member_bill mb WHERE bill_id = ?';
 
 afterAll(async () => {
     await pool.end();
@@ -28,7 +30,7 @@ describe('sp_patch_bill()', () => {
         const values = [billId, '2022-02-24', 1];
 
         expResults[0].emailed_bill = '2022-02-24';
-        expResults[0].cur_year_paid = [1];
+        expResults[0].cur_year_paid = Buffer.from([1]);
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
@@ -36,7 +38,7 @@ describe('sp_patch_bill()', () => {
         const checkValues = [billId];
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, checkValues);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches emailed_bill field', async () => {
@@ -52,7 +54,7 @@ describe('sp_patch_bill()', () => {
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [billId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches cur_year_paid field', async () => {
@@ -61,14 +63,14 @@ describe('sp_patch_bill()', () => {
 
         const values = [billId, null, 0];
 
-        expResults[0].cur_year_paid = 0;
+        expResults[0].cur_year_paid = Buffer.from([0]);
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [billId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Throws on improper user input', async () => {

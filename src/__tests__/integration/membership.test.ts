@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { format } from 'date-fns';
 import supertest from 'supertest';
 import server from '../../server';
@@ -132,7 +131,7 @@ describe('GET /membership/:membershipId', () => {
         expect(mockValidToken).toHaveBeenCalled();
         expect(res.status).toBe(200);
         const membership: Membership = res.body;
-        expect(_.isEqual(membership, expMembership)).toBeTruthy();
+        expect(membership).toEqual(expMembership);
     });
 
     it('Returns 404 when no data found', async () => {

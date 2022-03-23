@@ -1,7 +1,6 @@
 import 'dotenv/config';
-import _ from 'lodash';
 
-import { PatchMembershipRequest } from 'src/typedefs/membership';
+import { PatchMembershipRequest } from '../../../typedefs/membership';
 import {
     getBaseDues,
     getMembership,
@@ -256,7 +255,6 @@ describe('getRegistration()', () => {
     it('Selects a single registration', async () => {
         const memberId = 18;
         const expRegistration = {
-            memberId,
             memberType: 'member',
             firstName: 'Testy',
             lastName: 'Testington',
@@ -272,7 +270,7 @@ describe('getRegistration()', () => {
 
         const result = await getRegistration(memberId);
         expect(mockQuery).toHaveBeenCalled();
-        expect(_.isEqual(result, expRegistration));
+        expect(result).toEqual(expRegistration);
     });
 
     it('Throws for registration not found', async () => {

@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import _ from 'lodash';
 import mysql, { OkPacket, RowDataPacket } from 'mysql2/promise';
 
@@ -5,11 +6,7 @@ import config from './config';
 
 const pool = mysql.createPool(config);
 
-const today = () => {
-    const date = new Date();
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}` +
-        `-${date.getDate().toString().padStart(2, '0')}`;
-};
+const today = format(new Date(), 'yyyy-MM-dd');
 
 const CHECK_SQL = 'SELECT event_type_id, type, DATE_FORMAT(last_modified_date, "%Y-%m-%d") AS last_modified_date, ' +
     'last_modified_by, active from event_type WHERE event_type_id = ?';
@@ -34,7 +31,7 @@ describe('sp_patch_event_type()', () => {
         expect(!_.isEmpty(checkResults));
         expect(checkResults[0].event_type_id).toBe(eventTypeId);
         expect(checkResults[0].type).toBe(values[1]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
         expect(checkResults[0].last_modified_by).toBe(values[3]);
         expect(checkResults[0].active[0]).toBe(values[2]);
     });
@@ -56,7 +53,7 @@ describe('sp_patch_event_type()', () => {
         expect(!_.isEmpty(checkResults));
         expect(checkResults[0].event_type_id).toBe(eventTypeId);
         expect(checkResults[0].type).toBe(values[1]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
         expect(checkResults[0].last_modified_by).toBe(values[3]);
         expect(checkResults[0].active[0]).toBe(origValues[0].active[0]);
     });
@@ -78,7 +75,7 @@ describe('sp_patch_event_type()', () => {
         expect(!_.isEmpty(checkResults));
         expect(checkResults[0].event_type_id).toBe(eventTypeId);
         expect(checkResults[0].type).toBe(origValues[0].type);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
         expect(checkResults[0].last_modified_by).toBe(values[3]);
         expect(checkResults[0].active[0]).toBe(values[2]);
     });
@@ -100,7 +97,7 @@ describe('sp_patch_event_type()', () => {
         expect(!_.isEmpty(checkResults));
         expect(checkResults[0].event_type_id).toBe(eventTypeId);
         expect(checkResults[0].type).toBe(origValues[0].type);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
         expect(checkResults[0].last_modified_by).toBe(origValues[0].last_modified_by);
         expect(checkResults[0].active[0]).toBe(origValues[0].active[0]);
     });

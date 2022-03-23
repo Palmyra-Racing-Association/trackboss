@@ -50,7 +50,7 @@ describe('sp_patch_member_type()', () => {
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [memberTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches base_dues_amt field', async () => {
@@ -68,7 +68,7 @@ describe('sp_patch_member_type()', () => {
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [memberTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Throws on improper user input', async () => {

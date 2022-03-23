@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import _ from 'lodash';
 import mysql, { OkPacket, RowDataPacket } from 'mysql2/promise';
 
@@ -5,11 +6,7 @@ import config from './config';
 
 const pool = mysql.createPool(config);
 
-const today = () => {
-    const date = new Date();
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}` +
-        `-${date.getDate().toString().padStart(2, '0')}`;
-};
+const today = format(new Date(), 'yyyy-MM-dd');
 
 const PROC_SQL = 'CALL sp_patch_job_type(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 const CHECK_SQL = 'SELECT job_type_id, title, point_value, cash_value, job_day_number, active, reserved, ' +
@@ -69,7 +66,7 @@ describe('sp_patch_job_type()', () => {
         expect(checkResults[0].meal_ticket[0]).toBe(values[8]);
         expect(checkResults[0].sort_order).toBe(values[9]);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches title field', async () => {
@@ -83,14 +80,14 @@ describe('sp_patch_job_type()', () => {
 
         expResults[0].title = 'newJobType';
         expResults[0].last_modified_by = 42;
-        expResults[0].last_modified_date = today();
+        expResults[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches point_value field', async () => {
@@ -104,14 +101,14 @@ describe('sp_patch_job_type()', () => {
 
         expResults[0].point_value = 214.1;
         expResults[0].last_modified_by = 42;
-        expResults[0].last_modified_date = today();
+        expResults[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches cash_value field', async () => {
@@ -125,14 +122,14 @@ describe('sp_patch_job_type()', () => {
 
         expResults[0].cash_value = 1247.13;
         expResults[0].last_modified_by = 42;
-        expResults[0].last_modified_date = today();
+        expResults[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches job_day_number field', async () => {
@@ -146,14 +143,14 @@ describe('sp_patch_job_type()', () => {
 
         expResults[0].job_day_number = 6;
         expResults[0].last_modified_by = 42;
-        expResults[0].last_modified_date = today();
+        expResults[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches active field', async () => {
@@ -167,14 +164,14 @@ describe('sp_patch_job_type()', () => {
 
         expResults[0].active[0] = 0;
         expResults[0].last_modified_by = 42;
-        expResults[0].last_modified_date = today();
+        expResults[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches reserved field', async () => {
@@ -188,14 +185,14 @@ describe('sp_patch_job_type()', () => {
 
         expResults[0].reserved[0] = 1;
         expResults[0].last_modified_by = 42;
-        expResults[0].last_modified_date = today();
+        expResults[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches online field', async () => {
@@ -209,14 +206,14 @@ describe('sp_patch_job_type()', () => {
 
         expResults[0].online[0] = 0;
         expResults[0].last_modified_by = 42;
-        expResults[0].last_modified_date = today();
+        expResults[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches meal_ticket field', async () => {
@@ -230,14 +227,14 @@ describe('sp_patch_job_type()', () => {
 
         expResults[0].meal_ticket[0] = 0;
         expResults[0].last_modified_by = 42;
-        expResults[0].last_modified_date = today();
+        expResults[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches sort_order field', async () => {
@@ -251,14 +248,14 @@ describe('sp_patch_job_type()', () => {
 
         expResults[0].sort_order = 23;
         expResults[0].last_modified_by = 42;
-        expResults[0].last_modified_date = today();
+        expResults[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PROC_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobTypeId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Throws on improper user input', async () => {

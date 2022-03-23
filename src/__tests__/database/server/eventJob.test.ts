@@ -1,7 +1,6 @@
 import 'dotenv/config';
-import _ from 'lodash';
 
-import { PatchEventJobRequest } from 'src/typedefs/eventJob';
+import { PatchEventJobRequest } from '../../../typedefs/eventJob';
 import { deleteEventJob, getEventJob, insertEventJob, patchEventJob } from '../../../database/eventJob';
 import { mockQuery } from './mockQuery';
 
@@ -39,14 +38,14 @@ describe('getEventJob()', () => {
     it('Selects a single event-job', async () => {
         const eventJobId = 8;
         const expEventJob = {
-            event_job_id: eventJobId,
-            event_type: 'Testing Day',
-            job_type: 'Test Subject',
+            eventJobId,
+            eventType: 'Testing Day',
+            jobType: 'Test Subject',
             count: 42,
         };
         const result = await getEventJob(eventJobId);
         expect(mockQuery).toHaveBeenCalled();
-        expect(_.isEqual(result, expEventJob));
+        expect(result).toEqual(expEventJob);
     });
 
     it('Throws for event-job not found', async () => {

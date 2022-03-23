@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import _ from 'lodash';
 import mysql, { OkPacket, RowDataPacket } from 'mysql2/promise';
 
@@ -5,11 +6,7 @@ import config from './config';
 
 const pool = mysql.createPool(config);
 
-const today = () => {
-    const date = new Date();
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}` +
-        `-${date.getDate().toString().padStart(2, '0')}`;
-};
+const today = format(new Date(), 'yyyy-MM-dd');
 
 const CHECK_SQL = 'SELECT member_id, membership_id, uuid, member_type_id, first_name, last_name, phone_number, ' +
     'occupation, email, DATE_FORMAT(member.birthdate, "%Y-%m-%d") AS birthdate, ' +
@@ -80,7 +77,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(values[10]);
         expect(checkResults[0].date_joined).toBe(values[11]);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches membership_id field', async () => {
@@ -111,7 +108,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches uuid field', async () => {
@@ -142,7 +139,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches active field', async () => {
@@ -173,7 +170,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches member_type_id field', async () => {
@@ -204,7 +201,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches first_name field', async () => {
@@ -235,7 +232,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches last_name field', async () => {
@@ -266,7 +263,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches phone_number field', async () => {
@@ -297,7 +294,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches occupation field', async () => {
@@ -328,7 +325,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches email field', async () => {
@@ -359,7 +356,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches birthdate field', async () => {
@@ -390,7 +387,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(values[10]);
         expect(checkResults[0].date_joined).toBe(origValues[0].date_joined);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches date_joined field', async () => {
@@ -421,7 +418,7 @@ describe('sp_patch_member()', () => {
         expect(checkResults[0].birthdate).toBe(origValues[0].birthdate);
         expect(checkResults[0].date_joined).toBe(values[11]);
         expect(checkResults[0].last_modified_by).toBe(values[12]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Throws on improper user input', async () => {
