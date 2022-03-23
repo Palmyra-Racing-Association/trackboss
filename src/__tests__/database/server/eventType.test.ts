@@ -93,9 +93,21 @@ describe('patchEventType()', () => {
         expect(mockQuery).toHaveBeenCalled();
     });
 
+    it('Throws for user error', async () => {
+        const bikeId = 4000;
+        await expect(patchEventType(bikeId, { modifiedBy: 2 })).rejects.toThrow('user input error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
     it('Throws for internal server error', async () => {
         const bikeId = -100;
         await expect(patchEventType(bikeId, { modifiedBy: 2 })).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws unreachable error without errno field', async () => {
+        const bikeId = -200;
+        await expect(patchEventType(bikeId, { modifiedBy: 2 })).rejects.toThrow('this error should not happen');
         expect(mockQuery).toHaveBeenCalled();
     });
 });

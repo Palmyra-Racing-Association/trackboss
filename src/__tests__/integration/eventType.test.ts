@@ -20,12 +20,12 @@ afterAll((done) => {
 });
 
 describe('GET /eventType/list', () => {
-    // it('Returns 401 for no token', async () => {
-    //     const res = await supertestServer.get(`${TAG_ROOT}/list`);
-    //     expect(mockGetEventTypeList).not.toHaveBeenCalled();
-    //     expect(res.status).toBe(401);
-    //     expect(res.body.reason).toBe('Missing authorization grant in header');
-    // });
+    // this test timesout for no reason, and is skipped until a fix is found
+    it.skip('Returns 401 for no token', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/list`);
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('Missing authorization grant in header');
+    });
 
     it('Returns 401 for invalid token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer invalidtoken');
@@ -99,12 +99,12 @@ describe('POST /eventType/new', () => {
 });
 
 describe('GET /eventType/:eventTypeId', () => {
-    // it('Returns 401 for no token', async () => {
-    //     const res = await supertestServer.get(`${TAG_ROOT}/2`);
-    //     expect(mockGetEventType).not.toHaveBeenCalled();
-    //     expect(res.status).toBe(401);
-    //     expect(res.body.reason).toBe('Missing authorization grant in header');
-    // });
+    // this test timesout for no reason, and is skipped until a fix is found
+    it.skip('Returns 401 for no token', async () => {
+        const res = await supertestServer.get(`${TAG_ROOT}/2`);
+        expect(res.status).toBe(401);
+        expect(res.body.reason).toBe('Missing authorization grant in header');
+    });
 
     it('Returns 401 for invalid token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/2`).set('Authorization', 'Bearer invalidtoken');
@@ -173,5 +173,14 @@ describe('PATCH /eventType/:eventTypeId', () => {
             .send({ type: 'test' });
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
+    });
+
+    it('returns 400 for FK violation', async () => {
+        const res = await supertestServer
+            .patch(`${TAG_ROOT}/4`)
+            .set('Authorization', 'Bearer admin')
+            .send({ modifiedBy: 1043 });
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
     });
 });
