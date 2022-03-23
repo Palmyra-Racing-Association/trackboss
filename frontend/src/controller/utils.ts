@@ -13,18 +13,19 @@ export function generateHeaders(token: string, range?: string): Headers {
     });
 }
 
+// Creates a string with today's date in YYYYMMDD format
 export function getTodaysDate() {
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
     const mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
     const yyyy = today.getFullYear();
 
-    const todayString = `${yyyy}${mm}${dd}-`;
+    const todayString = `${yyyy}${mm}${dd}`;
     return todayString;
 }
 
 export function getEventMonthDay(date: string) {
-    const eventDate = new Date(date).toUTCString();
+    const eventDate = new Date(date).toString();
     const dateArray = eventDate.split(' ');
     const formattedDate = `${dateArray[2]} ${dateArray[1]}`;
     return formattedDate;
@@ -39,10 +40,10 @@ function singleDayEvent(start: string, end: string) {
 }
 
 export function getEventMonthDaySpan(start: string, end: string) {
-    const startString = new Date(start).toUTCString();
+    const startString = new Date(start).toString();
     const startStringArray = startString.split(' ');
 
-    const endString = new Date(end).toUTCString();
+    const endString = new Date(end).toString();
     const endStringArray = endString.split(' ');
 
     const formattedStartDate = `${startStringArray[2]} ${startStringArray[1]}`;
@@ -61,7 +62,7 @@ export function getEventStartAndEndTime(start: string, end: string) {
         return ' ';
     }
     // only show start and end times for events that happen in one day
-    const startString = new Date(start).toUTCString();
+    const startString = new Date(start).toString();
     const startStringArray = startString.split(' ');
     let startHour = parseInt(startStringArray[4].substring(0, 2));
     const startMinute = startStringArray[4].substring(3, 5);
@@ -69,7 +70,7 @@ export function getEventStartAndEndTime(start: string, end: string) {
     // gets am or pm, and converts from military to standard hours
     const startAmOrPm = startHour >= 12 ? 'PM' : 'AM'; startHour = ((startHour + 11) % 12 + 1);
 
-    const endString = new Date(end).toUTCString();
+    const endString = new Date(end).toString();
     const endStringArray = endString.split(' ');
     let endHour = parseInt(endStringArray[4].substring(0, 2));
     const endMinute = endStringArray[4].substring(3, 5);
@@ -77,4 +78,13 @@ export function getEventStartAndEndTime(start: string, end: string) {
     const endAmOrPm = endHour >= 12 ? 'PM' : 'AM'; endHour = ((endHour + 11) % 12 + 1);
 
     return `${startHour}:${startMinute} ${startAmOrPm} - ${endHour}:${endMinute} ${endAmOrPm}`;
+}
+
+export function getTimeOfDay(time: string) {
+    console.log(time);
+    const endString = new Date(time).toString();
+    const endStringArray = endString.split(' ');
+    let endHour = parseInt(endStringArray[4].substring(0, 2));
+    const endAmOrPm = endHour >= 12 ? 'PM' : 'AM'; endHour = ((endHour + 11) % 12 + 1);
+    return `${endHour} ${endAmOrPm}`;
 }

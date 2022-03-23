@@ -29,17 +29,10 @@ export async function getWorkPointsByMembership(token: string, membershipId: num
     return response.json();
 }
 
-export async function getWorkPointsPercentage(token: string, membershipId: number) {
+export async function getWorkPointsTotal(token: string, membershipId: number) {
     const workPointsResponse = await getWorkPointsByMember(token, membershipId);
-
-    // TODO: bugfix on server side?
-    const thresholdResponse = {
-        year: 2021,
-        threshold: 100,
-    };
-
     if (isWorkPoints(workPointsResponse)) {
-        return Math.ceil((workPointsResponse.total / thresholdResponse.threshold) * 100);
+        return workPointsResponse.total;
     }
 
     // else
