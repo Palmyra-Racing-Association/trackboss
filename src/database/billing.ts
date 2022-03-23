@@ -9,7 +9,7 @@ export const GET_BILL_LIST_SQL = 'SELECT * FROM v_bill';
 export const GET_THRESHOLD_SQL = 'SELECT * FROM point_threshold WHERE year = ?';
 export const GENERATE_BILL_SQL =
     'INSERT INTO member_bill (generated_date, year, amount, amount_with_fee, membership_id, emailed_bill, ' +
-    'cur_year_paid) VALUES (CURDATE(), YEAR(CURDATE(), ?, ?, ?, NULL, 0))';
+    'cur_year_paid) VALUES (CURDATE(), YEAR(CURDATE()), ?, ?, ?, NULL, 0)';
 export const PATCH_BILL_SQL = 'CALL sp_patch_bill (?, ?, ?)';
 
 export async function generateBill(req: GenerateSingleBillRequest): Promise<number> {
@@ -25,6 +25,7 @@ export async function generateBill(req: GenerateSingleBillRequest): Promise<numb
         throw new Error('internal server error');
     }
 
+    logger.info('generateBill is not the problem');
     return result.insertId;
 }
 

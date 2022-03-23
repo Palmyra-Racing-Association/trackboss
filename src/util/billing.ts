@@ -28,7 +28,7 @@ export async function generateNewBills(
     threshold: number,
     year: number,
 ): Promise<Bill[]> {
-    membershipList.forEach(async (membership) => {
+    await Promise.all(membershipList.map(async (membership) => {
         // only generate a bill if one hasn't already been generated
         if (typeof _.find(
             preGeneratedBills,
@@ -48,7 +48,7 @@ export async function generateNewBills(
                 logger.error(`Failed to generate bill for membership with ID ${membership.membershipId}: ${e}`);
             }
         }
-    });
+    }));
     const allBills = await getBillList({ year });
     return _.differenceWith(allBills, preGeneratedBills, _.isEqual);
 }
@@ -71,7 +71,7 @@ export async function generateNewBills(
 // TODO: remove this line when emailBills tests are un-skipped
 /* istanbul ignore next */
 export async function emailBills(billList: Bill[]): Promise<Bill[]> {
-    billList.forEach(async (bill) => {
+    await Promise.all(billList.map(async (bill) => {
         // prevent sending duplicate emails
         if (typeof bill.emailedBill === 'undefined') {
             try {
@@ -88,6 +88,6 @@ export async function emailBills(billList: Bill[]): Promise<Bill[]> {
                 logger.error(`Failed to email bill ${bill.billId} to ${bill.membershipAdminEmail}: ${e}`);
             }
         }
-    });
+    }));
     return billList;
 }
