@@ -11,7 +11,6 @@ import {
 } from '../util/authMocks';
 import { Bill, WorkPointThreshold } from '../../typedefs/bill';
 import { destroyPool } from '../../database/pool';
-import logger from '../../logger';
 
 const TAG_ROOT = '/api/billing';
 

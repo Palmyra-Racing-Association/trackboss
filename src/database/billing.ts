@@ -53,7 +53,7 @@ export async function getWorkPointThreshold(year: number): Promise<WorkPointThre
 export async function getBillList(filters: GetBillListRequestFilters): Promise<Bill[]> {
     let sql;
     let values: any[] = [];
-    if (!_.isEmpty(filters)) {
+    if (_.values(filters).find((filter) => typeof filter !== 'undefined')) {
         let dynamicSql = ' WHERE ';
         let counter = 0;
         if (typeof filters.membershipId !== 'undefined') {
