@@ -60,20 +60,8 @@ export async function patchMemberType(id: number, req: PatchMemberTypeRequest): 
     try {
         [result] = await getPool().query<OkPacket>(PATCH_MEMBER_TYPE_SQL, values);
     } catch (e: any) {
-        if ('errno' in e) {
-            switch (e.errno) {
-                case 1451: // FK violation - referenced somewhere else
-                case 1452: // FK violation - referenced is missing
-                    logger.error(`User error patching member type in DB: ${e}`);
-                    throw new Error('user input error');
-                default:
-                    logger.error(`DB error patching member type: ${e}`);
-                    throw new Error('internal server error');
-            }
-        } else {
-            // this should not happen - errors from query should always have 'errno' field
-            throw e;
-        }
+        logger.error(`DB error patching member type: ${e}`);
+        throw new Error('internal server error');
     }
 
     if (result.affectedRows < 1) {

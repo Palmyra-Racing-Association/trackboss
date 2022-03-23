@@ -35,8 +35,18 @@ describe('GET /memberType/list', () => {
         expect(res.status).toBe(200);
         const memberTypes: MemberType[] = res.body;
         expect(memberTypes.length).toBe(4);
-        // expect(memberTypes[0]).toEqual(memberTypeList[0]);
-        // expect(memberTypes[1]).toEqual(memberTypeList[1]);
+        expect(memberTypes[0].memberTypeId).toBe(1);
+        expect(memberTypes[0].type).toBe('Admin');
+        expect(memberTypes[0].baseDuesAmt).toBe(100);
+        expect(memberTypes[1].memberTypeId).toBe(2);
+        expect(memberTypes[1].type).toBe('Membership Admin');
+        expect(memberTypes[1].baseDuesAmt).toBe(100);
+        expect(memberTypes[2].memberTypeId).toBe(3);
+        expect(memberTypes[2].type).toBe('Member');
+        expect(memberTypes[2].baseDuesAmt).toBe(0);
+        expect(memberTypes[3].memberTypeId).toBe(4);
+        expect(memberTypes[3].type).toBe('Paid Laborer');
+        expect(memberTypes[3].baseDuesAmt).toBe(0);
     });
 });
 
@@ -58,7 +68,9 @@ describe('GET /memberType/:memberTypeId', () => {
         const res = await supertestServer.get(`${TAG_ROOT}/1`).set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
         const memberType: MemberType = res.body;
-        // expect(memberType).toEqual(memberTypeList[1]);
+        expect(memberType.memberTypeId).toBe(1);
+        expect(memberType.type).toBe('Admin');
+        expect(memberType.baseDuesAmt).toBe(100);
     });
 
     it('Returns 404 when no data found', async () => {
@@ -96,6 +108,7 @@ describe('PATCH /memberType/:memberTypeId', () => {
         expect(res.status).toBe(200);
         expect(res.body.memberTypeId).toBe(3);
         expect(res.body.baseDuesAmt).toBe(100);
+        expect(res.body.type).toBe('Member');
     });
 
     it('returns 403 for insufficient permissions', async () => {
