@@ -119,24 +119,23 @@ describe('patchBoardMember()', () => {
     it('Throws for user error', async () => {
         const boardId = 1451;
         await expect(patchBoardMember(boardId, { })).rejects.toThrow('user input error');
-        expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for member not found', async () => {
         const boardId = 3000;
-        await expect(patchBoardMember(boardId, { })).rejects.toThrow('not found');
+        await expect(patchBoardMember(boardId, { year: 2020 })).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error', async () => {
         const boardId = -100;
-        await expect(patchBoardMember(boardId, { })).rejects.toThrow('internal server error');
+        await expect(patchBoardMember(boardId, { year: 2020 })).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws unreachable error without errno field', async () => {
         const boardId = -200;
-        await expect(patchBoardMember(boardId, { })).rejects.toThrow('this error should not happen');
+        await expect(patchBoardMember(boardId, { year: 2020 })).rejects.toThrow('this error should not happen');
         expect(mockQuery).toHaveBeenCalled();
     });
 });
