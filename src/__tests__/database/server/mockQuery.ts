@@ -220,7 +220,7 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
         case INSERT_BOARD_MEMBER_TYPE_SQL:
             return boardMemberTypeHelpers.insertBoardMemberTypeResponse(values[0]);
         case PATCH_BOARD_MEMBER_TYPE_SQL:
-            return boardMemberTypeHelpers.patchBoardMemberTypeResponse(values[0]);
+            return boardMemberTypeHelpers.patchBoardMemberTypeResponse(values[1]);
         case DELETE_BOARD_MEMBER_TYPE_SQL:
             return boardMemberTypeHelpers.deleteBoardMemberTypeResponse(values[0]);
         case GET_BILL_LIST_SQL:
