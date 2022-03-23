@@ -1,3 +1,8 @@
+/* eslint-disable no-throw-literal */
+// ESLint doesn't like `throw { errno: # }` since it's not throwing an error, but for a
+// mock, that is sufficient because we only care about 'errno' and it's easier than
+// instantiating an implementor of NodeJS.ErrnoException to get that field
+
 export function getBikeListResponse(values: number[]) {
     const bikeList = [
         {
@@ -62,7 +67,11 @@ export function getBikeResponse(id: number) {
 export function insertBikeResponse(year: string) {
     switch (year) {
         case '-100':
-            throw new Error('error message');
+            throw { errno: 0 };
+        case '-200':
+            throw new Error('this error should not happen');
+        case '1452':
+            throw { errno: 1452 };
         case '2010':
             return Promise.resolve([{ insertId: 321 }]);
         default:
@@ -76,8 +85,12 @@ export function patchBikeResponse(id: number) {
             return Promise.resolve([{ affectedRows: 1 }]);
         case 3000:
             return Promise.resolve([{ affectedRows: 0 }]);
+        case 1452:
+            throw { errno: 1452 };
         case -100:
-            throw new Error('error message');
+            throw { errno: 0 };
+        case -200:
+            throw new Error('this error should not happen');
         default:
             return Promise.resolve();
     }

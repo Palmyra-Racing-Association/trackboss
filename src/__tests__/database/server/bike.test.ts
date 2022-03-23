@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { PatchBikeRequest } from 'src/typedefs/bike';
+import { PatchBikeRequest } from '../../../typedefs/bike';
 import { getBike, getBikeList, insertBike, patchBike, deleteBike } from '../../../database/bike';
 import { mockQuery } from './mockQuery';
 
@@ -16,6 +16,18 @@ describe('insertBike()', () => {
         const request = { year: '-100', make: 'Toyonda', model: 'OK124', membershipId: 21 };
 
         await expect(insertBike(request)).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for user error', async () => {
+        const request = { year: '1452', make: 'Toyonda', model: 'OK124', membershipId: 21 };
+
+        await expect(insertBike(request)).rejects.toThrow('user input error');
+    });
+
+    it('Throws unreachable error without errno field', async () => {
+        const request = { year: '-200', make: 'Toyonda', model: 'OK124', membershipId: 21 };
+        await expect(insertBike(request)).rejects.toThrow('this error should not happen');
         expect(mockQuery).toHaveBeenCalled();
     });
 });
@@ -105,13 +117,30 @@ describe('patchBike()', () => {
 
     it('Throws for bike not found', async () => {
         const bikeId = 3000;
-        await expect(patchBike(bikeId, {})).rejects.toThrow('not found');
+        await expect(patchBike(bikeId, { membershipId: 42 })).rejects.toThrow('not found');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for empty request', async () => {
+        const bikeId = 1234;
+        await expect(patchBike(bikeId, {})).rejects.toThrow('user input error');
+    });
+
+    it('Throws for user error', async () => {
+        const bikeId = 1452;
+        await expect(patchBike(bikeId, { membershipId: 42 })).rejects.toThrow('user input error');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error', async () => {
         const bikeId = -100;
-        await expect(patchBike(bikeId, {})).rejects.toThrow('internal server error');
+        await expect(patchBike(bikeId, { membershipId: 42 })).rejects.toThrow('internal server error');
+        expect(mockQuery).toHaveBeenCalled();
+    });
+
+    it('Throws unreachable error without errno field', async () => {
+        const bikeId = -200;
+        await expect(patchBike(bikeId, { membershipId: 42 })).rejects.toThrow('this error should not happen');
         expect(mockQuery).toHaveBeenCalled();
     });
 });
