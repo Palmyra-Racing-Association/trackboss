@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import supertest from 'supertest';
 import { mockInvalidToken, mockVerifyAdmin, mockVerifyMember } from '../util/authMocks';
 import server from '../../server';
