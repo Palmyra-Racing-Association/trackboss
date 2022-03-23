@@ -55,7 +55,7 @@ export async function getEventType(id: number): Promise<EventType> {
     return {
         eventTypeId: results[0].event_type_id,
         type: results[0].type,
-        active: results[0].active[0],
+        active: !!results[0].active[0],
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
@@ -77,7 +77,7 @@ export async function getEventTypeList(): Promise<EventType[]> {
         type: result.type,
         lastModifiedBy: result.last_modified_by,
         lastModifiedDate: result.last_modified_date,
-        active: result.active[0],
+        active: !!result.active[0],
     }));
 }
 

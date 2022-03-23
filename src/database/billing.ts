@@ -93,7 +93,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         membershipAdmin: result.membership_admin,
         membershipAdminEmail: result.membership_admin_email,
         emailedBill: result.emailed_bill,
-        curYearPaid: result.cur_year_paid,
+        curYearPaid: !!result.cur_year_paid[0],
     }));
 }
 

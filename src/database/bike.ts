@@ -48,7 +48,7 @@ export async function getBikeList(membershipId?: number): Promise<Bike[]> {
     return results.map((result) => ({
         bikeId: result.bike_id,
         year: result.year,
-        make: result.year,
+        make: result.make,
         model: result.model,
         membershipAdmin: result.membership_admin,
     }));
