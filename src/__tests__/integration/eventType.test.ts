@@ -2,7 +2,7 @@ import _ from 'lodash';
 import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
-import { mockInvalidToken, mockVerifyMember, mockValidToken, mockVerifyAdmin } from '../util/authMocks';
+import { mockInvalidToken, mockVerifyMember, mockVerifyAdmin } from '../util/authMocks';
 import { EventType } from '../../typedefs/eventType';
 import { destroyPool } from '../../database/pool';
 
