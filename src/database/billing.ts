@@ -25,7 +25,6 @@ export async function generateBill(req: GenerateSingleBillRequest): Promise<numb
         throw new Error('internal server error');
     }
 
-    logger.info('generateBill is not the problem');
     return result.insertId;
 }
 
