@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
@@ -38,8 +39,12 @@ describe('GET /eventType/list', () => {
         expect(res.status).toBe(200);
         const eventTypes: EventType[] = res.body;
         expect(eventTypes.length).toBe(9);
-        // expect(eventTypes[0]).toEqual(eventTypeList[0]);
-        // expect(eventTypes[1]).toEqual(eventTypeList[1]);
+        _.forEach(eventTypes, (eventType: EventType, index) => {
+            expect(eventType.eventTypeId).toBe(index + 1);
+        });
+        expect(eventTypes[0].type).toBe('Race');
+        expect(eventTypes[6].type).toBe('Work Day');
+        expect(eventTypes[8].type).toBe('Ride Day');
     });
 });
 
@@ -87,8 +92,9 @@ describe('POST /eventType/new', () => {
         expect(mockVerifyAdmin).toHaveBeenCalled();
         expect(res.status).toBe(201);
         const eventType: EventType = res.body;
-        // expect(eventType.eventTypeId).toBe(eventTypeList[eventTypeList.length - 1].eventTypeId);
-        // expect(eventType).toEqual(eventTypeList[eventTypeList.length - 1]);
+        expect(eventType.eventTypeId).toBe(10);
+        expect(eventType.type).toBe('new event type');
+        expect(eventType.lastModifiedBy).toBe('Dionne Kleinhaut');
     });
 });
 
@@ -111,7 +117,9 @@ describe('GET /eventType/:eventTypeId', () => {
         const res = await supertestServer.get(`${TAG_ROOT}/1`).set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
         const eventType: EventType = res.body;
-        // expect(eventType).toEqual(eventTypeList[1]);
+        expect(eventType.eventTypeId).toBe(1);
+        expect(eventType.type).toBe('Race');
+        expect(eventType.active).toBe(true);
     });
 
     it('Returns 404 when no data found', async () => {

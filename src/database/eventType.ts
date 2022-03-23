@@ -92,20 +92,8 @@ export async function patchEventType(id: number, req: PatchEventTypeRequest): Pr
     try {
         [result] = await getPool().query<OkPacket>(PATCH_EVENT_TYPE_SQL, values);
     } catch (e: any) {
-        if ('errno' in e) {
-            switch (e.errno) {
-                case 1451: // FK violation - referenced somewhere else
-                case 1452: // FK violation - referenced is missing
-                    logger.error(`User error patching event type in DB: ${e}`);
-                    throw new Error('user input error');
-                default:
-                    logger.error(`DB error patching event type: ${e}`);
-                    throw new Error('internal server error');
-            }
-        } else {
-            // this should not happen - errors from query should always have 'errno' field
-            throw e;
-        }
+        logger.error(`DB error patching event type: ${e}`);
+        throw new Error('internal server error');
     }
 
     if (result.affectedRows < 1) {
