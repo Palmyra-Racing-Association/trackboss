@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
@@ -97,7 +96,7 @@ describe('GET /bike/:bikeId', () => {
         expect(mockValidToken).toHaveBeenCalled();
         expect(res.status).toBe(200);
         const bike: Bike = res.body;
-        expect(_.isEqual(bike, expBike)).toBeTruthy();
+        expect(bike).toEqual(expBike);
     });
 });
 
