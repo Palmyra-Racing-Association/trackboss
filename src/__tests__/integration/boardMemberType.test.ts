@@ -166,11 +166,6 @@ describe('DELETE /boardMemberType/:boardMemberTypeId', () => {
         expect(mockInvalidToken).toHaveBeenCalled();
         expect(res.body.reason).toBe('not authorized');
     });
-    // it('Returns 400 on user input error', async () => {
-    //     const res = await supertestServer.delete(`${TAG_ROOT}/notanid`).set('Authorization', 'Bearer admin');
-    //     expect(res.status).toBe(400);
-    //     expect(res.body.reason).toBe('bad request');
-    // });
     it('Successfully deletes a bmt', async () => {
         const res = await supertestServer
             .delete(`${TAG_ROOT}/10`)
