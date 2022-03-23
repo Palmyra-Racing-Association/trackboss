@@ -1,15 +1,15 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/no-unused-prop-types */
 import { useDisclosure } from '@chakra-ui/react';
-import React, { createRef, RefObject, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Bike } from '../../../src/typedefs/bike';
+import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import { Member } from '../../../src/typedefs/member';
-import { getFormattedMemberList } from '../controller/member';
+import { UserContext } from '../contexts/UserContext';
+import { getMemberList } from '../controller/member';
 import MemberSummaryModal from './MemberSummaryModal';
 
 function getMemberFamilyLocal() {
-    // const response = getMembersByMembership()
+    // const response = getMembersByMembership();
     const memberFamily: Member[] = [
         {
             memberId: 1,
@@ -80,11 +80,6 @@ const columns: any = [
     },
 ];
 
-function getFormattedMemberListLocal() {
-    const response = getFormattedMemberList('TestToken');
-    return response;
-}
-
 const customStyles = {
     rows: {
         style: {
@@ -111,13 +106,27 @@ export default function MemberList() {
     const { onClose, isOpen, onOpen } = useDisclosure();
     const [selectedMember, setSelectedMember] = useState<Member>();
     const [cells, setCells] = useState<Member[]>([]);
+    const userContext = useContext(UserContext);
+    const [error, setError] = useState<ErrorResponse | undefined>(undefined);
     useEffect(() => {
         async function getData() {
-            const c: Member[] = getFormattedMemberListLocal();
-            setCells(c);
+            const c: Member[] | ErrorResponse = await getMemberList(userContext.state.token);
+            if ('reason' in c) {
+                setError(c);
+            } else {
+                setCells(c);
+                setError(undefined);
+            }
         }
         getData();
     }, []);
+    if (error) {
+        return (
+            <div>
+                {error.reason}
+            </div>
+        );
+    }
     return (
         <div>
             <DataTable
@@ -131,7 +140,7 @@ export default function MemberList() {
                 customStyles={customStyles}
                 onRowClicked={
                     async (row: Member) => {
-                        await setSelectedMember(row);
+                        setSelectedMember(row);
                         onOpen();
                     }
                 }
