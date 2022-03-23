@@ -44,6 +44,7 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
+                case 1048: // non-null violation, missing a non-nullable column
                 case 1452: // FK violation - referenced is missing
                     logger.error(`User error inserting member in DB: ${e}`);
                     throw new Error('user input error');
@@ -160,6 +161,9 @@ export async function getMember(searchParam: string): Promise<Member> {
 }
 
 export async function patchMember(id: string, req: PatchMemberRequest): Promise<void> {
+    if (_.isEmpty(req)) { // empty request
+        throw new Error('user input error');
+    }
     const values = [
         id,
         req.membershipId,
