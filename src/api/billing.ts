@@ -23,11 +23,6 @@ import { checkHeader, verify } from '../util/auth';
 //
 
 const billing = Router();
-billing.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', '*');
-    next();
-});
 
 billing.get('/yearlyWorkPointThreshold', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
