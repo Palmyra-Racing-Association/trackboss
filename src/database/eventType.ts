@@ -21,6 +21,7 @@ export async function insertEventType(req: PostNewEventTypeRequest): Promise<num
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
+                case 1048: // non-null violation, missing a non-nullable column
                 case 1452: // FK violation - referenced is missing
                     logger.error(`User error inserting event type in DB: ${e}`);
                     throw new Error('user input error');
@@ -82,6 +83,9 @@ export async function getEventTypeList(): Promise<EventType[]> {
 }
 
 export async function patchEventType(id: number, req: PatchEventTypeRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [id, req.type, req.active, req.modifiedBy];
 
     let result;
