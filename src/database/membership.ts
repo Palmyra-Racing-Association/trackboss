@@ -34,6 +34,10 @@ export const GET_REGISTRATION_SQL = 'SELECT member_type, first_name, last_name, 
     'birthdate, address, city, state, zip FROM v_registration WHERE member_id = ?';
 
 export async function insertMembership(req: PostNewMembershipRequest): Promise<number> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
+
     const values = [
         req.membershipAdminId,
         req.yearJoined,
@@ -135,6 +139,10 @@ export async function getMembership(id: number): Promise<Membership> {
 }
 
 export async function patchMembership(id: number, req: PatchMembershipRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
+
     const values = [
         id,
         req.membershipAdminId,
@@ -198,6 +206,7 @@ export async function registerMembership(req: PostRegisterMembershipRequest): Pr
         } catch (e: any) {
             if ('errno' in e) {
                 switch (e.errno) {
+                    case 1048: // non-null violation, missing a non-nullable column
                     case 1452: // FK violation - referenced is missing
                         logger.error(`User error registering membership in DB: ${e}`);
                         throw new Error('user input error');
