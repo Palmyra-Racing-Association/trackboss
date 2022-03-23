@@ -32,4 +32,9 @@ export const mockedPayloadLaborer = mock<CognitoIdTokenPayload>();
 mockedPayloadLaborer['cognito:username'] = 'oo7';
 export const mockVerifyLaborer = mockedType.verify.calledWith('laborer').mockResolvedValue(mockedPayloadLaborer);
 
+export const mockedPayloadNonexistent = mock<CognitoIdTokenPayload>();
+mockedPayloadNonexistent['cognito:username'] = 'ff1';
+export const mockVerifyNonexistent =
+    mockedType.verify.calledWith('nonexistent').mockResolvedValue(mockedPayloadNonexistent);
+
 export const createSpy = jest.spyOn(CognitoJwtVerifier, 'create').mockImplementation(() => mockedType);
