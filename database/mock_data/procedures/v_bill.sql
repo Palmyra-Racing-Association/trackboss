@@ -9,7 +9,8 @@ CREATE VIEW `v_bill` AS
         CONCAT(ma.first_name, ' ', ma.last_name) AS membership_admin,
         ma.email AS membership_admin_email,
         mb.emailed_bill,
-        mb.cur_year_paid
+        mb.cur_year_paid,
+        mb.membership_id
     FROM
         member_bill mb
             LEFT JOIN

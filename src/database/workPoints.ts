@@ -7,7 +7,7 @@ import { getPool } from './pool';
 export const GET_WORK_POINTS_BY_MEMBER_SQL =
     'select total_points from v_work_points_by_member where member_id = ? and year = ?';
 export const GET_WORK_POINTS_BY_MEMBERSHIP_SQL =
-    'select total_points form v_work_points_by_membership where membership_id = ? and year = ?';
+    'select total_points from v_work_points_by_membership where membership_id = ? and year = ?';
 
 export async function getWorkPointsByMember(memberId: number, year: number): Promise<WorkPoints> {
     const values = [memberId, year];
