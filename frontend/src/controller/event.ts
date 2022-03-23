@@ -57,6 +57,10 @@ export async function getEventList(token: string, listType?: string): Promise<Ge
 export async function getCalendarEvents(token: string) {
     const calendarEvents = await getEventList(token);
     if (isEventList(calendarEvents)) {
+        calendarEvents.forEach((event) => {
+            event.start = new Date(event.start);
+            event.end = new Date(event.end);
+        });
         return calendarEvents;
     }
 
@@ -70,8 +74,10 @@ export async function getEventCardProps(token: string, listType: string) {
     if (isEventList(upcomingEvents)) {
         // + symbol here converts the dates to numbers, to allow for arithmetic comparison
         upcomingEvents.sort((e1: Event, e2: Event) => +new Date(e1.start) - +new Date(e2.start));
-        const formattedEventDate = getEventMonthDay(upcomingEvents[0].start);
-        const formattedEventTime = getTimeOfDay(upcomingEvents[0].start);
+        const startTime = upcomingEvents[0].start.toString();
+        const formattedEventDate = getEventMonthDay(startTime);
+        const formattedEventTime = getTimeOfDay(startTime);
+
         return { title: upcomingEvents[0].title, start: formattedEventDate, time: formattedEventTime };
     }
 

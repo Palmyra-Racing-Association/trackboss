@@ -47,6 +47,10 @@ export async function getJobList(token: string, queryType?: string, filterType?:
 export async function getCalendarJobs(token: string) {
     const calendarJobs = await getJobList(token);
     if (isJobList(calendarJobs)) {
+        calendarJobs.forEach((job) => {
+            job.start = new Date(job.start);
+            job.end = new Date(job.end);
+        });
         return calendarJobs;
     }
 

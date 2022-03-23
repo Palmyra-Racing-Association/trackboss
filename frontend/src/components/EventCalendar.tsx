@@ -81,26 +81,39 @@ export default function EventCalendar(props: EventCalendarProps) {
                     }
                 }
                 localizer={localizer}
-                // eventPropGetter={
-                //     (event) => {
-                //         const newStyle = {
-                //             backgroundColor: 'lightgrey',
-                //             color: 'black',
-                //         };
-                //         if (event.eventType.includes('Meeting')) {
-                //             newStyle.backgroundColor = '#76CE6F';
-                //         } else if (event.eventType.includes('Job')) {
-                //             newStyle.backgroundColor = '#68A4FF';
-                //         } else if (event.eventType.includes('Race')) {
-                //             newStyle.backgroundColor = '#EE6439';
-                //         } else {
-                //             newStyle.backgroundColor = 'lightgrey';
-                //         }
-                //         return {
-                //             style: newStyle,
-                //         };
-                //     }
-                // }
+                eventPropGetter={
+                    (event) => {
+                        const newStyle = {
+                            backgroundColor: 'lightgrey',
+                            color: 'black',
+                        };
+                        if (event.eventType) {
+                            if (event.eventType === 'Meeting') {
+                                newStyle.backgroundColor = '#76CE6F';
+                            } else if (
+                                event.eventType === 'Yearly Job' ||
+                                event.eventType === 'Work Day') {
+                                newStyle.backgroundColor = '#68A9FF';
+                            } else if (
+                                event.eventType === 'Race' ||
+                                event.eventType === 'Race Week' ||
+                                event.eventType === 'XO Race' ||
+                                event.eventType === 'Harescramble') {
+                                newStyle.backgroundColor = '#EE6439';
+                            } else {
+                                newStyle.backgroundColor = 'lightgrey';
+                            }
+                            return {
+                                style: newStyle,
+                            };
+                        }
+                        // sets all jobs to blue
+                        newStyle.backgroundColor = '#68A4FF';
+                        return {
+                            style: newStyle,
+                        };
+                    }
+                }
                 style={{ height: '70vh' }}
                 components={
                     {
@@ -145,7 +158,6 @@ export default function EventCalendar(props: EventCalendarProps) {
                         onClose={onViewEventClose}
                         selectedEvent={selectedEvent}
                         onSignUpOpen={onSignUpOpen}
-                        // attendeesList={eventAttendees}
                         admin={state.user?.memberType === 'Admin'}
                     />
                 )

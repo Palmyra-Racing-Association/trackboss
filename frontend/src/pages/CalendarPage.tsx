@@ -17,13 +17,12 @@ async function getCalendarEventsLocal(token: string) {
     const events = await getCalendarEvents(token)
     const jobs = await getCalendarJobs(token);
 
-    const calendarEvents: Array<Job | Event> = [];
+    let calendarEvents: Array<Job | Event> = [];
     if (events && jobs) {
-        console.log(jobs[0]);
-        console.log(events[0])
-        calendarEvents.push(events[0]);
-        calendarEvents.push(jobs[0]);
+        calendarEvents = calendarEvents.concat(events);
+        calendarEvents = calendarEvents.concat(jobs);
     }
+    console.log(calendarEvents);
     
     return calendarEvents;
 }

@@ -146,7 +146,7 @@ export default function SelectedEventModal(props: modalProps) {
                         )
                     }
                     {
-                        props.selectedEvent.type === 'job' && (
+                        props.selectedEvent.memberId && (
                             <Button
                                 bgColor="orange"
                                 color="white"
