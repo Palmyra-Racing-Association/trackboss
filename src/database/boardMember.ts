@@ -14,6 +14,9 @@ export const PATCH_BOARD_MEMBER_SQL = 'CALL sp_patch_board_member(?, ?, ?, ?)';
 export const DELETE_BOARD_MEMBER_SQL = 'DELETE FROM board_member where board_id = ?';
 
 export async function insertBoardMember(req: PostNewBoardMemberRequest): Promise<number> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [req.year, req.memberId, req.boardMemberTitleId];
 
     let result;
@@ -89,6 +92,9 @@ export async function getBoardMember(id: number): Promise<BoardMember> {
 }
 
 export async function patchBoardMember(id: number, req: PatchBoardMemberRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [id, req.year, req.memberId, req.boardMemberTitleId];
 
     let result;
