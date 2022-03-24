@@ -333,7 +333,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                             }
                                                         }
                                                         mr="-px"
-                                                        backgroundColor={editedMemberType === 'member' ? 'blue' : ''}
+                                                        backgroundColor={(editingMemberRole && editedMemberType === 'member') || (!editingMemberRole && props.memberInfo.memberType === 'Member') ? 'blue' : ''}
                                                     >
                                                         Member
                                                     </Button>
@@ -346,7 +346,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                             }
                                                         }
                                                         mr="-px"
-                                                        backgroundColor={editedMemberType === 'admin' ? 'blue' : ''}
+                                                        backgroundColor={(editingMemberRole && editedMemberType === 'admin') || (!editingMemberRole && props.memberInfo.memberType === 'Admin') ? 'blue' : ''}
                                                     >
                                                         Admin
                                                     </Button>
@@ -359,7 +359,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                             }
                                                         }
                                                         mr="-px"
-                                                        backgroundColor={editedMemberType === 'board' ? 'blue' : ''}
+                                                        backgroundColor={(editingMemberRole && editedMemberType === 'board') || (!editingMemberRole && props.memberInfo.memberType === 'Board') ? 'blue' : ''}
                                                     >
                                                         Board
                                                     </Button>
