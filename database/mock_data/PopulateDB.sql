@@ -40,7 +40,7 @@ insert into event_type(type,active) VALUES ('Race Week',1);
 insert into event_type(type,active) VALUES ('XO Race',1);
 insert into event_type(type,active) VALUES ('Yearly Job',1);
 insert into event_type(type,active) VALUES ('Meeting',1);
-insert into event_type(type,active) VALUES ('Harescramble',1); 
+insert into event_type(type,active) VALUES ('Harescramble',1);
 insert into event_type(type,active) VALUES ('Work Day',1);
 insert into event_type(type,active) VALUES ('Camp and Ride',1);
 insert into event_type(type,active) VALUES ('Ride Day',1);
