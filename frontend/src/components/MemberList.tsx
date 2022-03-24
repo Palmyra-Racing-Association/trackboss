@@ -43,11 +43,13 @@ const customStyles = {
 };
 
 export default function MemberList() {
-    const { onClose, isOpen, onOpen } = useDisclosure();
     const [selectedMember, setSelectedMember] = useState<Member>();
     const [cells, setCells] = useState<Member[]>([]);
     const { state } = useContext(UserContext);
     const [error, setError] = useState<ErrorResponse | undefined>(undefined);
+    const [dirty, setDirty] = useState<boolean>(false);
+    const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((newDirty) => !newDirty) });
+
     useEffect(() => {
         async function getData() {
             const c: Member[] | ErrorResponse = await getMemberList(state.token);
@@ -74,7 +76,7 @@ export default function MemberList() {
             }
         }
         getData();
-    }, []);
+    }, [dirty]);
     if (error) {
         return (
             <div>
