@@ -8,7 +8,7 @@ import SignUpModal from './SignUpModal';
 import { UserContext } from '../contexts/UserContext';
 import { getJobAttendees, deleteJob, getCalendarJobs, updateJob } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
-import { DeletedEvent, Event, PostNewEventRequest } from '../../../src/typedefs/event';
+import { DeletedEvent, DeleteEventResponse, Event, PostNewEventRequest } from '../../../src/typedefs/event';
 import { DeletedJob, Job, PatchJobRequest } from '../../../src/typedefs/job';
 import { createEvent, deleteEvent, getCalendarEvents } from '../controller/event';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
@@ -98,6 +98,7 @@ export default function EventCalendar() {
         newEvent.endDate = endDate.toISOString(true).slice(0, -10);
 
         const res: Event | ErrorResponse = await createEvent(state.token, newEvent);
+        // eslint-disable-next-line no-console
         console.log(res); // TODO: 500 response for new event
         const test = await getCalendarEventsLocal(state.token);
         setCalendarEvents(test);
@@ -106,6 +107,7 @@ export default function EventCalendar() {
     async function signUpForJob(patchInfo: { jobId: number, editedJob: PatchJobRequest }) {
         const res = await updateJob(state.token, patchInfo.jobId, patchInfo.editedJob);
         if ('reason' in res) {
+            // eslint-disable-next-line no-console
             console.log(res.reason);
         } else {
             setCalendarEvents(await getCalendarEventsLocal(state.token));
@@ -114,7 +116,7 @@ export default function EventCalendar() {
 
     async function deleteEventLocal() {
         if (selectedEvent && isEvent(selectedEvent)) {
-            const response = await deleteEvent(state.token, selectedEvent.eventId);
+            const response: DeleteEventResponse | ErrorResponse = await deleteEvent(state.token, selectedEvent.eventId);
             if (deleteEventWasSuccessful(response)) {
                 const newCalendarEvents = calendarEvents.filter((e: any) => e.eventType !== selectedEvent?.eventType);
                 setCalendarEvents(newCalendarEvents);
