@@ -30,13 +30,13 @@ import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
 import { getMembersByMembership, updateMember } from '../controller/member';
 import { getBikeList } from '../controller/bike';
-import { PatchMemberResponse } from '../../../src/typedefs/member';
+import { BoardMemberType } from '../../../src/typedefs/boardMemberType';
+import { createBoardMember, getAllBoardMembersForCurrentYear, getBoardRoles, updateBoardMember } from '../controller/boardMember';
 
 interface modalProps {
     isOpen: boolean,
     onClose: () => void,
     memberInfo: Member,
-    // admin: boolean, // TODO: this will come from state
 }
 
 async function handleNewBoardMember(memberInfo: Member, editedBoardMember: string) {
@@ -69,6 +69,8 @@ export default function MemberSummaryModal(props: modalProps) {
 
     const [editedMemberType, setEditedMemberType] = useState<string>('');
     const [editedBoardMember, setEditedBoardMember] = useState<string>('');
+    const [boardRoles, setBoardRoles] = useState<BoardMemberType[]>([]);
+    const [isBoard, setIsBoard] = useState<boolean>(false);
 
     const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
     const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
@@ -89,7 +91,18 @@ export default function MemberSummaryModal(props: modalProps) {
         console.log(editedMemberType);
         let memberTypeId: number;
         if (editedMemberType === 'board') {
-            //special board member handling
+            if (isBoard) {
+                const response = await updateBoardMember(
+                    state.token,
+                    props.memberInfo.boardMemberData!.boardId,
+                    { boardMemberTitleId: Number(editedBoardMember) }
+                );
+            } else {
+                const response = await createBoardMember(
+                    state.token,
+                    { boardMemberTitleId: Number(editedBoardMember), year: new Date().getFullYear(), memberId: props.memberInfo.memberId }
+                );
+            }
             memberTypeId = 1;
         } else if (editedMemberType === 'member') {
             memberTypeId = 3;
@@ -103,7 +116,7 @@ export default function MemberSummaryModal(props: modalProps) {
           return false;
         }
         return true;
-    }, [state, props.memberInfo]);
+    }, [state, props.memberInfo, editedBoardMember, editedMemberType]);
 
     const handlePatchMemberContactInfo = useCallback(async (
         name: string,
@@ -169,6 +182,19 @@ export default function MemberSummaryModal(props: modalProps) {
                 setError(`error fetching bikes: ${bikeResponse.reason}`)
             } else {
                 setBikes(bikeResponse);
+            }
+            if (state.user?.memberType === 'Admin') {
+                const boardRoleData = await getBoardRoles(state.token);
+                if ('reason' in boardRoleData) {
+                    setError(`error loading board roles: ${boardRoleData.reason}`)
+                } else {
+                    setBoardRoles(boardRoleData)
+                }
+            }
+            if (props.memberInfo.memberType.includes('Board Member')) {
+                setIsBoard(true);
+            } else {
+                setIsBoard(false);
             }
         }
         setModalData();
@@ -359,7 +385,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                             }
                                                         }
                                                         mr="-px"
-                                                        backgroundColor={(editingMemberRole && editedMemberType === 'board') || (!editingMemberRole && props.memberInfo.memberType === 'Board') ? 'blue' : ''}
+                                                        backgroundColor={(editingMemberRole && editedMemberType === 'board') || (!editingMemberRole && isBoard) ? 'blue' : ''}
                                                     >
                                                         Board
                                                     </Button>
@@ -372,10 +398,11 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     value={editedBoardMember}
                                                     onChange={handleEditedBoardMember}
                                                 >
-                                                    {/* TODO: need the actual roles here */}
-                                                    <option value="president">president</option>
-                                                    <option value="vice president">vice president</option>
-                                                    <option value="secretary">secretary</option>
+                                                    {
+                                                        _.map(boardRoles, (role) => (
+                                                            <option value={role.boardTypeId} key={role.boardTypeId}>{role.title}</option>
+                                                        ))
+                                                    }
                                                 </Select>
                                                 <Button
                                                     ml={10}
