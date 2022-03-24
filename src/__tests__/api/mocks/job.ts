@@ -7,6 +7,7 @@ export const jobList: Job[] = [
     {
         jobId: 0,
         member: 'Doctor Tester',
+        eventId: 100,
         event: 'The MAIN Event!',
         start: '2022-07-12 9:00:00',
         end: '2022-07-14 22:00:00',
@@ -20,6 +21,7 @@ export const jobList: Job[] = [
     }, {
         jobId: 1,
         member: 'Testy Testerson',
+        eventId: 101,
         event: 'The second Event!',
         start: '2022-08-02 9:00:00',
         end: '2022-08-04 22:00:00',
@@ -31,6 +33,7 @@ export const jobList: Job[] = [
         lastModifiedBy: 'Bob Tes',
     }, {
         jobId: 2,
+        eventId: 100,
         event: 'The MAIN Event!',
         start: '2022-09-26 9:00:00',
         end: '2022-09-28 22:00:00',
@@ -43,6 +46,7 @@ export const jobList: Job[] = [
     }, {
         jobId: 3,
         member: 'Doctor Tester',
+        eventId: 100,
         event: 'The MAIN Event!',
         start: '2033-12-28 07:00:00',
         end: '2033-12-28 17:00:00',
@@ -73,6 +77,7 @@ export const mockInsertJob = jest.spyOn(job, 'insertJob')
         const newJob = {
             jobId: jobList.length,
             member: 'Testy Test',
+            eventId: 100,
             event: 'The MAIN Event!',
             start: req.jobStartDate as string,
             end: req.jobEndDate as string,
