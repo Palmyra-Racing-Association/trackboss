@@ -31,6 +31,7 @@ export async function insertJobType(req: PostNewJobTypeRequest): Promise<number>
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
+                case 1048: // non-null violation, missing a non-nullable column
                 case 1452: // FK violation - referenced is missing
                     logger.error(`User error inserting job type in DB: ${e}`);
                     throw new Error('user input error');
@@ -106,6 +107,10 @@ export async function getJobTypeList(): Promise<JobType[]> {
 }
 
 export async function patchJobType(id: number, req: PatchJobTypeRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
+
     const values = [
         id,
         req.title,
