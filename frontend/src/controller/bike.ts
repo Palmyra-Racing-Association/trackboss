@@ -24,7 +24,7 @@ export async function getBikeList(token: string, membershipID?: number): Promise
         const idString = membershipID.toString();
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/bike/list?membershipID=${idString}`, {
             method: 'GET',
-            mode: 'no-cors',
+            mode: 'cors',
             headers: generateHeaders(token),
         });
         return response.json();
@@ -32,7 +32,7 @@ export async function getBikeList(token: string, membershipID?: number): Promise
     // else
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/bike/list`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();

@@ -29,12 +29,12 @@ import { UserContext } from '../contexts/UserContext';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
 import { getMembersByMembership } from '../controller/member';
+import { getBikeList } from '../controller/bike';
 
 interface modalProps {
     isOpen: boolean,
     onClose: () => void,
     memberInfo: Member,
-    memberBikes: Bike[],
     // admin: boolean, // TODO: this will come from state
 }
 
@@ -125,13 +125,20 @@ export default function MemberSummaryModal(props: modalProps) {
     const handleEditedPhoneChange = (event: { target: { value: any; }; }) => setEditedPhone(event.target.value);
     const handleEditedBoardMember = (event: { target: { value: any; }; }) => setEditedBoardMember(event.target.value);
 
+    const [error, setError] = useState<string>('');
+
     useEffect(() => {
         async function setModalData() {
             setSelectedMember(props.memberInfo);
             setEditedMemberType(props.memberInfo.memberType);
             const familyReponse = await getMembersByMembership(state.token, props.memberInfo.membershipId);
             setFamily(familyReponse);
-            setBikes(props.memberBikes);
+            const bikeResponse = await getBikeList(state.token, props.memberInfo.membershipId);
+            if ('reason' in bikeResponse) {
+                setError(`error fetching bikes: ${bikeResponse.reason}`)
+            } else {
+                setBikes(bikeResponse);
+            }
         }
         setModalData();
     }, [props.memberInfo]);
@@ -246,7 +253,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <Text textAlign="left" fontSize="1xl" fontWeight="bold">Bikes</Text>
                                     <UnorderedList pl={10}>
                                         {
-                                            props.memberBikes.map((bike) => (
+                                            bikes.map((bike) => (
                                                 <ListItem key={bike.bikeId}>{`${bike.year}, ${bike.make} ${bike.model}`}</ListItem>
                                             ))
                                         }

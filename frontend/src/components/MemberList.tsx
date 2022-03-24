@@ -1,26 +1,11 @@
 import { useDisclosure } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { Bike } from '../../../src/typedefs/bike';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import { Member } from '../../../src/typedefs/member';
 import { UserContext } from '../contexts/UserContext';
 import { getMemberList } from '../controller/member';
 import MemberSummaryModal from './MemberSummaryModal';
-
-function getMemberBikesLocal() {
-    // const response = getBikes()
-    const memberBikes: Bike[] = [
-        {
-            bikeId: 0,
-            year: '2012',
-            make: 'honda',
-            model: 'rust-bucket',
-            membershipAdmin: 'string',
-        },
-    ];
-    return memberBikes;
-}
 
 const columns: any = [
     {
@@ -104,7 +89,6 @@ export default function MemberList() {
                         isOpen={isOpen}
                         onClose={onClose}
                         memberInfo={selectedMember}
-                        memberBikes={getMemberBikesLocal()}
                     />
                 )
             }
