@@ -14,11 +14,6 @@ import { checkHeader, verify } from '../util/auth';
 import { insertJob, getJob, getJobList, patchJob, deleteJob } from '../database/job';
 
 const job = Router();
-job.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', '*');
-    next();
-});
 
 job.post('/new', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
