@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface cardProps {
     date: string,
+    startTime: string,
     name: string,
 }
 
@@ -43,12 +44,10 @@ export default function EventCard(props: cardProps) {
                     </HStack>
                     <Divider />
                     <Text pt={10} pb={10} color="orange" fontSize="6xl">{props.date}</Text>
-                    {/* TODO: this should come from props once the API is updated */}
-                    <Text fontSize="4xl">Starts at 5pm</Text>
+                    <Text fontSize="4xl">{props.startTime}</Text>
                     <Text fontSize="4xl">{props.name}</Text>
                 </VStack>
             </Center>
-
         </Box>
     );
 }

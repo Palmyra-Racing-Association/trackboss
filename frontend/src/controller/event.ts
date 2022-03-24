@@ -1,5 +1,4 @@
-import { generateHeaders, getEventMonthDay } from './utils';
-// import { getTodaysDate } from './utils';
+import { generateHeaders, getEventMonthDay, getTimeOfDay } from './utils';
 import {
     DeleteEventResponse,
     GetEventListResponse,
@@ -8,7 +7,13 @@ import {
     PatchEventResponse,
     PostNewEventRequest,
     PostNewEventResponse,
+    Event,
 } from '../../../src/typedefs/event';
+import { ErrorResponse } from '../../../src/typedefs/errorResponse';
+
+function isEventList(res: Event[] | ErrorResponse): res is Event[] {
+    return (res as Event[]) !== undefined;
+}
 
 export async function createEvent(token: string, eventData: PostNewEventRequest): Promise<PostNewEventResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/new`, {
@@ -96,49 +101,33 @@ export async function getEventList(token: string, listType?: string): Promise<Ge
     if (listType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/list`, {
             method: 'GET',
-            mode: 'no-cors',
-            headers: generateHeaders(token),
+            mode: 'cors',
+            headers: generateHeaders(token, listType),
         });
         return response.json();
     }
     // else
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/list`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
 }
 
-// TODO: this is a mocked response for frontend development, replace once API is completed
-export async function getUpcomingEventData() {
-    // const todayString = getTodaysDate();
-    // const upcomingEvents: GetEventListResponse = await getEventList('TestToken', todayString);
-    // if ('reason' in upcomingEvents) {
-    //     console.log('TODO: error handling?');
-    // } else {
-    //     return upcomingEvents[0];
-    // }
+export async function getEventCardProps(token: string, listType: string) {
+    const upcomingEvents = await getEventList(token, listType);
 
-    const upcomingEvents = [
-        {
-            eventId: 0,
-            date: '2022-02-07',
-            eventType: 'string',
-            eventName: 'Work Day',
-            eventDescription: 'string',
-        },
-        {
-            eventId: 1,
-            date: '2022-02-07',
-            eventType: 'string',
-            eventName: 'string',
-            eventDescription: 'string',
-        },
-    ];
-    const formattedEventDate = getEventMonthDay(upcomingEvents[0].date);
-    upcomingEvents[0].date = formattedEventDate;
-    return upcomingEvents[0]; // Assuming that the API will return the list sorted by date
+    if (isEventList(upcomingEvents)) {
+        // + symbol here converts the dates to numbers, to allow for arithmetic comparison
+        upcomingEvents.sort((e1: Event, e2: Event) => +new Date(e1.start) - +new Date(e2.start));
+        const formattedEventDate = getEventMonthDay(upcomingEvents[0].start);
+        const formattedEventTime = getTimeOfDay(upcomingEvents[0].start);
+        return { title: upcomingEvents[0].title, start: formattedEventDate, time: formattedEventTime };
+    }
+
+    // else
+    return undefined;
 }
 
 export async function getEvent(token: string, eventID: number): Promise<GetEventResponse> {

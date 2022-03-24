@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import renderer, { act, ReactTestRenderer } from 'react-test-renderer';
+import { render } from '@testing-library/react';
 import FamilyAndBikes from '../../components/FamilyAndBikes';
 import { Member } from '../../../../src/typedefs/member';
 import { Bike } from '../../../../src/typedefs/bike';
@@ -67,26 +67,16 @@ const memberBikes: Bike[] = [
 
 describe('family and bikes', () => {
     it('renders all props correctly as admin', () => {
-        let component: ReactTestRenderer;
-        act(() => {
-            component = renderer.create(<FamilyAndBikes memberBikes={memberBikes} memberFamily={memberFamily} admin />);
-        });
-
-        expect(component!.toJSON).toMatchSnapshot();
+        const familyAndBikes = render(
+            <FamilyAndBikes memberBikes={memberBikes} memberFamily={memberFamily} admin />,
+        );
+        expect(familyAndBikes).toMatchSnapshot();
     });
 
     it('renders all props correctly as not admin', () => {
-        let component: ReactTestRenderer;
-        act(() => {
-            component = renderer.create(
-                <FamilyAndBikes
-                    memberBikes={memberBikes}
-                    memberFamily={memberFamily}
-                    admin={false}
-                />,
-            );
-        });
-
-        expect(component!.toJSON).toMatchSnapshot();
+        const familyAndBikes = render(
+            <FamilyAndBikes memberBikes={memberBikes} memberFamily={memberFamily} admin={false} />,
+        );
+        expect(familyAndBikes).toMatchSnapshot();
     });
 });

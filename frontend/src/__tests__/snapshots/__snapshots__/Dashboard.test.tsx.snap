@@ -1,35 +1,29 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`dashboard renders correctly 1`] = `
-Array [
+<DocumentFragment>
   <div
-    className="chakra-stack css-p747s7"
+    class="chakra-stack css-p747s7"
   >
     <div>
       <div
-        className="css-arm2n8"
+        class="css-arm2n8"
       >
         <div
-          className="chakra-stack css-84zodg"
+          class="chakra-stack css-84zodg"
         >
           <button
             aria-label="Back"
-            className="chakra-button css-76fq9n"
-            onClick={[Function]}
+            class="chakra-button css-76fq9n"
             type="button"
           >
             <svg
-              aria-hidden={true}
+              aria-hidden="true"
               fill="currentColor"
-              focusable={false}
+              focusable="false"
               height="lg"
               stroke="currentColor"
-              strokeWidth="0"
-              style={
-                Object {
-                  "color": undefined,
-                }
-              }
+              stroke-width="0"
               viewBox="0 0 512 512"
               width="lg"
               xmlns="http://www.w3.org/2000/svg"
@@ -42,22 +36,16 @@ Array [
           <div>
             <button
               aria-label="Menu"
-              className="chakra-button css-1y85x9m"
-              onClick={[Function]}
+              class="chakra-button css-1y85x9m"
               type="button"
             >
               <svg
-                aria-hidden={true}
+                aria-hidden="true"
                 fill="currentColor"
-                focusable={false}
+                focusable="false"
                 height="1em"
                 stroke="currentColor"
-                strokeWidth="0"
-                style={
-                  Object {
-                    "color": undefined,
-                  }
-                }
+                stroke-width="0"
                 viewBox="0 0 1024 1024"
                 width="1em"
                 xmlns="http://www.w3.org/2000/svg"
@@ -70,66 +58,72 @@ Array [
           </div>
         </div>
         <div
-          className="css-17xejub"
+          class="css-17xejub"
         />
         <div
-          className="css-0"
+          class="css-0"
         >
           <h2
-            className="chakra-heading css-1c7bccy"
+            class="chakra-heading css-1c7bccy"
           >
             Dashboard
           </h2>
         </div>
         <div
-          className="css-17xejub"
+          class="css-17xejub"
         />
       </div>
     </div>
     <div
-      className="css-gmuwbf"
+      class="css-gmuwbf"
+    >
+      <h2
+        class="chakra-heading css-1i61012"
+      >
+        Hi, 
+      </h2>
+      <h2
+        class="chakra-heading css-ws1u8n"
+      >
+        Martin Martian!
+      </h2>
+    </div>
+    <div
+      class="css-gmuwbf"
     >
       <div
-        className="chakra-stack css-84zodg"
+        class="chakra-stack css-84zodg"
       >
         <div
-          className="css-15ddyrp"
-          onClick={[Function]}
+          class="css-15ddyrp"
         >
           <div
-            className="css-gmuwbf"
+            class="css-gmuwbf"
           >
             <div
-              className="chakra-stack css-10j85wf"
+              class="chakra-stack css-10j85wf"
             >
-              <GaugeChart
-                colors={
-                  Array [
-                    "#FF9F46",
-                    "#76CE6F",
-                  ]
-                }
-                hideText={true}
+              <gaugechart
+                colors="#FF9F46,#76CE6F"
                 id="gauge-chart"
-                nrOfLevels={20}
-                percent={0.67}
+                nroflevels="20"
+                percent="0"
               />
               <div
-                className="chakra-stack css-jp20jv"
+                class="chakra-stack css-jp20jv"
               >
                 <p
-                  className="chakra-text css-1srjgni"
+                  class="chakra-text css-1srjgni"
                 >
                   You have completed
                 </p>
                 <p
-                  className="chakra-text css-68kehq"
+                  class="chakra-text css-68kehq"
                 >
-                  0
-                  %
+                  0%
                 </p>
                 <p
-                  className="chakra-text css-1bsg0uq"
+                  class="chakra-text css-1bsg0uq"
                 >
                   of this year's work points
                 </p>
@@ -137,69 +131,124 @@ Array [
             </div>
           </div>
         </div>
-        <div />
         <div
-          className="css-1z0glir"
+          class="css-13ixl7l"
         >
           <div
-            className="css-gmuwbf"
+            class="css-gmuwbf"
           >
             <div
-              className="chakra-stack css-nscsg6"
+              class="chakra-stack css-10j85wf"
+            >
+              <div
+                class="chakra-stack css-84zodg"
+              >
+                <button
+                  aria-label="Calendar"
+                  class="chakra-button css-ozg1ic"
+                  type="button"
+                >
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 3 16"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M0 2.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0zm0 5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0zM1.5 14a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <h2
+                  class="chakra-heading css-1smtq8o"
+                >
+                  Next Event
+                </h2>
+              </div>
+              <hr
+                aria-orientation="horizontal"
+                class="chakra-divider css-svjswr"
+              />
+              <p
+                class="chakra-text css-ykwwr6"
+              />
+              <p
+                class="chakra-text css-1bsg0uq"
+              />
+              <p
+                class="chakra-text css-1bsg0uq"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="css-1z0glir"
+        >
+          <div
+            class="css-gmuwbf"
+          >
+            <div
+              class="chakra-stack css-nscsg6"
             >
               <h2
-                className="chakra-heading css-1dklj6k"
+                class="chakra-heading css-1dklj6k"
               >
                 Important Links
               </h2>
               <hr
                 aria-orientation="horizontal"
-                className="chakra-divider css-svjswr"
+                class="chakra-divider css-svjswr"
               />
               <ul
-                className="css-1avoc21"
+                class="css-1avoc21"
                 role="list"
               >
                 <a
-                  className="chakra-link css-k6vkpw"
+                  class="chakra-link css-k6vkpw"
                   href="https://palmyramx.com/pages/track-rules"
                   target="_blank"
                 >
                   <li
-                    className="css-81gbng"
+                    class="css-81gbng"
                   >
                     Member Rules
                   </li>
                 </a>
                 <a
-                  className="chakra-link css-k6vkpw"
+                  class="chakra-link css-k6vkpw"
                   href="https://twitter.com/palmyramx"
                   target="_blank"
                 >
                   <li
-                    className="css-81gbng"
+                    class="css-81gbng"
                   >
                     Twitter
                   </li>
                 </a>
                 <a
-                  className="chakra-link css-k6vkpw"
+                  class="chakra-link css-k6vkpw"
                   href="https://www.facebook.com/palmyramx/"
                   target="_blank"
                 >
                   <li
-                    className="css-81gbng"
+                    class="css-81gbng"
                   >
                     Facebook
                   </li>
                 </a>
                 <a
-                  className="chakra-link css-k6vkpw"
+                  class="chakra-link css-k6vkpw"
                   href="https://www.instagram.com/palmyramx_hogback_hill/?hl=en"
                   target="_blank"
                 >
                   <li
-                    className="css-81gbng"
+                    class="css-81gbng"
                   >
                     Instagram
                   </li>
@@ -210,7 +259,6 @@ Array [
         </div>
       </div>
     </div>
-  </div>,
-  <span />,
-]
+  </div>
+</DocumentFragment>
 `;
