@@ -55,8 +55,9 @@ const memberFamily: Member[] = [
     },
 ];
 
+// eslint-disable-next-line no-unused-vars
 async function signUpForJob(patchInfo: { jobId: number, editedJob: PatchJobRequest }) {
-    console.log(patchInfo);
+    // void method
 }
 
 const selectedEvent: Event = {

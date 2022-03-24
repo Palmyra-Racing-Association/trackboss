@@ -58,9 +58,6 @@ export default function CreateEventModal(props: CreateEventModalProps) {
         const res = await getEventTypeList(token);
         if (getEventTypeListWasSuccessful(res)) {
             setEventTypes(res);
-        } else {
-            // eslint-disable-next-line no-console
-            console.log(res.reason);
         }
     }
 

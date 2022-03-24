@@ -93,9 +93,7 @@ export default function EventCalendar() {
         newEvent.startDate = startDate.toISOString(true).slice(0, -10);
         newEvent.endDate = endDate.toISOString(true).slice(0, -10);
 
-        const res: Event | ErrorResponse = await createEvent(state.token, newEvent);
-        // eslint-disable-next-line no-console
-        console.log(res); // TODO: 500 response for new event
+        await createEvent(state.token, newEvent);
         const test = await getCalendarEventsLocal(state.token);
         setCalendarEvents(test);
     }
@@ -104,7 +102,7 @@ export default function EventCalendar() {
         const res = await updateJob(state.token, patchInfo.jobId, patchInfo.editedJob);
         if ('reason' in res) {
             // eslint-disable-next-line no-console
-            console.log(res.reason);
+            // console.log(res.reason);
         } else {
             setCalendarEvents(await getCalendarEventsLocal(state.token));
         }
@@ -118,7 +116,7 @@ export default function EventCalendar() {
                 setCalendarEvents(newCalendarEvents);
             } else {
                 // eslint-disable-next-line no-console
-                console.log(response.reason);
+                // console.log(response.reason);
             }
         } else if (selectedEvent) {
             const response = await deleteJob(state.token, selectedEvent.jobId);
@@ -127,7 +125,7 @@ export default function EventCalendar() {
                 setCalendarEvents(newCalendarEvents);
             } else {
                 // eslint-disable-next-line no-console
-                console.log(response.reason);
+                // console.log(response.reason);
             }
         }
     }
@@ -136,7 +134,7 @@ export default function EventCalendar() {
         if (state.user) {
             const res: GetMemberListResponse = await getFamilyMembers(state.token, state.user.membershipId);
             if ('reason' in res) {
-                console.log(res.reason);
+                // console.log(res.reason);
             } else {
                 return res;
             }
@@ -146,7 +144,7 @@ export default function EventCalendar() {
 
     useEffect(() => {
         async function getData() {
-            console.log(state.user);
+            // console.log(state.user);
             // const attendees = await getSelectedJobAttendees();
             const currentFamilyMembers = await getFamilyMembersLocal();
             // setAttendees(attendees);
