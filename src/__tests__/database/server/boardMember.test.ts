@@ -23,6 +23,10 @@ describe('insertBoardMember()', () => {
         expect(mockQuery).toHaveBeenCalled();
     });
 
+    it('Throws for user error (empty request)', async () => {
+        await expect(insertBoardMember({ })).rejects.toThrow('user input error');
+    });
+
     it('Throws for internal server error', async () => {
         const request = { year: -100, memberId: 5, boardMemberTitleId: 2 };
         await expect(insertBoardMember(request)).rejects.toThrow('internal server error');
@@ -116,9 +120,15 @@ describe('patchBoardMember()', () => {
         await testPatchWithObject({ boardMemberTitleId: 5 });
     });
 
-    it('Throws for user error', async () => {
+    it('Throws for user error (empty request)', async () => {
         const boardId = 1451;
         await expect(patchBoardMember(boardId, { })).rejects.toThrow('user input error');
+    });
+
+    it('Throws for user error (1451 case)', async () => {
+        const boardId = 1451;
+        await expect(patchBoardMember(boardId, { year: 2020 })).rejects.toThrow('user input error');
+        expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for member not found', async () => {

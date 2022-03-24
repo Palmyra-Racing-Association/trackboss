@@ -101,7 +101,7 @@ describe('POST /boardMember/new', () => {
 });
 
 describe('GET /boardMember/:boardMemberId', () => {
-    it.skip('Returns 401 for no token', async () => {
+    it('Returns 401 for no token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/2`);
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
