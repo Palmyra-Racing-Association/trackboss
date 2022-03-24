@@ -48,7 +48,7 @@ export default function MemberList() {
     const { state } = useContext(UserContext);
     const [error, setError] = useState<ErrorResponse | undefined>(undefined);
     const [dirty, setDirty] = useState<boolean>(false);
-    const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((newDirty) => !newDirty) });
+    const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((oldDirty) => !oldDirty) });
 
     useEffect(() => {
         async function getData() {
