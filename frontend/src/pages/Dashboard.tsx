@@ -48,7 +48,7 @@ function Dashboard() {
                 <Header title="Dashboard" activeButtonId={1} />
                 {
                     state.user ? (
-                        <GreetingText name={`${state.user?.firstName} ${state.user?.lastName}`} />
+                        <GreetingText name={`${state.user?.firstName} ${state.user?.lastName}!`} />
                     ) : (
                         <GreetingText name={`${''} ${''}`} />
                     )

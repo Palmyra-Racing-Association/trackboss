@@ -16,7 +16,6 @@ export default function Header(props:pageProps) {
                 Hi, {/*eslint-disable-line*/}
                 <Heading sx={{ display: 'inline' }} color="orange" size="4xl">
                     {props.name}
-                    !
                 </Heading>
             </Heading>
         </Center>

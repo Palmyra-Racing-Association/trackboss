@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -18,9 +18,12 @@ import {
 } from '@chakra-ui/react';
 import DateTimePicker from 'react-datetime-picker';
 import { makeEvent } from '../controller/event';
-import { getMockedEventTypeList } from '../controller/eventType';
+import { UserContext } from '../contexts/UserContext';
+import { getEventTypeList } from '../controller/eventType';
+import { EventType } from '../../../src/typedefs/eventType';
+import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 
-function generateEventTypeOptions(eventTypes: any[]) {
+function generateEventTypeOptions(eventTypes: EventType[]) {
     const options: any[] = [];
     for (let i = 0; i < (eventTypes).length; i++) {
         options.push(<option key={i} value={eventTypes[i].eventTypeId}>{eventTypes[i].type}</option>);
@@ -39,18 +42,36 @@ async function handleClose(
 }
 
 export default function CreateEventModal() {
+    const { state } = useContext(UserContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [startDateTime, setStartDateTime] = useState(new Date());
     const [endDateTime, setEndDateTime] = useState(new Date());
     const [eventName, setEventName] = useState('');
     const [description, setDescription] = useState('');
     const [eventTypeId, setEventTypeId] = useState(0);
-    const [eventTypes, setEventTypes] = useState([{}]);
+    const [eventTypes, setEventTypes] = useState<EventType[]>([]);
+
+    function getEventTypeListWasSuccessful(calendarEvent: EventType[] | ErrorResponse): calendarEvent is EventType[] {
+        if ((calendarEvent as EventType[]).length) {
+            return true;
+        }
+        // else, its an error
+        return false;
+    }
+
+    async function getEventTypeListLocal(token: string) {
+        const res = await getEventTypeList(token);
+        if (getEventTypeListWasSuccessful(res)) {
+            setEventTypes(res);
+        } else {
+            // eslint-disable-next-line no-console
+            console.log(res.reason);
+        }
+    }
 
     useEffect(() => {
         async function getData() {
-            const types = await getMockedEventTypeList();
-            setEventTypes(types);
+            await getEventTypeListLocal(state.token);
         }
         getData();
     }, []);

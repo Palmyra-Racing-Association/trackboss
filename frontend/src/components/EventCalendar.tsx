@@ -11,10 +11,12 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import SignUpModal from './SignUpModal';
 import { UserContext } from '../contexts/UserContext';
-import { getJobAttendees } from '../controller/job';
+import { getJobAttendees, deleteJob } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
-import { Event } from '../../../src/typedefs/event';
-import { Job } from '../../../src/typedefs/job';
+import { DeletedEvent, Event } from '../../../src/typedefs/event';
+import { DeletedJob, Job } from '../../../src/typedefs/job';
+import { deleteEvent } from '../controller/event';
+import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 
 const RenderToolbar = require('react-big-calendar/lib/Toolbar');
 
@@ -68,16 +70,47 @@ export default function EventCalendar(props: EventCalendarProps) {
         return false;
     }
 
-    function deleteEvent() {
-        // call controller and await response, if successful...
+    function deleteEventWasSuccessful(calendarEvent: DeletedEvent | ErrorResponse): calendarEvent is DeletedEvent {
+        if ((calendarEvent as DeletedEvent).eventId) {
+            return true;
+        }
+        // else, its an error
+        return false;
+    }
+
+    function deleteJobWasSuccessfull(calendarEvent: DeletedJob | ErrorResponse): calendarEvent is DeletedJob {
+        if ((calendarEvent as DeletedJob).jobId) {
+            return true;
+        }
+        // else, its an error
+        return false;
+    }
+
+    async function deleteEventLocal() {
         if (selectedEvent && isEvent(selectedEvent)) {
-            const newCalendarEvents = calendarEvents.filter((e: any) => e.eventType !== selectedEvent?.eventType);
-            setCalendarEvents(newCalendarEvents);
-        } else {
-            const newCalendarEvents = calendarEvents.filter((e: any) => e.jobId !== selectedEvent?.jobId);
-            setCalendarEvents(newCalendarEvents);
+            const response = await deleteEvent(state.token, selectedEvent.eventId);
+            if (deleteEventWasSuccessful(response)) {
+                const newCalendarEvents = calendarEvents.filter((e: any) => e.eventType !== selectedEvent?.eventType);
+                setCalendarEvents(newCalendarEvents);
+            } else {
+                // eslint-disable-next-line no-console
+                console.log(response.reason);
+            }
+        } else if (selectedEvent) {
+            const response = await deleteJob(state.token, selectedEvent.jobId);
+            if (deleteJobWasSuccessfull(response)) {
+                const newCalendarEvents = calendarEvents.filter((e: any) => e.jobId !== selectedEvent?.jobId);
+                setCalendarEvents(newCalendarEvents);
+            } else {
+                // eslint-disable-next-line no-console
+                console.log(response.reason);
+            }
         }
     }
+
+    // async function createEventLocal() {
+
+    // }
 
     useEffect(() => {
         async function getData() {
@@ -183,7 +216,7 @@ export default function EventCalendar(props: EventCalendarProps) {
                         onSignUpOpen={onSignUpOpen}
                         admin={state.user?.memberType === 'Admin'}
                         // eslint-disable-next-line react/jsx-no-bind
-                        deleteEvent={deleteEvent}
+                        deleteEvent={deleteEventLocal}
                         // signUpForEvent={signUpForEvent}
                     />
                 )

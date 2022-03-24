@@ -77,7 +77,11 @@ export function getEventStartAndEndTime(start: string, end: string) {
     // gets am or pm, and converts from military to standard hours
     const endAmOrPm = endHour >= 12 ? 'PM' : 'AM'; endHour = ((endHour + 11) % 12 + 1);
 
-    return `${startHour}:${startMinute} ${startAmOrPm} - ${endHour}:${endMinute} ${endAmOrPm}`;
+    const response = `${startHour}:${startMinute} ${startAmOrPm} - ${endHour}:${endMinute} ${endAmOrPm}`;
+    if (response === '12:00 AM - 12:00 AM') {
+        return 'All Day';
+    }
+    return response;
 }
 
 export function getTimeOfDay(time: string) {

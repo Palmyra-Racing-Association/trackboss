@@ -18,7 +18,7 @@ function isEventList(res: Event[] | ErrorResponse): res is Event[] {
 export async function createEvent(token: string, eventData: PostNewEventRequest): Promise<PostNewEventResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/new`, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(eventData),
     });
@@ -88,7 +88,7 @@ export async function getEventCardProps(token: string, listType: string) {
 export async function getEvent(token: string, eventID: number): Promise<GetEventResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
@@ -101,18 +101,19 @@ export async function updateEvent(
 ): Promise<PatchEventResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
         method: 'PATCH',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(eventData),
     });
     return response.json();
 }
 
-export async function deleteEvent(token: string, eventID: number): Promise<DeleteEventResponse> {
+export async function deleteEvent(token: string, eventID: number) {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/${eventID}`, {
         method: 'DELETE',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
-    return response.json();
+    const res: DeleteEventResponse = await response.json();
+    return res;
 }
