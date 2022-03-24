@@ -1,35 +1,22 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useContext } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, Messages, momentLocalizer, View, ViewsProps } from 'react-big-calendar';
-import {
-    Text,
-    Flex,
-    Spacer,
-    useDisclosure,
-    Box,
-} from '@chakra-ui/react';
+import { Text, Flex, Spacer, useDisclosure, Box } from '@chakra-ui/react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import SignUpModal from './SignUpModal';
 import { UserContext } from '../contexts/UserContext';
-import { getJobAttendees, deleteJob, getCalendarJobs } from '../controller/job';
+import { getJobAttendees, deleteJob, getCalendarJobs, updateJob } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
 import { DeletedEvent, Event, PostNewEventRequest } from '../../../src/typedefs/event';
-import { DeletedJob, Job } from '../../../src/typedefs/job';
+import { DeletedJob, Job, PatchJobRequest } from '../../../src/typedefs/job';
 import { createEvent, deleteEvent, getCalendarEvents } from '../controller/event';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import CreateEventModal from './CreateEventModal';
-// import { formatDateString } from '../controller/utils';
 
 const RenderToolbar = require('react-big-calendar/lib/Toolbar');
 
 const localizer: DateLocalizer = momentLocalizer(moment);
-
-// interface EventCalendarProps {
-//     calendarEvents: Array<Job | Event>,
-//     getCalendarEventsLocal: (token: string) => Promise<(Event | Job)[]>,
-// }
 
 interface CustomToolbarProps {
     date: Date,
@@ -67,7 +54,6 @@ async function getCalendarEventsLocal(token: string) {
         calendarEvents = calendarEvents.concat(events);
         calendarEvents = calendarEvents.concat(jobs);
     }
-
     return calendarEvents;
 }
 
@@ -75,7 +61,6 @@ export default function EventCalendar() {
     const { state } = useContext(UserContext);
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
-    const [reloadCalendar, setReloadCalendar] = useState<boolean>(false);
     const [selectedEvent, setSelectedEvent] = useState<Job | Event>();
     const [eventAttendees, setAttendees] = useState<any>();
     const [familyMembers, setFamilyMembers] = useState<any>();
@@ -108,11 +93,20 @@ export default function EventCalendar() {
     async function createEventLocal(newEvent: PostNewEventRequest) {
         const startDate = moment(newEvent.startDate);
         const endDate = moment(newEvent.endDate);
+        // The server's expected format, ends at minutes
         newEvent.startDate = startDate.toISOString(true).slice(0, -10);
         newEvent.endDate = endDate.toISOString(true).slice(0, -10);
 
         const res: Event | ErrorResponse = await createEvent(state.token, newEvent);
-        setCalendarEvents(await getCalendarEventsLocal(state.token));
+        console.log(res); // TODO: 500 response for new event
+        const test = await getCalendarEventsLocal(state.token);
+        console.log(test);
+        setCalendarEvents(test);
+    }
+
+    async function signUpForJob(patchInfo: { jobId: number, editedJob: PatchJobRequest }) {
+        const res = await updateJob(state.token, patchInfo.jobId, patchInfo.editedJob);
+        console.log(res);
     }
 
     async function deleteEventLocal() {
@@ -172,23 +166,23 @@ export default function EventCalendar() {
                         };
                         if (isEvent(calendarEvent)) {
                             if (calendarEvent.eventType === 'Meeting') {
-                                newStyle.backgroundColor = '#76CE6F';
+                                newStyle.backgroundColor = '#76CE6F'; // green
                             } else if (
                                 calendarEvent.eventType === 'Yearly Job' ||
                                 calendarEvent.eventType === 'Work Day') {
-                                newStyle.backgroundColor = '#68A9FF';
+                                newStyle.backgroundColor = '#4B0082'; // purple
                             } else if (
                                 calendarEvent.eventType === 'Race' ||
                                 calendarEvent.eventType === 'Race Week' ||
                                 calendarEvent.eventType === 'XO Race' ||
                                 calendarEvent.eventType === 'Harescramble') {
-                                newStyle.backgroundColor = '#EE6439';
+                                newStyle.backgroundColor = '#EE6439'; // red
                             } else if (
                                 calendarEvent.eventType === 'Camp and Ride' ||
                                 calendarEvent.eventType === 'Ride Day') {
-                                newStyle.backgroundColor = 'lightgrey';
+                                newStyle.backgroundColor = '#D3D3D3'; // lightgrey
                             } else { // its a Job
-                                newStyle.backgroundColor = '#68A4FF';
+                                newStyle.backgroundColor = 'lightblue';
                             }
                             return {
                                 style: newStyle,
@@ -245,7 +239,8 @@ export default function EventCalendar() {
                         admin={state.user?.memberType === 'Admin'}
                         // eslint-disable-next-line react/jsx-no-bind
                         deleteEvent={deleteEventLocal}
-                        // signUpForEvent={signUpForEvent}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        signUpForJob={signUpForJob}
                     />
                 )
             }
