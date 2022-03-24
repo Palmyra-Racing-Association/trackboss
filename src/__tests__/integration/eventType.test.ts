@@ -20,8 +20,7 @@ afterAll((done) => {
 });
 
 describe('GET /eventType/list', () => {
-    // this test timesout for no reason, and is skipped until a fix is found
-    it.skip('Returns 401 for no token', async () => {
+    it('Returns 401 for no token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`);
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
@@ -99,8 +98,7 @@ describe('POST /eventType/new', () => {
 });
 
 describe('GET /eventType/:eventTypeId', () => {
-    // this test timesout for no reason, and is skipped until a fix is found
-    it.skip('Returns 401 for no token', async () => {
+    it('Returns 401 for no token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/2`);
         expect(res.status).toBe(401);
         expect(res.body.reason).toBe('Missing authorization grant in header');
