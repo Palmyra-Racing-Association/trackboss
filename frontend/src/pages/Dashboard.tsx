@@ -11,6 +11,8 @@ import { getWorkPointsTotal } from '../controller/workPoints';
 import { getYearlyThresholdValue } from '../controller/billing';
 import GreetingText from '../components/GreetingText';
 import { getTodaysDate } from '../controller/utils';
+import { Member } from '../../../src/typedefs/member';
+import me from '../controller/api';
 
 async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     const nowString = getTodaysDate();
@@ -30,11 +32,13 @@ async function getWorkPointsPercentage(token: string, memberId: number) {
 
 function Dashboard() {
     const { state } = useContext(UserContext);
+    const [localMe, setMe] = useState<Member>();
     const [eventCardProps, setEventCardProps] = useState<any>();
     const [percent, setPercent] = useState<number>();
     useEffect(() => {
         async function getData() {
             setEventCardProps(await getEventCardPropsLocal(state.token));
+            setMe(await me(state.token));
             if (state.user) {
                 setPercent(await getWorkPointsPercentage(state.token, state.user.memberId));
             }
@@ -47,10 +51,8 @@ function Dashboard() {
             <VStack align="left" spacing="2em">
                 <Header title="Dashboard" activeButtonId={1} />
                 {
-                    state.user ? (
-                        <GreetingText name={`${state.user?.firstName} ${state.user?.lastName}`} />
-                    ) : (
-                        <GreetingText name={`${''} ${''}`} />
+                    localMe && (
+                        <GreetingText name={`${localMe.firstName} ${localMe.lastName}`} />
                     )
                 }
                 <Center>
