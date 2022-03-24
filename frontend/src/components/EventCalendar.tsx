@@ -100,13 +100,16 @@ export default function EventCalendar() {
         const res: Event | ErrorResponse = await createEvent(state.token, newEvent);
         console.log(res); // TODO: 500 response for new event
         const test = await getCalendarEventsLocal(state.token);
-        console.log(test);
         setCalendarEvents(test);
     }
 
     async function signUpForJob(patchInfo: { jobId: number, editedJob: PatchJobRequest }) {
         const res = await updateJob(state.token, patchInfo.jobId, patchInfo.editedJob);
-        console.log(res);
+        if ('reason' in res) {
+            console.log(res.reason);
+        } else {
+            setCalendarEvents(await getCalendarEventsLocal(state.token));
+        }
     }
 
     async function deleteEventLocal() {
