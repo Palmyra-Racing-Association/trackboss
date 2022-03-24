@@ -94,6 +94,11 @@ describe('patchEventJob()', () => {
         expect(mockQuery).toHaveBeenCalled();
     });
 
+    it('Throws for user error ( empty body )', async () => {
+        const eventJobId = 4000;
+        await expect(patchEventJob(eventJobId, { })).rejects.toThrow('user input error');
+    });
+
     it('Throws for internal server error', async () => {
         const eventJobId = -100;
         await expect(patchEventJob(eventJobId, { jobTypeId: 2 })).rejects.toThrow('internal server error');

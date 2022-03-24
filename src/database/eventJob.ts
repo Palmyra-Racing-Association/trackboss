@@ -11,6 +11,9 @@ export const PATCH_EVENT_JOB_SQL = 'CALL sp_patch_event_job(?, ?, ?, ?)';
 export const DELETE_EVENT_JOB_SQL = 'DELETE FROM event_job WHERE event_job_id = ?';
 
 export async function insertEventJob(req: PostNewEventJobRequest): Promise<number> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [req.eventTypeId, req.jobTypeId, req.count];
 
     let result;
@@ -59,6 +62,9 @@ export async function getEventJob(id: number): Promise<EventJob> {
 }
 
 export async function patchEventJob(id: number, req: PatchEventJobRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [id, req.eventTypeId, req.jobTypeId, req.count];
 
     let result;
