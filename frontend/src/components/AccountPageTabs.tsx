@@ -21,6 +21,7 @@ import { Bike } from '../../../src/typedefs/bike';
 const memberFamily: Member[] = [
     {
         memberId: 1,
+        membershipId: 1,
         membershipAdmin: 'true',
         active: true,
         memberType: 'admin',
@@ -41,6 +42,7 @@ const memberFamily: Member[] = [
     },
     {
         memberId: 2,
+        membershipId: 2,
         membershipAdmin: 'true',
         active: true,
         memberType: 'admin',
