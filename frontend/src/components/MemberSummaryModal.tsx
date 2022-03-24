@@ -46,13 +46,6 @@ async function handleNewBoardMember(memberInfo: Member, editedBoardMember: strin
     // return response;
 }
 
-async function handlePatchMemberType(memberInfo: Member, editedMemberType: string) {
-    // const updatedMember = await patchMember(editedMemberType, memberInfo.memberId)
-    // if (updatedMember.reason) {
-    //   there was an error, show error message
-    // }
-}
-
 async function handlePatchMemberContactInfo(
     memberInfo: Member,
     name: string | undefined,
@@ -126,7 +119,27 @@ export default function MemberSummaryModal(props: modalProps) {
                 return false;
             }
             return true;
-        }, [state, props.memberInfo]);
+    }, [state, props.memberInfo]);
+
+    const handlePatchMemberType = useCallback(async (editedMemberType: string) => {
+        console.log(editedMemberType);
+        let memberTypeId: number;
+        if (editedMemberType === 'board') {
+            //special board member handling
+            memberTypeId = 1;
+        } else if (editedMemberType === 'member') {
+            memberTypeId = 3;
+        } else if (editedMemberType === 'admin') {
+            memberTypeId = 1;
+        } else {
+            return false;
+        }
+        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, { memberTypeId, modifiedBy: state.user!.memberId })
+        if ('reason' in updatedMember) {
+          return false;
+        }
+        return true;
+    }, [state, props.memberInfo]);
 
     useEffect(() => {
         async function setModalData() {
@@ -358,7 +371,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                                 await handleNewBoardMember(selectedMember, editedBoardMember);
                                                             }
                                                             if (selectedMember.memberType !== editedMemberType) {
-                                                                await handlePatchMemberType(selectedMember, editedMemberType);
+                                                                await handlePatchMemberType(editedMemberType);
                                                             }
                                                             setEditingMemberRole(false);
                                                             setEditingMemberInfo(false);
