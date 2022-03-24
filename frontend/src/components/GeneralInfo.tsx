@@ -11,8 +11,10 @@ import {
     SimpleGrid,
     Button,
     Input,
+    StatHelpText,
 } from '@chakra-ui/react';
-import { Member } from '../../../src/typedefs/member';
+import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
+import { updateMember } from '../controller/member';
 
 interface cardProps {
     user: Member,
@@ -24,32 +26,46 @@ async function handlePatchMemberContactInfo(
     email: string | undefined,
     phone: string | undefined,
 ) {
-    // const updatedMember = await patchMember(name, email, phone, memberInfo.memberId)
-    // if (updatedMember.reason) {
-    //      there was an error, show error message
-    // }
-
-    const updatedMember: Member = {
-        membershipId: 1,
-        memberId: 1,
-        membershipAdmin: 'true',
-        active: true,
-        memberType: 'member',
-        firstName: 'Updated',
-        lastName: 'Member',
-        phoneNumber: '0987',
-        email: 'updatedMember@example.com',
-        uuid: '',
-        occupation: '',
-        birthdate: '',
-        dateJoined: 'August 12, 2006',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        lastModifiedDate: '',
-        lastModifiedBy: '',
+    const patch: PatchMemberRequest = {
+        membershipId: memberInfo.memberId,
+        uuid: memberInfo.uuid,
+        memberTypeId: memberInfo.memberType,
+        firstName: memberInfo.firstName,
+        lastName: memberInfo.lastName,
+        phoneNumber: memberInfo.phoneNumber,
+        occupation: memberInfo.occupation,
+        email: memberInfo.email,
+        birthdate: memberInfo.birthdate,
+        dateJoined: memberInfo.dateJoined,
+        modifiedBy: memberInfo.memberId,
     };
+
+    const res = await updateMember(state.token, state.user.memberId, patch)
+    if ('reason' in res) {
+        console.log(res.reason);
+    }
+
+    // const updatedMember: Member = {
+    //     membershipId: 1,
+    //     memberId: 1,
+    //     membershipAdmin: 'true',
+    //     active: true,
+    //     memberType: 'member',
+    //     firstName: 'Updated',
+    //     lastName: 'Member',
+    //     phoneNumber: '0987',
+    //     email: 'updatedMember@example.com',
+    //     uuid: '',
+    //     occupation: '',
+    //     birthdate: '',
+    //     dateJoined: 'August 12, 2006',
+    //     address: '',
+    //     city: '',
+    //     state: '',
+    //     zip: '',
+    //     lastModifiedDate: '',
+    //     lastModifiedBy: '',
+    // };
 
     return updatedMember;
 }
