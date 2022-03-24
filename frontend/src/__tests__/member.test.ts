@@ -104,7 +104,26 @@ test('getMemberList returns list with valid id and no query param', async () => 
     const token = 'TestingToken';
     const res = await getMemberList(token);
     if (Array.isArray(res)) {
-        expect(res[0]).toEqual({ memberId: 1 });
+        expect(res[0]).toEqual({
+            memberId: 1,
+            firstName: 'Squeak',
+            lastName: 'Trainywhel',
+            membershipAdmin: 'Squeak Trainywhel',
+            uuid: null,
+            active: true,
+            memberType: 'Admin',
+            phoneNumber: '223-321-4438',
+            occupation: 'Software Engineer',
+            email: 'squeaky@trainingwheels.com',
+            birthdate: '1981-08-13',
+            dateJoined: '2016-10-18',
+            address: '25 Laurel Hill',
+            city: 'North Las Vegas',
+            state: 'NV',
+            zip: '59294',
+            lastModifiedDate: null,
+            lastModifiedBy: null,
+        });
     } else {
         throw new Error('Received unexpected error response');
     }
@@ -114,7 +133,26 @@ test('getMemberList returns list with valid id and query param', async () => {
     const token = 'TestingToken';
     const res = await getMemberList(token, 'valid');
     if (Array.isArray(res)) {
-        expect(res[0]).toEqual({ memberId: 1 });
+        expect(res[0]).toEqual({
+            memberId: 1,
+            firstName: 'Squeak',
+            lastName: 'Trainywhel',
+            membershipAdmin: 'Squeak Trainywhel',
+            uuid: null,
+            active: true,
+            memberType: 'Admin',
+            phoneNumber: '223-321-4438',
+            occupation: 'Software Engineer',
+            email: 'squeaky@trainingwheels.com',
+            birthdate: '1981-08-13',
+            dateJoined: '2016-10-18',
+            address: '25 Laurel Hill',
+            city: 'North Las Vegas',
+            state: 'NV',
+            zip: '59294',
+            lastModifiedDate: null,
+            lastModifiedBy: null,
+        });
     } else {
         throw new Error('Received unexpected error response');
     }
