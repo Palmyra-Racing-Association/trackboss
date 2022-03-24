@@ -18,16 +18,6 @@ import workPoints from './workPoints';
 
 const api = Router();
 
-<<<<<<< HEAD
-api.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', '*');
-    next();
-});
-
-api.use(bodyParser.json());
-=======
->>>>>>> added myself as a user to the database and began work
 api.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', '*');
@@ -48,7 +38,6 @@ api.get('/me', async (req: Request, res: Response) => {
         try {
             const payload = await verify(headerCheck.token);
             const uuid = payload['cognito:username'];
-            console.log(payload);
             try {
                 response = await getMember(uuid);
                 res.status(200);

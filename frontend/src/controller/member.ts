@@ -1,4 +1,5 @@
 import { generateHeaders } from './utils';
+
 import {
     GetMemberListResponse,
     GetMemberResponse,
@@ -8,7 +9,6 @@ import {
     PostNewMemberRequest,
     PostNewMemberResponse,
 } from '../../../src/typedefs/member';
-import { response } from 'msw';
 
 export async function createMember(token: string, memberData: PostNewMemberRequest): Promise<PostNewMemberResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/new`, {
@@ -30,14 +30,12 @@ export async function getMember(token: string, memberId: number): Promise<GetMem
 }
 
 // TODO: this is a mock response, redo when API is completed
-export async function getFamilyMembers(token: string, membershipId: number): Promise<GetMemberResponse> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/list?smembershipId?=${membershipId}`, {
+export function getFamilyMembers(token: string, membershipId: number): Promise<GetMemberListResponse> {
+    return fetch(`${process.env.REACT_APP_API_URL}/api/member/list?membershipId=${membershipId}`, {
         method: 'GET',
         mode: 'cors',
         headers: generateHeaders(token),
-    });
-    console.debug(response.json());
-    return response.json();
+    }).then((response) => response.json()).then((data) => data as GetMemberListResponse);
 }
 
 export async function getMemberList(token: string, listType?: string): Promise<GetMemberListResponse> {

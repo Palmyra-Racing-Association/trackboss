@@ -10,17 +10,18 @@ import {
     ListItem,
     useDisclosure,
 } from '@chakra-ui/react';
-import { Member } from '../../../src/typedefs/member';
-import { Bike } from '../../../src/typedefs/bike';
+import { GetMemberListResponse, Member, PatchMemberRequest } from '../../../src/typedefs/member';
+import { Bike, GetBikeListResponse } from '../../../src/typedefs/bike';
 import DeleteAlert from './DeleteAlert';
 import EditBikesModal from './EditBikeModal';
 import AddFamilyModal from './AddFamilyModal';
 import AddBikeModal from './AddBikeModal';
+import { updateMember } from '../controller/member';
 import { UserContext } from '../contexts/UserContext';
 
 interface cardProps {
-    memberFamily: Member[],
-    memberBikes: Bike[],
+    memberFamily: GetMemberListResponse,
+    memberBikes: GetBikeListResponse,
     admin: boolean
 }
 
@@ -33,17 +34,17 @@ export default function GeneralInfo(props: cardProps) {
     const { onClose: onEditBikeClose, isOpen: isEditBikeOpen, onOpen: onEditBikeOpen } = useDisclosure();
     const { onClose: onAddBikeClose, isOpen: isAddBikeOpen, onOpen: onAddBikeOpen } = useDisclosure();
 
-    const [memberFamily, setMemberFamily] = useState<Member[]>([]);
-    const [memberBikes, setMemberBikes] = useState<Bike[]>([]);
+    const [memberFamily, setMemberFamily] = useState<GetMemberListResponse>([]);
+    const [memberBikes, setMemberBikes] = useState<GetBikeListResponse>([]);
 
     const [memberToRemove, setMemberToRemove] = useState<Member>();
     const [bikeToRemove, setBikeToRemove] = useState<Bike>();
     const [bikeToEdit, setBikeToEdit] = useState<Bike>();
 
-    function removeFamilyMember() {
-        // call controller and await response, if successful...
-        if (memberToRemove) {
-            const newMemberFamily = memberFamily.filter((m) => m.memberId !== memberToRemove.memberId);
+    async function removeFamilyMember() {
+        if (memberToRemove && state.user) {
+            await updateMember( state.token, memberToRemove.memberId, {membershipId: undefined, modifiedBy: state.user.memberId})
+            const newMemberFamily = (memberFamily as Member[]).filter((m) => m.memberId !== memberToRemove.memberId);
             setMemberFamily(newMemberFamily);
         }
     }
@@ -51,17 +52,17 @@ export default function GeneralInfo(props: cardProps) {
     function removeBike() {
         // call controller and await response, if successful...
         if (bikeToRemove) {
-            const newMemberBikes = memberBikes.filter((b) => b.bikeId !== bikeToRemove?.bikeId);
+            const newMemberBikes = (memberBikes as Bike[]).filter((b) => b.bikeId !== bikeToRemove?.bikeId);
             setMemberBikes(newMemberBikes);
         }
     }
 
     function editBike(editedBike: Bike, bikeYear: string, bikeMake: string, bikeModel: string) {
         // call controller and await response, if successful...
-        const index = memberBikes.indexOf(editedBike);
-        memberBikes[index].year = bikeYear;
-        memberBikes[index].make = bikeMake;
-        memberBikes[index].model = bikeModel;
+        const index = (memberBikes as Bike[]).indexOf(editedBike);
+        (memberBikes as Bike[])[index].year = bikeYear;
+        (memberBikes as Bike[])[index].make = bikeMake;
+        (memberBikes as Bike[])[index].model = bikeModel;
         setMemberBikes(memberBikes);
     }
 
@@ -76,7 +77,7 @@ export default function GeneralInfo(props: cardProps) {
             model,
             membershipAdmin: 'me',
         };
-        setMemberBikes(memberBikes.concat(newBike));
+        setMemberBikes((memberBikes as Bike[]).concat(newBike));
     }
 
     useEffect(() => {
@@ -116,7 +117,7 @@ export default function GeneralInfo(props: cardProps) {
                     memberFamily && (
                         <UnorderedList pt={10} spacing={2}>
                             {
-                                memberFamily.map((member) => (
+                                (memberFamily as Member[]).map((member) => (
                                     <HStack>
                                         <ListItem
                                             fontSize="3xl"
@@ -174,7 +175,7 @@ export default function GeneralInfo(props: cardProps) {
                     memberBikes && (
                         <UnorderedList pt={10} spacing={2}>
                             {
-                                memberBikes.map((bike) => (
+                                (memberBikes as Bike[]).map((bike) => (
                                     <HStack>
                                         <ListItem
                                             ml={10}

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState, useContext, useEffect } from 'react';
 import {
     Button,
@@ -14,87 +15,38 @@ import { IoMdBriefcase } from 'react-icons/io';
 import { UserContext } from '../contexts/UserContext';
 import GeneralInfo from './GeneralInfo';
 import FamilyAndBikes from './FamilyAndBikes';
-import { Member } from '../../../src/typedefs/member';
+import { GetMemberListResponse, Member } from '../../../src/typedefs/member';
 import WorkPointsHistory from './WorkPointsHistory';
-import { Bike } from '../../../src/typedefs/bike';
+import { Bike, GetBikeListResponse } from '../../../src/typedefs/bike';
 import { getFamilyMembers } from '../controller/member';
+import { getBikeList } from '../controller/bike';
 
-const memberFamily: Member[] = [
-    {
-        memberId: 1,
-        membershipAdmin: 'true',
-        active: true,
-        memberType: 'admin',
-        firstName: 'John',
-        lastName: 'Smith',
-        phoneNumber: '1',
-        email: 'user@example.com',
-        uuid: '',
-        occupation: '',
-        birthdate: '',
-        dateJoined: 'August 12, 2006',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        lastModifiedDate: '',
-        lastModifiedBy: '',
-    },
-    {
-        memberId: 2,
-        membershipAdmin: 'true',
-        active: true,
-        memberType: 'admin',
-        firstName: 'Jane',
-        lastName: 'Smith',
-        phoneNumber: '2',
-        email: 'user@example.com',
-        uuid: '',
-        occupation: '',
-        birthdate: '',
-        dateJoined: 'August 12, 2006',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        lastModifiedDate: '',
-        lastModifiedBy: '',
-    },
-];
-
-const memberBikes: Bike[] = [
-    {
-        bikeId: 1,
-        year: '2012',
-        make: 'honda',
-        model: 'rust-bucket',
-        membershipAdmin: 'string',
-    },
-    {
-        bikeId: 2,
-        year: '2022',
-        make: 'yamaha',
-        model: '',
-        membershipAdmin: 'string',
-    },
-];
-
-async function getMemberFamilyLocal(token: string, membershipId: string) {
-    const family = await getFamilyMembers(token);
+async function getMemberFamilyLocal(token: string, membershipId: number) {
+    const family = await getFamilyMembers(token, membershipId);
+    return family;
 }
 
+async function getMemberBikesLocal(token: string, membershipId: number) {
+    const bikes = await getBikeList(token, membershipId);
+    return bikes;
+}
 
 export default function AccountPageTabs() {
     const { state } = useContext(UserContext);
     const [activeButton, setActiveButton] = useState<Number>(1);
-    const [memberFamily, setMemberFamily] = useState<Member[]>([]);
-    const [memberBikes, setMemberBikes] = useState<Bike[]>([]);
+    const [memberFamily, setMemberFamily] = useState<GetMemberListResponse>([]);
+    const [memberBikes, setMemberBikes] = useState<GetBikeListResponse>([]);
     useEffect(() => {
         async function setMemberData() {
-            const family = await getMemberFamilyLocal(state.token, );
+            if(state.user) {
+                const family: GetMemberListResponse = await getMemberFamilyLocal(state.token, state.user.membershipId);
+                const bikes: GetBikeListResponse = await getMemberBikesLocal(state.token, state.user.membershipId);
+                setMemberFamily(family);
+                setMemberBikes(bikes);
+            }
         }
         setMemberData();
-    }, [props.memberFamily, props.memberBikes]);
+    }, [memberFamily, memberBikes]);
 
     return (
         <Grid
