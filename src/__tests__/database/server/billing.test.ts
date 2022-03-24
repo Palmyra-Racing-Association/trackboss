@@ -1,7 +1,6 @@
 import 'dotenv/config';
-import _ from 'lodash';
 
-import { Bill, GetBillListRequestFilters } from 'src/typedefs/bill';
+import { Bill, GetBillListRequestFilters } from '../../../typedefs/bill';
 import {
     getBillList,
     generateBill,
@@ -84,7 +83,7 @@ describe('getWorkPointThreshold()', () => {
 
         const result = await getWorkPointThreshold(year);
         expect(mockQuery).toHaveBeenCalled();
-        expect(_.isEqual(result, expBill));
+        expect(result).toEqual(expBill);
     });
 
     it('Throws for year not found', async () => {

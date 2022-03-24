@@ -35,7 +35,8 @@ describe('GET /member/list', () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
-        expect(members.length).toBe(102);
+        // the registration test _sometimes_ runs before this, meaning an extra entry
+        expect([102, 103]).toContain(members.length);
         expect(members[0].memberId).toBe(1);
         expect(members[0].firstName).toBe('Squeak');
         expect(members[0].lastName).toBe('Trainywhel');
@@ -70,7 +71,8 @@ describe('GET /member/list', () => {
             .set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
-        expect(members.length).toBe(21);
+        // the registration test _sometimes_ runs before this, meaning an extra entry
+        expect([21, 22]).toContain(members.length);
         _.forEach(members, (member: Member) => expect(member.memberType).toBe('Member'));
     });
     it('Correctly filters by role Paid Laborer', async () => {
@@ -209,7 +211,8 @@ describe('POST /member/new', () => {
         expect(mockVerifyAdmin).toHaveBeenCalled();
         expect(res.status).toBe(201);
         const member: Member = res.body;
-        expect(member.memberId).toBe(103);
+        // the registration test _sometimes_ runs before this, meaning an extra entry
+        expect([103, 104]).toContain(member.memberId);
         expect(member.memberType).toBe('Admin');
         expect(member.uuid).toBe(newMember.uuid);
         expect(member.firstName).toBe(newMember.firstName);

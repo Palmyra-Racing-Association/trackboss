@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import _ from 'lodash';
 
 import { PatchMemberTypeRequest } from '../../../typedefs/memberType';
 import { getMemberType, getMemberTypeList, patchMemberType } from '../../../database/memberType';
@@ -10,11 +9,11 @@ describe('getMemberType()', () => {
         const expMemberType = {
             memberTypeId: 8,
             type: 'Test Subject',
-            BaseDuesAmt: 100,
+            baseDuesAmt: 100,
         };
         const result = await getMemberType(expMemberType.memberTypeId);
         expect(mockQuery).toHaveBeenCalled();
-        expect(_.isEqual(result, expMemberType));
+        expect(result).toEqual(expMemberType);
     });
 
     it('Throws for member type not found', async () => {

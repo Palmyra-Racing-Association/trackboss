@@ -1,7 +1,5 @@
 import 'dotenv/config';
-import _ from 'lodash';
-
-import { PatchJobTypeRequest } from 'src/typedefs/jobType';
+import { PatchJobTypeRequest } from '../../../typedefs/jobType';
 import { getJobType, getJobTypeList, insertJobType, patchJobType } from '../../../database/jobType';
 import { mockQuery } from './mockQuery';
 
@@ -53,7 +51,7 @@ describe('getJobType()', () => {
         };
         const result = await getJobType(expJobType.jobTypeId);
         expect(mockQuery).toHaveBeenCalled();
-        expect(_.isEqual(result, expJobType));
+        expect(result).toEqual(expJobType);
     });
 
     it('Throws for job type not found', async () => {

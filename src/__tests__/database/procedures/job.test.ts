@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import _ from 'lodash';
 import mysql, { OkPacket, RowDataPacket } from 'mysql2/promise';
 
@@ -5,11 +6,7 @@ import config from './config';
 
 const pool = mysql.createPool(config);
 
-const today = () => {
-    const date = new Date();
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}` +
-        `-${date.getDate().toString().padStart(2, '0')}`;
-};
+const today = format(new Date(), 'yyyy-MM-dd');
 
 const CHECK_SQL = 'SELECT job_id, member_id, event_id, job_type_id, ' +
     'DATE_FORMAT(job_start_date, "%Y-%m-%d %H:%i:%s") as job_start_date, ' +
@@ -74,8 +71,8 @@ describe('sp_patch_job()', () => {
         expect(checkResults[0].paid[0]).toBe(values[8]);
         expect(checkResults[0].last_modified_by).toBe(values[9]);
         expect(checkResults[0].verified_date).toBeNull(); // Since we just un verified this
-        expect(checkResults[0].paid_date).toBe(today()); // Since we just paid this
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].paid_date).toBe(today); // Since we just paid this
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
     it('Patches member_id field', async () => {
         const jobId = 2;
@@ -87,13 +84,15 @@ describe('sp_patch_job()', () => {
         values[9] = 42;
 
         origValues[0].member_id = 42;
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
     it('Patches event_id field', async () => {
         const jobId = 3;
@@ -105,13 +104,15 @@ describe('sp_patch_job()', () => {
         values[9] = 42;
 
         origValues[0].event_id = 3;
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
     it('Patches job_type_id field', async () => {
         const jobId = 4;
@@ -123,13 +124,15 @@ describe('sp_patch_job()', () => {
         values[9] = 42;
 
         origValues[0].job_type_id = 10;
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
     it('Patches job_start_date field', async () => {
         const jobId = 5;
@@ -141,13 +144,15 @@ describe('sp_patch_job()', () => {
         values[9] = 42;
 
         origValues[0].job_start_date = '2020-01-01 20:00:00';
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
     it('Patches job_end_date field', async () => {
         const jobId = 5;
@@ -159,13 +164,15 @@ describe('sp_patch_job()', () => {
         values[9] = 42;
 
         origValues[0].job_end_date = '2020-01-02 20:00:00';
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
     it('Patches points_awarded field', async () => {
         const jobId = 6;
@@ -177,13 +184,15 @@ describe('sp_patch_job()', () => {
         values[9] = 42;
 
         origValues[0].points_awarded = 5;
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
     it('Patches verified field', async () => {
         const jobId = 10;
@@ -195,14 +204,16 @@ describe('sp_patch_job()', () => {
         values[9] = 42;
 
         origValues[0].verified[0] = 1;
-        origValues[0].verified_date = today();
+        origValues[0].verified_date = today;
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
     it('Patches un-verified field', async () => {
         const jobId = 10;
@@ -215,13 +226,15 @@ describe('sp_patch_job()', () => {
 
         origValues[0].verified[0] = 0;
         origValues[0].verified_date = null;
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
     it('Patches paid field', async () => {
         const jobId = 15;
@@ -233,14 +246,16 @@ describe('sp_patch_job()', () => {
         values[9] = 42;
 
         origValues[0].paid[0] = 1;
-        origValues[0].paid_date = today();
+        origValues[0].paid_date = today;
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
     it('Patches un-paid field', async () => {
         const jobId = 15;
@@ -253,12 +268,14 @@ describe('sp_patch_job()', () => {
 
         origValues[0].paid[0] = 0;
         origValues[0].paid_date = null;
+        origValues[0].last_modified_by = 42;
+        origValues[0].last_modified_date = today;
 
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [jobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], origValues[0]));
+        expect(checkResults[0]).toEqual(origValues[0]);
     });
 });
