@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Heading,
     VStack,
@@ -16,6 +16,7 @@ import DeleteAlert from './DeleteAlert';
 import EditBikesModal from './EditBikeModal';
 import AddFamilyModal from './AddFamilyModal';
 import AddBikeModal from './AddBikeModal';
+import { UserContext } from '../contexts/UserContext';
 
 interface cardProps {
     memberFamily: Member[],
@@ -24,6 +25,7 @@ interface cardProps {
 }
 
 export default function GeneralInfo(props: cardProps) {
+    const { state } = useContext(UserContext);
     const { onClose: onRemoveFamilyClose, isOpen: isRemoveFamilyOpen, onOpen: onRemoveFamilyOpen } = useDisclosure();
     const { onClose: onAddFamilyClose, isOpen: isAddFamilyOpen, onOpen: onAddFamilyOpen } = useDisclosure();
 

@@ -12,12 +12,6 @@ createVerifier();
 
 app.use('/api', api);
 
-api.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000/');
-    res.header('Access-Control-Allow-Headers', '*');
-    next();
-});
-
 const server = app.listen(port, () => {
     logger.info(`PRA Club Manager API listening on port ${port}`);
 });

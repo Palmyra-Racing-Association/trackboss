@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
     Button,
     VStack,
@@ -17,6 +17,7 @@ import FamilyAndBikes from './FamilyAndBikes';
 import { Member } from '../../../src/typedefs/member';
 import WorkPointsHistory from './WorkPointsHistory';
 import { Bike } from '../../../src/typedefs/bike';
+import { getFamilyMembers } from '../controller/member';
 
 const memberFamily: Member[] = [
     {
@@ -78,9 +79,22 @@ const memberBikes: Bike[] = [
     },
 ];
 
-export default function HamburgerMenu() {
+async function getMemberFamilyLocal(token: string, membershipId: string) {
+    const family = await getFamilyMembers(token);
+}
+
+
+export default function AccountPageTabs() {
     const { state } = useContext(UserContext);
     const [activeButton, setActiveButton] = useState<Number>(1);
+    const [memberFamily, setMemberFamily] = useState<Member[]>([]);
+    const [memberBikes, setMemberBikes] = useState<Bike[]>([]);
+    useEffect(() => {
+        async function setMemberData() {
+            const family = await getMemberFamilyLocal(state.token, );
+        }
+        setMemberData();
+    }, [props.memberFamily, props.memberBikes]);
 
     return (
         <Grid
