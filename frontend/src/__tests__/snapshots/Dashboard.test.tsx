@@ -3,8 +3,6 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Dashboard from '../../pages/Dashboard';
 import { server } from '../../mocks/server';
-<<<<<<< HEAD
-=======
 import { UserContext } from '../../contexts/UserContext';
 
 beforeAll(() => server.listen());
@@ -16,6 +14,7 @@ function update() {
 }
 
 const user = {
+    membershipId: 1,
     memberId: 7,
     membershipAdmin: 'Some Guy',
     uuid: 'someUuid',
@@ -37,7 +36,6 @@ const user = {
 };
 
 const context = { loggedIn: true, token: 'TestToken', user, storedUser: undefined };
->>>>>>> main
 
 jest.mock('react-gauge-chart', () => 'GaugeChart');
 
@@ -47,14 +45,6 @@ afterAll(() => server.close());
 
 describe('dashboard', () => {
     it('renders correctly', async () => {
-<<<<<<< HEAD
-        const { asFragment } = render((
-            <BrowserRouter>
-                <Dashboard />
-            </BrowserRouter>
-        ));
-        await waitFor(() => screen.getByText('!'));
-=======
         const { asFragment } = render(
             <BrowserRouter>
                 {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
@@ -64,7 +54,6 @@ describe('dashboard', () => {
             </BrowserRouter>,
         );
         await waitFor(() => screen.getByText('Martin Martian!'));
->>>>>>> main
         expect(asFragment()).toMatchSnapshot();
     });
 });
