@@ -36,7 +36,7 @@ describe('GET /member/list', () => {
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
         // the registration test _sometimes_ runs before this, meaning an extra entry
-        expect([102, 103]).toContain(members.length);
+        expect([103, 104]).toContain(members.length);
         expect(members[0].memberId).toBe(1);
         expect(members[0].firstName).toBe('Squeak');
         expect(members[0].lastName).toBe('Trainywhel');
@@ -53,7 +53,7 @@ describe('GET /member/list', () => {
             .set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
-        expect(members.length).toBe(14);
+        expect(members.length).toBe(15);
         _.forEach(members, (member: Member) => expect(member.memberType).toBe('Admin'));
     });
     it('Correctly filters by role Membership Admin', async () => {
@@ -97,7 +97,7 @@ describe('GET /member/list', () => {
             .set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
         const list: Member[] = res.body;
-        expect(list.length).toBe(4);
+        expect(list.length).toBe(5);
         expect(list[0].memberId).toBe(3);
         expect(list[1].memberId).toBe(41);
         expect(list[2].memberId).toBe(53);
@@ -212,7 +212,7 @@ describe('POST /member/new', () => {
         expect(res.status).toBe(201);
         const member: Member = res.body;
         // the registration test _sometimes_ runs before this, meaning an extra entry
-        expect([103, 104]).toContain(member.memberId);
+        expect([104, 105]).toContain(member.memberId);
         expect(member.memberType).toBe('Admin');
         expect(member.uuid).toBe(newMember.uuid);
         expect(member.firstName).toBe(newMember.firstName);
