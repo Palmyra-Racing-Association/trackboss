@@ -12,7 +12,6 @@ exports[`renders correctly 1`] = `
       className="chakra-heading css-11haukf"
     >
       Martin
-      !
     </h2>
   </h2>
 </div>

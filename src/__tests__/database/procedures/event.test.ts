@@ -38,7 +38,7 @@ describe('sp_patch_event()', () => {
     it('Patches end date field', async () => {
         const eventId = 4;
         const origValues =
-        [eventId, '2022-01-11 08:00:00', '2022-01-13 08:00:00', 'Harescrambler', 'test harescrambler job generation!'];
+        [eventId, '2022-04-11 08:00:00', '2022-04-13 08:00:00', 'Harescrambler', 'test harescrambler job generation!'];
         const values = [eventId, null, '2022-02-11 08:00:00', null, null];
         await pool.query<OkPacket>(PATCH_SQL, values);
 
@@ -69,7 +69,7 @@ describe('sp_patch_event()', () => {
 
     it('Patches eventName field', async () => {
         const eventId = 3;
-        const origValues = [eventId, '2022-02-01 09:00:00', '2022-02-01 15:00:00', 'Yearly Meeting', 'test meeting!'];
+        const origValues = [eventId, '2022-03-01 09:00:00', '2022-03-01 15:00:00', 'Yearly Meeting', 'test meeting!'];
         const values = [eventId, null, null, 'Testrambler', null];
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
@@ -86,7 +86,7 @@ describe('sp_patch_event()', () => {
 
     it('Patches eventDescription field', async () => {
         const eventId = 1;
-        const origValues = [eventId, '2020-02-01 08:00:00', '2020-02-02 16:00:00', 'The First Race', 'test first race'];
+        const origValues = [eventId, '2022-04-01 08:00:00', '2022-04-02 16:00:00', 'The First Race', 'test first race'];
         const values = [eventId, null, null, null, 'test'];
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
@@ -104,7 +104,7 @@ describe('sp_patch_event()', () => {
     it('Patches no fields', async () => {
         const eventId = 2;
         const origValues =
-        [eventId, '2022-05-15 10:00:00', '2022-05-19 10:00:00', 'XO Race', 'Test XO Race Job Generation'];
+        [eventId, '2022-03-15 10:00:00', '2022-03-19 10:00:00', 'XO Race', 'Test XO Race Job Generation'];
         const values = [eventId, null, null, null, null];
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
