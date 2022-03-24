@@ -24,6 +24,7 @@ import {
     INSERT_EVENT_SQL,
     PATCH_EVENT_SQL,
     DELETE_EVENT_SQL,
+    GET_INSERTED_EVENT_ID_SQL,
 } from '../../../database/event';
 import {
     GET_BASE_DUES_SQL,
@@ -157,6 +158,8 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return eventHelpers.getEventListResponse(values);
         case INSERT_EVENT_SQL:
             return eventHelpers.insertEventResponse(values[3]);
+        case GET_INSERTED_EVENT_ID_SQL:
+            return eventHelpers.getInsertedEventIdResponse();
         case PATCH_EVENT_SQL:
             return eventHelpers.patchEventResponse(values[0]);
         case DELETE_EVENT_SQL:
