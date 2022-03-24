@@ -93,7 +93,7 @@ export async function getMemberList(filters: GetMemberListFilters): Promise<Memb
 
     return results.map((result) => ({
         memberId: result.member_id,
-        membershipId: result.membership_idm,
+        membershipId: result.membership_id,
         firstName: result.first_name,
         lastName: result.last_name,
         membershipAdmin: result.membership_admin,
