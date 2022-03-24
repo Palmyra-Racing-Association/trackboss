@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Dashboard from '../../pages/Dashboard';
 import { server } from '../../mocks/server';
 import { UserContext } from '../../contexts/UserContext';
+import { Member } from '../../../../src/typedefs/member';
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
@@ -13,7 +14,7 @@ function update() {
     // void function
 }
 
-const user = {
+const user: Member = {
     membershipId: 1,
     memberId: 7,
     membershipAdmin: 'Some Guy',
@@ -53,7 +54,7 @@ describe('dashboard', () => {
                 </UserContext.Provider>
             </BrowserRouter>,
         );
-        await waitFor(() => screen.getByText('Martin Martian!'));
+        await waitFor(() => screen.getByText('Martin Martian'));
         expect(asFragment()).toMatchSnapshot();
     });
 });
