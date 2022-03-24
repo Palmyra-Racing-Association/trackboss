@@ -7,7 +7,6 @@ import theme from '../theme';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getCalendarEvents } from '../controller/event';
 import { getCalendarJobs } from '../controller/job';
-import CreateEventModal from '../components/CreateEventModal';
 import { Event } from '../../../src/typedefs/event';
 import { Job } from '../../../src/typedefs/job';
 
@@ -37,9 +36,6 @@ function CalendarPage() {
     return (
         <ChakraProvider theme={theme}>
             <Header title="Calendar" activeButtonId={2} />
-            <Box p={5} pb={0} pl={10}>
-                <CreateEventModal />
-            </Box>
             <Box p={5} pt={3} pl={10} pr={10}>
                 {
                     upcomingEvents && (

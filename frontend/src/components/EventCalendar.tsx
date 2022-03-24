@@ -6,6 +6,7 @@ import {
     Flex,
     Spacer,
     useDisclosure,
+    Box,
 } from '@chakra-ui/react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
@@ -17,6 +18,7 @@ import { DeletedEvent, Event } from '../../../src/typedefs/event';
 import { DeletedJob, Job } from '../../../src/typedefs/job';
 import { deleteEvent } from '../controller/event';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
+import CreateEventModal from './CreateEventModal';
 
 const RenderToolbar = require('react-big-calendar/lib/Toolbar');
 
@@ -107,11 +109,6 @@ export default function EventCalendar(props: EventCalendarProps) {
             }
         }
     }
-
-    // async function createEventLocal() {
-
-    // }
-
     useEffect(() => {
         async function getData() {
             const attendees = await getSelectedJobAttendees();
@@ -125,6 +122,9 @@ export default function EventCalendar(props: EventCalendarProps) {
 
     return (
         <div>
+            <Box pt={5} pb={5}>
+                <CreateEventModal />
+            </Box>
             <Calendar
                 defaultView="month"
                 events={calendarEvents}

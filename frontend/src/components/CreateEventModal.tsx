@@ -17,11 +17,11 @@ import {
     Select,
 } from '@chakra-ui/react';
 import DateTimePicker from 'react-datetime-picker';
-import { makeEvent } from '../controller/event';
 import { UserContext } from '../contexts/UserContext';
 import { getEventTypeList } from '../controller/eventType';
 import { EventType } from '../../../src/typedefs/eventType';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
+import { PostNewEventRequest } from '../../../src/typedefs/event';
 
 function generateEventTypeOptions(eventTypes: EventType[]) {
     const options: any[] = [];
@@ -29,16 +29,6 @@ function generateEventTypeOptions(eventTypes: EventType[]) {
         options.push(<option key={i} value={eventTypes[i].eventTypeId}>{eventTypes[i].type}</option>);
     }
     return options;
-}
-
-async function handleClose(
-    eventName: string,
-    eventDescription: string,
-    startDateTime: Date,
-    endDateTime: Date,
-    eventTypeId: number,
-) {
-    await makeEvent(eventName, eventDescription, startDateTime, endDateTime, eventTypeId);
 }
 
 export default function CreateEventModal() {
@@ -67,6 +57,11 @@ export default function CreateEventModal() {
             // eslint-disable-next-line no-console
             console.log(res.reason);
         }
+    }
+
+    async function createEventLocal(newEvent: PostNewEventRequest) {
+        // const res = await createEvent(state.token, newEvent);
+        console.log(newEvent);
     }
 
     useEffect(() => {
@@ -144,7 +139,14 @@ export default function CreateEventModal() {
                             color="white"
                             onClick={
                                 () => {
-                                    handleClose(eventName, description, startDateTime, endDateTime, eventTypeId);
+                                    const newEvent: PostNewEventRequest = {
+                                        startDate: startDateTime.toISOString(),
+                                        endDate: endDateTime.toUTCString(),
+                                        eventTypeId,
+                                        eventName,
+                                        eventDescription: description,
+                                    };
+                                    createEventLocal(newEvent);
                                     onClose();
                                 }
                             }
