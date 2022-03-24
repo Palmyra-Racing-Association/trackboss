@@ -7,7 +7,7 @@ import WorkPointsCard from '../components/WorkPointsCard';
 import ImportantLinksCard from '../components/ImportantLinksCard';
 import EventCard from '../components/EventCard';
 import { getEventCardProps } from '../controller/event';
-import { getWorkPointsTotal } from '../controller/workPoints';
+import { getWorkPointsByMembership, getWorkPointsTotal } from '../controller/workPoints';
 import { getYearlyThresholdValue } from '../controller/billing';
 import GreetingText from '../components/GreetingText';
 import { getTodaysDate } from '../controller/utils';
@@ -18,7 +18,10 @@ async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     return props;
 }
 
+// eslint-disable-next-line no-unused-vars
 async function getWorkPointsPercentage(token: string, memberId: number) {
+    const test = await getWorkPointsByMembership(token, 20);
+    console.log(test);
     const workPoints = await getWorkPointsTotal(token, memberId);
     const threshold = await getYearlyThresholdValue(token);
     if (workPoints && threshold) {
