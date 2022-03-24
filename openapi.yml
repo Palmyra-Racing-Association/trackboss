@@ -117,6 +117,8 @@ components:
       properties:
         memberId:
           $ref: "#/components/schemas/number" # just the DB ID
+        membershipId:
+          $ref: "#/components/schemas/number"
         membershipAdmin:
           $ref: "#/components/schemas/string"
         uuid:

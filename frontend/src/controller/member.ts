@@ -100,6 +100,7 @@ export function getFormattedMemberList(token: string): Member[] {
     const response: Member[] = [
         {
             memberId: 1,
+            membershipId: 1,
             membershipAdmin: 'true',
             active: true,
             memberType: 'admin',
@@ -120,6 +121,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 2,
+            membershipId: 2,
             membershipAdmin: 'string',
             active: true,
             memberType: 'member',
@@ -140,6 +142,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 3,
+            membershipId: 2,
             membershipAdmin: 'true',
             active: true,
             memberType: 'admin',
@@ -160,6 +163,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 4,
+            membershipId: 1,
             membershipAdmin: 'string',
             active: true,
             memberType: 'member',
@@ -180,6 +184,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 5,
+            membershipId: 3,
             membershipAdmin: 'true',
             active: true,
             memberType: 'member',
@@ -200,6 +205,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 6,
+            membershipId: 3,
             membershipAdmin: 'string',
             active: true,
             memberType: 'member',
@@ -220,6 +226,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 7,
+            membershipId: 3,
             membershipAdmin: 'true',
             active: true,
             memberType: 'admin',
@@ -240,6 +247,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 8,
+            membershipId: 3,
             membershipAdmin: 'string',
             active: true,
             memberType: 'member',
@@ -260,6 +268,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 9,
+            membershipId: 6,
             membershipAdmin: 'true',
             active: true,
             memberType: 'admin',
@@ -280,6 +289,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 10,
+            membershipId: 4,
             membershipAdmin: 'string',
             active: true,
             memberType: 'member',
@@ -300,6 +310,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 11,
+            membershipId: 4,
             membershipAdmin: 'true',
             active: true,
             memberType: 'member',
@@ -320,6 +331,7 @@ export function getFormattedMemberList(token: string): Member[] {
         },
         {
             memberId: 12,
+            membershipId: 5,
             membershipAdmin: 'string',
             active: true,
             memberType: 'member',

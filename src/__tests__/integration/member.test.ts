@@ -38,6 +38,7 @@ describe('GET /member/list', () => {
         // the registration test _sometimes_ runs before this, meaning an extra entry
         expect([103, 104]).toContain(members.length);
         expect(members[0].memberId).toBe(1);
+        expect(members[0].membershipId).toBe(2);
         expect(members[0].firstName).toBe('Squeak');
         expect(members[0].lastName).toBe('Trainywhel');
         expect(members[0].memberType).toBe('Admin');
