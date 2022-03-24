@@ -1,5 +1,6 @@
-/* eslint-disable */
 /* eslint-disable max-len */
+// this file goes very deep into the DOM tree and has very long lines as a result, although most of the lines are composed of spacing
+// disabling max-len because there really isn't another super reasonable way to handle this
 import _ from 'lodash';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
@@ -31,19 +32,12 @@ import { Bike } from '../../../src/typedefs/bike';
 import { getMembersByMembership, updateMember } from '../controller/member';
 import { getBikeList } from '../controller/bike';
 import { BoardMemberType } from '../../../src/typedefs/boardMemberType';
-import { createBoardMember, getAllBoardMembersForCurrentYear, getBoardRoles, updateBoardMember } from '../controller/boardMember';
+import { createBoardMember, getBoardRoles, updateBoardMember } from '../controller/boardMember';
 
 interface modalProps {
     isOpen: boolean,
     onClose: () => void,
     memberInfo: Member,
-}
-
-async function handleNewBoardMember(memberInfo: Member, editedBoardMember: string) {
-    // const currentYear = new Date().getFullYear();
-    // const boardRoleId = getBoardRoleId(editedBoardMember); // Util method?
-    // const response = await newBoardMember(currentYear,boardRoleId, memberInfo.memberId);
-    // return response;
 }
 
 export default function MemberSummaryModal(props: modalProps) {
@@ -81,27 +75,32 @@ export default function MemberSummaryModal(props: modalProps) {
 
     const deactivateMember = useCallback(async () => {
         const response = await updateMember(state.token, props.memberInfo.memberId, { active: false, modifiedBy: state.user!.memberId });
-            if ('reason' in response) {
-                return false;
-            }
-            return true;
+        if ('reason' in response) {
+            return false;
+        }
+        return true;
     }, [state, props.memberInfo]);
 
-    const handlePatchMemberType = useCallback(async (editedMemberType: string) => {
-        console.log(editedMemberType);
+    const handlePatchMemberType = useCallback(async () => {
         let memberTypeId: number;
         if (editedMemberType === 'board') {
             if (isBoard) {
                 const response = await updateBoardMember(
                     state.token,
                     props.memberInfo.boardMemberData!.boardId,
-                    { boardMemberTitleId: Number(editedBoardMember) }
+                    { boardMemberTitleId: Number(editedBoardMember) },
                 );
+                if ('reason' in response) {
+                    setError(`error updating board member data: ${response.reason}`);
+                }
             } else {
                 const response = await createBoardMember(
                     state.token,
-                    { boardMemberTitleId: Number(editedBoardMember), year: new Date().getFullYear(), memberId: props.memberInfo.memberId }
+                    { boardMemberTitleId: Number(editedBoardMember), year: new Date().getFullYear(), memberId: props.memberInfo.memberId },
                 );
+                if ('reason' in response) {
+                    setError(`error updating board member data: ${response.reason}`);
+                }
             }
             memberTypeId = 1;
         } else if (editedMemberType === 'member') {
@@ -111,9 +110,9 @@ export default function MemberSummaryModal(props: modalProps) {
         } else {
             return false;
         }
-        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, { memberTypeId, modifiedBy: state.user!.memberId })
+        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, { memberTypeId, modifiedBy: state.user!.memberId });
         if ('reason' in updatedMember) {
-          return false;
+            return false;
         }
         return true;
     }, [state, props.memberInfo, editedBoardMember, editedMemberType]);
@@ -128,45 +127,43 @@ export default function MemberSummaryModal(props: modalProps) {
             request = {
                 firstName: props.memberInfo.firstName,
                 lastName: props.memberInfo.lastName,
-                ...request
-            }
+                ...request,
+            };
         } else {
             const nameSplit = name?.split(' ');
             request = {
                 firstName: nameSplit[0],
                 lastName: nameSplit[1],
-                ...request
-            }
+                ...request,
+            };
         }
         if (email === '') {
             request = {
                 email: props.memberInfo.email,
-                ...request
-            }
+                ...request,
+            };
         } else {
-            const nameSplit = name?.split(' ');
             request = {
                 email,
-                ...request
-            }
+                ...request,
+            };
         }
         if (phone === '') {
             request = {
                 phoneNumber: props.memberInfo.phoneNumber,
-                ...request
-            }
+                ...request,
+            };
         } else {
-            const nameSplit = name?.split(' ');
             request = {
                 phoneNumber: phone,
-                ...request
-            }
+                ...request,
+            };
         }
-        
-        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, request)
+
+        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, request);
         if ('reason' in updatedMember) {
-             setError(`error patching contact info: ${updatedMember.reason}`)
-             return;
+            setError(`error patching contact info: ${updatedMember.reason}`);
+            return props.memberInfo;
         }
         return updatedMember;
     }, [state, props.memberInfo]);
@@ -179,16 +176,16 @@ export default function MemberSummaryModal(props: modalProps) {
             setFamily(familyReponse);
             const bikeResponse = await getBikeList(state.token, props.memberInfo.membershipId);
             if ('reason' in bikeResponse) {
-                setError(`error fetching bikes: ${bikeResponse.reason}`)
+                setError(`error fetching bikes: ${bikeResponse.reason}`);
             } else {
                 setBikes(bikeResponse);
             }
             if (state.user?.memberType === 'Admin') {
                 const boardRoleData = await getBoardRoles(state.token);
                 if ('reason' in boardRoleData) {
-                    setError(`error loading board roles: ${boardRoleData.reason}`)
+                    setError(`error loading board roles: ${boardRoleData.reason}`);
                 } else {
-                    setBoardRoles(boardRoleData)
+                    setBoardRoles(boardRoleData);
                 }
             }
             if (props.memberInfo.memberType.includes('Board Member')) {
@@ -213,6 +210,7 @@ export default function MemberSummaryModal(props: modalProps) {
                 <Divider />
                 <ModalCloseButton />
                 <ModalBody>
+                    { error !== '' && ({ error }) }
                     {
                         selectedMember && bikes && (
                             <SimpleGrid columns={2} spacing={4}>
@@ -411,12 +409,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     color="green"
                                                     onClick={
                                                         async () => {
-                                                            if (editedBoardMember !== '') {
-                                                                await handleNewBoardMember(selectedMember, editedBoardMember);
-                                                            }
-                                                            if (selectedMember.memberType !== editedMemberType) {
-                                                                await handlePatchMemberType(editedMemberType);
-                                                            }
+                                                            await handlePatchMemberType();
                                                             setEditingMemberRole(false);
                                                             setEditingMemberInfo(false);
                                                         }
