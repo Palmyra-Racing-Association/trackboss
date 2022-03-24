@@ -26,7 +26,7 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
-import { Member } from '../../../src/typedefs/member';
+import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
 import { getMembersByMembership, updateMember } from '../controller/member';
 import { getBikeList } from '../controller/bike';
@@ -44,42 +44,6 @@ async function handleNewBoardMember(memberInfo: Member, editedBoardMember: strin
     // const boardRoleId = getBoardRoleId(editedBoardMember); // Util method?
     // const response = await newBoardMember(currentYear,boardRoleId, memberInfo.memberId);
     // return response;
-}
-
-async function handlePatchMemberContactInfo(
-    memberInfo: Member,
-    name: string | undefined,
-    email: string | undefined,
-    phone: string | undefined,
-) {
-    // const updatedMember = await patchMember(name, email, phone, memberInfo.memberId)
-    // if (updatedMember.reason) {
-    //      there was an error, show error message
-    // }
-
-    const updatedMember: Member = {
-        memberId: 1,
-        membershipId: 1,
-        membershipAdmin: 'true',
-        active: true,
-        memberType: 'member',
-        firstName: 'Updated',
-        lastName: 'Member',
-        phoneNumber: '0987',
-        email: 'updatedMember@example.com',
-        uuid: '',
-        occupation: '',
-        birthdate: '',
-        dateJoined: '',
-        address: '',
-        city: '',
-        state: '',
-        zip: '',
-        lastModifiedDate: '',
-        lastModifiedBy: '',
-    };
-
-    return updatedMember;
 }
 
 export default function MemberSummaryModal(props: modalProps) {
@@ -139,6 +103,59 @@ export default function MemberSummaryModal(props: modalProps) {
           return false;
         }
         return true;
+    }, [state, props.memberInfo]);
+
+    const handlePatchMemberContactInfo = useCallback(async (
+        name: string,
+        email: string,
+        phone: string,
+    ) => {
+        let request: PatchMemberRequest = { modifiedBy: state.user!.memberId };
+        if (name === '') {
+            request = {
+                firstName: props.memberInfo.firstName,
+                lastName: props.memberInfo.lastName,
+                ...request
+            }
+        } else {
+            const nameSplit = name?.split(' ');
+            request = {
+                firstName: nameSplit[0],
+                lastName: nameSplit[1],
+                ...request
+            }
+        }
+        if (email === '') {
+            request = {
+                email: props.memberInfo.email,
+                ...request
+            }
+        } else {
+            const nameSplit = name?.split(' ');
+            request = {
+                email,
+                ...request
+            }
+        }
+        if (phone === '') {
+            request = {
+                phoneNumber: props.memberInfo.phoneNumber,
+                ...request
+            }
+        } else {
+            const nameSplit = name?.split(' ');
+            request = {
+                phoneNumber: phone,
+                ...request
+            }
+        }
+        
+        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, request)
+        if ('reason' in updatedMember) {
+             setError(`error patching contact info: ${updatedMember.reason}`)
+             return;
+        }
+        return updatedMember;
     }, [state, props.memberInfo]);
 
     useEffect(() => {
@@ -231,7 +248,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         color="green"
                                                         onClick={
                                                             async () => {
-                                                                setSelectedMember(await handlePatchMemberContactInfo(selectedMember, editedName, editedEmail, editedPhone));
+                                                                setSelectedMember(await handlePatchMemberContactInfo(editedName, editedEmail, editedPhone));
                                                                 setEditingMemberInfo(false);
                                                                 setEditingMemberRole(false);
                                                             }
@@ -309,9 +326,9 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 <ButtonGroup size="sm" isAttached variant="outline">
                                                     <Button
                                                         onClick={
-                                                            async () => {
+                                                            () => {
                                                                 if (editedMemberType !== 'member') {
-                                                                    await setEditedMemberType('member');
+                                                                    setEditedMemberType('member');
                                                                 }
                                                             }
                                                         }
@@ -322,9 +339,9 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     </Button>
                                                     <Button
                                                         onClick={
-                                                            async () => {
+                                                            () => {
                                                                 if (editedMemberType !== 'admin') {
-                                                                    await setEditedMemberType('admin');
+                                                                    setEditedMemberType('admin');
                                                                 }
                                                             }
                                                         }
@@ -335,9 +352,9 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     </Button>
                                                     <Button
                                                         onClick={
-                                                            async () => {
+                                                            () => {
                                                                 if (editedMemberType !== 'board') {
-                                                                    await setEditedMemberType('board');
+                                                                    setEditedMemberType('board');
                                                                 }
                                                             }
                                                         }
