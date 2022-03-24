@@ -4,7 +4,8 @@ IN _event_start_date DATETIME,
 IN _event_end_date DATETIME,
 IN _event_type_id INT, 
 IN _event_name VARCHAR(255), 
-IN _event_description VARCHAR(255)
+IN _event_description VARCHAR(255),
+OUT _event_id INT
 )
 BEGIN
     
@@ -22,7 +23,7 @@ BEGIN
     
     ## Insert our new event and grab its ID
 	INSERT INTO event(start_date, end_date, event_type_id, event_name, event_description) VALUES (_event_start_date, _event_end_date, _event_type_id, _event_name, _event_description);
-    SELECT LAST_INSERT_ID() INTO @Event_Id;
+    SELECT LAST_INSERT_ID() INTO _event_id;
     
     ## Open the cursor to start our job generation
     OPEN cursorEJ;
@@ -41,7 +42,7 @@ BEGIN
         SET @JobDate = STR_TO_DATE(CONCAT(YEAR(_event_start_date),' ',WEEK(_event_start_date),' ',sqlDOW), '%X %V %w');
 		SET @JobStart = cast(concat(@JobDate, 'T', @StartTime) as datetime);
 		SET @JobEnd = cast(concat(@JobDate, 'T', @EndTime) as datetime);
-		INSERT INTO job(event_id, job_type_id, job_start_date, job_end_date, verified, paid) VALUES (@Event_Id, cur_job_type, IFNULL(@JobStart,IFNULL(@JobDate,null)), IFNULL(@JobEnd, IFNULL(@JobDate,null)), 0, 0);
+		INSERT INTO job(event_id, job_type_id, job_start_date, job_end_date, verified, paid) VALUES (_event_id, cur_job_type, IFNULL(@JobStart,IFNULL(@JobDate,null)), IFNULL(@JobEnd, IFNULL(@JobDate,null)), 0, 0);
         Set @k = @k +1;
 		UNTIL @K > cur_count END REPEAT lab1;
         
