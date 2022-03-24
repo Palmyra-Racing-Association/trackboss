@@ -12,7 +12,7 @@ import {
 export async function createMember(token: string, memberData: PostNewMemberRequest): Promise<PostNewMemberResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/new`, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(memberData),
     });
@@ -22,7 +22,7 @@ export async function createMember(token: string, memberData: PostNewMemberReque
 export async function getMember(token: string, memberId: number): Promise<GetMemberResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/${memberId}`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
@@ -75,7 +75,7 @@ export async function updateMember(
 ): Promise<PatchMemberResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/${memberID}`, {
         method: 'PATCH',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(memberData),
     });

@@ -1,7 +1,7 @@
 /* eslint-disable */
 /* eslint-disable max-len */
 import _ from 'lodash';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -28,8 +28,9 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
-import { getMembersByMembership } from '../controller/member';
+import { getMembersByMembership, updateMember } from '../controller/member';
 import { getBikeList } from '../controller/bike';
+import { PatchMemberResponse } from '../../../src/typedefs/member';
 
 interface modalProps {
     isOpen: boolean,
@@ -50,14 +51,6 @@ async function handlePatchMemberType(memberInfo: Member, editedMemberType: strin
     // if (updatedMember.reason) {
     //   there was an error, show error message
     // }
-}
-
-async function deactivateMember(memberInfo: Member) {
-    // const response = await patchMember()
-    // if (response.reason) {
-    //   there was an error, show error message
-    // }
-    return true; // to indicate success
 }
 
 async function handlePatchMemberContactInfo(
@@ -126,6 +119,14 @@ export default function MemberSummaryModal(props: modalProps) {
     const handleEditedBoardMember = (event: { target: { value: any; }; }) => setEditedBoardMember(event.target.value);
 
     const [error, setError] = useState<string>('');
+
+    const deactivateMember = useCallback(async () => {
+        const response = await updateMember(state.token, props.memberInfo.memberId, { active: false, modifiedBy: state.user!.memberId });
+            if ('reason' in response) {
+                return false;
+            }
+            return true;
+        }, [state, props.memberInfo]);
 
     useEffect(() => {
         async function setModalData() {
@@ -426,7 +427,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         }
                                                         onClick={
                                                             async () => {
-                                                                const res = await deactivateMember(selectedMember);
+                                                                const res = await deactivateMember();
                                                                 toast({
                                                                     variant: 'subtle',
                                                                     title: res ? 'Member Deactivated.' : 'Action Failed',
