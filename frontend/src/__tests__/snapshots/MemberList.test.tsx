@@ -1,13 +1,18 @@
 import React from 'react';
-import renderer, { act, ReactTestRenderer } from 'react-test-renderer';
+import { waitFor, screen, render } from '@testing-library/react';
 import MemberList from '../../components/MemberList';
+import { server } from '../../mocks/server';
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 describe('Member List component', () => {
-    it('renders correctly', () => {
-        let list: ReactTestRenderer;
-        act(() => {
-            list = renderer.create(<MemberList />);
-        });
-        expect(list!.toJSON()).toMatchSnapshot();
+    it('renders correctly', async () => {
+        const { asFragment } = render((
+            <MemberList />
+        ));
+        await waitFor(() => screen.getByText('Name'));
+        expect(asFragment()).toMatchSnapshot();
     });
 });

@@ -1,5 +1,46 @@
 import { rest } from 'msw';
 
+const memberList = [{
+    memberId: 1,
+    firstName: 'Squeak',
+    lastName: 'Trainywhel',
+    membershipAdmin: 'Squeak Trainywhel',
+    uuid: null,
+    active: true,
+    memberType: 'Admin',
+    phoneNumber: '223-321-4438',
+    occupation: 'Software Engineer',
+    email: 'squeaky@trainingwheels.com',
+    birthdate: '1981-08-13',
+    dateJoined: '2016-10-18',
+    address: '25 Laurel Hill',
+    city: 'North Las Vegas',
+    state: 'NV',
+    zip: '59294',
+    lastModifiedDate: null,
+    lastModifiedBy: null,
+},
+{
+    memberId: 2,
+    firstName: 'Isobel',
+    lastName: 'Jennery',
+    membershipAdmin: 'Isobel Jennery',
+    uuid: null,
+    active: true,
+    memberType: 'Membership Admin',
+    phoneNumber: '223-321-4438',
+    occupation: 'Account Executive',
+    email: 'ijennery0@wikia.com',
+    birthdate: '1981-08-13',
+    dateJoined: '2016-10-18',
+    address: '1869 Mifflin Park',
+    city: 'Gatesville',
+    state: 'TX',
+    zip: '62140',
+    lastModifiedDate: null,
+    lastModifiedBy: null,
+}];
+
 const memberHandlers = [
     // createMember
     rest.post(`${process.env.REACT_APP_API_URL}/api/member/new`, (req, res, ctx) => {
@@ -35,7 +76,7 @@ const memberHandlers = [
         } if (status === 'InternalServerError') {
             return res(ctx.status(404), ctx.json({ reason: 'InternalServerError' }));
         }
-        return res(ctx.status(200), ctx.json([{ memberId: 1 }, { memberId: 2 }]));
+        return res(ctx.status(200), ctx.json(memberList));
     }),
 
     // getMember
