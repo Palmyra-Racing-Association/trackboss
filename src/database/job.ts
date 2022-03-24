@@ -15,6 +15,9 @@ export const PATCH_JOB_SQL = 'CALL sp_patch_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 export const DELETE_JOB_SQL = 'DELETE FROM job WHERE job_id = ?';
 
 export async function insertJob(req: PostNewJobRequest): Promise<number> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [req.memberId, req.eventId, req.jobTypeId, req.jobStartDate, req.jobEndDate, req.verified,
         req.verifiedDate, req.pointsAwarded, req.paid, req.paidDate, req.modifiedBy];
 
@@ -143,6 +146,9 @@ export async function getJob(id: number): Promise<Job> {
 }
 
 export async function patchJob(id: number, req: PatchJobRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [id, req.memberId, req.eventId, req.jobTypeId, req.jobStartDate, req.jobEndDate,
         req.pointsAwarded, req.verified, req.paid, req.modifiedBy];
 

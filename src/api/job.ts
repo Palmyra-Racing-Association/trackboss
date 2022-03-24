@@ -83,23 +83,20 @@ job.get('/list', async (req: Request, res: Response) => {
                 const endData = verifyDate(end);
                 if (!startData.valid || !endData.valid) {
                     throw new Error('user input error');
+                } else if (start === '' && end !== '') {
+                    endDate = end;
+                } else if (end === '' && start !== '') {
+                    startDate = start;
                 } else {
-                    if (start === '' && end !== '') {
-                        endDate = end;
-                    } else if (end === '' && start !== '') {
-                        startDate = start;
-                    } else {
-                        startDate = start;
-                        endDate = end;
-                    }
-                    res.status(206);
+                    startDate = start;
+                    endDate = end;
                 }
             }
             const assignmentStatus: string | undefined = req.query.assignmentStatus as string;
             const verificationStatus: string | undefined = req.query.verificationStatus as string;
-            const memberId: string | undefined = req.query.memberId as string;
-            const membershipId: string | undefined = req.query.membershipId as string;
-            const eventId: string | undefined = req.query.eventId as string;
+            const memberId: string | undefined = req.query.memberID as string;
+            const membershipId: string | undefined = req.query.membershipID as string;
+            const eventId: string | undefined = req.query.eventID as string;
             const filters: GetJobListRequestFilters = {};
             if (typeof assignmentStatus !== 'undefined' &&
             (assignmentStatus === 'open' || assignmentStatus === 'assigned')) {
@@ -149,10 +146,10 @@ job.get('/list', async (req: Request, res: Response) => {
                     filters.endDate = endDate;
                 }
                 const jobList: Job[] = await getJobList(filters);
-                if (_.isEmpty(filters)) {
-                    res.status(200);
-                } else {
+                if (typeof filters.startDate !== 'undefined' || typeof filters.endDate !== 'undefined') {
                     res.status(206);
+                } else {
+                    res.status(200);
                 }
                 response = jobList;
             }
