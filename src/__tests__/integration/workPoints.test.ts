@@ -68,7 +68,7 @@ describe('GET /workPoints/byMember/:id', () => {
 
     it('Returns current-year work points for member', async () => {
         const memberId = 1;
-        const expWorkPoints = { total: 3 };
+        const expWorkPoints = { total: 8 };
         const res = await supertestServer
             .get(`${TAG_ROOT}/byMember/${memberId}`)
             .set('Authorization', 'Bearer validtoken');
