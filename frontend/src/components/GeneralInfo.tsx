@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
-    Box,
-    Center,
     Text,
     Heading,
     VStack,
@@ -11,66 +9,17 @@ import {
     SimpleGrid,
     Button,
     Input,
-    StatHelpText,
 } from '@chakra-ui/react';
 import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
 import { updateMember } from '../controller/member';
+import { UserContext } from '../contexts/UserContext';
 
 interface cardProps {
     user: Member,
 }
 
-async function handlePatchMemberContactInfo(
-    memberInfo: Member,
-    name: string | undefined,
-    email: string | undefined,
-    phone: string | undefined,
-) {
-    const patch: PatchMemberRequest = {
-        membershipId: memberInfo.memberId,
-        uuid: memberInfo.uuid,
-        memberTypeId: memberInfo.memberType,
-        firstName: memberInfo.firstName,
-        lastName: memberInfo.lastName,
-        phoneNumber: memberInfo.phoneNumber,
-        occupation: memberInfo.occupation,
-        email: memberInfo.email,
-        birthdate: memberInfo.birthdate,
-        dateJoined: memberInfo.dateJoined,
-        modifiedBy: memberInfo.memberId,
-    };
-
-    const res = await updateMember(state.token, state.user.memberId, patch)
-    if ('reason' in res) {
-        console.log(res.reason);
-    }
-
-    // const updatedMember: Member = {
-    //     membershipId: 1,
-    //     memberId: 1,
-    //     membershipAdmin: 'true',
-    //     active: true,
-    //     memberType: 'member',
-    //     firstName: 'Updated',
-    //     lastName: 'Member',
-    //     phoneNumber: '0987',
-    //     email: 'updatedMember@example.com',
-    //     uuid: '',
-    //     occupation: '',
-    //     birthdate: '',
-    //     dateJoined: 'August 12, 2006',
-    //     address: '',
-    //     city: '',
-    //     state: '',
-    //     zip: '',
-    //     lastModifiedDate: '',
-    //     lastModifiedBy: '',
-    // };
-
-    return updatedMember;
-}
-
 export default function GeneralInfo(props: cardProps) {
+    const { state } = useContext(UserContext);
     const [memberInfo, setMemberInfo] = useState<Member>();
     const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
     const [editedName, setEditedName] = useState<string>('');
@@ -80,6 +29,41 @@ export default function GeneralInfo(props: cardProps) {
     const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
     const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
     const handleEditedPhoneChange = (event: { target: { value: any; }; }) => setEditedPhone(event.target.value);
+
+    async function handlePatchMemberContactInfo(
+        memberPatchInfo: Member,
+        name: string | undefined,
+        email: string | undefined,
+        phone: string | undefined,
+    ) {
+        const nameArray = name?.split(' ');
+        if (nameArray && state.user) {
+            const first = nameArray[0];
+            const last = nameArray[1];
+
+            const patch: PatchMemberRequest = {
+                membershipId: memberPatchInfo.memberId,
+                uuid: memberPatchInfo.uuid,
+                memberTypeId: memberPatchInfo.memberType,
+                firstName: first,
+                lastName: last,
+                phoneNumber: memberPatchInfo.phoneNumber,
+                occupation: memberPatchInfo.occupation,
+                email: memberPatchInfo.email,
+                birthdate: memberPatchInfo.birthdate,
+                dateJoined: memberPatchInfo.dateJoined,
+                modifiedBy: memberPatchInfo.memberId,
+            };
+
+            const res = await updateMember(state.token, state.user.memberId, patch);
+            if ('reason' in res) {
+                console.log(res.reason);
+            } else {
+                return res;
+            }
+        }
+        return undefined;
+    }
 
     useEffect(() => {
         async function setMemberData() {
