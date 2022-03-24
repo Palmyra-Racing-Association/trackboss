@@ -145,13 +145,12 @@ insert into member (member_type_id, first_name, last_name, phone_number, occupat
 insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('7b', 1, 'Krispin', 'Deackes', '970-123-8696', 'Analyst Programmer', 'kdeackes2l@imgur.com', '1961-02-14', '2015-11-04', 1);
 insert into member (member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values (4, 'Andria', 'Platfoot', '392-414-6161', 'Budget/Accounting Analyst III', 'aplatfoot2m@arizona.edu', '1953-09-28', '2021-03-23', 1);
 insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('oo7', 4, 'Luelle', 'Bonham', '863-397-4190', 'Desktop Support Technician', 'lbonham2n@thetimes.co.uk', '2002-12-05', '2019-02-10', 1);
-insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('28m', 3, 'Vasilis', 'Mertel', '561-878-3783', 'Developer II', 'vmertel2o@parallels.com', '1976-11-30', '2019-02-03', 1);
 insert into member (member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values (3, 'Kathie', 'O''Scannill', '760-880-8632', 'Tax Accountant', 'koscannill2p@myspace.com', '2009-12-18', '2020-10-15', 1);
 insert into member (member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values (2, 'Patin', 'Lelliott', '913-810-0953', 'Senior Financial Analyst', 'plelliott2q@multiply.com', '2005-12-11', '2018-05-19', 1);
+insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('28m', 3, 'Vasilis', 'Mertel', '561-878-3783', 'Developer II', 'vmertel2o@parallels.com', '1976-11-30', '2019-02-03', 1);
 insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('6d817fa9-dca1-4f95-bd0a-e3c5c52d5639', 1, 'Elijah', 'Parrish', '315-396-2469', 'Senior Software Dev', 'elijah.parrish321@gmail.com', '2005-12-11', '2018-05-19', 1);
 insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('12c', 2, 'Patin', 'Lelliott', '913-810-0953', 'Senior Financial Analyst', 'plelliott2q@multiply.com', '2005-12-11', '2018-05-19', 1);
 insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('6e99b3fd-5771-4484-804c-2a42f807e365', 1, 'CJ', 'Schaefer', '216-867-5309', 'Senior Software Dev', 'not.cjs.email@gmail.com', '2005-12-11', '2018-05-19', 1);
-
 
 ### membership ###
 insert into membership (status, cur_year_renewed, view_online, renewal_sent, year_joined, address, city, state, zip) values ('Active', 0, 1, 0, 2009, '88811 Moulton Pass', 'Flushing', 'NY', 48463);
@@ -206,7 +205,6 @@ insert into membership (status, cur_year_renewed, view_online, renewal_sent, yea
 insert into membership (status, cur_year_renewed, view_online, renewal_sent, year_joined, address, city, state, zip) values ('Active', 0, 1, 0, 1998, '5551 Division Court', 'Spring', 'TX', 83665);
 insert into membership (status, cur_year_renewed, view_online, renewal_sent, year_joined, address, city, state, zip) values ('Disabled', 0, 1, 0, 2002, '13 Hill Road', 'Barbara', 'NY', 38358);
 insert into membership (status, cur_year_renewed, view_online, renewal_sent, year_joined, address, city, state, zip) values ('Pending', 0, 1, 0, 2005, '30 Hagan Drive', 'Jacksonville', 'NC', 38358);
-
 
 
 ### member_bikes###

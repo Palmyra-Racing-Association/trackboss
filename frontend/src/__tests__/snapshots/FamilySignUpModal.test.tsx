@@ -1,36 +1,14 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import MemberSummaryModal from '../../components/MemberSummaryModal';
+import FamilySignUpModal from '../../components/FamilySignUpModal';
 import { Member } from '../../../../src/typedefs/member';
-import { Bike } from '../../../../src/typedefs/bike';
+import { PatchJobRequest } from '../../../../src/typedefs/job';
+import { Event } from '../../../../src/typedefs/event';
 
 function onClose() {
-    // void function
+    // a void function
 }
-
-const member: Member = {
-    membershipId: 1,
-    memberId: 1,
-    membershipAdmin: 'true',
-    active: true,
-    memberType: 'admin',
-    firstName: 'test',
-    lastName: 'member',
-    phoneNumber: '1234',
-    email: 'user@example.com',
-    uuid: '',
-    occupation: 'secretary',
-    birthdate: '',
-    dateJoined: '',
-    address: '',
-    city: '',
-    state: '',
-    zip: '',
-    lastModifiedDate: '',
-    lastModifiedBy: '',
-};
 
 const memberFamily: Member[] = [
     {
@@ -77,15 +55,18 @@ const memberFamily: Member[] = [
     },
 ];
 
-const memberBikes: Bike[] = [
-    {
-        bikeId: 0,
-        year: '2012',
-        make: 'honda',
-        model: 'shitbox',
-        membershipAdmin: 'string',
-    },
-];
+async function signUpForJob(patchInfo: { jobId: number, editedJob: PatchJobRequest }) {
+    console.log(patchInfo);
+}
+
+const selectedEvent: Event = {
+    eventId: 1,
+    start: 'test',
+    end: 'test',
+    eventType: 'test',
+    title: 'test',
+    eventDescription: 'test',
+};
 
 // Necessary to mock the chakra-ui modal portal, so that the renderer can target the modal instead of the page
 const divWithChildrenMock = (children: any, identifier: any) => <div data-testId={identifier}>{children}</div>;
@@ -96,20 +77,16 @@ jest.mock('@chakra-ui/react', () => (
     }
 ));
 
-describe('member summary modal', () => {
+describe('sign up modal', () => {
     it('renders all props correctly', () => {
         const modal = render(
-            <BrowserRouter>
-                <MemberSummaryModal
-                    isOpen
-                    onClose={onClose}
-                    memberInfo={member}
-                    memberFamily={memberFamily}
-                    memberBikes={memberBikes}
-                />
-                ,
-            </BrowserRouter>,
-
+            <FamilySignUpModal
+                isOpen
+                onClose={onClose}
+                familyMembers={memberFamily}
+                selectedEvent={selectedEvent}
+                signUpForJob={signUpForJob}
+            />,
         );
         expect(modal).toMatchSnapshot();
     });

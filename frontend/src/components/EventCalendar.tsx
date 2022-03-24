@@ -13,6 +13,7 @@ import { DeletedJob, Job, PatchJobRequest } from '../../../src/typedefs/job';
 import { createEvent, deleteEvent, getCalendarEvents } from '../controller/event';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import CreateEventModal from './CreateEventModal';
+import { GetMemberListResponse } from '../../../src/typedefs/member';
 
 const RenderToolbar = require('react-big-calendar/lib/Toolbar');
 
@@ -40,11 +41,6 @@ const customMessages: Messages = {
 //     return attendees;
 // }
 
-async function getCurrentFamilyMembers(): Promise<any> {
-    const currentFamilyMembers = await getFamilyMembers();
-    return currentFamilyMembers;
-}
-
 async function getCalendarEventsLocal(token: string) {
     const events = await getCalendarEvents(token);
     const jobs = await getCalendarJobs(token);
@@ -61,13 +57,13 @@ export default function EventCalendar() {
     const { state } = useContext(UserContext);
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
-    const [selectedEvent, setSelectedEvent] = useState<Job | Event>();
+    const [selectedEvent, setSelectedEvent] = useState<Event | Job>();
     // const [eventAttendees, setAttendees] = useState<any>();
     const [familyMembers, setFamilyMembers] = useState<any>();
     const [calendarEvents, setCalendarEvents] = useState<Array<Job | Event>>([]);
 
-    function isEvent(calendarEvent: Event | Job): calendarEvent is Event {
-        if ((calendarEvent as Event).eventType) {
+    function isEvent(event: Event | Job): event is Event {
+        if ((event as Event).eventType) {
             return true;
         }
         // else, its a Job
@@ -135,10 +131,24 @@ export default function EventCalendar() {
             }
         }
     }
+
+    async function getFamilyMembersLocal() {
+        if (state.user) {
+            const res: GetMemberListResponse = await getFamilyMembers(state.token, state.user.membershipId);
+            if ('reason' in res) {
+                console.log(res.reason);
+            } else {
+                return res;
+            }
+        }
+        return undefined;
+    }
+
     useEffect(() => {
         async function getData() {
+            console.log(state.user);
             // const attendees = await getSelectedJobAttendees();
-            const currentFamilyMembers = await getCurrentFamilyMembers();
+            const currentFamilyMembers = await getFamilyMembersLocal();
             // setAttendees(attendees);
             setFamilyMembers(currentFamilyMembers);
             setCalendarEvents(await getCalendarEventsLocal(state.token));
@@ -250,11 +260,14 @@ export default function EventCalendar() {
                 )
             }
             {
-                familyMembers && (
+                familyMembers && selectedEvent && (
                     <FamilySignUpModal
                         isOpen={isSignUpOpen}
                         onClose={onSignUpClose}
                         familyMembers={familyMembers}
+                        selectedEvent={selectedEvent}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        signUpForJob={signUpForJob}
                     />
                 )
             }

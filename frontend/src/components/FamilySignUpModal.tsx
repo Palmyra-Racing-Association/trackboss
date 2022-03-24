@@ -1,5 +1,5 @@
 // import React, { useEffect, useState } from 'react';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -12,42 +12,50 @@ import {
     SimpleGrid,
 
 } from '@chakra-ui/react';
+import moment from 'moment';
 import { Member } from '../../../src/typedefs/member';
+import { Job, PatchJobRequest } from '../../../src/typedefs/job';
+import { UserContext } from '../contexts/UserContext';
 
 interface modalProps {
   isOpen: boolean,
   onClose: () => void,
   familyMembers: Member[],
+  selectedEvent: any, // TODO: bugfix needed, Event | Job breaks here
+  // eslint-disable-next-line no-unused-vars
+  signUpForJob: (patchInfo: { jobId: number; editedJob: PatchJobRequest; }) => void
 }
 
-// function signUp(attendingFamily: any[], member: any) {
-//     // Call controller to sign up member, then once it confirms...
-//     return attendingFamily.concat(member);
-// }
-
-// function undoSignUp(attendingFamily: any[], member: any) {
-//     // Call the controller to un-sign up, then once it confirms...
-//     const index = attendingFamily.indexOf(member);
-//     const unsignedMember = attendingFamily[index];
-//     return attendingFamily.filter((m) => m.member_id !== unsignedMember.member_id);
-// }
-
 export default function FamilySignUpModal(props: modalProps) {
-    // const [attendingFamily, setAttendingFamily] = useState<any>([]);
-    // useEffect(() => {
-    //     async function setAttendance() {
-    //         props.familyMembers.forEach((member) => {
-    //             // If the family member is attending the event, then add them to the list of attendingFamily
-    //             // (make their button orange)
-    //             if (props.attendeesList.some((attendee: any) => JSON.stringify(member)
-    //  === JSON.stringify(attendee))) {
-    //                 attendingFamily.push(member);
-    //             }
-    //         });
-    //         setAttendingFamily(attendingFamily);
-    //     }
-    //     setAttendance();
-    // }, []);
+    const { state } = useContext(UserContext);
+
+    function isJob(selectedEvent: Event | Job): selectedEvent is Job {
+        if ((selectedEvent as Job).jobId) {
+            return true;
+        }
+        // else, its an Event
+        return false;
+    }
+
+    async function generateJobSignUpPatch(memberId: number) {
+        let editedJob: PatchJobRequest;
+        if (isJob(props.selectedEvent) && memberId && state.user) {
+            const { jobId } = props.selectedEvent;
+            editedJob = {
+                memberId,
+                eventId: props.selectedEvent.eventId,
+                jobTypeId: undefined,
+                jobStartDate: moment(props.selectedEvent.start).toISOString(true).slice(0, -10),
+                jobEndDate: moment(props.selectedEvent.end).toISOString(true).slice(0, -10),
+                pointsAwarded: props.selectedEvent.pointsAwarded,
+                verified: props.selectedEvent.verified,
+                paid: props.selectedEvent.paid,
+                modifiedBy: state.user.memberId,
+            };
+            return { jobId, editedJob };
+        }
+        return undefined;
+    }
 
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
@@ -63,19 +71,14 @@ export default function FamilySignUpModal(props: modalProps) {
                                 key={member.memberId}
                                 onClick={
                                     async () => {
-                                        // if (attendingFamily.includes(member)) {
-                                        //     await setAttendingFamily(undoSignUp(attendingFamily, member));
-                                        // } else {
-                                        // await setAttendingFamily(signUp(attendingFamily, member));
-                                        // }
+                                        const signUpPatch = await generateJobSignUpPatch(member.memberId);
+                                        if (signUpPatch) {
+                                            props.signUpForJob(signUpPatch);
+                                        }
                                         props.onClose();
                                     }
                                 }
                                 m={3}
-                                // backgroundColor={
-                                //     attendingFamily.includes(member)
-                                //         ? 'orange.300' : 'grey.300'
-                                // }
                                 _hover={{ bg: 'orange.100' }}
                             >
                                 {`${member.firstName} ${member.lastName}`}

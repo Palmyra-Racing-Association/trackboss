@@ -68,7 +68,7 @@ Object {
             <h2
               class="chakra-heading css-w5vb1z"
             >
-              Select members to sign up
+              Select member to sign up
             </h2>
             <hr
               aria-orientation="horizontal"
@@ -95,16 +95,16 @@ Object {
               class="css-1kjn4rh"
             >
               <button
-                class="chakra-button css-1fk2wm0"
+                class="chakra-button css-16tbipg"
                 type="button"
               >
-                testing
+                test member
               </button>
               <button
-                class="chakra-button css-1fk2wm0"
+                class="chakra-button css-16tbipg"
                 type="button"
               >
-                testing again
+                Jon Smith
               </button>
             </div>
             <hr

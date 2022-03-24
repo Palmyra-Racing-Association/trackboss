@@ -26,7 +26,7 @@ import { Event } from '../../../src/typedefs/event';
 interface modalProps {
   isOpen: boolean,
   onClose: () => void,
-  selectedEvent: Event | Job,
+  selectedEvent: any,
   onSignUpOpen: () => void;
   admin: boolean;
   deleteEvent: () => void;
@@ -36,6 +36,7 @@ interface modalProps {
 
 export default function SelectedEventModal(props: modalProps) {
     const { state } = useContext(UserContext);
+
     function isJob(selectedEvent: Event | Job): selectedEvent is Job {
         if ((selectedEvent as Job).jobId) {
             return true;
@@ -63,6 +64,7 @@ export default function SelectedEventModal(props: modalProps) {
         }
         return undefined;
     }
+
     return (
         <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
@@ -106,7 +108,8 @@ export default function SelectedEventModal(props: modalProps) {
                             <Center>
                                 <VStack spacing={1}>
                                     {
-                                        props.admin && (
+                                        // Don't display the family sign up button if the job already has a member
+                                        props.admin && isJob(props.selectedEvent) && !props.selectedEvent.member && (
                                             <Button
                                                 as="u"
                                                 color="orange.300"

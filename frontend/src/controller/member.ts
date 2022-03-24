@@ -28,26 +28,12 @@ export async function getMember(token: string, memberId: number): Promise<GetMem
     return response.json();
 }
 
-// TODO: this is a mock response, redo when API is completed
-export async function getFamilyMembers() {
-    return [
-        {
-            member_id: 1,
-            name: 'Billy Joel',
-        },
-        {
-            member_id: 2,
-            name: 'Jimmi Hendrix',
-        },
-        {
-            member_id: 3,
-            name: 'Elvis',
-        },
-        {
-            member_id: 4,
-            name: 'Ringo Starr',
-        },
-    ];
+export function getFamilyMembers(token: string, membershipId: number): Promise<GetMemberListResponse> {
+    return fetch(`${process.env.REACT_APP_API_URL}/api/member/list?membershipId=${membershipId}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    }).then((response) => response.json()).then((data) => data as GetMemberListResponse);
 }
 
 export async function getMemberList(token: string, listType?: string): Promise<GetMemberListResponse> {
