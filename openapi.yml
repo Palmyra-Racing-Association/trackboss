@@ -262,6 +262,8 @@ components:
           $ref: "#/components/schemas/integer"
         member:
           $ref: "#/components/schemas/string"
+        eventId:
+          $ref: "#/components/schemas/number"
         event:
           $ref: "#/components/schemas/string"
         start:

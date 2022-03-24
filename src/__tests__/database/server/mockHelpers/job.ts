@@ -109,6 +109,7 @@ export function getJobResponse(id: number) {
                 job_id: 18,
                 member: 'Doctor Tester',
                 event: 'The MAIN Event!',
+                event_id: 100,
                 start: '2021-12-28 08:00:00',
                 end: '2021-12-28 18:00:00',
                 title: 'Gate Watcher',

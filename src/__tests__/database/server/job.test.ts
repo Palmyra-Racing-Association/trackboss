@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { PatchJobRequest } from 'src/typedefs/job';
+import { PatchJobRequest } from '../../../typedefs/job';
 import { getJob, getJobList, insertJob, patchJob, deleteJob } from '../../../database/job';
 import { mockQuery } from './mockQuery';
 
@@ -147,6 +147,7 @@ describe('getJob()', () => {
         const origValues = [
             jobId,
             'Doctor Tester',
+            100,
             'The MAIN Event!',
             '2021-12-28 08:00:00',
             '2021-12-28 18:00:00',
@@ -164,17 +165,18 @@ describe('getJob()', () => {
         expect(mockQuery).toHaveBeenCalled();
         expect(result.jobId).toBe(jobId);
         expect(result.member).toBe(origValues[1]);
-        expect(result.event).toBe(origValues[2]);
-        expect(result.start).toBe(origValues[3]);
-        expect(result.end).toBe(origValues[4]);
-        expect(result.title).toBe(origValues[5]);
-        expect(result.verified).toBe(origValues[6]);
-        expect(result.verifiedDate).toBe(origValues[7]);
-        expect(result.pointsAwarded).toBe(origValues[8]);
-        expect(result.paid).toBe(origValues[9]);
-        expect(result.paidDate).toBe(origValues[10]);
-        expect(result.lastModifiedDate).toBe(origValues[11]);
-        expect(result.lastModifiedBy).toBe(origValues[12]);
+        expect(result.eventId).toBe(origValues[2]);
+        expect(result.event).toBe(origValues[3]);
+        expect(result.start).toBe(origValues[4]);
+        expect(result.end).toBe(origValues[5]);
+        expect(result.title).toBe(origValues[6]);
+        expect(result.verified).toBe(origValues[7]);
+        expect(result.verifiedDate).toBe(origValues[8]);
+        expect(result.pointsAwarded).toBe(origValues[9]);
+        expect(result.paid).toBe(origValues[10]);
+        expect(result.paidDate).toBe(origValues[11]);
+        expect(result.lastModifiedDate).toBe(origValues[12]);
+        expect(result.lastModifiedBy).toBe(origValues[13]);
     });
 
     it('Throws for member not found', async () => {
