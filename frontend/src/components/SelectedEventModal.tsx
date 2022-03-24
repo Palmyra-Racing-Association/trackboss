@@ -22,7 +22,6 @@ import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/uti
 import { UserContext } from '../contexts/UserContext';
 import { Job, PatchJobRequest } from '../../../src/typedefs/job';
 import { Event } from '../../../src/typedefs/event';
-import { getCalendarEvents } from '../controller/event';
 
 interface modalProps {
   isOpen: boolean,
@@ -46,28 +45,21 @@ export default function SelectedEventModal(props: modalProps) {
     }
 
     async function generateJobSignUpPatch() {
+        let editedJob: PatchJobRequest;
         if (isJob(props.selectedEvent) && state.user) {
-            const eventList = await getCalendarEvents(state.token);
-            const eventName = props.selectedEvent.event;
-            let event: Event;
-            let editedJob: PatchJobRequest;
-            if (eventList) {
-                // eslint-disable-next-line prefer-destructuring
-                event = eventList.filter((e: Event) => e.title === eventName)[0];
-                const { jobId } = props.selectedEvent;
-                editedJob = {
-                    memberId: state.user.memberId,
-                    eventId: event.eventId,
-                    jobTypeId: undefined,
-                    jobStartDate: moment(props.selectedEvent.start).toISOString(true).slice(0, -10),
-                    jobEndDate: moment(props.selectedEvent.end).toISOString(true).slice(0, -10),
-                    pointsAwarded: props.selectedEvent.pointsAwarded,
-                    verified: props.selectedEvent.verified,
-                    paid: props.selectedEvent.paid,
-                    modifiedBy: state.user.memberId,
-                };
-                return { jobId, editedJob };
-            }
+            const { jobId } = props.selectedEvent;
+            editedJob = {
+                memberId: state.user.memberId,
+                eventId: props.selectedEvent.eventId,
+                jobTypeId: undefined,
+                jobStartDate: moment(props.selectedEvent.start).toISOString(true).slice(0, -10),
+                jobEndDate: moment(props.selectedEvent.end).toISOString(true).slice(0, -10),
+                pointsAwarded: props.selectedEvent.pointsAwarded,
+                verified: props.selectedEvent.verified,
+                paid: props.selectedEvent.paid,
+                modifiedBy: state.user.memberId,
+            };
+            return { jobId, editedJob };
         }
         return undefined;
     }

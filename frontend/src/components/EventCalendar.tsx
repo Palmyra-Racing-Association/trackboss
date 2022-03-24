@@ -4,9 +4,9 @@ import { Calendar, DateLocalizer, Messages, momentLocalizer, View, ViewsProps } 
 import { Text, Flex, Spacer, useDisclosure, Box } from '@chakra-ui/react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
-import SignUpModal from './SignUpModal';
+import FamilySignUpModal from './FamilySignUpModal';
 import { UserContext } from '../contexts/UserContext';
-import { getJobAttendees, deleteJob, getCalendarJobs, updateJob } from '../controller/job';
+import { deleteJob, getCalendarJobs, updateJob } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
 import { DeletedEvent, DeleteEventResponse, Event, PostNewEventRequest } from '../../../src/typedefs/event';
 import { DeletedJob, Job, PatchJobRequest } from '../../../src/typedefs/job';
@@ -35,10 +35,10 @@ const customMessages: Messages = {
     agenda: 'Agenda',
 };
 
-async function getSelectedJobAttendees(): Promise<any> {
-    const attendees = await getJobAttendees();
-    return attendees;
-}
+// async function getSelectedJobAttendees(): Promise<any> {
+//     const attendees = await getJobAttendees();
+//     return attendees;
+// }
 
 async function getCurrentFamilyMembers(): Promise<any> {
     const currentFamilyMembers = await getFamilyMembers();
@@ -62,7 +62,7 @@ export default function EventCalendar() {
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
     const [selectedEvent, setSelectedEvent] = useState<Job | Event>();
-    const [eventAttendees, setAttendees] = useState<any>();
+    // const [eventAttendees, setAttendees] = useState<any>();
     const [familyMembers, setFamilyMembers] = useState<any>();
     const [calendarEvents, setCalendarEvents] = useState<Array<Job | Event>>([]);
 
@@ -137,9 +137,9 @@ export default function EventCalendar() {
     }
     useEffect(() => {
         async function getData() {
-            const attendees = await getSelectedJobAttendees();
+            // const attendees = await getSelectedJobAttendees();
             const currentFamilyMembers = await getCurrentFamilyMembers();
-            setAttendees(attendees);
+            // setAttendees(attendees);
             setFamilyMembers(currentFamilyMembers);
             setCalendarEvents(await getCalendarEventsLocal(state.token));
         }
@@ -250,11 +250,10 @@ export default function EventCalendar() {
                 )
             }
             {
-                familyMembers && eventAttendees && (
-                    <SignUpModal
+                familyMembers && (
+                    <FamilySignUpModal
                         isOpen={isSignUpOpen}
                         onClose={onSignUpClose}
-                        attendeesList={eventAttendees}
                         familyMembers={familyMembers}
                     />
                 )
