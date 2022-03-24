@@ -39,6 +39,7 @@ const returnMember = {
     membership_admin: 'membershipAdmin',
     uuid: 'thisIsAUuid',
     active: [1],
+    member_type_id: 3,
     member_type: 'Member',
     first_name: 'Test',
     last_name: 'Testerson',

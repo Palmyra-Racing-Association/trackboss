@@ -125,6 +125,8 @@ components:
           $ref: "#/components/schemas/uuid"
         active:
           type: boolean
+        memberTypeId:
+          $ref: "#/components/schemas/number"
         memberType:
           $ref: "#/components/schemas/string"
         firstName:
