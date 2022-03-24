@@ -52,7 +52,7 @@ describe('sp_patch_event_job()', () => {
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [eventJobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches job_type_id field', async () => {
@@ -70,7 +70,7 @@ describe('sp_patch_event_job()', () => {
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [eventJobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Patches count field', async () => {
@@ -88,7 +88,7 @@ describe('sp_patch_event_job()', () => {
 
         const [checkResults] = await pool.query<RowDataPacket[]>(CHECK_SQL, [eventJobId]);
         expect(!_.isEmpty(checkResults));
-        expect(_.isEqual(checkResults[0], expResults[0]));
+        expect(checkResults[0]).toEqual(expResults[0]);
     });
 
     it('Throws on improper user input', async () => {

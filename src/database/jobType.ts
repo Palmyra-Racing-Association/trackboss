@@ -31,6 +31,7 @@ export async function insertJobType(req: PostNewJobTypeRequest): Promise<number>
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
+                case 1048: // non-null violation, missing a non-nullable column
                 case 1452: // FK violation - referenced is missing
                     logger.error(`User error inserting job type in DB: ${e}`);
                     throw new Error('user input error');
@@ -68,10 +69,10 @@ export async function getJobType(id: number): Promise<JobType> {
         pointValue: results[0].point_value,
         cashValue: results[0].cash_value,
         jobDayNumber: results[0].job_day_number,
-        active: results[0].active[0],
-        reserved: results[0].reserved[0],
-        online: results[0].online[0],
-        mealTicket: results[0].meal_ticket[0],
+        active: !!results[0].active[0],
+        reserved: !!results[0].reserved[0],
+        online: !!results[0].online[0],
+        mealTicket: !!results[0].meal_ticket[0],
         sortOrder: results[0].sort_order,
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
@@ -95,10 +96,10 @@ export async function getJobTypeList(): Promise<JobType[]> {
         pointValue: result.point_value,
         cashValue: result.cash_value,
         jobDayNumber: result.job_day_number,
-        active: result.active[0],
-        reserved: result.reserved[0],
-        online: result.online[0],
-        mealTicket: result.meal_ticket[0],
+        active: !!result.active[0],
+        reserved: !!result.reserved[0],
+        online: !!result.online[0],
+        mealTicket: !!result.meal_ticket[0],
         sortOrder: result.sort_order,
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
@@ -106,6 +107,10 @@ export async function getJobTypeList(): Promise<JobType[]> {
 }
 
 export async function patchJobType(id: number, req: PatchJobTypeRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
+
     const values = [
         id,
         req.title,

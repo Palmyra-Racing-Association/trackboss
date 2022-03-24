@@ -5,6 +5,7 @@ import { GetMemberListFilters, Member, PatchMemberRequest, PostNewMemberRequest 
 export const memberList: Member[] = [
     {
         memberId: 0,
+        membershipId: 1,
         membershipAdmin: 'Joe Blow',
         uuid: '7b',
         active: true,
@@ -25,6 +26,7 @@ export const memberList: Member[] = [
     },
     {
         memberId: 1,
+        membershipId: 2,
         membershipAdmin: 'Guy Fieri',
         uuid: '12c',
         active: true,
@@ -45,6 +47,7 @@ export const memberList: Member[] = [
     },
     {
         memberId: 2,
+        membershipId: 2,
         membershipAdmin: 'Guy Fieri',
         uuid: '28m',
         active: true,
@@ -65,6 +68,7 @@ export const memberList: Member[] = [
     },
     {
         memberId: 3,
+        membershipId: 3,
         membershipAdmin: '',
         uuid: 'oo7',
         active: true,
@@ -92,6 +96,7 @@ export const mockInsertMember = jest.spyOn(member, 'insertMember').mockImplement
 }).mockImplementation((req: PostNewMemberRequest): Promise<number> => {
     const newMember = {
         uuid: req.uuid as string,
+        membershipId: req.membershipId as number,
         firstName: req.firstName as string,
         lastName: req.lastName as string,
         phoneNumber: req.phoneNumber as string,

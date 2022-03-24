@@ -26,6 +26,7 @@ import {
     DELETE_EVENT_SQL,
 } from '../../../database/event';
 import {
+    GET_BASE_DUES_SQL,
     GET_MEMBERSHIP_LIST_BY_STATUS_SQL,
     GET_MEMBERSHIP_LIST_SQL,
     GET_MEMBERSHIP_SQL,
@@ -143,6 +144,8 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
             return membershipHelpers.getRegisteredMemberIdResponse();
         case GET_REGISTRATION_SQL:
             return membershipHelpers.getRegistrationResponse(values[0]);
+        case GET_BASE_DUES_SQL:
+            return membershipHelpers.getBaseDuesResponse(values[0]);
         case GET_WORK_POINTS_BY_MEMBER_SQL:
             return getWorkPointsByMemberResponse(values);
         case GET_WORK_POINTS_BY_MEMBERSHIP_SQL:
@@ -217,7 +220,7 @@ const mockQueryImplementation = async (sql: QueryOptions, values: any): Promise<
         case INSERT_BOARD_MEMBER_TYPE_SQL:
             return boardMemberTypeHelpers.insertBoardMemberTypeResponse(values[0]);
         case PATCH_BOARD_MEMBER_TYPE_SQL:
-            return boardMemberTypeHelpers.patchBoardMemberTypeResponse(values[0]);
+            return boardMemberTypeHelpers.patchBoardMemberTypeResponse(values[1]);
         case DELETE_BOARD_MEMBER_TYPE_SQL:
             return boardMemberTypeHelpers.deleteBoardMemberTypeResponse(values[0]);
         case GET_BILL_LIST_SQL:

@@ -1,32 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Member List Page renders correctly 1`] = `
-Array [
+<DocumentFragment>
   <div>
     <div
-      className="css-arm2n8"
+      class="css-arm2n8"
     >
       <div
-        className="chakra-stack css-84zodg"
+        class="chakra-stack css-84zodg"
       >
         <button
           aria-label="Back"
-          className="chakra-button css-76fq9n"
-          onClick={[Function]}
+          class="chakra-button css-76fq9n"
           type="button"
         >
           <svg
-            aria-hidden={true}
+            aria-hidden="true"
             fill="currentColor"
-            focusable={false}
+            focusable="false"
             height="lg"
             stroke="currentColor"
-            strokeWidth="0"
-            style={
-              Object {
-                "color": undefined,
-              }
-            }
+            stroke-width="0"
             viewBox="0 0 512 512"
             width="lg"
             xmlns="http://www.w3.org/2000/svg"
@@ -39,22 +33,16 @@ Array [
         <div>
           <button
             aria-label="Menu"
-            className="chakra-button css-1y85x9m"
-            onClick={[Function]}
+            class="chakra-button css-1y85x9m"
             type="button"
           >
             <svg
-              aria-hidden={true}
+              aria-hidden="true"
               fill="currentColor"
-              focusable={false}
+              focusable="false"
               height="1em"
               stroke="currentColor"
-              strokeWidth="0"
-              style={
-                Object {
-                  "color": undefined,
-                }
-              }
+              stroke-width="0"
               viewBox="0 0 1024 1024"
               width="1em"
               xmlns="http://www.w3.org/2000/svg"
@@ -67,90 +55,79 @@ Array [
         </div>
       </div>
       <div
-        className="css-17xejub"
+        class="css-17xejub"
       />
       <div
-        className="css-0"
+        class="css-0"
       >
         <h2
-          className="chakra-heading css-1c7bccy"
+          class="chakra-heading css-1c7bccy"
         >
           Members
         </h2>
       </div>
       <div
-        className="css-17xejub"
+        class="css-17xejub"
       />
     </div>
-  </div>,
+  </div>
   <div
-    className="css-wxr3l5"
+    class="css-wxr3l5"
   >
     <div>
       <div
-        className="sc-dlVxhl fSQziN"
+        class="sc-dlVxhl fSQziN"
       >
         <div
-          className="sc-fKVqWL XlRpR"
+          class="sc-fKVqWL XlRpR"
         >
           <div
-            className="sc-bdvvtL hLGqlg rdt_Table"
-            disabled={false}
+            class="sc-bdvvtL hLGqlg rdt_Table"
             role="table"
           >
             <div
-              className="sc-gsDKAQ fbhklE rdt_TableHead"
+              class="sc-gsDKAQ fbhklE rdt_TableHead"
               role="rowgroup"
             >
               <div
-                className="sc-dkPtRN hCBnvI rdt_TableHeadRow"
+                class="sc-dkPtRN hCBnvI rdt_TableHeadRow"
                 role="row"
               >
                 <div
-                  className="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
-                  data-column-id={1}
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
+                  class="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
+                  data-column-id="1"
                 >
                   <div
-                    className="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
-                    data-column-id={1}
-                    data-sort-id={1}
-                    disabled={true}
+                    class="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                    data-column-id="1"
+                    data-sort-id="1"
+                    disabled=""
                     role="columnheader"
-                    tabIndex={0}
+                    tabindex="0"
                   >
                     <div
-                      className="sc-egiyK lnndaO"
-                      data-column-id={1}
+                      class="sc-egiyK lnndaO"
+                      data-column-id="1"
                     >
                       Name
                     </div>
                   </div>
                 </div>
                 <div
-                  className="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
-                  data-column-id={2}
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
+                  class="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
+                  data-column-id="2"
                 >
                   <div
-                    className="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
-                    data-column-id={2}
-                    data-sort-id={2}
-                    disabled={true}
+                    class="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                    data-column-id="2"
+                    data-sort-id="2"
+                    disabled=""
                     role="columnheader"
-                    tabIndex={0}
+                    tabindex="0"
                   >
                     <div
-                      className="sc-egiyK lnndaO"
-                      data-column-id={2}
+                      class="sc-egiyK lnndaO"
+                      data-column-id="2"
                     >
                       Role
                     </div>
@@ -159,486 +136,70 @@ Array [
               </div>
             </div>
             <div
-              className="sc-hGPBjI fuBVgf rdt_TableBody"
+              class="sc-hGPBjI fuBVgf rdt_TableBody"
               role="rowgroup"
             >
               <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
+                class="sc-jrQzAO kCxImp rdt_TableRow"
                 id="row-0"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
                 role="row"
-                selected={false}
-                style={Object {}}
               >
                 <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
+                  class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                  data-column-id="1"
                   data-tag="allowRowEvents"
                   id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
                   role="gridcell"
-                  style={Object {}}
                 >
                   <div
                     data-tag="allowRowEvents"
                   >
-                    Alan Delimon
+                    Squeak Trainywhel
                   </div>
                 </div>
                 <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
+                  class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                  data-column-id="2"
                   data-tag="allowRowEvents"
                   id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
                   role="gridcell"
-                  style={Object {}}
                 >
                   <div
                     data-tag="allowRowEvents"
                   >
-                    admin
+                    Admin
                   </div>
                 </div>
               </div>
               <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
+                class="sc-jrQzAO kCxImp rdt_TableRow"
                 id="row-1"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
                 role="row"
-                selected={false}
-                style={Object {}}
               >
                 <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
+                  class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                  data-column-id="1"
                   data-tag="allowRowEvents"
                   id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
                   role="gridcell"
-                  style={Object {}}
                 >
                   <div
                     data-tag="allowRowEvents"
                   >
-                    John Smith
+                    Isobel Jennery
                   </div>
                 </div>
                 <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
+                  class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                  data-column-id="2"
                   data-tag="allowRowEvents"
                   id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
                   role="gridcell"
-                  style={Object {}}
                 >
                   <div
                     data-tag="allowRowEvents"
                   >
-                    member
-                  </div>
-                </div>
-              </div>
-              <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
-                id="row-2"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
-                role="row"
-                selected={false}
-                style={Object {}}
-              >
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
-                  data-tag="allowRowEvents"
-                  id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    Sarah Connors
-                  </div>
-                </div>
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
-                  data-tag="allowRowEvents"
-                  id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    admin
-                  </div>
-                </div>
-              </div>
-              <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
-                id="row-3"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
-                role="row"
-                selected={false}
-                style={Object {}}
-              >
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
-                  data-tag="allowRowEvents"
-                  id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    Jim Smith
-                  </div>
-                </div>
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
-                  data-tag="allowRowEvents"
-                  id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    member
-                  </div>
-                </div>
-              </div>
-              <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
-                id="row-4"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
-                role="row"
-                selected={false}
-                style={Object {}}
-              >
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
-                  data-tag="allowRowEvents"
-                  id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    Jane Smith
-                  </div>
-                </div>
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
-                  data-tag="allowRowEvents"
-                  id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    member
-                  </div>
-                </div>
-              </div>
-              <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
-                id="row-5"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
-                role="row"
-                selected={false}
-                style={Object {}}
-              >
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
-                  data-tag="allowRowEvents"
-                  id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    Jannet Smith
-                  </div>
-                </div>
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
-                  data-tag="allowRowEvents"
-                  id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    member
-                  </div>
-                </div>
-              </div>
-              <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
-                id="row-6"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
-                role="row"
-                selected={false}
-                style={Object {}}
-              >
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
-                  data-tag="allowRowEvents"
-                  id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    Alan Delimon
-                  </div>
-                </div>
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
-                  data-tag="allowRowEvents"
-                  id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    admin
-                  </div>
-                </div>
-              </div>
-              <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
-                id="row-7"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
-                role="row"
-                selected={false}
-                style={Object {}}
-              >
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
-                  data-tag="allowRowEvents"
-                  id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    John Smith
-                  </div>
-                </div>
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
-                  data-tag="allowRowEvents"
-                  id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    member
-                  </div>
-                </div>
-              </div>
-              <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
-                id="row-8"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
-                role="row"
-                selected={false}
-                style={Object {}}
-              >
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
-                  data-tag="allowRowEvents"
-                  id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    Sarah Connors
-                  </div>
-                </div>
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
-                  data-tag="allowRowEvents"
-                  id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    admin
-                  </div>
-                </div>
-              </div>
-              <div
-                className="sc-jrQzAO kCxImp rdt_TableRow"
-                id="row-9"
-                onClick={[Function]}
-                onDoubleClick={[Function]}
-                role="row"
-                selected={false}
-                style={Object {}}
-              >
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={1}
-                  data-tag="allowRowEvents"
-                  id="cell-1-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    Jim Smith
-                  </div>
-                </div>
-                <div
-                  className="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
-                  data-column-id={2}
-                  data-tag="allowRowEvents"
-                  id="cell-2-undefined"
-                  onDragEnd={[Function]}
-                  onDragEnter={[Function]}
-                  onDragLeave={[Function]}
-                  onDragOver={[Function]}
-                  onDragStart={[Function]}
-                  role="gridcell"
-                  style={Object {}}
-                >
-                  <div
-                    data-tag="allowRowEvents"
-                  >
-                    member
+                    Membership Admin
                   </div>
                 </div>
               </div>
@@ -648,44 +209,43 @@ Array [
       </div>
       <div>
         <nav
-          className="sc-iJKOTD bhoXfZ rdt_Pagination"
+          class="sc-iJKOTD bhoXfZ rdt_Pagination"
         >
           <span
-            className="sc-bYoBSM sc-ikJyIC fXzwgx bWTWQu"
+            class="sc-bYoBSM sc-ikJyIC fXzwgx bWTWQu"
           >
             Rows per page:
           </span>
           <div
-            className="sc-llYSUQ fQmYxz"
+            class="sc-llYSUQ fQmYxz"
           >
             <select
               aria-label="Rows per page:"
-              className="sc-cxpSdN fWWeYy"
-              defaultValue={10}
-              onChange={[Function]}
+              class="sc-cxpSdN fWWeYy"
             >
               <option
-                value={10}
+                selected=""
+                value="10"
               >
                 10
               </option>
               <option
-                value={15}
+                value="15"
               >
                 15
               </option>
               <option
-                value={20}
+                value="20"
               >
                 20
               </option>
               <option
-                value={25}
+                value="25"
               >
                 25
               </option>
               <option
-                value={30}
+                value="30"
               >
                 30
               </option>
@@ -706,20 +266,19 @@ Array [
             </svg>
           </div>
           <span
-            className="sc-bYoBSM sc-kLwhqv fXzwgx emVwZU"
+            class="sc-bYoBSM sc-kLwhqv fXzwgx emVwZU"
           >
-            1-10 of 12
+            1-2 of 2
           </span>
           <div
-            className="sc-ezbkAF kNbUsB"
+            class="sc-ezbkAF kNbUsB"
           >
             <button
-              aria-disabled={true}
+              aria-disabled="true"
               aria-label="First Page"
-              className="sc-giYglK gPLhoV"
-              disabled={true}
+              class="sc-giYglK gPLhoV"
+              disabled=""
               id="pagination-first-page"
-              onClick={[Function]}
               type="button"
             >
               <svg
@@ -740,12 +299,11 @@ Array [
               </svg>
             </button>
             <button
-              aria-disabled={true}
+              aria-disabled="true"
               aria-label="Previous Page"
-              className="sc-giYglK gPLhoV"
-              disabled={true}
+              class="sc-giYglK gPLhoV"
+              disabled=""
               id="pagination-previous-page"
-              onClick={[Function]}
               type="button"
             >
               <svg
@@ -766,12 +324,11 @@ Array [
               </svg>
             </button>
             <button
-              aria-disabled={false}
+              aria-disabled="true"
               aria-label="Next Page"
-              className="sc-giYglK gPLhoV"
-              disabled={false}
+              class="sc-giYglK gPLhoV"
+              disabled=""
               id="pagination-next-page"
-              onClick={[Function]}
               type="button"
             >
               <svg
@@ -792,12 +349,11 @@ Array [
               </svg>
             </button>
             <button
-              aria-disabled={false}
+              aria-disabled="true"
               aria-label="Last Page"
-              className="sc-giYglK gPLhoV"
-              disabled={false}
+              class="sc-giYglK gPLhoV"
+              disabled=""
               id="pagination-last-page"
-              onClick={[Function]}
               type="button"
             >
               <svg
@@ -821,7 +377,6 @@ Array [
         </nav>
       </div>
     </div>
-  </div>,
-  <span />,
-]
+  </div>
+</DocumentFragment>
 `;

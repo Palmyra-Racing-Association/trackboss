@@ -3,6 +3,7 @@ import { ErrorResponse } from './errorResponse';
 export type Job = {
     jobId: number,
     member?: string,
+    eventId: number,
     event: string,
     start: string | Date,
     end: string | Date,

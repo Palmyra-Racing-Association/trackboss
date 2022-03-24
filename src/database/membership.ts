@@ -34,6 +34,10 @@ export const GET_REGISTRATION_SQL = 'SELECT member_type, first_name, last_name, 
     'birthdate, address, city, state, zip FROM v_registration WHERE member_id = ?';
 
 export async function insertMembership(req: PostNewMembershipRequest): Promise<number> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
+
     const values = [
         req.membershipAdminId,
         req.yearJoined,
@@ -91,8 +95,8 @@ export async function getMembershipList(status?: string): Promise<Membership[]> 
         membershipId: result.membership_id,
         membershipAdmin: result.membership_admin,
         status: result.status,
-        curYearRenewed: result.cur_year_renewed[0],
-        renewalSent: result.renewal_sent[0],
+        curYearRenewed: !!result.cur_year_renewed[0],
+        renewalSent: !!result.renewal_sent[0],
         yearJoined: result.year_joined,
         address: result.address,
         city: result.city,
@@ -122,8 +126,8 @@ export async function getMembership(id: number): Promise<Membership> {
         membershipId: results[0].membership_id,
         membershipAdmin: results[0].membership_admin,
         status: results[0].status,
-        curYearRenewed: results[0].cur_year_renewed[0],
-        renewalSent: results[0].renewal_sent[0],
+        curYearRenewed: !!results[0].cur_year_renewed[0],
+        renewalSent: !!results[0].renewal_sent[0],
         yearJoined: results[0].year_joined,
         address: results[0].address,
         city: results[0].city,
@@ -135,6 +139,10 @@ export async function getMembership(id: number): Promise<Membership> {
 }
 
 export async function patchMembership(id: number, req: PatchMembershipRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
+
     const values = [
         id,
         req.membershipAdminId,
@@ -198,6 +206,7 @@ export async function registerMembership(req: PostRegisterMembershipRequest): Pr
         } catch (e: any) {
             if ('errno' in e) {
                 switch (e.errno) {
+                    case 1048: // non-null violation, missing a non-nullable column
                     case 1452: // FK violation - referenced is missing
                         logger.error(`User error registering membership in DB: ${e}`);
                         throw new Error('user input error');

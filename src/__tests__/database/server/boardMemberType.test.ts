@@ -75,7 +75,7 @@ describe('patchBoardMemberType()', () => {
     const emptyReq = { boardTypeId: 100, title: '' };
     it('Patches an event with boardMemberTitleId field', async () => {
         const boardTypeId = 42;
-        const title: PatchBoardMemberTypeRequest = { boardTypeId: 5, title: 'test pro' };
+        const title: PatchBoardMemberTypeRequest = { boardTypeId: 42, title: 'test pro' };
         // no error means success
         await patchBoardMemberType(boardTypeId, title);
         expect(mockQuery).toHaveBeenCalled();

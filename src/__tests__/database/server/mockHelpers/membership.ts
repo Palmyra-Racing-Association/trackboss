@@ -170,11 +170,10 @@ export function getRegistrationResponse(memberId: number) {
     switch (memberId) {
         case 18:
             return Promise.resolve([[{
-                memberId,
-                memberType: 'member',
-                firstName: 'Testy',
-                lastName: 'Testington',
-                phoneNumber: '123-456-7890',
+                member_type: 'member',
+                first_name: 'Testy',
+                last_name: 'Testington',
+                phone_number: '123-456-7890',
                 occupation: 'Involuntary Testing Entity',
                 email: 'em@il.com',
                 birthdate: '2022-02-08',
@@ -183,6 +182,19 @@ export function getRegistrationResponse(memberId: number) {
                 state: 'NT',
                 zip: '11111',
             }]]);
+        case 765:
+            return Promise.resolve([[]]);
+        case -100:
+            throw new Error('error message');
+        default:
+            return Promise.resolve();
+    }
+}
+
+export function getBaseDuesResponse(id: number) {
+    switch (id) {
+        case 18:
+            return Promise.resolve([[{ base_dues_amt: 500 }]]);
         case 765:
             return Promise.resolve([[]]);
         case -100:

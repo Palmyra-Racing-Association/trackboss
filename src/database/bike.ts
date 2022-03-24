@@ -18,9 +18,21 @@ export async function insertBike(req: PostNewBikeRequest): Promise<number> {
     let result;
     try {
         [result] = await getPool().query<OkPacket>(INSERT_BIKE_SQL, values);
-    } catch (e) {
-        logger.error(`DB error inserting bike: ${e}`);
-        throw new Error('internal server error');
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1048: // non-null violation, missing a non-nullable column
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error inserting bike in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error inserting bike: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
     }
 
     return result.insertId;
@@ -48,7 +60,7 @@ export async function getBikeList(membershipId?: number): Promise<Bike[]> {
     return results.map((result) => ({
         bikeId: result.bike_id,
         year: result.year,
-        make: result.year,
+        make: result.make,
         model: result.model,
         membershipAdmin: result.membership_admin,
     }));
@@ -79,14 +91,30 @@ export async function getBike(id: number): Promise<Bike> {
 }
 
 export async function patchBike(id: number, req: PatchBikeRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
+
     const values = [id, req.year, req.make, req.model, req.membershipId];
 
     let result;
     try {
         [result] = await getPool().query<OkPacket>(PATCH_BIKE_SQL, values);
-    } catch (e) {
-        logger.error(`DB error patching bike: ${e}`);
-        throw new Error('internal server error');
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1048: // non-null violation, missing a non-nullable column
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error patching bike in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error patching bike: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
     }
 
     if (result.affectedRows < 1) {

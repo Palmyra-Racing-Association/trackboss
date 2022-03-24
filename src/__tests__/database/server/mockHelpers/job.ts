@@ -94,9 +94,9 @@ export function getJobListResponse(values: string[]) {
         case '600':
             return Promise.resolve([jobList.filter((job) => job.membership_id === 600)]);
         case '200':
-            return Promise.resolve([jobList.filter((job) => Date.parse(job.job_start_date) >= Date.parse(values[1]))]);
+            return Promise.resolve([jobList.filter((job) => Date.parse(job.start) >= Date.parse(values[1]))]);
         case '201':
-            return Promise.resolve([jobList.filter((job) => Date.parse(job.job_start_date) <= Date.parse(values[1]))]);
+            return Promise.resolve([jobList.filter((job) => Date.parse(job.start) <= Date.parse(values[1]))]);
         default:
             return Promise.resolve();
     }
@@ -109,6 +109,7 @@ export function getJobResponse(id: number) {
                 job_id: 18,
                 member: 'Doctor Tester',
                 event: 'The MAIN Event!',
+                event_id: 100,
                 start: '2021-12-28 08:00:00',
                 end: '2021-12-28 18:00:00',
                 title: 'Gate Watcher',

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import supertest from 'supertest';
 import { createVerifier } from '../../util/auth';
 import server from '../../server';
@@ -26,7 +25,7 @@ describe('GET /workPoints/byMember/:id', () => {
         expect(mockValidToken).toHaveBeenCalled();
         expect(mockGetWorkPointsByMember).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        expect(_.isEqual(res.body, expWorkPoints));
+        expect(res.body).toEqual(expWorkPoints);
     });
 
     it('returns work points for member from specific year', async () => {
@@ -40,7 +39,7 @@ describe('GET /workPoints/byMember/:id', () => {
         expect(mockValidToken).toHaveBeenCalled();
         expect(mockGetWorkPointsByMember).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        expect(_.isEqual(res.body, expWorkPoints));
+        expect(res.body).toEqual(expWorkPoints);
     });
 
     it('returns 400 for unparseable year', async () => {
@@ -115,7 +114,7 @@ describe('GET /workPoints/byMembership/:id', () => {
         expect(mockValidToken).toHaveBeenCalled();
         expect(mockGetWorkPointsByMembership).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        expect(_.isEqual(res.body, expWorkPoints));
+        expect(res.body).toEqual(expWorkPoints);
     });
 
     it('returns work points for membership from specific year', async () => {
@@ -129,7 +128,7 @@ describe('GET /workPoints/byMembership/:id', () => {
         expect(mockValidToken).toHaveBeenCalled();
         expect(mockGetWorkPointsByMembership).toHaveBeenCalled();
         expect(res.status).toBe(200);
-        expect(_.isEqual(res.body, expWorkPoints));
+        expect(res.body).toEqual(expWorkPoints);
     });
 
     it('returns 400 for unparseable year', async () => {

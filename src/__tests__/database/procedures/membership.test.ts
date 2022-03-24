@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import _ from 'lodash';
 import mysql, { OkPacket, RowDataPacket } from 'mysql2/promise';
 
@@ -5,11 +6,7 @@ import config from './config';
 
 const pool = mysql.createPool(config);
 
-const today = () => {
-    const date = new Date();
-    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}` +
-        `-${date.getDate().toString().padStart(2, '0')}`;
-};
+const today = format(new Date(), 'yyyy-MM-dd');
 
 const PATCH_PROC_SQL = 'CALL sp_patch_membership(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 const REGISTER_MEMBER_ID_OUT = '@member_id';
@@ -68,7 +65,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(values[8]);
         expect(checkResults[0].zip).toBe(values[9]);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches membership_admin_id field', async () => {
@@ -96,7 +93,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(origValues[0].state);
         expect(checkResults[0].zip).toBe(origValues[0].zip);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches status field', async () => {
@@ -124,7 +121,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(origValues[0].state);
         expect(checkResults[0].zip).toBe(origValues[0].zip);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches cur_year_renewed field', async () => {
@@ -152,7 +149,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(origValues[0].state);
         expect(checkResults[0].zip).toBe(origValues[0].zip);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches renewal_sent field', async () => {
@@ -180,7 +177,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(origValues[0].state);
         expect(checkResults[0].zip).toBe(origValues[0].zip);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches year_joined field', async () => {
@@ -208,7 +205,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(origValues[0].state);
         expect(checkResults[0].zip).toBe(origValues[0].zip);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches address field', async () => {
@@ -236,7 +233,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(origValues[0].state);
         expect(checkResults[0].zip).toBe(origValues[0].zip);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches city field', async () => {
@@ -264,7 +261,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(origValues[0].state);
         expect(checkResults[0].zip).toBe(origValues[0].zip);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches state field', async () => {
@@ -292,7 +289,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(values[8]);
         expect(checkResults[0].zip).toBe(origValues[0].zip);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Patches zip field', async () => {
@@ -320,7 +317,7 @@ describe('sp_patch_membership()', () => {
         expect(checkResults[0].state).toBe(origValues[0].state);
         expect(checkResults[0].zip).toBe(values[9]);
         expect(checkResults[0].last_modified_by).toBe(values[10]);
-        expect(checkResults[0].last_modified_date).toBe(today());
+        expect(checkResults[0].last_modified_date).toBe(today);
     });
 
     it('Throws on improper user input', async () => {
@@ -373,8 +370,8 @@ describe('sp_register_membership()', () => {
             occupation: 'occupation',
             email: 'em@il.com',
             birthdate: '2000-01-01',
-            date_joined: today(),
-            last_modified_date: today(),
+            date_joined: today,
+            last_modified_date: today,
             last_modified_by: null,
             active: 0,
         };
@@ -387,7 +384,7 @@ describe('sp_register_membership()', () => {
             city: 'city',
             state: 'state',
             zip: 'zip',
-            last_modified_date: today(),
+            last_modified_date: today,
             last_modified_by: null,
         };
 
