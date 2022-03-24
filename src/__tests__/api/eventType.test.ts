@@ -96,8 +96,7 @@ describe('GET /eventType/list', () => {
         expect(res.body.reason).toBe('internal server error');
     });
 
-    // this test timesout for no reason, and is skipped until a fix is found
-    it.skip('Returns 401 for no token', async () => {
+    it('Returns 401 for no token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`);
         expect(mockGetEventTypeList).not.toHaveBeenCalled();
         expect(res.status).toBe(401);
@@ -131,8 +130,7 @@ describe('GET /eventType/:eventTypeId', () => {
         expect(res.body.reason).toBe('internal server error');
     });
 
-    // this test timesout for no reason, and is skipped until a fix is found
-    it.skip('Returns 401 for no token', async () => {
+    it('Returns 401 for no token', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/2`);
         expect(mockGetEventType).not.toHaveBeenCalled();
         expect(res.status).toBe(401);

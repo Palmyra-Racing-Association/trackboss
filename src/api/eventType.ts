@@ -65,8 +65,8 @@ eventType.get('/list', async (req: Request, res: Response) => {
                 response = { reason: 'internal server error' };
             }
         }
-        res.send(response);
     }
+    res.send(response);
 });
 
 eventType.get('/:eventTypeID', async (req: Request, res: Response) => {
@@ -94,8 +94,8 @@ eventType.get('/:eventTypeID', async (req: Request, res: Response) => {
                 response = { reason: 'internal server error' };
             }
         }
-        res.send(response);
     }
+    res.send(response);
 });
 
 eventType.patch('/:eventTypeID', async (req: Request, res: Response) => {
