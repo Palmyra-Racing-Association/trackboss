@@ -1,10 +1,10 @@
 ### GEN THE JOBS
-CALL sp_event_job_generation('2020-02-01T08:00:00', '2020-02-02T16:00:00', 1, 'The First Race', 'test first race!', @ignore);
-CALL sp_event_job_generation('2022-05-15T10:00:00', '2022-05-19T10:00:00', 3, 'XO Race','Test XO Race Job Generation', @ignore);
-CALL sp_event_job_generation('2022-02-01T09:00:00', '2022-02-01T15:00:00', 5, 'Yearly Meeting', 'test meeting!', @ignore);
-CALL sp_event_job_generation('2022-01-11T08:00:00', '2022-01-13T08:00:00', 6, 'Harescrambler', 'test harescrambler job generation!', @ignore);
-CALL sp_event_job_generation('2022-03-15T15:00:00', '2022-03-15T20:00:00', 9, 'Free Ride Day!', 'Test Ride Day!', @ignore);
-CALL sp_event_job_generation('2022-01-01T08:00:00', '2022-01-01T16:00:00', 1, '2022 first race', 'test race generation!', @ignore);
+CALL sp_event_job_generation('2022-04-01T08:00:00', '2022-04-02T16:00:00', 1, 'The First Race', 'test first race!', @ignore);
+CALL sp_event_job_generation('2022-03-15T10:00:00', '2022-03-19T10:00:00', 3, 'XO Race','Test XO Race Job Generation', @ignore);
+CALL sp_event_job_generation('2022-03-01T09:00:00', '2022-03-01T15:00:00', 5, 'Yearly Meeting', 'test meeting!', @ignore);
+CALL sp_event_job_generation('2022-04-11T08:00:00', '2022-04-13T08:00:00', 6, 'Harescrambler', 'test harescrambler job generation!', @ignore);
+CALL sp_event_job_generation('2022-04-22T15:00:00', '2022-04-25T20:00:00', 9, 'Free Ride Day!', 'Test Ride Day!', @ignore);
+CALL sp_event_job_generation('2022-04-01T08:00:00', '2022-04-01T16:00:00', 1, '2022 first race', 'test race generation!', @ignore);
 ###
 
 # Assign members to the jobs
