@@ -141,7 +141,7 @@ describe('sp_event_job_generation()', () => {
         const endDate = '2000-10-15 15:00:00';
         const eventTypeId = 3;
 
-        const sql = 'CALL sp_event_job_generation(?, ?, ?, ?, ?)';
+        const sql = 'CALL sp_event_job_generation(?, ?, ?, ?, ?, @ignore)';
         const checkJobSql = 'SELECT COUNT(*) as cnt FROM job;';
         const checkEventSql = 'SELECT COUNT(*) as cnt FROM event;';
         const values = [date, endDate, eventTypeId, 'event job test', 'testing for event job'];
