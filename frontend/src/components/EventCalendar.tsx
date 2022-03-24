@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useContext } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, Messages, momentLocalizer, View, ViewsProps } from 'react-big-calendar';
@@ -12,21 +13,23 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import SignUpModal from './SignUpModal';
 import { UserContext } from '../contexts/UserContext';
-import { getJobAttendees, deleteJob } from '../controller/job';
+import { getJobAttendees, deleteJob, getCalendarJobs } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
-import { DeletedEvent, Event } from '../../../src/typedefs/event';
+import { DeletedEvent, Event, PostNewEventRequest } from '../../../src/typedefs/event';
 import { DeletedJob, Job } from '../../../src/typedefs/job';
-import { deleteEvent } from '../controller/event';
+import { createEvent, deleteEvent, getCalendarEvents } from '../controller/event';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import CreateEventModal from './CreateEventModal';
+// import { formatDateString } from '../controller/utils';
 
 const RenderToolbar = require('react-big-calendar/lib/Toolbar');
 
 const localizer: DateLocalizer = momentLocalizer(moment);
 
-interface EventCalendarProps {
-    calendarEvents: Array<Job | Event>,
-}
+// interface EventCalendarProps {
+//     calendarEvents: Array<Job | Event>,
+//     getCalendarEventsLocal: (token: string) => Promise<(Event | Job)[]>,
+// }
 
 interface CustomToolbarProps {
     date: Date,
@@ -55,10 +58,24 @@ async function getCurrentFamilyMembers(): Promise<any> {
     return currentFamilyMembers;
 }
 
-export default function EventCalendar(props: EventCalendarProps) {
+async function getCalendarEventsLocal(token: string) {
+    const events = await getCalendarEvents(token);
+    const jobs = await getCalendarJobs(token);
+
+    let calendarEvents: Array<Job | Event> = [];
+    if (events && jobs) {
+        calendarEvents = calendarEvents.concat(events);
+        calendarEvents = calendarEvents.concat(jobs);
+    }
+
+    return calendarEvents;
+}
+
+export default function EventCalendar() {
     const { state } = useContext(UserContext);
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
+    const [reloadCalendar, setReloadCalendar] = useState<boolean>(false);
     const [selectedEvent, setSelectedEvent] = useState<Job | Event>();
     const [eventAttendees, setAttendees] = useState<any>();
     const [familyMembers, setFamilyMembers] = useState<any>();
@@ -88,6 +105,16 @@ export default function EventCalendar(props: EventCalendarProps) {
         return false;
     }
 
+    async function createEventLocal(newEvent: PostNewEventRequest) {
+        const startDate = moment(newEvent.startDate);
+        const endDate = moment(newEvent.endDate);
+        newEvent.startDate = startDate.toISOString(true).slice(0, -10);
+        newEvent.endDate = endDate.toISOString(true).slice(0, -10);
+
+        const res: Event | ErrorResponse = await createEvent(state.token, newEvent);
+        setCalendarEvents(await getCalendarEventsLocal(state.token));
+    }
+
     async function deleteEventLocal() {
         if (selectedEvent && isEvent(selectedEvent)) {
             const response = await deleteEvent(state.token, selectedEvent.eventId);
@@ -115,7 +142,7 @@ export default function EventCalendar(props: EventCalendarProps) {
             const currentFamilyMembers = await getCurrentFamilyMembers();
             setAttendees(attendees);
             setFamilyMembers(currentFamilyMembers);
-            setCalendarEvents(props.calendarEvents);
+            setCalendarEvents(await getCalendarEventsLocal(state.token));
         }
         getData();
     }, []);
@@ -123,7 +150,8 @@ export default function EventCalendar(props: EventCalendarProps) {
     return (
         <div>
             <Box pt={5} pb={5}>
-                <CreateEventModal />
+                {/* eslint-disable-next-line react/jsx-no-bind */}
+                <CreateEventModal createEventLocal={createEventLocal} />
             </Box>
             <Calendar
                 defaultView="month"

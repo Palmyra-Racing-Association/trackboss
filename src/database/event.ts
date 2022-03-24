@@ -18,6 +18,8 @@ export async function insertEvent(req: PostNewEventRequest): Promise<number> {
     let result;
     try {
         [result] = await getPool().query<OkPacket>(INSERT_EVENT_SQL, values);
+        console.log(INSERT_EVENT_SQL);
+        console.log(values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {

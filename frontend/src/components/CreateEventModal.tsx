@@ -23,6 +23,11 @@ import { EventType } from '../../../src/typedefs/eventType';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import { PostNewEventRequest } from '../../../src/typedefs/event';
 
+interface CreateEventModalProps {
+    // eslint-disable-next-line no-unused-vars
+    createEventLocal: (newEvent: PostNewEventRequest) => void,
+}
+
 function generateEventTypeOptions(eventTypes: EventType[]) {
     const options: any[] = [];
     for (let i = 0; i < (eventTypes).length; i++) {
@@ -31,7 +36,7 @@ function generateEventTypeOptions(eventTypes: EventType[]) {
     return options;
 }
 
-export default function CreateEventModal() {
+export default function CreateEventModal(props: CreateEventModalProps) {
     const { state } = useContext(UserContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [startDateTime, setStartDateTime] = useState(new Date());
@@ -57,11 +62,6 @@ export default function CreateEventModal() {
             // eslint-disable-next-line no-console
             console.log(res.reason);
         }
-    }
-
-    async function createEventLocal(newEvent: PostNewEventRequest) {
-        // const res = await createEvent(state.token, newEvent);
-        console.log(newEvent);
     }
 
     useEffect(() => {
@@ -141,12 +141,12 @@ export default function CreateEventModal() {
                                 () => {
                                     const newEvent: PostNewEventRequest = {
                                         startDate: startDateTime.toISOString(),
-                                        endDate: endDateTime.toUTCString(),
+                                        endDate: endDateTime.toISOString(),
                                         eventTypeId,
                                         eventName,
                                         eventDescription: description,
                                     };
-                                    createEventLocal(newEvent);
+                                    props.createEventLocal(newEvent);
                                     onClose();
                                 }
                             }

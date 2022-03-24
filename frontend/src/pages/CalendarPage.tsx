@@ -27,6 +27,7 @@ function CalendarPage() {
     const { state } = useContext(UserContext);
     // 'any' is needed here for the calendar to render properly
     const [upcomingEvents, setEvents] = useState<any[]>();
+
     useEffect(() => {
         async function getData() {
             setEvents(await getCalendarEventsLocal(state.token));
@@ -39,7 +40,11 @@ function CalendarPage() {
             <Box p={5} pt={3} pl={10} pr={10}>
                 {
                     upcomingEvents && (
-                        <EventCalendar calendarEvents={upcomingEvents} />
+                        // <EventCalendar
+                        //     calendarEvents={upcomingEvents}
+                        //     getCalendarEventsLocal={getCalendarEventsLocal}
+                        // />
+                        <EventCalendar />
                     )
                 }
             </Box>
