@@ -38,6 +38,7 @@ api.get('/me', async (req: Request, res: Response) => {
         try {
             const payload = await verify(headerCheck.token);
             const uuid = payload['cognito:username'];
+            console.log(payload);
             try {
                 response = await getMember(uuid);
                 res.status(200);
