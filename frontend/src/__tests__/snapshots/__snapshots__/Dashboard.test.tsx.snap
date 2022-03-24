@@ -85,7 +85,7 @@ exports[`dashboard renders correctly 1`] = `
       <h2
         class="chakra-heading css-ws1u8n"
       >
-         
+        Martin Martian!
       </h2>
     </div>
     <div
