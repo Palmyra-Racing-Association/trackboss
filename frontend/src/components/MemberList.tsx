@@ -8,55 +8,6 @@ import { UserContext } from '../contexts/UserContext';
 import { getMemberList } from '../controller/member';
 import MemberSummaryModal from './MemberSummaryModal';
 
-function getMemberFamilyLocal() {
-    // const response = getMembersByMembership();
-    const memberFamily: Member[] = [
-        {
-            memberId: 1,
-            membershipId: 1,
-            membershipAdmin: 'true',
-            active: true,
-            memberType: 'member',
-            firstName: 'test',
-            lastName: 'member',
-            phoneNumber: '1234',
-            email: 'user@example.com',
-            uuid: '',
-            occupation: '',
-            birthdate: '',
-            dateJoined: '',
-            address: '',
-            city: '',
-            state: '',
-            zip: '',
-            lastModifiedDate: '',
-            lastModifiedBy: '',
-        },
-        {
-            memberId: 2,
-            membershipId: 2,
-            membershipAdmin: 'string',
-            active: true,
-            memberType: 'member',
-            firstName: 'Jon',
-            lastName: 'Smith',
-            phoneNumber: '1234',
-            email: 'user@example.com',
-            uuid: '',
-            occupation: '',
-            birthdate: '',
-            dateJoined: '',
-            address: '',
-            city: '',
-            state: '',
-            zip: '',
-            lastModifiedDate: '',
-            lastModifiedBy: '',
-        },
-    ];
-    return memberFamily;
-}
-
 function getMemberBikesLocal() {
     // const response = getBikes()
     const memberBikes: Bike[] = [
@@ -141,7 +92,7 @@ export default function MemberList() {
                 subHeaderWrap
                 customStyles={customStyles}
                 onRowClicked={
-                    async (row: Member) => {
+                    (row: Member) => {
                         setSelectedMember(row);
                         onOpen();
                     }
@@ -153,7 +104,6 @@ export default function MemberList() {
                         isOpen={isOpen}
                         onClose={onClose}
                         memberInfo={selectedMember}
-                        memberFamily={getMemberFamilyLocal()}
                         memberBikes={getMemberBikesLocal()}
                     />
                 )

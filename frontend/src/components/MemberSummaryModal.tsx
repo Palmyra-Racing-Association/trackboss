@@ -1,5 +1,6 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable */
 /* eslint-disable max-len */
+import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import {
     Modal,
@@ -27,13 +28,12 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
-import memberHandlers from '../mocks/memberHandlers';
+import { getMembersByMembership } from '../controller/member';
 
 interface modalProps {
     isOpen: boolean,
     onClose: () => void,
     memberInfo: Member,
-    memberFamily: Member[],
     memberBikes: Bike[],
     // admin: boolean, // TODO: this will come from state
 }
@@ -73,6 +73,7 @@ async function handlePatchMemberContactInfo(
 
     const updatedMember: Member = {
         memberId: 1,
+        membershipId: 1,
         membershipAdmin: 'true',
         active: true,
         memberType: 'member',
@@ -106,6 +107,7 @@ export default function MemberSummaryModal(props: modalProps) {
     const { state, update } = useContext(UserContext);
 
     const [selectedMember, setSelectedMember] = useState<Member>();
+    const [family, setFamily] = useState<Member[]>();
     const [bikes, setBikes] = useState<Bike[]>();
 
     const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
@@ -127,10 +129,12 @@ export default function MemberSummaryModal(props: modalProps) {
         async function setModalData() {
             setSelectedMember(props.memberInfo);
             setEditedMemberType(props.memberInfo.memberType);
+            const familyReponse = await getMembersByMembership(state.token, props.memberInfo.membershipId);
+            setFamily(familyReponse);
             setBikes(props.memberBikes);
         }
         setModalData();
-    }, [props.memberInfo, props.memberInfo.memberType]);
+    }, [props.memberInfo]);
 
     return (
         <Modal
@@ -232,7 +236,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <Text textAlign="left" fontSize="1xl" fontWeight="bold">Members</Text>
                                     <UnorderedList pl={10}>
                                         {
-                                            props.memberFamily.map((member) => (
+                                            family && _.map(family, (member) => (
 
                                                 member.memberId === selectedMember.memberId ? <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
                                                     : <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName}`}</ListItem>

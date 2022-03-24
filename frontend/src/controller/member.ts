@@ -82,6 +82,15 @@ export async function updateMember(
     return response.json();
 }
 
+export async function getMembersByMembership(token: string, membershipId: number): Promise<Member[]> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/list?membershipId=${membershipId}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
+
 // this is a mocked api call
 // TODO: change this when the api is done
 export async function getName() {
