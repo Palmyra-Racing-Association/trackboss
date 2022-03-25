@@ -1174,8 +1174,6 @@ paths:
                   $ref: "#/components/schemas/date-time"
                 endDate:
                   $ref: "#/components/schemas/date-time"
-                eventTypeId:
-                  $ref: "#/components/schemas/integer"
                 eventName:
                   $ref: "#/components/schemas/string"
                 eventDescription:
