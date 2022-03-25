@@ -234,6 +234,10 @@ job.patch('/:jobId', async (req: Request, res: Response) => {
     res.send(response);
 });
 
+//  Cloning Jobs is a feature that got lost in the shuffle along the way
+//  The front end does not currently support cloning jobs so we decided
+//  It would not be worth the risk of introducing new bugs at this point
+//
 // job.post('/:jobId', (req: Request, res: Response) => {
 //     res.status(501).send();
 // });

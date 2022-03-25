@@ -1567,7 +1567,7 @@ paths:
       tags:
         - job
       summary: Clone this job
-      description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
+      description: "__This endpoint did not get implemented__. \n\n This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       responses:
         201:
           description: Created
