@@ -31,6 +31,7 @@ async function handlePatchMemberContactInfo(
 
     const updatedMember: Member = {
         memberId: 1,
+        memberTypeId: 3,
         membershipId: 1,
         membershipAdmin: 'true',
         active: true,

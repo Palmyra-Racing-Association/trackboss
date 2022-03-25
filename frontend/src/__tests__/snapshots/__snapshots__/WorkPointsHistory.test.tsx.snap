@@ -74,21 +74,7 @@ exports[`work points history renders all props correctly 1`] = `
           }
         }
         tabIndex={-1}
-      >
-        <button
-          className="chakra-menu__menuitem css-1k756t9"
-          id="menu-list-1-menuitem-1"
-          onClick={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-          onMouseMove={[Function]}
-          role="menuitem"
-          tabIndex={0}
-          type="button"
-        >
-          2020-2021
-        </button>
-      </div>
+      />
     </div>
     <h2
       className="chakra-heading css-0"
@@ -99,7 +85,7 @@ exports[`work points history renders all props correctly 1`] = `
   <h2
     className="chakra-heading css-7kmldq"
   >
-    150 / 200 points
+    0/0
   </h2>
   <div
     className="sc-dlVxhl fSQziN"
