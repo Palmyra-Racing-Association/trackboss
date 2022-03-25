@@ -9,7 +9,7 @@ insert into member_types(type, base_dues_amt) VALUES ("Member",0);
 insert into member_types(type, base_dues_amt) VALUES ("Paid Laborer",0);
 
 
-### point_threshold ###
+### point_threshold ### 
 insert into point_threshold(year,amount) VALUES (2020, 100);
 insert into point_threshold(year,amount) VALUES (2021, 100);
 insert into point_threshold(year,amount) VALUES (YEAR(CURDATE()), 100);
