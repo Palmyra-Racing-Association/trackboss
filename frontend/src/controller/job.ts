@@ -8,13 +8,7 @@ import {
     PostCloneJobResponse,
     PostNewJobRequest,
     PostNewJobResponse,
-    Job,
 } from '../../../src/typedefs/job';
-import { ErrorResponse } from '../../../src/typedefs/errorResponse';
-
-function isJobList(res: Job[] | ErrorResponse): res is Job[] {
-    return (res as Job[]) !== undefined;
-}
 
 export async function createJob(token: string, jobData: PostNewJobRequest): Promise<PostNewJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/new`, {
@@ -35,7 +29,7 @@ export async function getJobList(token: string, queryType?: string, filterType?:
         });
         return response.json();
     }
-    // // else
+    // else
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/list`, {
         method: 'GET',
         mode: 'cors',
@@ -46,7 +40,7 @@ export async function getJobList(token: string, queryType?: string, filterType?:
 
 export async function getCalendarJobs(token: string) {
     const calendarJobs = await getJobList(token);
-    if (isJobList(calendarJobs)) {
+    if (Array.isArray(calendarJobs)) {
         calendarJobs.forEach((job) => {
             job.start = new Date(job.start);
             job.end = new Date(job.end);
@@ -56,16 +50,6 @@ export async function getCalendarJobs(token: string) {
 
     // else
     return undefined;
-}
-
-export function getFormattedJobList() {
-    return [
-        {
-            start: 'Sept 12',
-            title: 'Track Watering',
-            pointsAwarded: '20',
-        },
-    ];
 }
 
 export async function getJob(token: string, jobID: number): Promise<GetJobResponse> {

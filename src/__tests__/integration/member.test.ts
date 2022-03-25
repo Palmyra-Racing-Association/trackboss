@@ -36,7 +36,7 @@ describe('GET /member/list', () => {
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
         // the registration test _sometimes_ runs before this, meaning an extra entry
-        expect([103, 104]).toContain(members.length);
+        expect([104, 105]).toContain(members.length);
         expect(members[0].memberId).toBe(1);
         expect(members[0].membershipId).toBe(2);
         expect(members[0].firstName).toBe('Squeak');
@@ -54,7 +54,7 @@ describe('GET /member/list', () => {
             .set('Authorization', 'Bearer validtoken');
         expect(res.status).toBe(200);
         const members: Member[] = res.body;
-        expect(members.length).toBe(15);
+        expect(members.length).toBe(16);
         _.forEach(members, (member: Member) => expect(member.memberType).toBe('Admin'));
     });
     it('Correctly filters by role Membership Admin', async () => {

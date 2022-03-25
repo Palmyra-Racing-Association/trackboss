@@ -18,6 +18,7 @@ async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     return props;
 }
 
+// eslint-disable-next-line no-unused-vars
 async function getWorkPointsPercentage(token: string, memberId: number) {
     const workPoints = await getWorkPointsTotal(token, memberId);
     const threshold = await getYearlyThresholdValue(token);

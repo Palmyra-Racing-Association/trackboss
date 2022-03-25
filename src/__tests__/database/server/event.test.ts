@@ -150,27 +150,20 @@ describe('patchEvent()', () => {
         await testPatchWithObject({ eventDescription: 'testerville' });
     });
 
-    it('Throws for user error', async () => {
-        const eventId = 1451;
+    it('Throws for no input', async () => {
+        const eventId = 0;
         await expect(patchEvent(eventId, { })).rejects.toThrow('user input error');
-        expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for member not found', async () => {
         const eventId = 3000;
-        await expect(patchEvent(eventId, { })).rejects.toThrow('not found');
+        await expect(patchEvent(eventId, { eventName: 'test test' })).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error', async () => {
         const eventId = -100;
-        await expect(patchEvent(eventId, { })).rejects.toThrow('internal server error');
-        expect(mockQuery).toHaveBeenCalled();
-    });
-
-    it('Throws unreachable error without errno field', async () => {
-        const eventId = -200;
-        await expect(patchEvent(eventId, { })).rejects.toThrow('this error should not happen');
+        await expect(patchEvent(eventId, { eventName: 'test test' })).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 });

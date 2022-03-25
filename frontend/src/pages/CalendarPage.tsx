@@ -5,23 +5,7 @@ import EventCalendar from '../components/EventCalendar';
 import Header from '../components/Header';
 import theme from '../theme';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { getCalendarEvents } from '../controller/event';
-import { getCalendarJobs } from '../controller/job';
-import { Event } from '../../../src/typedefs/event';
-import { Job } from '../../../src/typedefs/job';
-
-async function getCalendarEventsLocal(token: string) {
-    const events = await getCalendarEvents(token);
-    const jobs = await getCalendarJobs(token);
-
-    let calendarEvents: Array<Job | Event> = [];
-    if (events && jobs) {
-        calendarEvents = calendarEvents.concat(events);
-        calendarEvents = calendarEvents.concat(jobs);
-    }
-
-    return calendarEvents;
-}
+import { getCalendarEventsAndJobs } from '../controller/event';
 
 function CalendarPage() {
     const { state } = useContext(UserContext);
@@ -30,7 +14,7 @@ function CalendarPage() {
 
     useEffect(() => {
         async function getData() {
-            setEvents(await getCalendarEventsLocal(state.token));
+            setEvents(await getCalendarEventsAndJobs(state.token));
         }
         getData();
     }, []);
@@ -40,10 +24,6 @@ function CalendarPage() {
             <Box p={5} pt={3} pl={10} pr={10}>
                 {
                     upcomingEvents && (
-                        // <EventCalendar
-                        //     calendarEvents={upcomingEvents}
-                        //     getCalendarEventsLocal={getCalendarEventsLocal}
-                        // />
                         <EventCalendar />
                     )
                 }

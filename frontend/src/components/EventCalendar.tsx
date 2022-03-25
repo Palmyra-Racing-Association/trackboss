@@ -6,11 +6,11 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import FamilySignUpModal from './FamilySignUpModal';
 import { UserContext } from '../contexts/UserContext';
-import { deleteJob, getCalendarJobs, updateJob } from '../controller/job';
+import { deleteJob, updateJob } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
-import { DeletedEvent, DeleteEventResponse, Event, PostNewEventRequest } from '../../../src/typedefs/event';
-import { DeletedJob, Job, PatchJobRequest } from '../../../src/typedefs/job';
-import { createEvent, deleteEvent, getCalendarEvents } from '../controller/event';
+import { DeleteEventResponse, Event, PostNewEventRequest } from '../../../src/typedefs/event';
+import { Job, PatchJobRequest } from '../../../src/typedefs/job';
+import { createEvent, deleteEvent, getCalendarEventsAndJobs } from '../controller/event';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import CreateEventModal from './CreateEventModal';
 import { GetMemberListResponse } from '../../../src/typedefs/member';
@@ -36,131 +36,78 @@ const customMessages: Messages = {
     agenda: 'Agenda',
 };
 
-// async function getSelectedJobAttendees(): Promise<any> {
-//     const attendees = await getJobAttendees();
-//     return attendees;
-// }
-
-async function getCalendarEventsLocal(token: string) {
-    const events = await getCalendarEvents(token);
-    const jobs = await getCalendarJobs(token);
-
-    let calendarEvents: Array<Job | Event> = [];
-    if (events && jobs) {
-        calendarEvents = calendarEvents.concat(events);
-        calendarEvents = calendarEvents.concat(jobs);
-    }
-    return calendarEvents;
-}
-
 export default function EventCalendar() {
     const { state } = useContext(UserContext);
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
     const [selectedEvent, setSelectedEvent] = useState<Event | Job>();
-    // const [eventAttendees, setAttendees] = useState<any>();
     const [familyMembers, setFamilyMembers] = useState<any>();
     const [calendarEvents, setCalendarEvents] = useState<Array<Job | Event>>([]);
+    const [error, setError] = useState<string>('');
 
-    function isEvent(event: Event | Job): event is Event {
-        if ((event as Event).eventType) {
-            return true;
-        }
-        // else, its a Job
-        return false;
-    }
-
-    function deleteEventWasSuccessful(calendarEvent: DeletedEvent | ErrorResponse): calendarEvent is DeletedEvent {
-        if ((calendarEvent as DeletedEvent).eventId) {
-            return true;
-        }
-        // else, its an error
-        return false;
-    }
-
-    function deleteJobWasSuccessfull(calendarEvent: DeletedJob | ErrorResponse): calendarEvent is DeletedJob {
-        if ((calendarEvent as DeletedJob).jobId) {
-            return true;
-        }
-        // else, its an error
-        return false;
-    }
-
-    async function createEventLocal(newEvent: PostNewEventRequest) {
+    async function setNewEvent(newEvent: PostNewEventRequest) {
         const startDate = moment(newEvent.startDate);
         const endDate = moment(newEvent.endDate);
         // The server's expected format, ends at minutes
         newEvent.startDate = startDate.toISOString(true).slice(0, -10);
         newEvent.endDate = endDate.toISOString(true).slice(0, -10);
 
-        const res: Event | ErrorResponse = await createEvent(state.token, newEvent);
-        // eslint-disable-next-line no-console
-        console.log(res); // TODO: 500 response for new event
-        const test = await getCalendarEventsLocal(state.token);
+        await createEvent(state.token, newEvent);
+        const test = await getCalendarEventsAndJobs(state.token);
         setCalendarEvents(test);
     }
 
     async function signUpForJob(patchInfo: { jobId: number, editedJob: PatchJobRequest }) {
         const res = await updateJob(state.token, patchInfo.jobId, patchInfo.editedJob);
         if ('reason' in res) {
-            // eslint-disable-next-line no-console
-            console.log(res.reason);
+            setError(res.reason);
         } else {
-            setCalendarEvents(await getCalendarEventsLocal(state.token));
+            setCalendarEvents(await getCalendarEventsAndJobs(state.token));
         }
     }
 
     async function deleteEventLocal() {
-        if (selectedEvent && isEvent(selectedEvent)) {
+        if (selectedEvent && 'eventType' in selectedEvent) {
             const response: DeleteEventResponse | ErrorResponse = await deleteEvent(state.token, selectedEvent.eventId);
-            if (deleteEventWasSuccessful(response)) {
+            if ('reason' in response) {
+                setError(response.reason);
+            } else {
                 const newCalendarEvents = calendarEvents.filter((e: any) => e.eventType !== selectedEvent?.eventType);
                 setCalendarEvents(newCalendarEvents);
-            } else {
-                // eslint-disable-next-line no-console
-                console.log(response.reason);
             }
         } else if (selectedEvent) {
             const response = await deleteJob(state.token, selectedEvent.jobId);
-            if (deleteJobWasSuccessfull(response)) {
+            if ('reason' in response) {
+                setError(response.reason);
+            } else {
                 const newCalendarEvents = calendarEvents.filter((e: any) => e.jobId !== selectedEvent?.jobId);
                 setCalendarEvents(newCalendarEvents);
-            } else {
-                // eslint-disable-next-line no-console
-                console.log(response.reason);
             }
         }
-    }
-
-    async function getFamilyMembersLocal() {
-        if (state.user) {
-            const res: GetMemberListResponse = await getFamilyMembers(state.token, state.user.membershipId);
-            if ('reason' in res) {
-                console.log(res.reason);
-            } else {
-                return res;
-            }
-        }
-        return undefined;
     }
 
     useEffect(() => {
         async function getData() {
-            console.log(state.user);
-            // const attendees = await getSelectedJobAttendees();
-            const currentFamilyMembers = await getFamilyMembersLocal();
-            // setAttendees(attendees);
-            setFamilyMembers(currentFamilyMembers);
-            setCalendarEvents(await getCalendarEventsLocal(state.token));
+            if (state.user) {
+                const res: GetMemberListResponse = await getFamilyMembers(state.token, state.user.membershipId);
+                if ('reason' in res) {
+                    setError(res.reason);
+                } else {
+                    setFamilyMembers(res);
+                }
+            }
+
+            setCalendarEvents(await getCalendarEventsAndJobs(state.token));
         }
         getData();
     }, []);
 
     return (
         <div>
+            { error !== '' && ({ error }) }
             <Box pt={5} pb={5}>
                 {/* eslint-disable-next-line react/jsx-no-bind */}
-                <CreateEventModal createEventLocal={createEventLocal} />
+                <CreateEventModal createEvent={setNewEvent} />
             </Box>
             <Calendar
                 defaultView="month"
@@ -179,7 +126,7 @@ export default function EventCalendar() {
                             backgroundColor: 'lightgrey',
                             color: 'black',
                         };
-                        if (isEvent(calendarEvent)) {
+                        if ('eventType' in calendarEvent) {
                             if (calendarEvent.eventType === 'Meeting') {
                                 newStyle.backgroundColor = '#76CE6F'; // green
                             } else if (

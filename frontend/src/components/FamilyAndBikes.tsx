@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Heading,
     VStack,
@@ -10,20 +10,24 @@ import {
     ListItem,
     useDisclosure,
 } from '@chakra-ui/react';
-import { Member } from '../../../src/typedefs/member';
-import { Bike } from '../../../src/typedefs/bike';
+import { GetMemberListResponse, Member } from '../../../src/typedefs/member';
+import { Bike, GetBikeListResponse } from '../../../src/typedefs/bike';
 import DeleteAlert from './DeleteAlert';
 import EditBikesModal from './EditBikeModal';
 import AddFamilyModal from './AddFamilyModal';
 import AddBikeModal from './AddBikeModal';
+import { updateMember } from '../controller/member';
+import { UserContext } from '../contexts/UserContext';
+import { createBike, deleteBike, updateBike } from '../controller/bike';
 
 interface cardProps {
-    memberFamily: Member[],
-    memberBikes: Bike[],
+    memberFamily: GetMemberListResponse,
+    memberBikes: GetBikeListResponse,
     admin: boolean
 }
 
 export default function GeneralInfo(props: cardProps) {
+    const { state } = useContext(UserContext);
     const { onClose: onRemoveFamilyClose, isOpen: isRemoveFamilyOpen, onOpen: onRemoveFamilyOpen } = useDisclosure();
     const { onClose: onAddFamilyClose, isOpen: isAddFamilyOpen, onOpen: onAddFamilyOpen } = useDisclosure();
 
@@ -31,50 +35,44 @@ export default function GeneralInfo(props: cardProps) {
     const { onClose: onEditBikeClose, isOpen: isEditBikeOpen, onOpen: onEditBikeOpen } = useDisclosure();
     const { onClose: onAddBikeClose, isOpen: isAddBikeOpen, onOpen: onAddBikeOpen } = useDisclosure();
 
-    const [memberFamily, setMemberFamily] = useState<Member[]>([]);
-    const [memberBikes, setMemberBikes] = useState<Bike[]>([]);
+    const [memberFamily, setMemberFamily] = useState<GetMemberListResponse>([]);
+    const [memberBikes, setMemberBikes] = useState<GetBikeListResponse>([]);
 
     const [memberToRemove, setMemberToRemove] = useState<Member>();
     const [bikeToRemove, setBikeToRemove] = useState<Bike>();
     const [bikeToEdit, setBikeToEdit] = useState<Bike>();
 
-    function removeFamilyMember() {
-        // call controller and await response, if successful...
-        if (memberToRemove) {
-            const newMemberFamily = memberFamily.filter((m) => m.memberId !== memberToRemove.memberId);
-            setMemberFamily(newMemberFamily);
+    async function removeFamilyMember() {
+        if (memberToRemove !== undefined && state.user !== undefined) {
+            await updateMember(
+                state.token,
+                memberToRemove.memberId,
+                { active: false, modifiedBy: state.user.memberId },
+            );
         }
     }
 
-    function removeBike() {
-        // call controller and await response, if successful...
-        if (bikeToRemove) {
-            const newMemberBikes = memberBikes.filter((b) => b.bikeId !== bikeToRemove?.bikeId);
-            setMemberBikes(newMemberBikes);
+    async function removeBike() {
+        if (bikeToRemove !== undefined && state.user !== undefined) {
+            await deleteBike(state.token, bikeToRemove.bikeId);
         }
     }
 
-    function editBike(editedBike: Bike, bikeYear: string, bikeMake: string, bikeModel: string) {
-        // call controller and await response, if successful...
-        const index = memberBikes.indexOf(editedBike);
-        memberBikes[index].year = bikeYear;
-        memberBikes[index].make = bikeMake;
-        memberBikes[index].model = bikeModel;
-        setMemberBikes(memberBikes);
+    async function editBike(editedBike: Bike, bikeYear: string, bikeMake: string, bikeModel: string) {
+        await updateBike(
+            state.token,
+            editedBike.bikeId,
+            { year: bikeYear, make: bikeMake, model: bikeModel },
+        );
     }
 
-    function addBike(year: string, make: string, model: string) {
-        // call controller to add bike
-        // const newBike = addBike(memberShipId, year, make, model)
-        // if successful
-        const newBike: Bike = {
-            bikeId: 3,
-            year,
-            make,
-            model,
-            membershipAdmin: 'me',
-        };
-        setMemberBikes(memberBikes.concat(newBike));
+    async function addBike(newYear: string, newMake: string, newModel: string) {
+        if (state.user !== undefined) {
+            await createBike(
+                state.token,
+                { year: newYear, make: newMake, model: newModel, membershipId: state.user.membershipId },
+            );
+        }
     }
 
     useEffect(() => {
@@ -114,7 +112,7 @@ export default function GeneralInfo(props: cardProps) {
                     memberFamily && (
                         <UnorderedList pt={10} spacing={2}>
                             {
-                                memberFamily.map((member) => (
+                                (memberFamily as Member[]).map((member) => (
                                     <HStack>
                                         <ListItem
                                             fontSize="3xl"
@@ -172,7 +170,7 @@ export default function GeneralInfo(props: cardProps) {
                     memberBikes && (
                         <UnorderedList pt={10} spacing={2}>
                             {
-                                memberBikes.map((bike) => (
+                                (memberBikes as Bike[]).map((bike) => (
                                     <HStack>
                                         <ListItem
                                             ml={10}

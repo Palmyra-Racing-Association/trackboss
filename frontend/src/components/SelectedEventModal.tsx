@@ -20,8 +20,7 @@ import {
 import moment from 'moment';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
 import { UserContext } from '../contexts/UserContext';
-import { Job, PatchJobRequest } from '../../../src/typedefs/job';
-import { Event } from '../../../src/typedefs/event';
+import { PatchJobRequest } from '../../../src/typedefs/job';
 
 interface modalProps {
   isOpen: boolean,
@@ -31,23 +30,15 @@ interface modalProps {
   admin: boolean;
   deleteEvent: () => void;
   // eslint-disable-next-line no-unused-vars
-  signUpForJob: (patchInfo: { jobId: number; editedJob: PatchJobRequest; }) => void
+  signUpForJob: (patchInfo: { jobId: number; editedJob: PatchJobRequest; }) => void;
 }
 
 export default function SelectedEventModal(props: modalProps) {
     const { state } = useContext(UserContext);
 
-    function isJob(selectedEvent: Event | Job): selectedEvent is Job {
-        if ((selectedEvent as Job).jobId) {
-            return true;
-        }
-        // else, its an Event
-        return false;
-    }
-
     async function generateJobSignUpPatch() {
         let editedJob: PatchJobRequest;
-        if (isJob(props.selectedEvent) && state.user) {
+        if ('jobId' in (props.selectedEvent) && state.user) {
             const { jobId } = props.selectedEvent;
             editedJob = {
                 memberId: state.user.memberId,
@@ -91,7 +82,7 @@ export default function SelectedEventModal(props: modalProps) {
                     </Text>
                 </ModalBody>
                 {
-                    isJob(props.selectedEvent) && (
+                    'jobId' in props.selectedEvent && (
                         <SimpleGrid columns={1}>
                             <Center>
                                 <HStack spacing={0}>
@@ -109,7 +100,7 @@ export default function SelectedEventModal(props: modalProps) {
                                 <VStack spacing={1}>
                                     {
                                         // Don't display the family sign up button if the job already has a member
-                                        props.admin && isJob(props.selectedEvent) && !props.selectedEvent.member && (
+                                        props.admin && 'jobId' in props.selectedEvent && !props.selectedEvent.member && (
                                             <Button
                                                 as="u"
                                                 color="orange.300"
@@ -166,7 +157,7 @@ export default function SelectedEventModal(props: modalProps) {
                     }
                     {
                         // Don't display the sign up button if the job already has a member
-                        isJob(props.selectedEvent) && !props.selectedEvent.member && (
+                        'jobId' in props.selectedEvent && !props.selectedEvent.member && (
                             <Button
                                 bgColor="orange"
                                 color="white"

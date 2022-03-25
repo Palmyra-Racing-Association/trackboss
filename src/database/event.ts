@@ -121,29 +121,21 @@ export async function getEvent(id: number): Promise<Event> {
 }
 
 export async function patchEvent(id: number, req: PatchEventRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [id, req.startDate, req.endDate, req.eventName, req.eventDescription];
 
     let result;
     try {
         [result] = await getPool().query<OkPacket>(PATCH_EVENT_SQL, values);
-    } catch (e: any) {
-        if ('errno' in e) {
-            switch (e.errno) {
-                case 1451: // FK violation - referenced somewhere else
-                case 1452: // FK violation - referenced is missing
-                    logger.error(`User error patching event in DB: ${e}`);
-                    throw new Error('user input error');
-                default:
-                    logger.error(`DB error patching event: ${e}`);
-                    throw new Error('internal server error');
-            }
-        } else {
-            // this should not happen - errors from query should always have 'errno' field
-            throw e;
-        }
+    } catch (e) {
+        logger.error(`DB error patching event: ${e}`);
+        throw new Error('internal server error');
     }
 
     if (result.affectedRows < 1) {
+        logger.info('this is happening');
         throw new Error('not found');
     }
 }
