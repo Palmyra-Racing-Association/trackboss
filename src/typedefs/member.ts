@@ -1,3 +1,4 @@
+import { BoardMember } from './boardMember';
 import { ErrorResponse } from './errorResponse';
 
 export type Member = {
@@ -20,7 +21,8 @@ export type Member = {
     state: string,
     zip: string,
     lastModifiedDate: string,
-    lastModifiedBy: string
+    lastModifiedBy: string,
+    boardMemberData? : BoardMember // optional field to be used only by the frontend to store data
 }
 
 export type PostNewMemberRequest = {

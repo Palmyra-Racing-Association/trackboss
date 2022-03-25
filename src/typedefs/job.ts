@@ -68,8 +68,8 @@ export type GetJobListRequest = Record<string, never>
 export type GetJobListResponse = Job[] | ErrorResponse
 
 export type GetJobListRequestFilters = {
-    assignmentStatus?:number,
-    verificationStatus?:number,
+    assignmentStatus?:boolean,
+    verificationStatus?:boolean,
     memberId?:number,
     membershipId?: number,
     eventId?: number,

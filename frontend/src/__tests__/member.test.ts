@@ -3,7 +3,6 @@ import {
     getMember,
     updateMember,
     getMemberList,
-    getFormattedMemberList,
 } from '../controller/member';
 
 // createMember
@@ -333,9 +332,4 @@ test('updateMember returns internal server error', async () => {
     } else {
         throw new Error('Received unexpected non-error response');
     }
-});
-
-it('Mocked FormatMemberList call returns correct data', () => {
-    const response = getFormattedMemberList('Test');
-    expect(response.length).toBeGreaterThan(0);
 });

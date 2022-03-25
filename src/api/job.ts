@@ -1,5 +1,5 @@
+import { format } from 'date-fns';
 import { Request, Response, Router } from 'express';
-import _ from 'lodash';
 import {
     GetJobListResponse,
     PostNewJobResponse,
@@ -83,55 +83,44 @@ job.get('/list', async (req: Request, res: Response) => {
                 const endData = verifyDate(end);
                 if (!startData.valid || !endData.valid) {
                     throw new Error('user input error');
+                } else if (start === '' && end !== '') {
+                    endDate = `${format(endData.date, 'yyyy-MM-dd')}`;
+                } else if (end === '' && start !== '') {
+                    startDate = `${format(startData.date, 'yyyy-MM-dd')}`;
                 } else {
-                    if (start === '' && end !== '') {
-                        endDate = end;
-                    } else if (end === '' && start !== '') {
-                        startDate = start;
-                    } else {
-                        startDate = start;
-                        endDate = end;
-                    }
-                    res.status(206);
+                    startDate = `${format(startData.date, 'yyyy-MM-dd')}`;
+                    endDate = `${format(endData.date, 'yyyy-MM-dd')}`;
                 }
             }
             const assignmentStatus: string | undefined = req.query.assignmentStatus as string;
             const verificationStatus: string | undefined = req.query.verificationStatus as string;
-            const memberId: string | undefined = req.query.memberId as string;
-            const membershipId: string | undefined = req.query.membershipId as string;
-            const eventId: string | undefined = req.query.eventId as string;
+            const memberId: string | undefined = req.query.memberID as string;
+            const membershipId: string | undefined = req.query.membershipID as string;
+            const eventId: string | undefined = req.query.eventID as string;
             const filters: GetJobListRequestFilters = {};
             if (typeof assignmentStatus !== 'undefined' &&
-            (assignmentStatus === 'open' || assignmentStatus === 'assigned')) {
+            (assignmentStatus !== 'open' && assignmentStatus !== 'assigned')) {
                 res.status(400);
-                response = { reason: 'invalid assigment specified' };
+                response = { reason: 'bad request' };
             } else if (typeof verificationStatus !== 'undefined' &&
-            (verificationStatus === 'pending' || verificationStatus === 'verified')) {
+            (verificationStatus !== 'pending' && verificationStatus !== 'verified')) {
                 res.status(400);
-                response = { reason: 'invalid verification status' };
+                response = { reason: 'bad request' };
             } else if (Number.isNaN(Number(memberId)) && typeof memberId !== 'undefined') {
                 res.status(400);
-                response = { reason: 'invalid member id' };
+                response = { reason: 'bad request' };
             } else if (Number.isNaN(Number(membershipId)) && typeof membershipId !== 'undefined') {
                 res.status(400);
-                response = { reason: 'invalid membership id' };
+                response = { reason: 'bad request' };
             } else if (Number.isNaN(Number(eventId)) && typeof eventId !== 'undefined') {
                 res.status(400);
-                response = { reason: 'invalid event id' };
+                response = { reason: 'bad request' };
             } else {
                 if (typeof assignmentStatus !== 'undefined') {
-                    if (assignmentStatus === 'open') {
-                        filters.assignmentStatus = 0;
-                    } else {
-                        filters.assignmentStatus = 1;
-                    }
+                    filters.assignmentStatus = (assignmentStatus === 'assigned');
                 }
                 if (typeof verificationStatus !== 'undefined') {
-                    if (verificationStatus === 'pending') {
-                        filters.verificationStatus = 0;
-                    } else {
-                        filters.verificationStatus = 1;
-                    }
+                    filters.verificationStatus = (verificationStatus === 'verified');
                 }
                 if (typeof memberId !== 'undefined') {
                     filters.memberId = Number(memberId);
@@ -149,10 +138,10 @@ job.get('/list', async (req: Request, res: Response) => {
                     filters.endDate = endDate;
                 }
                 const jobList: Job[] = await getJobList(filters);
-                if (_.isEmpty(filters)) {
-                    res.status(200);
-                } else {
+                if (typeof filters.startDate !== 'undefined' || typeof filters.endDate !== 'undefined') {
                     res.status(206);
+                } else {
+                    res.status(200);
                 }
                 response = jobList;
             }
@@ -245,9 +234,13 @@ job.patch('/:jobId', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-job.post('/:jobId', (req: Request, res: Response) => {
-    res.status(501).send();
-});
+//  Cloning Jobs is a feature that got lost in the shuffle along the way
+//  The front end does not currently support cloning jobs so we decided
+//  It would not be worth the risk of introducing new bugs at this point
+//
+// job.post('/:jobId', (req: Request, res: Response) => {
+//     res.status(501).send();
+// });
 
 job.delete('/:jobId', async (req: Request, res: Response) => {
     const { authorization } = req.headers;

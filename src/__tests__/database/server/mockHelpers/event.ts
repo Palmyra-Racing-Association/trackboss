@@ -139,11 +139,7 @@ export function patchEventResponse(id: number) {
         case 3000:
             return Promise.resolve([{ affectedRows: 0 }]);
         case 1451:
-            throw { errno: 1451 };
-        case -100:
-            throw { errno: 0 };
-        case -200:
-            throw new Error('this error should not happen');
+            throw new Error('error message');
         default:
             return Promise.resolve();
     }

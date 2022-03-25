@@ -1,75 +1,13 @@
 import { useDisclosure } from '@chakra-ui/react';
+import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { Bike } from '../../../src/typedefs/bike';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import { Member } from '../../../src/typedefs/member';
 import { UserContext } from '../contexts/UserContext';
+import { getAllBoardMembersForCurrentYear } from '../controller/boardMember';
 import { getMemberList } from '../controller/member';
 import MemberSummaryModal from './MemberSummaryModal';
-
-function getMemberFamilyLocal() {
-    // const response = getMembersByMembership();
-    const memberFamily: Member[] = [
-        {
-            memberId: 1,
-            membershipId: 1,
-            membershipAdmin: 'true',
-            active: true,
-            memberType: 'member',
-            firstName: 'test',
-            lastName: 'member',
-            phoneNumber: '1234',
-            email: 'user@example.com',
-            uuid: '',
-            occupation: '',
-            birthdate: '',
-            dateJoined: '',
-            address: '',
-            city: '',
-            state: '',
-            zip: '',
-            lastModifiedDate: '',
-            lastModifiedBy: '',
-        },
-        {
-            memberId: 2,
-            membershipId: 2,
-            membershipAdmin: 'string',
-            active: true,
-            memberType: 'member',
-            firstName: 'Jon',
-            lastName: 'Smith',
-            phoneNumber: '1234',
-            email: 'user@example.com',
-            uuid: '',
-            occupation: '',
-            birthdate: '',
-            dateJoined: '',
-            address: '',
-            city: '',
-            state: '',
-            zip: '',
-            lastModifiedDate: '',
-            lastModifiedBy: '',
-        },
-    ];
-    return memberFamily;
-}
-
-function getMemberBikesLocal() {
-    // const response = getBikes()
-    const memberBikes: Bike[] = [
-        {
-            bikeId: 0,
-            year: '2012',
-            make: 'honda',
-            model: 'rust-bucket',
-            membershipAdmin: 'string',
-        },
-    ];
-    return memberBikes;
-}
 
 const columns: any = [
     {
@@ -105,23 +43,40 @@ const customStyles = {
 };
 
 export default function MemberList() {
-    const { onClose, isOpen, onOpen } = useDisclosure();
     const [selectedMember, setSelectedMember] = useState<Member>();
     const [cells, setCells] = useState<Member[]>([]);
-    const userContext = useContext(UserContext);
+    const { state } = useContext(UserContext);
     const [error, setError] = useState<ErrorResponse | undefined>(undefined);
+    const [dirty, setDirty] = useState<boolean>(false);
+    const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((oldDirty) => !oldDirty) });
+
     useEffect(() => {
         async function getData() {
-            const c: Member[] | ErrorResponse = await getMemberList(userContext.state.token);
+            const c: Member[] | ErrorResponse = await getMemberList(state.token);
+            const boardMembers = await getAllBoardMembersForCurrentYear(state.token);
             if ('reason' in c) {
                 setError(c);
             } else {
-                setCells(c);
+                if ('reason' in boardMembers) {
+                    // do nothing, an error here isn't a big deal, it just means we can't show baord member data
+                } else {
+                    _.forEach(boardMembers, (boardMember) => {
+                        _.forEach(c, (member: Member) => {
+                            if (member.memberId === boardMember.memberId) {
+                                member.memberType = `Board Member - ${boardMember.title}`;
+                                member.boardMemberData = boardMember;
+                                return false;
+                            }
+                            return true;
+                        });
+                    });
+                }
+                setCells(_.filter(c, (member) => member.active));
                 setError(undefined);
             }
         }
         getData();
-    }, []);
+    }, [dirty]);
     if (error) {
         return (
             <div>
@@ -141,7 +96,7 @@ export default function MemberList() {
                 subHeaderWrap
                 customStyles={customStyles}
                 onRowClicked={
-                    async (row: Member) => {
+                    (row: Member) => {
                         setSelectedMember(row);
                         onOpen();
                     }
@@ -153,8 +108,6 @@ export default function MemberList() {
                         isOpen={isOpen}
                         onClose={onClose}
                         memberInfo={selectedMember}
-                        memberFamily={getMemberFamilyLocal()}
-                        memberBikes={getMemberBikesLocal()}
                     />
                 )
             }

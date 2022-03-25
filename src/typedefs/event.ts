@@ -30,7 +30,6 @@ export type GetEventResponse = Event | ErrorResponse
 export type PatchEventRequest = {
     startDate?: string,
     endDate?: string,
-    eventTypeId?: number,
     eventName?: string,
     eventDescription?: string
 }
