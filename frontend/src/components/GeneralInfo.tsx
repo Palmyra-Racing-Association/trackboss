@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useContext } from 'react';
 import {
     Text,
@@ -13,7 +12,6 @@ import {
 import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
 import { updateMember } from '../controller/member';
 import { UserContext } from '../contexts/UserContext';
-import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 
 interface cardProps {
     user: Member,
@@ -49,9 +47,9 @@ export default function GeneralInfo(props: cardProps) {
                 memberTypeId: memberPatchInfo.memberTypeId,
                 firstName: first,
                 lastName: last,
-                phoneNumber: memberPatchInfo.phoneNumber,
+                phoneNumber: phone,
                 occupation: memberPatchInfo.occupation,
-                email: memberPatchInfo.email,
+                email: phone,
                 birthdate: memberPatchInfo.birthdate,
                 dateJoined: memberPatchInfo.dateJoined,
                 modifiedBy: memberPatchInfo.memberId,
