@@ -183,7 +183,6 @@ export async function patchMember(id: string, req: PatchMemberRequest): Promise<
         req.dateJoined,
         req.modifiedBy,
     ];
-
     let result;
     try {
         [result] = await getPool().query<OkPacket>(PATCH_MEMBER_SQL, values);

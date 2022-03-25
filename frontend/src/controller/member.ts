@@ -77,13 +77,3 @@ export async function getMembersByMembership(token: string, membershipId: number
     });
     return response.json();
 }
-
-// this is a mocked api call
-// TODO: change this when the api is done
-export async function getName() {
-    const response = {
-        name: 'Martin',
-    };
-
-    return response.name;
-}
