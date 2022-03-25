@@ -163,7 +163,7 @@ describe('sp_event_job_generation()', () => {
 
 describe('sp_delete_event()', () => {
     it('deletes an event', async () => {
-        const eventId = 1;
+        const eventId = 2;
         const sql = 'CALL sp_delete_event(?)';
         const values = [eventId];
         const [result] = await pool.query<OkPacket>(sql, values);
