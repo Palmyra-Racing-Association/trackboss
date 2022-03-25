@@ -1,5 +1,5 @@
+import { format } from 'date-fns';
 import { Request, Response, Router } from 'express';
-import _ from 'lodash';
 import {
     GetJobListResponse,
     PostNewJobResponse,
@@ -84,12 +84,12 @@ job.get('/list', async (req: Request, res: Response) => {
                 if (!startData.valid || !endData.valid) {
                     throw new Error('user input error');
                 } else if (start === '' && end !== '') {
-                    endDate = end;
+                    endDate = `${format(endData.date, 'yyyy-MM-dd')}`;
                 } else if (end === '' && start !== '') {
-                    startDate = start;
+                    startDate = `${format(startData.date, 'yyyy-MM-dd')}`;
                 } else {
-                    startDate = start;
-                    endDate = end;
+                    startDate = `${format(startData.date, 'yyyy-MM-dd')}`;
+                    endDate = `${format(endData.date, 'yyyy-MM-dd')}`;
                 }
             }
             const assignmentStatus: string | undefined = req.query.assignmentStatus as string;
@@ -99,36 +99,28 @@ job.get('/list', async (req: Request, res: Response) => {
             const eventId: string | undefined = req.query.eventID as string;
             const filters: GetJobListRequestFilters = {};
             if (typeof assignmentStatus !== 'undefined' &&
-            (assignmentStatus === 'open' || assignmentStatus === 'assigned')) {
+            (assignmentStatus !== 'open' && assignmentStatus !== 'assigned')) {
                 res.status(400);
-                response = { reason: 'invalid assigment specified' };
+                response = { reason: 'bad request' };
             } else if (typeof verificationStatus !== 'undefined' &&
-            (verificationStatus === 'pending' || verificationStatus === 'verified')) {
+            (verificationStatus !== 'pending' && verificationStatus !== 'verified')) {
                 res.status(400);
-                response = { reason: 'invalid verification status' };
+                response = { reason: 'bad request' };
             } else if (Number.isNaN(Number(memberId)) && typeof memberId !== 'undefined') {
                 res.status(400);
-                response = { reason: 'invalid member id' };
+                response = { reason: 'bad request' };
             } else if (Number.isNaN(Number(membershipId)) && typeof membershipId !== 'undefined') {
                 res.status(400);
-                response = { reason: 'invalid membership id' };
+                response = { reason: 'bad request' };
             } else if (Number.isNaN(Number(eventId)) && typeof eventId !== 'undefined') {
                 res.status(400);
-                response = { reason: 'invalid event id' };
+                response = { reason: 'bad request' };
             } else {
                 if (typeof assignmentStatus !== 'undefined') {
-                    if (assignmentStatus === 'open') {
-                        filters.assignmentStatus = 0;
-                    } else {
-                        filters.assignmentStatus = 1;
-                    }
+                    filters.assignmentStatus = (assignmentStatus === 'assigned');
                 }
                 if (typeof verificationStatus !== 'undefined') {
-                    if (verificationStatus === 'pending') {
-                        filters.verificationStatus = 0;
-                    } else {
-                        filters.verificationStatus = 1;
-                    }
+                    filters.verificationStatus = (verificationStatus === 'verified');
                 }
                 if (typeof memberId !== 'undefined') {
                     filters.memberId = Number(memberId);
@@ -242,9 +234,9 @@ job.patch('/:jobId', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-job.post('/:jobId', (req: Request, res: Response) => {
-    res.status(501).send();
-});
+// job.post('/:jobId', (req: Request, res: Response) => {
+//     res.status(501).send();
+// });
 
 job.delete('/:jobId', async (req: Request, res: Response) => {
     const { authorization } = req.headers;

@@ -1,8 +1,9 @@
+import { isEqual } from 'lodash';
+import { format, isAfter, isBefore } from 'date-fns';
 import supertest from 'supertest';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
 import { mockInvalidToken, mockValidToken, mockVerifyAdmin, mockVerifyLaborer } from '../util/authMocks';
-import { Bike } from '../../typedefs/bike';
 import { Job } from '../../typedefs/job';
 import { destroyPool } from '../../database/pool';
 
@@ -33,14 +34,50 @@ describe('GET /job/list', () => {
         expect(res.body.reason).toBe('not authorized');
     });
 
-//     it('Returns 400 for unparseable filter', async () => {
-//         const res = await supertestServer
-//             .get(`${TAG_ROOT}/list?assignmentStatus=blah`)
-//             .set('Authorization', 'Bearer validtoken');
-//         expect(mockValidToken).toHaveBeenCalled();
-//         expect(res.status).toBe(400);
-//         expect(res.body.reason).toBe('bad request');
-//     });
+    it('Returns 400 for unparseable filter assignmentStatus', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?assignmentStatus=notafilter`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('Returns 400 for unparseable filter verificationStatus', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?verificationStatus=notafilter`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('Returns 400 for unparseable filter memberID', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?memberID=notafilter`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('Returns 400 for unparseable filter membershipID', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?membershipID=notafilter`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('Returns 400 for unparseable filter eventID', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?eventID=notafilter`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
 
     it('Gets the unfiltered list', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/list`).set('Authorization', 'Bearer validtoken');
@@ -114,6 +151,52 @@ describe('GET /job/list', () => {
             expect(j.event).toBe('2022 first race');
         });
     });
+
+    it('Correctly filters with just start', async () => {
+        const startBound = new Date('2022-09-01');
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list`)
+            .set('Authorization', 'Bearer validtoken')
+            .set('Range', `${format(startBound, 'yyyyMMdd')}-`);
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(res.status).toBe(206);
+        const jobs: Job[] = res.body;
+        jobs.forEach((j:Job) => {
+            const jDate = new Date(j.start);
+            expect(isAfter(jDate, startBound) || isEqual(jDate, startBound)).toBeTruthy();
+        });
+    });
+
+    it('Correctly filters with just end', async () => {
+        const endBound = new Date('2022-09-01');
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list`)
+            .set('Authorization', 'Bearer validtoken')
+            .set('Range', '-20220901');
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(res.status).toBe(206);
+        const jobs: Job[] = res.body;
+        jobs.forEach((j:Job) => {
+            const jDate = new Date(j.start);
+            expect(isBefore(jDate, endBound) || isEqual(jDate, endBound)).toBeTruthy();
+        });
+    });
+
+    it('Correctly filters with both start and end', async () => {
+        const startBound = new Date('2020-09-01');
+        const endBound = new Date('2022-09-01');
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list`)
+            .set('Authorization', 'Bearer validtoken')
+            .set('Range', '20200901-20220901');
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(res.status).toBe(206);
+        const jobs: Job[] = res.body;
+        jobs.forEach((j:Job) => {
+            const jDate = new Date(j.start);
+            expect((isBefore(jDate, endBound) && isAfter(jDate, startBound)) || isEqual(jDate, endBound)).toBeTruthy();
+        });
+    });
 });
 
 describe('GET /job/:jobId', () => {
@@ -142,6 +225,7 @@ describe('GET /job/:jobId', () => {
             jobId: 1,
             member: 'Isobel Jennery',
             event: 'The First Race',
+            eventId: 1,
             start: '2020-02-01T00:00:00.000Z',
             end: '2020-02-01T00:00:00.000Z',
             title: 'Practice Flagger 6 - Double Double',

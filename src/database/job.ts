@@ -50,7 +50,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         let dynamicSql = ' WHERE ';
         let counter = 0;
         if (typeof filters.assignmentStatus !== 'undefined') {
-            if (filters.assignmentStatus === 1) {
+            if (filters.assignmentStatus) {
                 dynamicSql += 'member IS NOT NULL AND ';
             } else {
                 dynamicSql += 'member IS NULL AND ';
@@ -73,11 +73,11 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
             values[counter++] = filters.eventId;
         }
         if (typeof filters.startDate !== 'undefined') {
-            dynamicSql += 'job_date >= ? AND ';
+            dynamicSql += 'start >= ? AND ';
             values[counter++] = filters.startDate;
         }
         if (typeof filters.endDate !== 'undefined') {
-            dynamicSql += 'job_date <= ? AND ';
+            dynamicSql += 'start <= ? AND ';
             values[counter++] = filters.endDate;
         }
         sql = GET_JOB_LIST_SQL + dynamicSql.slice(0, -4); // Slice the trailing AND

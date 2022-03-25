@@ -105,41 +105,86 @@ describe('GET /job/list', () => {
         expect(jobs[1]).toEqual(jobList[1]);
     });
 
-    // it('Correctly filters with just start', async () => {
-    //     const res = await supertestServer
-    //         .get(`${TAG_ROOT}/list`)
-    //         .set('Authorization', 'Bearer validtoken')
-    //         .set('Range', '20220901-');
-    //     expect(mockGetJobList).toHaveBeenCalled();
-    //     expect(res.status).toBe(206);
-    //     const jobs: Job[] = res.body;
-    //     expect(jobs.length).toBe(1);
-    //     expect(jobs[0]).toEqual(jobList[2]);
-    // });
+    it('Correctly filters with just start', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list`)
+            .set('Authorization', 'Bearer validtoken')
+            .set('Range', '20220901-');
+        expect(mockGetJobList).toHaveBeenCalled();
+        expect(res.status).toBe(206);
+        const jobs: Job[] = res.body;
+        expect(jobs.length).toBe(2);
+        expect(jobs[0]).toEqual(jobList[2]);
+    });
 
-    // it('Correctly filters with just end', async () => {
-    //     const res = await supertestServer
-    //         .get(`${TAG_ROOT}/list`)
-    //         .set('Authorization', 'Bearer validtoken')
-    //         .set('Range', '-20220720');
-    //     expect(mockGetJobList).toHaveBeenCalled();
-    //     expect(res.status).toBe(206);
-    //     const jobs: Job[] = res.body;
-    //     expect(jobs.length).toBe(1);
-    //     expect(jobs[0]).toEqual(jobList[0]);
-    // });
+    it('Correctly filters with just end', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list`)
+            .set('Authorization', 'Bearer validtoken')
+            .set('Range', '-20220720');
+        expect(mockGetJobList).toHaveBeenCalled();
+        expect(res.status).toBe(206);
+        const jobs: Job[] = res.body;
+        expect(jobs.length).toBe(1);
+        expect(jobs[0]).toEqual(jobList[0]);
+    });
 
-    // it('Correctly filters with both start and end', async () => {
-    //     const res = await supertestServer
-    //         .get(`${TAG_ROOT}/list`)
-    //         .set('Authorization', 'Bearer validtoken')
-    //         .set('Range', '20220801-20220831');
-    //     expect(mockGetJobList).toHaveBeenCalled();
-    //     expect(res.status).toBe(206);
-    //     const jobs: Job[] = res.body;
-    //     expect(jobs.length).toBe(1);
-    //     expect(jobs[0]).toEqual(jobList[1]);
-    // });
+    it('Correctly filters with both start and end', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list`)
+            .set('Authorization', 'Bearer validtoken')
+            .set('Range', '20220801-20220831');
+        expect(mockGetJobList).toHaveBeenCalled();
+        expect(res.status).toBe(206);
+        const jobs: Job[] = res.body;
+        expect(jobs.length).toBe(1);
+        expect(jobs[0]).toEqual(jobList[1]);
+    });
+
+    it('returns 400 for illegal assignment status', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?assignmentStatus=notastatus`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockGetJobList).not.toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('returns 400 for illegal verification status', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?verificationStatus=notastatus`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockGetJobList).not.toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('returns 400 for illegal memberId', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?memberID=notanumber`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockGetJobList).not.toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('returns 400 for illegal eventId', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?eventID=notanumber`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockGetJobList).not.toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
+
+    it('returns 400 for illegal membershipId', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?membershipID=notanumber`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockGetJobList).not.toHaveBeenCalled();
+        expect(res.status).toBe(400);
+        expect(res.body.reason).toBe('bad request');
+    });
 
     it('returns 400 for illegal date format', async () => {
         const res = await supertestServer
