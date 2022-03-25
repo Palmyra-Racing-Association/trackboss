@@ -26,7 +26,6 @@ api.use((req, res, next) => {
 });
 api.use(bodyParser.json());
 
-
 api.get('/me', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response;
@@ -38,7 +37,6 @@ api.get('/me', async (req: Request, res: Response) => {
         try {
             const payload = await verify(headerCheck.token);
             const uuid = payload['cognito:username'];
-            console.log(payload);
             try {
                 response = await getMember(uuid);
                 res.status(200);
