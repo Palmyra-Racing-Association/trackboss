@@ -7,11 +7,16 @@ IN _end_date DATETIME,
 IN _event_name VARCHAR(255),
 IN _event_description VARCHAR(255)
 )
-BEGIN
+sp: BEGIN
 	SELECT start_date, end_date, event_name, event_description, event_type_id
     INTO @cur_start_date, @cur_end_date, @cur_event_name, @cur_event_description, @cur_event_type_id
     FROM event e
     WHERE event_id = _event_id;
+
+	-- if the event was not found, don't continue
+	IF(ROW_COUNT() = 0) THEN
+		LEAVE sp;
+	END IF;
 	
 	SELECT TIMEDIFF(IFNULL(_start_date, @cur_start_date), @cur_start_date) INTO @date_dif;
 	
