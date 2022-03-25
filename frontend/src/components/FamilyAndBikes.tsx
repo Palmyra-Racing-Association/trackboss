@@ -10,7 +10,7 @@ import {
     ListItem,
     useDisclosure,
 } from '@chakra-ui/react';
-import { GetMemberListResponse, Member, PatchMemberRequest } from '../../../src/typedefs/member';
+import { GetMemberListResponse, Member } from '../../../src/typedefs/member';
 import { Bike, GetBikeListResponse } from '../../../src/typedefs/bike';
 import DeleteAlert from './DeleteAlert';
 import EditBikesModal from './EditBikeModal';
@@ -18,6 +18,7 @@ import AddFamilyModal from './AddFamilyModal';
 import AddBikeModal from './AddBikeModal';
 import { updateMember } from '../controller/member';
 import { UserContext } from '../contexts/UserContext';
+import { createBike, deleteBike, updateBike } from '../controller/bike';
 
 interface cardProps {
     memberFamily: GetMemberListResponse,
@@ -42,42 +43,36 @@ export default function GeneralInfo(props: cardProps) {
     const [bikeToEdit, setBikeToEdit] = useState<Bike>();
 
     async function removeFamilyMember() {
-        if (memberToRemove && state.user) {
-            await updateMember( state.token, memberToRemove.memberId, {membershipId: undefined, modifiedBy: state.user.memberId})
-            const newMemberFamily = (memberFamily as Member[]).filter((m) => m.memberId !== memberToRemove.memberId);
-            setMemberFamily(newMemberFamily);
+        if (memberToRemove !== undefined && state.user !== undefined) {
+            await updateMember(
+                state.token,
+                memberToRemove.memberId,
+                { active: false, modifiedBy: state.user.memberId },
+            );
         }
     }
 
-    function removeBike() {
-        // call controller and await response, if successful...
-        if (bikeToRemove) {
-            const newMemberBikes = (memberBikes as Bike[]).filter((b) => b.bikeId !== bikeToRemove?.bikeId);
-            setMemberBikes(newMemberBikes);
+    async function removeBike() {
+        if (bikeToRemove !== undefined && state.user !== undefined) {
+            await deleteBike(state.token, bikeToRemove.bikeId);
         }
     }
 
-    function editBike(editedBike: Bike, bikeYear: string, bikeMake: string, bikeModel: string) {
-        // call controller and await response, if successful...
-        const index = (memberBikes as Bike[]).indexOf(editedBike);
-        (memberBikes as Bike[])[index].year = bikeYear;
-        (memberBikes as Bike[])[index].make = bikeMake;
-        (memberBikes as Bike[])[index].model = bikeModel;
-        setMemberBikes(memberBikes);
+    async function editBike(editedBike: Bike, bikeYear: string, bikeMake: string, bikeModel: string) {
+        await updateBike(
+            state.token,
+            editedBike.bikeId,
+            { year: bikeYear, make: bikeMake, model: bikeModel },
+        );
     }
 
-    function addBike(year: string, make: string, model: string) {
-        // call controller to add bike
-        // const newBike = addBike(memberShipId, year, make, model)
-        // if successful
-        const newBike: Bike = {
-            bikeId: 3,
-            year,
-            make,
-            model,
-            membershipAdmin: 'me',
-        };
-        setMemberBikes((memberBikes as Bike[]).concat(newBike));
+    async function addBike(newYear: string, newMake: string, newModel: string) {
+        if (state.user !== undefined) {
+            await createBike(
+                state.token,
+                { year: newYear, make: newMake, model: newModel, membershipId: state.user.membershipId },
+            );
+        }
     }
 
     useEffect(() => {

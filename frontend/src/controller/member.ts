@@ -60,9 +60,10 @@ export async function updateMember(
     memberID: number,
     memberData: PatchMemberRequest,
 ): Promise<PatchMemberResponse> {
+
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/${memberID}`, {
         method: 'PATCH',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(memberData),
     });

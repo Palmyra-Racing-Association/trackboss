@@ -163,9 +163,9 @@ export async function getMember(searchParam: string): Promise<Member> {
 }
 
 export async function patchMember(id: string, req: PatchMemberRequest): Promise<void> {
-    if (_.isEmpty(req)) { // empty request
+   /* if (_.isEmpty(req)) { // empty request
         throw new Error('user input error');
-    }
+    }*/
     const values = [
         id,
         req.membershipId,

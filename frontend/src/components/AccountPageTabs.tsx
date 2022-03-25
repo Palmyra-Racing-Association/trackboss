@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useContext, useEffect } from 'react';
 import {
     Button,
@@ -17,12 +16,13 @@ import GeneralInfo from './GeneralInfo';
 import FamilyAndBikes from './FamilyAndBikes';
 import { GetMemberListResponse, Member } from '../../../src/typedefs/member';
 import WorkPointsHistory from './WorkPointsHistory';
-import { Bike, GetBikeListResponse } from '../../../src/typedefs/bike';
+import { GetBikeListResponse } from '../../../src/typedefs/bike';
 import { getFamilyMembers } from '../controller/member';
 import { getBikeList } from '../controller/bike';
 
 async function getMemberFamilyLocal(token: string, membershipId: number) {
-    const family = await getFamilyMembers(token, membershipId);
+    let family = await getFamilyMembers(token, membershipId);
+    family = (family as Member[]).filter((m) => m.active);
     return family;
 }
 
@@ -38,7 +38,7 @@ export default function AccountPageTabs() {
     const [memberBikes, setMemberBikes] = useState<GetBikeListResponse>([]);
     useEffect(() => {
         async function setMemberData() {
-            if(state.user) {
+            if (state.user) {
                 const family: GetMemberListResponse = await getMemberFamilyLocal(state.token, state.user.membershipId);
                 const bikes: GetBikeListResponse = await getMemberBikesLocal(state.token, state.user.membershipId);
                 setMemberFamily(family);
