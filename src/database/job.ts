@@ -15,6 +15,9 @@ export const PATCH_JOB_SQL = 'CALL sp_patch_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 export const DELETE_JOB_SQL = 'DELETE FROM job WHERE job_id = ?';
 
 export async function insertJob(req: PostNewJobRequest): Promise<number> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [req.memberId, req.eventId, req.jobTypeId, req.jobStartDate, req.jobEndDate, req.verified,
         req.verifiedDate, req.pointsAwarded, req.paid, req.paidDate, req.modifiedBy];
 
@@ -47,7 +50,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         let dynamicSql = ' WHERE ';
         let counter = 0;
         if (typeof filters.assignmentStatus !== 'undefined') {
-            if (filters.assignmentStatus === 1) {
+            if (filters.assignmentStatus) {
                 dynamicSql += 'member IS NOT NULL AND ';
             } else {
                 dynamicSql += 'member IS NULL AND ';
@@ -70,11 +73,11 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
             values[counter++] = filters.eventId;
         }
         if (typeof filters.startDate !== 'undefined') {
-            dynamicSql += 'job_date >= ? AND ';
+            dynamicSql += 'start >= ? AND ';
             values[counter++] = filters.startDate;
         }
         if (typeof filters.endDate !== 'undefined') {
-            dynamicSql += 'job_date <= ? AND ';
+            dynamicSql += 'start <= ? AND ';
             values[counter++] = filters.endDate;
         }
         sql = GET_JOB_LIST_SQL + dynamicSql.slice(0, -4); // Slice the trailing AND
@@ -143,6 +146,9 @@ export async function getJob(id: number): Promise<Job> {
 }
 
 export async function patchJob(id: number, req: PatchJobRequest): Promise<void> {
+    if (_.isEmpty(req)) {
+        throw new Error('user input error');
+    }
     const values = [id, req.memberId, req.eventId, req.jobTypeId, req.jobStartDate, req.jobEndDate,
         req.pointsAwarded, req.verified, req.paid, req.modifiedBy];
 

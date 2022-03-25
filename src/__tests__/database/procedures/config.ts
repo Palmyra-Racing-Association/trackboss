@@ -10,6 +10,7 @@ const config = {
     waitForConnections: true,
     connectionLimit: Number(process.env.MYSQL_CONN_LIMIT) || 10,
     queueLimit: Number(process.env.MYSQL_QUEUE_LIMIT) || 0,
+    timezone: '+00:00',
 };
 
 export default config;

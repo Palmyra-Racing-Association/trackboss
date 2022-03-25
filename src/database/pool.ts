@@ -33,6 +33,7 @@ export function getPool(): Pool {
             password: MYSQL_PASS,
             database: MYSQL_DB,
             waitForConnections: true,
+            timezone: '+00:00',
             connectionLimit,
             queueLimit,
         });
