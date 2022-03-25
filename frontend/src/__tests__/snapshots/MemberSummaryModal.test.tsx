@@ -10,17 +10,17 @@ function onClose() {
 }
 
 const member: Member = {
+    memberId: 1,
     memberTypeId: 1,
     membershipId: 1,
-    memberId: 1,
-    membershipAdmin: 'true',
+    firstName: 'Squeak',
+    lastName: 'Trainywhel',
+    membershipAdmin: 'Squeak Trainywhel',
+    uuid: '',
     active: true,
     memberType: 'admin',
-    firstName: 'test',
-    lastName: 'member',
     phoneNumber: '1234',
     email: 'user@example.com',
-    uuid: '',
     occupation: 'secretary',
     birthdate: '',
     dateJoined: '',

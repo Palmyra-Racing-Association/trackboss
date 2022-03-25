@@ -13,8 +13,16 @@ function isThreshold(res: WorkPointThreshold | ErrorResponse): res is WorkPointT
     return (res as WorkPointThreshold) !== undefined;
 }
 
-export async function getYearlyThreshold(token: string): Promise<GetWorkPointThresholdResponse> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/yearlyWorkPointThreshold`, {
+export async function getYearlyThreshold(token: string, year?: number): Promise<GetWorkPointThresholdResponse> {
+    if (typeof year === 'undefined') {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/yearlyWorkPointThreshold`, {
+            method: 'GET',
+            mode: 'cors',
+            headers: generateHeaders(token),
+        });
+        return response.json();
+    }
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/yearlyWorkPointThreshold?year=${year}`, {
         method: 'GET',
         mode: 'cors',
         headers: generateHeaders(token),

@@ -46,7 +46,7 @@ export default function AccountPageTabs() {
             }
         }
         setMemberData();
-    }, [memberFamily, memberBikes]);
+    }, []);
 
     return (
         <Grid

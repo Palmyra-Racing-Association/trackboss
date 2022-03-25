@@ -67,7 +67,7 @@ describe('GET /workPoints/byMember/:id', () => {
     });
 
     it('Returns current-year work points for member', async () => {
-        const memberId = 1;
+        const memberId = 17;
         const expWorkPoints = { total: 3 };
         const res = await supertestServer
             .get(`${TAG_ROOT}/byMember/${memberId}`)
@@ -143,7 +143,7 @@ describe('GET /workPoints/byMembership/:id', () => {
 
     it('Returns current-year work points for membership', async () => {
         const membershipId = 46;
-        const expWorkPoints = { total: 8 };
+        const expWorkPoints = { total: 6 };
         const res = await supertestServer
             .get(`${TAG_ROOT}/byMembership/${membershipId}`)
             .set('Authorization', 'Bearer validtoken');
@@ -155,7 +155,7 @@ describe('GET /workPoints/byMembership/:id', () => {
     it('Returns work points for membership from specific year', async () => {
         const membershipId = 3;
         const year = 2020;
-        const expWorkPoints = { total: 7 };
+        const expWorkPoints = { total: 11 };
         const res = await supertestServer
             .get(`${TAG_ROOT}/byMembership/${membershipId}`)
             .query({ year })
