@@ -134,8 +134,6 @@ export async function patchEvent(id: number, req: PatchEventRequest): Promise<vo
         throw new Error('internal server error');
     }
 
-    console.log(result);
-    
     if (result.affectedRows < 1) {
         logger.info('this is happening');
         throw new Error('not found');
