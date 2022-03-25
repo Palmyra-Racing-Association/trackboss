@@ -8,7 +8,7 @@ CALL sp_event_job_generation('2022-01-01T08:00:00', '2022-01-01T16:00:00', 1, '2
 ###
 
 # Assign members to the jobs
-update job set member_id = (job_id % 101 + 1); -- simple way to assign randomly members to jobs ( 101 is how many members we have )
+update job set member_id = (job_id % 102 + 1); -- simple way to assign randomly members to jobs ( 101 is how many members we have )
 
 # THIS TO VERIFY 80% of jobs, giving 1-1 points, not verifying paid laborers
 update job j
