@@ -6,6 +6,7 @@ export type Member = {
     membershipAdmin: string,
     uuid: string,
     active: boolean,
+    memberTypeId: number,
     memberType: string,
     firstName: string,
     lastName: string,

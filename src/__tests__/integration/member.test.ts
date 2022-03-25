@@ -141,6 +141,7 @@ describe('GET /member/:memberId', () => {
         const member: Member = res.body;
         expect(member.memberId).toBe(3);
         expect(member.membershipAdmin).toBe('Perry Spencley');
+        expect(member.memberTypeId).toBe(3);
         expect(member.memberType).toBe('Member');
         expect(member.firstName).toBe('Grace');
         expect(member.lastName).toBe('Lovekin');

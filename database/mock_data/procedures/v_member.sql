@@ -8,6 +8,7 @@ CREATE VIEW `v_member` AS
         CONCAT(ma.first_name, ' ', ma.last_name) AS membership_admin,
         m.uuid,
         m.active,
+        mt.member_type_id,
         mt.type as member_type,
         m.phone_number,
         m.occupation,
