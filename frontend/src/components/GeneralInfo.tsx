@@ -40,16 +40,15 @@ export default function GeneralInfo(props: cardProps) {
         if (nameArray && state.user) {
             const first = nameArray[0];
             const last = nameArray[1];
-
             const patch: PatchMemberRequest = {
                 membershipId: memberPatchInfo.membershipId,
                 uuid: memberPatchInfo.uuid,
                 memberTypeId: memberPatchInfo.memberTypeId,
-                firstName: first,
-                lastName: last,
-                phoneNumber: phone,
+                firstName: first || memberPatchInfo.firstName,
+                lastName: last || memberPatchInfo.lastName,
+                phoneNumber: phone || memberPatchInfo.phoneNumber,
                 occupation: memberPatchInfo.occupation,
-                email: phone,
+                email: email || memberPatchInfo.email,
                 birthdate: memberPatchInfo.birthdate,
                 dateJoined: memberPatchInfo.dateJoined,
                 modifiedBy: memberPatchInfo.memberId,
@@ -60,7 +59,7 @@ export default function GeneralInfo(props: cardProps) {
                 setError(res.reason);
             } else {
                 update({ loggedIn: true, token: state.token, user: res, storedUser: undefined });
-                return res;
+                setMemberInfo(res);
             }
         }
         return undefined;
@@ -75,8 +74,8 @@ export default function GeneralInfo(props: cardProps) {
 
     return (
         <VStack mt={25}>
-            { error !== '' && ({ error }) }
             <HStack>
+                { error !== '' && ({ error })}
                 <Heading>General Information</Heading>
                 {
                     props.user.memberType === 'Admin' && (
@@ -141,7 +140,7 @@ export default function GeneralInfo(props: cardProps) {
                                         onClick={
                                             async () => {
                                                 // eslint-disable-next-line max-len
-                                                setMemberInfo(await handlePatchMemberContactInfo(memberInfo, editedName, editedEmail, editedPhone));
+                                                await handlePatchMemberContactInfo(memberInfo, editedName, editedEmail, editedPhone);
                                                 setEditingMemberInfo(false);
                                             }
                                         }
@@ -150,7 +149,7 @@ export default function GeneralInfo(props: cardProps) {
                                     </Button>
                                 </VStack>
                             ) : (
-                                <VStack ml="-80px" align="left">
+                                <VStack ml="-70px" align="left">
                                     <Text fontSize="3xl">
                                         {`${memberInfo.firstName} ${memberInfo.lastName}`}
                                     </Text>
