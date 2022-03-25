@@ -294,6 +294,7 @@ describe('PATCH /event/:eventId', () => {
     it('returns 404 when bad id is specified', async () => {
         const res = await supertestServer.patch(`${TAG_ROOT}/17`).set('Authorization', 'Bearer admin');
         expect(mockPatchEvent).toHaveBeenCalled();
+        expect(mockGetEvent).not.toHaveBeenCalled();
         expect(res.status).toBe(404);
         expect(res.body.reason).toBe('not found');
     });
