@@ -305,7 +305,7 @@ describe('POST /job/new', () => {
             .send({
                 jobTypeId: 2,
                 eventId: 2,
-                startDate: '2023-01-01 08:00:00',
+                jobStartDate: '2023-01-01 08:00:00',
                 modifiedBy: 1,
                 verified: false,
                 paid: false,
@@ -314,6 +314,8 @@ describe('POST /job/new', () => {
         expect(res.status).toBe(201);
         const job: Job = res.body;
         expect(job.jobId).toBe(395);
+        // verify that the time zone configuration is working properly
+        expect(job.start).toBe('2023-01-01T08:00:00.000Z');
     });
 });
 
