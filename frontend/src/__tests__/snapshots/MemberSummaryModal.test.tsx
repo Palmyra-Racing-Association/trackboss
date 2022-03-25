@@ -17,6 +17,7 @@ function onClose() {
 const member: Member = {
     memberId: 1,
     membershipId: 1,
+    memberTypeId: 1,
     firstName: 'Squeak',
     lastName: 'Trainywhel',
     membershipAdmin: 'Squeak Trainywhel',
