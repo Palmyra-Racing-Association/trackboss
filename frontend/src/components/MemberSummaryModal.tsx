@@ -1,6 +1,8 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable max-len */
-import React, { useContext, useEffect, useState } from 'react';
+// this file goes very deep into the DOM tree and has very long lines as a result, although most of the lines are composed of spacing
+// disabling max-len because there really isn't another super reasonable way to handle this
+import _ from 'lodash';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -25,14 +27,18 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
-import { Member } from '../../../src/typedefs/member';
+import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
-import memberHandlers from '../mocks/memberHandlers';
+import { getMembersByMembership, updateMember } from '../controller/member';
+import { getBikeList } from '../controller/bike';
+import { BoardMemberType } from '../../../src/typedefs/boardMemberType';
+import { createBoardMember, getBoardRoles, updateBoardMember } from '../controller/boardMember';
 
 interface modalProps {
     isOpen: boolean,
     onClose: () => void,
     memberInfo: Member,
+<<<<<<< HEAD
     memberFamily: Member[],
     memberBikes: Bike[],
     // admin: boolean, // TODO: this will come from state
@@ -94,6 +100,8 @@ async function handlePatchMemberContactInfo(
     };
 
     return updatedMember;
+=======
+>>>>>>> origin/main
 }
 
 export default function MemberSummaryModal(props: modalProps) {
@@ -107,6 +115,7 @@ export default function MemberSummaryModal(props: modalProps) {
     const { state, update } = useContext(UserContext);
 
     const [selectedMember, setSelectedMember] = useState<Member>();
+    const [family, setFamily] = useState<Member[]>();
     const [bikes, setBikes] = useState<Bike[]>();
 
     const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
@@ -118,20 +127,139 @@ export default function MemberSummaryModal(props: modalProps) {
 
     const [editedMemberType, setEditedMemberType] = useState<string>('');
     const [editedBoardMember, setEditedBoardMember] = useState<string>('');
+    const [boardRoles, setBoardRoles] = useState<BoardMemberType[]>([]);
+    const [isBoard, setIsBoard] = useState<boolean>(false);
 
     const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
     const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
     const handleEditedPhoneChange = (event: { target: { value: any; }; }) => setEditedPhone(event.target.value);
     const handleEditedBoardMember = (event: { target: { value: any; }; }) => setEditedBoardMember(event.target.value);
 
+    const [error, setError] = useState<string>('');
+
+    const deactivateMember = useCallback(async () => {
+        const response = await updateMember(state.token, props.memberInfo.memberId, { active: false, modifiedBy: state.user!.memberId });
+        if ('reason' in response) {
+            return false;
+        }
+        return true;
+    }, [state, props.memberInfo]);
+
+    const handlePatchMemberType = useCallback(async () => {
+        let memberTypeId: number;
+        if (editedMemberType === 'board') {
+            if (isBoard) {
+                const response = await updateBoardMember(
+                    state.token,
+                    props.memberInfo.boardMemberData!.boardId,
+                    { boardMemberTitleId: Number(editedBoardMember) },
+                );
+                if ('reason' in response) {
+                    setError(`error updating board member data: ${response.reason}`);
+                }
+            } else {
+                const response = await createBoardMember(
+                    state.token,
+                    { boardMemberTitleId: Number(editedBoardMember), year: new Date().getFullYear(), memberId: props.memberInfo.memberId },
+                );
+                if ('reason' in response) {
+                    setError(`error updating board member data: ${response.reason}`);
+                }
+            }
+            memberTypeId = 1;
+        } else if (editedMemberType === 'member') {
+            memberTypeId = 3;
+        } else if (editedMemberType === 'admin') {
+            memberTypeId = 1;
+        } else {
+            return false;
+        }
+        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, { memberTypeId, modifiedBy: state.user!.memberId });
+        if ('reason' in updatedMember) {
+            return false;
+        }
+        return true;
+    }, [state, props.memberInfo, editedBoardMember, editedMemberType]);
+
+    const handlePatchMemberContactInfo = useCallback(async (
+        name: string,
+        email: string,
+        phone: string,
+    ) => {
+        let request: PatchMemberRequest = { modifiedBy: state.user!.memberId };
+        if (name === '') {
+            request = {
+                firstName: props.memberInfo.firstName,
+                lastName: props.memberInfo.lastName,
+                ...request,
+            };
+        } else {
+            const nameSplit = name?.split(' ');
+            request = {
+                firstName: nameSplit[0],
+                lastName: nameSplit[1],
+                ...request,
+            };
+        }
+        if (email === '') {
+            request = {
+                email: props.memberInfo.email,
+                ...request,
+            };
+        } else {
+            request = {
+                email,
+                ...request,
+            };
+        }
+        if (phone === '') {
+            request = {
+                phoneNumber: props.memberInfo.phoneNumber,
+                ...request,
+            };
+        } else {
+            request = {
+                phoneNumber: phone,
+                ...request,
+            };
+        }
+
+        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, request);
+        if ('reason' in updatedMember) {
+            setError(`error patching contact info: ${updatedMember.reason}`);
+            return props.memberInfo;
+        }
+        return updatedMember;
+    }, [state, props.memberInfo]);
+
     useEffect(() => {
         async function setModalData() {
             setSelectedMember(props.memberInfo);
             setEditedMemberType(props.memberInfo.memberType);
-            setBikes(props.memberBikes);
+            const familyReponse = await getMembersByMembership(state.token, props.memberInfo.membershipId);
+            setFamily(familyReponse);
+            const bikeResponse = await getBikeList(state.token, props.memberInfo.membershipId);
+            if ('reason' in bikeResponse) {
+                setError(`error fetching bikes: ${bikeResponse.reason}`);
+            } else {
+                setBikes(bikeResponse);
+            }
+            if (state.user?.memberType === 'Admin') {
+                const boardRoleData = await getBoardRoles(state.token);
+                if ('reason' in boardRoleData) {
+                    setError(`error loading board roles: ${boardRoleData.reason}`);
+                } else {
+                    setBoardRoles(boardRoleData);
+                }
+            }
+            if (props.memberInfo.memberType.includes('Board Member')) {
+                setIsBoard(true);
+            } else {
+                setIsBoard(false);
+            }
         }
         setModalData();
-    }, [props.memberInfo, props.memberInfo.memberType]);
+    }, [props.memberInfo]);
 
     return (
         <Modal
@@ -146,6 +274,7 @@ export default function MemberSummaryModal(props: modalProps) {
                 <Divider />
                 <ModalCloseButton />
                 <ModalBody>
+                    { error !== '' && ({ error }) }
                     {
                         selectedMember && bikes && (
                             <SimpleGrid columns={2} spacing={4}>
@@ -207,7 +336,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         color="green"
                                                         onClick={
                                                             async () => {
-                                                                setSelectedMember(await handlePatchMemberContactInfo(selectedMember, editedName, editedEmail, editedPhone));
+                                                                setSelectedMember(await handlePatchMemberContactInfo(editedName, editedEmail, editedPhone));
                                                                 setEditingMemberInfo(false);
                                                                 setEditingMemberRole(false);
                                                             }
@@ -233,7 +362,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <Text textAlign="left" fontSize="1xl" fontWeight="bold">Members</Text>
                                     <UnorderedList pl={10}>
                                         {
-                                            props.memberFamily.map((member) => (
+                                            family && _.map(family, (member) => (
 
                                                 member.memberId === selectedMember.memberId ? <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
                                                     : <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName}`}</ListItem>
@@ -243,7 +372,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <Text textAlign="left" fontSize="1xl" fontWeight="bold">Bikes</Text>
                                     <UnorderedList pl={10}>
                                         {
-                                            props.memberBikes.map((bike) => (
+                                            bikes.map((bike) => (
                                                 <ListItem key={bike.bikeId}>{`${bike.year}, ${bike.make} ${bike.model}`}</ListItem>
                                             ))
                                         }
@@ -285,40 +414,40 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 <ButtonGroup size="sm" isAttached variant="outline">
                                                     <Button
                                                         onClick={
-                                                            async () => {
+                                                            () => {
                                                                 if (editedMemberType !== 'member') {
-                                                                    await setEditedMemberType('member');
+                                                                    setEditedMemberType('member');
                                                                 }
                                                             }
                                                         }
                                                         mr="-px"
-                                                        backgroundColor={editedMemberType === 'member' ? 'blue' : ''}
+                                                        backgroundColor={(editingMemberRole && editedMemberType === 'member') || (!editingMemberRole && props.memberInfo.memberType === 'Member') ? 'blue' : ''}
                                                     >
                                                         Member
                                                     </Button>
                                                     <Button
                                                         onClick={
-                                                            async () => {
+                                                            () => {
                                                                 if (editedMemberType !== 'admin') {
-                                                                    await setEditedMemberType('admin');
+                                                                    setEditedMemberType('admin');
                                                                 }
                                                             }
                                                         }
                                                         mr="-px"
-                                                        backgroundColor={editedMemberType === 'admin' ? 'blue' : ''}
+                                                        backgroundColor={(editingMemberRole && editedMemberType === 'admin') || (!editingMemberRole && props.memberInfo.memberType === 'Admin') ? 'blue' : ''}
                                                     >
                                                         Admin
                                                     </Button>
                                                     <Button
                                                         onClick={
-                                                            async () => {
+                                                            () => {
                                                                 if (editedMemberType !== 'board') {
-                                                                    await setEditedMemberType('board');
+                                                                    setEditedMemberType('board');
                                                                 }
                                                             }
                                                         }
                                                         mr="-px"
-                                                        backgroundColor={editedMemberType === 'board' ? 'blue' : ''}
+                                                        backgroundColor={(editingMemberRole && editedMemberType === 'board') || (!editingMemberRole && isBoard) ? 'blue' : ''}
                                                     >
                                                         Board
                                                     </Button>
@@ -331,10 +460,11 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     value={editedBoardMember}
                                                     onChange={handleEditedBoardMember}
                                                 >
-                                                    {/* TODO: need the actual roles here */}
-                                                    <option value="president">president</option>
-                                                    <option value="vice president">vice president</option>
-                                                    <option value="secretary">secretary</option>
+                                                    {
+                                                        _.map(boardRoles, (role) => (
+                                                            <option value={role.boardTypeId} key={role.boardTypeId}>{role.title}</option>
+                                                        ))
+                                                    }
                                                 </Select>
                                                 <Button
                                                     ml={10}
@@ -343,12 +473,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     color="green"
                                                     onClick={
                                                         async () => {
-                                                            if (editedBoardMember !== '') {
-                                                                await handleNewBoardMember(selectedMember, editedBoardMember);
-                                                            }
-                                                            if (selectedMember.memberType !== editedMemberType) {
-                                                                await handlePatchMemberType(selectedMember, editedMemberType);
-                                                            }
+                                                            await handlePatchMemberType();
                                                             setEditingMemberRole(false);
                                                             setEditingMemberInfo(false);
                                                         }
@@ -416,7 +541,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         }
                                                         onClick={
                                                             async () => {
-                                                                const res = await deactivateMember(selectedMember);
+                                                                const res = await deactivateMember();
                                                                 toast({
                                                                     variant: 'subtle',
                                                                     title: res ? 'Member Deactivated.' : 'Action Failed',

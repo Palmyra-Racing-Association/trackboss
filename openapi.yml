@@ -117,12 +117,16 @@ components:
       properties:
         memberId:
           $ref: "#/components/schemas/number" # just the DB ID
+        membershipId:
+          $ref: "#/components/schemas/number"
         membershipAdmin:
           $ref: "#/components/schemas/string"
         uuid:
           $ref: "#/components/schemas/uuid"
         active:
           type: boolean
+        memberTypeId:
+          $ref: "#/components/schemas/number"
         memberType:
           $ref: "#/components/schemas/string"
         firstName:
@@ -260,6 +264,8 @@ components:
           $ref: "#/components/schemas/integer"
         member:
           $ref: "#/components/schemas/string"
+        eventId:
+          $ref: "#/components/schemas/number"
         event:
           $ref: "#/components/schemas/string"
         start:
@@ -1170,8 +1176,6 @@ paths:
                   $ref: "#/components/schemas/date-time"
                 endDate:
                   $ref: "#/components/schemas/date-time"
-                eventTypeId:
-                  $ref: "#/components/schemas/integer"
                 eventName:
                   $ref: "#/components/schemas/string"
                 eventDescription:

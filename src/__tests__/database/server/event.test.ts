@@ -1,7 +1,7 @@
 import 'dotenv/config';
-import { PatchEventRequest } from 'src/typedefs/event';
+import { PatchEventRequest } from '../../../typedefs/event';
 import { deleteEvent, getEvent, getEventList, insertEvent, patchEvent } from '../../../database/event';
-import { mockQuery } from './mockQuery';
+import { mockConnQuery, mockQuery } from './mockQuery';
 
 describe('insertEvent()', () => {
     it('Inserts a single event', async () => {
@@ -14,25 +14,31 @@ describe('insertEvent()', () => {
         };
         const result = await insertEvent(request);
         expect(result).toBe(321);
-        expect(mockQuery).toHaveBeenCalled();
+        expect(mockConnQuery).toHaveBeenCalled();
     });
 
     it('Throws for user error', async () => {
         const request = { startDate: '2020-05-05', eventName: '1452', eventTypeId: 2, eventDescription: 'test' };
         await expect(insertEvent(request)).rejects.toThrow('user input error');
-        expect(mockQuery).toHaveBeenCalled();
+        expect(mockConnQuery).toHaveBeenCalled();
     });
 
-    it('Throws for internal server error', async () => {
+    it('Throws for internal server error when registering', async () => {
         const request = { startDate: '2020-05-05', eventName: '-100', eventTypeId: 2, eventDescription: 'test' };
         await expect(insertEvent(request)).rejects.toThrow('internal server error');
-        expect(mockQuery).toHaveBeenCalled();
+        expect(mockConnQuery).toHaveBeenCalled();
+    });
+
+    it('Throws for internal server error when getting insert ID', async () => {
+        const request = { startDate: '2020-05-05', eventName: '-101', eventTypeId: 2, eventDescription: 'test' };
+        await expect(insertEvent(request)).rejects.toThrow('internal server error');
+        expect(mockConnQuery).toHaveBeenCalled();
     });
 
     it('Throws unreachable error without errno field', async () => {
         const request = { startDate: '2020-05-05', eventName: '-200', eventTypeId: 2, eventDescription: 'test' };
         await expect(insertEvent(request)).rejects.toThrow('this error should not happen');
-        expect(mockQuery).toHaveBeenCalled();
+        expect(mockConnQuery).toHaveBeenCalled();
     });
 });
 
@@ -144,27 +150,20 @@ describe('patchEvent()', () => {
         await testPatchWithObject({ eventDescription: 'testerville' });
     });
 
-    it('Throws for user error', async () => {
-        const eventId = 1451;
+    it('Throws for no input', async () => {
+        const eventId = 0;
         await expect(patchEvent(eventId, { })).rejects.toThrow('user input error');
-        expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for member not found', async () => {
         const eventId = 3000;
-        await expect(patchEvent(eventId, { })).rejects.toThrow('not found');
+        await expect(patchEvent(eventId, { eventName: 'test test' })).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 
     it('Throws for internal server error', async () => {
         const eventId = -100;
-        await expect(patchEvent(eventId, { })).rejects.toThrow('internal server error');
-        expect(mockQuery).toHaveBeenCalled();
-    });
-
-    it('Throws unreachable error without errno field', async () => {
-        const eventId = -200;
-        await expect(patchEvent(eventId, { })).rejects.toThrow('this error should not happen');
+        await expect(patchEvent(eventId, { eventName: 'test test' })).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
     });
 });

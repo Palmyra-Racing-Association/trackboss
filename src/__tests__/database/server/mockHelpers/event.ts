@@ -1,7 +1,21 @@
+/* eslint-disable no-await-in-loop */
+// This rule assumes I'm trying to do multiple async tasks at once, meaning
+// awaits in a loop would be inefficient. I do not want to do that here - I just
+// want to poll insertedEventIdRead, and I want to wait a bit between each
+// poll.
+
 /* eslint-disable no-throw-literal */
 // ESLint doesn't like `throw { errno: # }` since it's not throwing an error, but for a
 // mock, that is sufficient because we only care about 'errno' and it's easier than
 // instantiating an implementor of NodeJS.ErrnoException to get that field
+
+import { Mutex } from 'async-mutex';
+// eslint-disable-next-line import/no-unresolved
+import { setTimeout } from 'timers/promises';
+
+const insertedEventIdReadMutex = new Mutex();
+let insertedEventId: number;
+let insertedEventIdRead = true;
 
 export function getEventListResponse(values: string[]) {
     const eventList = [
@@ -57,18 +71,64 @@ export function getEventResponse(id: number) {
     }
 }
 
-export function insertEventResponse(eventName: string) {
+export async function insertEventResponse(eventName: string) {
     switch (eventName) {
-        case 'test event':
-            return Promise.resolve([{ insertId: 321 }]);
+        case 'test event': {
+            let release = await insertedEventIdReadMutex.acquire();
+            try {
+                while (!insertedEventIdRead) {
+                    release();
+                    await setTimeout(500);
+                    release = await insertedEventIdReadMutex.acquire();
+                }
+                insertedEventId = 321;
+                insertedEventIdRead = false;
+            } finally {
+                release();
+            }
+            return Promise.resolve();
+        }
         case '1452':
             throw { errno: 1452 };
         case '-100':
             throw { errno: 0 };
+        case '-101': {
+            let release = await insertedEventIdReadMutex.acquire();
+            try {
+                while (!insertedEventIdRead) {
+                    release();
+                    await setTimeout(500);
+                    release = await insertedEventIdReadMutex.acquire();
+                }
+                insertedEventId = -101;
+                insertedEventIdRead = false;
+            } finally {
+                release();
+            }
+            return Promise.resolve();
+        }
         case '-200':
             throw new Error('this error should not happen');
         default:
             return Promise.resolve();
+    }
+}
+
+export async function getInsertedEventIdResponse() {
+    let release = await insertedEventIdReadMutex.acquire();
+    try {
+        while (insertedEventIdRead) {
+            release();
+            await setTimeout(500);
+            release = await insertedEventIdReadMutex.acquire();
+        }
+        if (insertedEventId === -101) {
+            throw new Error('internal server error');
+        }
+        return Promise.resolve([[{ '@event_id': insertedEventId }]]);
+    } finally {
+        insertedEventIdRead = true;
+        release();
     }
 }
 
@@ -79,11 +139,7 @@ export function patchEventResponse(id: number) {
         case 3000:
             return Promise.resolve([{ affectedRows: 0 }]);
         case 1451:
-            throw { errno: 1451 };
-        case -100:
-            throw { errno: 0 };
-        case -200:
-            throw new Error('this error should not happen');
+            throw new Error('error message');
         default:
             return Promise.resolve();
     }

@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { PatchMemberRequest } from 'src/typedefs/member';
+import { PatchMemberRequest } from '../../../typedefs/member';
 import { getMember, getMemberList, getValidActors, insertMember, patchMember } from '../../../database/member';
 import { mockQuery } from './mockQuery';
 
@@ -107,6 +107,7 @@ describe('getMember()', () => {
             'membershipAdmin',
             'thisIsAUuid',
             true,
+            3,
             'Member',
             'Test',
             'Testerson',
@@ -129,20 +130,21 @@ describe('getMember()', () => {
         expect(result.membershipAdmin).toBe(origValues[1]);
         expect(result.uuid).toBe(origValues[2]);
         expect(result.active).toBe(origValues[3]);
-        expect(result.memberType).toBe(origValues[4]);
-        expect(result.firstName).toBe(origValues[5]);
-        expect(result.lastName).toBe(origValues[6]);
-        expect(result.phoneNumber).toBe(origValues[7]);
-        expect(result.occupation).toBe(origValues[8]);
-        expect(result.email).toBe(origValues[9]);
-        expect(result.birthdate).toBe(origValues[10]);
-        expect(result.dateJoined).toBe(origValues[11]);
-        expect(result.address).toBe(origValues[12]);
-        expect(result.city).toBe(origValues[13]);
-        expect(result.state).toBe(origValues[14]);
-        expect(result.zip).toBe(origValues[15]);
-        expect(result.lastModifiedDate).toBe(origValues[16]);
-        expect(result.lastModifiedBy).toBe(origValues[17]);
+        expect(result.memberTypeId).toBe(origValues[4]);
+        expect(result.memberType).toBe(origValues[5]);
+        expect(result.firstName).toBe(origValues[6]);
+        expect(result.lastName).toBe(origValues[7]);
+        expect(result.phoneNumber).toBe(origValues[8]);
+        expect(result.occupation).toBe(origValues[9]);
+        expect(result.email).toBe(origValues[10]);
+        expect(result.birthdate).toBe(origValues[11]);
+        expect(result.dateJoined).toBe(origValues[12]);
+        expect(result.address).toBe(origValues[13]);
+        expect(result.city).toBe(origValues[14]);
+        expect(result.state).toBe(origValues[15]);
+        expect(result.zip).toBe(origValues[16]);
+        expect(result.lastModifiedDate).toBe(origValues[17]);
+        expect(result.lastModifiedBy).toBe(origValues[18]);
     });
 
     it('Selects a single member by uuid', async () => {
@@ -152,6 +154,7 @@ describe('getMember()', () => {
             'membershipAdmin',
             Number(memberId),
             true,
+            3,
             'Member',
             'Test',
             'Testerson',
@@ -174,20 +177,21 @@ describe('getMember()', () => {
         expect(result.membershipAdmin).toBe(origValues[1]);
         expect(result.uuid).toBe(memberId);
         expect(result.active).toBe(origValues[3]);
-        expect(result.memberType).toBe(origValues[4]);
-        expect(result.firstName).toBe(origValues[5]);
-        expect(result.lastName).toBe(origValues[6]);
-        expect(result.phoneNumber).toBe(origValues[7]);
-        expect(result.occupation).toBe(origValues[8]);
-        expect(result.email).toBe(origValues[9]);
-        expect(result.birthdate).toBe(origValues[10]);
-        expect(result.dateJoined).toBe(origValues[11]);
-        expect(result.address).toBe(origValues[12]);
-        expect(result.city).toBe(origValues[13]);
-        expect(result.state).toBe(origValues[14]);
-        expect(result.zip).toBe(origValues[15]);
-        expect(result.lastModifiedDate).toBe(origValues[16]);
-        expect(result.lastModifiedBy).toBe(origValues[17]);
+        expect(result.memberTypeId).toBe(origValues[4]);
+        expect(result.memberType).toBe(origValues[5]);
+        expect(result.firstName).toBe(origValues[6]);
+        expect(result.lastName).toBe(origValues[7]);
+        expect(result.phoneNumber).toBe(origValues[8]);
+        expect(result.occupation).toBe(origValues[9]);
+        expect(result.email).toBe(origValues[10]);
+        expect(result.birthdate).toBe(origValues[11]);
+        expect(result.dateJoined).toBe(origValues[12]);
+        expect(result.address).toBe(origValues[13]);
+        expect(result.city).toBe(origValues[14]);
+        expect(result.state).toBe(origValues[15]);
+        expect(result.zip).toBe(origValues[16]);
+        expect(result.lastModifiedDate).toBe(origValues[17]);
+        expect(result.lastModifiedBy).toBe(origValues[18]);
     });
 
     it('Throws for member not found', async () => {

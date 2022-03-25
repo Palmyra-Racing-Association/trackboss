@@ -86,7 +86,7 @@ describe('sp_patch_event()', () => {
 
     it('Patches eventDescription field', async () => {
         const eventId = 1;
-        const origValues = [eventId, '2022-02-01 08:00:00', '2022-02-02 16:00:00', 'The First Race', 'test first race'];
+        const origValues = [eventId, '2020-02-01 08:00:00', '2020-02-02 16:00:00', 'The First Race', 'test first race'];
         const values = [eventId, null, null, null, 'test'];
         const [result] = await pool.query<OkPacket>(PATCH_SQL, values);
         expect(result.affectedRows).toBe(1);
@@ -141,7 +141,7 @@ describe('sp_event_job_generation()', () => {
         const endDate = '2000-10-15 15:00:00';
         const eventTypeId = 3;
 
-        const sql = 'CALL sp_event_job_generation(?, ?, ?, ?, ?)';
+        const sql = 'CALL sp_event_job_generation(?, ?, ?, ?, ?, @ignore)';
         const checkJobSql = 'SELECT COUNT(*) as cnt FROM job;';
         const checkEventSql = 'SELECT COUNT(*) as cnt FROM event;';
         const values = [date, endDate, eventTypeId, 'event job test', 'testing for event job'];

@@ -20,11 +20,58 @@ import { GetBikeListResponse } from '../../../src/typedefs/bike';
 import { getFamilyMembers } from '../controller/member';
 import { getBikeList } from '../controller/bike';
 
+<<<<<<< HEAD
 async function getMemberFamilyLocal(token: string, membershipId: number) {
     let family = await getFamilyMembers(token, membershipId);
     family = (family as Member[]).filter((m) => m.active);
     return family;
 }
+=======
+const memberFamily: Member[] = [
+    {
+        memberId: 1,
+        membershipId: 1,
+        membershipAdmin: 'true',
+        active: true,
+        memberType: 'admin',
+        firstName: 'John',
+        lastName: 'Smith',
+        phoneNumber: '1',
+        email: 'user@example.com',
+        uuid: '',
+        occupation: '',
+        birthdate: '',
+        dateJoined: 'August 12, 2006',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        lastModifiedDate: '',
+        lastModifiedBy: '',
+    },
+    {
+        memberId: 2,
+        membershipId: 2,
+        membershipAdmin: 'true',
+        active: true,
+        memberType: 'admin',
+        firstName: 'Jane',
+        lastName: 'Smith',
+        phoneNumber: '2',
+        email: 'user@example.com',
+        uuid: '',
+        occupation: '',
+        birthdate: '',
+        dateJoined: 'August 12, 2006',
+        address: '',
+        city: '',
+        state: '',
+        zip: '',
+        lastModifiedDate: '',
+        lastModifiedBy: '',
+    },
+];
+>>>>>>> origin/main
 
 async function getMemberBikesLocal(token: string, membershipId: number) {
     const bikes = await getBikeList(token, membershipId);
