@@ -126,18 +126,17 @@ describe('GET /job/list', () => {
         });
     });
 
-    // it('Correctly filters by membershipId', async () => {
-    //     const res = await supertestServer
-    //         .get(`${TAG_ROOT}/list?membershipID=19`)
-    //         .set('Authorization', 'Bearer validtoken');
-    //     expect(mockValidToken).toHaveBeenCalled();
-    //     expect(res.status).toBe(200);
-    //     const jobs: Job[] = res.body;
-    //     expect(jobs.length).toBeGreaterThan(0);
-    //     jobs.forEach((j: Job) => {
-    //         expect(j.member).toBe('Verile Camamile');
-    //     });
-    // }); // How can we test this one
+    it('Correctly filters by membershipId', async () => {
+        const res = await supertestServer
+            .get(`${TAG_ROOT}/list?membershipID=5`)
+            .set('Authorization', 'Bearer validtoken');
+        expect(mockValidToken).toHaveBeenCalled();
+        expect(res.status).toBe(200);
+        const jobs: Job[] = res.body;
+        jobs.forEach((j: Job) => {
+            expect(j.member === 'Marisa Baptie' || j.member === 'Seumas Count').toBeTruthy();
+        });
+    });
 
     it('Correctly filters by eventId', async () => {
         const res = await supertestServer
@@ -260,7 +259,7 @@ describe('POST /job/new', () => {
             .send({
                 jobTypeId: 200,
                 eventId: 200,
-                startDate: '2023-01-01 08:00:00',
+                jobStartDate: '2023-01-01 08:00:00',
                 modifiedBy: 1000,
                 verified: false,
                 paid: false,
@@ -290,7 +289,7 @@ describe('POST /job/new', () => {
             .send({
                 jobTypeId: 2,
                 eventId: 2,
-                startDate: '2023-01-01 08:00:00',
+                jobStartDate: '2023-01-01 08:00:00',
                 modifiedBy: 1,
             });
         expect(mockVerifyLaborer).toHaveBeenCalled();
