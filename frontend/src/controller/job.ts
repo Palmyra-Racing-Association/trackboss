@@ -13,7 +13,7 @@ import {
 export async function createJob(token: string, jobData: PostNewJobRequest): Promise<PostNewJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/new`, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(jobData),
     });
@@ -24,34 +24,24 @@ export async function getJobList(token: string, queryType?: string, filterType?:
     if (queryType && filterType) {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/list?${queryType}=${filterType}`, {
             method: 'GET',
-            mode: 'no-cors',
+            mode: 'cors',
             headers: generateHeaders(token),
         });
         return response.json();
     }
-    // // else
+    // else
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/list`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
 }
 
-export function getFormattedJobList() {
-    return [
-        {
-            start: 'Sept 12',
-            title: 'Track Watering',
-            pointsAwarded: '20',
-        },
-    ];
-}
-
 export async function getJob(token: string, jobID: number): Promise<GetJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
@@ -78,7 +68,7 @@ export async function getJobAttendees() {
 export async function updateJob(token: string, jobID: number, jobData: PatchJobRequest): Promise<PatchJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'PATCH',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(jobData),
     });
@@ -88,7 +78,7 @@ export async function updateJob(token: string, jobID: number, jobData: PatchJobR
 export async function cloneJob(token: string, jobID: number): Promise<PostCloneJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
@@ -97,7 +87,7 @@ export async function cloneJob(token: string, jobID: number): Promise<PostCloneJ
 export async function deleteJob(token: string, jobID: number): Promise<DeleteJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'DELETE',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();

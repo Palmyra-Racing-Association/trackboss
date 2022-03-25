@@ -10,8 +10,20 @@ function isWorkPoints(res: WorkPoints | ErrorResponse): res is WorkPoints {
     return (res as WorkPoints) !== undefined;
 }
 
-export async function getWorkPointsByMember(token: string, memberId: number): Promise<GetMemberWorkPointsResponse> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/byMember/${memberId}`, {
+export async function getWorkPointsByMember(
+    token: string,
+    memberId: number,
+    year?: number,
+): Promise<GetMemberWorkPointsResponse> {
+    if (typeof year === 'undefined') {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/byMember/${memberId}`, {
+            method: 'GET',
+            mode: 'cors',
+            headers: generateHeaders(token),
+        });
+        return response.json();
+    }
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/byMember/${memberId}?year=${year}`, {
         method: 'GET',
         mode: 'cors',
         headers: generateHeaders(token),
