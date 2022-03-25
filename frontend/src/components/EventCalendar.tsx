@@ -1,29 +1,23 @@
 import React, { useEffect, useState, useContext } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, Messages, momentLocalizer, View, ViewsProps } from 'react-big-calendar';
-import {
-    Text,
-    Flex,
-    Spacer,
-    useDisclosure,
-} from '@chakra-ui/react';
+import { Text, Flex, Spacer, useDisclosure, Box } from '@chakra-ui/react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
-import SignUpModal from './SignUpModal';
+import FamilySignUpModal from './FamilySignUpModal';
 import { UserContext } from '../contexts/UserContext';
-import { getJobAttendees } from '../controller/job';
+import { deleteJob, updateJob } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
-// import Event from '../../../src/typedefs/event';
+import { DeleteEventResponse, Event, PostNewEventRequest } from '../../../src/typedefs/event';
+import { Job, PatchJobRequest } from '../../../src/typedefs/job';
+import { createEvent, deleteEvent, getCalendarEventsAndJobs } from '../controller/event';
+import { ErrorResponse } from '../../../src/typedefs/errorResponse';
+import CreateEventModal from './CreateEventModal';
+import { GetMemberListResponse } from '../../../src/typedefs/member';
 
 const RenderToolbar = require('react-big-calendar/lib/Toolbar');
 
 const localizer: DateLocalizer = momentLocalizer(moment);
-
-interface EventCalendarProps {
-    // This <any> will be replaced with our own Event Typedef, once it has all the attributes we need here
-    // events: Event[],
-    events: any[],
-}
 
 interface CustomToolbarProps {
     date: Date,
@@ -42,65 +36,122 @@ const customMessages: Messages = {
     agenda: 'Agenda',
 };
 
-async function getSelectedJobAttendees(): Promise<any> {
-    const attendees = await getJobAttendees();
-    return attendees;
-}
-
-async function getCurrentFamilyMembers(token: string, membershipId: number): Promise<any> {
-    const currentFamilyMembers = await getFamilyMembers(token, membershipId);
-    return currentFamilyMembers;
-}
-
-export default function EventCalendar(props: EventCalendarProps) {
+export default function EventCalendar() {
     const { state } = useContext(UserContext);
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
-    const [selectedEvent, setSelectedEvent] = useState<any>();
-    const [eventAttendees, setAttendees] = useState<any>();
+    const [selectedEvent, setSelectedEvent] = useState<Event | Job>();
     const [familyMembers, setFamilyMembers] = useState<any>();
+    const [calendarEvents, setCalendarEvents] = useState<Array<Job | Event>>([]);
+    const [error, setError] = useState<string>('');
+
+    async function setNewEvent(newEvent: PostNewEventRequest) {
+        const startDate = moment(newEvent.startDate);
+        const endDate = moment(newEvent.endDate);
+        // The server's expected format, ends at minutes
+        newEvent.startDate = startDate.toISOString(true).slice(0, -10);
+        newEvent.endDate = endDate.toISOString(true).slice(0, -10);
+
+        await createEvent(state.token, newEvent);
+        const test = await getCalendarEventsAndJobs(state.token);
+        setCalendarEvents(test);
+    }
+
+    async function signUpForJob(patchInfo: { jobId: number, editedJob: PatchJobRequest }) {
+        const res = await updateJob(state.token, patchInfo.jobId, patchInfo.editedJob);
+        if ('reason' in res) {
+            setError(res.reason);
+        } else {
+            setCalendarEvents(await getCalendarEventsAndJobs(state.token));
+        }
+    }
+
+    async function deleteEventLocal() {
+        if (selectedEvent && 'eventType' in selectedEvent) {
+            const response: DeleteEventResponse | ErrorResponse = await deleteEvent(state.token, selectedEvent.eventId);
+            if ('reason' in response) {
+                setError(response.reason);
+            } else {
+                const newCalendarEvents = calendarEvents.filter((e: any) => e.eventType !== selectedEvent?.eventType);
+                setCalendarEvents(newCalendarEvents);
+            }
+        } else if (selectedEvent) {
+            const response = await deleteJob(state.token, selectedEvent.jobId);
+            if ('reason' in response) {
+                setError(response.reason);
+            } else {
+                const newCalendarEvents = calendarEvents.filter((e: any) => e.jobId !== selectedEvent?.jobId);
+                setCalendarEvents(newCalendarEvents);
+            }
+        }
+    }
 
     useEffect(() => {
         async function getData() {
-            const attendees = await getSelectedJobAttendees();
-            const currentFamilyMembers = await getCurrentFamilyMembers(state.token, state.user?.membershipId ?? 0);
-            setAttendees(attendees);
-            setFamilyMembers(currentFamilyMembers);
+            if (state.user) {
+                const res: GetMemberListResponse = await getFamilyMembers(state.token, state.user.membershipId);
+                if ('reason' in res) {
+                    setError(res.reason);
+                } else {
+                    setFamilyMembers(res);
+                }
+            }
+
+            setCalendarEvents(await getCalendarEventsAndJobs(state.token));
         }
         getData();
     }, []);
 
     return (
         <div>
+            { error !== '' && ({ error }) }
+            <Box pt={5} pb={5}>
+                {/* eslint-disable-next-line react/jsx-no-bind */}
+                <CreateEventModal createEvent={setNewEvent} />
+            </Box>
             <Calendar
                 defaultView="month"
-                events={props.events}
+                events={calendarEvents}
                 selected={selectedEvent}
                 onSelectEvent={
-                    (event) => {
-                        setSelectedEvent(event);
+                    (calendarEvent) => {
+                        setSelectedEvent(calendarEvent);
                         onViewEventOpen();
                     }
                 }
                 localizer={localizer}
                 eventPropGetter={
-                    (event) => {
+                    (calendarEvent) => {
                         const newStyle = {
                             backgroundColor: 'lightgrey',
                             color: 'black',
                         };
-                        if (event.type === 'meeting') {
-                            newStyle.backgroundColor = '#76CE6F';
-                        } else if (event.type === 'job') {
-                            newStyle.backgroundColor = '#68A4FF';
-                        } else if (event.type === 'race') {
-                            newStyle.backgroundColor = '#EE6439';
-                        } else {
-                            newStyle.backgroundColor = 'lightgrey';
+                        if ('eventType' in calendarEvent) {
+                            if (calendarEvent.eventType === 'Meeting') {
+                                newStyle.backgroundColor = '#76CE6F'; // green
+                            } else if (
+                                calendarEvent.eventType === 'Yearly Job' ||
+                                calendarEvent.eventType === 'Work Day') {
+                                newStyle.backgroundColor = '#4B0082'; // purple
+                            } else if (
+                                calendarEvent.eventType === 'Race' ||
+                                calendarEvent.eventType === 'Race Week' ||
+                                calendarEvent.eventType === 'XO Race' ||
+                                calendarEvent.eventType === 'Harescramble') {
+                                newStyle.backgroundColor = '#EE6439'; // red
+                            } else if (
+                                calendarEvent.eventType === 'Camp and Ride' ||
+                                calendarEvent.eventType === 'Ride Day') {
+                                newStyle.backgroundColor = '#D3D3D3'; // lightgrey
+                            } else { // its a Job
+                                newStyle.backgroundColor = 'lightblue';
+                            }
+                            return {
+                                style: newStyle,
+                            };
                         }
-                        return {
-                            style: newStyle,
-                        };
+                        // unreachable
+                        return {};
                     }
                 }
                 style={{ height: '70vh' }}
@@ -141,24 +192,29 @@ export default function EventCalendar(props: EventCalendarProps) {
                 }
             />
             {
-                selectedEvent && eventAttendees && (
+                selectedEvent && (
                     <SelectedEventModal
                         isOpen={isViewEventOpen}
                         onClose={onViewEventClose}
                         selectedEvent={selectedEvent}
                         onSignUpOpen={onSignUpOpen}
-                        // attendeesList={eventAttendees}
                         admin={state.user?.memberType === 'Admin'}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        deleteEvent={deleteEventLocal}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        signUpForJob={signUpForJob}
                     />
                 )
             }
             {
-                familyMembers && eventAttendees && (
-                    <SignUpModal
+                familyMembers && selectedEvent && (
+                    <FamilySignUpModal
                         isOpen={isSignUpOpen}
                         onClose={onSignUpClose}
-                        attendeesList={eventAttendees}
                         familyMembers={familyMembers}
+                        selectedEvent={selectedEvent}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        signUpForJob={signUpForJob}
                     />
                 )
             }

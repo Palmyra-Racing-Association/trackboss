@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -17,10 +17,17 @@ import {
     Select,
 } from '@chakra-ui/react';
 import DateTimePicker from 'react-datetime-picker';
-import { makeEvent } from '../controller/event';
-import { getMockedEventTypeList } from '../controller/eventType';
+import { UserContext } from '../contexts/UserContext';
+import { getEventTypeList } from '../controller/eventType';
+import { EventType } from '../../../src/typedefs/eventType';
+import { PostNewEventRequest } from '../../../src/typedefs/event';
 
-function generateEventTypeOptions(eventTypes: any[]) {
+interface CreateEventModalProps {
+    // eslint-disable-next-line no-unused-vars
+    createEvent: (newEvent: PostNewEventRequest) => void,
+}
+
+function generateEventTypeOptions(eventTypes: EventType[]) {
     const options: any[] = [];
     for (let i = 0; i < (eventTypes).length; i++) {
         options.push(<option key={i} value={eventTypes[i].eventTypeId}>{eventTypes[i].type}</option>);
@@ -28,35 +35,32 @@ function generateEventTypeOptions(eventTypes: any[]) {
     return options;
 }
 
-async function handleClose(
-    eventName: string,
-    eventDescription: string,
-    startDateTime: Date,
-    endDateTime: Date,
-    eventTypeId: number,
-) {
-    await makeEvent(eventName, eventDescription, startDateTime, endDateTime, eventTypeId);
-}
-
-export default function CreateEventModal() {
+export default function CreateEventModal(props: CreateEventModalProps) {
+    const { state } = useContext(UserContext);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [startDateTime, setStartDateTime] = useState(new Date());
     const [endDateTime, setEndDateTime] = useState(new Date());
     const [eventName, setEventName] = useState('');
     const [description, setDescription] = useState('');
     const [eventTypeId, setEventTypeId] = useState(0);
-    const [eventTypes, setEventTypes] = useState([{}]);
+    const [eventTypes, setEventTypes] = useState<EventType[]>([]);
+    const [error, setError] = useState<string>('');
 
     useEffect(() => {
         async function getData() {
-            const types = await getMockedEventTypeList();
-            setEventTypes(types);
+            const res = await getEventTypeList(state.token);
+            if ('reason' in res) {
+                setError(res.reason);
+            } else {
+                setEventTypes(res);
+            }
         }
         getData();
     }, []);
     return (
         <div>
             <Button background="orange.300" color="white" onClick={onOpen}>Create New Event</Button>
+            { error !== '' && ({ error }) }
             <Modal isCentered size="xl" isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -123,7 +127,14 @@ export default function CreateEventModal() {
                             color="white"
                             onClick={
                                 () => {
-                                    handleClose(eventName, description, startDateTime, endDateTime, eventTypeId);
+                                    const newEvent: PostNewEventRequest = {
+                                        startDate: startDateTime.toISOString(),
+                                        endDate: endDateTime.toISOString(),
+                                        eventTypeId,
+                                        eventName,
+                                        eventDescription: description,
+                                    };
+                                    props.createEvent(newEvent);
                                     onClose();
                                 }
                             }

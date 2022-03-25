@@ -30,3 +30,6 @@ update member m
 left join membership ms on m.membership_id = ms.membership_id
 set membership_admin_id = m.member_id
 where m.member_type_id = 2;
+
+-- CALL sp_event_job_generation('2022-04-01T08:00:00', '2022-04-01T16:00:00', 1, '2022 Last Race', 'test empty event', @ignore);
+

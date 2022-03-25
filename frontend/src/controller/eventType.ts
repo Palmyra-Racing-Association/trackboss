@@ -44,30 +44,12 @@ export async function updateEventType(
     return response.json();
 }
 
-export async function getMockedEventTypeList() {
-    return [
-        {
-            eventTypeId: 0,
-            type: 'Race',
-            active: true,
-            lastmodifiedDate: '2022-02-10',
-            lastModifiedBy: 'Me :D',
-        },
-        {
-            eventTypeId: 1,
-            type: 'Meeting',
-            active: true,
-            lastmodifiedDate: '2022-02-10',
-            lastModifiedBy: 'Me :D',
-        },
-    ];
-}
-
 export async function getEventTypeList(token: string): Promise<GetEventTypeListResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/eventType/list`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
-    return response.json();
+    const res: GetEventTypeListResponse = await response.json();
+    return res;
 }

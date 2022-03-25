@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable max-len */
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import {
     Modal,
@@ -15,39 +16,46 @@ import {
     HStack,
     VStack,
     Text,
-    // ListItem,
-    // UnorderedList,
 } from '@chakra-ui/react';
+import moment from 'moment';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
-// import { deleteJob } from '../controller/job';
-// import { deleteEvent } from '../controller/event';
+import { UserContext } from '../contexts/UserContext';
+import { PatchJobRequest } from '../../../src/typedefs/job';
 
 interface modalProps {
   isOpen: boolean,
   onClose: () => void,
   selectedEvent: any,
   onSignUpOpen: () => void;
-  // attendeesList: any[], // TODO this should match our typing
-  admin: boolean
-}
-
-async function handleSignUp(selectedJob: any) {
-    // eslint-disable-next-line no-console
-    console.log(selectedJob);
-}
-
-async function deleteEventLocal(event: any) {
-    // if (event.type === 'work') {
-    //     await deleteJob('TestingToken', event);
-    // } else {
-    //     await deleteEvent('TestingToken', event);
-    // }
-    // eslint-disable-next-line no-console
-    console.log(event);
-    // Update state?
+  admin: boolean;
+  deleteEvent: () => void;
+  // eslint-disable-next-line no-unused-vars
+  signUpForJob: (patchInfo: { jobId: number; editedJob: PatchJobRequest; }) => void;
 }
 
 export default function SelectedEventModal(props: modalProps) {
+    const { state } = useContext(UserContext);
+
+    async function generateJobSignUpPatch() {
+        let editedJob: PatchJobRequest;
+        if ('jobId' in (props.selectedEvent) && state.user) {
+            const { jobId } = props.selectedEvent;
+            editedJob = {
+                memberId: state.user.memberId,
+                eventId: props.selectedEvent.eventId,
+                jobTypeId: undefined,
+                jobStartDate: moment(props.selectedEvent.start).toISOString(true).slice(0, -10),
+                jobEndDate: moment(props.selectedEvent.end).toISOString(true).slice(0, -10),
+                pointsAwarded: props.selectedEvent.pointsAwarded,
+                verified: props.selectedEvent.verified,
+                paid: props.selectedEvent.paid,
+                modifiedBy: state.user.memberId,
+            };
+            return { jobId, editedJob };
+        }
+        return undefined;
+    }
+
     return (
         <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
@@ -58,39 +66,41 @@ export default function SelectedEventModal(props: modalProps) {
                     pt={2}
                     color="orange.400"
                 >
-                    {getEventMonthDaySpan(props.selectedEvent.start, props.selectedEvent.end)}
+                    {getEventMonthDaySpan(props.selectedEvent.start.toString(), props.selectedEvent.end.toString())}
                 </Heading>
                 <ModalBody>
                     <Text fontSize="2xl" textAlign="center">
                         {props.selectedEvent.title}
                     </Text>
                     <Text fontSize="xl" textAlign="center">
-                        {getEventStartAndEndTime(props.selectedEvent.start, props.selectedEvent.end)}
+                        {
+                            getEventStartAndEndTime(
+                                props.selectedEvent.start.toString(),
+                                props.selectedEvent.end.toString(),
+                            )
+                        }
                     </Text>
                 </ModalBody>
                 {
-                    props.selectedEvent.workPoints && (
+                    'jobId' in props.selectedEvent && (
                         <SimpleGrid columns={1}>
                             <Center>
                                 <HStack spacing={0}>
                                     <Text fontSize="xl">Work Points:</Text>
-                                    <Text pl={2} color="orange.400" fontSize="3xl">3</Text>
+                                    <Text
+                                        pl={2}
+                                        color="orange.400"
+                                        fontSize="3xl"
+                                    >
+                                        {props.selectedEvent.pointsAwarded}
+                                    </Text>
                                 </HStack>
                             </Center>
                             <Center>
                                 <VStack spacing={1}>
-                                    {/* <Text pr={8} fontSize="xl">Going:</Text> */}
-                                    {/* <Divider /> */}
-                                    {/* TODO: Should we handle a case with many attendees? (10+) */}
-                                    {/* <UnorderedList>
-                                        {
-                                            props.attendeesList.map((attendee) => (
-                                                <ListItem>{attendee.name}</ListItem>
-                                            ))
-                                        }
-                                    </UnorderedList> */}
                                     {
-                                        props.admin && (
+                                        // Don't display the family sign up button if the job already has a member
+                                        props.admin && 'jobId' in props.selectedEvent && !props.selectedEvent.member && (
                                             <Button
                                                 as="u"
                                                 color="orange.300"
@@ -119,7 +129,7 @@ export default function SelectedEventModal(props: modalProps) {
                     {
                         props.admin && (
                             <Link
-                                to={`signups/${(props.selectedEvent.start).toISOString().split('T')[0]}`}
+                                to={`signups/${(moment(props.selectedEvent.start).toISOString()).split('T')[0]}`}
                                 state={{ date: props.selectedEvent.start }}
                             >
                                 View Sign Ups
@@ -136,7 +146,7 @@ export default function SelectedEventModal(props: modalProps) {
                                 color="red"
                                 onClick={
                                     () => {
-                                        deleteEventLocal(props.selectedEvent);
+                                        props.deleteEvent();
                                         props.onClose();
                                     }
                                 }
@@ -146,15 +156,19 @@ export default function SelectedEventModal(props: modalProps) {
                         )
                     }
                     {
-                        props.selectedEvent.type === 'job' && (
+                        // Don't display the sign up button if the job already has a member
+                        'jobId' in props.selectedEvent && !props.selectedEvent.member && (
                             <Button
                                 bgColor="orange"
                                 color="white"
                                 onClick={
-                                    () => [
-                                        handleSignUp(props.selectedEvent),
-                                        props.onClose(),
-                                    ]
+                                    async () => {
+                                        const signUpPatch = await generateJobSignUpPatch();
+                                        if (signUpPatch) {
+                                            props.signUpForJob(signUpPatch);
+                                        }
+                                        props.onClose();
+                                    }
                                 }
                             >
                                 Sign Up

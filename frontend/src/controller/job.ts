@@ -38,6 +38,20 @@ export async function getJobList(token: string, queryType?: string, filterType?:
     return response.json();
 }
 
+export async function getCalendarJobs(token: string) {
+    const calendarJobs = await getJobList(token);
+    if (Array.isArray(calendarJobs)) {
+        calendarJobs.forEach((job) => {
+            job.start = new Date(job.start);
+            job.end = new Date(job.end);
+        });
+        return calendarJobs;
+    }
+
+    // else
+    return undefined;
+}
+
 export async function getJob(token: string, jobID: number): Promise<GetJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/${jobID}`, {
         method: 'GET',
@@ -90,7 +104,8 @@ export async function deleteJob(token: string, jobID: number): Promise<DeleteJob
         mode: 'cors',
         headers: generateHeaders(token),
     });
-    return response.json();
+    const res: DeleteJobResponse = await response.json();
+    return res;
 }
 
 interface Worker {

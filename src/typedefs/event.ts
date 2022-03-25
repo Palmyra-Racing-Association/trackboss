@@ -2,8 +2,8 @@ import { ErrorResponse } from './errorResponse';
 
 export type Event = {
     eventId: number,
-    start: string,
-    end: string,
+    start: string | Date,
+    end: string | Date,
     eventType: string,
     title: string,
     eventDescription: string
