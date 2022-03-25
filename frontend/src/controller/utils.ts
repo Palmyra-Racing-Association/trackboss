@@ -81,7 +81,6 @@ export function getEventStartAndEndTime(start: string, end: string) {
 }
 
 export function getTimeOfDay(time: string) {
-    console.log(time);
     const endString = new Date(time).toString();
     const endStringArray = endString.split(' ');
     let endHour = parseInt(endStringArray[4].substring(0, 2));

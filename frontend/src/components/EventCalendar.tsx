@@ -47,8 +47,8 @@ async function getSelectedJobAttendees(): Promise<any> {
     return attendees;
 }
 
-async function getCurrentFamilyMembers(): Promise<any> {
-    const currentFamilyMembers = await getFamilyMembers();
+async function getCurrentFamilyMembers(token: string, membershipId: number): Promise<any> {
+    const currentFamilyMembers = await getFamilyMembers(token, membershipId);
     return currentFamilyMembers;
 }
 
@@ -63,7 +63,7 @@ export default function EventCalendar(props: EventCalendarProps) {
     useEffect(() => {
         async function getData() {
             const attendees = await getSelectedJobAttendees();
-            const currentFamilyMembers = await getCurrentFamilyMembers();
+            const currentFamilyMembers = await getCurrentFamilyMembers(state.token, state.user?.membershipId ?? 0);
             setAttendees(attendees);
             setFamilyMembers(currentFamilyMembers);
         }
