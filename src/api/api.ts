@@ -21,11 +21,7 @@ const api = Router();
 api.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', '*');
-<<<<<<< HEAD
-    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, PATCH, DELETE');
-=======
     res.header('Access-Control-Allow-Methods', '*');
->>>>>>> origin/main
     next();
 });
 api.use(bodyParser.json());
