@@ -66,12 +66,8 @@ async function handlePatchMemberContactInfo(
     email: string | undefined,
     phone: string | undefined,
 ) {
-    // const updatedMember = await patchMember(name, email, phone, memberInfo.memberId)
-    // if (updatedMember.reason) {
-    //      there was an error, show error message
-    // }
-
     const updatedMember: Member = {
+        memberTypeId: 1,
         membershipId: 1,
         memberId: 1,
         membershipAdmin: 'true',

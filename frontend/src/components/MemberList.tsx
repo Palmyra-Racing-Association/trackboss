@@ -12,6 +12,7 @@ function getMemberFamilyLocal() {
     // const response = getMembersByMembership();
     const memberFamily: Member[] = [
         {
+            memberTypeId: 1,
             memberId: 1,
             membershipId: 1,
             membershipAdmin: 'true',
@@ -33,6 +34,7 @@ function getMemberFamilyLocal() {
             lastModifiedBy: '',
         },
         {
+            memberTypeId: 1,
             memberId: 2,
             membershipId: 2,
             membershipAdmin: 'string',

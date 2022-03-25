@@ -20,6 +20,7 @@ import { Bike } from '../../../src/typedefs/bike';
 
 const memberFamily: Member[] = [
     {
+        memberTypeId: 1,
         membershipId: 1,
         memberId: 1,
         membershipAdmin: 'true',
@@ -41,6 +42,7 @@ const memberFamily: Member[] = [
         lastModifiedBy: '',
     },
     {
+        memberTypeId: 1,
         membershipId: 1,
         memberId: 2,
         membershipAdmin: 'true',

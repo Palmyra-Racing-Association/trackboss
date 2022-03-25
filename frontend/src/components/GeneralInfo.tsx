@@ -13,18 +13,20 @@ import {
 import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
 import { updateMember } from '../controller/member';
 import { UserContext } from '../contexts/UserContext';
+import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 
 interface cardProps {
     user: Member,
 }
 
 export default function GeneralInfo(props: cardProps) {
-    const { state } = useContext(UserContext);
+    const { state, update } = useContext(UserContext);
     const [memberInfo, setMemberInfo] = useState<Member>();
     const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
     const [editedName, setEditedName] = useState<string>('');
     const [editedEmail, setEditedEmail] = useState<string>('');
     const [editedPhone, setEditedPhone] = useState<string>('');
+    const [error, setError] = useState<string>('');
 
     const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
     const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
@@ -42,9 +44,9 @@ export default function GeneralInfo(props: cardProps) {
             const last = nameArray[1];
 
             const patch: PatchMemberRequest = {
-                membershipId: memberPatchInfo.memberId,
+                membershipId: memberPatchInfo.membershipId,
                 uuid: memberPatchInfo.uuid,
-                memberTypeId: memberPatchInfo.memberType,
+                memberTypeId: memberPatchInfo.memberTypeId,
                 firstName: first,
                 lastName: last,
                 phoneNumber: memberPatchInfo.phoneNumber,
@@ -57,8 +59,9 @@ export default function GeneralInfo(props: cardProps) {
 
             const res = await updateMember(state.token, state.user.memberId, patch);
             if ('reason' in res) {
-                console.log(res.reason);
+                setError(res.reason);
             } else {
+                update({ loggedIn: true, token: state.token, user: res, storedUser: undefined });
                 return res;
             }
         }
@@ -74,6 +77,7 @@ export default function GeneralInfo(props: cardProps) {
 
     return (
         <VStack mt={25}>
+            { error !== '' && ({ error }) }
             <HStack>
                 <Heading>General Information</Heading>
                 {
