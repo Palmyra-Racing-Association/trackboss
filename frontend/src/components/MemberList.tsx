@@ -71,7 +71,7 @@ export default function MemberList() {
                         });
                     });
                 }
-                setCells(c);
+                setCells(_.filter(c, (member) => member.active));
                 setError(undefined);
             }
         }
