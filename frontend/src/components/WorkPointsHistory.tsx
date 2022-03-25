@@ -70,7 +70,7 @@ export default function WorkPointsHistory() {
 
     useEffect(() => {
         async function getData() {
-            const jobs = await getJobList(state.token, 'memberId', state.user!.memberId as unknown as string);
+            const jobs = await getJobList(state.token, 'memberID', state.user!.memberId as unknown as string);
             if ('reason' in jobs) {
                 // squash error
             } else {
