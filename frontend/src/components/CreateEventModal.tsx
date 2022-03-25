@@ -20,12 +20,11 @@ import DateTimePicker from 'react-datetime-picker';
 import { UserContext } from '../contexts/UserContext';
 import { getEventTypeList } from '../controller/eventType';
 import { EventType } from '../../../src/typedefs/eventType';
-import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import { PostNewEventRequest } from '../../../src/typedefs/event';
 
 interface CreateEventModalProps {
     // eslint-disable-next-line no-unused-vars
-    createEventLocal: (newEvent: PostNewEventRequest) => void,
+    createEvent: (newEvent: PostNewEventRequest) => void,
 }
 
 function generateEventTypeOptions(eventTypes: EventType[]) {
@@ -45,31 +44,23 @@ export default function CreateEventModal(props: CreateEventModalProps) {
     const [description, setDescription] = useState('');
     const [eventTypeId, setEventTypeId] = useState(0);
     const [eventTypes, setEventTypes] = useState<EventType[]>([]);
-
-    function getEventTypeListWasSuccessful(calendarEvent: EventType[] | ErrorResponse): calendarEvent is EventType[] {
-        if ((calendarEvent as EventType[]).length) {
-            return true;
-        }
-        // else, its an error
-        return false;
-    }
-
-    async function getEventTypeListLocal(token: string) {
-        const res = await getEventTypeList(token);
-        if (getEventTypeListWasSuccessful(res)) {
-            setEventTypes(res);
-        }
-    }
+    const [error, setError] = useState<string>('');
 
     useEffect(() => {
         async function getData() {
-            await getEventTypeListLocal(state.token);
+            const res = await getEventTypeList(state.token);
+            if ('reason' in res) {
+                setError(res.reason);
+            } else {
+                setEventTypes(res);
+            }
         }
         getData();
     }, []);
     return (
         <div>
             <Button background="orange.300" color="white" onClick={onOpen}>Create New Event</Button>
+            { error !== '' && ({ error }) }
             <Modal isCentered size="xl" isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -143,7 +134,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                         eventName,
                                         eventDescription: description,
                                     };
-                                    props.createEventLocal(newEvent);
+                                    props.createEvent(newEvent);
                                     onClose();
                                 }
                             }

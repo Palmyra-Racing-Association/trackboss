@@ -1,4 +1,3 @@
-// import React, { useEffect, useState } from 'react';
 import React, { useContext } from 'react';
 import {
     Modal,
@@ -14,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import moment from 'moment';
 import { Member } from '../../../src/typedefs/member';
-import { Job, PatchJobRequest } from '../../../src/typedefs/job';
+import { PatchJobRequest } from '../../../src/typedefs/job';
 import { UserContext } from '../contexts/UserContext';
 
 interface modalProps {
@@ -29,17 +28,9 @@ interface modalProps {
 export default function FamilySignUpModal(props: modalProps) {
     const { state } = useContext(UserContext);
 
-    function isJob(selectedEvent: Event | Job): selectedEvent is Job {
-        if ((selectedEvent as Job).jobId) {
-            return true;
-        }
-        // else, its an Event
-        return false;
-    }
-
     async function generateJobSignUpPatch(memberId: number) {
         let editedJob: PatchJobRequest;
-        if (isJob(props.selectedEvent) && memberId && state.user) {
+        if ('jobId' in props.selectedEvent && memberId && state.user) {
             const { jobId } = props.selectedEvent;
             editedJob = {
                 memberId,
