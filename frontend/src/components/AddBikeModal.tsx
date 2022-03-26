@@ -10,7 +10,12 @@ import {
     ModalFooter,
     VStack,
     Input,
-
+    Select,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
+    NumberIncrementStepper,
+    NumberDecrementStepper,
 } from '@chakra-ui/react';
 
 interface modalProps {
@@ -28,6 +33,9 @@ export default function EditBikesModal(props: modalProps) {
     const handleEditedBikeYear = (event: { target: { value: any; }; }) => setBikeYear(event.target.value);
     const handleEditedBikeMake = (event: { target: { value: any; }; }) => setBikeMake(event.target.value);
     const handleEditedBikeModel = (event: { target: { value: any; }; }) => setBikeModel(event.target.value);
+    const thisYear = (new Date()).getFullYear();
+    const minModelYear = thisYear - 55;
+    const maxModelYear = thisYear + 1;
 
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
@@ -43,20 +51,37 @@ export default function EditBikesModal(props: modalProps) {
                     mr={5}
                     ml={5}
                 >
-                    <Input
+                    <NumberInput
                         variant="outline"
                         placeholder="Bike year"
-                        value={bikeYear}
-                        onChange={handleEditedBikeYear}
-                        size="md"
-                    />
-                    <Input
+                        min={minModelYear}
+                        max={maxModelYear}
+                    >
+                        <NumberInputField onChange={handleEditedBikeYear} />
+                        <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                        </NumberInputStepper>
+                    </NumberInput>
+                    <Select
                         variant="outline"
                         placeholder="Bike Make"
-                        value={bikeMake}
                         onChange={handleEditedBikeMake}
                         size="md"
-                    />
+                    >
+                        <option value="Beta">Beta</option>
+                        <option value="Cobra">Cobra</option>
+                        <option value="Gas Gas">Gas Gas</option>
+                        <option value="GPX">GPX</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Husqvarna">Husqvarna</option>
+                        <option value="Kawasaki">Kawasaki</option>
+                        <option value="KTM">KTM</option>
+                        <option value="Other">Other</option>
+                        <option value="Pitster Pro">Pitster Pro</option>
+                        <option value="Suzuki">Suzuki</option>
+                        <option value="Yamaha">Yamaha</option>
+                    </Select>
                     <Input
                         variant="outline"
                         placeholder="Bike Model"

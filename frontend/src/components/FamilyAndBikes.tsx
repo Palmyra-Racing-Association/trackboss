@@ -18,7 +18,7 @@ import AddFamilyModal from './AddFamilyModal';
 import AddBikeModal from './AddBikeModal';
 import { updateMember } from '../controller/member';
 import { UserContext } from '../contexts/UserContext';
-import { createBike, deleteBike, updateBike } from '../controller/bike';
+import { createBike, deleteBike, getBikeList, updateBike } from '../controller/bike';
 
 interface cardProps {
     memberFamily: GetMemberListResponse,
@@ -42,6 +42,11 @@ export default function GeneralInfo(props: cardProps) {
     const [bikeToRemove, setBikeToRemove] = useState<Bike>();
     const [bikeToEdit, setBikeToEdit] = useState<Bike>();
 
+    async function refreshBikeList() {
+        const newBikeList = await getBikeList(state.token, state?.user?.membershipId);
+        setMemberBikes(newBikeList);
+    }
+
     async function removeFamilyMember() {
         if (memberToRemove !== undefined && state.user !== undefined) {
             await updateMember(
@@ -56,6 +61,7 @@ export default function GeneralInfo(props: cardProps) {
         if (bikeToRemove !== undefined && state.user !== undefined) {
             await deleteBike(state.token, bikeToRemove.bikeId);
         }
+        await refreshBikeList();
     }
 
     async function editBike(editedBike: Bike, bikeYear: string, bikeMake: string, bikeModel: string) {
@@ -64,6 +70,7 @@ export default function GeneralInfo(props: cardProps) {
             editedBike.bikeId,
             { year: bikeYear, make: bikeMake, model: bikeModel },
         );
+        await refreshBikeList();
     }
 
     async function addBike(newYear: string, newMake: string, newModel: string) {
@@ -73,6 +80,7 @@ export default function GeneralInfo(props: cardProps) {
                 { year: newYear, make: newMake, model: newModel, membershipId: state.user.membershipId },
             );
         }
+        await refreshBikeList();
     }
 
     useEffect(() => {

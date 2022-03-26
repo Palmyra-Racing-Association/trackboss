@@ -109,6 +109,7 @@ export default function GeneralInfo(props: cardProps) {
                             <Text fontSize="3xl" fontWeight="bold">Email:</Text>
                             <Text fontSize="3xl" fontWeight="bold">Phone:</Text>
                             <Text fontSize="3xl" fontWeight="bold">Joined:</Text>
+                            <Text fontSize="3xl" fontWeight="bold">DOB:</Text>
                         </VStack>
                         {
                             editingMemberInfo ? (
@@ -132,6 +133,7 @@ export default function GeneralInfo(props: cardProps) {
                                         size="md"
                                     />
                                     <Text fontSize="3xl">{memberInfo.dateJoined}</Text>
+                                    <Text fontSize="3xl">{memberInfo.birthdate}</Text>
                                     <Button
                                         ml={10}
                                         variant="outline"
@@ -156,6 +158,7 @@ export default function GeneralInfo(props: cardProps) {
                                     <Text fontSize="3xl">{memberInfo.email}</Text>
                                     <Text fontSize="3xl">{memberInfo.phoneNumber}</Text>
                                     <Text fontSize="3xl">{memberInfo.dateJoined}</Text>
+                                    <Text fontSize="3xl">{memberInfo.birthdate}</Text>
                                 </VStack>
                             )
                         }
