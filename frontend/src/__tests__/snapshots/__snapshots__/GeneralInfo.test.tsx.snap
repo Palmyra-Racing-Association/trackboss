@@ -81,6 +81,11 @@ Object {
             >
               Joined:
             </p>
+            <p
+              class="chakra-text css-lnxk8v"
+            >
+              DOB:
+            </p>
           </div>
           <div
             class="chakra-stack css-kd7bnp"
@@ -100,6 +105,9 @@ Object {
             >
               1234
             </p>
+            <p
+              class="chakra-text css-1tapsqs"
+            />
             <p
               class="chakra-text css-1tapsqs"
             />
@@ -157,6 +165,11 @@ Object {
           >
             Joined:
           </p>
+          <p
+            class="chakra-text css-lnxk8v"
+          >
+            DOB:
+          </p>
         </div>
         <div
           class="chakra-stack css-kd7bnp"
@@ -176,6 +189,9 @@ Object {
           >
             1234
           </p>
+          <p
+            class="chakra-text css-1tapsqs"
+          />
           <p
             class="chakra-text css-1tapsqs"
           />
@@ -312,6 +328,11 @@ Object {
             >
               Joined:
             </p>
+            <p
+              class="chakra-text css-lnxk8v"
+            >
+              DOB:
+            </p>
           </div>
           <div
             class="chakra-stack css-kd7bnp"
@@ -331,6 +352,9 @@ Object {
             >
               1234
             </p>
+            <p
+              class="chakra-text css-1tapsqs"
+            />
             <p
               class="chakra-text css-1tapsqs"
             />
@@ -382,6 +406,11 @@ Object {
           >
             Joined:
           </p>
+          <p
+            class="chakra-text css-lnxk8v"
+          >
+            DOB:
+          </p>
         </div>
         <div
           class="chakra-stack css-kd7bnp"
@@ -401,6 +430,9 @@ Object {
           >
             1234
           </p>
+          <p
+            class="chakra-text css-1tapsqs"
+          />
           <p
             class="chakra-text css-1tapsqs"
           />

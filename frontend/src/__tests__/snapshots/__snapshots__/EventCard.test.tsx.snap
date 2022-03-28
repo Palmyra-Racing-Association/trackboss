@@ -2,7 +2,7 @@
 
 exports[`event card renders all props correctly 1`] = `
 <div
-  className="css-1wrvpfi"
+  className="css-1mkw5k2"
   onClick={[Function]}
 >
   <div

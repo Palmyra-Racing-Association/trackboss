@@ -25,7 +25,6 @@ export default function EventCard(props: cardProps) {
             border="1px"
             borderColor="gray.200"
             p={3}
-            maxWidth={300}
         >
             <Center>
                 <VStack p={0} boxSize="md">

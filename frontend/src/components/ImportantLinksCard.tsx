@@ -3,7 +3,7 @@ import { Box, Center, ListItem, Link, UnorderedList, Heading, VStack, Divider } 
 
 export default function ImportantLinksCard() {
     return (
-        <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={3} maxWidth={350}>
+        <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={3}>
             <Center>
                 <VStack boxSize="md">
                     <Heading>Important Links</Heading>
