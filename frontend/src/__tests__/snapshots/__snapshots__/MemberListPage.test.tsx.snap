@@ -94,14 +94,13 @@ exports[`Member List Page renders correctly 1`] = `
                 role="row"
               >
                 <div
-                  class="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
+                  class="sc-hKwDye sc-eCImPb sc-iqseJM crvHGE fvAeSn iwmeYY rdt_TableCol"
                   data-column-id="1"
                 >
                   <div
-                    class="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                    class="sc-crHmcD fFBlx rdt_TableCol_Sortable"
                     data-column-id="1"
                     data-sort-id="1"
-                    disabled=""
                     role="columnheader"
                     tabindex="0"
                   >
@@ -111,17 +110,21 @@ exports[`Member List Page renders correctly 1`] = `
                     >
                       Name
                     </div>
+                    <span
+                      class="sc-kDTinF gqExIP"
+                    >
+                      ▲
+                    </span>
                   </div>
                 </div>
                 <div
-                  class="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
+                  class="sc-hKwDye sc-eCImPb sc-iqseJM crvHGE fvAeSn iwmeYY rdt_TableCol"
                   data-column-id="2"
                 >
                   <div
-                    class="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                    class="sc-crHmcD fFBlx rdt_TableCol_Sortable"
                     data-column-id="2"
                     data-sort-id="2"
-                    disabled=""
                     role="columnheader"
                     tabindex="0"
                   >
@@ -131,6 +134,11 @@ exports[`Member List Page renders correctly 1`] = `
                     >
                       Role
                     </div>
+                    <span
+                      class="sc-kDTinF gqExIP"
+                    >
+                      ▲
+                    </span>
                   </div>
                 </div>
               </div>
@@ -145,7 +153,7 @@ exports[`Member List Page renders correctly 1`] = `
                 role="row"
               >
                 <div
-                  class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                  class="sc-hKwDye sc-eCImPb sc-jRQBWg fDgsXD fvAeSn bsgpsK rdt_TableCell"
                   data-column-id="1"
                   data-tag="allowRowEvents"
                   id="cell-1-undefined"
@@ -158,7 +166,7 @@ exports[`Member List Page renders correctly 1`] = `
                   </div>
                 </div>
                 <div
-                  class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                  class="sc-hKwDye sc-eCImPb sc-jRQBWg fDgsXD fvAeSn bsgpsK rdt_TableCell"
                   data-column-id="2"
                   data-tag="allowRowEvents"
                   id="cell-2-undefined"
@@ -177,7 +185,7 @@ exports[`Member List Page renders correctly 1`] = `
                 role="row"
               >
                 <div
-                  class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                  class="sc-hKwDye sc-eCImPb sc-jRQBWg fDgsXD fvAeSn bsgpsK rdt_TableCell"
                   data-column-id="1"
                   data-tag="allowRowEvents"
                   id="cell-1-undefined"
@@ -190,7 +198,7 @@ exports[`Member List Page renders correctly 1`] = `
                   </div>
                 </div>
                 <div
-                  class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                  class="sc-hKwDye sc-eCImPb sc-jRQBWg fDgsXD fvAeSn bsgpsK rdt_TableCell"
                   data-column-id="2"
                   data-tag="allowRowEvents"
                   id="cell-2-undefined"
