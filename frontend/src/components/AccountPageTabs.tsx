@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import {
     Button,
-    VStack,
     StackDivider,
-    Grid,
-    GridItem,
+    Box,
     Center,
+    SimpleGrid,
+    HStack,
 } from '@chakra-ui/react';
 
 import { BsWrench, BsFillPeopleFill } from 'react-icons/bs';
@@ -49,31 +49,21 @@ export default function AccountPageTabs() {
     }, []);
 
     return (
-        <Grid
-            h="100vh"
-            templateColumns="repeat(4, 1fr)"
-            gap={0.5}
-            mt={0.5}
-        >
-            <GridItem
-                colSpan={1}
-                borderRightWidth={2}
-                borderRightColor="lightgray"
-            >
-                <VStack
-                    width="100%"
+        <SimpleGrid>
+            <Box>
+                <HStack
                     divider={<StackDivider borderColor="gray.300" />}
                     spacing="0"
                 >
                     <Button
                         justifyContent="flex-start"
-                        height="80px"
-                        fontSize="4xl"
+                        fontSize="xl"
                         rightIcon={<BsWrench />}
                         isFullWidth
                         bg="white"
                         color="black"
                         borderRadius="0"
+                        variant="outline"
                         _hover={{ bg: 'gray.100' }}
                         _active={
                             {
@@ -93,12 +83,12 @@ export default function AccountPageTabs() {
                     </Button>
                     <Button
                         justifyContent="flex-start"
-                        height="80px"
-                        fontSize="4xl"
+                        fontSize="xl"
                         rightIcon={<BsFillPeopleFill />}
                         isFullWidth
                         bg="white"
                         color="black"
+                        variant="outline"
                         _hover={{ bg: 'gray.100' }}
                         _active={
                             {
@@ -119,12 +109,12 @@ export default function AccountPageTabs() {
                     </Button>
                     <Button
                         justifyContent="flex-start"
-                        height="80px"
-                        fontSize="4xl"
+                        fontSize="xl"
                         rightIcon={<IoMdBriefcase />}
                         isFullWidth
                         bg="white"
                         color="black"
+                        variant="outline"
                         borderRadius="0"
                         _hover={{ bg: 'gray.100' }}
                         _active={
@@ -145,12 +135,12 @@ export default function AccountPageTabs() {
                     </Button>
                     <Button
                         justifyContent="flex-start"
-                        height="80px"
-                        fontSize="4xl"
+                        fontSize="xl"
                         rightIcon={<FaMoneyBillAlt />}
                         isFullWidth
                         bg="white"
                         color="black"
+                        variant="outline"
                         borderRadius="0"
                         _hover={{ bg: 'gray.100' }}
                         _active={
@@ -169,9 +159,9 @@ export default function AccountPageTabs() {
                     >
                         Dues & Waivers
                     </Button>
-                </VStack>
-            </GridItem>
-            <GridItem colSpan={3}>
+                </HStack>
+            </Box>
+            <Box>
                 {
                     activeButton === 1 && state.user && (
                         <GeneralInfo user={state.user} />
@@ -198,8 +188,7 @@ export default function AccountPageTabs() {
                         </Center>
                     )
                 }
-            </GridItem>
-        </Grid>
-
+            </Box>
+        </SimpleGrid>
     );
 }
