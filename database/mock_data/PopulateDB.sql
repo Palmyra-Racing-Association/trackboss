@@ -152,6 +152,8 @@ insert into member (uuid, member_type_id, first_name, last_name, phone_number, o
 insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('12c', 2, 'Patin', 'Lelliott', '913-810-0953', 'Senior Financial Analyst', 'plelliott2q@multiply.com', '2005-12-11', '2018-05-19', 1);
 insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('6e99b3fd-5771-4484-804c-2a42f807e365', 1, 'CJ', 'Schaefer', '216-867-5309', 'Senior Software Dev', 'not.cjs.email@gmail.com', '2005-12-11', '2018-05-19', 1);
 insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('a6f6b09d-83fd-414d-99a4-71ddffde40e0', 1, 'Brianna', 'Fehring', '513-929-5010', 'Senior Software Dev', 'bnf8555@rit.edu', '1997-12-05', '2018-05-19', 1);
+insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('babf8cc4-80b0-4495-a9fb-33d534f2e33e', 1, 'Alex', 'Stone', '513-929-5010', 'Senior Software Dev', 'awstone@buffalo.edu', '1997-12-05', '2018-05-19', 1);
+insert into member (uuid, member_type_id, first_name, last_name, phone_number, occupation, email, birthdate, date_joined, active) values ('1b4a22a9-eabe-474a-a82f-72f45abab243', 1, 'Stephen', 'Pratt', '513-929-5010', 'Senior Software Dev', 'stephen.r.pratt@gmail.com', '1997-12-05', '2018-05-19', 1);
 
 ### membership ###
 insert into membership (status, cur_year_renewed, view_online, renewal_sent, year_joined, address, city, state, zip) values ('Active', 0, 1, 0, 2009, '88811 Moulton Pass', 'Flushing', 'NY', 48463);
