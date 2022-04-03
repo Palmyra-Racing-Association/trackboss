@@ -95,7 +95,7 @@ exports[`dashboard renders correctly 1`] = `
         class="css-brfpum"
       >
         <div
-          class="css-15ddyrp"
+          class="css-fvqjrt"
         >
           <div
             class="css-gmuwbf"
@@ -113,17 +113,17 @@ exports[`dashboard renders correctly 1`] = `
                 class="chakra-stack css-jp20jv"
               >
                 <p
-                  class="chakra-text css-1srjgni"
+                  class="chakra-text css-1qhpl4f"
                 >
                   You have completed
                 </p>
                 <p
-                  class="chakra-text css-68kehq"
+                  class="chakra-text css-urz4bw"
                 >
                   0%
                 </p>
                 <p
-                  class="chakra-text css-1bsg0uq"
+                  class="chakra-text css-9hpz1u"
                 >
                   of this year's work points
                 </p>
@@ -132,7 +132,7 @@ exports[`dashboard renders correctly 1`] = `
           </div>
         </div>
         <div
-          class="css-15ddyrp"
+          class="css-1v663m6"
         >
           <div
             class="css-gmuwbf"
@@ -176,19 +176,19 @@ exports[`dashboard renders correctly 1`] = `
                 class="chakra-divider css-svjswr"
               />
               <p
-                class="chakra-text css-ykwwr6"
+                class="chakra-text css-f11cbl"
               />
               <p
-                class="chakra-text css-1bsg0uq"
+                class="chakra-text css-9hpz1u"
               />
               <p
-                class="chakra-text css-1bsg0uq"
+                class="chakra-text css-9hpz1u"
               />
             </div>
           </div>
         </div>
         <div
-          class="css-9nem3t"
+          class="css-q49w35"
         >
           <div
             class="css-gmuwbf"
@@ -210,7 +210,7 @@ exports[`dashboard renders correctly 1`] = `
                 role="list"
               >
                 <a
-                  class="chakra-link css-k6vkpw"
+                  class="chakra-link css-n1hyml"
                   href="https://palmyramx.com/pages/track-rules"
                   target="_blank"
                 >
@@ -221,7 +221,7 @@ exports[`dashboard renders correctly 1`] = `
                   </li>
                 </a>
                 <a
-                  class="chakra-link css-k6vkpw"
+                  class="chakra-link css-n1hyml"
                   href="https://twitter.com/palmyramx"
                   target="_blank"
                 >
@@ -232,7 +232,7 @@ exports[`dashboard renders correctly 1`] = `
                   </li>
                 </a>
                 <a
-                  class="chakra-link css-k6vkpw"
+                  class="chakra-link css-n1hyml"
                   href="https://www.facebook.com/palmyramx/"
                   target="_blank"
                 >
@@ -243,7 +243,7 @@ exports[`dashboard renders correctly 1`] = `
                   </li>
                 </a>
                 <a
-                  class="chakra-link css-k6vkpw"
+                  class="chakra-link css-n1hyml"
                   href="https://www.instagram.com/palmyramx_hogback_hill/?hl=en"
                   target="_blank"
                 >

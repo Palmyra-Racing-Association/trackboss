@@ -2,7 +2,7 @@
 
 exports[`workpoints card renders correctly 1`] = `
 <div
-  className="css-1mkw5k2"
+  className="css-1v9pmtf"
   onClick={[Function]}
 >
   <div
@@ -27,18 +27,18 @@ exports[`workpoints card renders correctly 1`] = `
         className="chakra-stack css-jp20jv"
       >
         <p
-          className="chakra-text css-12gxl7b"
+          className="chakra-text css-h66c1t"
         >
           You have completed
         </p>
         <p
-          className="chakra-text css-ev573i"
+          className="chakra-text css-11taexh"
         >
           67
           %
         </p>
         <p
-          className="chakra-text css-1gjuw9l"
+          className="chakra-text css-1n49pl7"
         >
           of this year's work points
         </p>

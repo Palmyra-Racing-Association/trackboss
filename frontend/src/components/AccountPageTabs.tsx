@@ -57,9 +57,9 @@ export default function AccountPageTabs() {
                 >
                     <Button
                         justifyContent="flex-start"
-                        fontSize="xl"
+                        fontSize="m"
+                        width="25%"
                         rightIcon={<BsWrench />}
-                        isFullWidth
                         bg="white"
                         color="black"
                         borderRadius="0"
@@ -83,9 +83,9 @@ export default function AccountPageTabs() {
                     </Button>
                     <Button
                         justifyContent="flex-start"
-                        fontSize="xl"
+                        fontSize="m"
+                        width="25%"
                         rightIcon={<BsFillPeopleFill />}
-                        isFullWidth
                         bg="white"
                         color="black"
                         variant="outline"
@@ -109,9 +109,9 @@ export default function AccountPageTabs() {
                     </Button>
                     <Button
                         justifyContent="flex-start"
-                        fontSize="xl"
+                        fontSize="m"
+                        width="25%"
                         rightIcon={<IoMdBriefcase />}
-                        isFullWidth
                         bg="white"
                         color="black"
                         variant="outline"
@@ -135,9 +135,9 @@ export default function AccountPageTabs() {
                     </Button>
                     <Button
                         justifyContent="flex-start"
-                        fontSize="xl"
+                        fontSize="m"
+                        width="25%"
                         rightIcon={<FaMoneyBillAlt />}
-                        isFullWidth
                         bg="white"
                         color="black"
                         variant="outline"

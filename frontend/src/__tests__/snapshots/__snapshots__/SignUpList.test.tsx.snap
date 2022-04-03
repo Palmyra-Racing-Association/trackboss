@@ -85,26 +85,26 @@ exports[`SignUpList component renders correctly 1`] = `
     </div>
   </div>
   <div
-    className="sc-dlVxhl fSQziN"
+    className="sc-dmRaPn gelpCx"
   >
     <div
-      className="sc-fKVqWL XlRpR"
+      className="sc-fLlhyt ifOHjV"
     >
       <div
-        className="sc-bdvvtL hLGqlg rdt_Table"
+        className="sc-bczRLJ eSTlnH rdt_Table"
         disabled={false}
         role="table"
       >
         <div
-          className="sc-gsDKAQ fbhklE rdt_TableHead"
+          className="sc-gsnTZi idPHNo rdt_TableHead"
           role="rowgroup"
         >
           <div
-            className="sc-dkPtRN hCBnvI rdt_TableHeadRow"
+            className="sc-dkzDqf gZWIKX rdt_TableHeadRow"
             role="row"
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-iqseJM MoAup fvAeSn iwmeYY rdt_TableCol"
+              className="sc-hKMtZM sc-eCYdqJ sc-iqcoie eAgBAG bnAwAJ crSOFH rdt_TableCol"
               data-column-id={1}
               onDragEnd={[Function]}
               onDragEnter={[Function]}
@@ -113,7 +113,7 @@ exports[`SignUpList component renders correctly 1`] = `
               onDragStart={[Function]}
             >
               <div
-                className="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                className="sc-crXcEl bLyqNT rdt_TableCol_Sortable"
                 data-column-id={1}
                 data-sort-id={1}
                 disabled={true}
@@ -121,7 +121,7 @@ exports[`SignUpList component renders correctly 1`] = `
                 tabIndex={0}
               >
                 <div
-                  className="sc-egiyK lnndaO"
+                  className="sc-evZas eUeqdG"
                   data-column-id={1}
                 >
                   Name
@@ -129,7 +129,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-iqseJM MoAup fvAeSn iwmeYY rdt_TableCol"
+              className="sc-hKMtZM sc-eCYdqJ sc-iqcoie eAgBAG bnAwAJ crSOFH rdt_TableCol"
               data-column-id={2}
               onDragEnd={[Function]}
               onDragEnter={[Function]}
@@ -138,7 +138,7 @@ exports[`SignUpList component renders correctly 1`] = `
               onDragStart={[Function]}
             >
               <div
-                className="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                className="sc-crXcEl bLyqNT rdt_TableCol_Sortable"
                 data-column-id={2}
                 data-sort-id={2}
                 disabled={true}
@@ -146,7 +146,7 @@ exports[`SignUpList component renders correctly 1`] = `
                 tabIndex={0}
               >
                 <div
-                  className="sc-egiyK lnndaO"
+                  className="sc-evZas eUeqdG"
                   data-column-id={2}
                 >
                   Job
@@ -154,7 +154,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-iqseJM MoAup dKJxny crHzxA rdt_TableCol"
+              className="sc-hKMtZM sc-eCYdqJ sc-iqcoie eAgBAG bxPJzw flvcDD rdt_TableCol"
               data-column-id={3}
               onDragEnd={[Function]}
               onDragEnter={[Function]}
@@ -165,11 +165,11 @@ exports[`SignUpList component renders correctly 1`] = `
           </div>
         </div>
         <div
-          className="sc-hGPBjI fuBVgf rdt_TableBody"
+          className="sc-hHLeRK gFYXSL rdt_TableBody"
           role="rowgroup"
         >
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-0"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -178,7 +178,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -197,7 +197,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -216,7 +216,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -238,7 +238,7 @@ exports[`SignUpList component renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-1"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -247,7 +247,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -266,7 +266,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -285,7 +285,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -307,7 +307,7 @@ exports[`SignUpList component renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-2"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -316,7 +316,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -335,7 +335,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -354,7 +354,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -376,7 +376,7 @@ exports[`SignUpList component renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-3"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -385,7 +385,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -404,7 +404,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -423,7 +423,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -445,7 +445,7 @@ exports[`SignUpList component renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-4"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -454,7 +454,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -473,7 +473,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -492,7 +492,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -514,7 +514,7 @@ exports[`SignUpList component renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-5"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -523,7 +523,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -542,7 +542,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -561,7 +561,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -583,7 +583,7 @@ exports[`SignUpList component renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-6"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -592,7 +592,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -611,7 +611,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -630,7 +630,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -652,7 +652,7 @@ exports[`SignUpList component renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-7"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -661,7 +661,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -680,7 +680,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -699,7 +699,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -721,7 +721,7 @@ exports[`SignUpList component renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-8"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -730,7 +730,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -749,7 +749,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -768,7 +768,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -790,7 +790,7 @@ exports[`SignUpList component renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="sc-jrQzAO kyAlCz rdt_TableRow"
+            className="sc-jqUVSM esKboC rdt_TableRow"
             id="row-9"
             onClick={[Function]}
             onDoubleClick={[Function]}
@@ -799,7 +799,7 @@ exports[`SignUpList component renders correctly 1`] = `
             style={Object {}}
           >
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={1}
               data-tag="allowRowEvents"
               id="cell-1-undefined"
@@ -818,7 +818,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU fvAeSn bsgpsK rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bnAwAJ bMgaAx rdt_TableCell"
               data-column-id={2}
               data-tag="allowRowEvents"
               id="cell-2-undefined"
@@ -837,7 +837,7 @@ exports[`SignUpList component renders correctly 1`] = `
               </div>
             </div>
             <div
-              className="sc-hKwDye sc-eCImPb sc-jRQBWg jGCQvU dKJxny iGMjuu rdt_TableCell"
+              className="sc-hKMtZM sc-eCYdqJ sc-jSMfEi hwrcuL bxPJzw bPUord rdt_TableCell"
               data-column-id={3}
               data-tag={null}
               id="cell-3-undefined"
@@ -864,19 +864,19 @@ exports[`SignUpList component renders correctly 1`] = `
   </div>
   <div>
     <nav
-      className="sc-iJKOTD bhoXfZ rdt_Pagination"
+      className="sc-iIPllB jxflYm rdt_Pagination"
     >
       <span
-        className="sc-bYoBSM sc-ikJyIC fXzwgx bWTWQu"
+        className="sc-bZkfAO sc-ikZpkk lmGpws kBhHpT"
       >
         Rows per page:
       </span>
       <div
-        className="sc-llYSUQ fQmYxz"
+        className="sc-llJcti gnaqej"
       >
         <select
           aria-label="Rows per page:"
-          className="sc-cxpSdN fWWeYy"
+          className="sc-cxabCf kJrhuj"
           defaultValue={10}
           onChange={[Function]}
         >
@@ -927,17 +927,17 @@ exports[`SignUpList component renders correctly 1`] = `
         </svg>
       </div>
       <span
-        className="sc-bYoBSM sc-kLwhqv fXzwgx emVwZU"
+        className="sc-bZkfAO sc-kLLXSd lmGpws OHwJB"
       >
         1-10 of 24
       </span>
       <div
-        className="sc-ezbkAF kNbUsB"
+        className="sc-ezWOiH jMMJgk"
       >
         <button
           aria-disabled={true}
           aria-label="First Page"
-          className="sc-giYglK gPLhoV"
+          className="sc-gicCDI bvxQGL"
           disabled={true}
           id="pagination-first-page"
           onClick={[Function]}
@@ -963,7 +963,7 @@ exports[`SignUpList component renders correctly 1`] = `
         <button
           aria-disabled={true}
           aria-label="Previous Page"
-          className="sc-giYglK gPLhoV"
+          className="sc-gicCDI bvxQGL"
           disabled={true}
           id="pagination-previous-page"
           onClick={[Function]}
@@ -989,7 +989,7 @@ exports[`SignUpList component renders correctly 1`] = `
         <button
           aria-disabled={false}
           aria-label="Next Page"
-          className="sc-giYglK gPLhoV"
+          className="sc-gicCDI bvxQGL"
           disabled={false}
           id="pagination-next-page"
           onClick={[Function]}
@@ -1015,7 +1015,7 @@ exports[`SignUpList component renders correctly 1`] = `
         <button
           aria-disabled={false}
           aria-label="Last Page"
-          className="sc-giYglK gPLhoV"
+          className="sc-gicCDI bvxQGL"
           disabled={false}
           id="pagination-last-page"
           onClick={[Function]}

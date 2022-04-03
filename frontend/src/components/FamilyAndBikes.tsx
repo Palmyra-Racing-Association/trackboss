@@ -92,7 +92,7 @@ export default function GeneralInfo(props: cardProps) {
     }, [props.memberFamily, props.memberBikes]);
 
     return (
-        <SimpleGrid columns={2}>
+        <SimpleGrid columns={1}>
             <VStack mt={25} borderRightWidth={0.5} borderRightColor="lightgrey">
                 <HStack>
                     <Heading>Family</Heading>

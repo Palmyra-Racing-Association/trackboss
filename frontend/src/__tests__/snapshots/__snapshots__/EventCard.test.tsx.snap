@@ -2,7 +2,7 @@
 
 exports[`event card renders all props correctly 1`] = `
 <div
-  className="css-1mkw5k2"
+  className="css-ynfpsp"
   onClick={[Function]}
 >
   <div
@@ -52,15 +52,15 @@ exports[`event card renders all props correctly 1`] = `
         className="chakra-divider css-1upb9tn"
       />
       <p
-        className="chakra-text css-1xo06ej"
+        className="chakra-text css-kee7rk"
       >
         Dec 19th
       </p>
       <p
-        className="chakra-text css-1gjuw9l"
+        className="chakra-text css-1n49pl7"
       />
       <p
-        className="chakra-text css-1gjuw9l"
+        className="chakra-text css-1n49pl7"
       >
         pick rocks, kid
       </p>

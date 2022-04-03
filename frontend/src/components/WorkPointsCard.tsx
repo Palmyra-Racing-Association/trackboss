@@ -22,6 +22,7 @@ export default function WorkPointsCard(props: cardProps) {
             boxShadow="md"
             border="1px"
             borderColor="gray.200"
+            h="365"
             p={3}
         >
             <Center>
@@ -34,12 +35,12 @@ export default function WorkPointsCard(props: cardProps) {
                         colors={['#FF9F46', '#76CE6F']}
                     />
                     <VStack spacing={0}>
-                        <Text pt={5} fontSize="4xl">You have completed</Text>
-                        <Text color="orange" fontSize="6xl">
+                        <Text pt={5} fontSize="2xl">You have completed</Text>
+                        <Text color="orange" fontSize="4xl">
                             {props.percent}
                             %
                         </Text>
-                        <Text fontSize="4xl">of this year&apos;s work points</Text>
+                        <Text fontSize="2xl">of this year&apos;s work points</Text>
                     </VStack>
                 </VStack>
             </Center>

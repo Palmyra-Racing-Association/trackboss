@@ -88,18 +88,18 @@ exports[`work points history renders all props correctly 1`] = `
     0/0
   </h2>
   <div
-    className="sc-dlVxhl fSQziN"
+    className="sc-dmRaPn gelpCx"
   >
     <div
-      className="sc-fKVqWL XlRpR"
+      className="sc-fLlhyt ifOHjV"
     >
       <div
-        className="sc-bdvvtL hLGqlg rdt_Table"
+        className="sc-bczRLJ eSTlnH rdt_Table"
         disabled={false}
         role="table"
       >
         <div
-          className="sc-iwjdpV kntihR"
+          className="sc-ivTmOn fwKvpK"
         >
           <div
             style={

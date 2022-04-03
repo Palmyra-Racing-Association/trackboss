@@ -3,7 +3,7 @@ import { Box, Center, ListItem, Link, UnorderedList, Heading, VStack, Divider } 
 
 export default function ImportantLinksCard() {
     return (
-        <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={3}>
+        <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={3} h="365">
             <Center>
                 <VStack boxSize="md">
                     <Heading>Important Links</Heading>
@@ -12,7 +12,7 @@ export default function ImportantLinksCard() {
                         <Link
                             href="https://palmyramx.com/pages/track-rules"
                             target="_blank"
-                            fontSize="4xl"
+                            fontSize="2xl"
                             color="orange"
                         >
                             <ListItem pt={1}>Member Rules</ListItem>
@@ -20,7 +20,7 @@ export default function ImportantLinksCard() {
                         <Link
                             href="https://twitter.com/palmyramx"
                             target="_blank"
-                            fontSize="4xl"
+                            fontSize="2xl"
                             color="orange"
                         >
                             <ListItem pt={1}>Twitter</ListItem>
@@ -28,7 +28,7 @@ export default function ImportantLinksCard() {
                         <Link
                             href="https://www.facebook.com/palmyramx/"
                             target="_blank"
-                            fontSize="4xl"
+                            fontSize="2xl"
                             color="orange"
                         >
                             <ListItem pt={1}>Facebook</ListItem>
@@ -36,7 +36,7 @@ export default function ImportantLinksCard() {
                         <Link
                             href="https://www.instagram.com/palmyramx_hogback_hill/?hl=en"
                             target="_blank"
-                            fontSize="4xl"
+                            fontSize="2xl"
                             color="orange"
                         >
                             <ListItem pt={1}>Instagram</ListItem>

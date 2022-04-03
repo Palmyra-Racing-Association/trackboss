@@ -11,7 +11,7 @@ exports[`account page tabs renders correctly 1`] = `
       className="chakra-stack css-1p1m4ay"
     >
       <button
-        className="chakra-button css-1u2ox7f"
+        className="chakra-button css-1q89pga"
         data-active=""
         id="1"
         onClick={[Function]}
@@ -47,7 +47,7 @@ exports[`account page tabs renders correctly 1`] = `
         className="chakra-stack__divider css-dmkk74"
       />
       <button
-        className="chakra-button css-81ofja"
+        className="chakra-button css-12j8761"
         id="2"
         onClick={[Function]}
         type="button"
@@ -89,7 +89,7 @@ exports[`account page tabs renders correctly 1`] = `
         className="chakra-stack__divider css-dmkk74"
       />
       <button
-        className="chakra-button css-1u2ox7f"
+        className="chakra-button css-1q89pga"
         id="3"
         onClick={[Function]}
         type="button"
@@ -124,7 +124,7 @@ exports[`account page tabs renders correctly 1`] = `
         className="chakra-stack__divider css-dmkk74"
       />
       <button
-        className="chakra-button css-1u2ox7f"
+        className="chakra-button css-1q89pga"
         id="4"
         onClick={[Function]}
         type="button"

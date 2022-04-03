@@ -95,7 +95,7 @@ Array [
         className="css-brfpum"
       >
         <div
-          className="css-15ddyrp"
+          className="css-fvqjrt"
           onClick={[Function]}
         >
           <div
@@ -120,18 +120,18 @@ Array [
                 className="chakra-stack css-jp20jv"
               >
                 <p
-                  className="chakra-text css-1srjgni"
+                  className="chakra-text css-1qhpl4f"
                 >
                   You have completed
                 </p>
                 <p
-                  className="chakra-text css-68kehq"
+                  className="chakra-text css-urz4bw"
                 >
                   0
                   %
                 </p>
                 <p
-                  className="chakra-text css-1bsg0uq"
+                  className="chakra-text css-9hpz1u"
                 >
                   of this year's work points
                 </p>
@@ -140,7 +140,7 @@ Array [
           </div>
         </div>
         <div
-          className="css-15ddyrp"
+          className="css-1v663m6"
           onClick={[Function]}
         >
           <div
@@ -190,17 +190,17 @@ Array [
                 className="chakra-divider css-svjswr"
               />
               <p
-                className="chakra-text css-ykwwr6"
+                className="chakra-text css-f11cbl"
               >
                 
               </p>
               <p
-                className="chakra-text css-1bsg0uq"
+                className="chakra-text css-9hpz1u"
               >
                 
               </p>
               <p
-                className="chakra-text css-1bsg0uq"
+                className="chakra-text css-9hpz1u"
               >
                 
               </p>
@@ -208,7 +208,7 @@ Array [
           </div>
         </div>
         <div
-          className="css-9nem3t"
+          className="css-q49w35"
         >
           <div
             className="css-gmuwbf"
@@ -230,7 +230,7 @@ Array [
                 role="list"
               >
                 <a
-                  className="chakra-link css-k6vkpw"
+                  className="chakra-link css-n1hyml"
                   href="https://palmyramx.com/pages/track-rules"
                   target="_blank"
                 >
@@ -241,7 +241,7 @@ Array [
                   </li>
                 </a>
                 <a
-                  className="chakra-link css-k6vkpw"
+                  className="chakra-link css-n1hyml"
                   href="https://twitter.com/palmyramx"
                   target="_blank"
                 >
@@ -252,7 +252,7 @@ Array [
                   </li>
                 </a>
                 <a
-                  className="chakra-link css-k6vkpw"
+                  className="chakra-link css-n1hyml"
                   href="https://www.facebook.com/palmyramx/"
                   target="_blank"
                 >
@@ -263,7 +263,7 @@ Array [
                   </li>
                 </a>
                 <a
-                  className="chakra-link css-k6vkpw"
+                  className="chakra-link css-n1hyml"
                   href="https://www.instagram.com/palmyramx_hogback_hill/?hl=en"
                   target="_blank"
                 >
