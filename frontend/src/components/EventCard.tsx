@@ -25,7 +25,7 @@ export default function EventCard(props: cardProps) {
             border="1px"
             borderColor="gray.200"
             p={3}
-            maxWidth={300}
+            h="365"
         >
             <Center>
                 <VStack p={0} boxSize="md">
@@ -43,9 +43,9 @@ export default function EventCard(props: cardProps) {
                         <Heading pr={5}>Next Event</Heading>
                     </HStack>
                     <Divider />
-                    <Text pt={10} pb={10} color="orange" fontSize="6xl">{props.date}</Text>
-                    <Text fontSize="4xl">{props.startTime}</Text>
-                    <Text fontSize="4xl">{props.name}</Text>
+                    <Text pt={10} pb={10} color="orange" fontSize="4xl">{props.date}</Text>
+                    <Text fontSize="2xl">{props.startTime}</Text>
+                    <Text fontSize="2xl">{props.name}</Text>
                 </VStack>
             </Center>
         </Box>

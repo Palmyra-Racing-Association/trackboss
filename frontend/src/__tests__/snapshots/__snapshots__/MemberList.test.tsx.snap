@@ -4,76 +4,84 @@ exports[`Member List component renders correctly 1`] = `
 <DocumentFragment>
   <div>
     <div
-      class="sc-dlVxhl fSQziN"
+      class="sc-dmRaPn gelpCx"
     >
       <div
-        class="sc-fKVqWL XlRpR"
+        class="sc-fLlhyt ifOHjV"
       >
         <div
-          class="sc-bdvvtL hLGqlg rdt_Table"
+          class="sc-bczRLJ eSTlnH rdt_Table"
           role="table"
         >
           <div
-            class="sc-gsDKAQ fbhklE rdt_TableHead"
+            class="sc-gsnTZi idPHNo rdt_TableHead"
             role="rowgroup"
           >
             <div
-              class="sc-dkPtRN hCBnvI rdt_TableHeadRow"
+              class="sc-dkzDqf gZWIKX rdt_TableHeadRow"
               role="row"
             >
               <div
-                class="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
+                class="sc-hKMtZM sc-eCYdqJ sc-iqcoie dAGdUH bnAwAJ crSOFH rdt_TableCol"
                 data-column-id="1"
               >
                 <div
-                  class="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                  class="sc-crXcEl gJhVev rdt_TableCol_Sortable"
                   data-column-id="1"
                   data-sort-id="1"
-                  disabled=""
                   role="columnheader"
                   tabindex="0"
                 >
                   <div
-                    class="sc-egiyK lnndaO"
+                    class="sc-evZas eUeqdG"
                     data-column-id="1"
                   >
                     Name
                   </div>
+                  <span
+                    class="sc-kDDrLX fTxtMi"
+                  >
+                    ▲
+                  </span>
                 </div>
               </div>
               <div
-                class="sc-hKwDye sc-eCImPb sc-iqseJM itnIOV fvAeSn iwmeYY rdt_TableCol"
+                class="sc-hKMtZM sc-eCYdqJ sc-iqcoie dAGdUH bnAwAJ crSOFH rdt_TableCol"
                 data-column-id="2"
               >
                 <div
-                  class="sc-crHmcD bNgcsh rdt_TableCol_Sortable"
+                  class="sc-crXcEl gJhVev rdt_TableCol_Sortable"
                   data-column-id="2"
                   data-sort-id="2"
-                  disabled=""
                   role="columnheader"
                   tabindex="0"
                 >
                   <div
-                    class="sc-egiyK lnndaO"
+                    class="sc-evZas eUeqdG"
                     data-column-id="2"
                   >
                     Role
                   </div>
+                  <span
+                    class="sc-kDDrLX fTxtMi"
+                  >
+                    ▲
+                  </span>
                 </div>
               </div>
             </div>
           </div>
           <div
-            class="sc-hGPBjI fuBVgf rdt_TableBody"
+            class="sc-hHLeRK gFYXSL rdt_TableBody"
             role="rowgroup"
           >
             <div
-              class="sc-jrQzAO kCxImp rdt_TableRow"
+              class="sc-jqUVSM gOWJSc rdt_TableRow"
               id="row-0"
               role="row"
             >
               <div
-                class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                class="sc-hKMtZM sc-eCYdqJ sc-jSMfEi ebHJoU bnAwAJ bMgaAx rdt_TableCell"
                 data-column-id="1"
                 data-tag="allowRowEvents"
                 id="cell-1-undefined"
@@ -86,7 +94,7 @@ exports[`Member List component renders correctly 1`] = `
                 </div>
               </div>
               <div
-                class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                class="sc-hKMtZM sc-eCYdqJ sc-jSMfEi ebHJoU bnAwAJ bMgaAx rdt_TableCell"
                 data-column-id="2"
                 data-tag="allowRowEvents"
                 id="cell-2-undefined"
@@ -100,12 +108,12 @@ exports[`Member List component renders correctly 1`] = `
               </div>
             </div>
             <div
-              class="sc-jrQzAO kCxImp rdt_TableRow"
+              class="sc-jqUVSM gOWJSc rdt_TableRow"
               id="row-1"
               role="row"
             >
               <div
-                class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                class="sc-hKMtZM sc-eCYdqJ sc-jSMfEi ebHJoU bnAwAJ bMgaAx rdt_TableCell"
                 data-column-id="1"
                 data-tag="allowRowEvents"
                 id="cell-1-undefined"
@@ -118,7 +126,7 @@ exports[`Member List component renders correctly 1`] = `
                 </div>
               </div>
               <div
-                class="sc-hKwDye sc-eCImPb sc-jRQBWg jQVlyN fvAeSn bsgpsK rdt_TableCell"
+                class="sc-hKMtZM sc-eCYdqJ sc-jSMfEi ebHJoU bnAwAJ bMgaAx rdt_TableCell"
                 data-column-id="2"
                 data-tag="allowRowEvents"
                 id="cell-2-undefined"
@@ -137,19 +145,19 @@ exports[`Member List component renders correctly 1`] = `
     </div>
     <div>
       <nav
-        class="sc-iJKOTD bhoXfZ rdt_Pagination"
+        class="sc-iIPllB jxflYm rdt_Pagination"
       >
         <span
-          class="sc-bYoBSM sc-ikJyIC fXzwgx bWTWQu"
+          class="sc-bZkfAO sc-ikZpkk lmGpws kBhHpT"
         >
           Rows per page:
         </span>
         <div
-          class="sc-llYSUQ fQmYxz"
+          class="sc-llJcti gnaqej"
         >
           <select
             aria-label="Rows per page:"
-            class="sc-cxpSdN fWWeYy"
+            class="sc-cxabCf kJrhuj"
           >
             <option
               selected=""
@@ -194,17 +202,17 @@ exports[`Member List component renders correctly 1`] = `
           </svg>
         </div>
         <span
-          class="sc-bYoBSM sc-kLwhqv fXzwgx emVwZU"
+          class="sc-bZkfAO sc-kLLXSd lmGpws OHwJB"
         >
           1-2 of 2
         </span>
         <div
-          class="sc-ezbkAF kNbUsB"
+          class="sc-ezWOiH jMMJgk"
         >
           <button
             aria-disabled="true"
             aria-label="First Page"
-            class="sc-giYglK gPLhoV"
+            class="sc-gicCDI bvxQGL"
             disabled=""
             id="pagination-first-page"
             type="button"
@@ -229,7 +237,7 @@ exports[`Member List component renders correctly 1`] = `
           <button
             aria-disabled="true"
             aria-label="Previous Page"
-            class="sc-giYglK gPLhoV"
+            class="sc-gicCDI bvxQGL"
             disabled=""
             id="pagination-previous-page"
             type="button"
@@ -254,7 +262,7 @@ exports[`Member List component renders correctly 1`] = `
           <button
             aria-disabled="true"
             aria-label="Next Page"
-            class="sc-giYglK gPLhoV"
+            class="sc-gicCDI bvxQGL"
             disabled=""
             id="pagination-next-page"
             type="button"
@@ -279,7 +287,7 @@ exports[`Member List component renders correctly 1`] = `
           <button
             aria-disabled="true"
             aria-label="Last Page"
-            class="sc-giYglK gPLhoV"
+            class="sc-gicCDI bvxQGL"
             disabled=""
             id="pagination-last-page"
             type="button"

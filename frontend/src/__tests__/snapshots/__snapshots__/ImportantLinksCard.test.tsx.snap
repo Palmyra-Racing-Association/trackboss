@@ -2,7 +2,7 @@
 
 exports[`important links card renders correctly 1`] = `
 <div
-  className="css-1nfevod"
+  className="css-1sczra"
 >
   <div
     className="css-gmuwbf"
@@ -24,7 +24,7 @@ exports[`important links card renders correctly 1`] = `
         role="list"
       >
         <a
-          className="chakra-link css-1ffay1v"
+          className="chakra-link css-vy4mxi"
           href="https://palmyramx.com/pages/track-rules"
           target="_blank"
         >
@@ -35,7 +35,7 @@ exports[`important links card renders correctly 1`] = `
           </li>
         </a>
         <a
-          className="chakra-link css-1ffay1v"
+          className="chakra-link css-vy4mxi"
           href="https://twitter.com/palmyramx"
           target="_blank"
         >
@@ -46,7 +46,7 @@ exports[`important links card renders correctly 1`] = `
           </li>
         </a>
         <a
-          className="chakra-link css-1ffay1v"
+          className="chakra-link css-vy4mxi"
           href="https://www.facebook.com/palmyramx/"
           target="_blank"
         >
@@ -57,7 +57,7 @@ exports[`important links card renders correctly 1`] = `
           </li>
         </a>
         <a
-          className="chakra-link css-1ffay1v"
+          className="chakra-link css-vy4mxi"
           href="https://www.instagram.com/palmyramx_hogback_hill/?hl=en"
           target="_blank"
         >

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Center, ChakraProvider, HStack, VStack } from '@chakra-ui/react';
+import { ChakraProvider, Center, SimpleGrid, VStack } from '@chakra-ui/react';
 import { UserContext } from '../contexts/UserContext';
 import theme from '../theme';
 import Header from '../components/Header';
@@ -18,7 +18,6 @@ async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     return props;
 }
 
-// eslint-disable-next-line no-unused-vars
 async function getWorkPointsPercentage(token: string, memberId: number) {
     const workPoints = await getWorkPointsTotal(token, memberId);
     const threshold = await getYearlyThresholdValue(token);
@@ -26,13 +25,13 @@ async function getWorkPointsPercentage(token: string, memberId: number) {
         return Math.ceil((workPoints / threshold) * 100);
     }
     // else
-    return undefined;
+    return -1;
 }
 
 function Dashboard() {
     const { state } = useContext(UserContext);
     const [eventCardProps, setEventCardProps] = useState<any>();
-    const [percent, setPercent] = useState<number>();
+    const [percent, setPercent] = useState<number>(0);
     useEffect(() => {
         async function getData() {
             setEventCardProps(await getEventCardPropsLocal(state.token));
@@ -53,14 +52,8 @@ function Dashboard() {
                     )
                 }
                 <Center>
-                    <HStack>
-                        {
-                            percent ? (
-                                <WorkPointsCard percent={percent} />
-                            ) : (
-                                <WorkPointsCard percent={0} />
-                            )
-                        }
+                    <SimpleGrid columns={[1, null, 3]} spacing="20px">
+                        <WorkPointsCard percent={percent} />
                         {
                             eventCardProps ? (
                                 <EventCard
@@ -77,7 +70,7 @@ function Dashboard() {
                             )
                         }
                         <ImportantLinksCard />
-                    </HStack>
+                    </SimpleGrid>
                 </Center>
             </VStack>
         </ChakraProvider>

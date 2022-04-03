@@ -13,10 +13,12 @@ const columns: any = [
     {
         name: 'Name',
         selector: (row: Member) => `${row.firstName} ${row.lastName}`,
+        sortable: true,
     },
     {
         name: 'Role',
         selector: (row: Member) => row.memberType,
+        sortable: true,
     },
 ];
 
@@ -30,14 +32,14 @@ const customStyles = {
         style: {
             marginTop: '90px',
             paddingTop: '0',
-            fontSize: '3em',
+            fontSize: '2em',
             backgroundColor: '#f9f9f9',
             color: '#626262',
         },
     },
     cells: {
         style: {
-            fontSize: '2.0em',
+            fontSize: '1.5em',
         },
     },
 };
