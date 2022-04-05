@@ -114,6 +114,15 @@ interface Worker {
     verified: boolean
 }
 
+export async function getSignupList(token: string, eventId: number): Promise<Worker[]> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/list?eventID=${eventId}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
+
 // mocked api call
 // TODO: replace with actual call to api/job/list with date range when api is complete
 export function getFormattedSignUpList(): Worker[] {
