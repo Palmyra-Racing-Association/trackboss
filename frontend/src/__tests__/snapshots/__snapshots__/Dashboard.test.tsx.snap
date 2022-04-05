@@ -78,12 +78,12 @@ exports[`dashboard renders correctly 1`] = `
       class="css-gmuwbf"
     >
       <h2
-        class="chakra-heading css-1i61012"
+        class="chakra-heading css-1jkx6l7"
       >
         Hi, 
       </h2>
       <h2
-        class="chakra-heading css-ws1u8n"
+        class="chakra-heading css-10fa1fq"
       >
         Martin Martian
       </h2>

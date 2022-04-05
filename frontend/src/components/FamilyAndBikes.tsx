@@ -115,7 +115,6 @@ export default function GeneralInfo(props: cardProps) {
                         )
                     }
                 </HStack>
-                <Divider />
                 {
                     memberFamily && (
                         <UnorderedList pt={10} spacing={2}>

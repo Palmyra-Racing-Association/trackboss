@@ -54,10 +54,6 @@ Object {
               Add
             </button>
           </div>
-          <hr
-            aria-orientation="horizontal"
-            class="chakra-divider css-1upb9tn"
-          />
           <ul
             class="css-1k0qbim"
             role="list"
@@ -189,10 +185,6 @@ Object {
             Add
           </button>
         </div>
-        <hr
-          aria-orientation="horizontal"
-          class="chakra-divider css-1upb9tn"
-        />
         <ul
           class="css-1k0qbim"
           role="list"
@@ -403,10 +395,6 @@ Object {
               Family
             </h2>
           </div>
-          <hr
-            aria-orientation="horizontal"
-            class="chakra-divider css-1upb9tn"
-          />
           <ul
             class="css-1k0qbim"
             role="list"
@@ -490,10 +478,6 @@ Object {
             Family
           </h2>
         </div>
-        <hr
-          aria-orientation="horizontal"
-          class="chakra-divider css-1upb9tn"
-        />
         <ul
           class="css-1k0qbim"
           role="list"

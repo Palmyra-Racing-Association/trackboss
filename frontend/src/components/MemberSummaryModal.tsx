@@ -199,7 +199,6 @@ export default function MemberSummaryModal(props: modalProps) {
 
     return (
         <Modal
-            isCentered
             size="xl"
             isOpen={props.isOpen}
             onClose={props.onClose}
@@ -213,7 +212,7 @@ export default function MemberSummaryModal(props: modalProps) {
                     { error !== '' && ({ error }) }
                     {
                         selectedMember && bikes && (
-                            <SimpleGrid columns={2} spacing={4}>
+                            <SimpleGrid columns={[1, null, 2]} spacing={4}>
                                 <VStack borderRightWidth={1} borderRightColor="light-grey" align="left">
                                     <HStack>
                                         <Text textAlign="left" fontSize="3xl" fontWeight="bold">Contact Info</Text>

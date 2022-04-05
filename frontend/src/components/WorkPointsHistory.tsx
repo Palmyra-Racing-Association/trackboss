@@ -46,14 +46,14 @@ const customStyles = {
         style: {
             marginTop: '90px',
             paddingTop: '0',
-            fontSize: '3em',
+            fontSize: '1.5em',
             backgroundColor: '#f9f9f9',
             color: '#626262',
         },
     },
     cells: {
         style: {
-            fontSize: '2.0em',
+            fontSize: '1.2em',
         },
     },
 };
@@ -129,7 +129,7 @@ export default function WorkPointsHistory() {
                 </Menu>
                 <Heading>Work Points History</Heading>
             </HStack>
-            <Heading color="orange" size="4xl">{`${workPointsEarned}/${workPoinstThreshold}`}</Heading>
+            <Heading color="orange" size="2xl">{`${workPointsEarned}/${workPoinstThreshold}`}</Heading>
 
             <DataTable
                 columns={columns}

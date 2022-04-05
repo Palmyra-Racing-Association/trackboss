@@ -12,9 +12,9 @@ interface pageProps {
 export default function Header(props:pageProps) {
     return (
         <Center>
-            <Heading size="4xl">
+            <Heading size="2xl">
                 Hi, {/*eslint-disable-line*/}
-                <Heading sx={{ display: 'inline' }} color="orange" size="4xl">
+                <Heading sx={{ display: 'inline' }} color="orange" size="2xl">
                     {props.name}
                 </Heading>
             </Heading>
