@@ -11,7 +11,7 @@ import {
 } from 'src/typedefs/job';
 import { checkHeader, verify } from '../util/auth';
 
-import { insertJob, getJob, getJobList, patchJob, deleteJob } from '../database/job';
+import { insertJob, getJob, getJobList, patchJob, deleteJob, setJobVerifiedState } from '../database/job';
 
 const job = Router();
 
@@ -225,6 +225,41 @@ job.patch('/:jobId', async (req: Request, res: Response) => {
             } else if (e.message === 'Forbidden') {
                 res.status(403);
                 response = { reason: 'forbidden' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
+});
+
+job.patch('/verify/:jobId/:state', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: GetJobResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const { jobId, state } = req.params;
+            const id = Number(jobId);
+            const verifiedState = (state === 'true');
+            if (Number.isNaN(id)) {
+                throw new Error('not found');
+            }
+            await setJobVerifiedState(id, verifiedState);
+            response = await getJob(id);
+            res.status(200);
+        } catch (e: any) {
+            if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
             } else {
                 res.status(500);
                 response = { reason: 'internal server error' };

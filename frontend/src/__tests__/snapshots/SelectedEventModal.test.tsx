@@ -17,6 +17,7 @@ const selectedEvent = {
     start: new Date('2022-02-11T03:10:00'),
     end: new Date('2022-02-12T14:10:00'),
     type: 'race',
+    eventId: 1,
 };
 
 // Necessary to mock the chakra-ui modal portal, so that the renderer can target the modal instead of the page

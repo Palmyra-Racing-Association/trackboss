@@ -129,7 +129,7 @@ export default function SelectedEventModal(props: modalProps) {
                     {
                         props.admin && (
                             <Link
-                                to={`signups/${(moment(props.selectedEvent.start).toISOString()).split('T')[0]}`}
+                                to={`signups/${(moment(props.selectedEvent.start).toISOString()).split('T')[0]}/${props.selectedEvent.eventId}`}
                                 state={{ date: props.selectedEvent.start }}
                             >
                                 View Sign Ups

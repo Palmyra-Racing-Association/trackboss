@@ -1,22 +1,28 @@
 import { Box, Center, Flex, IconButton, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsPrinter, BsSearch } from 'react-icons/bs';
-import { getFormattedSignUpList } from '../controller/job';
+import { getSignupList } from '../controller/job';
+import { UserContext } from '../contexts/UserContext';
 import VerifyButton from './VerifyButton';
 
 const columns: any = [
     {
         name: 'Name',
-        selector: (row: { name: string; }) => row.name,
+        selector: (row: { member: string; }) => row.member,
+        sortable: true,
     },
     {
         name: 'Job',
-        selector: (row: { job: string; }) => row.job,
+        selector: (row: { title: string; }) => row.title,
+        sortable: true,
     },
     {
         button: true,
-        cell: (row: { verified: boolean }) => (<VerifyButton verified={row.verified} />),
+        // eslint-disable-next-line max-len
+        cell: (row: { verified: boolean, jobId: number, member: string }) => (
+            <VerifyButton verified={row.verified} jobId={row.jobId} member={row.member} />
+        ),
         minWidth: '10em',
         style: {
             paddingRight: '2em',
@@ -49,10 +55,6 @@ interface Worker {
 }
 
 // not strictly necessary now but will be when the api is done and these become async functions
-function getFormattedSignUpListLocal() {
-    const response = getFormattedSignUpList();
-    return response;
-}
 
 const customStyles = {
     rows: {
@@ -63,7 +65,7 @@ const customStyles = {
     headCells: {
         style: {
             paddingTop: '2em',
-            fontSize: '2.7em',
+            fontSize: '1.7em',
             fontWeight: 'bold',
             backgroundColor: '#f9f9f9',
             color: '#626262',
@@ -71,7 +73,7 @@ const customStyles = {
     },
     cells: {
         style: {
-            fontSize: '2.5em',
+            fontSize: '1.5em',
         },
     },
 };
@@ -81,17 +83,18 @@ const paginationComponentOptions = {
     selectAllRowsItemText: 'All Rows',
 };
 
-export default function SignUpList() {
+export default function SignUpList(props: any) {
     const [cells, setCells] = useState([] as Worker[]);
     const [printing, setPrinting] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [allCells, setAllCells] = useState<Worker[]>([]);
+    const { state } = useContext(UserContext);
 
     useEffect(() => {
         async function getData() {
-            const formattedResponse = getFormattedSignUpListLocal();
-            setCells(formattedResponse);
-            setAllCells(formattedResponse);
+            const eventJobs = await getSignupList(state?.token, props.eventId);
+            setCells(eventJobs);
+            setAllCells(eventJobs);
         }
         getData();
     }, []);
