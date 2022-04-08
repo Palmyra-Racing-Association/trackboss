@@ -18,7 +18,7 @@ export default function VerifyButton(props: buttonProps) {
         setVerifiedState(state.token, props.jobId, !verified);
     };
     let verifyButton;
-    if (props.member) {
+    if (props.member && (state.user?.memberType === 'Admin')) {
         verifyButton = (
             <Button
                 size="lg"

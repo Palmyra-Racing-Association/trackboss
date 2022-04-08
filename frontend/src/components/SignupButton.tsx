@@ -5,19 +5,18 @@ import { signupForJob, removeSignup } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 
 interface buttonProps {
-    filled: boolean,
     jobId: number,
     member: string,
+    memberId: number,
 }
 
 export default function SignupButton(props: buttonProps) {
     const { state } = useContext(UserContext);
-    const [filled, setFilled] = useState(props.filled);
     const [member, setMember] = useState(props.member);
+    const [jobMemberId] = useState(props.memberId);
+
     const [jobId] = useState(props.jobId);
     const handleClick = async () => {
-        setFilled(!filled);
-        console.log(`signed up ${state.user?.memberId} for ${jobId}`);
         setMember(`${state.user?.firstName} ${state.user?.lastName}`);
         const memberId = state?.user?.memberId;
         if (memberId) {
@@ -39,7 +38,7 @@ export default function SignupButton(props: buttonProps) {
     } else {
         // I can delete my own signups, and of course admins can delete everyone's signups.
         const allowDelete = (
-            (member === `${state.user?.firstName} ${state.user?.lastName}`) ||
+            (state?.user?.memberId === jobMemberId) ||
             (state.user?.memberType === 'Admin')
         );
         signupButton = (
@@ -53,8 +52,7 @@ export default function SignupButton(props: buttonProps) {
                     icon={<BsFillTrashFill />}
                     onClick={
                         async () => {
-                            alert(`${jobId} ${state.user?.memberId}`);
-                            removeSignup(state.token, jobId);
+                            await removeSignup(state.token, jobId);
                             setMember('');
                         }
                     }

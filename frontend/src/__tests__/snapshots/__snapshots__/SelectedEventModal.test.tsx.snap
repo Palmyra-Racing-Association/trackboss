@@ -122,7 +122,7 @@ Object {
               class="chakra-modal__footer css-192qrng"
             >
               <a
-                href="/signups/2022-02-11"
+                href="/signups/2022-02-11/1"
               >
                 View Sign Ups
               </a>
@@ -323,7 +323,13 @@ Object {
             </button>
             <footer
               class="chakra-modal__footer css-192qrng"
-            />
+            >
+              <a
+                href="/signups/2022-02-11/1"
+              >
+                View Sign Ups
+              </a>
+            </footer>
           </section>
         </div>
       </div>
