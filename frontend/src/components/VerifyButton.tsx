@@ -13,10 +13,9 @@ interface buttonProps {
 export default function VerifyButton(props: buttonProps) {
     const { state } = useContext(UserContext);
     const [verified, setVerified] = useState(props.verified);
-    const [jobId] = useState(props.jobId);
     const handleClick = () => {
         setVerified(!verified);
-        setVerifiedState(state.token, jobId, !verified);
+        setVerifiedState(state.token, props.jobId, !verified);
     };
     let verifyButton;
     if (props.member) {

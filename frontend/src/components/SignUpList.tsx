@@ -5,17 +5,35 @@ import { BsPrinter, BsSearch } from 'react-icons/bs';
 import { getSignupList } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 import VerifyButton from './VerifyButton';
+import SignupButton from './SignupButton';
 
 const columns: any = [
+    {
+        name: 'Name',
+        // eslint-disable-next-line max-len
+        cell: (row: { filled: boolean, jobId: number, member: string }) => (
+            <SignupButton filled={false} jobId={row.jobId} member={row.member} />
+        ),
+        style: {
+            paddingRight: '2em',
+        },
+        sortable: true,
+    },
+    /*
     {
         name: 'Name',
         selector: (row: { member: string; }) => row.member,
         sortable: true,
     },
+    */
     {
         name: 'Job',
         selector: (row: { title: string; }) => row.title,
         sortable: true,
+    },
+    {
+        name: 'Points',
+        selector: (row: { pointsAwarded: number; }) => row.pointsAwarded,
     },
     {
         button: true,
@@ -23,7 +41,6 @@ const columns: any = [
         cell: (row: { verified: boolean, jobId: number, member: string }) => (
             <VerifyButton verified={row.verified} jobId={row.jobId} member={row.member} />
         ),
-        minWidth: '10em',
         style: {
             paddingRight: '2em',
         },
@@ -65,7 +82,7 @@ const customStyles = {
     headCells: {
         style: {
             paddingTop: '2em',
-            fontSize: '1.7em',
+            fontSize: '1.2em',
             fontWeight: 'bold',
             backgroundColor: '#f9f9f9',
             color: '#626262',
@@ -73,7 +90,7 @@ const customStyles = {
     },
     cells: {
         style: {
-            fontSize: '1.5em',
+            fontSize: '1.2em',
         },
     },
 };
@@ -146,7 +163,6 @@ export default function SignUpList(props: any) {
             <DataTable
                 columns={printing ? printingColumns : columns}
                 data={cells}
-                fixedHeaderScrollHeight="300px"
                 highlightOnHover
                 pagination
                 paginationComponentOptions={paginationComponentOptions}

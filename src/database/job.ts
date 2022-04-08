@@ -177,15 +177,22 @@ export async function patchJob(id: number, req: PatchJobRequest): Promise<void> 
     }
 }
 
-export async function setJobVerifiedState(id: number, state: boolean) : Promise<void> {
+export async function setJobVerifiedState(id: number, state: boolean) : Promise<number> {
     const [result] = await getPool().query<OkPacket>(
         'update job set verified = ? where job_id = ?',
         [state, id],
     );
-    if (result.affectedRows < 1) {
-        throw new Error('not found');
-    }
+    return result.affectedRows;
 }
+
+export async function removeSignup(jobId: number) : Promise<number> {
+    const [result] = await getPool().query<OkPacket>(
+        'update job set member_id = null where job_id = ?',
+        [jobId],
+    );
+    return result.affectedRows;
+}
+
 export async function deleteJob(id: number): Promise<void> {
     const values = [id];
 

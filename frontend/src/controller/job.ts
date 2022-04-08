@@ -99,6 +99,29 @@ export async function setVerifiedState(token: string, jobId: number, state: bool
     return response.json();
 }
 
+/**
+ * Signup a user for a job.
+ * @param token user token
+ * @param jobId job to sign up for.
+ * @param memberId member to signup for the job.
+ * @returns job signed up for.
+ */
+export async function signupForJob(token:string, jobId: number, memberId: number) : Promise<any> {
+    const signupJob : any = await getJob(token, jobId);
+    signupJob.memberId = memberId;
+    const modifiedJob : any = await updateJob(token, jobId, signupJob);
+    return modifiedJob;
+}
+
+export async function removeSignup(token:string, jobId: number) : Promise<any> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/remove/signup/${jobId}`, {
+        method: 'PATCH',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
+
 interface Worker {
     name: string,
     job: string,
