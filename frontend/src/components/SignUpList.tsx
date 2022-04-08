@@ -11,8 +11,8 @@ const columns: any = [
     {
         name: 'Name',
         // eslint-disable-next-line max-len
-        cell: (row: { filled: boolean, jobId: number, member: string }) => (
-            <SignupButton filled={false} jobId={row.jobId} member={row.member} />
+        cell: (row: { filled: boolean, jobId: number, member: string, memberId:number }) => (
+            <SignupButton jobId={row.jobId} member={row.member} memberId={row.memberId} />
         ),
         style: {
             paddingRight: '2em',

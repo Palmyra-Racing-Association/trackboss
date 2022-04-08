@@ -97,6 +97,8 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
     return results.map((result) => ({
         jobId: result.job_id,
         member: result.member,
+        memberId: result.member_id,
+        membershipId: result.membership_id,
         eventId: result.event_id,
         event: result.event,
         start: result.start,
@@ -130,6 +132,8 @@ export async function getJob(id: number): Promise<Job> {
     return {
         jobId: results[0].job_id,
         member: results[0].member,
+        memberId: results[0].member_id,
+        membershipId: results[0].membership_id,
         eventId: results[0].event_id,
         event: results[0].event,
         start: results[0].start,
