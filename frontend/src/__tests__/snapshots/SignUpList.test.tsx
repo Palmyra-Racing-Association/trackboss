@@ -6,7 +6,7 @@ describe('SignUpList component', () => {
     it('renders correctly', () => {
         let list: ReactTestRenderer;
         act(() => {
-            list = renderer.create(<SignUpList />);
+            list = renderer.create(<SignUpList eventId="1" />);
         });
         expect(list!.toJSON()).toMatchSnapshot();
     });

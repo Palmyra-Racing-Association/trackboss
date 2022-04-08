@@ -2,6 +2,8 @@ import { ErrorResponse } from './errorResponse';
 
 export type Job = {
     jobId: number,
+    memberId: number,
+    membershipId: number,
     member?: string,
     eventId: number,
     event: string,

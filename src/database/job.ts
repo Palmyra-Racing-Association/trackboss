@@ -97,6 +97,8 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
     return results.map((result) => ({
         jobId: result.job_id,
         member: result.member,
+        memberId: result.member_id,
+        membershipId: result.membership_id,
         eventId: result.event_id,
         event: result.event,
         start: result.start,
@@ -130,6 +132,8 @@ export async function getJob(id: number): Promise<Job> {
     return {
         jobId: results[0].job_id,
         member: results[0].member,
+        memberId: results[0].member_id,
+        membershipId: results[0].membership_id,
         eventId: results[0].event_id,
         event: results[0].event,
         start: results[0].start,
@@ -175,6 +179,22 @@ export async function patchJob(id: number, req: PatchJobRequest): Promise<void> 
     if (result.affectedRows < 1) {
         throw new Error('not found');
     }
+}
+
+export async function setJobVerifiedState(id: number, state: boolean) : Promise<number> {
+    const [result] = await getPool().query<OkPacket>(
+        'update job set verified = ? where job_id = ?',
+        [state, id],
+    );
+    return result.affectedRows;
+}
+
+export async function removeSignup(jobId: number) : Promise<number> {
+    const [result] = await getPool().query<OkPacket>(
+        'update job set member_id = null where job_id = ?',
+        [jobId],
+    );
+    return result.affectedRows;
 }
 
 export async function deleteJob(id: number): Promise<void> {
