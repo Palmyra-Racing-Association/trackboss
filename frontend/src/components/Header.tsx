@@ -72,7 +72,7 @@ export default function Header(props:pageProps) {
                                 }
                             }
                         >
-                            RETURN TO YOUR PROFILE
+                            {`RETURN TO YOUR PROFILE (${state.storedUser.firstName} ${state.storedUser.lastName})`}
                         </Button>
                     </Flex>
                 )

@@ -95,10 +95,12 @@ const customStyles = {
     },
 };
 
+/*
 const paginationComponentOptions = {
     selectAllRowsItem: true,
     selectAllRowsItemText: 'All Rows',
 };
+*/
 
 export default function SignUpList(props: any) {
     const [cells, setCells] = useState([] as Worker[]);
@@ -164,8 +166,10 @@ export default function SignUpList(props: any) {
                 columns={printing ? printingColumns : columns}
                 data={cells}
                 highlightOnHover
+                /*
                 pagination
                 paginationComponentOptions={paginationComponentOptions}
+                */
                 responsive
                 subHeaderWrap
                 customStyles={customStyles}
