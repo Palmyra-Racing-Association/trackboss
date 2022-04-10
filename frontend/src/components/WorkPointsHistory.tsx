@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unused-prop-types */
 import _ from 'lodash';
+import moment from 'moment';
 import {
     Button,
     Heading,
@@ -24,27 +25,24 @@ import { getYearlyThreshold, getYearlyThresholdValue } from '../controller/billi
 const columns: any = [
     {
         name: 'Date',
-        selector: (row: Job) => `${row.start}`,
+        selector: (row: Job) => `${moment(row.start).utc().format('MM/DD/YYYY')}`,
+        sortable: true,
     },
     {
         name: 'Job',
         selector: (row: Job) => `${row.title}`,
+        sortable: true,
     },
     {
         name: 'Points',
         selector: (row: Job) => `${row.pointsAwarded}`,
+        sortable: true,
     },
 ];
 
 const customStyles = {
-    rows: {
-        style: {
-            minHeight: '65px',
-        },
-    },
     headCells: {
         style: {
-            marginTop: '90px',
             paddingTop: '0',
             fontSize: '1.5em',
             backgroundColor: '#f9f9f9',

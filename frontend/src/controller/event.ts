@@ -127,7 +127,7 @@ export async function getCalendarEventsAndJobs(token: string) {
     let calendarEvents: Array<Job | Event> = [];
     if (events && jobs) {
         calendarEvents = calendarEvents.concat(events);
-        calendarEvents = calendarEvents.concat(jobs);
+        // calendarEvents = calendarEvents.concat(jobs);
     }
 
     return calendarEvents;
