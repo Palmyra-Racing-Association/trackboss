@@ -108,6 +108,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         verifiedDate: result.verified_date,
         pointsAwarded: result.points_awarded,
         paid: !!result.verified[0],
+        cashPayout: result.cash_payout,
         paidDate: result.paid_date,
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,

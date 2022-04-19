@@ -14,6 +14,7 @@ CREATE VIEW `v_job` AS
 		j.verified,
 		DATE_FORMAT(j.verified_date, '%Y-%m-%d') AS verified_date,
 		j.points_awarded,
+		j.cash_payout,
 		j.paid,
 		DATE_FORMAT(j.paid_date, '%Y-%m-%d') AS paid_date,
 		DATE_FORMAT(j.last_modified_date, '%Y-%m-%d') AS last_modified_date,

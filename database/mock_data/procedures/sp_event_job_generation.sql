@@ -1,4 +1,5 @@
 DELIMITER //
+drop procedure sp_event_job_generation;
 CREATE PROCEDURE sp_event_job_generation(
 IN _event_start_date DATETIME,
 IN _event_end_date DATETIME,
@@ -36,13 +37,15 @@ BEGIN
         SET @K = 1; # This counter is to handle count from event_job
 		lab1: REPEAT
         
-        SELECT job_day_number, start_time, end_time INTO @JobDayNumber, @StartTime, @EndTime FROM job_type WHERE job_type_id = cur_job_type; #Get the JobDayNumber(this was taken from Alan DB)
+        # Get the JobDayNumber(this was taken from Alan DB)
+        SELECT job_day_number, start_time, end_time, point_value, cash_value INTO @JobDayNumber, @StartTime, @EndTime, @Points, @Cash FROM job_type WHERE job_type_id = cur_job_type; 
         
         SET sqlDOW = (@JobDayNumber + 1) % 7; #Convert to something SQL likes
         SET @JobDate = STR_TO_DATE(CONCAT(YEAR(_event_start_date),' ',WEEK(_event_start_date),' ',sqlDOW), '%X %V %w');
 		SET @JobStart = cast(concat(@JobDate, 'T', @StartTime) as datetime);
 		SET @JobEnd = cast(concat(@JobDate, 'T', @EndTime) as datetime);
-		INSERT INTO job(event_id, job_type_id, job_start_date, job_end_date, verified, paid) VALUES (_event_id, cur_job_type, IFNULL(@JobStart,IFNULL(@JobDate,null)), IFNULL(@JobEnd, IFNULL(@JobDate,null)), 0, 0);
+		INSERT INTO job(event_id, job_type_id, job_start_date, job_end_date, verified, paid, points_awarded, cash_payout) VALUES
+        (_event_id, cur_job_type, IFNULL(@JobStart,IFNULL(@JobDate,null)), IFNULL(@JobEnd, IFNULL(@JobDate,null)), 0, 0, @Points, @Cash);
         Set @k = @k +1;
 		UNTIL @K > cur_count END REPEAT lab1;
         

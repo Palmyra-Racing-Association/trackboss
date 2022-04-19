@@ -314,6 +314,7 @@ CREATE TABLE IF NOT EXISTS `pradb`.`job` (
   `verified` BIT NOT NULL,
   `verified_date` DATE NULL,
   `points_awarded` FLOAT NULL,
+  `cash_payout` FLOAT NULL,
   `paid` BIT NOT NULL,
   `paid_date` DATE NULL,
   PRIMARY KEY (`job_id`),

@@ -17,15 +17,7 @@ const columns: any = [
         style: {
             paddingRight: '2em',
         },
-        sortable: true,
     },
-    /*
-    {
-        name: 'Name',
-        selector: (row: { member: string; }) => row.member,
-        sortable: true,
-    },
-    */
     {
         name: 'Job',
         selector: (row: { title: string; }) => row.title,
@@ -34,6 +26,11 @@ const columns: any = [
     {
         name: 'Points',
         selector: (row: { pointsAwarded: number; }) => row.pointsAwarded,
+        sortable: true,
+    },
+    {
+        name: 'Cash payout',
+        selector: (row: { cashPayout: number; }) => row.cashPayout,
     },
     {
         button: true,

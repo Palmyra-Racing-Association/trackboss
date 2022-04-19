@@ -25,7 +25,7 @@ async function getWorkPointsPercentage(token: string, memberId: number) {
         return Math.ceil((workPoints / threshold) * 100);
     }
     // else
-    return -1;
+    return 0;
 }
 
 function Dashboard() {
