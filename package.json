@@ -30,7 +30,10 @@
     "homepage": "https://github.com/Squeaky-Training-Wheels/clubmanager-2.0#readme",
     "pkg": {
         "scripts": "build/**/*.js",
-        "targets": [ "node16-linux", "node16-macos" ],
+        "targets": [
+            "node16-linux",
+            "node16-macos"
+        ],
         "outputPath": "dist"
     },
     "dependencies": {

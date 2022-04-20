@@ -15,6 +15,7 @@ import member from './member';
 import membership from './membership';
 import memberType from './memberType';
 import workPoints from './workPoints';
+import health from './health';
 
 const api = Router();
 
@@ -70,5 +71,6 @@ api.use('/eventJob', eventJob);
 api.use('/billing', billing);
 api.use('/boardMember', boardMember);
 api.use('/boardMemberType', boardMemberType);
+api.use('/health', health);
 
 export default api;
