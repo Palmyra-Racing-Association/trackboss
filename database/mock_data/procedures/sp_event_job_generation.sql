@@ -1,5 +1,4 @@
 DELIMITER //
-drop procedure sp_event_job_generation;
 CREATE PROCEDURE sp_event_job_generation(
 IN _event_start_date DATETIME,
 IN _event_end_date DATETIME,
