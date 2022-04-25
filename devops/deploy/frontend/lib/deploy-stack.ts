@@ -11,6 +11,7 @@ export class DeployStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
+    const projectRoot = process.env.PROJECT_ROOT;
     const domain = `${environmentName}.palmyramx.com`;
     const bucketName = `${environmentName}-frontend-deploy-bucket`;
     const certArn = 'arn:aws:acm:us-east-1:425610073499:certificate/139b9cfa-087f-4e30-8565-cceb33ec6a21';
@@ -30,7 +31,7 @@ export class DeployStack extends cdk.Stack {
 
     // eslint-disable-next-line no-unused-vars
     const deployment = new s3Deployment.BucketDeployment(this, 'deployStaticWebsite', {
-      sources: [s3Deployment.Source.asset('../../../frontend/build')],
+      sources: [s3Deployment.Source.asset(`${projectRoot}/frontend/build`)],
       destinationBucket: deploymentBucket,
     });
 
@@ -56,6 +57,12 @@ export class DeployStack extends cdk.Stack {
       },
       domainNames: [domain],
       certificate,
+    });
+
+    const cloudfrontOutput = new cdk.CfnOutput(this, 'bucketName', {
+      value: distribution.domainName,
+      description: 'Distribution domain name',
+      exportName: 'distributionDomainName',
     });
   }
 }

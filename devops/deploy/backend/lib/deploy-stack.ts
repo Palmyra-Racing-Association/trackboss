@@ -54,10 +54,14 @@ export class DeployStack extends cdk.Stack {
       maxCapacity: 1,
     });
 
-    listener.addTargets('default-target', {
+    listener.addTargets('trackboss-api', {
       port: 3000,
       protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [asg],
+      priority: 1,
+      conditions: [
+        elbv2.ListenerCondition.hostHeaders(['trackbosstestapi.palmyramx.com']),
+      ],
       healthCheck: {
         path: '/api/health',
         unhealthyThresholdCount: 2,
@@ -66,12 +70,12 @@ export class DeployStack extends cdk.Stack {
       },
     });
 
-    listener.addAction('/static', {
-      priority: 5,
-      conditions: [elbv2.ListenerCondition.pathPatterns(['/static'])],
+    listener.addAction('trackboss', {
+      // priority: 5,
+      // conditions: [elbv2.ListenerCondition.pathPatterns(['/static'])],
       action: elbv2.ListenerAction.fixedResponse(200, {
         contentType: 'text/html',
-        messageBody: '<h1>Static ALB Response</h1>',
+        messageBody: '<h1>TrackBoss API</h1>',
       }),
     });
 

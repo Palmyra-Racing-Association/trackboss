@@ -1,2 +1,7 @@
 .env
-.git/
+.git
+.vscode
+build
+devops
+frontend
+node_modules
