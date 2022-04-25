@@ -17,14 +17,4 @@ cd $PROJECT_ROOT/frontend
 npm install
 npm run build
 
-# deploy back end
-echo "Backend CDK infrastructure build...."
-cd $PROJECT_ROOT/devops/deploy/backend
-bash deployBackendInfra.sh
-echo "In a 5-10 minutes, you can hit this by accessing /api/health on the load balancer."
-
-# deploy front end
-echo "Backend front end infrastructure build...."
-cd $PROJECT_ROOT/devops/deploy/frontend
-bash deployFrontEnd.sh
-echo "DONE"
+bash infrastructureButton.sh $PROJECT_ROOT

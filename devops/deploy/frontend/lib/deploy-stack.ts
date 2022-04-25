@@ -56,7 +56,7 @@ export class DeployStack extends cdk.Stack {
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
       domainNames: [domain],
-      certificate,
+      certificate: certificate,
     });
 
     const cloudfrontOutput = new cdk.CfnOutput(this, 'bucketName', {
