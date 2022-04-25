@@ -1,0 +1,114 @@
+{
+  "vpc-provider:account=425610073499:filter.isDefault=true:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-f72e978c",
+    "vpcCidrBlock": "172.31.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-6884af47",
+            "cidr": "172.31.80.0/20",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-e214e9a8",
+            "cidr": "172.31.16.0/20",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-bb94bde6",
+            "cidr": "172.31.32.0/20",
+            "availabilityZone": "us-east-1c",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-94747ef0",
+            "cidr": "172.31.0.0/20",
+            "availabilityZone": "us-east-1d",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-e32204dc",
+            "cidr": "172.31.48.0/20",
+            "availabilityZone": "us-east-1e",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-33ac093c",
+            "cidr": "172.31.64.0/20",
+            "availabilityZone": "us-east-1f",
+            "routeTableId": "rtb-c1a901bd"
+          }
+        ]
+      }
+    ]
+  },
+  "load-balancer:account=425610073499:loadBalancerArn=arn$:aws:elasticloadbalancing:us-east-1:425610073499:loadbalancer/app/4343HogbackHill-lb/2bd650d93825f0dd:loadBalancerType=application:region=us-east-1": {
+    "loadBalancerArn": "arn:aws:elasticloadbalancing:us-east-1:425610073499:loadbalancer/app/4343HogbackHill-lb/2bd650d93825f0dd",
+    "loadBalancerCanonicalHostedZoneId": "Z35SXDOTRQ7X7K",
+    "loadBalancerDnsName": "4343HogbackHill-lb-1275566236.us-east-1.elb.amazonaws.com",
+    "vpcId": "vpc-f72e978c",
+    "securityGroupIds": [
+      "sg-0838b1e730e6fdcec"
+    ],
+    "ipAddressType": "ipv4"
+  },
+  "vpc-provider:account=425610073499:filter.vpc-id=vpc-f72e978c:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-f72e978c",
+    "vpcCidrBlock": "172.31.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-6884af47",
+            "cidr": "172.31.80.0/20",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-e214e9a8",
+            "cidr": "172.31.16.0/20",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-bb94bde6",
+            "cidr": "172.31.32.0/20",
+            "availabilityZone": "us-east-1c",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-94747ef0",
+            "cidr": "172.31.0.0/20",
+            "availabilityZone": "us-east-1d",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-e32204dc",
+            "cidr": "172.31.48.0/20",
+            "availabilityZone": "us-east-1e",
+            "routeTableId": "rtb-c1a901bd"
+          },
+          {
+            "subnetId": "subnet-33ac093c",
+            "cidr": "172.31.64.0/20",
+            "availabilityZone": "us-east-1f",
+            "routeTableId": "rtb-c1a901bd"
+          }
+        ]
+      }
+    ]
+  },
+  "security-group:account=425610073499:region=us-east-1:securityGroupId=sg-0838b1e730e6fdcec": {
+    "securityGroupId": "sg-0838b1e730e6fdcec",
+    "allowAllOutbound": false
+  }
+}

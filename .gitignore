@@ -127,3 +127,5 @@ yarn-error.log*
 
 # don't upload stuff with real info in it!
 devops/cognito/*.csv
+
+nohup.out
