@@ -15,6 +15,6 @@ bash devops/deploy/backend/buildDockerImage.sh
 echo "Front end node build....."
 cd $PROJECT_ROOT/frontend
 npm install
-npm run build
+npm run build-$TRACKBOSS_ENVIRONMENT_NAME
 
 bash infrastructureButton.sh $PROJECT_ROOT
