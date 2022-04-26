@@ -184,7 +184,7 @@ export default function GeneralInfo(props: cardProps) {
                                             fontSize="3xl"
                                             width={375}
                                         >
-                                            {` ${bike.year}, ${bike.make} ${bike.model}`}
+                                            {` ${bike.year} ${bike.make} ${bike.model}`}
                                         </ListItem>
                                         {
                                             props.admin && (
