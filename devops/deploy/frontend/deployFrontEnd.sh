@@ -1,4 +1,21 @@
 #!/bin/bash
+export TRACKBOSS_ENVIRONMENT_NAME=$1
+export PROJECT_ROOT=$2
+if [ -z $1 ]; then
+  echo "Please specify an environment name."
+  exit -1
+fi;
+if [ -z $2 ]; then
+  echo "Please specify a project root."
+  exit -1
+fi;
+
+echo "Front end node build....."
+cd $PROJECT_ROOT/frontend
+npm install
+npm run build-$TRACKBOSS_ENVIRONMENT_NAME
+
+cd $PROJECT_ROOT/deploy/frontend
 npm install
 echo "Deploying front end, here is the CDK diff."
 npx cdk diff

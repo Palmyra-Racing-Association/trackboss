@@ -1,6 +1,14 @@
 #!/bin/bash
-export PROJECT_ROOT=$1
-export TRACKBOSS_ENVIRONMENT_NAME=$2
+export TRACKBOSS_ENVIRONMENT_NAME=$1
+export PROJECT_ROOT=$2
+if [ -z $1 ]; then
+  echo "Please specify an environment name."
+  exit -1
+fi;
+if [ -z $2 ]; then
+  echo "Please specify a project root."
+  exit -1
+fi;
 
 # deploy back end
 echo "Backend CDK infrastructure build...."
