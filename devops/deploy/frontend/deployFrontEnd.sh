@@ -15,7 +15,7 @@ cd $PROJECT_ROOT/frontend
 npm install
 npm run build-$TRACKBOSS_ENVIRONMENT_NAME
 
-cd $PROJECT_ROOT/deploy/frontend
+cd $PROJECT_ROOT/devops/deploy/frontend
 npm install
 echo "Deploying front end, here is the CDK diff."
 npx cdk diff
