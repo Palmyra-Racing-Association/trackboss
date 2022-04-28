@@ -21,12 +21,12 @@ const columns: any = [
     {
         name: 'Job',
         selector: (row: { title: string; }) => row.title,
-        sortable: true,
+        sortable: false, // Just until we can figure out why it doesnt work.  I think it's a state thing.
     },
     {
         name: 'Points',
         selector: (row: { pointsAwarded: number; }) => row.pointsAwarded,
-        sortable: true,
+        sortable: false, // Just until we can figure out why it doesn't work.  I think it's a state thing.
     },
     {
         name: 'Cash payout',
@@ -120,7 +120,7 @@ export default function SignUpList(props: any) {
             setCells(allCells);
         } else {
             const newCells =
-                allCells.filter((cell: Worker) => cell.name.toLowerCase().includes(searchTerm.toLowerCase()));
+                allCells.filter((cell: any) => cell.title.toLowerCase().includes(searchTerm.toLowerCase()));
             setCells(newCells);
         }
     }, [searchTerm, allCells]);

@@ -20,6 +20,8 @@ jobs:
         (cd frontend && npm ci)
     - name: Run ESLint
       run: npx eslint .
+    - name: Got docker?
+      run: docker --version
   jest-backend-unit-tests:
     runs-on: ubuntu-latest
     steps:
