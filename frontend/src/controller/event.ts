@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { generateHeaders, getEventMonthDay, getTimeOfDay } from './utils';
 import {
     DeleteEventResponse,
@@ -60,8 +61,10 @@ export async function getCalendarEvents(token: string) {
     const calendarEvents = await getEventList(token);
     if (isEventList(calendarEvents)) {
         calendarEvents.forEach((event) => {
-            event.start = new Date(event.start);
-            event.end = new Date(event.end);
+            console.log(JSON.stringify(event));
+            console.log(typeof event.start);
+            event.start = moment(event.start, 'YYYY-MM-DD').toDate();
+            event.end = moment(event.end, 'YYYY-MM-DD').toDate();
         });
         return calendarEvents;
     }
@@ -122,6 +125,7 @@ export async function deleteEvent(token: string, eventID: number) {
 
 export async function getCalendarEventsAndJobs(token: string) {
     const events = await getCalendarEvents(token);
+    console.log(JSON.stringify(events));
     const jobs = await getCalendarJobs(token);
 
     let calendarEvents: Array<Job | Event> = [];

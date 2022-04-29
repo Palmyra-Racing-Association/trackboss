@@ -96,8 +96,9 @@ export default function EventCalendar() {
                     setFamilyMembers(res);
                 }
             }
-
-            setCalendarEvents(await getCalendarEventsAndJobs(state.token));
+            const calendarEventsAndJobs = await getCalendarEventsAndJobs(state.token);
+            console.log(JSON.stringify(calendarEventsAndJobs));
+            setCalendarEvents(calendarEventsAndJobs);
         }
         getData();
     }, []);
