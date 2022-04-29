@@ -54,7 +54,7 @@
         "typescript": "^4.4.3"
     },
     "scripts": {
-        "start": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" REACT_APP_AUTH_URL=\"https://palmyramx-test.auth.us-east-1.amazoncognito.com\" REACT_APP_CLIENT_ID=3q7ile80d2qk4bgt75af9684bq react-scripts start",
+        "start": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" REACT_APP_AUTH_URL=\"https://pratrackboss.auth.us-east-1.amazoncognito.com\" REACT_APP_CLIENT_ID=7ffktlqd0dfr9eo7a57uq6a5in react-scripts start",
         "build-trackbosstest": "REACT_APP_API_URL=\"https://trackbosstestapi.palmyramx.com:4443\" REACT_APP_AUTH_URL=\"https://pratrackboss.auth.us-east-1.amazoncognito.com\" REACT_APP_CLIENT_ID=7ffktlqd0dfr9eo7a57uq6a5in react-scripts build",
         "build-trackboss": "REACT_APP_API_URL=\"https://trackbossapi.palmyramx.com:4443\" REACT_APP_AUTH_URL=\"https://palmyramx-test.auth.us-east-1.amazoncognito.com\" REACT_APP_CLIENT_ID=3q7ile80d2qk4bgt75af9684bq react-scripts build",
         "build-ci": "cross-env REACT_APP_API_URL=\"http://localhost:8080\" REACT_APP_AUTH_URL=\"https://palmyramx-test.auth.us-east-1.amazoncognito.com\" REACT_APP_CLIENT_ID=3q7ile80d2qk4bgt75af9684bq react-scripts build",
