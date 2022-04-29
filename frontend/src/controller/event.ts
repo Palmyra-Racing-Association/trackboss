@@ -75,7 +75,7 @@ export async function getEventCardProps(token: string, listType: string) {
 
     if (isEventList(upcomingEvents)) {
         // + symbol here converts the dates to numbers, to allow for arithmetic comparison
-        upcomingEvents.sort((e1: Event, e2: Event) => +new Date(e1.start) - +new Date(e2.start));
+        // upcomingEvents.sort((e1: Event, e2: Event) => +new Date(e1.start) - +new Date(e2.start));
         const startTime = upcomingEvents[0].start.toString();
         const formattedEventDate = getEventMonthDay(startTime);
         const formattedEventTime = getTimeOfDay(startTime);
