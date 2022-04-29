@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { generateHeaders, getEventMonthDay, getTimeOfDay } from './utils';
 import {
     DeleteEventResponse,
@@ -60,8 +61,10 @@ export async function getCalendarEvents(token: string) {
     const calendarEvents = await getEventList(token);
     if (isEventList(calendarEvents)) {
         calendarEvents.forEach((event) => {
-            event.start = new Date(event.start);
-            event.end = new Date(event.end);
+            console.log(JSON.stringify(event));
+            console.log(typeof event.start);
+            event.start = moment(event.start, 'YYYY-MM-DD').toDate();
+            event.end = moment(event.end, 'YYYY-MM-DD').toDate();
         });
         return calendarEvents;
     }
@@ -75,7 +78,7 @@ export async function getEventCardProps(token: string, listType: string) {
 
     if (isEventList(upcomingEvents)) {
         // + symbol here converts the dates to numbers, to allow for arithmetic comparison
-        upcomingEvents.sort((e1: Event, e2: Event) => +new Date(e1.start) - +new Date(e2.start));
+        // upcomingEvents.sort((e1: Event, e2: Event) => +new Date(e1.start) - +new Date(e2.start));
         const startTime = upcomingEvents[0].start.toString();
         const formattedEventDate = getEventMonthDay(startTime);
         const formattedEventTime = getTimeOfDay(startTime);
@@ -122,6 +125,7 @@ export async function deleteEvent(token: string, eventID: number) {
 
 export async function getCalendarEventsAndJobs(token: string) {
     const events = await getCalendarEvents(token);
+    console.log(JSON.stringify(events));
     const jobs = await getCalendarJobs(token);
 
     let calendarEvents: Array<Job | Event> = [];

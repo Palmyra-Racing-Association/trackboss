@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 /* eslint-disable radix */
 export function generateHeaders(token: string, range?: string): Headers {
     if (typeof range === 'undefined') {
@@ -25,10 +27,8 @@ export function getTodaysDate() {
 }
 
 export function getEventMonthDay(date: string) {
-    const eventDate = new Date(date).toString();
-    const dateArray = eventDate.split(' ');
-    const formattedDate = `${dateArray[1]} ${dateArray[2]}`;
-    return formattedDate;
+    const dateMoment = moment(date);
+    return dateMoment.format('MMMM DD');
 }
 
 function singleDayEvent(start: string, end: string) {
@@ -85,9 +85,6 @@ export function getEventStartAndEndTime(start: string, end: string) {
 }
 
 export function getTimeOfDay(time: string) {
-    const endString = new Date(time).toString();
-    const endStringArray = endString.split(' ');
-    let endHour = parseInt(endStringArray[4].substring(0, 2));
-    const endAmOrPm = endHour >= 12 ? 'PM' : 'AM'; endHour = ((endHour + 11) % 12 + 1);
-    return `${endHour} ${endAmOrPm}`;
+    const dateMoment = moment(time);
+    return dateMoment.format('h a');
 }
