@@ -97,7 +97,6 @@ export default function EventCalendar() {
                 }
             }
             const calendarEventsAndJobs = await getCalendarEventsAndJobs(state.token);
-            console.log(JSON.stringify(calendarEventsAndJobs));
             setCalendarEvents(calendarEventsAndJobs);
         }
         getData();
