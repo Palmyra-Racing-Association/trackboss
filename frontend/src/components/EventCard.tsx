@@ -25,6 +25,7 @@ export default function EventCard(props: cardProps) {
             border="1px"
             borderColor="gray.200"
             p={3}
+            m={2}
             h="365"
         >
             <Center>

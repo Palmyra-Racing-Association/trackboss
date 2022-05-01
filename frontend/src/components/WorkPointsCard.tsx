@@ -24,6 +24,7 @@ export default function WorkPointsCard(props: cardProps) {
             borderColor="gray.200"
             h="365"
             p={3}
+            m={2}
         >
             <Center>
                 <VStack p={0} boxSize="md">

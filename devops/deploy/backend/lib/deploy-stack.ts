@@ -39,6 +39,7 @@ export class DeployStack extends cdk.Stack {
 
     const asg = new autoscaling.AutoScalingGroup(this, 'asg', {
       vpc,
+      autoScalingGroupName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}-backend-asg`,
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.T2,
         ec2.InstanceSize.MICRO,

@@ -28,7 +28,7 @@ export function getTodaysDate() {
 
 export function getEventMonthDay(date: string) {
     const dateMoment = moment(date);
-    return dateMoment.format('MMMM DD');
+    return dateMoment.format('dddd MMMM DD');
 }
 
 function singleDayEvent(start: string, end: string) {
