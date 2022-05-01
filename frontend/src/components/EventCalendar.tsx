@@ -133,6 +133,7 @@ export default function EventCalendar() {
                                 calendarEvent.eventType === 'Yearly Job' ||
                                 calendarEvent.eventType === 'Work Day') {
                                 newStyle.backgroundColor = '#4B0082'; // purple
+                                newStyle.color = '#FFFFFF';
                             } else if (
                                 calendarEvent.eventType === 'Race' ||
                                 calendarEvent.eventType === 'Race Week' ||

@@ -1092,7 +1092,7 @@ paths:
     get:
       tags:
         - event
-      summary: Get all events
+      summary: Get all events.  The list is returned in ascending date order so the closest event is always first.
       description: "This endpoint requires an `Authorization: Bearer` header with a JWT ID token."
       parameters:
         - name: Range
