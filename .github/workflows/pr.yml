@@ -6,7 +6,9 @@ env:
   NODE_VERSION: "16"
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_AKI }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SAC }}  
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SAC }}
+  PROJECT_ROOT: ${{ secrets.PROJECT_ROOT }}
+  TRACKBOSS_ENVIRONMENT_NAME: trackbosstest
 jobs:
   eslint:
     runs-on: ubuntu-latest
@@ -77,7 +79,20 @@ jobs:
         MYSQL_USER: dev
         MYSQL_PASS: devpass
       run: npm run ci-integration-test
-  jest-frontend:
+  # jest-frontend:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
+  #   - name: Specify Node version
+  #     uses: actions/setup-node@v2
+  #     with:
+  #       node-version: ${{ env.NODE_VERSION }}
+  #   - name: Install modules
+  #     run: cd frontend && npm ci
+  #   - name: Run Jest on frontend
+  #     run: cd frontend && npm run ci-test
+  cdk-diff:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -86,24 +101,9 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - name: Install modules
-      run: cd frontend && npm ci
-    - name: Run Jest on frontend
-      run: cd frontend && npm run ci-test
-  cdk-diff-frontend:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Specify Node version
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Install modules frontened
-      run: cd devops/deploy/frontend && npm ci
-    - name: Run CDK diff front end
-      run: cdk diff
-    - name: Install modules
-      run: cd devops/deploy/backend && npm ci
-    - name: Run CDK diff back end
-      run: cdk diff  
+    - name: Frontend build
+      run: cd frontend && npm install && npm run build-$TRACKBOSS_ENVIRONMENT_NAME
+    - name: CDK diff - front end
+      run: cd devops/deploy/frontend && npm ci && npx cdk diff
+    - name: CDK diff - back end
+      run: cd devops/deploy/backend && npm ci && npx cdk diff
