@@ -85,7 +85,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         sql = GET_JOB_LIST_SQL;
         values = [];
     }
-
+    sql += ' order by job_day_number, sort_order';
     let results;
     try {
         [results] = await getPool().query<RowDataPacket[]>(sql, values);

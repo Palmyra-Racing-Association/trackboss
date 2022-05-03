@@ -6,8 +6,10 @@ on:
   workflow_dispatch:
 env:
   NODE_VERSION: "16"
+  PROJECT_ROOT: ${{ secrets.PROJECT_ROOT }}
+  TRACKBOSS_ENVIRONMENT_NAME: trackbosstest
 jobs:
-  backend-build:
+  backend-docker-build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -16,17 +18,28 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ env.NODE_VERSION }}
-    - name: Install modules
-      run: npm ci
-    - name: Run TS Build
-      run: npm run build
-    - name: Create Distributable
-      run: npm run dist
-    - name: Create Artifact
-      uses: actions/upload-artifact@v3
-      with:
-          name: backend-build
-          path: dist
+    - name: Run Docker Build script
+      run: bash devops/deploy/backend/buildDockerImage.sh $PROJECT_ROOT
+  # backend-build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
+  #   - name: Specify Node version
+  #     uses: actions/setup-node@v2
+  #     with:
+  #       node-version: ${{ env.NODE_VERSION }}
+  #   - name: Install modules
+  #     run: npm ci
+  #   - name: Run TS Build
+  #     run: npm run build
+  #   - name: Create Distributable
+  #     run: npm run dist
+  #   - name: Create Artifact
+  #     uses: actions/upload-artifact@v3
+  #     with:
+  #         name: backend-build
+  #         path: dist
   frontend-build:
     runs-on: ubuntu-latest
     steps:
