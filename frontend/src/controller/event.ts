@@ -11,7 +11,7 @@ import {
     Event,
 } from '../../../src/typedefs/event';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
-import { getCalendarJobs } from './job';
+// import { getCalendarJobs } from './job';
 import { Job } from '../../../src/typedefs/job';
 
 function isEventList(res: Event[] | ErrorResponse): res is Event[] {
@@ -123,10 +123,10 @@ export async function deleteEvent(token: string, eventID: number) {
 
 export async function getCalendarEventsAndJobs(token: string) {
     const events = await getCalendarEvents(token);
-    const jobs = await getCalendarJobs(token);
+    // const jobs = await getCalendarJobs(token);
 
     let calendarEvents: Array<Job | Event> = [];
-    if (events && jobs) {
+    if (events) { // && jobs) {
         calendarEvents = calendarEvents.concat(events);
         // calendarEvents = calendarEvents.concat(jobs);
     }
