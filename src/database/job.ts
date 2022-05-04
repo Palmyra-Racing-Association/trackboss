@@ -93,6 +93,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         logger.error(`DB error getting job list: ${e}`);
         throw new Error('internal server error');
     }
+    const jobDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
     return results.map((result) => ({
         jobId: result.job_id,
@@ -110,6 +111,9 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         paid: !!result.verified[0],
         cashPayout: result.cash_payout,
         paidDate: result.paid_date,
+        jobDay: jobDays[result.job_day_number],
+        sortOrder: result.sort_order,
+        jobDayNumber: result.job_day_number,
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));

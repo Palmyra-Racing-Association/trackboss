@@ -22,6 +22,7 @@ const columns: any = [
         name: 'Job',
         selector: (row: { title: string; }) => row.title,
         sortable: false, // Just until we can figure out why it doesnt work.  I think it's a state thing.
+        wrap: true,
     },
     {
         name: 'Points',
@@ -31,6 +32,11 @@ const columns: any = [
     {
         name: 'Cash payout',
         selector: (row: { cashPayout: number; }) => row.cashPayout,
+    },
+    {
+        name: 'Job Day',
+        selector: (row: {jobDay: string; }) => row.jobDay,
+        sortable: false,
     },
     {
         button: true,
