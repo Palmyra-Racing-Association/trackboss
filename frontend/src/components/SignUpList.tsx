@@ -1,35 +1,41 @@
-import { Box, Center, Flex, IconButton, Input, InputGroup, InputLeftElement, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, IconButton, Input, InputGroup, InputLeftElement, Tag, Text } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsPrinter, BsSearch } from 'react-icons/bs';
-import { getSignupList } from '../controller/job';
+import { getSignupList, removeSignup, signupForJob } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 import VerifyButton from './VerifyButton';
-import SignupButton from './SignupButton';
 
 const columns: any = [
     {
         name: 'Name',
         // eslint-disable-next-line max-len
-        selector: (row: { filled: boolean, jobId: number, member: string, memberId: number }) => (
-            <SignupButton jobId={row.jobId} member={row.member} memberId={row.memberId} />
+        cell: (row: { filled: boolean, jobId: number, member: string, memberId: number }) => (
+            // <SignupButton jobId={row.jobId} member={row.member} memberId={row.memberId} />
+            <div data-tag="allowRowEvents">
+                {
+                    row.member &&
+                    row.member ||
+                    <Tag data-tag="allowRowEvents" height="50" background="orange.300" color="white">Sign up</Tag>
+                }
+            </div>
         ),
     },
     {
         name: 'Job',
         selector: (row: { title: string; }) => row.title,
-        sortable: false, // Just until we can figure out why it doesnt work.  I think it's a state thing.
+        sortable: true, // Just until we can figure out why it doesnt work.  I think it's a state thing.
         wrap: true,
     },
     {
         name: 'Points',
         selector: (row: { pointsAwarded: number; }) => row.pointsAwarded,
-        sortable: false, // Just until we can figure out why it doesn't work.  I think it's a state thing.
+        sortable: true, // Just until we can figure out why it doesn't work.  I think it's a state thing.
     },
     {
         name: 'Job Day',
         selector: (row: {jobDay: string; }) => row.jobDay,
-        sortable: false,
+        sortable: true,
         wrap: true,
         hide: 'sm',
     },
@@ -93,12 +99,10 @@ const customStyles = {
     },
 };
 
-/*
 const paginationComponentOptions = {
     selectAllRowsItem: true,
     selectAllRowsItemText: 'All Rows',
 };
-*/
 
 export default function SignUpList(props: any) {
     const [cells, setCells] = useState([] as Worker[]);
@@ -124,7 +128,8 @@ export default function SignUpList(props: any) {
                 allCells.filter((cell: any) => {
                     const titleSearch = cell.title.toLowerCase().includes(searchTerm.toLowerCase());
                     const daySearch = cell.jobDay.toLowerCase().includes(searchTerm.toLowerCase());
-                    return (titleSearch || daySearch);
+                    const nameSearch = cell.member.toLowerCase().includes(searchTerm.toLowerCase());
+                    return (titleSearch || daySearch || nameSearch);
                 });
             setCells(newCells);
         }
@@ -140,7 +145,6 @@ export default function SignUpList(props: any) {
                             </InputLeftElement>
                             <Input
                                 size="lg"
-                                disabled
                                 placeholder="Search..."
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
@@ -174,13 +178,24 @@ export default function SignUpList(props: any) {
                     columns={printing ? printingColumns : columns}
                     data={cells}
                     highlightOnHover
-                    /*
                     pagination
                     paginationComponentOptions={paginationComponentOptions}
-                    */
                     responsive
                     subHeaderWrap
+                    striped
                     customStyles={customStyles}
+                    onRowClicked={
+                        async (row: any) => {
+                            if (!row.member) {
+                                await signupForJob(state.token, row.jobId, (state.user?.memberId || -1));
+                            } else {
+                                await removeSignup(state.token, row.jobId);
+                            }
+                            const eventJobs = await getSignupList(state?.token, props.eventId);
+                            setCells(eventJobs);
+                            setAllCells(eventJobs);
+                        }
+                    }
                 />
             </Box>
         </div>
