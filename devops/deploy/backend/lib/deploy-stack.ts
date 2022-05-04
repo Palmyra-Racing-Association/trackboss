@@ -4,6 +4,7 @@ import * as ecs from '@aws-cdk/aws-ecs';
 import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
 import * as iam from '@aws-cdk/aws-iam';
 import * as cdk from '@aws-cdk/core';
+import { Tags } from '@aws-cdk/core';
 
 export class DeployStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -36,10 +37,11 @@ export class DeployStack extends cdk.Stack {
       `docker pull ${dockerImg}`,
       `docker run -p 3000:3000 --env-file /home/ec2-user/tbenv-test ${dockerImg}`,
     );
+    const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
 
     const asg = new autoscaling.AutoScalingGroup(this, 'asg', {
       vpc,
-      autoScalingGroupName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}-backend-asg`,
+      autoScalingGroupName: `${environmentName}-backend-asg`,
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.T2,
         ec2.InstanceSize.MICRO,
@@ -54,14 +56,16 @@ export class DeployStack extends cdk.Stack {
       minCapacity: 1,
       maxCapacity: 1,
     });
-
+    Tags.of(asg).add('Name', `${environmentName}-api`)
+    Tags.of(asg).add('EnvironmentName', environmentName);
+    Tags.of(asg).add('AlbDomainName', alb.loadBalancerDnsName);
     listener.addTargets('trackboss-api', {
       port: 3000,
       protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [asg],
       priority: 1,
       conditions: [
-        elbv2.ListenerCondition.hostHeaders(['trackbosstestapi.palmyramx.com']),
+        elbv2.ListenerCondition.hostHeaders([`${environmentName}api.palmyramx.com`]),
       ],
       healthCheck: {
         path: '/api/health',

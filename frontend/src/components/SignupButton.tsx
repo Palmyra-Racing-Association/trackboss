@@ -1,6 +1,6 @@
-import { Button, IconButton } from '@chakra-ui/react';
+import { IconButton } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
-import { BsFillTrashFill } from 'react-icons/bs';
+import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
 import { signupForJob, removeSignup } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 
@@ -26,14 +26,14 @@ export default function SignupButton(props: buttonProps) {
     let signupButton;
     if (!member) {
         signupButton = (
-            <Button
+            <IconButton
                 // variant={verified ? 'verified' : 'unverified'}
+                aria-label="Sign Up"
                 background="orange.300"
                 color="white"
+                icon={<BsPencilSquare />}
                 onClick={handleClick}
-            >
-                Sign up!
-            </Button>
+            />
         );
     } else {
         // I can delete my own signups, and of course admins can delete everyone's signups.

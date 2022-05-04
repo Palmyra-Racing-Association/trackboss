@@ -11,12 +11,9 @@ const columns: any = [
     {
         name: 'Name',
         // eslint-disable-next-line max-len
-        cell: (row: { filled: boolean, jobId: number, member: string, memberId:number }) => (
+        selector: (row: { filled: boolean, jobId: number, member: string, memberId: number }) => (
             <SignupButton jobId={row.jobId} member={row.member} memberId={row.memberId} />
         ),
-        style: {
-            paddingRight: '2em',
-        },
     },
     {
         name: 'Job',
@@ -30,13 +27,11 @@ const columns: any = [
         sortable: false, // Just until we can figure out why it doesn't work.  I think it's a state thing.
     },
     {
-        name: 'Cash payout',
-        selector: (row: { cashPayout: number; }) => row.cashPayout,
-    },
-    {
         name: 'Job Day',
         selector: (row: {jobDay: string; }) => row.jobDay,
         sortable: false,
+        wrap: true,
+        hide: 'sm',
     },
     {
         button: true,
@@ -126,7 +121,11 @@ export default function SignUpList(props: any) {
             setCells(allCells);
         } else {
             const newCells =
-                allCells.filter((cell: any) => cell.title.toLowerCase().includes(searchTerm.toLowerCase()));
+                allCells.filter((cell: any) => {
+                    const titleSearch = cell.title.toLowerCase().includes(searchTerm.toLowerCase());
+                    const daySearch = cell.jobDay.toLowerCase().includes(searchTerm.toLowerCase());
+                    return (titleSearch || daySearch);
+                });
             setCells(newCells);
         }
     }, [searchTerm, allCells]);
@@ -139,7 +138,12 @@ export default function SignUpList(props: any) {
                             <InputLeftElement pointerEvents="none">
                                 <BsSearch color="gray.300" />
                             </InputLeftElement>
-                            <Input size="lg" placeholder="Search..." onChange={(e) => setSearchTerm(e.target.value)} />
+                            <Input
+                                size="lg"
+                                disabled
+                                placeholder="Search..."
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
                         </InputGroup>
                     </Box>
                     <Box pl={5}>
@@ -165,18 +169,20 @@ export default function SignUpList(props: any) {
                     </Box>
                 </Flex>
             </Center>
-            <DataTable
-                columns={printing ? printingColumns : columns}
-                data={cells}
-                highlightOnHover
-                /*
-                pagination
-                paginationComponentOptions={paginationComponentOptions}
-                */
-                responsive
-                subHeaderWrap
-                customStyles={customStyles}
-            />
+            <Box w="100%">
+                <DataTable
+                    columns={printing ? printingColumns : columns}
+                    data={cells}
+                    highlightOnHover
+                    /*
+                    pagination
+                    paginationComponentOptions={paginationComponentOptions}
+                    */
+                    responsive
+                    subHeaderWrap
+                    customStyles={customStyles}
+                />
+            </Box>
         </div>
     );
 }
