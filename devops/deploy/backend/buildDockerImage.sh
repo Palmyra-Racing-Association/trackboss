@@ -10,7 +10,6 @@ backendChanges=`git status -s $PROJECT_ROOT/src`
 if [ -z "$backendChanges" ]
 then
   echo "No backend changes in commit $gitCommitId, skipping back end Docker creation"
-  exit 1
 else 
   imageName="pra/trackbossapi:latest"
   imageNameCommit="pra/trackbossapi:$gitCommitId"

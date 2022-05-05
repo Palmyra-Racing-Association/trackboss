@@ -11,20 +11,16 @@ if [ -z $2 ]; then
 fi;
 gitCommitId=`git rev-parse --short HEAD`
 frontendChanges=`git status -s $PROJECT_ROOT/frontend`
-if [ -z "$frontendChanges" ]
-then
-  echo "No frontend changes in commit $gitCommitId, skipping back end frontend build and deploy"
-  exit 1
-else 
-  echo "Front end node build....."
-  cd $PROJECT_ROOT/frontend
-  npm install
-  npm run build-$TRACKBOSS_ENVIRONMENT_NAME
-  cd $PROJECT_ROOT/devops/deploy/frontend
-  npm install
-  echo "Deploying front end, here is the CDK diff."
-  npx cdk diff
-  echo "Deploying Track Boss front end.  Most of the time this will just update S3 objects"
-  npx cdk deploy --require-approval never
-  echo "Track Boss front end deployed.  Please update any DNS records in Bluehost if needed."
-fi
+echo $gitCommitId
+echo $frontendChanges
+echo "Front end node build....."
+cd $PROJECT_ROOT/frontend
+npm install
+npm run build-$TRACKBOSS_ENVIRONMENT_NAME
+cd $PROJECT_ROOT/devops/deploy/frontend
+npm install
+echo "Deploying front end, here is the CDK diff."
+npx cdk diff
+echo "Deploying Track Boss front end.  Most of the time this will just update S3 objects"
+npx cdk deploy --require-approval never
+echo "Track Boss front end deployed.  Please update any DNS records in Bluehost if needed."
