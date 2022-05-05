@@ -105,11 +105,11 @@ export default function GeneralInfo(props: cardProps) {
                 memberInfo && (
                     <SimpleGrid pt={10} columns={2}>
                         <VStack spacing={2} align="left">
-                            <Text fontSize="3xl" fontWeight="bold">Name:</Text>
-                            <Text fontSize="3xl" fontWeight="bold">Email:</Text>
-                            <Text fontSize="3xl" fontWeight="bold">Phone:</Text>
-                            <Text fontSize="3xl" fontWeight="bold">Joined:</Text>
-                            <Text fontSize="3xl" fontWeight="bold">DOB:</Text>
+                            <Text fontSize="xl" fontWeight="bold">Name:</Text>
+                            <Text fontSize="xl" fontWeight="bold">Email:</Text>
+                            <Text fontSize="xl" fontWeight="bold">Phone:</Text>
+                            <Text fontSize="xl" fontWeight="bold">Joined:</Text>
+                            <Text fontSize="xl" fontWeight="bold">DOB:</Text>
                         </VStack>
                         {
                             editingMemberInfo ? (
@@ -132,8 +132,8 @@ export default function GeneralInfo(props: cardProps) {
                                         onChange={handleEditedPhoneChange}
                                         size="md"
                                     />
-                                    <Text fontSize="3xl">{memberInfo.dateJoined}</Text>
-                                    <Text fontSize="3xl">{memberInfo.birthdate}</Text>
+                                    <Text fontSize="xl">{memberInfo.dateJoined}</Text>
+                                    <Text fontSize="xl">{memberInfo.birthdate}</Text>
                                     <Button
                                         ml={10}
                                         variant="outline"
@@ -151,14 +151,14 @@ export default function GeneralInfo(props: cardProps) {
                                     </Button>
                                 </VStack>
                             ) : (
-                                <VStack ml="-70px" align="left">
-                                    <Text fontSize="3xl">
+                                <VStack ml="-20px" align="left">
+                                    <Text fontSize="xl">
                                         {`${memberInfo.firstName} ${memberInfo.lastName}`}
                                     </Text>
-                                    <Text fontSize="3xl">{memberInfo.email}</Text>
-                                    <Text fontSize="3xl">{memberInfo.phoneNumber}</Text>
-                                    <Text fontSize="3xl">{memberInfo.dateJoined}</Text>
-                                    <Text fontSize="3xl">{memberInfo.birthdate}</Text>
+                                    <Text fontSize="xl">{memberInfo.email}</Text>
+                                    <Text fontSize="xl">{memberInfo.phoneNumber}</Text>
+                                    <Text fontSize="xl">{memberInfo.dateJoined}</Text>
+                                    <Text fontSize="xl">{memberInfo.birthdate}</Text>
                                 </VStack>
                             )
                         }

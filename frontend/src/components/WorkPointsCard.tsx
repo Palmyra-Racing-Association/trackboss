@@ -34,10 +34,11 @@ export default function WorkPointsCard(props: cardProps) {
                         nrOfLevels={20}
                         percent={props.percent / 100}
                         colors={['#FF9F46', '#76CE6F']}
+                        arcWidth={0.3}
                     />
                     <VStack spacing={0}>
                         <Text pt={5} fontSize="2xl">You have completed</Text>
-                        <Text color="orange" fontSize="4xl">
+                        <Text color="orange" fontSize="2xl">
                             {props.percent}
                             %
                         </Text>

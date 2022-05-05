@@ -4,7 +4,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { BsPrinter, BsSearch, BsTrash } from 'react-icons/bs';
+import { BsPrinter, BsSearch, BsTrashFill } from 'react-icons/bs';
 import { getSignupList, removeSignup, signupForJob } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 
@@ -20,7 +20,7 @@ const columns: any = [
                     (
                         <>
                             {row.member}
-                            <Icon data-tag="allowRowEvents" as={BsTrash} />
+                            <Icon data-tag="allowRowEvents" color="red" as={BsTrashFill} />
                         </>
                     ) ||
                     <Tag data-tag="allowRowEvents" height="50" background="orange.300" color="white">Sign up</Tag>
@@ -83,7 +83,7 @@ const customStyles = {
     headCells: {
         style: {
             paddingTop: '2em',
-            fontSize: '1.2em',
+            fontSize: '1.5em',
             fontWeight: 'bold',
             backgroundColor: '#f9f9f9',
             color: '#626262',
@@ -91,7 +91,7 @@ const customStyles = {
     },
     cells: {
         style: {
-            fontSize: '1em',
+            fontSize: '1.2em',
         },
     },
 };
@@ -170,7 +170,7 @@ export default function SignUpList(props: any) {
                     </Box>
                 </Flex>
             </Center>
-            <Box w="100%">
+            <Box w="85%">
                 To choose a job - click it.  To remove your selection, click again.
                 <DataTable
                     columns={printing ? printingColumns : columns}
