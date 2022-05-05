@@ -1,10 +1,12 @@
-import { Box, Center, Flex, IconButton, Input, InputGroup, InputLeftElement, Tag, Text } from '@chakra-ui/react';
+import {
+    Box, Center, Flex, Icon, IconButton, Input, InputGroup, InputLeftElement,
+    Tag, Text,
+} from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { BsPrinter, BsSearch } from 'react-icons/bs';
+import { BsPrinter, BsSearch, BsTrash } from 'react-icons/bs';
 import { getSignupList, removeSignup, signupForJob } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
-import VerifyButton from './VerifyButton';
 
 const columns: any = [
     {
@@ -15,7 +17,12 @@ const columns: any = [
             <div data-tag="allowRowEvents">
                 {
                     row.member &&
-                    row.member ||
+                    (
+                        <>
+                            {row.member}
+                            <Icon data-tag="allowRowEvents" as={BsTrash} />
+                        </>
+                    ) ||
                     <Tag data-tag="allowRowEvents" height="50" background="orange.300" color="white">Sign up</Tag>
                 }
             </div>
@@ -38,16 +45,6 @@ const columns: any = [
         sortable: true,
         wrap: true,
         hide: 'sm',
-    },
-    {
-        button: true,
-        // eslint-disable-next-line max-len
-        cell: (row: { verified: boolean, jobId: number, member: string }) => (
-            <VerifyButton verified={row.verified} jobId={row.jobId} member={row.member} />
-        ),
-        style: {
-            paddingRight: '2em',
-        },
     },
 ];
 
@@ -94,7 +91,7 @@ const customStyles = {
     },
     cells: {
         style: {
-            fontSize: '1.2em',
+            fontSize: '1em',
         },
     },
 };
@@ -128,7 +125,7 @@ export default function SignUpList(props: any) {
                 allCells.filter((cell: any) => {
                     const titleSearch = cell.title.toLowerCase().includes(searchTerm.toLowerCase());
                     const daySearch = cell.jobDay.toLowerCase().includes(searchTerm.toLowerCase());
-                    const nameSearch = cell.member.toLowerCase().includes(searchTerm.toLowerCase());
+                    const nameSearch = cell.member?.toLowerCase().includes(searchTerm.toLowerCase());
                     return (titleSearch || daySearch || nameSearch);
                 });
             setCells(newCells);
@@ -174,6 +171,7 @@ export default function SignUpList(props: any) {
                 </Flex>
             </Center>
             <Box w="100%">
+                To choose a job - click it.  To remove your selection, click again.
                 <DataTable
                     columns={printing ? printingColumns : columns}
                     data={cells}
@@ -186,9 +184,15 @@ export default function SignUpList(props: any) {
                     customStyles={customStyles}
                     onRowClicked={
                         async (row: any) => {
+                            // I can delete my own signups, and of course admins can delete everyone's signups.
+                            const allowDelete = (
+                                (state?.user?.memberId === row.memberId) ||
+                                (state.user?.memberType === 'Admin')
+                            );
                             if (!row.member) {
                                 await signupForJob(state.token, row.jobId, (state.user?.memberId || -1));
-                            } else {
+                            }
+                            if ((row.member) && (allowDelete)) {
                                 await removeSignup(state.token, row.jobId);
                             }
                             const eventJobs = await getSignupList(state?.token, props.eventId);
