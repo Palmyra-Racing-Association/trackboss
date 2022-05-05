@@ -41,10 +41,10 @@ export default function EventCard(props: cardProps) {
                             color="gray.200"
                             icon={<GoKebabVertical />}
                         />
-                        <Heading pr={5}>Next Event</Heading>
+                        <Heading pr={5} size="lg">Next Event</Heading>
                     </HStack>
                     <Divider />
-                    <Text pt={10} pb={10} color="orange" fontSize="4xl">{props.date}</Text>
+                    <Text pt={10} color="orange" fontSize="2xl">{props.date}</Text>
                     <Text fontSize="2xl">{props.startTime}</Text>
                     <Text fontSize="2xl">{props.name}</Text>
                 </VStack>

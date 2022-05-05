@@ -122,7 +122,7 @@ export default function GeneralInfo(props: cardProps) {
                                 (memberFamily as Member[]).map((member) => (
                                     <HStack>
                                         <ListItem
-                                            fontSize="3xl"
+                                            fontSize="xl"
                                         >
                                             {` ${member.firstName} ${member.lastName}`}
                                         </ListItem>
@@ -180,9 +180,7 @@ export default function GeneralInfo(props: cardProps) {
                                 (memberBikes as Bike[]).map((bike) => (
                                     <HStack>
                                         <ListItem
-                                            ml={10}
-                                            fontSize="3xl"
-                                            width={375}
+                                            fontSize="xl"
                                         >
                                             {` ${bike.year} ${bike.make} ${bike.model}`}
                                         </ListItem>

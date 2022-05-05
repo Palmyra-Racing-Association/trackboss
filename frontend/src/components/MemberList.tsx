@@ -39,7 +39,7 @@ const customStyles = {
     },
     cells: {
         style: {
-            fontSize: '1.5em',
+            fontSize: '1.2em',
         },
     },
 };
