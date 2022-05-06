@@ -103,7 +103,7 @@ const paginationComponentOptions = {
 
 export default function SignUpList(props: any) {
     const [cells, setCells] = useState([] as Worker[]);
-    const [printing, setPrinting] = useState<boolean>(false);
+    const [printing] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [allCells, setAllCells] = useState<Worker[]>([]);
     const { state } = useContext(UserContext);
@@ -155,14 +155,10 @@ export default function SignUpList(props: any) {
                             color="white"
                             onClick={
                                 () => {
-                                    setPrinting(true);
-                                    setTimeout(() => {
-                                        // Allows the data table to re-render before the print window opens
-                                        window.print();
-                                    }, 0);
-                                    window.onafterprint = () => {
-                                        setPrinting(false);
-                                    };
+                                    const excelTab = window.open(
+                                        `${process.env.REACT_APP_API_URL}/api/job/list/excel?eventID=${props.eventId}`,
+                                    );
+                                    excelTab?.focus();
                                 }
                             }
                             icon={<BsPrinter />}

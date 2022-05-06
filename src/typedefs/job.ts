@@ -15,6 +15,9 @@ export type Job = {
     pointsAwarded: number,
     paid: boolean,
     paidDate?: string,
+    jobDay?: string,
+    cashPayout: number,
+    mealTicket: boolean,
     lastModifiedDate: string,
     lastModifiedBy: string
 }

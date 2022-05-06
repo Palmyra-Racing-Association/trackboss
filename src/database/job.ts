@@ -114,6 +114,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         jobDay: jobDays[result.job_day_number],
         sortOrder: result.sort_order,
         jobDayNumber: result.job_day_number,
+        mealTicket: result.mealTicket,
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));
@@ -149,6 +150,8 @@ export async function getJob(id: number): Promise<Job> {
         pointsAwarded: results[0].points_awarded,
         paid: !!results[0].paid[0],
         paidDate: results[0].paid_date,
+        cashPayout: results[0].cash_payout,
+        mealTicket: results[0].meal_ticket,
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };

@@ -1,5 +1,7 @@
 import { format } from 'date-fns';
 import { Request, Response, Router } from 'express';
+import * as ExcelJS from 'exceljs';
+
 import {
     GetJobListResponse,
     PostNewJobResponse,
@@ -13,41 +15,7 @@ import { checkHeader, verify } from '../util/auth';
 
 import { insertJob, getJob, getJobList, patchJob, deleteJob, setJobVerifiedState, removeSignup } from '../database/job';
 
-const job = Router();
-
-job.post('/new', async (req: Request, res: Response) => {
-    const { authorization } = req.headers;
-    let response: PostNewJobResponse;
-    const headerCheck = checkHeader(authorization);
-    if (!headerCheck.valid) {
-        res.status(401);
-        response = { reason: headerCheck.reason };
-    } else {
-        try {
-            await verify(headerCheck.token, 'Admin');
-            const insertId = await insertJob(req.body);
-            response = await getJob(insertId);
-            res.status(201);
-        } catch (e: any) {
-            if (e.message === 'user input error') {
-                res.status(400);
-                response = { reason: 'bad request' };
-            } else if (e.message === 'Authorization Failed') {
-                res.status(401);
-                response = { reason: 'not authorized' };
-            } else if (e.message === 'Forbidden') {
-                res.status(403);
-                response = { reason: 'forbidden' };
-            } else {
-                res.status(500);
-                response = { reason: 'internal server error' };
-            }
-        }
-    }
-    res.send(response);
-});
-
-job.get('/list', async (req: Request, res: Response) => {
+async function GetJobList(req: Request, res:Response) {
     const { authorization } = req.headers;
     let response: GetJobListResponse;
     const headerCheck = checkHeader(authorization);
@@ -158,7 +126,117 @@ job.get('/list', async (req: Request, res: Response) => {
             }
         }
     }
+    return response;
+}
+
+const job = Router();
+
+job.post('/new', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: PostNewJobResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token, 'Admin');
+            const insertId = await insertJob(req.body);
+            response = await getJob(insertId);
+            res.status(201);
+        } catch (e: any) {
+            if (e.message === 'user input error') {
+                res.status(400);
+                response = { reason: 'bad request' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'Forbidden') {
+                res.status(403);
+                response = { reason: 'forbidden' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
     res.send(response);
+});
+
+job.get('/list', async (req: Request, res: Response) => {
+    const response = await GetJobList(req, res);
+    res.send(response);
+});
+
+job.get('/list/excel', async (req: Request, res: Response) => {
+    // get the jobs list with the given parameters.
+    const jobsList = await GetJobList(req, res) as Job[];
+    // Create workbook and some meta datars about it.
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Palmyra Racing Association - Track Boss';
+    workbook.created = new Date();
+
+    // Add a worksheet to the workbook for the current signups.
+    const worksheet = workbook.addWorksheet(
+        `Track Boss Signups for ${jobsList[0].event}`,
+        {
+            pageSetup: { orientation: 'landscape' },
+        },
+    );
+    worksheet.columns = [
+        { header: 'Name', key: 'name', width: 15 },
+        { header: 'Job', key: 'job', width: 30 },
+        { header: 'Day', key: 'day', width: 10 },
+        { header: 'Point Value', key: 'pointValue', width: 6 },
+        { header: 'Cash Value', key: 'cashValue', width: 6 },
+        { header: 'Meal Ticket', key: 'mealTicket', width: 6 },
+        { header: 'Signature', key: 'signature', width: 30 },
+    ];
+    // add data
+    jobsList.forEach((jobRow) => {
+        worksheet.addRow({
+            name: jobRow.member,
+            job: jobRow.title,
+            day: jobRow.jobDay,
+            pointValue: jobRow.pointsAwarded,
+            cashValue: jobRow.cashPayout,
+            mealTicket: jobRow.mealTicket,
+            signature: '',
+        });
+    });
+    // do various formatting things.
+    const headerRow = worksheet.getRow(1);
+    headerRow.font = { bold: true };
+    headerRow.alignment = { wrapText: true };
+
+    for (let index = 2; index <= worksheet.rowCount; index++) {
+        const currentRow = worksheet.getRow(index);
+        currentRow.height = 31;
+        let rowColor = 'FFFFFF';
+        if (index % 2) {
+            rowColor = 'D9D8D8';
+        }
+        currentRow.alignment = { wrapText: true };
+        currentRow.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: rowColor },
+        };
+        currentRow.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+        };
+    }
+
+    // worksheet.getRow(2).font = { name: 'Comic Sans MS', family: 4, size: 16, underline: 'double', bold: true };
+
+    // write workbook to buffer.
+    const buffer = await workbook.xlsx.writeBuffer();
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=signups${new Date().getTime()}.xlsx`);
+    res.send(buffer);
 });
 
 job.get('/:jobId', async (req: Request, res: Response) => {
