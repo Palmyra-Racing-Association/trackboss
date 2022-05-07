@@ -20,6 +20,7 @@ export function getJobListResponse(values: string[]) {
             points_awarded: '3',
             paid: [0],
             paid_date: null,
+            meal_ticket: 0,
             last_modified_date: '2022-02-07',
             last_modified_by: 'Bob Tes',
         }, {
@@ -37,6 +38,7 @@ export function getJobListResponse(values: string[]) {
             points_awarded: null,
             paid: [0],
             paid_date: null,
+            meal_ticket: 0,
             last_modified_date: '2022-02-07',
             last_modified_by: 'Bob Tes',
         }, {
@@ -54,6 +56,7 @@ export function getJobListResponse(values: string[]) {
             points_awarded: null,
             paid: [0],
             paid_date: null,
+            meal_ticket: 0,
             last_modified_date: '2022-02-07',
             last_modified_by: 'Bob Tes',
         }, {
@@ -70,6 +73,7 @@ export function getJobListResponse(values: string[]) {
             verified_date: '2022-02-07',
             points_awarded: '3',
             paid: [0],
+            meal_ticket: 0,
             paid_date: null,
             last_modified_date: '2022-02-07',
             last_modified_by: 'Bob Tes',
