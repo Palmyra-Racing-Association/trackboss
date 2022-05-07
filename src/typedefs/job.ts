@@ -17,7 +17,7 @@ export type Job = {
     paidDate?: string,
     jobDay?: string,
     cashPayout: number,
-    mealTicket: boolean,
+    mealTicket: string,
     lastModifiedDate: string,
     lastModifiedBy: string
 }

@@ -114,7 +114,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         jobDay: jobDays[result.job_day_number],
         sortOrder: result.sort_order,
         jobDayNumber: result.job_day_number,
-        mealTicket: result.mealTicket,
+        mealTicket: ((result.meal_ticket[0] === 1) ? 'Yes' : 'No'),
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));

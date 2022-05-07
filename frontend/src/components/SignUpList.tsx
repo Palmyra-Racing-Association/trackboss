@@ -5,7 +5,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsPrinter, BsSearch, BsTrashFill } from 'react-icons/bs';
-import { getSignupList, removeSignup, signupForJob } from '../controller/job';
+import { getSignupList, removeSignup, signupForJob, getSignupListExcel } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 
 const columns: any = [
@@ -154,11 +154,10 @@ export default function SignUpList(props: any) {
                             background="orange.300"
                             color="white"
                             onClick={
-                                () => {
-                                    const excelTab = window.open(
-                                        `${process.env.REACT_APP_API_URL}/api/job/list/excel?eventID=${props.eventId}`,
-                                    );
-                                    excelTab?.focus();
+                                async () => {
+                                    const signupListExcel = await getSignupListExcel(state.token, props.eventId);
+                                    const objectUrl = URL.createObjectURL(signupListExcel);
+                                    window.open(objectUrl, '_blank');
                                 }
                             }
                             icon={<BsPrinter />}
