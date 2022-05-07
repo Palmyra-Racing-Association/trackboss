@@ -5,7 +5,7 @@ import {
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsPrinter, BsSearch, BsTrashFill } from 'react-icons/bs';
-import { getSignupList, removeSignup, signupForJob } from '../controller/job';
+import { getSignupList, removeSignup, signupForJob, getSignupListExcel } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 
 const columns: any = [
@@ -103,7 +103,7 @@ const paginationComponentOptions = {
 
 export default function SignUpList(props: any) {
     const [cells, setCells] = useState([] as Worker[]);
-    const [printing, setPrinting] = useState<boolean>(false);
+    const [printing] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [allCells, setAllCells] = useState<Worker[]>([]);
     const { state } = useContext(UserContext);
@@ -154,15 +154,10 @@ export default function SignUpList(props: any) {
                             background="orange.300"
                             color="white"
                             onClick={
-                                () => {
-                                    setPrinting(true);
-                                    setTimeout(() => {
-                                        // Allows the data table to re-render before the print window opens
-                                        window.print();
-                                    }, 0);
-                                    window.onafterprint = () => {
-                                        setPrinting(false);
-                                    };
+                                async () => {
+                                    const signupListExcel = await getSignupListExcel(state.token, props.eventId);
+                                    const objectUrl = URL.createObjectURL(signupListExcel);
+                                    window.open(objectUrl, '_blank');
                                 }
                             }
                             icon={<BsPrinter />}

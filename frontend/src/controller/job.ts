@@ -136,3 +136,12 @@ export async function getSignupList(token: string, eventId: number): Promise<Wor
     });
     return response.json();
 }
+
+export async function getSignupListExcel(token: string, eventId: number): Promise<Blob> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/list/excel?eventID=${eventId}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.blob();
+}
