@@ -157,7 +157,7 @@ export default function SignUpList(props: any) {
                                 async () => {
                                     const signupListExcel = await getSignupListExcel(state.token, props.eventId);
                                     const objectUrl = URL.createObjectURL(signupListExcel);
-                                    window.open(objectUrl, '_blank');
+                                    window.location.href = objectUrl;
                                 }
                             }
                             icon={<BsPrinter />}
