@@ -382,6 +382,17 @@ CREATE TABLE IF NOT EXISTS `pradb`.`point_threshold` (
   PRIMARY KEY (`year`))
 ENGINE = InnoDB;
 
+CREATE TABLE `pradb`.`earned_points_history` (
+  `earned_points_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `description` text,
+  `point_value` int(11) DEFAULT NULL,
+  `old_member_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`earned_points_history_id`),
+  KEY `idx_points_history_date_member` (`date`,`old_member_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4211;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
