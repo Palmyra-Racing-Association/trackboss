@@ -58,7 +58,7 @@ export default function HamburgerMenu(props:pageProps) {
                                     justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
-                                    fontSize="4xl"
+                                    fontSize="2xl"
                                     leftIcon={<AiFillHome />}
                                     isFullWidth
                                     bg="white"
@@ -80,7 +80,7 @@ export default function HamburgerMenu(props:pageProps) {
                                     justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
-                                    fontSize="4xl"
+                                    fontSize="2xl"
                                     leftIcon={<AiFillCalendar />}
                                     isFullWidth
                                     bg="white"
@@ -102,7 +102,7 @@ export default function HamburgerMenu(props:pageProps) {
                                     justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
-                                    fontSize="4xl"
+                                    fontSize="2xl"
                                     leftIcon={<HiUsers />}
                                     isFullWidth
                                     bg="white"
@@ -124,7 +124,7 @@ export default function HamburgerMenu(props:pageProps) {
                                     justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
-                                    fontSize="4xl"
+                                    fontSize="2xl"
                                     leftIcon={<HiCog />}
                                     isFullWidth
                                     bg="white"

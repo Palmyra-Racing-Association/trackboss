@@ -5,21 +5,21 @@ export type Job = {
     memberId: number,
     membershipId: number,
     member?: string,
-    eventId: number,
+    eventId?: number,
     event: string,
     start: string | Date,
-    end: string | Date,
+    end?: string | Date,
     title: string,
     verified: boolean,
     verifiedDate?: string,
     pointsAwarded: number,
-    paid: boolean,
+    paid?: boolean,
     paidDate?: string,
     jobDay?: string,
-    cashPayout: number,
-    mealTicket: string,
-    lastModifiedDate: string,
-    lastModifiedBy: string
+    cashPayout?: number,
+    mealTicket?: string,
+    lastModifiedDate?: string,
+    lastModifiedBy?: string
 }
 
 export type DeletedJob = {

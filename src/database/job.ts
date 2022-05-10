@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
+import member from 'src/api/member';
 
 import { Job, PatchJobRequest, PostNewJobRequest, GetJobListRequestFilters } from 'src/typedefs/job';
 
@@ -46,9 +47,12 @@ export async function insertJob(req: PostNewJobRequest): Promise<number> {
 export async function getJobList(filters: GetJobListRequestFilters): Promise<Job[]> {
     let sql;
     let values: any[] = [];
+    let useMemberFilter = false;
+    let memberId = -1;
     if (!_.isEmpty(filters)) {
         let dynamicSql = ' WHERE ';
         let counter = 0;
+        useMemberFilter = (typeof filters.memberId !== 'undefined');
         if (typeof filters.assignmentStatus !== 'undefined') {
             if (filters.assignmentStatus) {
                 dynamicSql += 'member IS NOT NULL AND ';
@@ -60,7 +64,8 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
             dynamicSql += 'verified = ? AND ';
             values[counter++] = filters.verificationStatus;
         }
-        if (typeof filters.memberId !== 'undefined') {
+        if (useMemberFilter) {
+            memberId = filters.memberId || -1;
             dynamicSql += 'member_id = ? AND ';
             values[counter++] = filters.memberId;
         }
@@ -95,7 +100,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
     }
     const jobDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    return results.map((result) => ({
+    const jobResults : any = results.map((result) => ({
         jobId: result.job_id,
         member: result.member,
         memberId: result.member_id,
@@ -118,6 +123,33 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));
+    if (useMemberFilter && memberId > 0) {
+        const historicalResults = await getPool().query<RowDataPacket[]>(
+            `select 
+              m.member_id, m.membership_id, concat(m.first_name, ' ', m.last_name) member, eph.date, 
+              eph.description title, eph.point_value points_awarded
+              from member m, earned_points_history eph where 
+              eph.old_member_id = m.old_member_id and 
+              m.member_id = ?`,
+            [memberId],
+        );
+        if (historicalResults) {
+            historicalResults[0].map((legacyPoints) => (jobResults.push({
+                member: legacyPoints.member,
+                memberId: legacyPoints.member_id,
+                membershipId: legacyPoints.membership_id,
+                start: legacyPoints.date,
+                end: legacyPoints.date,
+                title: legacyPoints.title,
+                verified: true,
+                pointsAwarded: legacyPoints.points_awarded,
+                paid: false,
+                cashPayout: 0,
+            })
+            ));
+        }
+    }
+    return jobResults;
 }
 
 export async function getJob(id: number): Promise<Job> {

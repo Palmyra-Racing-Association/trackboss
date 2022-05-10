@@ -127,13 +127,13 @@ export default function EventCalendar() {
                             color: 'black',
                         };
                         if ('eventType' in calendarEvent) {
+                            newStyle.color = '#FFFFFF';
                             if (calendarEvent.eventType === 'Meeting') {
                                 newStyle.backgroundColor = '#76CE6F'; // green
                             } else if (
                                 calendarEvent.eventType === 'Yearly Job' ||
                                 calendarEvent.eventType === 'Work Day') {
                                 newStyle.backgroundColor = '#4B0082'; // purple
-                                newStyle.color = '#FFFFFF';
                             } else if (
                                 calendarEvent.eventType === 'Race' ||
                                 calendarEvent.eventType === 'Race Week' ||
