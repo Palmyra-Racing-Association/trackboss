@@ -391,7 +391,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     disabled={editedMemberType !== 'board'}
                                                     variant="outline"
                                                     size="xs"
-                                                    placeholder={selectedMember.occupation}
                                                     value={editedBoardMember}
                                                     onChange={handleEditedBoardMember}
                                                 >
@@ -421,20 +420,20 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <ButtonGroup size="sm" isAttached variant="outline">
                                                 <Button
                                                     mr="-px"
-                                                    backgroundColor={selectedMember.memberType === 'member' ? 'blue' : ''}
+                                                    backgroundColor={(!isBoard && selectedMember.memberType.toLowerCase().includes('member')) ? 'blue' : ''}
                                                 >
                                                     Member
                                                 </Button>
                                                 <Button
                                                     userSelect="none"
                                                     mr="-px"
-                                                    backgroundColor={selectedMember.memberType === 'admin' ? 'blue' : ''}
+                                                    backgroundColor={selectedMember.memberType.toLowerCase().includes('admin') ? 'blue' : ''}
                                                 >
                                                     Admin
                                                 </Button>
                                                 <Button
                                                     mr="-px"
-                                                    backgroundColor={selectedMember.memberType === 'board' ? 'blue' : ''}
+                                                    backgroundColor={isBoard ? 'blue' : ''}
                                                 >
                                                     Board
                                                 </Button>
