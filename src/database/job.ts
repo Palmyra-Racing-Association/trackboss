@@ -133,21 +133,21 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
               m.member_id = ?`,
             [memberId],
         );
-        // eslint-disable-next-line no-self-compare
-        const historicalJobs = historicalResults[0].map((legacyPoints) => (jobResults.push({
-            member: legacyPoints.member,
-            memberId: legacyPoints.member_id,
-            membershipId: legacyPoints.membership_id,
-            start: legacyPoints.date,
-            end: legacyPoints.date,
-            title: legacyPoints.title,
-            verified: true,
-            pointsAwarded: legacyPoints.points_awarded,
-            paid: false,
-            cashPayout: 0,
-        })
-        ));
-        jobResults.push(historicalJobs);
+        if (historicalResults) {
+            historicalResults[0].map((legacyPoints) => (jobResults.push({
+                member: legacyPoints.member,
+                memberId: legacyPoints.member_id,
+                membershipId: legacyPoints.membership_id,
+                start: legacyPoints.date,
+                end: legacyPoints.date,
+                title: legacyPoints.title,
+                verified: true,
+                pointsAwarded: legacyPoints.points_awarded,
+                paid: false,
+                cashPayout: 0,
+            })
+            ));
+        }
     }
     return jobResults;
 }

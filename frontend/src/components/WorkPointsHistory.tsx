@@ -62,7 +62,7 @@ export default function WorkPointsHistory() {
     const [year, setYear] = useState<number>(new Date().getFullYear());
     const [years, setYears] = useState<number[]>([]);
     const [workPointsEarned, setWorkPointsEarned] = useState<number>(0);
-    const [workPoinstThreshold, setWorkPointsThreshold] = useState<number>(0);
+    const [workPointsThreshold, setWorkPointsThreshold] = useState<number>(0);
 
     const { state } = useContext(UserContext);
 
@@ -84,7 +84,9 @@ export default function WorkPointsHistory() {
                 if (!allYears.includes(currentYear)) {
                     allYears.push(currentYear);
                 }
-                setYears(_.sortBy(allYears, (aYear) => aYear));
+                // reverse sort the years so that most recent is always at the top
+                const sortedYears = allYears.sort((a, b) => (b - a));
+                setYears(sortedYears);
                 setAllJobs(jobs);
             }
         }
@@ -125,9 +127,15 @@ export default function WorkPointsHistory() {
                         }
                     </MenuList>
                 </Menu>
-                <Heading>Work Points History</Heading>
+                <Heading>
+                    Work Points History (
+                    {year}
+                    )
+                </Heading>
             </HStack>
-            <Heading color="orange" size="2xl">{`${workPointsEarned}/${workPoinstThreshold}`}</Heading>
+            <Heading color="orange" size="2xl">
+                {`${workPointsEarned}/${workPointsThreshold}`}
+            </Heading>
 
             <DataTable
                 columns={columns}

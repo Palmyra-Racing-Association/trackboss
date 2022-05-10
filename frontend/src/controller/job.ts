@@ -43,7 +43,9 @@ export async function getCalendarJobs(token: string) {
     if (Array.isArray(calendarJobs)) {
         calendarJobs.forEach((job) => {
             job.start = new Date(job.start);
-            job.end = new Date(job.end);
+            if (job.end) {
+                job.end = new Date(job.end);
+            }
         });
         return calendarJobs;
     }

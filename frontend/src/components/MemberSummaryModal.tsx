@@ -308,7 +308,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <UnorderedList pl={10}>
                                         {
                                             bikes.map((bike) => (
-                                                <ListItem key={bike.bikeId}>{`${bike.year}, ${bike.make} ${bike.model}`}</ListItem>
+                                                <ListItem key={bike.bikeId}>{`${bike.year} ${bike.make} ${bike.model}`}</ListItem>
                                             ))
                                         }
                                     </UnorderedList>
