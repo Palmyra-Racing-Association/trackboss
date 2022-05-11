@@ -462,7 +462,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                             }
                                                         }
                                                     >
-                                                        Assign To Event
+                                                        Act As Member
                                                     </Button>
                                                     <Button
                                                         backgroundColor="red"

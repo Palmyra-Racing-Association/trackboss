@@ -79,7 +79,7 @@ export default function AccountPageTabs() {
                             <FamilyAndBikes
                                 memberBikes={memberBikes}
                                 memberFamily={memberFamily}
-                                admin={state.user.memberType === 'Admin'}
+                                admin={state.user.memberType.includes('Admin')}
                             />
                         )
                     }
