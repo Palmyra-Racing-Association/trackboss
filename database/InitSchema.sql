@@ -29,6 +29,14 @@ CREATE TABLE IF NOT EXISTS `pradb`.`member_types` (
   PRIMARY KEY (`member_type_id`))
 ENGINE = InnoDB;
 
+drop table if exists pradb.membership_types;
+
+CREATE TABLE IF NOT EXISTS `pradb`.`membership_types` (
+  `membership_type_id` INT NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(255) NOT NULL,
+  `base_dues_amt` FLOAT NULL,
+  PRIMARY KEY (`membership_type_id`))
+ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `pradb`.`member`
@@ -107,6 +115,15 @@ CREATE TABLE IF NOT EXISTS `pradb`.`membership` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+ALTER TABLE `pradb`.`membership`
+ADD COLUMN `membership_type_id` INT(11) NULL AFTER `OLD_MEMBERSHIP_ID`,
+ADD INDEX `FK_membership_type_idx` (`membership_type_id` ASC);
+ALTER TABLE `pradb`.`membership`
+ADD CONSTRAINT `FK_membership_type`
+  FOREIGN KEY (`membership_type_id`)
+  REFERENCES `pradb`.`membership_types` (`membership_type_id`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
 
 -- -----------------------------------------------------
 -- Table `pradb`.`member_bikes`

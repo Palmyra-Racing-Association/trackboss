@@ -4,6 +4,7 @@ CREATE VIEW `v_membership` AS
         ms.membership_id,
         CONCAT(ma.first_name, ' ', ma.last_name) AS membership_admin,
         ms.status,
+        (select type from membership_types where membership_type_id = ms.membership_type_id) membership_type,
         ms.cur_year_renewed,
         ms.renewal_sent,
         ms.year_joined,
