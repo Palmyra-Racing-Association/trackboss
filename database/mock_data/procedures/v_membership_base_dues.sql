@@ -8,7 +8,7 @@ CREATE VIEW `v_membership_base_dues` AS
             LEFT JOIN
         membership ms ON m.membership_id = ms.membership_id
             LEFT JOIN
-        member_types mt ON m.member_type_id = mt.member_type_id
+        membership_types mt ON ms.membership_type_id = mt.membership_type_id
     GROUP BY
         membership_id
 //
