@@ -11,8 +11,18 @@ import MemberSummaryModal from './MemberSummaryModal';
 
 const columns: any = [
     {
-        name: 'Name',
-        selector: (row: Member) => `${row.firstName} ${row.lastName}`,
+        name: 'Last Name',
+        selector: (row: Member) => row.lastName,
+        sortable: true,
+    },
+    {
+        name: 'First Name',
+        selector: (row: Member) => row.firstName,
+        sortable: true,
+    },
+    {
+        name: 'Membership Type',
+        selector: (row: Member) => row.membershipType,
         sortable: true,
     },
     {
@@ -32,7 +42,7 @@ const customStyles = {
         style: {
             marginTop: '90px',
             paddingTop: '0',
-            fontSize: '2em',
+            fontSize: '1.5em',
             backgroundColor: '#f9f9f9',
             color: '#626262',
         },
@@ -96,7 +106,13 @@ export default function MemberList() {
                 pagination
                 responsive
                 subHeaderWrap
+                defaultSortFieldId={1}
                 customStyles={customStyles}
+                paginationComponentOptions={
+                    {
+                        selectAllRowsItem: true,
+                    }
+                }
                 onRowClicked={
                     (row: Member) => {
                         setSelectedMember(row);

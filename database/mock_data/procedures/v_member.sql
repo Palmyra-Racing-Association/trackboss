@@ -10,6 +10,7 @@ CREATE VIEW `v_member` AS
         m.active,
         mt.member_type_id,
         mt.type as member_type,
+        mst.type as membership_type,
         m.phone_number,
         m.occupation,
         m.email,
@@ -28,5 +29,7 @@ CREATE VIEW `v_member` AS
             LEFT JOIN
         member ma ON ms.membership_admin_id = ma.member_id
             LEFT JOIN
-        member_types mt ON m.member_type_id = mt.member_type_id;
+        member_types mt ON m.member_type_id = mt.member_type_id
+            LEFT JOIN
+        membership_types mst ON ms.membership_type_id = mst.membership_type_id
 //

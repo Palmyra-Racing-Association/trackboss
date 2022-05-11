@@ -9,6 +9,7 @@ export type Member = {
     active: boolean,
     memberTypeId: number,
     memberType: string,
+    membershipType: string,
     firstName: string,
     lastName: string,
     phoneNumber: string,
