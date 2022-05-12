@@ -30,6 +30,15 @@ export async function getJobTypeList(token: string): Promise<GetJobTypeListRespo
     return response.json();
 }
 
+export async function getJobTypeListEventType(token: string, eventType: string): Promise<GetJobTypeListResponse> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/jobType/list/${eventType}`, {
+        method: 'GET',
+        mode: 'no-cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
+
 export async function getJobType(token: string, jobTypeID: number): Promise<GetJobTypeResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/jobType/${jobTypeID}`, {
         method: 'GET',

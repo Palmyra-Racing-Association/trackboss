@@ -7,7 +7,7 @@ import {
     PatchJobTypeResponse,
     PostNewJobTypeResponse,
 } from '../typedefs/jobType';
-import { getJobType, getJobTypeList, insertJobType, patchJobType } from '../database/jobType';
+import { getJobType, getJobTypeList, getJobTypesEventList, insertJobType, patchJobType } from '../database/jobType';
 
 const jobType = Router();
 
@@ -54,6 +54,32 @@ jobType.get('/list', async (req: Request, res: Response) => {
         try {
             await verify(headerCheck.token);
             const jobTypeList: JobType[] = await getJobTypeList();
+            res.status(200);
+            response = jobTypeList;
+        } catch (e: any) {
+            if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
+});
+
+jobType.get('/list/:eventTypeName', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: GetJobTypeListResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const jobTypeList: JobType[] = await getJobTypesEventList(req.params.eventTypeName);
             res.status(200);
             response = jobTypeList;
         } catch (e: any) {
