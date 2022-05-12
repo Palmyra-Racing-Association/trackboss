@@ -12,7 +12,7 @@ import {
     HStack,
 } from '@chakra-ui/react';
 
-import { AiOutlineMenu, AiFillHome, AiFillCalendar } from 'react-icons/ai';
+import { AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank } from 'react-icons/ai';
 import { HiUsers, HiCog } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
@@ -141,6 +141,28 @@ export default function HamburgerMenu(props:pageProps) {
                                     isActive={props.activeButtonId === 4}
                                 >
                                     <Link to="/settings">My Account</Link>
+                                </Button>
+                                <Button
+                                    justifyContent="flex-start"
+                                    height="80px"
+                                    fontFamily="heading"
+                                    fontSize="2xl"
+                                    leftIcon={<AiFillBank />}
+                                    isFullWidth
+                                    bg="white"
+                                    color="black"
+                                    borderRadius="0"
+                                    _hover={{ bg: 'gray.100' }}
+                                    _active={
+                                        {
+                                            bg: 'orange',
+                                            color: 'white',
+                                        }
+                                    }
+                                    id="5"
+                                    isActive={props.activeButtonId === 5}
+                                >
+                                    <Link to="/jobs">Event Jobs</Link>
                                 </Button>
                             </VStack>
                         </DrawerBody>

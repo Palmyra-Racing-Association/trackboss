@@ -106,6 +106,36 @@ export async function getJobTypeList(): Promise<JobType[]> {
     }));
 }
 
+export async function getJobTypesEventList(eventTypeName : string) : Promise<JobType[]> {
+    const sql = `select jt.* from job_type jt, event_job ej, event_type et
+    where et.type = ? and jt.active = 1 and ej.event_type_id = et.event_type_id and
+    ej.job_type_id = jt.job_type_id order by jt.job_day_number, jt.job_type_id`;
+
+    let results;
+    try {
+        [results] = await getPool().query<RowDataPacket[]>(sql, [eventTypeName]);
+    } catch (e) {
+        logger.error(`DB error getting job type list: ${e}`);
+        throw new Error('internal server error');
+    }
+    const jobDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    return results.map((result) => ({
+        jobTypeId: result.job_type_id,
+        title: result.title,
+        pointValue: result.point_value,
+        cashValue: result.cash_value,
+        jobDayNumber: result.job_day_number,
+        jobDay: jobDays[result.job_day_number],
+        active: !!result.active[0],
+        reserved: !!result.reserved[0],
+        online: !!result.online[0],
+        mealTicket: !!result.meal_ticket[0],
+        sortOrder: result.sort_order,
+        lastModifiedDate: result.last_modified_date,
+        lastModifiedBy: result.last_modified_by,
+    }));
+}
+
 export async function patchJobType(id: number, req: PatchJobTypeRequest): Promise<void> {
     if (_.isEmpty(req)) {
         throw new Error('user input error');
