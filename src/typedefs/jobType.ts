@@ -11,6 +11,8 @@ export type JobType = {
     mealTicket: boolean,
     sortOrder: number,
     active: boolean,
+    jobDay: string,
+    count?: number,
     lastModifiedDate: string,
     lastModifiedBy: string
 }
