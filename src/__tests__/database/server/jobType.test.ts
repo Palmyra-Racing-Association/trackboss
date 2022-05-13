@@ -40,6 +40,7 @@ describe('getJobType()', () => {
             title: 'Test Subject',
             pointValue: 3,
             cashValue: 5.50,
+            jobDay: 'Tuesday',
             jobDayNumber: 1,
             reserved: true,
             online: true,
