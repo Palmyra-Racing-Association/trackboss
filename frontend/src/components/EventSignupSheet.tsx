@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, VStack } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, VStack } from '@chakra-ui/react';
 import { BsChevronDown } from 'react-icons/bs';
 import _ from 'lodash';
 import DataTable from 'react-data-table-component';
@@ -8,6 +8,7 @@ import { getJobTypeListEventType } from '../controller/jobType';
 import { getEventTypeList } from '../controller/eventType';
 import { EventType } from '../../../src/typedefs/eventType';
 import { JobType } from '../../../src/typedefs/jobType';
+import SignupSheetJobsRow from './SignupSheetJobsRow';
 
 function EventSignupSheet() {
     const { state } = useContext(UserContext);
@@ -36,8 +37,6 @@ function EventSignupSheet() {
     }, [selectedEventType]);
 
     // Put it in a table
-
-    // make it editable in some fancy UI thang.
 
     return (
         <VStack>
@@ -83,6 +82,10 @@ function EventSignupSheet() {
                             sortFunction: (rowA, rowB) => rowA.jobDayNumber - rowB.jobDayNumber,
                         },
                         {
+                            name: 'Meal Ticket',
+                            selector: (row: JobType) => row.mealTicket,
+                        },
+                        {
                             name: 'Number of positions',
                             selector: (row: JobType) => row.count || 1,
                         },
@@ -111,7 +114,11 @@ function EventSignupSheet() {
                         },
                     }
                 }
+                expandableRows
+                expandableRowsComponent={SignupSheetJobsRow}
+                responsive
             />
+            <Box height="10" />
         </VStack>
     );
 }
