@@ -12,6 +12,8 @@ export const INSERT_JOB_TYPE_SQL = 'INSERT INTO job_type (title, point_value, ca
     'VALUES (?, ?, ?, ?, 1, ?, ?, ?, ?, CURDATE(), ?)';
 export const PATCH_JOB_TYPE_SQL = 'CALL sp_patch_job_type (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
+const jobDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
 export async function insertJobType(req: PostNewJobTypeRequest): Promise<number> {
     const values = [
         req.title,
@@ -69,6 +71,7 @@ export async function getJobType(id: number): Promise<JobType> {
         pointValue: results[0].point_value,
         cashValue: results[0].cash_value,
         jobDayNumber: results[0].job_day_number,
+        jobDay: jobDays[results[0].job_day_number],
         active: !!results[0].active[0],
         reserved: !!results[0].reserved[0],
         online: !!results[0].online[0],
@@ -96,6 +99,7 @@ export async function getJobTypeList(): Promise<JobType[]> {
         pointValue: result.point_value,
         cashValue: result.cash_value,
         jobDayNumber: result.job_day_number,
+        jobDay: jobDays[result.job_day_number],
         active: !!result.active[0],
         reserved: !!result.reserved[0],
         online: !!result.online[0],
@@ -107,7 +111,7 @@ export async function getJobTypeList(): Promise<JobType[]> {
 }
 
 export async function getJobTypesEventList(eventTypeName : string) : Promise<JobType[]> {
-    const sql = `select jt.* from job_type jt, event_job ej, event_type et
+    const sql = `select jt.*, ej.count from job_type jt, event_job ej, event_type et
     where et.type = ? and jt.active = 1 and ej.event_type_id = et.event_type_id and
     ej.job_type_id = jt.job_type_id order by jt.job_day_number, jt.job_type_id`;
 
@@ -118,7 +122,6 @@ export async function getJobTypesEventList(eventTypeName : string) : Promise<Job
         logger.error(`DB error getting job type list: ${e}`);
         throw new Error('internal server error');
     }
-    const jobDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     return results.map((result) => ({
         jobTypeId: result.job_type_id,
         title: result.title,
@@ -131,6 +134,7 @@ export async function getJobTypesEventList(eventTypeName : string) : Promise<Job
         online: !!result.online[0],
         mealTicket: !!result.meal_ticket[0],
         sortOrder: result.sort_order,
+        count: result.count,
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));

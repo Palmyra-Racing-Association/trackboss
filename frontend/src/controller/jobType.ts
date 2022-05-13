@@ -31,12 +31,15 @@ export async function getJobTypeList(token: string): Promise<GetJobTypeListRespo
 }
 
 export async function getJobTypeListEventType(token: string, eventType: string): Promise<GetJobTypeListResponse> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/jobType/list/${eventType}`, {
+    const headers = generateHeaders(token);
+    const requestUrl = `${process.env.REACT_APP_API_URL}/api/jobType/list/${eventType}`;
+    const response = await fetch(requestUrl, {
         method: 'GET',
-        mode: 'no-cors',
-        headers: generateHeaders(token),
+        mode: 'cors',
+        headers,
     });
-    return response.json();
+    const json = response.json();
+    return json;
 }
 
 export async function getJobType(token: string, jobTypeID: number): Promise<GetJobTypeResponse> {
