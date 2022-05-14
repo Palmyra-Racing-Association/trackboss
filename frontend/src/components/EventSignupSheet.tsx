@@ -83,7 +83,7 @@ function EventSignupSheet() {
                         },
                         {
                             name: 'Meal Ticket',
-                            selector: (row: JobType) => row.mealTicket,
+                            selector: (row: JobType) => (row.mealTicket ? 'Yes' : 'No'),
                         },
                         {
                             name: 'Number of positions',
