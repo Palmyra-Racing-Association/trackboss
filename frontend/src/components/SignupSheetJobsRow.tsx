@@ -1,8 +1,9 @@
 import {
-    Box, Button, NumberInput, NumberInputField, Select, SimpleGrid, Text,
+    Box, Button, NumberInput, NumberInputField, Select, SimpleGrid, Text, useToast,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { JobType } from '../../../src/typedefs/jobType';
+import { UserContext } from '../contexts/UserContext';
 
 interface RowProps {
     data: JobType,
@@ -28,7 +29,11 @@ interface RowProps {
 */
 
 function SignupSheetJobsRow(props: RowProps) {
+    const { state } = useContext(UserContext);
+
     const { data } = props;
+    const toast = useToast();
+
     const mealTicket = data.mealTicket ? 'Yes' : 'No';
     const [pointValue, setPointValue] = useState<number>(data.pointValue);
     const [cashValue, setCashValue] = useState<number>(data.cashValue);
@@ -102,7 +107,17 @@ function SignupSheetJobsRow(props: RowProps) {
                         jobCopy.mealTicket = mealTicketValue;
                         jobCopy.count = count;
                         jobCopy.sortOrder = sortOrder;
-                        alert(JSON.stringify(jobCopy));
+                        toast({
+                            containerStyle: {
+                                background: 'orange',
+                            },
+                            // eslint-disable-next-line max-len
+                            title: `${jobCopy.title} updated. (Job Type ID ${jobCopy.jobTypeId} user ${state.user?.email})`,
+                            // description: "We've created your account for you.",
+                            status: 'success',
+                            duration: 5000,
+                            isClosable: true,
+                        });
                     }
                 }
             >
