@@ -64,16 +64,20 @@ function EventSignupSheet() {
                             name: 'Title',
                             selector: (row: JobType) => row.title,
                             sortable: true,
+                            maxWidth: '200',
+                            wrap: true,
                         },
                         {
                             name: 'Points',
                             selector: (row: JobType) => row.pointValue,
                             sortable: true,
+                            maxWidth: '50',
                         },
                         {
                             name: 'Cash',
                             selector: (row: JobType) => row.cashValue,
                             sortable: true,
+                            maxWidth: '50',
                         },
                         {
                             name: 'Job Day',
@@ -84,15 +88,18 @@ function EventSignupSheet() {
                         {
                             name: 'Meal Ticket',
                             selector: (row: JobType) => (row.mealTicket ? 'Yes' : 'No'),
+                            maxWidth: '50',
                         },
                         {
                             name: 'Number of positions',
                             selector: (row: JobType) => row.count || 1,
+                            maxWidth: '50',
                         },
                         {
                             name: 'Display Order',
                             selector: (row: JobType) => row.sortOrder,
                             sortable: true,
+                            maxWidth: '50',
                         },
                     ]
                 }
