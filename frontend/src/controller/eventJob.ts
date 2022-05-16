@@ -24,7 +24,7 @@ export async function createEventJob(
 export async function getEventJob(token: string, eventJobId: number): Promise<GetEventJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/eventJob/${eventJobId}`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
@@ -37,7 +37,7 @@ export async function updateEventJob(
 ): Promise<PatchEventJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/eventJob/${eventJobId}`, {
         method: 'PATCH',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(eventJobData),
     });

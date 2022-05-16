@@ -111,8 +111,8 @@ export async function getJobTypeList(): Promise<JobType[]> {
 }
 
 export async function getJobTypesEventList(eventTypeName : string) : Promise<JobType[]> {
-    const sql = `select jt.*, ej.count from job_type jt, event_job ej, event_type et
-    where et.type = ? and jt.active = 1 and ej.event_type_id = et.event_type_id and
+    const sql = `select jt.*, ej.event_job_id, ej.count from job_type jt, event_job ej, event_type et
+    where et.type = ? and ej.event_type_id = et.event_type_id and
     ej.job_type_id = jt.job_type_id order by jt.job_day_number, jt.job_type_id`;
 
     let results;
@@ -135,6 +135,7 @@ export async function getJobTypesEventList(eventTypeName : string) : Promise<Job
         mealTicket: !!result.meal_ticket[0],
         sortOrder: result.sort_order,
         count: result.count,
+        eventJobId: result.event_job_id,
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));
@@ -146,7 +147,6 @@ export async function patchJobType(id: number, req: PatchJobTypeRequest): Promis
     }
 
     const values = [
-        id,
         req.title,
         req.pointValue,
         req.cashValue,
@@ -157,11 +157,16 @@ export async function patchJobType(id: number, req: PatchJobTypeRequest): Promis
         req.sortOrder,
         req.active,
         req.modifiedBy,
+        id,
     ];
 
     let result;
     try {
-        [result] = await getPool().query<OkPacket>(PATCH_JOB_TYPE_SQL, values);
+        const updateSql = `update job_type set title = ?, point_value = ?, cash_value = ?, job_day_number = ?,
+            reserved = ?, online = ?, meal_ticket = ?, sort_order = ?, active = ?, last_modified_by = ?,
+            last_modified_date = NOW() where job_type_id = ?
+        `;
+        [result] = await getPool().query<OkPacket>(updateSql, values);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
