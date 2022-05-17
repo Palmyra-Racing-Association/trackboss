@@ -152,16 +152,16 @@ export async function patchJobType(id: number, req: PatchJobTypeRequest): Promis
     // eslint-disable-next-line no-restricted-syntax
 
     const values = [
-        req.title || existingJobType.title,
-        req.pointValue || existingJobType.pointValue,
-        req.cashValue || existingJobType.cashValue,
-        req.jobDayNumber || existingJobType.jobDayNumber,
+        req.title,
+        req.pointValue,
+        req.cashValue,
+        req.jobDayNumber,
         req.reserved,
         req.online,
         req.mealTicket,
-        req.sortOrder || existingJobType.sortOrder,
+        req.sortOrder,
         req.active,
-        req.modifiedBy || existingJobType.lastModifiedBy,
+        req.modifiedBy,
         id,
     ];
 
