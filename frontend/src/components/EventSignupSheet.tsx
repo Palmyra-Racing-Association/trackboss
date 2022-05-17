@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, VStack } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, VStack } from '@chakra-ui/react';
 import { BsChevronDown } from 'react-icons/bs';
 import _ from 'lodash';
 import DataTable from 'react-data-table-component';
@@ -8,6 +8,7 @@ import { getJobTypeListEventType } from '../controller/jobType';
 import { getEventTypeList } from '../controller/eventType';
 import { EventType } from '../../../src/typedefs/eventType';
 import { JobType } from '../../../src/typedefs/jobType';
+import SignupSheetJobsRow from './SignupSheetJobsRow';
 
 function EventSignupSheet() {
     const { state } = useContext(UserContext);
@@ -37,8 +38,6 @@ function EventSignupSheet() {
 
     // Put it in a table
 
-    // make it editable in some fancy UI thang.
-
     return (
         <VStack>
             <HStack>
@@ -65,16 +64,20 @@ function EventSignupSheet() {
                             name: 'Title',
                             selector: (row: JobType) => row.title,
                             sortable: true,
+                            maxWidth: '200',
+                            wrap: true,
                         },
                         {
                             name: 'Points',
                             selector: (row: JobType) => row.pointValue,
                             sortable: true,
+                            maxWidth: '50',
                         },
                         {
                             name: 'Cash',
                             selector: (row: JobType) => row.cashValue,
                             sortable: true,
+                            maxWidth: '50',
                         },
                         {
                             name: 'Job Day',
@@ -83,13 +86,20 @@ function EventSignupSheet() {
                             sortFunction: (rowA, rowB) => rowA.jobDayNumber - rowB.jobDayNumber,
                         },
                         {
+                            name: 'Meal Ticket',
+                            selector: (row: JobType) => (row.mealTicket ? 'Yes' : 'No'),
+                            maxWidth: '50',
+                        },
+                        {
                             name: 'Number of positions',
                             selector: (row: JobType) => row.count || 1,
+                            maxWidth: '50',
                         },
                         {
                             name: 'Display Order',
                             selector: (row: JobType) => row.sortOrder,
                             sortable: true,
+                            maxWidth: '50',
                         },
                     ]
                 }
@@ -111,7 +121,11 @@ function EventSignupSheet() {
                         },
                     }
                 }
+                expandableRows
+                expandableRowsComponent={SignupSheetJobsRow}
+                responsive
             />
+            <Box height="10" />
         </VStack>
     );
 }
