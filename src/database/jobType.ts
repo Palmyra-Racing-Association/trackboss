@@ -146,17 +146,22 @@ export async function patchJobType(id: number, req: PatchJobTypeRequest): Promis
         throw new Error('user input error');
     }
 
+    const existingJobType = await getJobType(id);
+    // check the values to see if they are set, and if not, set them. This is good practice that makes
+    // this a true "PATCH"
+    // eslint-disable-next-line no-restricted-syntax
+
     const values = [
-        req.title,
-        req.pointValue,
-        req.cashValue,
-        req.jobDayNumber,
+        req.title || existingJobType.title,
+        req.pointValue || existingJobType.pointValue,
+        req.cashValue || existingJobType.cashValue,
+        req.jobDayNumber || existingJobType.jobDayNumber,
         req.reserved,
         req.online,
         req.mealTicket,
-        req.sortOrder,
+        req.sortOrder || existingJobType.sortOrder,
         req.active,
-        req.modifiedBy,
+        req.modifiedBy || existingJobType.lastModifiedBy,
         id,
     ];
 
