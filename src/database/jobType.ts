@@ -91,7 +91,7 @@ export async function getJobTypeList(): Promise<JobType[]> {
         [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting job type list: ${e}`);
-        throw new Error('internal server error');
+        throw e;
     }
     return results.map((result) => ({
         jobTypeId: result.job_type_id,
