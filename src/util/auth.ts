@@ -3,7 +3,7 @@ import { CognitoJwtVerifierSingleUserPool } from 'aws-jwt-verify/cognito-verifie
 import { getMember, getValidActors } from '../database/member';
 import logger from '../logger';
 
-let verifier: CognitoJwtVerifierSingleUserPool<{ userPoolId: string; tokenUse: 'id'; clientId: string; }> | null;
+let verifier: CognitoJwtVerifierSingleUserPool<{ userPoolId: string; tokenUse: 'id'; clientId: string[]; }> | null;
 
 const createVerifier = () => {
     if (!process.env.COGNITO_POOL_ID) {
@@ -14,10 +14,12 @@ const createVerifier = () => {
         logger.error('No Cognito Client ID in environment');
         throw new Error('Auth setup failed due to missing client ID');
     }
+    const clientId = process.env.COGNITO_CLIENT_ID as string;
+    const clientIds = clientId.split(',');
     verifier = CognitoJwtVerifier.create({
         userPoolId: process.env.COGNITO_POOL_ID,
         tokenUse: 'id',
-        clientId: process.env.COGNITO_CLIENT_ID,
+        clientId: clientIds,
     });
 };
 
