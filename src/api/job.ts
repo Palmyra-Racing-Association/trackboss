@@ -15,6 +15,8 @@ import { checkHeader, verify } from '../util/auth';
 
 import { insertJob, getJob, getJobList, patchJob, deleteJob, setJobVerifiedState, removeSignup } from '../database/job';
 
+import { formatWorkbook, startWorkbook } from '../excel/workbookHelper';
+
 async function GetJobList(req: Request, res:Response) {
     const { authorization } = req.headers;
     let response: GetJobListResponse;
@@ -172,17 +174,8 @@ job.get('/list/excel', async (req: Request, res: Response) => {
     // get the jobs list with the given parameters.
     const jobsList = await GetJobList(req, res) as Job[];
     // Create workbook and some meta datars about it.
-    const workbook = new ExcelJS.Workbook();
-    workbook.creator = 'Palmyra Racing Association - Track Boss';
-    workbook.created = new Date();
-
-    // Add a worksheet to the workbook for the current signups.
-    const worksheet = workbook.addWorksheet(
-        `Track Boss Signups for ${jobsList[0].event}`,
-        {
-            pageSetup: { orientation: 'landscape' },
-        },
-    );
+    const workbook = startWorkbook(`Track Boss Signups for ${jobsList[0].event}`);
+    const worksheet = workbook.getWorksheet(1);
     worksheet.columns = [
         { header: 'Name', key: 'name', width: 15 },
         { header: 'Job', key: 'job', width: 30 },
@@ -204,34 +197,7 @@ job.get('/list/excel', async (req: Request, res: Response) => {
             signature: '',
         });
     });
-    // do various formatting things.
-    const headerRow = worksheet.getRow(1);
-    headerRow.font = { bold: true };
-    headerRow.alignment = { wrapText: true };
-
-    for (let index = 2; index <= worksheet.rowCount; index++) {
-        const currentRow = worksheet.getRow(index);
-        currentRow.height = 31;
-        let rowColor = 'FFFFFF';
-        if (index % 2) {
-            rowColor = 'D9D8D8';
-        }
-        currentRow.alignment = { wrapText: true };
-        currentRow.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: rowColor },
-        };
-        currentRow.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' },
-        };
-    }
-
-    // worksheet.getRow(2).font = { name: 'Comic Sans MS', family: 4, size: 16, underline: 'double', bold: true };
-
+    formatWorkbook(worksheet);
     // write workbook to buffer.
     const buffer = await workbook.xlsx.writeBuffer();
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
