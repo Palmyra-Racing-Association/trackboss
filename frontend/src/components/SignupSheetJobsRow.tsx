@@ -3,14 +3,9 @@ import {
 } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { EventJob } from '../../../src/typedefs/eventJob';
-import { JobType } from '../../../src/typedefs/jobType';
 import { UserContext } from '../contexts/UserContext';
 import { getEventJob, updateEventJob } from '../controller/eventJob';
 import { updateJobType } from '../controller/jobType';
-
-interface RowProps {
-    data: JobType,
-}
 
 /**
  * A component representing a row in a PRA signup sheet, with all the data to represent a job.
@@ -18,11 +13,18 @@ interface RowProps {
  * @param props
  * @returns
  */
-function SignupSheetJobsRow(props: RowProps) {
+function SignupSheetJobsRow(props: any) {
+    // This is using a callback (props.updateRow) from the parent component to update data, so we have to do funky
+    // stuff which is why props is an "any" instead of a type.  Javascript woudl allow this, typescript requires us
+    // to jump through hoops.  Although if I'm writing a book about why I did this this way I guess I know what
+    // the heck I am doing.. :)
+
     const { state } = useContext(UserContext);
     const disableInputs = (state.user?.memberType !== 'Admin');
 
-    const { data } = props;
+    // this is a JobType we just refer to it like an any to keep TS happy.
+    let { data } = props;
+
     const toast = useToast();
 
     const mealTicket = data.mealTicket ? 'Yes' : 'No';
@@ -36,7 +38,7 @@ function SignupSheetJobsRow(props: RowProps) {
     const jobCopy = JSON.parse(JSON.stringify(data));
 
     return (
-        <Box ml={20} maxWidth="50%">
+        <Box ml={10} maxWidth="50%">
             <SimpleGrid columns={[2, 3, 3]} spacing={2}>
                 <Box maxWidth={100}>
                     <Text fontSize="sm">Point Value</Text>
@@ -79,7 +81,7 @@ function SignupSheetJobsRow(props: RowProps) {
                         }
                     >
                         {
-                            !data.mealTicket ? <option value="true">Yes</option>
+                            (mealTicket === 'No') ? <option value="true">Yes</option>
                                 : <option value="false">No</option>
                         }
                     </Select>
@@ -145,6 +147,9 @@ function SignupSheetJobsRow(props: RowProps) {
                             duration: 5000,
                             isClosable: true,
                         });
+                        // call back to EventSignupSheet to clean it up.
+                        props.refreshData();
+                        data = jobCopy;
                     }
                 }
             >
