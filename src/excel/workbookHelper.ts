@@ -1,6 +1,7 @@
-import * as ExcelJS from 'exceljs';
+import { Workbook, Worksheet } from 'exceljs';
+import { Response } from 'express';
 
-function formatWorkbook(worksheet: ExcelJS.Worksheet) {
+export function formatWorkbook(worksheet: Worksheet) {
     // do various formatting things.
     // part one: bold headers
     const headerRow = worksheet.getRow(1);
@@ -31,12 +32,13 @@ function formatWorkbook(worksheet: ExcelJS.Worksheet) {
     }
 }
 
-function startWorkbook(title: string) {
+export function startWorkbook(title: string) {
     // Create workbook and some meta datars about it.
-    const workbook = new ExcelJS.Workbook();
+    const workbook = new Workbook();
     workbook.creator = 'Palmyra Racing Association - Track Boss';
     workbook.created = new Date();
-    workbook.addWorksheet(title,
+    workbook.addWorksheet(
+        title,
         {
             pageSetup: { orientation: 'landscape' },
         },
@@ -44,4 +46,9 @@ function startWorkbook(title: string) {
     return workbook;
 }
 
-export { formatWorkbook, startWorkbook };
+export async function httpOutputWorkbook(workbook: Workbook, res: Response, filename: string) {
+    const buffer = await workbook.xlsx.writeBuffer();
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}xlsx`);
+    res.send(buffer);
+}

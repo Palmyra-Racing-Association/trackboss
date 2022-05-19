@@ -15,7 +15,7 @@ import { checkHeader, verify } from '../util/auth';
 
 import { insertJob, getJob, getJobList, patchJob, deleteJob, setJobVerifiedState, removeSignup } from '../database/job';
 
-import { formatWorkbook, startWorkbook } from '../excel/workbookHelper';
+import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 
 async function GetJobList(req: Request, res:Response) {
     const { authorization } = req.headers;
@@ -199,10 +199,7 @@ job.get('/list/excel', async (req: Request, res: Response) => {
     });
     formatWorkbook(worksheet);
     // write workbook to buffer.
-    const buffer = await workbook.xlsx.writeBuffer();
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', `attachment; filename=signups${new Date().getTime()}.xlsx`);
-    res.send(buffer);
+    httpOutputWorkbook(workbook, res, `signups${new Date().getTime()}.xlsx`);
 });
 
 job.get('/:jobId', async (req: Request, res: Response) => {
