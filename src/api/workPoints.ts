@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
-import { getWorkPointsByMember, getWorkPointsByMembership } from '../database/workPoints';
-import { GetMemberWorkPointsResponse } from '../typedefs/workPoints';
+import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
+import { getWorkPointsByMember, getWorkPointsByMembership, getWorkPointsList } from '../database/workPoints';
+import { GetMemberWorkPointsResponse, WorkPoints } from '../typedefs/workPoints';
 import { checkHeader, verify } from '../util/auth';
 
 const workPoints = Router();
@@ -97,6 +98,30 @@ workPoints.get('/byMembership/:membershipID', async (req: Request, res: Response
         }
     }
     res.send(response);
+});
+
+workPoints.get('/list/excel', async (req: Request, res: Response) => {
+    const workPointsByMember = await getWorkPointsList() as WorkPoints[];
+    const workbookTitle = `PRA members ${new Date().toLocaleDateString().replace(/\//gi, '-')}`;
+    const workbook = startWorkbook(workbookTitle);
+    const worksheet = workbook.getWorksheet(1);
+    worksheet.columns = [
+        { header: 'First Name', key: 'firstName', width: 15 },
+        { header: 'Last Name', key: 'lastName', width: 10 },
+        { header: 'Membership Type', key: 'membershipType', width: 15 },
+        { header: 'Points', key: 'points', width: 6 },
+    ];
+    workPointsByMember.forEach((member) => {
+        worksheet.addRow({
+            firstName: member.firstName,
+            lastName: member.lastName,
+            membershipType: member.membershipType,
+            points: member.total,
+        });
+    });
+    formatWorkbook(worksheet);
+    // write workbook to buffer.
+    httpOutputWorkbook(workbook, res, `members${new Date().getTime()}`);
 });
 
 export default workPoints;
