@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Box, Center, ChakraProvider, IconButton } from '@chakra-ui/react';
 import { BsPrinter } from 'react-icons/bs';
 import theme from '../theme';
 import Header from '../components/Header';
 import MemberList from '../components/MemberList';
+import { getMemberPointsExcel } from '../controller/workPoints';
+import { UserContext } from '../contexts/UserContext';
 
 function MemberListPage() {
+    const { state } = useContext(UserContext);
+
     return (
         <ChakraProvider theme={theme}>
             <Header title="Members" activeButtonId={3} />
@@ -18,10 +22,9 @@ function MemberListPage() {
                         color="white"
                         onClick={
                             async () => {
-                                alert('download member list sir');
-                                // const signupListExcel = await getSignupListExcel(state.token, props.eventId);
-                                // const objectUrl = URL.createObjectURL(signupListExcel);
-                                // window.location.href = objectUrl;
+                                const memberWorkListExcel = await getMemberPointsExcel(state.token);
+                                const objectUrl = URL.createObjectURL(memberWorkListExcel);
+                                window.location.href = objectUrl;
                             }
                         }
                         icon={<BsPrinter />}
