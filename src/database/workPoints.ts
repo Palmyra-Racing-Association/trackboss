@@ -47,3 +47,21 @@ export async function getWorkPointsByMembership(membershipId: number, year: numb
         total: results[0].total_points,
     };
 }
+
+export async function getWorkPointsList() : Promise<WorkPoints[]> {
+    const sql = 'select * from v_current_member_points';
+    let results = [];
+    try {
+        [results] = await getPool().query<RowDataPacket[]>(sql);
+    } catch (error) {
+        logger.error('Error accessing current member points list');
+        logger.error(error);
+        throw error;
+    }
+    return results.map((result) => ({
+        firstName: result.first_name,
+        lastName: result.last_name,
+        membershipType: result.membership_type,
+        total: result.total_points,
+    }));
+}

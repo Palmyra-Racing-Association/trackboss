@@ -50,3 +50,12 @@ export async function getWorkPointsTotal(token: string, membershipId: number) {
     // else
     return undefined;
 }
+
+export async function getMemberPointsExcel(token: string): Promise<Blob> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/list/excel`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.blob();
+}

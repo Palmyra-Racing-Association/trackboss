@@ -40,7 +40,7 @@ const customStyles = {
     },
     headCells: {
         style: {
-            marginTop: '90px',
+            marginTop: '20px',
             paddingTop: '0',
             fontSize: '1.5em',
             backgroundColor: '#f9f9f9',
