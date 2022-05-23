@@ -1,4 +1,4 @@
-import { Heading, HStack, VStack } from '@chakra-ui/react';
+import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Bill } from '../../../src/typedefs/bill';
@@ -16,29 +16,23 @@ export default function DuesAndWaivers() {
         }
         getData();
     }, []);
-    /*
-    {
-        "billId":3362,
-        "generatedDate":"2022-05-23",
-        "year":2022,
-        "amount":428.57,
-        "amountWithFee":441.3,
-        "membershipAdmin":"Alan Delimon",
-        "membershipAdminEmail":"adelimon@gmail.com",
-        "emailedBill":null,
-        "curYearPaid":false
-     }
-     */
+
     const columns: any = [
         {
-            name: 'Bill Year',
+            name: 'Due Date',
+            selector: (row: Bill) => `${row.dueDate}`,
+        },
+        {
+            name: 'Billing Year',
             selector: (row: Bill) => row.year,
             sortable: true,
+            maxWidth: '25',
         },
         {
             name: 'Amount',
-            selector: (row: Bill) => `$${row.amount} ($${row.amountWithFee} w/ PayPal)`,
+            selector: (row: Bill) => `$${row.amount} ($${row.amountWithFee})`,
             sortable: true,
+            maxWidth: '25',
         },
         {
             name: 'Generated on',
@@ -51,6 +45,11 @@ export default function DuesAndWaivers() {
             <HStack>
                 <Heading>Dues and Waivers</Heading>
             </HStack>
+            <Text align="left">
+                Your dues for 2023 and beyond are displayed below.  Note that payment links will be available on or
+                around January 1.  Until then, you can see your projected amount based on the work you have completed
+                so far.  This will change as you earn more points.  Billing is updated daily.
+            </Text>
             <DataTable
                 columns={columns}
                 data={allBills as Bill[]}
