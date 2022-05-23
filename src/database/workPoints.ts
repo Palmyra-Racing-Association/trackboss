@@ -14,7 +14,6 @@ export async function getWorkPointsByMember(memberId: number, year: number): Pro
 
     let results;
     try {
-        await getPool().query<OkPacket>('delete from member_bill where year = ?', [year]);
         [results] = await getPool().query<RowDataPacket[]>(GET_WORK_POINTS_BY_MEMBER_SQL, values);
     } catch (e) {
         logger.error(`DB error getting work points for member: ${e}`);

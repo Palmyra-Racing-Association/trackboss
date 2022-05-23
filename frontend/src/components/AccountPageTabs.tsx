@@ -18,6 +18,7 @@ import WorkPointsHistory from './WorkPointsHistory';
 import { GetBikeListResponse } from '../../../src/typedefs/bike';
 import { getFamilyMembers } from '../controller/member';
 import { getBikeList } from '../controller/bike';
+import DuesAndWaivers from './DuesAndWaivers';
 
 async function getMemberFamilyLocal(token: string, membershipId: number) {
     let family = await getFamilyMembers(token, membershipId);
@@ -88,7 +89,7 @@ export default function AccountPageTabs() {
                     <WorkPointsHistory />
                 </TabPanel>
                 <TabPanel>
-                    Dues and Waivers Component
+                    <DuesAndWaivers />
                 </TabPanel>
             </TabPanels>
         </Tabs>

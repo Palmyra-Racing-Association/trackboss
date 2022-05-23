@@ -54,10 +54,11 @@ export async function getBillsForMembership(
 ): Promise<GetMembershipBillListResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/${membershipID}`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
-    return response.json();
+    const responseJson = response.json();
+    return responseJson;
 }
 
 export async function generateBills(token: string): Promise<PostCalculateBillsResponse> {
