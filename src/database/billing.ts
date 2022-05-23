@@ -94,6 +94,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         membershipAdminEmail: result.membership_admin_email,
         emailedBill: result.emailed_bill,
         curYearPaid: !!result.cur_year_paid[0],
+        dueDate: new Date((result.year + 1), 1, 15).toDateString(),
     }));
 }
 

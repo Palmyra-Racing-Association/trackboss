@@ -9,7 +9,8 @@ export type Bill = {
     membershipAdmin: string,
     membershipAdminEmail: string,
     emailedBill?: string, // undefined if not emailed, date otherwise
-    curYearPaid: boolean
+    curYearPaid: boolean,
+    dueDate: string,
 }
 
 export type WorkPointThreshold = {
