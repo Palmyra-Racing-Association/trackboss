@@ -1,6 +1,6 @@
 import {
     Box, Center, Flex, Icon, IconButton, Input, InputGroup, InputLeftElement,
-    Tag, Text,
+    Tag, Text, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -106,6 +106,7 @@ export default function SignUpList(props: any) {
     const [printing] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [allCells, setAllCells] = useState<Worker[]>([]);
+
     const { state } = useContext(UserContext);
 
     useEffect(() => {
@@ -131,6 +132,7 @@ export default function SignUpList(props: any) {
             setCells(newCells);
         }
     }, [searchTerm, allCells]);
+    const toast = useToast();
     return (
         <div data-testid="table">
             <Center>
@@ -179,20 +181,36 @@ export default function SignUpList(props: any) {
                     customStyles={customStyles}
                     onRowClicked={
                         async (row: any) => {
-                            // I can delete my own signups, and of course admins can delete everyone's signups.
-                            const allowDelete = (
-                                (state?.user?.memberId === row.memberId) ||
-                                (state.user?.memberType === 'Admin')
-                            );
-                            if (!row.member) {
-                                await signupForJob(state.token, row.jobId, (state.user?.memberId || -1));
+                            const startDate = Date.parse(row.start);
+                            const now = new Date().getTime();
+                            if (startDate >= now) {
+                                // I can delete my own signups, and of course admins can delete everyone's signups.
+                                const allowDelete = (
+                                    (state?.user?.memberId === row.memberId) ||
+                                    (state.user?.memberType === 'Admin')
+                                );
+                                if (!row.member) {
+                                    await signupForJob(state.token, row.jobId, (state.user?.memberId || -1));
+                                }
+                                if ((row.member) && (allowDelete)) {
+                                    await removeSignup(state.token, row.jobId);
+                                }
+                                const eventJobs = await getSignupList(state?.token, props.eventId);
+                                setCells(eventJobs);
+                                setAllCells(eventJobs);
+                            } else {
+                                toast({
+                                    containerStyle: {
+                                        background: 'orange',
+                                    },
+                                    // eslint-disable-next-line max-len
+                                    title: 'This event has already passed, and is no longer eligible for signups',
+                                    description: JSON.stringify(row),
+                                    status: 'error',
+                                    duration: 5000,
+                                    isClosable: true,
+                                });
                             }
-                            if ((row.member) && (allowDelete)) {
-                                await removeSignup(state.token, row.jobId);
-                            }
-                            const eventJobs = await getSignupList(state?.token, props.eventId);
-                            setCells(eventJobs);
-                            setAllCells(eventJobs);
                         }
                     }
                 />

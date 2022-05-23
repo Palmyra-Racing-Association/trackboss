@@ -125,3 +125,15 @@ export async function markBillPaid(id: number): Promise<void> {
         throw new Error('not found');
     }
 }
+
+export async function cleanBilling(year: number): Promise<number> {
+    let result;
+    try {
+        [result] = await getPool().query<OkPacket>('delete from member_bill where year = ?', [year]);
+    } catch (e) {
+        logger.error('DB error cleaning up bills', e);
+        throw e;
+    }
+    logger.info(`billing cleanup for ${year}, ${result.affectedRows} bills cleaned up`);
+    return result.affectedRows;
+}

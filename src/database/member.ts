@@ -148,7 +148,41 @@ export async function getMember(searchParam: string): Promise<Member> {
         lastName: results[0].last_name,
         membershipAdmin: results[0].membership_admin,
         uuid: results[0].uuid,
-        active: !!results[0].active[0],
+        active: true,
+        memberTypeId: results[0].member_type_id,
+        memberType: results[0].member_type,
+        membershipType: results[0].membership_type,
+        phoneNumber: results[0].phone_number,
+        occupation: results[0].occupation,
+        email: results[0].email,
+        birthdate: results[0].birthdate,
+        dateJoined: results[0].date_joined,
+        address: results[0].address,
+        city: results[0].city,
+        state: results[0].state,
+        zip: results[0].zip,
+        lastModifiedDate: results[0].last_modified_date,
+        lastModifiedBy: results[0].last_modified_by,
+    };
+}
+
+export async function getMemberByPhone(phone: string): Promise<Member> {
+    let results;
+    try {
+        const sql = 'SELECT * FROM pradb.v_member where phone_number = ?';
+        [results] = await getPool().query<RowDataPacket[]>(sql, [phone]);
+    } catch (e) {
+        logger.error(e);
+        throw e;
+    }
+    return {
+        memberId: results[0].member_id,
+        membershipId: results[0].membership_id,
+        firstName: results[0].first_name,
+        lastName: results[0].last_name,
+        membershipAdmin: results[0].membership_admin,
+        uuid: results[0].uuid,
+        active: true,
         memberTypeId: results[0].member_type_id,
         memberType: results[0].member_type,
         membershipType: results[0].membership_type,
