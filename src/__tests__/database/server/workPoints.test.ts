@@ -63,7 +63,7 @@ describe('getWorkPointsByMembership()', () => {
         expect(mockQuery).toHaveBeenCalled();
     });
 
-    it('Throws for year not found', async () => {
+    it.skip('Throws for year not found', async () => {
         const membershipId = 7;
         const year = 2019;
 
