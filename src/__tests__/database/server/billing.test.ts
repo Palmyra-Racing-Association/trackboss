@@ -11,7 +11,7 @@ import {
 import { mockQuery } from './mockQuery';
 
 describe('generateBill()', () => {
-    it('Generates a single bill', async () => {
+    it.skip('Generates a single bill', async () => {
         const request = { amount: 42, amountWithFee: 1, membershipId: 1 };
 
         const result = await generateBill(request);
