@@ -382,7 +382,6 @@ describe('POST /billing/', () => {
             amountWithFee: 101,
             membershipAdmin: 'Jimbus Gimbus',
             membershipAdminEmail: 'em@il.com',
-            emailedBill: '2022-03-21',
             curYearPaid: true,
         }];
 
