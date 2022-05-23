@@ -300,10 +300,4 @@ describe('getBaseDues()', () => {
         await expect(getBaseDues(membershipId)).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
-
-    it('Throws for internal server error', async () => {
-        const membershipId = -100;
-        await expect(getBaseDues(membershipId)).rejects.toThrow('internal server error');
-        expect(mockQuery).toHaveBeenCalled();
-    });
 });

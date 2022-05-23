@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { RowDataPacket } from 'mysql2';
+import { OkPacket, RowDataPacket } from 'mysql2';
 import { WorkPoints } from 'src/typedefs/workPoints';
 import logger from '../logger';
 import { getPool } from './pool';
@@ -7,7 +7,7 @@ import { getPool } from './pool';
 export const GET_WORK_POINTS_BY_MEMBER_SQL =
     'select total_points from v_work_points_by_member where member_id = ? and year = ?';
 export const GET_WORK_POINTS_BY_MEMBERSHIP_SQL =
-    'select total_points from v_work_points_by_membership where membership_id = ? and year = ?';
+    'select total_points from v_current_member_points where membership_id = ? and year = ?';
 
 export async function getWorkPointsByMember(memberId: number, year: number): Promise<WorkPoints> {
     const values = [memberId, year];
@@ -39,20 +39,21 @@ export async function getWorkPointsByMembership(membershipId: number, year: numb
         throw new Error('internal server error');
     }
 
-    if (_.isEmpty(results)) {
-        throw new Error('not found');
+    let total = 0;
+    if (!_.isEmpty(results)) {
+        total = results[0].total_points;
     }
 
     return {
-        total: results[0].total_points,
+        total,
     };
 }
 
-export async function getWorkPointsList() : Promise<WorkPoints[]> {
-    const sql = 'select * from v_current_member_points';
+export async function getWorkPointsList(year: number) : Promise<WorkPoints[]> {
+    const sql = 'select * from v_current_member_points where year = ? or year is null order by last_name, first_name';
     let results = [];
     try {
-        [results] = await getPool().query<RowDataPacket[]>(sql);
+        [results] = await getPool().query<RowDataPacket[]>(sql, [year]);
     } catch (error) {
         logger.error('Error accessing current member points list');
         logger.error(error);

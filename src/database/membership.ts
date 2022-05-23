@@ -269,12 +269,12 @@ export async function getBaseDues(membershipId: number): Promise<number> {
     try {
         [result] = await getPool().query<RowDataPacket[]>(GET_BASE_DUES_SQL, values);
     } catch (e) {
-        logger.error(`DB error getting membership's base dues: ${e}`);
-        throw new Error('internal server error');
+        logger.error(`DB error getting membership id ${membershipId}'s base dues`, e);
+        throw e;
     }
 
     if (_.isEmpty(result)) {
-        throw new Error('not found');
+        throw new Error(`Base dues amount not found for membershipId ${membershipId}`);
     }
 
     return result[0].base_dues_amt;

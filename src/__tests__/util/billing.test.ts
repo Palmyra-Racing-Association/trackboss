@@ -39,7 +39,8 @@ describe('generateNewBills()', () => {
         const baseDues = 1000;
         const earned = 25;
         const expOwed = 750;
-        const expOwedWithFee = 750; // TODO: change if fee is added
+        // based on (owed * 1.0290) + 0.30 which is paypal's standard calc.
+        const expOwedWithFee = 772.05;
 
         const mockGetBaseDues = jest
             .spyOn(membership, 'getBaseDues')

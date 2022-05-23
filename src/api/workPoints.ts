@@ -101,7 +101,8 @@ workPoints.get('/byMembership/:membershipID', async (req: Request, res: Response
 });
 
 workPoints.get('/list/excel', async (req: Request, res: Response) => {
-    const workPointsByMember = await getWorkPointsList() as WorkPoints[];
+    const rightNow = new Date();
+    const workPointsByMember = await getWorkPointsList(rightNow.getFullYear()) as WorkPoints[];
     const workbookTitle = `PRA members ${new Date().toLocaleDateString().replace(/\//gi, '-')}`;
     const workbook = startWorkbook(workbookTitle);
     const worksheet = workbook.getWorksheet(1);

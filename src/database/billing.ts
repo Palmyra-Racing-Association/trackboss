@@ -13,7 +13,7 @@ export const GENERATE_BILL_SQL =
 export const PATCH_BILL_SQL = 'CALL sp_patch_bill (?, ?, ?)';
 
 export async function generateBill(req: GenerateSingleBillRequest): Promise<number> {
-    const values = [req.amount, req.amountWithFee, req.membershipId];
+    const values = [req.amount.toFixed(2), req.amountWithFee.toFixed(2), req.membershipId];
 
     let result;
     try {

@@ -176,8 +176,8 @@ billing.post('/', async (req: Request, res: Response) => {
             // to protect against generating duplicate bills
             const preGeneratedBills = await getBillList({ year: curYear });
 
-            let generatedBills = await generateNewBills(membershipList, preGeneratedBills, threshold, curYear);
-            generatedBills = await emailBills(generatedBills);
+            const generatedBills = await generateNewBills(membershipList, preGeneratedBills, threshold, curYear);
+            // generatedBills = await emailBills(generatedBills);
 
             res.status(201);
             response = generatedBills;
