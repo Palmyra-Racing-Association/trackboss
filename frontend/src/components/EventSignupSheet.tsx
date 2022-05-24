@@ -75,7 +75,7 @@ function EventSignupSheet() {
                     [
                         {
                             name: 'Title',
-                            selector: (row: JobType) => row.title,
+                            selector: (row: JobType) => `${row.title} (id: ${row.jobTypeId})`,
                             sortable: true,
                             maxWidth: '150',
                             wrap: true,
