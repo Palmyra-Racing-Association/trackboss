@@ -126,10 +126,19 @@ export async function markBillPaid(id: number): Promise<void> {
     }
 }
 
-export async function cleanBilling(year: number): Promise<number> {
+export async function cleanBilling(year: number, memberId?: number): Promise<number> {
+    let param; 
     let result;
+    let sql;
+    if (memberId) {
+        sql = 'delete from member_bill where member_id = ? and year = ?';
+        param = [memberId, year];
+    } else {
+        sql = 'delete from member_bill where year = ?';
+        param = [year];
+    }
     try {
-        [result] = await getPool().query<OkPacket>('delete from member_bill where year = ?', [year]);
+        [result] = await getPool().query<OkPacket>(sql, param);
     } catch (e) {
         logger.error('DB error cleaning up bills', e);
         throw e;

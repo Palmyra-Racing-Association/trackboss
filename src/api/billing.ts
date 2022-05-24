@@ -174,8 +174,8 @@ billing.post('/', async (req: Request, res: Response) => {
             const membershipList = await getMembershipList('active');
             const { threshold } = await getWorkPointThreshold(curYear);
             // to protect against generating duplicate bills
+            const cleanedUp = await cleanBilling(curYear);
             const preGeneratedBills = await getBillList({ year: curYear });
-            const claeanedUp = await cleanBilling(curYear);
             const generatedBills = await generateNewBills(membershipList, preGeneratedBills, threshold, curYear);
             // generatedBills = await emailBills(generatedBills);
 
