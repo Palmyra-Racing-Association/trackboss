@@ -90,9 +90,12 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         sql = GET_JOB_LIST_SQL;
         values = [];
     }
-    sql += ' order by job_day_number, sort_order';
+    // sorting by job_id keeps stuff in the same order. SORT of important for front end so it doesn't just
+    // change shit randomly.
+    sql += ' order by job_day_number, sort_order, job_id';
     let results;
     try {
+        logger.info(`running sql ${sql}`);
         [results] = await getPool().query<RowDataPacket[]>(sql, values);
     } catch (e) {
         logger.error(`DB error getting job list: ${e}`);

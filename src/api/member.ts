@@ -1,6 +1,9 @@
 import { Request, Response, Router } from 'express';
 import { checkHeader, verify } from '../util/auth';
-import { getMember, getMemberByPhone, getMemberList, insertMember, MEMBER_TYPE_MAP, patchMember } from '../database/member';
+import {
+    getMember, getMemberByPhone, getMemberList,
+    insertMember, MEMBER_TYPE_MAP, patchMember,
+} from '../database/member';
 import {
     GetMemberListFilters,
     GetMemberListResponse,

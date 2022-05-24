@@ -127,7 +127,7 @@ export async function markBillPaid(id: number): Promise<void> {
 }
 
 export async function cleanBilling(year: number, memberId?: number): Promise<number> {
-    let param; 
+    let param;
     let result;
     let sql;
     if (memberId) {

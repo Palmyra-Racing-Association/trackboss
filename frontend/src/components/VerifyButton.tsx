@@ -21,7 +21,7 @@ export default function VerifyButton(props: buttonProps) {
     if (props.member && (state.user?.memberType === 'Admin')) {
         verifyButton = (
             <Button
-                size="lg"
+                ml={4}
                 variant={verified ? 'verified' : 'unverified'}
                 onClick={handleClick}
                 isDisabled={!props.member}

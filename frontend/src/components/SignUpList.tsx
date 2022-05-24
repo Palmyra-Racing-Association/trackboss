@@ -1,43 +1,31 @@
 import {
-    Box, Center, Flex, Icon, IconButton, Input, InputGroup, InputLeftElement,
-    Tag, Text, useToast,
+    Box, Center, Flex, IconButton, Input, InputGroup, InputLeftElement,
+    Text,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { BsPrinter, BsSearch, BsTrashFill } from 'react-icons/bs';
-import { getSignupList, removeSignup, signupForJob, getSignupListExcel } from '../controller/job';
+import { BsPrinter, BsSearch } from 'react-icons/bs';
+import { getSignupList, getSignupListExcel } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
+import SignupListRow from './SignupListRow';
 
 const columns: any = [
     {
         name: 'Name',
-        // eslint-disable-next-line max-len
-        cell: (row: { filled: boolean, jobId: number, member: string, memberId: number }) => (
-            // <SignupButton jobId={row.jobId} member={row.member} memberId={row.memberId} />
-            <div data-tag="allowRowEvents">
-                {
-                    row.member &&
-                    (
-                        <>
-                            {row.member}
-                            <Icon data-tag="allowRowEvents" color="red" as={BsTrashFill} />
-                        </>
-                    ) ||
-                    <Tag data-tag="allowRowEvents" height="50" background="orange.300" color="white">Sign up</Tag>
-                }
-            </div>
-        ),
+        selector: (row: { member: string; }) => row.member,
+        sortable: true,
+        wrap: true,
     },
     {
         name: 'Job',
         selector: (row: { title: string; }) => row.title,
-        sortable: true, // Just until we can figure out why it doesnt work.  I think it's a state thing.
+        sortable: true,
         wrap: true,
     },
     {
         name: 'Points',
         selector: (row: { pointsAwarded: number; }) => row.pointsAwarded,
-        sortable: true, // Just until we can figure out why it doesn't work.  I think it's a state thing.
+        sortable: true,
     },
     {
         name: 'Job Day',
@@ -96,10 +84,12 @@ const customStyles = {
     },
 };
 
+/*
 const paginationComponentOptions = {
     selectAllRowsItem: true,
     selectAllRowsItemText: 'All Rows',
 };
+*/
 
 export default function SignUpList(props: any) {
     const [cells, setCells] = useState([] as Worker[]);
@@ -109,11 +99,15 @@ export default function SignUpList(props: any) {
 
     const { state } = useContext(UserContext);
 
+    async function getSignupListData() {
+        const eventJobs = await getSignupList(state?.token, props.eventId);
+        setCells(eventJobs);
+        setAllCells(eventJobs);
+    }
+
     useEffect(() => {
         async function getData() {
-            const eventJobs = await getSignupList(state?.token, props.eventId);
-            setCells(eventJobs);
-            setAllCells(eventJobs);
+            await getSignupListData();
         }
         getData();
     }, []);
@@ -132,7 +126,7 @@ export default function SignUpList(props: any) {
             setCells(newCells);
         }
     }, [searchTerm, allCells]);
-    const toast = useToast();
+
     return (
         <div data-testid="table">
             <Center>
@@ -167,52 +161,25 @@ export default function SignUpList(props: any) {
                     </Box>
                 </Flex>
             </Center>
-            <Box w="85%">
-                To choose a job - click it.  To remove your selection, click again.
+            <Box>
+                To choose a job expands its row, and click the signup button.
                 <DataTable
                     columns={printing ? printingColumns : columns}
                     data={cells}
                     highlightOnHover
-                    pagination
-                    paginationComponentOptions={paginationComponentOptions}
+                    expandableRows
+                    expandableRowsComponent={SignupListRow}
+                    expandableRowsComponentProps={
+                        {
+                            refreshData: async () => {
+                                await getSignupListData();
+                            },
+                        }
+                    }
                     responsive
                     subHeaderWrap
                     striped
                     customStyles={customStyles}
-                    onRowClicked={
-                        async (row: any) => {
-                            const startDate = Date.parse(row.start);
-                            const now = new Date().getTime();
-                            if (startDate >= now) {
-                                // I can delete my own signups, and of course admins can delete everyone's signups.
-                                const allowDelete = (
-                                    (state?.user?.memberId === row.memberId) ||
-                                    (state.user?.memberType === 'Admin')
-                                );
-                                if (!row.member) {
-                                    await signupForJob(state.token, row.jobId, (state.user?.memberId || -1));
-                                }
-                                if ((row.member) && (allowDelete)) {
-                                    await removeSignup(state.token, row.jobId);
-                                }
-                                const eventJobs = await getSignupList(state?.token, props.eventId);
-                                setCells(eventJobs);
-                                setAllCells(eventJobs);
-                            } else {
-                                toast({
-                                    containerStyle: {
-                                        background: 'orange',
-                                    },
-                                    // eslint-disable-next-line max-len
-                                    title: 'This event has already passed, and is no longer eligible for signups',
-                                    description: JSON.stringify(row),
-                                    status: 'error',
-                                    duration: 5000,
-                                    isClosable: true,
-                                });
-                            }
-                        }
-                    }
                 />
             </Box>
         </div>

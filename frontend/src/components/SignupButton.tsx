@@ -1,13 +1,14 @@
-import { IconButton } from '@chakra-ui/react';
+import { Button, useToast } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
-import { BsFillTrashFill, BsPencilSquare } from 'react-icons/bs';
 import { signupForJob, removeSignup } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 
 interface buttonProps {
     jobId: number,
     member: string,
+    start: string,
     memberId: number,
+    refreshData: any,
 }
 
 export default function SignupButton(props: buttonProps) {
@@ -16,24 +17,42 @@ export default function SignupButton(props: buttonProps) {
     const [jobMemberId] = useState(props.memberId);
 
     const [jobId] = useState(props.jobId);
+    const toast = useToast();
     const handleClick = async () => {
-        setMember(`${state.user?.firstName} ${state.user?.lastName}`);
-        const memberId = state?.user?.memberId;
-        if (memberId) {
-            signupForJob(state.token, jobId, memberId);
+        if (Date.parse(props.start) >= Date.now()) {
+            setMember(`${state.user?.firstName} ${state.user?.lastName}`);
+            const memberId = state?.user?.memberId;
+            if (memberId) {
+                await signupForJob(state.token, jobId, memberId);
+            }
+            await props.refreshData();
+        } else {
+            toast({
+                containerStyle: {
+                    background: 'orange',
+                },
+                // eslint-disable-next-line max-len
+                title: 'This event has already passed, and is no longer eligible for signups',
+                description: `Job ID ${props.jobId}`,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+            });
         }
     };
     let signupButton;
     if (!member) {
         signupButton = (
-            <IconButton
+            <Button
                 // variant={verified ? 'verified' : 'unverified'}
                 aria-label="Sign Up"
                 background="orange.300"
                 color="white"
-                icon={<BsPencilSquare />}
                 onClick={handleClick}
-            />
+            >
+                Signup &nbsp;
+                {state.user?.firstName}
+            </Button>
         );
     } else {
         // I can delete my own signups, and of course admins can delete everyone's signups.
@@ -42,25 +61,21 @@ export default function SignupButton(props: buttonProps) {
             (state.user?.memberType === 'Admin')
         );
         signupButton = (
-            <>
-                {member}
-                &nbsp;
-                <IconButton
-                    aria-label="Remove"
-                    background="red"
-                    color="white"
-                    icon={<BsFillTrashFill />}
-                    onClick={
-                        async () => {
-                            await removeSignup(state.token, jobId);
-                            setMember('');
-                        }
+            <Button
+                aria-label="Remove"
+                background="red"
+                color="white"
+                onClick={
+                    async () => {
+                        await removeSignup(state.token, jobId);
+                        setMember('');
+                        await props.refreshData();
                     }
-                    disabled={!allowDelete}
-                >
-                    Remove
-                </IconButton>
-            </>
+                }
+                disabled={!allowDelete}
+            >
+                Remove Signup
+            </Button>
         );
     }
     return signupButton;
