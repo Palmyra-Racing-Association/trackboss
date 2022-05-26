@@ -52,6 +52,7 @@ export default function SignupButton(props: buttonProps) {
                     // variant={verified ? 'verified' : 'unverified'}
                     aria-label="Sign Up"
                     background="orange.300"
+                    size="md"
                     color="white"
                     onClick={handleClick}
                 >
@@ -61,7 +62,6 @@ export default function SignupButton(props: buttonProps) {
                 <Button
                     backgroundColor="orange.300"
                     color="white"
-                    ml={3}
                     onClick={onOpen}
                 >
                     Sign Up Non Member

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Box } from '@chakra-ui/react';
+import { SimpleGrid } from '@chakra-ui/react';
 import SignupButton from './SignupButton';
 
 export default function SignupListRow(props: any) {
     return (
-        <Box m={3}>
+        <SimpleGrid columns={[1, null, 3]} spacing="10px">
             <SignupButton
                 jobId={props.data.jobId}
                 member={props.data.member}
@@ -12,6 +12,6 @@ export default function SignupListRow(props: any) {
                 start={props.data.start}
                 refreshData={props.refreshData}
             />
-        </Box>
+        </SimpleGrid>
     );
 }
