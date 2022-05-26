@@ -360,6 +360,8 @@ CREATE TABLE IF NOT EXISTS `pradb`.`job` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+ALTER TABLE `pradb`.`job` 
+ADD COLUMN `paid_labor` VARCHAR(255) NULL AFTER `member_id`;
 
 -- -----------------------------------------------------
 -- Table `pradb`.`event_job`

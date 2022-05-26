@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
-import member from 'src/api/member';
 
 import { Job, PatchJobRequest, PostNewJobRequest, GetJobListRequestFilters } from 'src/typedefs/job';
 
@@ -12,7 +11,7 @@ export const GET_JOB_SQL = `${GET_JOB_LIST_SQL} WHERE job_id = ?`;
 export const INSERT_JOB_SQL = 'INSERT INTO job (member_id, event_id, job_type_id, job_start_date, job_end_date, ' +
      ' last_modified_date, verified, verified_date, points_awarded, paid, paid_date, last_modified_by) ' +
      'VALUES (?, ?, ?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?)';
-export const PATCH_JOB_SQL = 'CALL sp_patch_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+export const PATCH_JOB_SQL = 'CALL sp_patch_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 export const DELETE_JOB_SQL = 'DELETE FROM job WHERE job_id = ?';
 
 export async function insertJob(req: PostNewJobRequest): Promise<number> {
@@ -197,7 +196,7 @@ export async function patchJob(id: number, req: PatchJobRequest): Promise<void> 
         throw new Error('user input error');
     }
     const values = [id, req.memberId, req.eventId, req.jobTypeId, req.jobStartDate, req.jobEndDate,
-        req.pointsAwarded, req.verified, req.paid, req.modifiedBy];
+        req.pointsAwarded, req.verified, req.paid, req.modifiedBy, req.paidLabor];
 
     let result;
     try {
@@ -234,7 +233,7 @@ export async function setJobVerifiedState(id: number, state: boolean) : Promise<
 
 export async function removeSignup(jobId: number) : Promise<number> {
     const [result] = await getPool().query<OkPacket>(
-        'update job set member_id = null where job_id = ?',
+        'update job set member_id = null, paid_labor = null where job_id = ?',
         [jobId],
     );
     return result.affectedRows;

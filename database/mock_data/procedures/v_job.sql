@@ -3,7 +3,11 @@ DROP VIEW IF EXISTS `v_job`;
 CREATE VIEW `v_job` AS
     SELECT
 		j.job_id,
-		CONCAT(m.first_name, ' ', m.last_name) AS member,
+		if(
+			isnull(j.paid_labor),
+            CONCAT(m.first_name, ' ', m.last_name), 
+            j.paid_labor
+		) AS member,
 		m.member_id,
 		m.membership_id,
 		e.event_name as event,
