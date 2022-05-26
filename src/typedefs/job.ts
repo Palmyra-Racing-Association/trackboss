@@ -5,6 +5,7 @@ export type Job = {
     memberId: number,
     membershipId: number,
     member?: string,
+    paidLabor?: string,
     eventId?: number,
     event: string,
     start: string | Date,
@@ -48,6 +49,7 @@ export type GetJobResponse = Job | ErrorResponse
 
 export type PatchJobRequest = {
     memberId?: number,
+    paidLabor: string,
     eventId?: number,
     jobTypeId?: number,
     jobStartDate?: string,

@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
 import { Request, Response, Router } from 'express';
-import * as ExcelJS from 'exceljs';
 
 import {
     GetJobListResponse,

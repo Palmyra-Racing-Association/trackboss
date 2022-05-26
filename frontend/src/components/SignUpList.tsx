@@ -174,6 +174,7 @@ export default function SignUpList(props: any) {
                             refreshData: async () => {
                                 await getSignupListData();
                             },
+                            token: state.token,
                         }
                     }
                     responsive

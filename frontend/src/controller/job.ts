@@ -115,6 +115,13 @@ export async function signupForJob(token:string, jobId: number, memberId: number
     return modifiedJob;
 }
 
+export async function signupForJobFreeForm(token: string, jobId: number, name: string) : Promise<any> {
+    const signupJob : any = await getJob(token, jobId);
+    signupJob.paidLabor = name;
+    const modifiedJob : any = await updateJob(token, jobId, signupJob);
+    return modifiedJob;
+}
+
 export async function removeSignup(token:string, jobId: number) : Promise<any> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/remove/signup/${jobId}`, {
         method: 'PATCH',
