@@ -17,7 +17,6 @@ interface buttonProps {
 
 export default function SignupButton(props: buttonProps) {
     const { state } = useContext(UserContext);
-    const [member, setMember] = useState(props.member);
     const [paidLabor, setPaidLabor] = useState<string>('');
     const [jobMemberId] = useState(props.memberId);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -26,7 +25,6 @@ export default function SignupButton(props: buttonProps) {
     const toast = useToast();
     const handleClick = async () => {
         if (Date.parse(props.start) >= Date.now()) {
-            setMember(`${state.user?.firstName} ${state.user?.lastName}`);
             const memberId = state?.user?.memberId;
             if (memberId) {
                 await signupForJob(state.token, jobId, memberId);
@@ -47,7 +45,7 @@ export default function SignupButton(props: buttonProps) {
         }
     };
     let signupButton;
-    if (!member) {
+    if (!props.member) {
         signupButton = (
             <>
                 <Button
@@ -80,7 +78,7 @@ export default function SignupButton(props: buttonProps) {
                             link to a member record.
                             <Input
                                 placeholder="Non Member Name"
-                                onBlur={
+                                onChange={
                                     (e) => {
                                         if (e.target.value?.length === 1) {
                                             e.target.value = _.startCase(e.target.value);
@@ -95,7 +93,6 @@ export default function SignupButton(props: buttonProps) {
                             <Button
                                 backgroundColor="orange.300"
                                 color="white"
-                                disabled={(paidLabor === undefined)}
                                 onClick={
                                     async () => {
                                         await signupForJobFreeForm(state.token, props.jobId, paidLabor);
@@ -128,7 +125,6 @@ export default function SignupButton(props: buttonProps) {
                 onClick={
                     async () => {
                         await removeSignup(state.token, jobId);
-                        setMember('');
                         await props.refreshData();
                     }
                 }
