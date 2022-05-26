@@ -49,7 +49,7 @@ export type GetJobResponse = Job | ErrorResponse
 
 export type PatchJobRequest = {
     memberId?: number,
-    paidLabor: string,
+    paidLabor?: string,
     eventId?: number,
     jobTypeId?: number,
     jobStartDate?: string,
