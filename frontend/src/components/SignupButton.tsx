@@ -1,11 +1,13 @@
 import {
     Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
-    ModalOverlay, useDisclosure, useToast,
+    ModalOverlay, Text, useDisclosure, useToast,
 } from '@chakra-ui/react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import _ from 'lodash';
 import { signupForJob, removeSignup, signupForJobFreeForm } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
+import { Member } from '../../../src/typedefs/member';
+import { getMemberList } from '../controller/member';
 
 interface buttonProps {
     jobId: number,
@@ -18,10 +20,41 @@ interface buttonProps {
 export default function SignupButton(props: buttonProps) {
     const { state } = useContext(UserContext);
     const [paidLabor, setPaidLabor] = useState<string>('');
+    const [nameFilter, setNameFilter] = useState<string>('');
+    const [allMembers, setAllMembers] = useState<Member[]>([]);
+    const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+
     const [jobMemberId] = useState(props.memberId);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const {
+        isOpen: isNonMemberOpen,
+        onOpen: onNonMemberOpen,
+        onClose: onNonMemberClose,
+    } = useDisclosure();
 
     const [jobId] = useState(props.jobId);
+
+    useEffect(() => {
+        async function getData() {
+            const activeMembers = await getMemberList(state.token);
+            setAllMembers(activeMembers as Member[]);
+            setFilteredMembers(activeMembers as Member[]);
+        }
+        getData();
+    }, []);
+
+    useEffect(() => {
+        if (nameFilter !== '') {
+            const membersWithNameFilter = allMembers.filter((member: Member) => {
+                const lastNameMatched = (member.lastName.toLowerCase().includes(nameFilter));
+                return lastNameMatched;
+            });
+            setFilteredMembers(membersWithNameFilter);
+        } else {
+            setFilteredMembers(allMembers);
+        }
+    }, [nameFilter]);
+
     const toast = useToast();
     const handleClick = async () => {
         if (Date.parse(props.start) >= Date.now()) {
@@ -62,11 +95,11 @@ export default function SignupButton(props: buttonProps) {
                 <Button
                     backgroundColor="orange.300"
                     color="white"
-                    onClick={onOpen}
+                    onClick={onNonMemberOpen}
                 >
                     Sign Up Non Member
                 </Button>
-                <Modal isOpen={isOpen} onClose={onClose}>
+                <Modal isOpen={isNonMemberOpen} onClose={onNonMemberClose}>
                     <ModalOverlay />
                     <ModalContent>
                         <ModalHeader>Add Non Member</ModalHeader>
@@ -79,14 +112,27 @@ export default function SignupButton(props: buttonProps) {
                             <Input
                                 placeholder="Non Member Name"
                                 onChange={
-                                    (e) => {
-                                        if (e.target.value?.length === 1) {
-                                            e.target.value = _.startCase(e.target.value);
+                                    (nonMemberEvent) => {
+                                        if (nonMemberEvent.target.value?.length === 1) {
+                                            nonMemberEvent.target.value = _.startCase(nonMemberEvent.target.value);
                                         }
-                                        setPaidLabor(e.target.value);
+                                        setPaidLabor(nonMemberEvent.target.value);
                                     }
                                 }
                             />
+                            <Input
+                                placeholder="Member"
+                                onChange={
+                                    (e) => {
+                                        setNameFilter(e.target.value.toLowerCase());
+                                    }
+                                }
+                            />
+                            <Text>
+                                {nameFilter}
+                                <br />
+                                {JSON.stringify(filteredMembers)}
+                            </Text>
                         </ModalBody>
 
                         <ModalFooter>
@@ -97,13 +143,13 @@ export default function SignupButton(props: buttonProps) {
                                     async () => {
                                         await signupForJobFreeForm(state.token, props.jobId, paidLabor);
                                         await props.refreshData();
-                                        onClose();
+                                        onNonMemberClose();
                                     }
                                 }
                             >
                                 Save
                             </Button>
-                            <Button ml={3} color="white" onClick={onClose}>
+                            <Button ml={3} color="white" onClick={onNonMemberClose}>
                                 Close
                             </Button>
                         </ModalFooter>
