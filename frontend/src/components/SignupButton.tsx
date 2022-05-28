@@ -1,9 +1,10 @@
 import {
     Button, Input,
     Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
-    ModalOverlay, Select, useDisclosure, useToast,
+    ModalOverlay, useDisclosure, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
+import Select from 'react-select';
 import _ from 'lodash';
 import { signupForJob, removeSignup, signupForJobFreeForm } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
@@ -21,9 +22,7 @@ interface buttonProps {
 export default function SignupButton(props: buttonProps) {
     const { state } = useContext(UserContext);
     const [paidLabor, setPaidLabor] = useState<string>('');
-    const [nameFilter, setNameFilter] = useState<string>('');
-    const [allMembers, setAllMembers] = useState<Member[]>([]);
-    const [filteredMembers, setFilteredMembers] = useState<Member[]>([]);
+    const [allMembers, setAllMembers] = useState<any[]>([]);
 
     const [jobMemberId] = useState(props.memberId);
 
@@ -39,24 +38,17 @@ export default function SignupButton(props: buttonProps) {
         async function getData() {
             const activeMembers = await getMemberList(state.token) as Member[];
             activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
-            setAllMembers(activeMembers);
-            setFilteredMembers(activeMembers);
+            const options = activeMembers.map((member) => {
+                const option = {
+                    value: member.memberId,
+                    label: `${member.lastName}, ${member.firstName}`,
+                };
+                return option;
+            });
+            setAllMembers(options);
         }
         getData();
     }, []);
-
-    useEffect(() => {
-        if (nameFilter !== '') {
-            const membersWithNameFilter = allMembers.filter((member: Member) => {
-                const lastNameMatched = (member.lastName.toLowerCase().includes(nameFilter));
-                const firstNameMatched = (member.firstName.toLowerCase().includes(nameFilter));
-                return lastNameMatched || firstNameMatched;
-            });
-            setFilteredMembers(membersWithNameFilter);
-        } else {
-            setFilteredMembers(allMembers);
-        }
-    }, [nameFilter]);
 
     const toast = useToast();
     const handleClick = async () => {
@@ -130,26 +122,7 @@ export default function SignupButton(props: buttonProps) {
                                     }
                                 }
                             />
-                            <Input
-                                placeholder="Search for a member here, then select a name below"
-                                onChange={
-                                    (e) => {
-                                        setNameFilter(e.target.value.toLowerCase());
-                                    }
-                                }
-                            />
-                            <Select>
-                                {
-                                    filteredMembers.map((member) => {
-                                        const item = (
-                                            <option value={member.memberId}>
-                                                {`${member.lastName}, ${member.firstName}`}
-                                            </option>
-                                        );
-                                        return item;
-                                    })
-                                }
-                            </Select>
+                            <Select options={allMembers} />
                         </ModalBody>
 
                         <ModalFooter>
