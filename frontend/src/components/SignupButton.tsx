@@ -1,6 +1,7 @@
 import {
-    Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
-    ModalOverlay, Text, useDisclosure, useToast,
+    Button, Input,
+    Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
+    ModalOverlay, Select, useDisclosure, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import _ from 'lodash';
@@ -36,9 +37,10 @@ export default function SignupButton(props: buttonProps) {
 
     useEffect(() => {
         async function getData() {
-            const activeMembers = await getMemberList(state.token);
-            setAllMembers(activeMembers as Member[]);
-            setFilteredMembers(activeMembers as Member[]);
+            const activeMembers = await getMemberList(state.token) as Member[];
+            activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
+            setAllMembers(activeMembers);
+            setFilteredMembers(activeMembers);
         }
         getData();
     }, []);
@@ -47,7 +49,8 @@ export default function SignupButton(props: buttonProps) {
         if (nameFilter !== '') {
             const membersWithNameFilter = allMembers.filter((member: Member) => {
                 const lastNameMatched = (member.lastName.toLowerCase().includes(nameFilter));
-                return lastNameMatched;
+                const firstNameMatched = (member.firstName.toLowerCase().includes(nameFilter));
+                return lastNameMatched || firstNameMatched;
             });
             setFilteredMembers(membersWithNameFilter);
         } else {
@@ -97,6 +100,13 @@ export default function SignupButton(props: buttonProps) {
                     color="white"
                     onClick={onNonMemberOpen}
                 >
+                    Signup another member
+                </Button>
+                <Button
+                    backgroundColor="orange.300"
+                    color="white"
+                    onClick={onNonMemberOpen}
+                >
                     Sign Up Non Member
                 </Button>
                 <Modal isOpen={isNonMemberOpen} onClose={onNonMemberClose}>
@@ -121,18 +131,25 @@ export default function SignupButton(props: buttonProps) {
                                 }
                             />
                             <Input
-                                placeholder="Member"
+                                placeholder="Search for a member here, then select a name below"
                                 onChange={
                                     (e) => {
                                         setNameFilter(e.target.value.toLowerCase());
                                     }
                                 }
                             />
-                            <Text>
-                                {nameFilter}
-                                <br />
-                                {JSON.stringify(filteredMembers)}
-                            </Text>
+                            <Select>
+                                {
+                                    filteredMembers.map((member) => {
+                                        const item = (
+                                            <option value={member.memberId}>
+                                                {`${member.lastName}, ${member.firstName}`}
+                                            </option>
+                                        );
+                                        return item;
+                                    })
+                                }
+                            </Select>
                         </ModalBody>
 
                         <ModalFooter>
