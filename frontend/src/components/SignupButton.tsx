@@ -23,6 +23,7 @@ export default function SignupButton(props: buttonProps) {
     const { state } = useContext(UserContext);
     const [paidLabor, setPaidLabor] = useState<string>('');
     const [allMembers, setAllMembers] = useState<any[]>([]);
+    const [selectedOption, setSelectedOption] = useState<any>();
 
     const [jobMemberId] = useState(props.memberId);
 
@@ -49,6 +50,14 @@ export default function SignupButton(props: buttonProps) {
         }
         getData();
     }, []);
+
+    useEffect(() => {
+        async function signupForJobDropdown() {
+            await signupForJob(state.token, props.jobId, selectedOption.value);
+            props.refreshData();
+        }
+        signupForJobDropdown();
+    }, [selectedOption]);
 
     const toast = useToast();
     const handleClick = async () => {
@@ -87,13 +96,18 @@ export default function SignupButton(props: buttonProps) {
                     Signup &nbsp;
                     {state.user?.firstName}
                 </Button>
-                <Button
-                    backgroundColor="orange.300"
-                    color="white"
-                    onClick={onNonMemberOpen}
-                >
-                    Signup another member
-                </Button>
+                <Select
+                    getOptionLabel={(option) => option.label}
+                    getOptionValue={(option) => option.value}
+                    isSearchable
+                    options={allMembers}
+                    value={selectedOption}
+                    onChange={
+                        async (e) => {
+                            setSelectedOption(e);
+                        }
+                    }
+                />
                 <Button
                     backgroundColor="orange.300"
                     color="white"
@@ -122,7 +136,6 @@ export default function SignupButton(props: buttonProps) {
                                     }
                                 }
                             />
-                            <Select options={allMembers} />
                         </ModalBody>
 
                         <ModalFooter>
