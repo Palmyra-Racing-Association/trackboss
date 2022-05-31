@@ -35,7 +35,22 @@ const columns: any = [
     },
     {
         name: 'Points',
-        selector: (row: Job) => `${row.pointsAwarded}`,
+        selector: (row: Job) => {
+            if (row.paid) {
+                return 0;
+            }
+            return row.pointsAwarded;
+        },
+        sortable: true,
+    },
+    {
+        name: 'Cash ($)',
+        selector: (row: Job) => {
+            if (row.paid) {
+                return row.cashPayout;
+            }
+            return 0;
+        },
         sortable: true,
     },
 ];

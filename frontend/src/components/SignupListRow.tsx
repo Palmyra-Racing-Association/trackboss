@@ -9,6 +9,7 @@ export default function SignupListRow(props: any) {
                 jobId={props.data.jobId}
                 member={props.data.member}
                 memberId={props.data.memberId}
+                paid={props.data.paid}
                 start={props.data.start}
                 refreshData={props.refreshData}
             />

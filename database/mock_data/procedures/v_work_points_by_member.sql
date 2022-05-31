@@ -7,6 +7,7 @@ CREATE VIEW `v_work_points_by_member` AS
     SUM(job.points_awarded) AS total_points
     FROM
     job
+    where paid = 0
     GROUP BY member_id, year
     union all
     select 
