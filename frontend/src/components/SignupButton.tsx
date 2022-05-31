@@ -91,30 +91,46 @@ export default function SignupButton(props: buttonProps) {
                     background="orange.300"
                     size="md"
                     color="white"
+                    ml={2}
                     onClick={handleClick}
                 >
                     Signup &nbsp;
                     {state.user?.firstName}
                 </Button>
-                <Select
-                    getOptionLabel={(option) => option.label}
-                    getOptionValue={(option) => option.value}
-                    isSearchable
-                    options={allMembers}
-                    value={selectedOption}
-                    onChange={
-                        async (e) => {
-                            setSelectedOption(e);
-                        }
-                    }
-                />
-                <Button
-                    backgroundColor="orange.300"
-                    color="white"
-                    onClick={onNonMemberOpen}
-                >
-                    Sign Up Non Member
-                </Button>
+                {
+                    state.user?.memberType === 'Admin' && (
+                        <>
+                            <Select
+                                styles={
+                                    {
+                                        option: (provided, optionState) => ({
+                                            ...provided,
+                                            backgroundColor: optionState.isSelected ? '#ffa24d' : 'white',
+                                            borderBottom: '1px solid #ffa24d',
+                                        }),
+                                    }
+                                }
+                                getOptionLabel={(option) => option.label}
+                                getOptionValue={(option) => option.value}
+                                isSearchable
+                                options={allMembers}
+                                value={selectedOption}
+                                onChange={
+                                    async (e) => {
+                                        setSelectedOption(e);
+                                    }
+                                }
+                            />
+                            <Button
+                                backgroundColor="orange.300"
+                                color="white"
+                                onClick={onNonMemberOpen}
+                            >
+                                Sign Up Non Member
+                            </Button>
+                        </>
+                    )
+                }
                 <Modal isOpen={isNonMemberOpen} onClose={onNonMemberClose}>
                     <ModalOverlay />
                     <ModalContent>
@@ -122,8 +138,8 @@ export default function SignupButton(props: buttonProps) {
                         <ModalCloseButton />
                         <ModalBody>
                             You can use this window to add a non member to a job.  Adding a member this way
-                            will cause their points to not be counted for this job, so please add non members only.
-                            This just stores the name you enter as it&apos;s entered, and doesn&apos;t
+                            will cause their points to not be counted for this job, so please use the dropdown for that.
+                            This way stores the name you enter as it&apos;s entered, and doesn&apos;t
                             link to a member record.
                             <Input
                                 placeholder="Non Member Name"
