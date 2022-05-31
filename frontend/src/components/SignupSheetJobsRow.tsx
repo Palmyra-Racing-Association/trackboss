@@ -1,5 +1,5 @@
 import {
-    Box, Button, NumberInput, NumberInputField, Select, SimpleGrid, Text, useToast,
+    Box, Button, NumberInput, NumberInputField, SimpleGrid, Switch, Text, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { EventJob } from '../../../src/typedefs/eventJob';
@@ -27,7 +27,6 @@ function SignupSheetJobsRow(props: any) {
 
     const toast = useToast();
 
-    const mealTicket = data.mealTicket ? 'Yes' : 'No';
     const [pointValue, setPointValue] = useState<number>(data.pointValue);
     const [cashValue, setCashValue] = useState<number>(data.cashValue);
     const [mealTicketValue, setMealTicketValue] = useState<boolean>(data.mealTicket);
@@ -70,21 +69,17 @@ function SignupSheetJobsRow(props: any) {
                 </Box>
                 <Box maxWidth={100}>
                     <Text fontSize="sm">Meal Ticket?</Text>
-                    <Select
-                        placeholder={mealTicket}
-                        disabled={disableInputs}
+                    <Switch
+                        colorScheme="orange"
+                        defaultChecked={data.mealTicket}
+                        size="lg"
                         onChange={
-                            (event) => {
-                                setMealTicketValue(event.target.value === 'true');
+                            () => {
+                                setMealTicketValue(!data.mealTicket);
                                 setDirty(true);
                             }
                         }
-                    >
-                        {
-                            (mealTicket === 'No') ? <option value="true">Yes</option>
-                                : <option value="false">No</option>
-                        }
-                    </Select>
+                    />
                 </Box>
                 <Box maxWidth={100}>
                     <Text fontSize="sm">Positions</Text>
