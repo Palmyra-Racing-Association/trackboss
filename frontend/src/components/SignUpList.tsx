@@ -1,4 +1,5 @@
 import {
+    Alert,
     Box, Center, Flex, IconButton, Input, InputGroup, InputLeftElement,
     Text,
 } from '@chakra-ui/react';
@@ -162,7 +163,11 @@ export default function SignUpList(props: any) {
                 </Flex>
             </Center>
             <Box>
-                To choose a job expands its row, and click the signup button.
+                <Alert status="warning">
+                    To choose a job expands its row, and click the signup button.  If you are an admin you can also
+                    choose a name from the drop down, or type it in the dropdown to narrow the list.  Admins can also
+                    assign a non member to a job.
+                </Alert>
                 <DataTable
                     columns={printing ? printingColumns : columns}
                     data={cells}

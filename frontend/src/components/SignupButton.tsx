@@ -1,11 +1,15 @@
 import {
-    Button, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
+    Button, Input,
+    Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
     ModalOverlay, useDisclosure, useToast,
 } from '@chakra-ui/react';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import Select from 'react-select';
 import _ from 'lodash';
 import { signupForJob, removeSignup, signupForJobFreeForm } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
+import { Member } from '../../../src/typedefs/member';
+import { getMemberList } from '../controller/member';
 
 interface buttonProps {
     jobId: number,
@@ -18,10 +22,43 @@ interface buttonProps {
 export default function SignupButton(props: buttonProps) {
     const { state } = useContext(UserContext);
     const [paidLabor, setPaidLabor] = useState<string>('');
+    const [allMembers, setAllMembers] = useState<any[]>([]);
+    const [selectedOption, setSelectedOption] = useState<any>();
+
     const [jobMemberId] = useState(props.memberId);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const {
+        isOpen: isNonMemberOpen,
+        onOpen: onNonMemberOpen,
+        onClose: onNonMemberClose,
+    } = useDisclosure();
 
     const [jobId] = useState(props.jobId);
+
+    useEffect(() => {
+        async function getData() {
+            const activeMembers = await getMemberList(state.token) as Member[];
+            activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
+            const options = activeMembers.map((member) => {
+                const option = {
+                    value: member.memberId,
+                    label: `${member.lastName}, ${member.firstName}`,
+                };
+                return option;
+            });
+            setAllMembers(options);
+        }
+        getData();
+    }, []);
+
+    useEffect(() => {
+        async function signupForJobDropdown() {
+            await signupForJob(state.token, props.jobId, selectedOption.value);
+            props.refreshData();
+        }
+        signupForJobDropdown();
+    }, [selectedOption]);
+
     const toast = useToast();
     const handleClick = async () => {
         if (Date.parse(props.start) >= Date.now()) {
@@ -54,36 +91,64 @@ export default function SignupButton(props: buttonProps) {
                     background="orange.300"
                     size="md"
                     color="white"
+                    ml={2}
                     onClick={handleClick}
                 >
                     Signup &nbsp;
                     {state.user?.firstName}
                 </Button>
-                <Button
-                    backgroundColor="orange.300"
-                    color="white"
-                    onClick={onOpen}
-                >
-                    Sign Up Non Member
-                </Button>
-                <Modal isOpen={isOpen} onClose={onClose}>
+                {
+                    state.user?.memberType === 'Admin' && (
+                        <>
+                            <Select
+                                styles={
+                                    {
+                                        option: (provided, optionState) => ({
+                                            ...provided,
+                                            backgroundColor: optionState.isSelected ? '#ffa24d' : 'white',
+                                            borderBottom: '1px solid #ffa24d',
+                                        }),
+                                    }
+                                }
+                                getOptionLabel={(option) => option.label}
+                                getOptionValue={(option) => option.value}
+                                isSearchable
+                                options={allMembers}
+                                value={selectedOption}
+                                onChange={
+                                    async (e) => {
+                                        setSelectedOption(e);
+                                    }
+                                }
+                            />
+                            <Button
+                                backgroundColor="orange.300"
+                                color="white"
+                                onClick={onNonMemberOpen}
+                            >
+                                Sign Up Non Member
+                            </Button>
+                        </>
+                    )
+                }
+                <Modal isOpen={isNonMemberOpen} onClose={onNonMemberClose}>
                     <ModalOverlay />
                     <ModalContent>
                         <ModalHeader>Add Non Member</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
                             You can use this window to add a non member to a job.  Adding a member this way
-                            will cause their points to not be counted for this job, so please add non members only.
-                            This just stores the name you enter as it&apos;s entered, and doesn&apos;t
+                            will cause their points to not be counted for this job, so please use the dropdown for that.
+                            This way stores the name you enter as it&apos;s entered, and doesn&apos;t
                             link to a member record.
                             <Input
                                 placeholder="Non Member Name"
                                 onChange={
-                                    (e) => {
-                                        if (e.target.value?.length === 1) {
-                                            e.target.value = _.startCase(e.target.value);
+                                    (nonMemberEvent) => {
+                                        if (nonMemberEvent.target.value?.length === 1) {
+                                            nonMemberEvent.target.value = _.startCase(nonMemberEvent.target.value);
                                         }
-                                        setPaidLabor(e.target.value);
+                                        setPaidLabor(nonMemberEvent.target.value);
                                     }
                                 }
                             />
@@ -97,13 +162,13 @@ export default function SignupButton(props: buttonProps) {
                                     async () => {
                                         await signupForJobFreeForm(state.token, props.jobId, paidLabor);
                                         await props.refreshData();
-                                        onClose();
+                                        onNonMemberClose();
                                     }
                                 }
                             >
                                 Save
                             </Button>
-                            <Button ml={3} color="white" onClick={onClose}>
+                            <Button ml={3} color="white" onClick={onNonMemberClose}>
                                 Close
                             </Button>
                         </ModalFooter>
