@@ -214,6 +214,7 @@ export default function SignupButton(props: buttonProps) {
                             await props.refreshData();
                         }
                     }
+                    hidden={(state.user?.memberType !== 'Admin')}
                 >
                     {markedPaid ? 'Mark as Paid' : 'Unmark paid'}
                 </Button>
