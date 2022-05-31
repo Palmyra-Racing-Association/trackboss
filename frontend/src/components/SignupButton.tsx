@@ -1,12 +1,14 @@
 import {
-    Button, Input,
+    Button, ButtonGroup, Input,
     Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
     ModalOverlay, useDisclosure, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import Select from 'react-select';
 import _ from 'lodash';
-import { signupForJob, removeSignup, signupForJobFreeForm } from '../controller/job';
+import { BsCurrencyDollar, BsTrash2 } from 'react-icons/bs';
+
+import { signupForJob, removeSignup, signupForJobFreeForm, setPaidState } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 import { Member } from '../../../src/typedefs/member';
 import { getMemberList } from '../controller/member';
@@ -16,6 +18,7 @@ interface buttonProps {
     member: string,
     start: string,
     memberId: number,
+    paid: boolean,
     refreshData: any,
 }
 
@@ -24,6 +27,7 @@ export default function SignupButton(props: buttonProps) {
     const [paidLabor, setPaidLabor] = useState<string>('');
     const [allMembers, setAllMembers] = useState<any[]>([]);
     const [selectedOption, setSelectedOption] = useState<any>();
+    const [markedPaid, setMarkedPaid] = useState<boolean>(props.paid);
 
     const [jobMemberId] = useState(props.memberId);
 
@@ -183,20 +187,37 @@ export default function SignupButton(props: buttonProps) {
             (state.user?.memberType === 'Admin')
         );
         signupButton = (
-            <Button
-                aria-label="Remove"
-                background="red"
-                color="white"
-                onClick={
-                    async () => {
-                        await removeSignup(state.token, jobId);
-                        await props.refreshData();
+            <ButtonGroup variant="outline" spacing="6">
+                <Button
+                    aria-label="Remove"
+                    background="red"
+                    color="white"
+                    rightIcon={<BsTrash2 />}
+                    onClick={
+                        async () => {
+                            await removeSignup(state.token, jobId);
+                            await props.refreshData();
+                        }
                     }
-                }
-                disabled={!allowDelete}
-            >
-                Remove Signup
-            </Button>
+                    disabled={!allowDelete}
+                >
+                    Remove Signup
+                </Button>
+                <Button
+                    background={markedPaid ? 'green' : 'red'}
+                    color="white"
+                    rightIcon={<BsCurrencyDollar />}
+                    onClick={
+                        async () => {
+                            await setPaidState(state.token, jobId);
+                            setMarkedPaid(!markedPaid);
+                            await props.refreshData();
+                        }
+                    }
+                >
+                    {markedPaid ? 'Mark as Paid' : 'Unmark paid'}
+                </Button>
+            </ButtonGroup>
         );
     }
     return signupButton;

@@ -115,7 +115,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         verified: !!result.verified[0],
         verifiedDate: result.verified_date,
         pointsAwarded: result.points_awarded,
-        paid: !!result.verified[0],
+        paid: !!result.paid[0],
         cashPayout: result.cash_payout,
         paidDate: result.paid_date,
         jobDay: jobDays[result.job_day_number],

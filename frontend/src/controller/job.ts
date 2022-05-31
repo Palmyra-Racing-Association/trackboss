@@ -101,6 +101,13 @@ export async function setVerifiedState(token: string, jobId: number, state: bool
     return response.json();
 }
 
+export async function setPaidState(token: string, jobId: number) : Promise<any> {
+    const paidJob : any = await getJob(token, jobId);
+    paidJob.paid = !paidJob.paid;
+    const modifiedJob : any = await updateJob(token, jobId, paidJob);
+    return modifiedJob;
+}
+
 /**
  * Signup a user for a job.
  * @param token user token
