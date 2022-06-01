@@ -1,7 +1,6 @@
 import {
     Alert,
     Box, Center, Flex, IconButton, Input, InputGroup, InputLeftElement,
-    Text,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -31,6 +30,7 @@ const columns: any = [
     {
         name: 'Cash Payout',
         selector: (row: { cashPayout: number; }) => row.cashPayout,
+        hide: 'sm',
     },
     {
         name: 'Job Day',
@@ -41,31 +41,11 @@ const columns: any = [
     },
 ];
 
-const printingColumns: any = [
-    {
-        name: 'Name',
-        selector: (row: { name: string; }) => row.name,
-    },
-    {
-        name: 'Job',
-        selector: (row: { job: string; }) => row.job,
-    },
-    {
-        cell: () => (<Text align="right" fontSize="xl">Sign Here: __________________</Text>),
-        minWidth: '10em',
-        style: {
-            paddingRight: '2em',
-        },
-    },
-];
-
 interface Worker {
     name: string,
     job: string,
     verified: boolean
 }
-
-// not strictly necessary now but will be when the api is done and these become async functions
 
 const customStyles = {
     rows: {
@@ -98,7 +78,6 @@ const paginationComponentOptions = {
 
 export default function SignUpList(props: any) {
     const [cells, setCells] = useState([] as Worker[]);
-    const [printing] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [allCells, setAllCells] = useState<Worker[]>([]);
 
@@ -173,7 +152,7 @@ export default function SignUpList(props: any) {
                     assign a non member to a job.
                 </Alert>
                 <DataTable
-                    columns={printing ? printingColumns : columns}
+                    columns={columns}
                     data={cells}
                     highlightOnHover
                     expandableRows

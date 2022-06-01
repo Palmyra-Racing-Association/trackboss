@@ -1,4 +1,5 @@
 import {
+    Box,
     Button, ButtonGroup, Input,
     Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
     ModalOverlay, useDisclosure, useToast,
@@ -29,7 +30,7 @@ export default function SignupButton(props: buttonProps) {
     const [selectedOption, setSelectedOption] = useState<any>();
     const [markedPaid, setMarkedPaid] = useState<boolean>(props.paid);
 
-    const [jobMemberId] = useState(props.memberId);
+    const [jobMemberId, setJobMemberId] = useState(props.memberId);
 
     const {
         isOpen: isNonMemberOpen,
@@ -75,6 +76,7 @@ export default function SignupButton(props: buttonProps) {
             if (memberId) {
                 await signupForJob(state.token, jobId, memberId);
             }
+            setJobMemberId(memberId || -1);
             await props.refreshData();
         } else {
             toast({
@@ -102,7 +104,7 @@ export default function SignupButton(props: buttonProps) {
                             background="orange.300"
                             size="md"
                             color="white"
-                            ml={2}
+                            ml={10}
                             onClick={handleClick}
                         >
                             Signup &nbsp;
@@ -112,8 +114,9 @@ export default function SignupButton(props: buttonProps) {
                 }
                 {
                     isAdmin && (
-                        <>
+                        <Box ml={10} width="100%">
                             <Select
+                                placeholder="Choose a member or start typing to narrow down the list"
                                 styles={
                                     {
                                         option: (provided, optionState) => ({
@@ -143,7 +146,7 @@ export default function SignupButton(props: buttonProps) {
                             >
                                 Sign Up Non Member
                             </Button>
-                        </>
+                        </Box>
                     )
                 }
                 <Modal isOpen={isNonMemberOpen} onClose={onNonMemberClose}>
@@ -198,7 +201,7 @@ export default function SignupButton(props: buttonProps) {
             (isAdmin)
         );
         signupButton = (
-            <ButtonGroup variant="outline" spacing="6">
+            <ButtonGroup variant="outline" ml={10} spacing="6">
                 <Button
                     aria-label="Remove"
                     background="red"
