@@ -11,7 +11,7 @@ import { BsCurrencyDollar, BsTrash2 } from 'react-icons/bs';
 import { signupForJob, removeSignup, signupForJobFreeForm, setPaidState } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 import { Member } from '../../../src/typedefs/member';
-import { getMemberList } from '../controller/member';
+import { getMemberList, getMembersByMembership } from '../controller/member';
 
 interface buttonProps {
     jobId: number,
@@ -25,7 +25,7 @@ interface buttonProps {
 export default function SignupButton(props: buttonProps) {
     const { state } = useContext(UserContext);
     const [paidLabor, setPaidLabor] = useState<string>('');
-    const [allMembers, setAllMembers] = useState<any[]>([]);
+    const [eligibleMembers, setEligibleMembers] = useState<any[]>([]);
     const [selectedOption, setSelectedOption] = useState<any>();
     const [markedPaid, setMarkedPaid] = useState<boolean>(props.paid);
 
@@ -39,9 +39,14 @@ export default function SignupButton(props: buttonProps) {
 
     const [jobId] = useState(props.jobId);
 
+    const isAdmin = state.user?.memberType === 'Admin';
+
     useEffect(() => {
         async function getData() {
-            const activeMembers = await getMemberList(state.token) as Member[];
+            let activeMembers = await getMembersByMembership(state.token, state.user?.membershipId || 0);
+            if (isAdmin) {
+                activeMembers = await getMemberList(state.token) as Member[];
+            }
             activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
             const options = activeMembers.map((member) => {
                 const option = {
@@ -50,7 +55,7 @@ export default function SignupButton(props: buttonProps) {
                 };
                 return option;
             });
-            setAllMembers(options);
+            setEligibleMembers(options);
         }
         getData();
     }, []);
@@ -89,20 +94,24 @@ export default function SignupButton(props: buttonProps) {
     if (!props.member) {
         signupButton = (
             <>
-                <Button
-                    // variant={verified ? 'verified' : 'unverified'}
-                    aria-label="Sign Up"
-                    background="orange.300"
-                    size="md"
-                    color="white"
-                    ml={2}
-                    onClick={handleClick}
-                >
-                    Signup &nbsp;
-                    {state.user?.firstName}
-                </Button>
                 {
-                    state.user?.memberType === 'Admin' && (
+                    !isAdmin && (
+                        <Button
+                            // variant={verified ? 'verified' : 'unverified'}
+                            aria-label="Sign Up"
+                            background="orange.300"
+                            size="md"
+                            color="white"
+                            ml={2}
+                            onClick={handleClick}
+                        >
+                            Signup &nbsp;
+                            {state.user?.firstName}
+                        </Button>
+                    )
+                }
+                {
+                    isAdmin && (
                         <>
                             <Select
                                 styles={
@@ -117,7 +126,9 @@ export default function SignupButton(props: buttonProps) {
                                 getOptionLabel={(option) => option.label}
                                 getOptionValue={(option) => option.value}
                                 isSearchable
-                                options={allMembers}
+                                isClearable
+                                backspaceRemovesValue
+                                options={eligibleMembers}
                                 value={selectedOption}
                                 onChange={
                                     async (e) => {
@@ -184,7 +195,7 @@ export default function SignupButton(props: buttonProps) {
         // I can delete my own signups, and of course admins can delete everyone's signups.
         const allowDelete = (
             (state?.user?.memberId === jobMemberId) ||
-            (state.user?.memberType === 'Admin')
+            (isAdmin)
         );
         signupButton = (
             <ButtonGroup variant="outline" spacing="6">
@@ -204,7 +215,7 @@ export default function SignupButton(props: buttonProps) {
                     Remove Signup
                 </Button>
                 <Button
-                    background={markedPaid ? 'green' : 'red'}
+                    background={markedPaid ? 'orange.300' : 'green'}
                     color="white"
                     rightIcon={<BsCurrencyDollar />}
                     onClick={
@@ -214,9 +225,9 @@ export default function SignupButton(props: buttonProps) {
                             await props.refreshData();
                         }
                     }
-                    hidden={(state.user?.memberType !== 'Admin')}
+                    hidden={(!isAdmin)}
                 >
-                    {markedPaid ? 'Mark as Paid' : 'Unmark paid'}
+                    {markedPaid ? 'Unmark paid' : 'Mark as Paid' }
                 </Button>
             </ButtonGroup>
         );

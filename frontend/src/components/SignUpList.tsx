@@ -29,6 +29,10 @@ const columns: any = [
         sortable: true,
     },
     {
+        name: 'Cash Payout',
+        selector: (row: { cashPayout: number; }) => row.cashPayout,
+    },
+    {
         name: 'Job Day',
         selector: (row: {jobDay: string; }) => row.jobDay,
         sortable: true,
