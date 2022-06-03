@@ -167,7 +167,7 @@ describe('generateNewBills()', () => {
         const results = await generateNewBills(membershipList, preGeneratedBills, threshold, year);
         expect(mockGetBaseDues).toHaveBeenCalled();
         expect(mockGetWorkPointsByMembership).toHaveBeenCalled();
-        expect(mockGenerateBill).toHaveBeenCalledTimes(2);
+        expect(mockGenerateBill).toHaveBeenCalledTimes(1);
         expect(mockGetBillList).toHaveBeenCalled();
         expect(results.length).toBe(1);
         expect(results[0].membershipAdmin).toBe('Jimbus Gimbus');
