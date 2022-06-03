@@ -6,6 +6,8 @@ export type Bill = {
     year: number,
     amount: number,
     amountWithFee: number,
+    pointsEarned: number,
+    pointsThreshold: number,
     membershipAdmin: string,
     membershipAdminEmail: string,
     emailedBill?: string, // undefined if not emailed, date otherwise
@@ -41,7 +43,9 @@ export type PostCalculateBillsResponse = Bill[] | ErrorResponse
 export type GenerateSingleBillRequest = {
     amount: number,
     amountWithFee: number,
-    membershipId: number
+    membershipId: number,
+    pointsEarned: number,
+    pointsThreshold: number,
 }
 
 export type GetMembershipBillListRequest = Record<string, never>

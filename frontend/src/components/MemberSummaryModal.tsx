@@ -43,8 +43,8 @@ interface modalProps {
 export default function MemberSummaryModal(props: modalProps) {
     const toast = useToast();
     const navigate = useNavigate();
-    const navigateToCalendar = () => {
-        const path = '/calendar';
+    const navigateToMyAccount = () => {
+        const path = '/settings';
         navigate(path);
     };
 
@@ -456,7 +456,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         }
                                                         onClick={
                                                             () => {
-                                                                navigateToCalendar();
+                                                                navigateToMyAccount();
                                                                 // Sign in as the selected user (to sign them up for events), and store the original user as storedUser
                                                                 update({ loggedIn: true, token: state.token, user: selectedMember, storedUser: state.user });
                                                             }

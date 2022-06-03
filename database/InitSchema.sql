@@ -169,6 +169,9 @@ CREATE TABLE IF NOT EXISTS `pradb`.`member_bill` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+ALTER TABLE `pradb`.`member_bill` 
+ADD COLUMN `threshold` DOUBLE NULL DEFAULT NULL AFTER `cur_year_paid`,
+ADD COLUMN `points_earned` DOUBLE NULL DEFAULT NULL AFTER `threshold`;
 
 -- -----------------------------------------------------
 -- Table `pradb`.`member_status`

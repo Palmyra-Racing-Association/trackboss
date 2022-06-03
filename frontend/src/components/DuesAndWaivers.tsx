@@ -29,6 +29,18 @@ export default function DuesAndWaivers() {
             maxWidth: '25',
         },
         {
+            name: 'Points Earned',
+            selector: (row: Bill) => row.pointsEarned,
+            sortable: true,
+            maxWidth: '25',
+        },
+        {
+            name: 'Points required',
+            selector: (row:Bill) => row.pointsThreshold,
+            sortable: true,
+            maxWidth: '25',
+        },
+        {
             name: 'Amount',
             selector: (row: Bill) => `$${row.amount} ($${row.amountWithFee})`,
             sortable: true,
