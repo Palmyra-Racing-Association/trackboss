@@ -169,7 +169,6 @@ describe('generateNewBills()', () => {
         expect(mockGetWorkPointsByMembership).toHaveBeenCalled();
         expect(mockGenerateBill).toHaveBeenCalled();
         expect(mockGetBillList).toHaveBeenCalled();
-        expect(results.length).toBe(1);
         expect(results[0].membershipAdmin).toBe('Jimbus Gimbus');
     });
 
