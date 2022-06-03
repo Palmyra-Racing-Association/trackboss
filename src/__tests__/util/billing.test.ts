@@ -58,8 +58,6 @@ describe('generateNewBills()', () => {
             amount: expOwed,
             amountWithFee: expOwedWithFee,
             membershipId,
-            pointsEarned,
-            pointsThreshold,
         });
         expect(mockGetBillList).toHaveBeenCalled();
     });
@@ -104,6 +102,8 @@ describe('generateNewBills()', () => {
             amount: expOwed,
             amountWithFee: expOwedWithFee,
             membershipId,
+            pointsEarned: 125,
+            pointsThreshold: 100,
         });
         expect(mockGetBillList).toHaveBeenCalled();
     });
