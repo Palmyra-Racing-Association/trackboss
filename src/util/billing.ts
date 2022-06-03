@@ -48,6 +48,8 @@ export async function generateNewBills(
                     amount: owed,
                     amountWithFee: (owed + fee),
                     membershipId: membership.membershipId,
+                    pointsEarned: earned,
+                    pointsThreshold: threshold,
                 });
             } catch (e) {
                 // generate more bills even if this one failed

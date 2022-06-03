@@ -6,6 +6,8 @@ CREATE VIEW `v_bill` AS
         mb.year,
         mb.amount,
         mb.amount_with_fee,
+        mb.points_earned,
+        mb.threshold,
         CONCAT(ma.first_name, ' ', ma.last_name) AS membership_admin,
         ma.email AS membership_admin_email,
         mb.emailed_bill,
