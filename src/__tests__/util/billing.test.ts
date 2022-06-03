@@ -58,6 +58,8 @@ describe('generateNewBills()', () => {
             amount: expOwed,
             amountWithFee: expOwedWithFee,
             membershipId,
+            pointsEarned: earned,
+            pointsThreshold: threshold,
         });
         expect(mockGetBillList).toHaveBeenCalled();
     });
@@ -102,8 +104,8 @@ describe('generateNewBills()', () => {
             amount: expOwed,
             amountWithFee: expOwedWithFee,
             membershipId,
-            pointsEarned: 125,
-            pointsThreshold: 100,
+            pointsEarned: earned,
+            pointsThreshold: threshold,
         });
         expect(mockGetBillList).toHaveBeenCalled();
     });
@@ -165,7 +167,7 @@ describe('generateNewBills()', () => {
         const results = await generateNewBills(membershipList, preGeneratedBills, threshold, year);
         expect(mockGetBaseDues).toHaveBeenCalled();
         expect(mockGetWorkPointsByMembership).toHaveBeenCalled();
-        expect(mockGenerateBill).toHaveBeenCalledTimes(1);
+        expect(mockGenerateBill).toHaveBeenCalledTimes(2);
         expect(mockGetBillList).toHaveBeenCalled();
         expect(results.length).toBe(1);
         expect(results[0].membershipAdmin).toBe('Jimbus Gimbus');
