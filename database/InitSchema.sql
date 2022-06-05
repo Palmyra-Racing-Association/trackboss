@@ -403,6 +403,13 @@ CREATE TABLE IF NOT EXISTS `pradb`.`point_threshold` (
   PRIMARY KEY (`year`))
 ENGINE = InnoDB;
 
+CREATE TABLE `pradb`.`gate_code` (
+  `gate_code_id` INT NOT NULL AUTO_INCREMENT,
+  `year` INT NULL,
+  `gate_code` VARCHAR(20) NULL,
+  PRIMARY KEY (`gate_code_id`),
+  UNIQUE INDEX `gate_code_id_UNIQUE` (`gate_code_id` ASC),
+  INDEX `idx_gate_code_year` (`year` ASC));
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
