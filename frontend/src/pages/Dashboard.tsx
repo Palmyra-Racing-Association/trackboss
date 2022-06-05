@@ -11,6 +11,8 @@ import { getWorkPointsTotal } from '../controller/workPoints';
 import { getYearlyThresholdValue } from '../controller/billing';
 import GreetingText from '../components/GreetingText';
 import { getTodaysDate } from '../controller/utils';
+import { getGateCodeLatest } from '../controller/gateCode';
+import { GateCode } from '../../../src/typedefs/gateCode';
 
 async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     const nowString = getTodaysDate();
@@ -32,6 +34,8 @@ function Dashboard() {
     const { state } = useContext(UserContext);
     const [eventCardProps, setEventCardProps] = useState<any>();
     const [percent, setPercent] = useState<number>(0);
+    const [gateCode, setGateCode] = useState<string>('');
+
     useEffect(() => {
         async function getData() {
             setEventCardProps(await getEventCardPropsLocal(state.token));
@@ -41,6 +45,14 @@ function Dashboard() {
         }
         getData();
     }, [state.user]);
+
+    useEffect(() => {
+        async function getData() {
+            const latestGateCode = await getGateCodeLatest(state.token) as GateCode;
+            setGateCode(latestGateCode.gateCode);
+        }
+        getData();
+    });
 
     return (
         <ChakraProvider theme={theme}>
@@ -69,7 +81,7 @@ function Dashboard() {
                                 />
                             )
                         }
-                        <ImportantLinksCard />
+                        <ImportantLinksCard gateCode={gateCode} />
                     </SimpleGrid>
                 </Center>
             </VStack>
