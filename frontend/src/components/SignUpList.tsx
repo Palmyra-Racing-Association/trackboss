@@ -7,7 +7,7 @@ import DataTable from 'react-data-table-component';
 import { BsPrinter, BsSearch } from 'react-icons/bs';
 import { getSignupList, getSignupListExcel } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
-import SignupListRow from './SignupListRow';
+import SignupButtonRow from './SignupButtonRow';
 
 const columns: any = [
     {
@@ -156,13 +156,12 @@ export default function SignUpList(props: any) {
                     data={cells}
                     highlightOnHover
                     expandableRows
-                    expandableRowsComponent={SignupListRow}
+                    expandableRowsComponent={SignupButtonRow}
                     expandableRowsComponentProps={
                         {
                             refreshData: async () => {
                                 await getSignupListData();
                             },
-                            token: state.token,
                         }
                     }
                     responsive

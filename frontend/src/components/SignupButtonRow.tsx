@@ -1,8 +1,7 @@
 import {
-    Box,
     Button, ButtonGroup, Input,
     Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
-    ModalOverlay, useDisclosure, useToast,
+    ModalOverlay, SimpleGrid, useDisclosure, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import Select from 'react-select';
@@ -14,23 +13,14 @@ import { UserContext } from '../contexts/UserContext';
 import { Member } from '../../../src/typedefs/member';
 import { getMemberList, getMembersByMembership } from '../controller/member';
 
-interface buttonProps {
-    jobId: number,
-    member: string,
-    start: string,
-    memberId: number,
-    paid: boolean,
-    refreshData: any,
-}
-
-export default function SignupButton(props: buttonProps) {
+export default function SignupButtonRow(props: any) {
     const { state } = useContext(UserContext);
     const [paidLabor, setPaidLabor] = useState<string>('');
     const [eligibleMembers, setEligibleMembers] = useState<any[]>([]);
     const [selectedOption, setSelectedOption] = useState<any>();
-    const [markedPaid, setMarkedPaid] = useState<boolean>(props.paid);
+    const [markedPaid, setMarkedPaid] = useState<boolean>(props.data.paid);
 
-    const [jobMemberId, setJobMemberId] = useState(props.memberId);
+    const [jobMemberId, setJobMemberId] = useState(props.data.memberId);
 
     const {
         isOpen: isNonMemberOpen,
@@ -38,7 +28,7 @@ export default function SignupButton(props: buttonProps) {
         onClose: onNonMemberClose,
     } = useDisclosure();
 
-    const [jobId] = useState(props.jobId);
+    const [jobId] = useState(props.data.jobId);
 
     const isAdmin = state.user?.memberType === 'Admin';
 
@@ -63,15 +53,15 @@ export default function SignupButton(props: buttonProps) {
 
     useEffect(() => {
         async function signupForJobDropdown() {
-            await signupForJob(state.token, props.jobId, selectedOption.value);
+            await signupForJob(state.token, props.data.jobId, selectedOption.value);
             props.refreshData();
         }
         signupForJobDropdown();
     }, [selectedOption]);
 
     const toast = useToast();
-    const handleClick = async () => {
-        if (Date.parse(props.start) >= Date.now()) {
+    const handleSelfSignupClick = async () => {
+        if (Date.parse(props.data.start) >= Date.now()) {
             const memberId = state?.user?.memberId;
             if (memberId) {
                 await signupForJob(state.token, jobId, memberId);
@@ -85,7 +75,7 @@ export default function SignupButton(props: buttonProps) {
                 },
                 // eslint-disable-next-line max-len
                 title: 'This event has already passed, and is no longer eligible for signups',
-                description: `Job ID ${props.jobId}`,
+                description: `Job ID ${props.data.jobId}`,
                 status: 'error',
                 duration: 5000,
                 isClosable: true,
@@ -93,9 +83,9 @@ export default function SignupButton(props: buttonProps) {
         }
     };
     let signupButton;
-    if (!props.member) {
+    if (!props.data.member) {
         signupButton = (
-            <>
+            <SimpleGrid columns={[1, null, 3]} spacing="20px">
                 {
                     !isAdmin && (
                         <Button
@@ -105,7 +95,8 @@ export default function SignupButton(props: buttonProps) {
                             size="md"
                             color="white"
                             ml={10}
-                            onClick={handleClick}
+                            maxWidth={200}
+                            onClick={handleSelfSignupClick}
                         >
                             Signup &nbsp;
                             {state.user?.firstName}
@@ -114,7 +105,7 @@ export default function SignupButton(props: buttonProps) {
                 }
                 {
                     isAdmin && (
-                        <Box ml={10} width="100%">
+                        <>
                             <Select
                                 placeholder="Choose a member or start typing to narrow down the list"
                                 styles={
@@ -142,11 +133,12 @@ export default function SignupButton(props: buttonProps) {
                             <Button
                                 backgroundColor="orange.300"
                                 color="white"
+                                maxWidth={200}
                                 onClick={onNonMemberOpen}
                             >
                                 Sign Up Non Member
                             </Button>
-                        </Box>
+                        </>
                     )
                 }
                 <Modal isOpen={isNonMemberOpen} onClose={onNonMemberClose}>
@@ -178,7 +170,7 @@ export default function SignupButton(props: buttonProps) {
                                 color="white"
                                 onClick={
                                     async () => {
-                                        await signupForJobFreeForm(state.token, props.jobId, paidLabor);
+                                        await signupForJobFreeForm(state.token, props.data.jobId, paidLabor);
                                         await props.refreshData();
                                         onNonMemberClose();
                                     }
@@ -192,7 +184,7 @@ export default function SignupButton(props: buttonProps) {
                         </ModalFooter>
                     </ModalContent>
                 </Modal>
-            </>
+            </SimpleGrid>
         );
     } else {
         // I can delete my own signups, and of course admins can delete everyone's signups.
@@ -228,6 +220,7 @@ export default function SignupButton(props: buttonProps) {
                             await props.refreshData();
                         }
                     }
+                    disabled={!props.data.cashPayout}
                     hidden={(!isAdmin)}
                 >
                     {markedPaid ? 'Unmark paid' : 'Mark as Paid' }
