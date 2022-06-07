@@ -37,7 +37,7 @@ export function App() {
             <Route path="calendar" element={<CalendarPage />} />
             <Route path="members" element={<MemberListPage />} />
             <Route path="settings" element={<Settings />} />
-            <Route path="calendar/signups/:date/:eventId" element={<SignUpPage />} />
+            <Route path="calendar/signups/:date/:eventId/:eventType" element={<SignUpPage />} />
             <Route path="jobs" element={<JobsByEventType />} />
         </Routes>
     );

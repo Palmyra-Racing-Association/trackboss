@@ -8,15 +8,16 @@ import SignUpList from '../components/SignUpList';
 type pageParams = {
     date: string,
     eventId: string,
+    eventType: string,
 };
 
 export default function SignUpPage() {
-    const { date, eventId } = useParams<pageParams>();
+    const { date, eventId, eventType } = useParams<pageParams>();
     return (
         <ChakraProvider theme={theme}>
-            <Header title={`Sign Ups (${date})`} activeButtonId={2} />
+            <Header title={`${eventType} Sign Ups for (${date})`} activeButtonId={2} />
             <Box>
-                <SignUpList eventId={eventId} />
+                <SignUpList eventId={Number(eventId)} eventType={eventType as string} />
             </Box>
         </ChakraProvider>
     );

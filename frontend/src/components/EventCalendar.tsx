@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, Messages, momentLocalizer, View, Views, ViewsProps } from 'react-big-calendar';
 import { Text, Flex, Spacer, useDisclosure, Box } from '@chakra-ui/react';
-import { useSearchParams } from 'react-router-dom';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import FamilySignUpModal from './FamilySignUpModal';
@@ -11,7 +10,7 @@ import { deleteJob, updateJob } from '../controller/job';
 import { getFamilyMembers } from '../controller/member';
 import { DeleteEventResponse, Event, PostNewEventRequest } from '../../../src/typedefs/event';
 import { Job, PatchJobRequest } from '../../../src/typedefs/job';
-import { createEvent, deleteEvent, getCalendarEventsAndJobs } from '../controller/event';
+import { createEvent, deleteEvent, getCalendarEventsAndJobs, getNextEvent } from '../controller/event';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import CreateEventModal from './CreateEventModal';
 import { GetMemberListResponse } from '../../../src/typedefs/member';
@@ -45,12 +44,8 @@ export default function EventCalendar() {
     const [familyMembers, setFamilyMembers] = useState<any>();
     const [calendarEvents, setCalendarEvents] = useState<Array<Job | Event>>([]);
     const [error, setError] = useState<string>('');
-    const [searchParams] = useSearchParams();
+    const [defaultDate, setDefaultDate] = useState<Date>();
 
-    let defaultDate = new Date();
-    if (searchParams.get('nextEvent')) {
-        defaultDate = moment(searchParams.get('nextEvent')).toDate();
-    }
     async function setNewEvent(newEvent: PostNewEventRequest) {
         const startDate = moment(newEvent.startDate);
         const endDate = moment(newEvent.endDate);
@@ -104,6 +99,18 @@ export default function EventCalendar() {
             }
             const calendarEventsAndJobs = await getCalendarEventsAndJobs(state.token);
             setCalendarEvents(calendarEventsAndJobs);
+        }
+        getData();
+    }, []);
+
+    useEffect(() => {
+        async function getData() {
+            const nextEvent = await getNextEvent(state.token) as Event;
+            let nextEventDate = new Date();
+            if (nextEvent?.start) {
+                nextEventDate = moment(nextEvent.start).toDate();
+            }
+            setDefaultDate(nextEventDate);
         }
         getData();
     }, []);

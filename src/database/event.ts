@@ -120,6 +120,30 @@ export async function getEvent(id: number): Promise<Event> {
     };
 }
 
+export async function getClosestEvent(): Promise<Event> {
+    let results;
+    try {
+        [results] = await getPool()
+            .query<RowDataPacket[]>('select * from v_event where start >= now() order by start limit 1');
+    } catch (e) {
+        logger.error(`DB error getting event: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (_.isEmpty(results)) {
+        throw new Error('not found');
+    }
+
+    return {
+        eventId: results[0].event_id,
+        start: results[0].start,
+        end: results[0].end,
+        eventType: results[0].event_type,
+        title: results[0].title,
+        eventDescription: results[0].event_description,
+    };
+}
+
 export async function patchEvent(id: number, req: PatchEventRequest): Promise<void> {
     if (_.isEmpty(req)) {
         throw new Error('user input error');

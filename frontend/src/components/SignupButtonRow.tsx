@@ -32,6 +32,10 @@ export default function SignupButtonRow(props: any) {
 
     const isAdmin = state.user?.memberType === 'Admin';
 
+    const eventAllowsPayment = ((props.eventType.toLowerCase() === 'race') ||
+        (props.eventType.toLowerCase() === 'harescramble')
+    );
+
     useEffect(() => {
         async function getData() {
             let activeMembers = await getMembersByMembership(state.token, state.user?.membershipId || 0);
@@ -221,7 +225,7 @@ export default function SignupButtonRow(props: any) {
                         }
                     }
                     disabled={!props.data.cashPayout}
-                    hidden={(!isAdmin)}
+                    hidden={(!eventAllowsPayment || !isAdmin)}
                 >
                     {markedPaid ? 'Unmark paid' : 'Mark as Paid' }
                 </Button>

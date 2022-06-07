@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { Request, Response, Router } from 'express';
-import { deleteEvent, getEvent, getEventList, insertEvent, patchEvent } from '../database/event';
+import { deleteEvent, getClosestEvent, getEvent, getEventList, insertEvent, patchEvent } from '../database/event';
 import {
     DeleteEventResponse,
     Event,
@@ -127,11 +127,15 @@ event.get('/:eventID', async (req: Request, res: Response) => {
         try {
             await verify(headerCheck.token);
             const { eventID } = req.params;
-            const id = Number(eventID);
-            if (Number.isNaN(id)) {
-                throw new Error('not found');
+            if (eventID === 'next') {
+                response = await getClosestEvent();
+            } else {
+                const id = Number(eventID);
+                if (Number.isNaN(id)) {
+                    throw new Error('not found');
+                }
+                response = await getEvent(id);
             }
-            response = await getEvent(id);
             res.status(200);
         } catch (e: any) {
             if (e.message === 'not found') {
