@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import moment from 'moment';
-import { Calendar, DateLocalizer, Messages, momentLocalizer, View, ViewsProps } from 'react-big-calendar';
-import { Text, Flex, Spacer, useDisclosure, Box, useMediaQuery } from '@chakra-ui/react';
+import { Calendar, DateLocalizer, Messages, momentLocalizer, View, Views, ViewsProps } from 'react-big-calendar';
+import { Text, Flex, Spacer, useDisclosure, Box } from '@chakra-ui/react';
 import { useSearchParams } from 'react-router-dom';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
@@ -46,7 +46,6 @@ export default function EventCalendar() {
     const [calendarEvents, setCalendarEvents] = useState<Array<Job | Event>>([]);
     const [error, setError] = useState<string>('');
     const [searchParams] = useSearchParams();
-    const [isMobile] = useMediaQuery('(@media only screen and (hover: none) and (pointer: coarse))');
 
     let defaultDate = new Date();
     if (searchParams.get('nextEvent')) {
@@ -117,7 +116,7 @@ export default function EventCalendar() {
                 <CreateEventModal createEvent={setNewEvent} />
             </Box>
             <Calendar
-                defaultView={(isMobile ? 'day' : 'month')}
+                defaultView={Views.MONTH}
                 defaultDate={defaultDate}
                 events={calendarEvents}
                 selected={selectedEvent}

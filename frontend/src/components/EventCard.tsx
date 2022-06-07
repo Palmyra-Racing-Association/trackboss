@@ -7,13 +7,12 @@ interface cardProps {
     date: string,
     startTime: string,
     name: string,
-    fullDate: string,
 }
 
 export default function EventCard(props: cardProps) {
     const navigate = useNavigate();
     const navigateToCalendar = () => {
-        const path = `/calendar?nextEvent=${props.fullDate}`;
+        const path = '/calendar';
         navigate(path);
     };
 

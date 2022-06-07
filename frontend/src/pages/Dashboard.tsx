@@ -72,14 +72,12 @@ function Dashboard() {
                                     date={eventCardProps.start}
                                     startTime={eventCardProps.time}
                                     name={eventCardProps.title}
-                                    fullDate={eventCardProps.fullDate}
                                 />
                             ) : (
                                 <EventCard
                                     date=""
                                     startTime=""
                                     name=""
-                                    fullDate=""
                                 />
                             )
                         }
