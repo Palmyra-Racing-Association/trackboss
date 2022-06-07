@@ -81,7 +81,12 @@ export async function getEventCardProps(token: string, listType: string) {
         const formattedEventDate = getEventMonthDay(startTime);
         const formattedEventTime = getTimeOfDay(startTime);
 
-        return { title: upcomingEvents[0].title, start: formattedEventDate, time: formattedEventTime };
+        return {
+            title: upcomingEvents[0].title,
+            start: formattedEventDate,
+            time: formattedEventTime,
+            fullDate: moment(upcomingEvents[0].start).format('MM-DD-YYYY'),
+        };
     }
 
     // else

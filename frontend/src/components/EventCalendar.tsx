@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import moment from 'moment';
 import { Calendar, DateLocalizer, Messages, momentLocalizer, View, ViewsProps } from 'react-big-calendar';
-import { Text, Flex, Spacer, useDisclosure, Box } from '@chakra-ui/react';
+import { Text, Flex, Spacer, useDisclosure, Box, useMediaQuery } from '@chakra-ui/react';
+import { useSearchParams } from 'react-router-dom';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import FamilySignUpModal from './FamilySignUpModal';
@@ -44,7 +45,13 @@ export default function EventCalendar() {
     const [familyMembers, setFamilyMembers] = useState<any>();
     const [calendarEvents, setCalendarEvents] = useState<Array<Job | Event>>([]);
     const [error, setError] = useState<string>('');
+    const [searchParams] = useSearchParams();
+    const [isMobile] = useMediaQuery('(@media only screen and (hover: none) and (pointer: coarse))');
 
+    let defaultDate = new Date();
+    if (searchParams.get('nextEvent')) {
+        defaultDate = moment(searchParams.get('nextEvent')).toDate();
+    }
     async function setNewEvent(newEvent: PostNewEventRequest) {
         const startDate = moment(newEvent.startDate);
         const endDate = moment(newEvent.endDate);
@@ -110,7 +117,8 @@ export default function EventCalendar() {
                 <CreateEventModal createEvent={setNewEvent} />
             </Box>
             <Calendar
-                defaultView="month"
+                defaultView={(isMobile ? 'day' : 'month')}
+                defaultDate={defaultDate}
                 events={calendarEvents}
                 selected={selectedEvent}
                 onSelectEvent={
