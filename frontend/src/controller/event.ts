@@ -138,3 +138,12 @@ export async function getCalendarEventsAndJobs(token: string) {
 
     return calendarEvents;
 }
+
+export async function getNextEvent(token: string): Promise<GetEventResponse> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/event/next`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}

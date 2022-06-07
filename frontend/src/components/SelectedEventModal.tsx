@@ -127,7 +127,7 @@ export default function SelectedEventModal(props: modalProps) {
                 <ModalCloseButton />
                 <ModalFooter>
                     <Link
-                        to={`signups/${(moment(props.selectedEvent.start).toISOString()).split('T')[0]}/${props.selectedEvent.eventId}`}
+                        to={`signups/${(moment(props.selectedEvent.start).toISOString()).split('T')[0]}/${props.selectedEvent.eventId}/${props.selectedEvent.eventType}`}
                         state={{ date: props.selectedEvent.start }}
                     >
                         View Sign Ups

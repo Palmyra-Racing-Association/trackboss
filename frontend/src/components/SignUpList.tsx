@@ -76,7 +76,12 @@ const paginationComponentOptions = {
 };
 */
 
-export default function SignUpList(props: any) {
+interface SignupListProps {
+    eventId: number,
+    eventType: string,
+}
+
+export default function SignUpList(props: SignupListProps) {
     const [cells, setCells] = useState([] as Worker[]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [allCells, setAllCells] = useState<Worker[]>([]);
@@ -162,6 +167,7 @@ export default function SignUpList(props: any) {
                             refreshData: async () => {
                                 await getSignupListData();
                             },
+                            eventType: props.eventType,
                         }
                     }
                     responsive
