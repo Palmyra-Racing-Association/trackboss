@@ -14,7 +14,7 @@ export async function createJobType(
 ): Promise<PostNewJobTypeResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/jobType/new`, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(jobTypeData),
     });

@@ -21,6 +21,7 @@ import { UserContext } from '../contexts/UserContext';
 import { getJobList } from '../controller/job';
 import { getWorkPointsByMember, getWorkPointsTotal } from '../controller/workPoints';
 import { getYearlyThreshold, getYearlyThresholdValue } from '../controller/billing';
+// eslint-disable-next-line import/no-named-as-default
 import AddPointsModal from './AddPointsModal';
 
 const columns: any = [
@@ -82,31 +83,32 @@ export default function WorkPointsHistory() {
 
     const { state } = useContext(UserContext);
 
-    useEffect(() => {
-        async function getData() {
-            const jobs = await getJobList(state.token, 'memberID', state.user!.memberId as unknown as string);
-            if ('reason' in jobs) {
-                // squash error
-            } else {
-                const allYears: number[] = [];
-                _.forEach(jobs, (job) => {
-                    if (job.start === null) return;
-                    const jobYear = new Date(job.start).getFullYear();
-                    if (!allYears.includes(jobYear)) {
-                        allYears.push(jobYear);
-                    }
-                });
-                const currentYear = new Date().getFullYear();
-                if (!allYears.includes(currentYear)) {
-                    allYears.push(currentYear);
+    async function getJobsData() {
+        const jobs = await getJobList(state.token, 'memberID', state.user!.memberId as unknown as string);
+        if ('reason' in jobs) {
+            // squash error
+        } else {
+            const allYears: number[] = [];
+            _.forEach(jobs, (job) => {
+                if (job.start === null) return;
+                const jobYear = new Date(job.start).getFullYear();
+                if (!allYears.includes(jobYear)) {
+                    allYears.push(jobYear);
                 }
-                // reverse sort the years so that most recent is always at the top
-                const sortedYears = allYears.sort((a, b) => (b - a));
-                setYears(sortedYears);
-                setAllJobs(jobs);
+            });
+            const currentYear = new Date().getFullYear();
+            if (!allYears.includes(currentYear)) {
+                allYears.push(currentYear);
             }
+            // reverse sort the years so that most recent is always at the top
+            const sortedYears = allYears.sort((a, b) => (b - a));
+            setYears(sortedYears);
+            setAllJobs(jobs);
         }
-        getData();
+    }
+
+    useEffect(() => {
+        getJobsData();
     }, []);
 
     useEffect(() => {
@@ -148,14 +150,18 @@ export default function WorkPointsHistory() {
                     {year}
                     )
                 </Heading>
-                <AddPointsModal
-                    memberName={state?.user?.firstName || ''}
-                    visible={(state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin')}
-                />
             </HStack>
             <Heading color="orange" size="2xl">
                 {`${workPointsEarned}/${workPointsThreshold}`}
             </Heading>
+            <AddPointsModal
+                memberName={state?.user?.firstName || ''}
+                memberId={state?.user?.memberId as number}
+                visible={(state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin')}
+                token={state.token}
+                // eslint-disable-next-line react/jsx-no-bind
+                refreshPoints={getJobsData}
+            />
             <DataTable
                 columns={columns}
                 data={cells}
