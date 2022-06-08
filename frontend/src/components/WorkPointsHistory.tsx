@@ -21,6 +21,7 @@ import { UserContext } from '../contexts/UserContext';
 import { getJobList } from '../controller/job';
 import { getWorkPointsByMember, getWorkPointsTotal } from '../controller/workPoints';
 import { getYearlyThreshold, getYearlyThresholdValue } from '../controller/billing';
+import AddPointsModal from './AddPointsModal';
 
 const columns: any = [
     {
@@ -147,11 +148,14 @@ export default function WorkPointsHistory() {
                     {year}
                     )
                 </Heading>
+                <AddPointsModal
+                    memberName={state?.user?.firstName || ''}
+                    visible={(state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin')}
+                />
             </HStack>
             <Heading color="orange" size="2xl">
                 {`${workPointsEarned}/${workPointsThreshold}`}
             </Heading>
-
             <DataTable
                 columns={columns}
                 data={cells}

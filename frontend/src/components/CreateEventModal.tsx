@@ -100,7 +100,15 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                 <Text>Start Date/Time:</Text>
                                 <DateTimePicker
                                     disableClock
-                                    onChange={(date: Date) => setStartDateTime(date)}
+                                    onChange={
+                                        (date: Date) => {
+                                            setStartDateTime(date);
+                                            // when the start is picked - set the end to the start.  This is just
+                                            // for ease of use and picking dates.
+                                            setEndDateTime(date);
+                                        }
+                                    }
+                                    onCalendarClose={() => setEndDateTime(startDateTime)}
                                     value={startDateTime}
                                 />
                             </VStack>
@@ -108,6 +116,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                 <Text>End Date/Time:</Text>
                                 <DateTimePicker
                                     disableClock
+                                    minDate={startDateTime}
                                     onChange={(date:Date) => setEndDateTime(date)}
                                     value={endDateTime}
                                 />
