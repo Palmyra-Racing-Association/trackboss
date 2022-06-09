@@ -138,10 +138,10 @@ export default function EventCalendar() {
                     (calendarEvent) => {
                         const newStyle = {
                             backgroundColor: 'lightgrey',
-                            color: 'black',
+                            color: 'white',
                         };
                         if ('eventType' in calendarEvent) {
-                            newStyle.color = '#FFFFFF';
+                            // newStyle.color = '#FFFFFF';
                             if (calendarEvent.eventType === 'Meeting') {
                                 newStyle.backgroundColor = '#76CE6F'; // green
                             } else if (

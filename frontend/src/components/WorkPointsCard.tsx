@@ -34,9 +34,10 @@ export default function WorkPointsCard(props: cardProps) {
                 <VStack p={0} boxSize="md">
                     <GaugeChart
                         id="gauge-chart"
-                        nrOfLevels={20}
+                        nrOfLevels={25}
                         percent={gaugePercent / 100}
                         colors={['#FF9F46', '#76CE6F']}
+                        hideText
                         arcWidth={0.3}
                     />
                     <VStack spacing={0}>

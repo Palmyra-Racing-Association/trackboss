@@ -33,6 +33,7 @@ const columns: any = [
     {
         name: 'Job',
         selector: (row: Job) => `${row.title}`,
+        wrap: true,
         sortable: true,
     },
     {
@@ -54,6 +55,7 @@ const columns: any = [
             return 0;
         },
         sortable: true,
+        hide: 'sm',
     },
 ];
 

@@ -21,12 +21,14 @@ export default function DuesAndWaivers() {
         {
             name: 'Due Date',
             selector: (row: Bill) => `${row.dueDate}`,
+            wrap: true,
         },
         {
             name: 'Billing Year',
             selector: (row: Bill) => row.year,
             sortable: true,
             maxWidth: '25',
+            hide: 'sm',
         },
         {
             name: 'Points Earned',
@@ -39,6 +41,7 @@ export default function DuesAndWaivers() {
             selector: (row:Bill) => row.pointsThreshold,
             sortable: true,
             maxWidth: '25',
+            hide: 'sm',
         },
         {
             name: 'Amount',
@@ -50,6 +53,7 @@ export default function DuesAndWaivers() {
             name: 'Generated on',
             selector: (row: Bill) => `${row.generatedDate}`,
             sortable: true,
+            hide: 'sm',
         },
     ];
     return (
