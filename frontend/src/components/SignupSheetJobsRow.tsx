@@ -1,5 +1,5 @@
 import {
-    Box, Button, NumberInput, NumberInputField, SimpleGrid, Switch, Text, useToast,
+    Box, Button, Input, NumberInput, NumberInputField, SimpleGrid, Switch, Text, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { EventJob } from '../../../src/typedefs/eventJob';
@@ -27,6 +27,7 @@ function SignupSheetJobsRow(props: any) {
 
     const toast = useToast();
 
+    const [description, setDescription] = useState<string>(data.title);
     const [pointValue, setPointValue] = useState<number>(data.pointValue);
     const [cashValue, setCashValue] = useState<number>(data.cashValue);
     const [mealTicketValue, setMealTicketValue] = useState<boolean>(data.mealTicket);
@@ -39,6 +40,18 @@ function SignupSheetJobsRow(props: any) {
     return (
         <Box ml={10} maxWidth="50%">
             <SimpleGrid columns={[2, 3, 3]} spacing={2}>
+                <Box maxWidth={250}>
+                    <Text fontSize="sm">Description</Text>
+                    <Input
+                        placeholder={data.title}
+                        onChange={
+                            (event) => {
+                                setDescription(event.target.value);
+                                setDirty(true);
+                            }
+                        }
+                    />
+                </Box>
                 <Box maxWidth={100}>
                     <Text fontSize="sm">Point Value</Text>
                     <NumberInput min={0} max={30} step={0.25}>
@@ -117,6 +130,7 @@ function SignupSheetJobsRow(props: any) {
                 mt={2}
                 onClick={
                     async () => {
+                        jobCopy.title = description;
                         jobCopy.pointValue = pointValue;
                         jobCopy.cashValue = cashValue;
                         jobCopy.mealTicket = mealTicketValue;
