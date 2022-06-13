@@ -1,11 +1,13 @@
 import {
-    Box, Button, Input, NumberInput, NumberInputField, SimpleGrid, Switch, Text, useToast,
+    Box, Button, Input, NumberInput, NumberInputField, SimpleGrid, Switch, Text, useDisclosure, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
+import { BsTrashFill } from 'react-icons/bs';
 import { EventJob } from '../../../src/typedefs/eventJob';
 import { UserContext } from '../contexts/UserContext';
-import { getEventJob, updateEventJob } from '../controller/eventJob';
+import { getEventJob, updateEventJob, deleteEventJob } from '../controller/eventJob';
 import { updateJobType } from '../controller/jobType';
+import DeleteAlert from './DeleteAlert';
 
 /**
  * A component representing a row in a PRA signup sheet, with all the data to represent a job.
@@ -34,6 +36,7 @@ function SignupSheetJobsRow(props: any) {
     const [count, setCount] = useState<number>(data.count || -1);
     const [sortOrder, setSortOrder] = useState<number>(data.sortOrder);
     const [dirty, setDirty] = useState<boolean>(false);
+    const { onClose, isOpen, onOpen } = useDisclosure();
 
     const jobCopy = JSON.parse(JSON.stringify(data));
 
@@ -164,6 +167,31 @@ function SignupSheetJobsRow(props: any) {
             >
                 Save
             </Button>
+            <Button
+                hidden={disableInputs}
+                leftIcon={<BsTrashFill />}
+                mt={2}
+                ml={2}
+                backgroundColor="red"
+                color="white"
+                onClick={
+                    () => {
+                        onOpen();
+                    }
+                }
+            >
+                Delete
+            </Button>
+            <DeleteAlert
+                isOpen={isOpen}
+                onClose={onClose}
+                removeMethod={
+                    async () => {
+                        await deleteEventJob(state.token, props.data.eventJobId);
+                        props.refreshData();
+                    }
+                }
+            />
         </Box>
     );
 }
