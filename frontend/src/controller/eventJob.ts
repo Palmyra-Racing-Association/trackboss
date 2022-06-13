@@ -47,7 +47,7 @@ export async function updateEventJob(
 export async function deleteEventJob(token: string, eventJobId: number): Promise<DeleteEventJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/eventJob/${eventJobId}`, {
         method: 'DELETE',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
