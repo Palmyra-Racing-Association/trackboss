@@ -172,6 +172,15 @@ export async function patchJobType(id: number, req: PatchJobTypeRequest): Promis
             last_modified_date = NOW() where job_type_id = ?
         `;
         [result] = await getPool().query<OkPacket>(updateSql, values);
+        logger.info(`updated job: ${JSON.stringify(req)} in job type database`);
+        logger.info(`${result.affectedRows} were updated`);
+        // also update any future jobs in the job table that already have this info on them (use case: calendar
+        // already made for the year, and now we want to change the point value).
+        const jobUpdateSql = `update job set points_awarded = ?, cash_payout = ? 
+            where job_type_id = ? and job_start_date > now()`;
+        const [jobUpdateResult] = await getPool().query<OkPacket>(jobUpdateSql, [req.pointValue, req.cashValue, id]);
+        logger.info(`updated job: ${JSON.stringify(req)} in future jobs table`);
+        logger.info(`${jobUpdateResult.affectedRows} were updated`);
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {
@@ -190,6 +199,8 @@ export async function patchJobType(id: number, req: PatchJobTypeRequest): Promis
     }
 
     if (result.affectedRows < 1) {
-        throw new Error('not found');
+        const errorMessage = `The job type with id ${id} was not found so it cant' be updated.  Check that it exists.`;
+        logger.error(errorMessage);
+        throw new Error(errorMessage);
     }
 }
