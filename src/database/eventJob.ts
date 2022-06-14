@@ -56,6 +56,7 @@ export async function getEventJob(id: number): Promise<EventJob> {
     return {
         eventJobId: results[0].event_job_id,
         eventType: results[0].event_type,
+        jobTypeId: results[0].job_type_id,
         jobType: results[0].job_type,
         count: results[0].count,
     };
@@ -97,7 +98,14 @@ export async function deleteEventJob(id: number): Promise<void> {
 
     let result;
     try {
+        // get the job right before deleting it so we know what it is. it's a
+        // ghooooooooooost job.
+        const eventJob = await getEventJob(id);
         [result] = await getPool().query<OkPacket>(DELETE_EVENT_JOB_SQL, values);
+        const [deleteJobsResult] = await getPool()
+            .query<OkPacket>('delete from job where job_type_id = ? and job_start_date > now()', [eventJob.jobTypeId]);
+        logger.info(`removed job id ${id} from jobs table`);
+        logger.info(`${deleteJobsResult.affectedRows} rows in jobs affected`);
     } catch (e) {
         logger.error(`DB error deleting event-job: ${e}`);
         throw new Error('internal server error');

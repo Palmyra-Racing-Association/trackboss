@@ -9,7 +9,7 @@ export default function ImportantLinksCard(props: any) {
                 <VStack boxSize="md">
                     <Heading size="lg">Important Links</Heading>
                     <Divider />
-                    <UnorderedList pt={10}>
+                    <UnorderedList>
                         <Link
                             target="_blank"
                             fontSize="2xl"
