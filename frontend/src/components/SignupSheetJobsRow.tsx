@@ -1,5 +1,5 @@
 import {
-    Box, Button, Input, NumberInput, NumberInputField, SimpleGrid, Switch, Text, useDisclosure, useToast,
+    Box, Button, Input, NumberInput, NumberInputField, SimpleGrid, Text, useDisclosure, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useState } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
@@ -8,6 +8,8 @@ import { UserContext } from '../contexts/UserContext';
 import { getEventJob, updateEventJob, deleteEventJob } from '../controller/eventJob';
 import { updateJobType } from '../controller/jobType';
 import DeleteAlert from './DeleteAlert';
+import DaysOfWeekSelect from './input/DaysOfWeekSelect';
+import WrappedSwitchInput from './input/WrappedSwitchInput';
 
 /**
  * A component representing a row in a PRA signup sheet, with all the data to represent a job.
@@ -35,6 +37,7 @@ function SignupSheetJobsRow(props: any) {
     const [mealTicketValue, setMealTicketValue] = useState<boolean>(data.mealTicket);
     const [count, setCount] = useState<number>(data.count || -1);
     const [sortOrder, setSortOrder] = useState<number>(data.sortOrder);
+    const [jobDayNumber, setJobDayNumber] = useState<number>(data.jobDayNumber);
     const [dirty, setDirty] = useState<boolean>(false);
     const { onClose, isOpen, onOpen } = useDisclosure();
 
@@ -42,7 +45,7 @@ function SignupSheetJobsRow(props: any) {
 
     return (
         <Box ml={10} maxWidth="50%">
-            <SimpleGrid columns={[2, 3, 3]} spacing={2}>
+            <SimpleGrid columns={[1, 2, 3]} spacing={2}>
                 <Box maxWidth={250}>
                     <Text fontSize="sm">Description</Text>
                     <Input
@@ -83,20 +86,28 @@ function SignupSheetJobsRow(props: any) {
                         />
                     </NumberInput>
                 </Box>
-                <Box maxWidth={100}>
-                    <Text fontSize="sm">Meal Ticket?</Text>
-                    <Switch
-                        colorScheme="orange"
-                        defaultChecked={data.mealTicket}
-                        size="lg"
-                        onChange={
-                            () => {
-                                setMealTicketValue(!data.mealTicket);
+                <Box maxWidth={250}>
+                    <Text fontSize="sm">Job Day</Text>
+                    <DaysOfWeekSelect
+                        defaultDay={jobDayNumber}
+                        onDayChange={
+                            (value) => {
+                                setJobDayNumber(value);
                                 setDirty(true);
                             }
                         }
                     />
                 </Box>
+                <WrappedSwitchInput
+                    wrapperText="Meal Ticket?"
+                    defaultChecked={mealTicketValue}
+                    onSwitchChange={
+                        () => {
+                            setMealTicketValue(!data.mealTicket);
+                            setDirty(true);
+                        }
+                    }
+                />
                 <Box maxWidth={100}>
                     <Text fontSize="sm">Positions</Text>
                     <NumberInput min={1} max={300} step={1} isDisabled>
@@ -136,6 +147,7 @@ function SignupSheetJobsRow(props: any) {
                         jobCopy.title = description;
                         jobCopy.pointValue = pointValue;
                         jobCopy.cashValue = cashValue;
+                        jobCopy.jobDayNumber = jobDayNumber;
                         jobCopy.mealTicket = mealTicketValue;
                         jobCopy.count = count;
                         jobCopy.sortOrder = sortOrder;

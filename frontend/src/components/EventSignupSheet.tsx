@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, Button, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, VStack } from '@chakra-ui/react';
+import {
+    Box, Button, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, VStack, useDisclosure,
+} from '@chakra-ui/react';
 import { BsChevronDown } from 'react-icons/bs';
 import _ from 'lodash';
 import DataTable, { Media } from 'react-data-table-component';
@@ -9,13 +11,27 @@ import { getEventTypeList } from '../controller/eventType';
 import { EventType } from '../../../src/typedefs/eventType';
 import { JobType } from '../../../src/typedefs/jobType';
 import SignupSheetJobsRow from './SignupSheetJobsRow';
+import AddEventTypeModal from './modals/AddEventTypeModal';
+import AddJobTypeModal from './modals/AddJobTypeModal';
 
 function EventSignupSheet() {
     const { state } = useContext(UserContext);
-
+    const isAdminUser = state.user?.memberType === 'Admin';
     const [eventTypes, setEventTypes] = useState<EventType[]>();
-    const [selectedEventType, setSelectedEventType] = useState<string>('Race');
+    const [selectedEventType, setSelectedEventType] = useState<string>();
+    const [selectedEventTypeId, setSelectedEventTypeId] = useState<number>();
     const [eventJobTypes, setEventJobTypes] = useState<JobType[]>();
+    const {
+        isOpen: isAddEventTypeOpen,
+        onOpen: onAddEventTypeOpen,
+        onClose: onAddEventTypeClose,
+    } = useDisclosure();
+
+    const {
+        isOpen: isAddJobTypeOpen,
+        onOpen: onAddJobTypeOpen,
+        onClose: onAddJobTypeClose,
+    } = useDisclosure();
 
     async function getEventTypeData() {
         if (selectedEventType) {
@@ -31,13 +47,17 @@ function EventSignupSheet() {
         }
     }
 
+    async function getEventTypeListData() {
+        const eventTypeList = (await getEventTypeList(state.token)) as EventType[];
+        setEventTypes(eventTypeList);
+        const autoSelectEvent = 0;
+        setSelectedEventType(eventTypeList[autoSelectEvent].type);
+        setSelectedEventTypeId(eventTypeList[autoSelectEvent].eventTypeId);
+    }
+
     // get the API data from the jobType API
     useEffect(() => {
-        async function getData() {
-            const eventTypeList = (await getEventTypeList(state.token)) as EventType[];
-            setEventTypes(eventTypeList);
-        }
-        getData();
+        getEventTypeListData();
     }, []);
 
     useEffect(() => {
@@ -59,17 +79,68 @@ function EventSignupSheet() {
                 </Heading>
                 <Menu>
                     <MenuButton bg="orange" color="white" as={Button} rightIcon={<BsChevronDown />} />
-                    <MenuList>
+                    <MenuList defaultValue={selectedEventType}>
                         {
                             _.map(eventTypes, (listEvent) => (
-                                <MenuItem key={listEvent.type} onClick={() => setSelectedEventType(listEvent.type)}>
+                                <MenuItem
+                                    key={listEvent.type}
+                                    onClick={
+                                        () => {
+                                            setSelectedEventType(listEvent.type);
+                                            setSelectedEventTypeId(listEvent.eventTypeId);
+                                        }
+                                    }
+                                >
                                     {listEvent.type}
                                 </MenuItem>
                             ))
                         }
                     </MenuList>
                 </Menu>
+                {
+                    isAdminUser && (
+                        <>
+                            <Button
+                                backgroundColor="orange"
+                                color="white"
+                                onClick={onAddEventTypeOpen}
+                            >
+                                +
+                            </Button>
+                            <AddEventTypeModal
+                                isOpen={isAddEventTypeOpen}
+                                onClose={onAddEventTypeClose}
+                                // eslint-disable-next-line react/jsx-no-bind
+                                addAction={getEventTypeListData}
+                                token={state.token}
+                                userId={state.user?.memberId as number}
+                            />
+                        </>
+                    )
+                }
             </HStack>
+            <Box>
+                <Button
+                    backgroundColor="orange.300"
+                    color="white"
+                    onClick={onAddJobTypeOpen}
+                >
+                    Create new &nbsp;
+                    {selectedEventType}
+                    &nbsp;
+                    job
+                </Button>
+                <AddJobTypeModal
+                    eventType={selectedEventType as string}
+                    eventTypeId={selectedEventTypeId as number}
+                    isOpen={isAddJobTypeOpen}
+                    onClose={onAddJobTypeClose}
+                    // eslint-disable-next-line react/jsx-no-bind
+                    addAction={getEventTypeData}
+                    token={state.token}
+                    userId={state.user?.memberId as number}
+                />
+            </Box>
             <DataTable
                 columns={
                     [
