@@ -19,7 +19,7 @@ export default function DaysOfWeekSelect(props: daysOfWeekSelectProps) {
                 }
             }
         >
-            {jobDays.map((dayName, index) => <option value={index}>{dayName}</option>)}
+            {jobDays.map((dayName, index) => <option key={dayName} value={index}>{dayName}</option>)}
         </Select>
     );
 }
