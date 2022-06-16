@@ -14,7 +14,7 @@ export async function createEventJob(
 ): Promise<PostNewEventJobResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/eventJob/new`, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(eventJobData),
     });

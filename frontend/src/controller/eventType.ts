@@ -14,7 +14,7 @@ export async function createEventType(
 ): Promise<PostNewEventTypeResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/eventType/new`, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(eventTypeData),
     });
