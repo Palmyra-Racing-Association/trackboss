@@ -29,6 +29,7 @@ export type DeletedJob = {
 
 export type PostNewJobRequest = {
     memberId?: number,
+    cashPayout: number,
     eventId?: number,
     jobTypeId: number,
     jobStartDate?: string,
@@ -36,6 +37,7 @@ export type PostNewJobRequest = {
     pointsAwarded?: number,
     verified?: boolean,
     verifiedDate? : string,
+    mealTicket?: boolean,
     paid?: boolean,
     paidDate?: string,
     modifiedBy: number

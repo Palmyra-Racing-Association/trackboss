@@ -7,7 +7,7 @@ CREATE PROCEDURE `sp_patch_event_job`(
     IN _count INT
 )
 BEGIN
-SELECT event_type_id, job_type_id, count
+    SELECT event_type_id, job_type_id, count
     INTO @cur_event_type_id, @cur_job_type_id, @cur_count
     FROM event_job ej
     WHERE event_job_id = _event_job_id;

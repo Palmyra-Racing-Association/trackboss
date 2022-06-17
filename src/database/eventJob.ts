@@ -4,6 +4,8 @@ import { OkPacket, RowDataPacket } from 'mysql2';
 import logger from '../logger';
 import { getPool } from './pool';
 import { EventJob, PatchEventJobRequest, PostNewEventJobRequest } from '../typedefs/eventJob';
+import { PostNewJobRequest } from '../typedefs/job';
+import { insertJob } from './job';
 
 export const GET_EVENT_JOB_SQL = 'SELECT * FROM v_event_job WHERE event_job_id = ?';
 export const INSERT_EVENT_JOB_SQL = 'INSERT INTO event_job (event_type_id, job_type_id, count) VALUES (?, ?, ?)';
@@ -56,10 +58,62 @@ export async function getEventJob(id: number): Promise<EventJob> {
     return {
         eventJobId: results[0].event_job_id,
         eventType: results[0].event_type,
+        eventTypeId: results[0].event_type_id,
         jobTypeId: results[0].job_type_id,
         jobType: results[0].job_type,
         count: results[0].count,
     };
+}
+
+export async function updateJobsOnEventJob(id: number, req: PatchEventJobRequest): Promise<void> {
+    let results;
+    try {
+        const countSql = `select distinct(event), event_id, job_type_id, start, end, points_awarded, cash_payout,
+            meal_ticket, count(*) job_count, (?)-count(*) difference
+            from v_job where member is null and
+            event_type_id = ? and job_type_id = ? and start > now()
+            group by event`;
+        [results] = await getPool().query<RowDataPacket[]>(countSql, [req.count, req.eventTypeId, req.jobTypeId]);
+        results.forEach(async (row) => {
+            const jobCountDiff = row.difference;
+            if (jobCountDiff > 0) {
+                logger.info('Adding jobs for an event type as the count was changed.');
+                for (let index = 0; index < jobCountDiff; index++) {
+                    const newJob : PostNewJobRequest = {
+                        eventId: row.event_id,
+                        jobTypeId: req.jobTypeId as number,
+                        jobStartDate: row.start,
+                        jobEndDate: row.end,
+                        pointsAwarded: row.points_awarded,
+                        cashPayout: row.cash_payout,
+                        mealTicket: (row.meal_ticket[0] === 1),
+                        modifiedBy: 530,
+                        verified: true,
+                        paid: false,
+                    };
+                    // eslint-disable-next-line no-await-in-loop
+                    const insertedJob = await insertJob(newJob);
+                    logger.info(`inserted job with ID ${insertedJob} for event with id ${row.event_id}`);
+                }
+            } else if (jobCountDiff < 0) {
+                logger.info('Removing jobs for an event type as the count was changed.');
+                // bring some positivity in the world, no reason to be so negative!
+                const removalCount = row.difference * -1;
+                for (let index = 0; index < removalCount; index++) {
+                    const deleteSql =
+                        'delete from job where event_id = ? and job_type_id = ? and member_id is null limit 1';
+                    // eslint-disable-next-line no-await-in-loop
+                    const [removeResults] = await getPool().query<OkPacket>(deleteSql, [row.event_id, req.jobTypeId]);
+                    logger.info(`removed one job with id ${req.jobTypeId} for event id ${row.event_id}`);
+                    logger.info(removeResults.affectedRows);
+                }
+            } else {
+                logger.info('Called jobs upate but there was no count change so count update was not done.');
+            }
+        });
+    } catch (e: any) {
+        logger.error('unable to update jobs on event job change', e);
+    }
 }
 
 export async function patchEventJob(id: number, req: PatchEventJobRequest): Promise<void> {
@@ -91,6 +145,7 @@ export async function patchEventJob(id: number, req: PatchEventJobRequest): Prom
     if (result.affectedRows < 1) {
         throw new Error('not found');
     }
+    await updateJobsOnEventJob(id, req);
 }
 
 export async function deleteEventJob(id: number): Promise<void> {

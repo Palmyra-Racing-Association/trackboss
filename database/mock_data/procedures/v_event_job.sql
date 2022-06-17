@@ -3,6 +3,7 @@ DROP VIEW IF EXISTS `v_event_job`;
 CREATE VIEW `v_event_job` AS
     SELECT 
         ej.event_job_id,
+        et.event_type_id,
         et.type AS event_type,
         jt.job_type_id as job_type_id,
         jt.title AS job_type,
