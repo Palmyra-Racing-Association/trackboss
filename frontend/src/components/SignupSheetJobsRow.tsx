@@ -110,7 +110,7 @@ function SignupSheetJobsRow(props: any) {
                 />
                 <Box maxWidth={100}>
                     <Text fontSize="sm">Positions</Text>
-                    <NumberInput min={1} max={300} step={1} isDisabled>
+                    <NumberInput min={1} max={300} step={1}>
                         <NumberInputField
                             placeholder={`${data.count}`}
                             onChange={

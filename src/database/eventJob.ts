@@ -56,10 +56,35 @@ export async function getEventJob(id: number): Promise<EventJob> {
     return {
         eventJobId: results[0].event_job_id,
         eventType: results[0].event_type,
+        eventTypeId: results[0].event_type_id,
         jobTypeId: results[0].job_type_id,
         jobType: results[0].job_type,
         count: results[0].count,
     };
+}
+
+export async function updateJobsOnEventJob(id: number, req: PatchEventJobRequest): Promise<void> {
+    let results;
+    try {
+        const countSql = `select distinct(event), event_id, job_type_id, 
+            count(*) job_count, (?)-count(*) difference
+            from v_job where 
+            event_type_id = ? and job_type_id = ? and start > now()
+            group by event`;
+        [results] = await getPool().query<RowDataPacket[]>(countSql, [req.count, req.eventTypeId, req.jobTypeId]);
+        results.forEach((row) => {
+            const jobCountDiff = row.difference;
+            if (jobCountDiff > 0) {
+                console.log('add jobs!');
+            } else if (jobCountDiff < 0) {
+                console.log('remove jobs!');
+            } else {
+                console.log('it is the same we do nothing!');
+            }
+        });
+    } catch (e: any) {
+        logger.error('unable to update jobs on event job change', e);
+    }
 }
 
 export async function patchEventJob(id: number, req: PatchEventJobRequest): Promise<void> {
@@ -91,6 +116,7 @@ export async function patchEventJob(id: number, req: PatchEventJobRequest): Prom
     if (result.affectedRows < 1) {
         throw new Error('not found');
     }
+    await updateJobsOnEventJob(id, req);
 }
 
 export async function deleteEventJob(id: number): Promise<void> {

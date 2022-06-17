@@ -3,6 +3,7 @@ import { ErrorResponse } from './errorResponse';
 export type EventJob = {
     eventJobId: number,
     eventType: string,
+    eventTypeId: number,
     jobTypeId: number,
     jobType: string,
     count: number
@@ -27,6 +28,7 @@ export type GetEventJobResponse = EventJob | ErrorResponse
 export type PatchEventJobRequest = {
     eventTypeId?: number,
     jobTypeId?: number,
+    eventType?: string,
     count?: number
 }
 
