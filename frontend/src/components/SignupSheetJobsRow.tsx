@@ -115,7 +115,9 @@ function SignupSheetJobsRow(props: any) {
                             placeholder={`${data.count}`}
                             onChange={
                                 (event) => {
-                                    setCount(parseInt(event.target.value, 10));
+                                    let positionCount = parseInt(event.target.value, 10);
+                                    if (positionCount < 1) positionCount = 1;
+                                    setCount(positionCount);
                                     setDirty(true);
                                 }
                             }
