@@ -104,6 +104,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                                         jobStartDate: rightNow,
                                         jobEndDate: rightNow,
                                         pointsAwarded: createdJobType.pointValue,
+                                        cashPayout: 0,
                                         verified: true,
                                         paid: false,
                                         verifiedDate: rightNow,
