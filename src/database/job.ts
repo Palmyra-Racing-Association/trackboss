@@ -9,8 +9,8 @@ import { getPool } from './pool';
 export const GET_JOB_LIST_SQL = 'SELECT * FROM v_job';
 export const GET_JOB_SQL = `${GET_JOB_LIST_SQL} WHERE job_id = ?`;
 export const INSERT_JOB_SQL = 'INSERT INTO job (member_id, event_id, job_type_id, job_start_date, job_end_date, ' +
-     ' last_modified_date, verified, verified_date, points_awarded, paid, paid_date, last_modified_by) ' +
-     'VALUES (?, ?, ?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?)';
+     ' last_modified_date, verified, verified_date, points_awarded, cash_payout, paid, paid_date, last_modified_by) ' +
+     'VALUES (?, ?, ?, ?, ?, CURDATE(), ?, ?, ?, ?, ?, ?, ?)';
 export const PATCH_JOB_SQL = 'CALL sp_patch_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 export const DELETE_JOB_SQL = 'DELETE FROM job WHERE job_id = ?';
 
@@ -19,7 +19,7 @@ export async function insertJob(req: PostNewJobRequest): Promise<number> {
         throw new Error('user input error');
     }
     const values = [req.memberId, req.eventId, req.jobTypeId, req.jobStartDate, req.jobEndDate, req.verified,
-        req.verifiedDate, req.pointsAwarded, req.paid, req.paidDate, req.modifiedBy];
+        req.verifiedDate, req.pointsAwarded, req.cashPayout, req.paid, req.paidDate, req.modifiedBy];
 
     let result;
     try {

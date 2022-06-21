@@ -6,6 +6,9 @@ import { getPool } from './pool';
 import { EventJob, PatchEventJobRequest, PostNewEventJobRequest } from '../typedefs/eventJob';
 import { PostNewJobRequest } from '../typedefs/job';
 import { insertJob } from './job';
+import { getEventList } from './event';
+import { getJobType } from './jobType';
+import { calculateStartDate } from '../util/dateHelper';
 
 export const GET_EVENT_JOB_SQL = 'SELECT * FROM v_event_job WHERE event_job_id = ?';
 export const INSERT_EVENT_JOB_SQL = 'INSERT INTO event_job (event_type_id, job_type_id, count) VALUES (?, ?, ?)';
@@ -36,7 +39,36 @@ export async function insertEventJob(req: PostNewEventJobRequest): Promise<numbe
             throw e;
         }
     }
-
+    // first get all the events
+    let upcomingEvents = await getEventList();
+    upcomingEvents = upcomingEvents.filter((event) => event.eventTypeId === req.eventTypeId);
+    upcomingEvents.forEach(async (event) => {
+        // now for each event, insert the job for that event
+        // "2022-06-21 09:30:00"
+        const jobType = await getJobType(req.jobTypeId);
+        const jobDate = calculateStartDate(event.start.toString(), jobType.jobDayNumber);
+        const newJob: PostNewJobRequest = {
+            eventId: event.eventId,
+            jobTypeId: req.jobTypeId,
+            jobStartDate: jobDate,
+            jobEndDate: jobDate,
+            pointsAwarded: jobType.pointValue,
+            cashPayout: jobType.cashValue,
+            mealTicket: jobType.mealTicket,
+            modifiedBy: 530,
+            verified: true,
+            paid: false,
+        };
+        // this syntax lets all the promises fire at the same time and then awaits them all.  This is some
+        // high performance paralellism that we totally don't need here.   I kind of hate it because the clarity
+        // quite frankly sucks as it looks like no other language.  But, eslint suggested it so I gave it a shot.
+        // YAY for learning new things!
+        const insertPromises = [];
+        for (let index = 0; index < req.count; index++) {
+            insertPromises.push(insertJob(newJob));
+        }
+        await Promise.all(insertPromises);
+    });
     return result.insertId;
 }
 
@@ -71,8 +103,8 @@ export async function addJobTypeEvents(jobCountDiff: any, row: RowDataPacket, jo
         const newJob: PostNewJobRequest = {
             eventId: row.event_id,
             jobTypeId,
-            jobStartDate: row.start,
-            jobEndDate: row.end,
+            jobStartDate: calculateStartDate(row.start, row.job_day_number),
+            jobEndDate: calculateStartDate(row.start, row.job_day_number),
             pointsAwarded: row.points_awarded,
             cashPayout: row.cash_payout,
             mealTicket: (row.meal_ticket[0] === 1),
@@ -109,8 +141,9 @@ export async function removeJobTypeEvents(row: RowDataPacket, jobTypeId: number)
     }
 }
 
-export async function updateJobsOnEventJob(id: number, req: PatchEventJobRequest): Promise<void> {
+export async function updateJobsOnEventJob(id: number, req: PatchEventJobRequest): Promise<number> {
     let results;
+    let changedCount = 0;
     try {
         const countSql = `select distinct(event), event_id, job_type_id, start, end, points_awarded, cash_payout,
             meal_ticket, count(*) job_count, (?)-count(*) difference
@@ -127,10 +160,12 @@ export async function updateJobsOnEventJob(id: number, req: PatchEventJobRequest
             } else {
                 logger.info('Called jobs upate but there was no count change so count update was not done.');
             }
+            changedCount++;
         });
     } catch (e: any) {
         logger.error('unable to update jobs on event job change', e);
     }
+    return changedCount;
 }
 
 export async function patchEventJob(id: number, req: PatchEventJobRequest): Promise<void> {
@@ -162,7 +197,8 @@ export async function patchEventJob(id: number, req: PatchEventJobRequest): Prom
     if (result.affectedRows < 1) {
         throw new Error('not found');
     }
-    await updateJobsOnEventJob(id, req);
+    const changedJobs = await updateJobsOnEventJob(id, req);
+    logger.info(`Added or removed ${changedJobs} jobs while doing an update to eventJob`);
 }
 
 export async function deleteEventJob(id: number): Promise<void> {

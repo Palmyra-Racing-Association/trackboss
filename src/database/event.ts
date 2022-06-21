@@ -87,6 +87,7 @@ export async function getEventList(startDate?: string, endDate?: string): Promis
 
     return results.map((result) => ({
         eventId: result.event_id,
+        eventTypeId: result.event_type_id,
         start: result.start,
         end: result.end,
         eventType: result.event_type,
@@ -114,6 +115,7 @@ export async function getEvent(id: number): Promise<Event> {
         eventId: results[0].event_id,
         start: results[0].start,
         end: results[0].end,
+        eventTypeId: results[0].event_type_id,
         eventType: results[0].event_type,
         title: results[0].title,
         eventDescription: results[0].event_description,
@@ -139,6 +141,7 @@ export async function getClosestEvent(): Promise<Event> {
         start: results[0].start,
         end: results[0].end,
         eventType: results[0].event_type,
+        eventTypeId: results[0].event_type_id,
         title: results[0].title,
         eventDescription: results[0].event_description,
     };

@@ -5,6 +5,7 @@ export type Event = {
     start: string | Date,
     end: string | Date,
     eventType: string,
+    eventTypeId: number,
     title: string,
     eventDescription: string
 }
