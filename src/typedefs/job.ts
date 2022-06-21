@@ -29,7 +29,7 @@ export type DeletedJob = {
 
 export type PostNewJobRequest = {
     memberId?: number,
-    cashPayout: number,
+    cashPayout?: number,
     eventId?: number,
     jobTypeId: number,
     jobStartDate?: string,

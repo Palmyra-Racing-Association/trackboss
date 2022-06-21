@@ -39,8 +39,7 @@ BEGIN
         # Get the JobDayNumber(this was taken from Alan DB)
         SELECT job_day_number, start_time, end_time, point_value, cash_value INTO @JobDayNumber, @StartTime, @EndTime, @Points, @Cash FROM job_type WHERE job_type_id = cur_job_type; 
         
-        SET sqlDOW = (@JobDayNumber + 1) % 7; #Convert to something SQL likes
-        SET @JobDate = STR_TO_DATE(CONCAT(YEAR(_event_start_date),' ',WEEK(_event_start_date),' ',sqlDOW), '%X %V %w');
+        SET @JobDate = DATE_ADD(_event_start_date, interval @JobDayNumber-1 DAY);
 		SET @JobStart = cast(concat(@JobDate, 'T', @StartTime) as datetime);
 		SET @JobEnd = cast(concat(@JobDate, 'T', @EndTime) as datetime);
 		INSERT INTO job(event_id, job_type_id, job_start_date, job_end_date, verified, paid, points_awarded, cash_payout) VALUES

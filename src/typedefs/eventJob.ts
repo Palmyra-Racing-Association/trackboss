@@ -6,7 +6,8 @@ export type EventJob = {
     eventTypeId: number,
     jobTypeId: number,
     jobType: string,
-    count: number
+    count: number,
+    modifiedBy?: number,
 }
 
 export type DeletedEventJob = {
@@ -29,7 +30,8 @@ export type PatchEventJobRequest = {
     eventTypeId?: number,
     jobTypeId?: number,
     eventType?: string,
-    count?: number
+    count?: number,
+    modifiedBy?: number,
 }
 
 export type PatchEventJobResponse = EventJob | ErrorResponse

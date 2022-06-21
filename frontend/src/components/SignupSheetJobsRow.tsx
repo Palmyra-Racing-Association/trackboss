@@ -158,6 +158,7 @@ function SignupSheetJobsRow(props: any) {
                             // save the job type
                             const eventJob = await getEventJob(state.token, jobCopy.eventJobId) as EventJob;
                             eventJob.count = jobCopy.count;
+                            eventJob.modifiedBy = state.user?.memberId || 0;
                             await updateEventJob(state.token, jobCopy.eventJobId, eventJob);
                             await updateJobType(state.token, jobCopy.jobTypeId, jobCopy);
                         }

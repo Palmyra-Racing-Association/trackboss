@@ -65,6 +65,50 @@ export async function getEventJob(id: number): Promise<EventJob> {
     };
 }
 
+export async function addJobTypeEvents(jobCountDiff: any, row: RowDataPacket, jobTypeId: number, modifiedBy: number) {
+    logger.info('Adding jobs for an event type as the count was changed.');
+    for (let index = 0; index < jobCountDiff; index++) {
+        const newJob: PostNewJobRequest = {
+            eventId: row.event_id,
+            jobTypeId,
+            jobStartDate: row.start,
+            jobEndDate: row.end,
+            pointsAwarded: row.points_awarded,
+            cashPayout: row.cash_payout,
+            mealTicket: (row.meal_ticket[0] === 1),
+            modifiedBy,
+            verified: true,
+            paid: false,
+        };
+        try {
+            // eslint-disable-next-line no-await-in-loop
+            const insertedJob = await insertJob(newJob);
+            logger.info(`inserted job with ID ${insertedJob} for event with id ${row.event_id}`);
+        } catch (e: any) {
+            logger.error(e);
+            throw e;
+        }
+    }
+}
+
+export async function removeJobTypeEvents(row: RowDataPacket, jobTypeId: number) {
+    logger.info('Removing jobs for an event type as the count was changed.');
+    // bring some positivity in the world, no reason to be so negative!
+    const removalCount = row.difference * -1;
+    for (let index = 0; index < removalCount; index++) {
+        const deleteSql = 'delete from job where event_id = ? and job_type_id = ? and member_id is null limit 1';
+        try {
+            // eslint-disable-next-line no-await-in-loop
+            const [removeResults] = await getPool().query<OkPacket>(deleteSql, [row.event_id, jobTypeId]);
+            logger.info(`removed one job with id ${jobTypeId} for event id ${row.event_id}`);
+            logger.info(removeResults.affectedRows);
+        } catch (error: any) {
+            logger.error(error);
+            throw error;
+        }
+    }
+}
+
 export async function updateJobsOnEventJob(id: number, req: PatchEventJobRequest): Promise<void> {
     let results;
     try {
@@ -77,36 +121,9 @@ export async function updateJobsOnEventJob(id: number, req: PatchEventJobRequest
         results.forEach(async (row) => {
             const jobCountDiff = row.difference;
             if (jobCountDiff > 0) {
-                logger.info('Adding jobs for an event type as the count was changed.');
-                for (let index = 0; index < jobCountDiff; index++) {
-                    const newJob : PostNewJobRequest = {
-                        eventId: row.event_id,
-                        jobTypeId: req.jobTypeId as number,
-                        jobStartDate: row.start,
-                        jobEndDate: row.end,
-                        pointsAwarded: row.points_awarded,
-                        cashPayout: row.cash_payout,
-                        mealTicket: (row.meal_ticket[0] === 1),
-                        modifiedBy: 530,
-                        verified: true,
-                        paid: false,
-                    };
-                    // eslint-disable-next-line no-await-in-loop
-                    const insertedJob = await insertJob(newJob);
-                    logger.info(`inserted job with ID ${insertedJob} for event with id ${row.event_id}`);
-                }
+                await addJobTypeEvents(jobCountDiff, row, req.jobTypeId as number, req.modifiedBy as number);
             } else if (jobCountDiff < 0) {
-                logger.info('Removing jobs for an event type as the count was changed.');
-                // bring some positivity in the world, no reason to be so negative!
-                const removalCount = row.difference * -1;
-                for (let index = 0; index < removalCount; index++) {
-                    const deleteSql =
-                        'delete from job where event_id = ? and job_type_id = ? and member_id is null limit 1';
-                    // eslint-disable-next-line no-await-in-loop
-                    const [removeResults] = await getPool().query<OkPacket>(deleteSql, [row.event_id, req.jobTypeId]);
-                    logger.info(`removed one job with id ${req.jobTypeId} for event id ${row.event_id}`);
-                    logger.info(removeResults.affectedRows);
-                }
+                await removeJobTypeEvents(row, req.jobTypeId as number);
             } else {
                 logger.info('Called jobs upate but there was no count change so count update was not done.');
             }
