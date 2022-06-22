@@ -15,7 +15,7 @@ export default function ImportantLinksCard(props: any) {
                             fontSize="2xl"
                             color="orange"
                         >
-                            <ListItem pt={1}>
+                            <ListItem marginLeft={4}>
                                 Current Gate Code:
                                 {props.gateCode}
                             </ListItem>
@@ -26,7 +26,7 @@ export default function ImportantLinksCard(props: any) {
                             fontSize="2xl"
                             color="orange"
                         >
-                            <ListItem pt={1}>Member Info Phone System</ListItem>
+                            <ListItem pt={1} marginLeft={4}>Member Info Phone System</ListItem>
                         </Link>
                         <Link
                             href="https://palmyramx.com/pages/track-rules"
@@ -34,7 +34,7 @@ export default function ImportantLinksCard(props: any) {
                             fontSize="2xl"
                             color="orange"
                         >
-                            <ListItem pt={1}>Member Rules</ListItem>
+                            <ListItem pt={1} marginLeft={4}>Member Rules</ListItem>
                         </Link>
                         <Link
                             href="https://twitter.com/palmyramx"
@@ -42,7 +42,7 @@ export default function ImportantLinksCard(props: any) {
                             fontSize="2xl"
                             color="orange"
                         >
-                            <ListItem pt={1}>Twitter</ListItem>
+                            <ListItem pt={1} marginLeft={4}>Twitter</ListItem>
                         </Link>
                         <Link
                             href="https://www.facebook.com/palmyramx/"
@@ -50,7 +50,7 @@ export default function ImportantLinksCard(props: any) {
                             fontSize="2xl"
                             color="orange"
                         >
-                            <ListItem pt={1}>Facebook</ListItem>
+                            <ListItem pt={1} marginLeft={4}>Facebook</ListItem>
                         </Link>
                         <Link
                             href="https://www.instagram.com/palmyramx_hogback_hill/?hl=en"
@@ -58,7 +58,7 @@ export default function ImportantLinksCard(props: any) {
                             fontSize="2xl"
                             color="orange"
                         >
-                            <ListItem pt={1}>Instagram</ListItem>
+                            <ListItem pt={1} marginLeft={4}>Instagram</ListItem>
                         </Link>
                     </UnorderedList>
                 </VStack>
