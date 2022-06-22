@@ -3,6 +3,9 @@ import * as ec2 from '@aws-cdk/aws-ec2';
 import * as ecs from '@aws-cdk/aws-ecs';
 import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
 import * as iam from '@aws-cdk/aws-iam';
+import * as route53targets from '@aws-cdk/aws-route53-targets';
+import * as route53 from '@aws-cdk/aws-route53';
+import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as cdk from '@aws-cdk/core';
 import { Tags } from '@aws-cdk/core';
 
@@ -18,12 +21,42 @@ export class DeployStack extends cdk.Stack {
       loadBalancerArn: 'arn:aws:elasticloadbalancing:us-east-1:425610073499:loadbalancer/app/4343HogbackHill-lb/2bd650d93825f0dd',
     });
 
-    const listener = alb.addListener('Listener', {
-      port: 4443,
-      open: true,
-      protocol: elbv2.ApplicationProtocol.HTTPS,
-      certificates: [elbv2.ListenerCertificate.fromArn('arn:aws:acm:us-east-1:425610073499:certificate/eca2cbf8-247e-4edc-86fb-99c8f28c9dd7')],
+    const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'trackbossZone', 
+        {
+            hostedZoneId: 'Z01677201PBLHEH8PE24N',
+            zoneName: 'hogbackmx.com'
+        },
+    );
+    const dnsARecord = new route53.ARecord(this, 'TrackBossApiAliasRecord', {
+        zone,
+        recordName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}.hogbackmx.com`,
+        target: route53.RecordTarget.fromAlias({
+            bind() {
+                return {
+                    dnsName: alb.loadBalancerDnsName,
+                    hostedZoneId: zone.hostedZoneId,
+                }
+            }
+        })
     });
+
+    const hogbackmxCert = new acm.DnsValidatedCertificate(this, 'backendCertificateApi', {
+        domainName: '*.hogbackmx.com',
+        hostedZone: zone,
+        region: 'us-east-1',
+    });
+
+      const listener = alb.addListener('Listener',
+          {
+              port: 4443,
+              open: true,
+              protocol: elbv2.ApplicationProtocol.HTTPS,
+              certificates: [
+                  elbv2.ListenerCertificate.fromArn('arn:aws:acm:us-east-1:425610073499:certificate/eca2cbf8-247e-4edc-86fb-99c8f28c9dd7'),
+                  hogbackmxCert,
+              ],
+          }
+      );
 
     const dockerReg = `${account}.dkr.ecr.${region}.amazonaws.com`;
     const dockerImg = `${dockerReg}/pra/trackbossapi:latest`;
@@ -65,7 +98,9 @@ export class DeployStack extends cdk.Stack {
       targets: [asg],
       priority: 1,
       conditions: [
-        elbv2.ListenerCondition.hostHeaders([`${environmentName}api.palmyramx.com`]),
+        elbv2.ListenerCondition.hostHeaders(
+            [`${environmentName}api.palmyramx.com`, `${environmentName}api.hogbackmx.com`]
+        ),
       ],
       healthCheck: {
         path: '/api/health',
