@@ -86,7 +86,16 @@ export default function WorkPointsHistory() {
     const { state } = useContext(UserContext);
 
     async function getJobsData() {
-        const jobs = await getJobList(state.token, 'memberID', state.user!.memberId as unknown as string);
+        const jobs = await getJobList(state.token, 'memberID', state.user!.memberId as unknown as string) as Job[];
+        jobs.sort((a, b) => {
+            let order = 0;
+            if (a.start < b.start) {
+                order = 1;
+            } else if (a.start > b.start) {
+                order = -1;
+            }
+            return order;
+        });
         if ('reason' in jobs) {
             // squash error
         } else {

@@ -26,6 +26,8 @@
     "@aws-cdk/aws-cloudfront": "^1.148.0",
     "@aws-cdk/aws-cloudfront-origins": "1.148.0",
     "@aws-cdk/aws-ecs-patterns": "^1.148.0",
+    "@aws-cdk/aws-route53": "^1.148.0",
+    "@aws-cdk/aws-route53-targets": "^1.148.0",
     "@aws-cdk/aws-s3": "^1.148.0",
     "@aws-cdk/aws-s3-deployment": "1.148.0",
     "@aws-cdk/aws-sns": "1.148.0",
