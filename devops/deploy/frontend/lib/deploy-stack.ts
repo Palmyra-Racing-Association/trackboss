@@ -18,7 +18,7 @@ export class DeployStack extends cdk.Stack {
     for (let index = 0; index < domains.length; index++) {
       let domain = domains[index];
       const deploymentBucket = new s3.Bucket(this, bucketName+domain, {
-        bucketName: domain,
+        bucketName: domain+'-frontend',
         // lifecycle rules are flippant, but this is ephemeral build stuff
         removalPolicy: cdk.RemovalPolicy.DESTROY,
         autoDeleteObjects: true,
