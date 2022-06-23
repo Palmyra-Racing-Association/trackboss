@@ -52,7 +52,6 @@ export class DeployStack extends cdk.Stack {
               open: true,
               protocol: elbv2.ApplicationProtocol.HTTPS,
               certificates: [
-                  elbv2.ListenerCertificate.fromArn('arn:aws:acm:us-east-1:425610073499:certificate/eca2cbf8-247e-4edc-86fb-99c8f28c9dd7'),
                   hogbackmxCert,
               ],
           }
@@ -99,7 +98,7 @@ export class DeployStack extends cdk.Stack {
       priority: 1,
       conditions: [
         elbv2.ListenerCondition.hostHeaders(
-            [`${environmentName}api.palmyramx.com`, `${environmentName}api.hogbackmx.com`]
+            [`${environmentName}api.hogbackmx.com`]
         ),
       ],
       healthCheck: {
