@@ -17,7 +17,7 @@ export class DeployStack extends cdk.Stack {
     const certArns = ['arn:aws:acm:us-east-1:425610073499:certificate/139b9cfa-087f-4e30-8565-cceb33ec6a21'];
     for (let index = 0; index < domains.length; index++) {
       let domain = domains[index];
-      const deploymentBucket = new s3.Bucket(this, bucketName, {
+      const deploymentBucket = new s3.Bucket(this, bucketName+domain, {
         bucketName: domain,
         // lifecycle rules are flippant, but this is ephemeral build stuff
         removalPolicy: cdk.RemovalPolicy.DESTROY,
@@ -31,26 +31,26 @@ export class DeployStack extends cdk.Stack {
       });
 
       // eslint-disable-next-line no-unused-vars
-      const deployment = new s3Deployment.BucketDeployment(this, 'deployStaticWebsite', {
+      const deployment = new s3Deployment.BucketDeployment(this, 'deployStaticWebsite'+domain, {
         sources: [s3Deployment.Source.asset(`${projectRoot}/frontend/build`)],
         destinationBucket: deploymentBucket,
       });
 
       const certificate = acm.Certificate.fromCertificateArn(
         this,
-        'Certificate',
+        'Certificate'+domain,
         // found using aws acm list-certificates --region us-east-1
         certArns[index],
       );
 
-      const cachePolicy = new cloudfront.CachePolicy(this, 'cachePolicy', {
+      const cachePolicy = new cloudfront.CachePolicy(this, 'cachePolicy'+domain, {
         cachePolicyName: `${environmentName}CachePolicy`,
         comment: 'A default policy for a Track Boss environment',
         defaultTtl: Duration.minutes(10),
       });
 
       // eslint-disable-next-line no-unused-vars
-      const distribution = new cloudfront.Distribution(this, 'applyToCdnDistribution', {
+      const distribution = new cloudfront.Distribution(this, 'applyToCdnDistribution'+domain, {
         defaultBehavior: {
           cachePolicy,
           origin: new origins.S3Origin(deploymentBucket),
