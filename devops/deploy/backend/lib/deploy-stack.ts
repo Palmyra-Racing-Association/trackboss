@@ -29,12 +29,12 @@ export class DeployStack extends cdk.Stack {
     );
     const dnsARecord = new route53.ARecord(this, 'TrackBossApiAliasRecord', {
         zone,
-        recordName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}.hogbackmx.com`,
+        recordName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}api.hogbackmx.com`,
         target: route53.RecordTarget.fromAlias({
             bind() {
                 return {
                     dnsName: alb.loadBalancerDnsName,
-                    hostedZoneId: zone.hostedZoneId,
+                    hostedZoneId: alb.loadBalancerCanonicalHostedZoneId,
                 }
             }
         })
