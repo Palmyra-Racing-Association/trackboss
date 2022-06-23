@@ -44,7 +44,7 @@ export class DeployStack extends cdk.Stack {
       );
 
       const cachePolicy = new cloudfront.CachePolicy(this, 'cachePolicy'+domain, {
-        cachePolicyName: `${environmentName}CachePolicy`,
+        cachePolicyName: `${environmentName}-frontEndCachePolicy`,
         comment: 'A default policy for a Track Boss environment',
         defaultTtl: Duration.minutes(10),
       });
