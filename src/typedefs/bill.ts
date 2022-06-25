@@ -10,6 +10,8 @@ export type Bill = {
     pointsThreshold: number,
     membershipAdmin: string,
     membershipAdminEmail: string,
+    firstName: string,
+    lastName: string,
     emailedBill?: string, // undefined if not emailed, date otherwise
     curYearPaid: boolean,
     dueDate: string,

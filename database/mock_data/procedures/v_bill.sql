@@ -8,6 +8,8 @@ CREATE VIEW `v_bill` AS
         mb.amount_with_fee,
         mb.points_earned,
         mb.threshold,
+        ma.last_name,
+        ma.first_name,
         CONCAT(ma.first_name, ' ', ma.last_name) AS membership_admin,
         ma.email AS membership_admin_email,
         mb.emailed_bill,
@@ -18,5 +20,9 @@ CREATE VIEW `v_bill` AS
             LEFT JOIN
         membership ms ON mb.membership_id = ms.membership_id
             LEFT JOIN
-        member ma ON ms.membership_admin_id = ma.member_id;
+        member ma ON ms.membership_admin_id = ma.member_id
+	WHERE 
+		ms.status = 'active'
+	ORDER BY
+		last_name, first_name, year;
 //

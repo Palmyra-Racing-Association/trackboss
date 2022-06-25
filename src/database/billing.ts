@@ -94,6 +94,8 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         amount: result.amount,
         amountWithFee: result.amount_with_fee,
         membershipAdmin: result.membership_admin,
+        firstName: result.first_name,
+        lastName: result.last_name,
         membershipAdminEmail: result.membership_admin_email,
         emailedBill: result.emailed_bill,
         curYearPaid: !!result.cur_year_paid[0],
