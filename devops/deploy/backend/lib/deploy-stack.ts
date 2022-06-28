@@ -6,6 +6,7 @@ import * as iam from '@aws-cdk/aws-iam';
 import * as route53targets from '@aws-cdk/aws-route53-targets';
 import * as route53 from '@aws-cdk/aws-route53';
 import * as acm from '@aws-cdk/aws-certificatemanager';
+import * as rds from '@aws-cdk/aws-rds';
 import * as cdk from '@aws-cdk/core';
 import { Tags } from '@aws-cdk/core';
 
@@ -117,6 +118,30 @@ export class DeployStack extends cdk.Stack {
         messageBody: '<h1>TrackBoss API</h1>',
       }),
     });
+
+    // create DB security group that allows attaching to auto scaling group
+    const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
+      vpc,
+      allowAllOutbound: true,
+      description: 'inbound rules for database',
+    })
+    rdsSecurityInBound.connections.allowFrom(
+      new ec2.Connections({
+        securityGroups: asg.connections.securityGroups
+      }), 
+      ec2.Port.tcp(3306),
+      'allow access to database from application server.'
+    );
+
+    
+    const rdsInstance = rds.DatabaseInstance.fromDatabaseInstanceAttributes(this, 'trackBossAppDb', {
+      instanceIdentifier: 'praclubmanager2-dev',
+      instanceEndpointAddress: 'arn:aws:rds:us-east-1:425610073499:db:praclubmanager2-dev',
+      port: 3306,
+      securityGroups: [rdsSecurityInBound],
+    });
+    
+    rdsInstance.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
 
     new cdk.CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,
