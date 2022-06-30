@@ -25,7 +25,7 @@ export class DeployStack extends cdk.Stack {
     */
 
     const alb = new elbv2.ApplicationLoadBalancer(this, 'alb', {
-      loadBalancerName: `${environmentName}-applicationLoadBalancer`,
+      loadBalancerName: `${environmentName}-alb`,
       vpc,
       internetFacing: true,
     });
