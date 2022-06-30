@@ -96,10 +96,7 @@ export class DeployStack extends cdk.Stack {
       minCapacity: 1,
       maxCapacity: 1,
     });
-    Tags.of(asg).add('Name', `${environmentName}-api`)
-    Tags.of(asg).add('EnvironmentName', environmentName);
-    Tags.of(asg).add('AlbDomainName', alb.loadBalancerDnsName);
-    Tags.of(asg).add('EnvironmentDomainName', dnsARecord.domainName);
+
     listener.addTargets('trackboss-api', {
       port: 3000,
       protocol: elbv2.ApplicationProtocol.HTTP,
@@ -150,6 +147,14 @@ export class DeployStack extends cdk.Stack {
     });
     
     rdsInstance.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
+
+    const taggableInfra = [asg, alb];
+    taggableInfra.forEach(infraElement => {
+      Tags.of(infraElement).add('AlbDomainName', alb.loadBalancerDnsName);
+      Tags.of(infraElement).add('EnvironmentDomainName', dnsARecord.domainName);      
+      Tags.of(infraElement).add('EnvironmentName', environmentName);
+      Tags.of(infraElement).add('Name', `${environmentName}-api`);  
+    });
 
     new cdk.CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,
