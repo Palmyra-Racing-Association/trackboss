@@ -3,7 +3,6 @@ import * as ec2 from '@aws-cdk/aws-ec2';
 import * as ecs from '@aws-cdk/aws-ecs';
 import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
 import * as iam from '@aws-cdk/aws-iam';
-import * as route53targets from '@aws-cdk/aws-route53-targets';
 import * as route53 from '@aws-cdk/aws-route53';
 import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as rds from '@aws-cdk/aws-rds';
@@ -57,6 +56,7 @@ export class DeployStack extends cdk.Stack {
               ],
           }
       );
+    const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
 
     const dockerReg = `${account}.dkr.ecr.${region}.amazonaws.com`;
     const dockerImg = `${dockerReg}/pra/trackbossapi:latest`;
@@ -65,12 +65,11 @@ export class DeployStack extends cdk.Stack {
     userData.addCommands(
       'sudo su',
       'yum install -y awscli',
-      'aws s3 cp s3://praconfig/tbenv-test /home/ec2-user',
+      `aws s3 cp s3://praconfig/${environmentName}-env /home/ec2-user`,
       `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${dockerReg}`,
       `docker pull ${dockerImg}`,
-      `docker run -p 3000:3000 --env-file /home/ec2-user/tbenv-test ${dockerImg}`,
+      `docker run -p 3000:3000 --env-file /home/ec2-user/${environmentName}-env ${dockerImg}`,
     );
-    const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
 
     const asg = new autoscaling.AutoScalingGroup(this, 'asg', {
       vpc,
