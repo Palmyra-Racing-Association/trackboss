@@ -16,9 +16,18 @@ export class DeployStack extends cdk.Stack {
     const region = cdk.Stack.of(this).region;
 
     const vpc = ec2.Vpc.fromLookup(this, 'ImportVPC',{isDefault: true});
-
+    
+    const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
+    /*
     const alb = elbv2.ApplicationLoadBalancer.fromLookup(this, 'alb', {
       loadBalancerArn: 'arn:aws:elasticloadbalancing:us-east-1:425610073499:loadbalancer/app/4343HogbackHill-lb/2bd650d93825f0dd',
+    });
+    */
+
+    const alb = new elbv2.ApplicationLoadBalancer(this, 'alb', {
+      loadBalancerName: `${environmentName}-applicationLoadBalancer`,
+      vpc,
+      internetFacing: true,
     });
 
     const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'trackbossZone', 
@@ -29,7 +38,7 @@ export class DeployStack extends cdk.Stack {
     );
     const dnsARecord = new route53.ARecord(this, 'TrackBossApiAliasRecord', {
         zone,
-        recordName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}api.hogbackmx.com`,
+        recordName: `${environmentName}api.hogbackmx.com`,
         target: route53.RecordTarget.fromAlias({
             bind() {
                 return {
@@ -56,7 +65,6 @@ export class DeployStack extends cdk.Stack {
               ],
           }
       );
-    const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
 
     const dockerReg = `${account}.dkr.ecr.${region}.amazonaws.com`;
     const dockerImg = `${dockerReg}/pra/trackbossapi:latest`;
@@ -91,6 +99,7 @@ export class DeployStack extends cdk.Stack {
     Tags.of(asg).add('Name', `${environmentName}-api`)
     Tags.of(asg).add('EnvironmentName', environmentName);
     Tags.of(asg).add('AlbDomainName', alb.loadBalancerDnsName);
+    Tags.of(asg).add('EnvironmentDomainName', dnsARecord.domainName);
     listener.addTargets('trackboss-api', {
       port: 3000,
       protocol: elbv2.ApplicationProtocol.HTTP,
@@ -144,6 +153,10 @@ export class DeployStack extends cdk.Stack {
 
     new cdk.CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,
+    });
+
+    new cdk.CfnOutput(this, 'apiDns', {
+      value: dnsARecord.domainName,
     });
   }
 }
