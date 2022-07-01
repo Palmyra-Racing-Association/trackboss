@@ -27,7 +27,12 @@
         "react-to-print": "^2.14.4",
         "styled-components": "^5.3.5",
         "tslib": "^2.3.1",
-        "web-vitals": "^2.1.4"
+        "web-vitals": "^2.1.4",
+        "workbox-core": "^6.5.3",
+        "workbox-expiration": "^6.5.3",
+        "workbox-precaching": "^6.5.3",
+        "workbox-routing": "^6.5.3",
+        "workbox-strategies": "^6.5.3"
     },
     "devDependencies": {
         "-": "^0.0.1",
