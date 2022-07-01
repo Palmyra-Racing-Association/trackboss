@@ -150,8 +150,6 @@ export class DeployStack extends cdk.Stack {
 
     const taggableInfra = [asg, alb];
     taggableInfra.forEach(infraElement => {
-      Tags.of(infraElement).add('AlbDomainName', alb.loadBalancerDnsName);
-      Tags.of(infraElement).add('EnvironmentDomainName', dnsARecord.domainName);      
       Tags.of(infraElement).add('EnvironmentName', environmentName);
       Tags.of(infraElement).add('Name', `${environmentName}-api`);  
     });
