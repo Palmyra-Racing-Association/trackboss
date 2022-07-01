@@ -83,7 +83,7 @@ export class DeployStack extends cdk.Stack {
       const cloudfrontOutput = new cdk.CfnOutput(this, 'bucketName', {
         value: distribution.domainName,
         description: 'Distribution domain name',
-        exportName: 'distributionDomainName',
+        exportName: `distributionDomainName-${process.env.TRACKBOSS_ENVIRONMENT_NAME}`,
       });
     }
   }
