@@ -184,7 +184,9 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
             ));
         }
     }
-    jobResults = jobResults.filter((job: Job) => job.year === filters.year);
+    if (filters.year) {
+        jobResults = jobResults.filter((job: Job) => job.year === filters.year);
+    }
     return jobResults;
 }
 
