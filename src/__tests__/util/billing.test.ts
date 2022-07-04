@@ -60,6 +60,7 @@ describe('generateNewBills()', () => {
             membershipId,
             pointsEarned: earned,
             pointsThreshold: threshold,
+            detail: [],
         });
         expect(mockGetBillList).toHaveBeenCalled();
     });
