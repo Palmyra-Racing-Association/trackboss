@@ -1,4 +1,5 @@
 import { ErrorResponse } from './errorResponse';
+import { Job } from './job';
 
 export type Bill = {
     billId: number,
@@ -10,11 +11,13 @@ export type Bill = {
     pointsThreshold: number,
     membershipAdmin: string,
     membershipAdminEmail: string,
+    membershipId: number,
     firstName: string,
     lastName: string,
     emailedBill?: string, // undefined if not emailed, date otherwise
     curYearPaid: boolean,
     dueDate: string,
+    detail?: string,
 }
 
 export type WorkPointThreshold = {
@@ -48,6 +51,7 @@ export type GenerateSingleBillRequest = {
     membershipId: number,
     pointsEarned: number,
     pointsThreshold: number,
+    workDetail?: Job[],
 }
 
 export type GetMembershipBillListRequest = Record<string, never>

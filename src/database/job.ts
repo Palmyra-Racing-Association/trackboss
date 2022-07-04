@@ -6,7 +6,7 @@ import { Job, PatchJobRequest, PostNewJobRequest, GetJobListRequestFilters } fro
 import logger from '../logger';
 import { getPool } from './pool';
 
-export const GET_JOB_LIST_SQL = 'SELECT * FROM v_job';
+export const GET_JOB_LIST_SQL = 'SELECT *, year(end) year FROM v_job';
 export const GET_JOB_SQL = `${GET_JOB_LIST_SQL} WHERE job_id = ?`;
 export const INSERT_JOB_SQL = 'INSERT INTO job (member_id, event_id, job_type_id, job_start_date, job_end_date, ' +
      ' last_modified_date, verified, verified_date, points_awarded, cash_payout, paid, paid_date, last_modified_by) ' +
@@ -48,10 +48,13 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
     let values: any[] = [];
     let useMemberFilter = false;
     let memberId = -1;
+    let useMembershipFilter = false;
+    let membershipId = -1;
     if (!_.isEmpty(filters)) {
         let dynamicSql = ' WHERE ';
         let counter = 0;
         useMemberFilter = (typeof filters.memberId !== 'undefined');
+        useMembershipFilter = (typeof filters.membershipId !== 'undefined');
         if (typeof filters.assignmentStatus !== 'undefined') {
             if (filters.assignmentStatus) {
                 dynamicSql += 'member IS NOT NULL AND ';
@@ -69,6 +72,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
             values[counter++] = filters.memberId;
         }
         if (typeof filters.membershipId !== 'undefined') {
+            membershipId = filters.membershipId;
             dynamicSql += 'membership_id = ? AND ';
             values[counter++] = filters.membershipId;
         }
@@ -102,7 +106,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
     }
     const jobDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-    const jobResults : any = results.map((result) => ({
+    let jobResults : any = results.map((result) => ({
         jobId: result.job_id,
         member: result.member,
         memberId: result.member_id,
@@ -124,12 +128,13 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
         mealTicket: ((result.meal_ticket[0] === 1) ? 'Yes' : 'No'),
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
+        year: result.year,
     }));
     if (useMemberFilter && memberId > 0) {
         const historicalResults = await getPool().query<RowDataPacket[]>(
             `select 
               m.member_id, m.membership_id, concat(m.first_name, ' ', m.last_name) member, eph.date, 
-              eph.description title, eph.point_value points_awarded
+              eph.description title, eph.point_value points_awarded, year(eph.date) year
               from member m, earned_points_history eph where 
               eph.old_member_id = m.old_member_id and 
               m.member_id = ?`,
@@ -147,10 +152,39 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
                 pointsAwarded: legacyPoints.points_awarded,
                 paid: false,
                 cashPayout: 0,
+                year: legacyPoints.year,
             })
             ));
         }
     }
+    if (useMembershipFilter && membershipId > 0) {
+        const historicalResults = await getPool().query<RowDataPacket[]>(
+            `select 
+              m.member_id, m.membership_id, concat(m.first_name, ' ', m.last_name) member, eph.date, 
+              eph.description title, eph.point_value points_awarded, year(eph.date) year
+              from member m, earned_points_history eph where 
+              eph.old_member_id = m.old_member_id and 
+              m.membership_id = ?`,
+            [membershipId],
+        );
+        if (historicalResults) {
+            historicalResults[0].map((legacyPoints) => (jobResults.push({
+                member: legacyPoints.member,
+                memberId: legacyPoints.member_id,
+                membershipId: legacyPoints.membership_id,
+                start: legacyPoints.date,
+                end: legacyPoints.date,
+                title: legacyPoints.title,
+                verified: true,
+                pointsAwarded: legacyPoints.points_awarded,
+                paid: false,
+                cashPayout: 0,
+                year: legacyPoints.year,
+            })
+            ));
+        }
+    }
+    jobResults = jobResults.filter((job: Job) => job.year === filters.year);
     return jobResults;
 }
 

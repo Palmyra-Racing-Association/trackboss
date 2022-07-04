@@ -9,13 +9,14 @@ export const GET_BILL_LIST_SQL = 'SELECT * FROM v_bill';
 export const GET_THRESHOLD_SQL = 'SELECT * FROM point_threshold WHERE year = ?';
 export const GENERATE_BILL_SQL =
     'INSERT INTO member_bill (generated_date, year, amount, amount_with_fee, membership_id, emailed_bill, ' +
-    'cur_year_paid, threshold, points_earned) VALUES (CURDATE(), YEAR(CURDATE()), ?, ?, ?, NULL, 0, ?, ?)';
+    'cur_year_paid, threshold, points_earned, work_detail) ' +
+    'VALUES (CURDATE(), YEAR(CURDATE()), ?, ?, ?, NULL, 0, ?, ?, ?)';
 export const PATCH_BILL_SQL = 'CALL sp_patch_bill (?, ?, ?)';
 
 export async function generateBill(req: GenerateSingleBillRequest): Promise<number> {
     const values = [
         req.amount.toFixed(2), req.amountWithFee.toFixed(2), req.membershipId,
-        req.pointsThreshold, req.pointsEarned,
+        req.pointsThreshold, req.pointsEarned, JSON.stringify(req.workDetail),
     ];
 
     let result;
@@ -94,6 +95,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         amount: result.amount,
         amountWithFee: result.amount_with_fee,
         membershipAdmin: result.membership_admin,
+        membershipId: result.membership_id,
         firstName: result.first_name,
         lastName: result.last_name,
         membershipAdminEmail: result.membership_admin_email,
@@ -102,6 +104,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         dueDate: new Date((result.year + 1), 1, 15).toDateString(),
         pointsEarned: result.points_earned,
         pointsThreshold: result.threshold,
+        detail: result.work_detail,
     }));
 }
 

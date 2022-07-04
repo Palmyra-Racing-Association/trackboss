@@ -14,7 +14,8 @@ CREATE VIEW `v_bill` AS
         ma.email AS membership_admin_email,
         mb.emailed_bill,
         mb.cur_year_paid,
-        mb.membership_id
+        mb.membership_id,
+        mb.work_detail
     FROM
         member_bill mb
             LEFT JOIN

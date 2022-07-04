@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { getJobList } from '../database/job';
 import { generateBill, getBillList } from '../database/billing';
 import { getBaseDues } from '../database/membership';
 import { getWorkPointsByMembership } from '../database/workPoints';
@@ -44,12 +45,14 @@ export async function generateNewBills(
                 if (owed === 0) {
                     fee = 0;
                 }
+                const workDetail = await getJobList({ membershipId: membership.membershipId, year });
                 await generateBill({
                     amount: owed,
                     amountWithFee: (owed + fee),
                     membershipId: membership.membershipId,
                     pointsEarned: earned,
                     pointsThreshold: threshold,
+                    workDetail,
                 });
             } catch (e) {
                 // generate more bills even if this one failed
