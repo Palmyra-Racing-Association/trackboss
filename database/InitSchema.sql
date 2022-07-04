@@ -160,6 +160,7 @@ CREATE TABLE IF NOT EXISTS `pradb`.`member_bill` (
   `membership_id` INT NOT NULL,
   `emailed_bill` DATE NULL,
   `cur_year_paid` BIT NOT NULL,
+  `work_detail` JSON NULL,
   PRIMARY KEY (`bill_id`),
   INDEX `membership_id_idx` (`membership_id` ASC) VISIBLE,
   CONSTRAINT `FK_bill_membership`

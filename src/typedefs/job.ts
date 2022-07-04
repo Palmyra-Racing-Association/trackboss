@@ -20,7 +20,8 @@ export type Job = {
     cashPayout?: number,
     mealTicket?: string,
     lastModifiedDate?: string,
-    lastModifiedBy?: string
+    lastModifiedBy?: string,
+    year?: number,
 }
 
 export type DeletedJob = {
@@ -84,4 +85,5 @@ export type GetJobListRequestFilters = {
     eventId?: number,
     startDate?:string,
     endDate?:string,
+    year?:number,
 }
