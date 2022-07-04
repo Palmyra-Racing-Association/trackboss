@@ -12,6 +12,7 @@ health.get('/', async (req: Request, res: Response) => {
         dbtime: '',
         commitId: '',
         githubCommitLink: '',
+        error: undefined,
     };
     let status;
     let results;
@@ -26,6 +27,7 @@ health.get('/', async (req: Request, res: Response) => {
         logger.error(e);
         response.ok = false;
         response.dbtime = '';
+        response.error = e;
         status = 500;
     }
     res.status(status);
