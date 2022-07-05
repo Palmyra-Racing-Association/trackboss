@@ -1,6 +1,5 @@
 import { Request, Response, Router } from 'express';
 import { RowDataPacket } from 'mysql2';
-import { execSync } from 'child_process';
 import { getPool } from '../database/pool';
 import logger from '../logger';
 
@@ -19,15 +18,12 @@ health.get('/', async (req: Request, res: Response) => {
     try {
         [results] = await getPool().query<RowDataPacket[]>('select now() dbtime from dual');
         response.dbtime = results[0].dbtime;
-        response.commitId = execSync('git rev-parse HEAD').toString().replace(/\n/, '');
-        // eslint-disable-next-line max-len
-        response.githubCommitLink = `https://github.com/Palmyra-Racing-Association/clubmanager-2.0/commit/${response.commitId}`;
         status = 200;
     } catch (e: any) {
-        logger.error(e);
+        logger.error(e.getMessage());
         response.ok = false;
         response.dbtime = '';
-        response.error = e;
+        response.error = e.getMessage();
         status = 500;
     }
     res.status(status);

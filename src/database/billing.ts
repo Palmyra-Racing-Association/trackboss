@@ -14,9 +14,19 @@ export const GENERATE_BILL_SQL =
 export const PATCH_BILL_SQL = 'CALL sp_patch_bill (?, ?, ?)';
 
 export async function generateBill(req: GenerateSingleBillRequest): Promise<number> {
+    const workDetailJson = JSON.stringify(
+        req.workDetail,
+        function replacer(key, value) {
+            if (this[key] instanceof Date) {
+                const workDateStr = this[key].toLocaleDateString('en-US');
+                return workDateStr;
+            }
+            return value;
+        },
+    );
     const values = [
         req.amount.toFixed(2), req.amountWithFee.toFixed(2), req.membershipId,
-        req.pointsThreshold, req.pointsEarned, JSON.stringify(req.workDetail),
+        req.pointsThreshold, req.pointsEarned, workDetailJson,
     ];
 
     let result;
