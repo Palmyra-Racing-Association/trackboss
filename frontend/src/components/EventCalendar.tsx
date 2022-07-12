@@ -157,9 +157,9 @@ export default function EventCalendar() {
                             } else if (
                                 calendarEvent.eventType === 'Camp and Ride' ||
                                 calendarEvent.eventType === 'Ride Day') {
-                                newStyle.backgroundColor = '#D3D3D3'; // lightgrey
+                                newStyle.backgroundColor = '#037ffc';
                             } else { // its a Job
-                                newStyle.backgroundColor = 'lightblue';
+                                newStyle.backgroundColor = '#037ffc';
                             }
                             return {
                                 style: newStyle,
