@@ -96,7 +96,7 @@ export default function HamburgerMenu(props:pageProps) {
                                     id="2"
                                     isActive={props.activeButtonId === 2}
                                 >
-                                    <Link to="/calendar">Calendar</Link>
+                                    <Link to="/calendar">Calendar and Job Signup</Link>
                                 </Button>
                                 <Button
                                     justifyContent="flex-start"
@@ -162,7 +162,7 @@ export default function HamburgerMenu(props:pageProps) {
                                     id="5"
                                     isActive={props.activeButtonId === 5}
                                 >
-                                    <Link to="/jobs">Event Jobs</Link>
+                                    <Link to="/jobs">Administer Event Jobs</Link>
                                 </Button>
                             </VStack>
                         </DrawerBody>
