@@ -393,6 +393,15 @@ CREATE TABLE `pradb`.`earned_points_history` (
   KEY `idx_points_history_date_member` (`date`,`old_member_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=4211;
 
+DROP TABLE IF EXISTS `pradb`.`membership_application`;
+
+CREATE TABLE `membership_application` (
+  `membership_application_id` int(11) NOT NULL AUTO_INCREMENT,
+  `application_status` VARCHAR(50) NOT NULL,
+  `application_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `application_json` json DEFAULT NULL,
+  PRIMARY KEY (`membership_application_id`)
+) ENGINE=InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
