@@ -1,4 +1,4 @@
-import { OkPacket, RowDataPacket } from 'mysql2';
+import { OkPacket } from 'mysql2';
 import { getPool } from './pool';
 import logger from '../logger';
 
