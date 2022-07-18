@@ -397,11 +397,23 @@ DROP TABLE IF EXISTS `pradb`.`membership_application`;
 
 CREATE TABLE `membership_application` (
   `membership_application_id` int(11) NOT NULL AUTO_INCREMENT,
-  `application_status` VARCHAR(50) NOT NULL,
+  `application_status` varchar(50) NOT NULL,
+  `application_email` varchar(255) NOT NULL,
   `application_date` datetime DEFAULT CURRENT_TIMESTAMP,
   `application_json` json DEFAULT NULL,
   PRIMARY KEY (`membership_application_id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `pradb`.`emails`;
+
+CREATE TABLE `pradb`.`emails` (
+  `email_id` INT NOT NULL AUTO_INCREMENT,
+  `purpose` VARCHAR(45) NOT NULL,
+  `subject` VARCHAR(255) NULL,
+  `text` VARCHAR(4000) NULL,
+  PRIMARY KEY (`email_id`),
+  UNIQUE INDEX `email_id_UNIQUE` (`email_id` ASC)) ENGINE=InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
