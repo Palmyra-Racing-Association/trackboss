@@ -79,7 +79,7 @@ export default function MemberList() {
                     _.forEach(boardMembers, (boardMember) => {
                         _.forEach(c, (member: Member) => {
                             if (member.memberId === boardMember.memberId) {
-                                member.memberType = `Board Member - ${boardMember.title}`;
+                                member.membershipType = `Board Member - ${boardMember.title}(${member.membershipType})`;
                                 member.boardMemberData = boardMember;
                                 return false;
                             }
