@@ -84,11 +84,11 @@ export class DeployStack extends cdk.Stack {
       autoScalingGroupName: `${environmentName}-backend-asg`,
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.T2,
-        ec2.InstanceSize.MICRO,
+        ec2.InstanceSize.SMALL,
       ),
       // see https://aws.amazon.com/ec2/pricing/on-demand/ for this number. This should be checked against
       // instance classes every once in a while to make sure that this is optimal.
-      spotPrice: '0.0084',      
+      spotPrice: '0.023',
       keyName: 'prakeyz',
       role: iam.Role.fromRoleName(this, 'ec2-role', 'ec2_aws_access'),
       machineImage: ecs.EcsOptimizedImage.amazonLinux2(),
