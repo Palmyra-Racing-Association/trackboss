@@ -27,7 +27,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
         onClose,
     } = useDisclosure();
     const [description, setDescription] = useState<string>('');
-    const [pointValue, setPointValue] = useState<number>();
+    const [pointValue, setPointValue] = useState<number>(0);
     const [dirty, setDirty] = useState<boolean>(false);
     const toast = useToast();
 
@@ -59,7 +59,17 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                                     }
                                 }
                             />
-                            <NumberInput min={1} max={30} step={0.25}>
+                            <NumberInput
+                                min={1}
+                                max={30}
+                                step={0.25}
+                                onChange={
+                                    (changeValue) => {
+                                        setPointValue(Number(changeValue));
+                                        setDirty(true);
+                                    }
+                                }
+                            >
                                 <NumberInputField
                                     placeholder="Points earned"
                                     value={pointValue}

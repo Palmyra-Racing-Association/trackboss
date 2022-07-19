@@ -3,7 +3,6 @@ import { getPool } from './pool';
 import logger from '../logger';
 import { MembershipApplication } from '../typedefs/membershipApplication';
 
-// eslint-disable-next-line import/prefer-default-export
 export async function insertMembershipApplication(membershipApplication: any): Promise<number> {
     const values = ['PENDING_REVIEW', membershipApplication.email, JSON.stringify(membershipApplication)];
     let result;
@@ -37,7 +36,8 @@ export async function getMembershipApplications() : Promise<MembershipApplicatio
 export async function getMembershipApplication(id: number) : Promise<MembershipApplication> {
     let results;
     try {
-        [results] = await getPool().query<RowDataPacket[]>('select application_json from membership_application');
+        // eslint-disable-next-line max-len
+        [results] = await getPool().query<RowDataPacket[]>('select application_json from membership_application where membership_application_id = ?', [id]);
     } catch (e) {
         logger.error(`DB error getting bike list: ${e}`);
         throw new Error('internal server error');

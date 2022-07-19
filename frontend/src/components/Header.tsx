@@ -29,7 +29,7 @@ export default function Header(props:pageProps) {
     return (
         <div>
             <Flex bg="white" boxShadow="lg" padding="6">
-                <HamburgerMenu activeButtonId={props.activeButtonId} />
+                <HamburgerMenu activeButtonId={props.activeButtonId} admin={state.user?.memberType === 'Admin'} />
                 <Spacer />
                 <Box>
                     <Heading pr={90} size="xl">{props.title}</Heading>
