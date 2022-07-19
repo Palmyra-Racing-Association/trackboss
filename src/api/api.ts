@@ -17,6 +17,7 @@ import memberType from './memberType';
 import workPoints from './workPoints';
 import health from './health';
 import gateCode from './gateCode';
+import membershipApplication from './membershipApplication';
 
 const api = Router();
 
@@ -74,5 +75,6 @@ api.use('/boardMember', boardMember);
 api.use('/boardMemberType', boardMemberType);
 api.use('/health', health);
 api.use('/gateCode', gateCode);
+api.use('/membershipApplication', membershipApplication);
 
 export default api;

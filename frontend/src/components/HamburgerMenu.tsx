@@ -12,16 +12,17 @@ import {
     HStack,
 } from '@chakra-ui/react';
 
-import { AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank } from 'react-icons/ai';
+import { AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank, AiFillFolderOpen } from 'react-icons/ai';
 import { HiUsers, HiCog } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface pageProps {
-  activeButtonId: number
+    activeButtonId: number,
+    admin: boolean,
 }
 
-export default function HamburgerMenu(props:pageProps) {
+export default function HamburgerMenu(props: pageProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const history = useNavigate();
     return (
@@ -142,29 +143,58 @@ export default function HamburgerMenu(props:pageProps) {
                                 >
                                     <Link to="/settings">My Account</Link>
                                 </Button>
-                                <Button
-                                    justifyContent="flex-start"
-                                    height="80px"
-                                    fontFamily="heading"
-                                    fontSize="2xl"
-                                    leftIcon={<AiFillBank />}
-                                    isFullWidth
-                                    bg="white"
-                                    color="black"
-                                    borderRadius="0"
-                                    _hover={{ bg: 'gray.100' }}
-                                    _active={
-                                        {
-                                            bg: 'orange',
-                                            color: 'white',
-                                        }
-                                    }
-                                    id="5"
-                                    isActive={props.activeButtonId === 5}
-                                >
-                                    <Link to="/jobs">Administer Event Jobs</Link>
-                                </Button>
                             </VStack>
+                            {
+                                (props.admin) && (
+                                    <VStack width="100%" divider={<StackDivider borderColor="gray.300" />} spacing="0">
+                                        <StackDivider borderColor="gray.300" />
+                                        <Button
+                                            justifyContent="flex-start"
+                                            height="80px"
+                                            fontFamily="heading"
+                                            fontSize="2xl"
+                                            leftIcon={<AiFillBank />}
+                                            isFullWidth
+                                            bg="white"
+                                            color="black"
+                                            borderRadius="0"
+                                            _hover={{ bg: 'gray.100' }}
+                                            _active={
+                                                {
+                                                    bg: 'orange',
+                                                    color: 'white',
+                                                }
+                                            }
+                                            id="5"
+                                            isActive={props.activeButtonId === 5}
+                                        >
+                                            <Link to="/jobs">Administer Event Jobs</Link>
+                                        </Button>
+                                        <Button
+                                            justifyContent="flex-start"
+                                            height="80px"
+                                            fontFamily="heading"
+                                            fontSize="2xl"
+                                            leftIcon={<AiFillFolderOpen />}
+                                            isFullWidth
+                                            bg="white"
+                                            color="black"
+                                            borderRadius="0"
+                                            _hover={{ bg: 'gray.100' }}
+                                            _active={
+                                                {
+                                                    bg: 'orange',
+                                                    color: 'white',
+                                                }
+                                            }
+                                            id="6"
+                                            isActive={props.activeButtonId === 6}
+                                        >
+                                            <Link to="/applications">Membership Applications</Link>
+                                        </Button>
+                                    </VStack>
+                                )
+                            }
                         </DrawerBody>
                     </DrawerContent>
                 </Drawer>
