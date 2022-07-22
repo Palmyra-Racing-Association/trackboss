@@ -111,6 +111,7 @@ workPoints.get('/list/excel', async (req: Request, res: Response) => {
         { header: 'Last Name', key: 'lastName', width: 10 },
         { header: 'Membership Type', key: 'membershipType', width: 15 },
         { header: 'Points', key: 'points', width: 6 },
+        { header: 'Signature', key: 'signature', width: 25 },
     ];
     workPointsByMember.forEach((member) => {
         worksheet.addRow({
@@ -118,6 +119,7 @@ workPoints.get('/list/excel', async (req: Request, res: Response) => {
             lastName: member.lastName,
             membershipType: member.membershipType,
             points: member.total,
+            signature: '',
         });
     });
     formatWorkbook(worksheet);
