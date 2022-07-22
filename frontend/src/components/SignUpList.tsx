@@ -140,7 +140,11 @@ export default function SignUpList(props: SignupListProps) {
                             color="white"
                             onClick={
                                 async () => {
-                                    const signupListExcel = await getSignupListExcel(state.token, props.eventId);
+                                    const retrieveJobs = (
+                                        (props.eventType === 'Race') || (props.eventType === 'Harescramble')
+                                    );
+                                    const signupListExcel =
+                                        await getSignupListExcel(state.token, props.eventId, retrieveJobs);
                                     const objectUrl = URL.createObjectURL(signupListExcel);
                                     window.location.href = objectUrl;
                                 }
