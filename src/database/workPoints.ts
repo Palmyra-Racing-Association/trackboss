@@ -50,7 +50,10 @@ export async function getWorkPointsByMembership(membershipId: number, year: numb
 }
 
 export async function getWorkPointsList(year: number) : Promise<WorkPoints[]> {
-    const sql = 'select * from v_current_member_points where year = ? or year is null order by last_name, first_name';
+    const sql = `select b.last_name, b.first_name, m.membership_type, b.points_earned from
+    v_bill b, v_member m where  b.year = 2022 and m.membership_id = b.membership_id order by
+    last_name, first_name`;
+
     let results = [];
     try {
         [results] = await getPool().query<RowDataPacket[]>(sql, [year]);
@@ -63,6 +66,6 @@ export async function getWorkPointsList(year: number) : Promise<WorkPoints[]> {
         firstName: result.first_name,
         lastName: result.last_name,
         membershipType: result.membership_type,
-        total: result.total_points,
+        total: result.points_earned,
     }));
 }
