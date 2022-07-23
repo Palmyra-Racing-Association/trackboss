@@ -7,7 +7,7 @@ import MembershipApplicationList from '../components/MembershipApplicationList';
 function MembershipApplications() {
     return (
         <ChakraProvider theme={theme}>
-            <Header title="Membership Applications" activeButtonId={3} />
+            <Header title="Membership Applications" activeButtonId={6} />
             <Box mt={0} pt={0}>
                 <MembershipApplicationList />
             </Box>

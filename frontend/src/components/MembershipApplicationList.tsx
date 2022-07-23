@@ -1,33 +1,28 @@
-import { Box, Center, Input, InputGroup, InputLeftElement, useDisclosure } from '@chakra-ui/react';
-import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { BsSearch } from 'react-icons/bs';
-import { ErrorResponse } from '../../../src/typedefs/errorResponse';
-import { Member } from '../../../src/typedefs/member';
+import { MembershipApplication } from '../../../src/typedefs/membershipApplication';
 import { UserContext } from '../contexts/UserContext';
-import { getMemberList } from '../controller/member';
-import MemberSummaryModal from './MemberSummaryModal';
+import { getMembershipApplications } from '../controller/membershipApplication';
 
 const columns: any = [
     {
         name: 'Last Name',
-        selector: (row: Member) => row.lastName,
+        selector: (row: MembershipApplication) => row.lastName,
         sortable: true,
     },
     {
         name: 'First Name',
-        selector: (row: Member) => row.firstName,
+        selector: (row: MembershipApplication) => row.firstName,
         sortable: true,
     },
     {
-        name: 'Membership Type',
-        selector: (row: Member) => row.membershipType,
+        name: 'City',
+        selector: (row: MembershipApplication) => row.city,
         sortable: true,
     },
     {
-        name: 'Role',
-        selector: (row: Member) => row.memberType,
+        name: 'Google Link',
+        selector: (row: MembershipApplication) => row.googleLink,
         sortable: true,
     },
 ];
@@ -55,69 +50,20 @@ const customStyles = {
 };
 
 export default function MembershipApplicationList() {
-    const [selectedMember, setSelectedMember] = useState<Member>();
-    const [cells, setCells] = useState<Member[]>([]);
-    const [allCells, setAllCells] = useState<Member[]>([]);
+    const [cells, setCells] = useState<MembershipApplication[]>([]);
 
     const { state } = useContext(UserContext);
-    const [error, setError] = useState<ErrorResponse | undefined>(undefined);
-    const [dirty, setDirty] = useState<boolean>(false);
-    const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((oldDirty) => !oldDirty) });
-    const [searchTerm, setSearchTerm] = useState<string>('');
 
     useEffect(() => {
         async function getData() {
-            const c: Member[] | ErrorResponse = await getMemberList(state.token);
-            if ('reason' in c) {
-                setError(c);
-            } else {
-                const activeMembers = _.filter(c, (member) => member.active);
-                setCells(activeMembers);
-                setAllCells(activeMembers);
-                setError(undefined);
-            }
+            const c: MembershipApplication[] = await getMembershipApplications(state.token);
+            setCells(c);
         }
         getData();
-    }, [dirty]);
+    }, []);
 
-    useEffect(() => {
-        if (searchTerm === '') {
-            setCells(allCells);
-        } else {
-            const newCells =
-                allCells.filter((cell: any) => {
-                    const firstNameFound = cell.firstName.toLowerCase().includes(searchTerm);
-                    const lastNameFound = cell.lastName.toLowerCase().includes(searchTerm);
-                    const typeFound = cell.membershipType.toLowerCase().includes(searchTerm);
-                    return (firstNameFound || lastNameFound || typeFound);
-                });
-            setCells(newCells);
-        }
-    }, [searchTerm, allCells]);
-
-    if (error) {
-        return (
-            <div>
-                {error.reason}
-            </div>
-        );
-    }
     return (
         <div>
-            <Center>
-                <Box maxWidth={300}>
-                    <InputGroup>
-                        <InputLeftElement pointerEvents="none">
-                            <BsSearch color="gray.300" />
-                        </InputLeftElement>
-                        <Input
-                            size="lg"
-                            placeholder="Search..."
-                            onChange={(e) => setSearchTerm(e.target.value?.toLowerCase())}
-                        />
-                    </InputGroup>
-                </Box>
-            </Center>
             <DataTable
                 columns={columns}
                 data={cells}
@@ -134,22 +80,7 @@ export default function MembershipApplicationList() {
                         selectAllRowsItem: true,
                     }
                 }
-                onRowClicked={
-                    (row: Member) => {
-                        setSelectedMember(row);
-                        onOpen();
-                    }
-                }
             />
-            {
-                selectedMember && (
-                    <MemberSummaryModal
-                        isOpen={isOpen}
-                        onClose={onClose}
-                        memberInfo={selectedMember}
-                    />
-                )
-            }
         </div>
     );
 }
