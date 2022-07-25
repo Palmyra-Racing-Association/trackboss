@@ -1,5 +1,6 @@
 export type MembershipApplication = {
     id: number,
+    status: string,
     firstName: string,
     lastName: string,
     address: string,
@@ -9,6 +10,10 @@ export type MembershipApplication = {
     email: string,
     phoneNumber: string,
     occupation: string,
+    googleLink: string,
+    receivedDate: Date,
+    birthDate: Date,
+    recommendedBy: string,
     familyMember0FirstName?: string,
     familyMember0LastName?: string,
     familyMember0Age?: number,

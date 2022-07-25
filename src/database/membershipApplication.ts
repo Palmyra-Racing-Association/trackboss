@@ -21,27 +21,20 @@ export async function insertMembershipApplication(membershipApplication: any): P
 export async function getMembershipApplications() : Promise<MembershipApplication[]> {
     let results;
     try {
-        [results] = await getPool().query<RowDataPacket[]>('select application_json from membership_application');
+        const applicationsQuery =
+            'select membership_application_id, application_status, application_json from membership_application';
+        [results] = await getPool()
+            .query<RowDataPacket[]>(applicationsQuery);
     } catch (e) {
         logger.error(`DB error getting bike list: ${e}`);
         throw new Error('internal server error');
     }
     const applications : MembershipApplication[] = [];
     results.forEach((result) => {
-        applications.push(result.application_json);
+        const app : MembershipApplication = result.application_json;
+        app.id = result.membership_application_id;
+        app.status = result.application_status;
+        applications.push(app);
     });
-    return applications;
-}
-
-export async function getMembershipApplication(id: number) : Promise<MembershipApplication> {
-    let results;
-    try {
-        // eslint-disable-next-line max-len
-        [results] = await getPool().query<RowDataPacket[]>('select application_json from membership_application where membership_application_id = ?', [id]);
-    } catch (e) {
-        logger.error(`DB error getting bike list: ${e}`);
-        throw new Error('internal server error');
-    }
-    const applications = results[0].application_json;
     return applications;
 }
