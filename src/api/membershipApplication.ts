@@ -33,7 +33,7 @@ async function validateAdminAccess(req: Request, res: Response) {
 
 membershipApplication.post('/', async (req: Request, res: Response) => {
     const application = req.body;
-    application.receivedDate = new Date();
+    application.receivedDate = (new Date()).toLocaleString('en-US');
     logger.info(`Application received at ${application.receivedDate} for ${application.lastName}`);
     // eslint-disable-next-line max-len
     application.googleLink = `https://www.google.com/search?q=${application.firstName}+${application.lastName}+${application.city}+${application.state}`;

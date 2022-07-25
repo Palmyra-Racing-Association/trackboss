@@ -10,6 +10,7 @@ export type MembershipApplication = {
     phoneNumber: string,
     occupation: string,
     googleLink: string,
+    receivedDate: Date,
     familyMember0FirstName?: string,
     familyMember0LastName?: string,
     familyMember0Age?: number,

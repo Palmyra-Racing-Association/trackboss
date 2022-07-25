@@ -1,8 +1,10 @@
+import { useDisclosure } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { MembershipApplication } from '../../../src/typedefs/membershipApplication';
 import { UserContext } from '../contexts/UserContext';
 import { getMembershipApplications } from '../controller/membershipApplication';
+import MembershipApplicationModal from './modals/MembershipApplicationModal';
 
 const columns: any = [
     {
@@ -21,8 +23,8 @@ const columns: any = [
         sortable: true,
     },
     {
-        name: 'Google Link',
-        selector: (row: MembershipApplication) => row.googleLink,
+        name: 'Application date',
+        selector: (row: MembershipApplication) => row.receivedDate,
         sortable: true,
     },
 ];
@@ -51,9 +53,9 @@ const customStyles = {
 
 export default function MembershipApplicationList() {
     const [cells, setCells] = useState<MembershipApplication[]>([]);
-
     const { state } = useContext(UserContext);
-
+    const { isOpen, onClose, onOpen } = useDisclosure();
+    const [selectedApplication, setSelectedApplication] = useState<MembershipApplication>();
     useEffect(() => {
         async function getData() {
             const c: MembershipApplication[] = await getMembershipApplications(state.token);
@@ -80,7 +82,25 @@ export default function MembershipApplicationList() {
                         selectAllRowsItem: true,
                     }
                 }
+                onRowClicked={
+                    (row: MembershipApplication) => {
+                        setSelectedApplication(row);
+                        onOpen();
+                    }
+                }
             />
+            {
+                (selectedApplication && (
+                    <MembershipApplicationModal
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        addAction={() => undefined}
+                        membershipApplication={selectedApplication}
+                        token={state.token}
+                    />
+                )
+                )
+            }
         </div>
     );
 }
