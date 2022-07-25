@@ -4,7 +4,7 @@ import logger from '../logger';
 import { MembershipApplication } from '../typedefs/membershipApplication';
 
 export async function insertMembershipApplication(membershipApplication: any): Promise<number> {
-    const values = ['PENDING_REVIEW', membershipApplication.email, JSON.stringify(membershipApplication)];
+    const values = ['Review', membershipApplication.email, JSON.stringify(membershipApplication)];
     let result;
     // eslint-disable-next-line max-len
     const insertSql = 'insert into membership_application (application_status, application_email, application_json) values (?, ?, ?)';
@@ -37,4 +37,35 @@ export async function getMembershipApplications() : Promise<MembershipApplicatio
         applications.push(app);
     });
     return applications;
+}
+
+export async function getMembershipApplication(id: number) : Promise<MembershipApplication> {
+    let results;
+    try {
+        const applicationsQuery =
+            // eslint-disable-next-line max-len
+            'select membership_application_id, application_status, application_json from membership_application where membership_application_id = ?';
+        // eslint-disable-next-line max-len
+        [results] = await getPool().query<RowDataPacket[]>(applicationsQuery, [id]);
+    } catch (e) {
+        logger.error(`DB error getting bike list: ${e}`);
+        throw new Error('internal server error');
+    }
+    const applications = results[0].application_json;
+    applications.id = results[0].membership_application_id;
+    applications.status = results[0].application_status;
+    return applications;
+}
+
+export async function updateApplicationStatus(id: number, newStatus: string) : Promise<MembershipApplication> {
+    let results;
+    try {
+        const updateQuery =
+            'update membership_application set application_status = ? where membership_application_id = ?';
+        [results] = await getPool().query<OkPacket>(updateQuery, [newStatus, id]);
+        return getMembershipApplication(id);
+    } catch (e) {
+        logger.error(`DB error updating application status: ${e}`);
+        throw new Error('Internal server error');
+    }
 }

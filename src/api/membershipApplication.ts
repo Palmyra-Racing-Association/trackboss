@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { sendAppConfirmationEmail } from '../util/email';
 import {
-    getMembershipApplications, insertMembershipApplication,
+    getMembershipApplications, insertMembershipApplication, updateApplicationStatus,
 } from '../database/membershipApplication';
 import logger from '../logger';
 import { checkHeader, verify } from '../util/auth';
@@ -31,6 +31,19 @@ async function validateAdminAccess(req: Request, res: Response) {
     }
 }
 
+/**
+ * Shared function to update the status in the database.  Yay reusablity!
+ * @param req request
+ * @param res response
+ * @param status status
+ */
+const sendApplicationStatus = async (req: Request, res: Response, status: string) => {
+    await validateAdminAccess(req, res);
+    const id = parseInt(req.params.id, 10);
+    const updatedApplication = await updateApplicationStatus(id, status);
+    res.send(updatedApplication);
+};
+
 membershipApplication.post('/', async (req: Request, res: Response) => {
     const application = req.body;
     application.receivedDate = (new Date()).toLocaleString('en-US');
@@ -50,17 +63,11 @@ membershipApplication.get('/', async (req: Request, res: Response) => {
 });
 
 membershipApplication.post('/accept/:id', async (req: Request, res: Response) => {
-    await validateAdminAccess(req, res);
-    const id = parseInt(req.params.id, 10);
-    res.status(200);
-    res.send(`Accepted application id ${id}`);
+    await sendApplicationStatus(req, res, 'Accepted');
 });
 
 membershipApplication.post('/reject/:id', async (req: Request, res: Response) => {
-    await validateAdminAccess(req, res);
-    const id = parseInt(req.params.id, 10);
-    res.status(200);
-    res.send(`Rejected application id ${id}`);
+    await sendApplicationStatus(req, res, 'Rejected');
 });
 
 export default membershipApplication;

@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Button, Divider, Heading, Link, ListItem, Modal, ModalContent, ModalFooter,
-    ModalOverlay, OrderedList, SimpleGrid, Text,
+    ModalOverlay, OrderedList, SimpleGrid, Text, Textarea,
 } from '@chakra-ui/react';
 import { MembershipApplication } from '../../../../src/typedefs/membershipApplication';
 import NameAddressDisplay from '../shared/NameAddressDisplay';
@@ -20,6 +20,9 @@ interface appModalProps {
 }
 
 export default function MembershipApplicationModal(props: appModalProps) {
+    const [internalNotes, setInternalNotes] = useState<string>();
+    const [applicantNotes, setApplicantNotes] = useState<string>();
+
     const { membershipApplication, isOpen, onClose } = props;
     props.addAction();
     return (
@@ -105,6 +108,28 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         )
                         )
                     }
+                    <Divider />
+                    <Text size="lg">Notes (please add for tracking)</Text>
+                    <Textarea
+                        placeholder="Internal PRA notes"
+                        onChange={
+                            (e) => {
+                                setInternalNotes(e.target.value);
+                            }
+                        }
+                    >
+                        {internalNotes}
+                    </Textarea>
+                    <Textarea
+                        placeholder="Notes to applicant"
+                        onChange={
+                            (e) => {
+                                setApplicantNotes(e.target.value);
+                            }
+                        }
+                    >
+                        {applicantNotes}
+                    </Textarea>
                 </SimpleGrid>
                 <ModalFooter>
                     <Button
@@ -125,8 +150,10 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         size="lg"
                         onClick={
                             async () => {
-                                await rejectMembershipApplication(props.token, membershipApplication.id);
-                                props.onClose();
+                                const response = await rejectMembershipApplication(props.token, membershipApplication.id);
+                                console.log(response);
+                                props.addAction();
+                                onClose();
                             }
                         }
                     >
@@ -138,8 +165,10 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         size="lg"
                         onClick={
                             async () => {
-                                await acceptMembershipApplication(props.token, membershipApplication.id);
-                                props.onClose();
+                                const response = await acceptMembershipApplication(props.token, membershipApplication.id);
+                                console.log(response);
+                                props.addAction();
+                                onClose();
                             }
                         }
                     >

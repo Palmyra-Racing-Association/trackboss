@@ -61,12 +61,14 @@ export default function MembershipApplicationList() {
     const { state } = useContext(UserContext);
     const { isOpen, onClose, onOpen } = useDisclosure();
     const [selectedApplication, setSelectedApplication] = useState<MembershipApplication>();
+
+    async function getMembershipApplicationsData() {
+        const c: MembershipApplication[] = await getMembershipApplications(state.token);
+        setCells(c);
+    }
+
     useEffect(() => {
-        async function getData() {
-            const c: MembershipApplication[] = await getMembershipApplications(state.token);
-            setCells(c);
-        }
-        getData();
+        getMembershipApplicationsData();
     }, []);
 
     return (
@@ -99,7 +101,8 @@ export default function MembershipApplicationList() {
                     <MembershipApplicationModal
                         isOpen={isOpen}
                         onClose={onClose}
-                        addAction={() => undefined}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        addAction={getMembershipApplicationsData}
                         membershipApplication={selectedApplication}
                         token={state.token}
                     />
