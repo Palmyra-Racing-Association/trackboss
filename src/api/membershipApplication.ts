@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { sendAppConfirmationEmail } from '../util/email';
 import {
-    getMembershipApplication, getMembershipApplications, insertMembershipApplication,
+    getMembershipApplications, insertMembershipApplication,
 } from '../database/membershipApplication';
 import logger from '../logger';
 import { checkHeader, verify } from '../util/auth';
@@ -49,11 +49,18 @@ membershipApplication.get('/', async (req: Request, res: Response) => {
     res.send(allApplications);
 });
 
-membershipApplication.get('/:id', async (req: Request, res: Response) => {
+membershipApplication.post('/accept/:id', async (req: Request, res: Response) => {
     await validateAdminAccess(req, res);
     const id = parseInt(req.params.id, 10);
-    const allApplications = await getMembershipApplication(id);
-    res.send(allApplications);
+    res.status(200);
+    res.send(`Accepted application id ${id}`);
+});
+
+membershipApplication.post('/reject/:id', async (req: Request, res: Response) => {
+    await validateAdminAccess(req, res);
+    const id = parseInt(req.params.id, 10);
+    res.status(200);
+    res.send(`Rejected application id ${id}`);
 });
 
 export default membershipApplication;

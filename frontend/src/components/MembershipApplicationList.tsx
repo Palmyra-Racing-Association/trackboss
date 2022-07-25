@@ -18,13 +18,18 @@ const columns: any = [
         sortable: true,
     },
     {
-        name: 'City',
-        selector: (row: MembershipApplication) => row.city,
+        name: 'Recommended By',
+        selector: (row: MembershipApplication) => row.recommendedBy,
         sortable: true,
     },
     {
         name: 'Application date',
         selector: (row: MembershipApplication) => row.receivedDate,
+        sortable: true,
+    },
+    {
+        name: 'Status',
+        selector: (row: MembershipApplication) => row.status,
         sortable: true,
     },
 ];
