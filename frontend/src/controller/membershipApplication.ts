@@ -35,3 +35,11 @@ export async function rejectMembershipApplication(token: string, id: number): Pr
     });
     return response.json();
 }
+export async function reviewMembershipApplication(token: string, id: number): Promise<MembershipApplication[]> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication/review/${id}`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}

@@ -70,4 +70,8 @@ membershipApplication.post('/reject/:id', async (req: Request, res: Response) =>
     await sendApplicationStatus(req, res, 'Rejected');
 });
 
+membershipApplication.post('/review/:id', async (req: Request, res: Response) => {
+    await sendApplicationStatus(req, res, 'Review');
+});
+
 export default membershipApplication;

@@ -23,6 +23,7 @@ export default function NameAddressDisplay(props: any) {
             <Link href={`tel:${addressContainer.phone}`} isExternal>
                 {addressContainer.phone}
             </Link>
+            <br />
             <Link href={`mailto:${addressContainer.email}`} isExternal>
                 {addressContainer.email}
             </Link>

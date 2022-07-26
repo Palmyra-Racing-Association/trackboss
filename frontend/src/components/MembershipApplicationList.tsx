@@ -18,11 +18,6 @@ const columns: any = [
         sortable: true,
     },
     {
-        name: 'Recommended By',
-        selector: (row: MembershipApplication) => row.recommendedBy,
-        sortable: true,
-    },
-    {
         name: 'Application date',
         selector: (row: MembershipApplication) => row.receivedDate,
         sortable: true,
