@@ -27,6 +27,12 @@ export default function NameAddressDisplay(props: any) {
             <Link href={`mailto:${addressContainer.email}`} isExternal>
                 {addressContainer.email}
             </Link>
+            <br />
+            <Text fontSize="md">
+                DOB:
+                &nbsp;
+                {addressContainer.birthDate}
+            </Text>
         </>
     );
 }
