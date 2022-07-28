@@ -18,15 +18,13 @@ async function validateAdminAccess(req: Request, res: Response) {
     const { authorization } = req.headers;
     const headerCheck = checkHeader(authorization);
     if (!headerCheck.valid) {
-        res.status(401);
-        res.send({ reason: headerCheck.reason });
+        throw new Error(headerCheck.reason);
     } else {
         try {
             await verify(headerCheck.token, 'Admin');
         } catch (error: any) {
             logger.error('Error authorizing user token as admin', error);
-            res.status(401);
-            res.send(error);
+            throw error;
         }
     }
 }
@@ -56,8 +54,9 @@ membershipApplication.post('/', async (req: Request, res: Response) => {
         await sendAppConfirmationEmail(application);
         res.send(application);
     } catch (error: any) {
+        logger.error(error);
         res.status(500);
-        res.send(error);
+        res.send('Unable to process application due to error');
     }
 });
 
@@ -67,8 +66,9 @@ membershipApplication.get('/', async (req: Request, res: Response) => {
         const allApplications = await getMembershipApplications();
         res.send(allApplications);
     } catch (error: any) {
+        logger.error(error);
         res.status(500);
-        res.send(error);
+        res.send('Unable to process application due to error');
     }
 });
 
@@ -76,8 +76,9 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
     try {
         await sendApplicationStatus(req, res, 'Accepted');
     } catch (error: any) {
+        logger.error(error);
         res.status(500);
-        res.send(error);
+        res.send('Unable to process application due to error');
     }
 });
 
@@ -85,8 +86,9 @@ membershipApplication.post('/reject/:id', async (req: Request, res: Response) =>
     try {
         await sendApplicationStatus(req, res, 'Rejected');
     } catch (error: any) {
+        logger.error(error);
         res.status(500);
-        res.send(error);
+        res.send('Unable to process application due to error');
     }
 });
 
@@ -94,8 +96,9 @@ membershipApplication.post('/review/:id', async (req: Request, res: Response) =>
     try {
         await sendApplicationStatus(req, res, 'Review');
     } catch (error: any) {
+        logger.error(error);
         res.status(500);
-        res.send(error);
+        res.send('Unable to process application due to error');
     }
 });
 
