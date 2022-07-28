@@ -62,21 +62,41 @@ membershipApplication.post('/', async (req: Request, res: Response) => {
 });
 
 membershipApplication.get('/', async (req: Request, res: Response) => {
-    await validateAdminAccess(req, res);
-    const allApplications = await getMembershipApplications();
-    res.send(allApplications);
+    try {
+        await validateAdminAccess(req, res);
+        const allApplications = await getMembershipApplications();
+        res.send(allApplications);
+    } catch (error: any) {
+        res.status(500);
+        res.send(error);
+    }
 });
 
 membershipApplication.post('/accept/:id', async (req: Request, res: Response) => {
-    await sendApplicationStatus(req, res, 'Accepted');
+    try {
+        await sendApplicationStatus(req, res, 'Accepted');
+    } catch (error: any) {
+        res.status(500);
+        res.send(error);
+    }
 });
 
 membershipApplication.post('/reject/:id', async (req: Request, res: Response) => {
-    await sendApplicationStatus(req, res, 'Rejected');
+    try {
+        await sendApplicationStatus(req, res, 'Rejected');
+    } catch (error: any) {
+        res.status(500);
+        res.send(error);
+    }
 });
 
 membershipApplication.post('/review/:id', async (req: Request, res: Response) => {
-    await sendApplicationStatus(req, res, 'Review');
+    try {
+        await sendApplicationStatus(req, res, 'Review');
+    } catch (error: any) {
+        res.status(500);
+        res.send(error);
+    }
 });
 
 export default membershipApplication;
