@@ -45,15 +45,20 @@ const sendApplicationStatus = async (req: Request, res: Response, status: string
 };
 
 membershipApplication.post('/', async (req: Request, res: Response) => {
-    const application = req.body;
-    application.receivedDate = (new Date()).toLocaleString('en-US');
-    logger.info(`Application received at ${application.receivedDate} for ${application.lastName}`);
-    // eslint-disable-next-line max-len
-    application.googleLink = `https://www.google.com/search?q=${application.firstName}+${application.lastName}+${application.city}+${application.state}`;
-    const insertId = await insertMembershipApplication(application);
-    application.id = insertId;
-    await sendAppConfirmationEmail(application);
-    res.send(application);
+    try {
+        const application = req.body;
+        application.receivedDate = (new Date()).toLocaleString('en-US');
+        logger.info(`Application received at ${application.receivedDate} for ${application.lastName}`);
+        // eslint-disable-next-line max-len
+        application.googleLink = `https://www.google.com/search?q=${application.firstName}+${application.lastName}+${application.city}+${application.state}`;
+        const insertId = await insertMembershipApplication(application);
+        application.id = insertId;
+        await sendAppConfirmationEmail(application);
+        res.send(application);
+    } catch (error: any) {
+        res.status(500);
+        res.send(error);
+    }
 });
 
 membershipApplication.get('/', async (req: Request, res: Response) => {

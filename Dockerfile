@@ -16,4 +16,4 @@ RUN npm install
 # RUN npm ci --only=production
 
 EXPOSE ${PORT}
-CMD [ "npm", "run", "server" ]
+CMD [ "npm", "run", "server-prod" ]

@@ -11,6 +11,7 @@
         "ci-integration-test": "cross-env PORT=0 jest --ci --reporters $(pwd)/.github/jest-reporter.js --testPathPattern=integration",
         "dev": "concurrently \"npm run frontend\" \"npm run server\"",
         "server": "nodemon --exec npx ts-node src/server.ts",
+        "server-prod": "npx ts-node src/server.ts",
         "frontend": "cd frontend && npm start",
         "build": "rm -rf build && tsc --project tsconfig.json",
         "dist": "pkg --compress GZip .",
