@@ -4,7 +4,9 @@ import {
     ModalOverlay,
     ModalContent,
     Button,
+    Heading,
     Text,
+    SimpleGrid,
     ModalFooter,
     Divider,
 } from '@chakra-ui/react';
@@ -19,10 +21,13 @@ export default function AddFamilyModal(props: modalProps) {
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
             <ModalContent>
-                <Text fontSize="2xl" pl={2} pr={2} textAlign="center">
-                    Please contact a club board member to add members to your membership.
-                </Text>
+                <Heading pl={2} pr={2} textAlign="center">
+                    Add family member
+                </Heading>
                 <Divider />
+                <SimpleGrid>
+                    <Text>stuff</Text>
+                </SimpleGrid>
                 <ModalFooter>
                     <Button
                         color="green"
