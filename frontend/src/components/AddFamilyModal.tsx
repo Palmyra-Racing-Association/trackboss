@@ -5,10 +5,12 @@ import {
     ModalContent,
     Button,
     Heading,
-    Text,
-    SimpleGrid,
     ModalFooter,
     Divider,
+    Box,
+    Input,
+    NumberInput,
+    NumberInputField,
 } from '@chakra-ui/react';
 
 interface modalProps {
@@ -25,9 +27,30 @@ export default function AddFamilyModal(props: modalProps) {
                     Add family member
                 </Heading>
                 <Divider />
-                <SimpleGrid>
-                    <Text>stuff</Text>
-                </SimpleGrid>
+                <Box width={300}>
+                    <Box>
+                        <Input
+                            placeholder="First Name"
+                        />
+                    </Box>
+                    <Box>
+                        <Input
+                            placeholder="Last Name"
+                        />
+                    </Box>
+                    <Box>
+                        <NumberInput min={0} max={99} step={1}>
+                            <NumberInputField
+                                placeholder="Age"
+                                onChange={
+                                    (event) => {
+                                        console.log(event.target.value);
+                                    }
+                                }
+                            />
+                        </NumberInput>
+                    </Box>
+                </Box>
                 <ModalFooter>
                     <Button
                         color="green"
