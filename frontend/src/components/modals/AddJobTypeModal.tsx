@@ -87,6 +87,7 @@ export default function AddJobTypeModal(props: alertProps) {
                         wrapperText="Meal Ticket?"
                         defaultChecked={mealTicketValue}
                         onSwitchChange={setMealTicketValue}
+                        maxWidth={100}
                     />
                     <Box maxWidth={100}>
                         <Text fontSize="sm">Positions</Text>

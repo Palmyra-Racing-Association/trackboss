@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -9,16 +9,29 @@ import {
     Divider,
     Box,
     Input,
-    NumberInput,
-    NumberInputField,
+    Text,
 } from '@chakra-ui/react';
+import DatePicker from 'react-date-picker';
+import moment from 'moment';
+import WrappedSwitchInput from './input/WrappedSwitchInput';
+import { Member, PostNewMemberRequest } from '../../../src/typedefs/member';
+
+import 'react-date-picker/dist/DatePicker.css';
+import '../css/date-picker.css';
 
 interface modalProps {
   isOpen: boolean,
+  membershipAdmin: Member | undefined,
   onClose: () => void,
 }
 
 export default function AddFamilyModal(props: modalProps) {
+    const [firstName, setFirstName] = useState<string>();
+    const [lastName, setLastName] = useState<string>();
+    const [email, setEmail] = useState<string>();
+    const [allowOnlineAccess, setAllowOnlineAccess] = useState<boolean>(true);
+    const [birthDate, setBirthDate] = useState<Date>();
+
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
@@ -28,32 +41,65 @@ export default function AddFamilyModal(props: modalProps) {
                 </Heading>
                 <Divider />
                 <Box width={300}>
-                    <Box>
+                    <Box m={3}>
                         <Input
                             placeholder="First Name"
+                            value={firstName}
+                            onChange={
+                                (e) => {
+                                    setFirstName(e.target.value);
+                                }
+                            }
                         />
                     </Box>
-                    <Box>
+                    <Box m={3}>
                         <Input
                             placeholder="Last Name"
+                            value={lastName}
+                            onChange={
+                                (e) => {
+                                    setLastName(e.target.value);
+                                }
+                            }
                         />
                     </Box>
-                    <Box>
-                        <NumberInput min={0} max={99} step={1}>
-                            <NumberInputField
-                                placeholder="Age"
-                                onChange={
-                                    (event) => {
-                                        console.log(event.target.value);
-                                    }
+                    <Box m={3}>
+                        <Text>Birth date</Text>
+                        <DatePicker
+                            minDate={moment().subtract(100, 'years').toDate()}
+                            maxDate={moment().subtract(1, 'months').toDate()}
+                            onChange={
+                                (date: Date) => {
+                                    setBirthDate(date);
                                 }
-                            />
-                        </NumberInput>
+                            }
+                            onCalendarClose={() => setBirthDate(birthDate)}
+                            value={birthDate}
+                        />
+                    </Box>
+                    <Box m={3}>
+                        <Input
+                            placeholder="email (if applicable)"
+                            value={email}
+                            onChange={
+                                (e) => {
+                                    setEmail(e.target.value);
+                                }
+                            }
+                        />
+                    </Box>
+                    <Box m={3}>
+                        <WrappedSwitchInput
+                            maxWidth={300}
+                            wrapperText="Allow online access?"
+                            defaultChecked={allowOnlineAccess}
+                            onSwitchChange={setAllowOnlineAccess}
+                        />
                     </Box>
                 </Box>
                 <ModalFooter>
                     <Button
-                        color="green"
+                        color="black"
                         variant="ghost"
                         mr={3}
                         size="lg"
@@ -63,7 +109,44 @@ export default function AddFamilyModal(props: modalProps) {
                             }
                         }
                     >
-                        Accept
+                        Cancel
+                    </Button>
+                    <Button
+                        color="green"
+                        variant="ghost"
+                        mr={3}
+                        size="lg"
+                        disabled={
+                            (!firstName) ||
+                            (!lastName) ||
+                            (!birthDate) ||
+                            (allowOnlineAccess && !email)
+                        }
+                        onClick={
+                            async () => {
+                                const familyMemberAdd : PostNewMemberRequest = {
+                                    membershipId: props.membershipAdmin?.membershipId,
+                                    uuid: props.membershipAdmin?.uuid,
+                                    // magic numberism - this is 'Member'.  anyone created this way will be a member
+                                    // created by a membership admin.
+                                    memberTypeId: 9,
+                                    firstName,
+                                    lastName,
+                                    occupation: '',
+                                    email: '',
+                                    birthdate: birthDate?.toLocaleDateString('en-CA'),
+                                    dateJoined: props.membershipAdmin?.dateJoined,
+                                    modifiedBy: props.membershipAdmin?.memberId || 0,
+                                };
+                                if (allowOnlineAccess) {
+                                    familyMemberAdd.email = email;
+                                }
+                                alert(JSON.stringify(familyMemberAdd));
+                                props.onClose();
+                            }
+                        }
+                    >
+                        Save
                     </Button>
                 </ModalFooter>
             </ModalContent>

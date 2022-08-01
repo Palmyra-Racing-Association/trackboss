@@ -263,6 +263,7 @@ export default function GeneralInfo(props: cardProps) {
                     <AddFamilyModal
                         isOpen={isAddFamilyOpen}
                         onClose={onAddFamilyClose}
+                        membershipAdmin={state.user}
                     />
                 )
             }
