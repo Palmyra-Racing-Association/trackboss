@@ -6,12 +6,13 @@ interface wrappedSwitchProps {
     defaultChecked: boolean,
     // eslint-disable-next-line no-unused-vars
     onSwitchChange: (value: boolean) => void,
+    maxWidth: number,
 }
 
 export default function WrappedSwitchInput(props: wrappedSwitchProps) {
-    const { wrapperText, defaultChecked, onSwitchChange } = props;
+    const { wrapperText, defaultChecked, onSwitchChange, maxWidth } = props;
     return (
-        <Box maxWidth={100}>
+        <Box maxWidth={maxWidth}>
             <Text fontSize="sm">{wrapperText}</Text>
             <Switch
                 colorScheme="orange"

@@ -101,6 +101,7 @@ function SignupSheetJobsRow(props: any) {
                 <WrappedSwitchInput
                     wrapperText="Meal Ticket?"
                     defaultChecked={mealTicketValue}
+                    maxWidth={100}
                     onSwitchChange={
                         () => {
                             setMealTicketValue(!data.mealTicket);

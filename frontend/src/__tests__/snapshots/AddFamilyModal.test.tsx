@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
-import AddFamilyModal from '../../components/AddFamilyModal';
+import AddFamilyModal from '../../components/modals/AddFamilyModal';
 
 function onClose() {
     // void function
