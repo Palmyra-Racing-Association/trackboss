@@ -169,8 +169,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         size="lg"
                         onClick={
                             async () => {
-                                const response = await reviewMembershipApplication(props.token, membershipApplication.id);
-                                console.log(response);
+                                await reviewMembershipApplication(props.token, membershipApplication.id);
                                 props.addAction();
                                 onClose();
                             }
@@ -184,8 +183,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         size="lg"
                         onClick={
                             async () => {
-                                const response = await rejectMembershipApplication(props.token, membershipApplication.id);
-                                console.log(response);
+                                await rejectMembershipApplication(props.token, membershipApplication.id);
                                 props.addAction();
                                 onClose();
                             }
@@ -199,8 +197,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         size="lg"
                         onClick={
                             async () => {
-                                const response = await acceptMembershipApplication(props.token, membershipApplication.id);
-                                console.log(response);
+                                await acceptMembershipApplication(props.token, membershipApplication.id);
                                 props.addAction();
                                 onClose();
                             }

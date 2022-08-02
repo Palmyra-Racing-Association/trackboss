@@ -140,7 +140,9 @@ export default function AddFamilyModal(props: modalProps) {
                                 if (allowOnlineAccess) {
                                     familyMemberAdd.email = email;
                                 }
+                                // eslint-disable-next-line no-alert
                                 alert('Save coming soon!');
+                                // eslint-disable-next-line no-console
                                 console.log(JSON.stringify(familyMemberAdd));
                                 props.onClose();
                             }
