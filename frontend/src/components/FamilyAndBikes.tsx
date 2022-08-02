@@ -14,7 +14,7 @@ import { GetMemberListResponse, Member } from '../../../src/typedefs/member';
 import { Bike, GetBikeListResponse } from '../../../src/typedefs/bike';
 import DeleteAlert from './DeleteAlert';
 import EditBikesModal from './EditBikeModal';
-import AddFamilyModal from './AddFamilyModal';
+import AddFamilyModal from './modals/AddFamilyModal';
 import AddBikeModal from './AddBikeModal';
 import { updateMember } from '../controller/member';
 import { UserContext } from '../contexts/UserContext';
