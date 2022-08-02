@@ -40,7 +40,17 @@ export function startWorkbook(title: string) {
     workbook.addWorksheet(
         title,
         {
-            pageSetup: { orientation: 'landscape' },
+            pageSetup: {
+                orientation: 'portrait',
+                margins: {
+                    left: 0.10,
+                    right: 0.10,
+                    top: 0.10,
+                    bottom: 0.10,
+                    header: 0,
+                    footer: 0,
+                },
+            },
         },
     );
     return workbook;
