@@ -176,13 +176,13 @@ job.get('/list/excel', async (req: Request, res: Response) => {
     const workbook = startWorkbook(`Signups for ${jobsList[0].event}`);
     const worksheet = workbook.getWorksheet(1);
     worksheet.columns = [
-        { header: 'Name', key: 'name', width: 15 },
-        { header: 'Job', key: 'job', width: 30 },
+        { header: 'Name', key: 'name', width: 13 },
+        { header: 'Job', key: 'job', width: 23 },
         { header: 'Day', key: 'day', width: 10 },
-        { header: 'Point Value', key: 'pointValue', width: 6 },
-        { header: 'Cash Value', key: 'cashValue', width: 6 },
+        { header: 'Points', key: 'pointValue', width: 6 },
+        { header: 'Cash', key: 'cashValue', width: 5 },
         { header: 'Meal Ticket', key: 'mealTicket', width: 6 },
-        { header: 'Signature', key: 'signature', width: 30 },
+        { header: 'Signature', key: 'signature', width: 32 },
     ];
     // add data
     jobsList.forEach((jobRow) => {
