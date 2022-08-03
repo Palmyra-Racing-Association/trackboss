@@ -244,7 +244,7 @@ job.patch('/:jobId', async (req: Request, res: Response) => {
     } else {
         try {
             const { jobId } = req.params;
-            await verify(headerCheck.token, 'Membership Admin');
+            await verify(headerCheck.token, 'Member');
             const id = Number(jobId);
             if (Number.isNaN(id)) {
                 throw new Error('not found');

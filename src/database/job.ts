@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
+import membership from 'src/api/membership';
 
 import { Job, PatchJobRequest, PostNewJobRequest, GetJobListRequestFilters } from 'src/typedefs/job';
 
@@ -137,8 +138,8 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
               eph.description title, eph.point_value points_awarded, year(eph.date) year
               from member m, earned_points_history eph where 
               eph.old_member_id = m.old_member_id and 
-              m.member_id = ?`,
-            [memberId],
+              m.membership_id = ?`,
+            [membershipId],
         );
         if (historicalResults) {
             historicalResults[0].map((legacyPoints) => (jobResults.push({

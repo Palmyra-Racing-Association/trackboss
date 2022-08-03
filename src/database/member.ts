@@ -12,6 +12,7 @@ export const MEMBER_TYPE_MAP = new Map([
     ['member', 'Member'],
     ['paidLaborer', 'Paid Laborer'],
 ]);
+
 export const GET_MEMBER_LIST_SQL = 'SELECT * FROM v_member';
 export const GET_MEMBER_SQL = `${GET_MEMBER_LIST_SQL} WHERE member_id = ?`;
 export const GET_MEMBER_UUID_SQL = `${GET_MEMBER_LIST_SQL} WHERE uuid = ?`;
@@ -82,7 +83,6 @@ export async function getMemberList(filters: GetMemberListFilters): Promise<Memb
         sql = GET_MEMBER_LIST_SQL;
         values = [];
     }
-
     let results;
     try {
         [results] = await getPool().query<RowDataPacket[]>(sql, values);

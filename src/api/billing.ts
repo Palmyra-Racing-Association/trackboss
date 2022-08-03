@@ -92,7 +92,7 @@ billing.get('/:membershipID', async (req: Request, res: Response) => {
         response = { reason: headerCheck.reason };
     } else {
         try {
-            await verify(headerCheck.token, 'Membership Admin');
+            await verify(headerCheck.token, 'Member');
             const membershipId = Number(req.params.membershipID);
             if (Number.isNaN(membershipId)) {
                 throw new Error('not found');

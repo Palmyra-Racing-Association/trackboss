@@ -42,7 +42,7 @@ export async function getWorkPointsByMembership(token: string, membershipId: num
 }
 
 export async function getWorkPointsTotal(token: string, membershipId: number) {
-    const workPointsResponse = await getWorkPointsByMember(token, membershipId);
+    const workPointsResponse = await getWorkPointsByMembership(token, membershipId);
     if (isWorkPoints(workPointsResponse)) {
         return workPointsResponse.total;
     }

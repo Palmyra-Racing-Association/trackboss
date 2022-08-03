@@ -236,15 +236,6 @@ describe('GET /billing/:membershipID', () => {
         expect(res.body.reason).toBe('not authorized');
     });
 
-    it('Returns 403 for insufficient permissions', async () => {
-        const res = await supertestServer.get(`${TAG_ROOT}/0`).set('Authorization', 'Bearer member');
-        expect(mockVerifyMember).toHaveBeenCalled();
-        expect(mockVerifyMembershipAdmin).not.toHaveBeenCalled();
-        expect(mockGetMember).toHaveBeenCalled();
-        expect(res.status).toBe(403);
-        expect(res.body.reason).toBe('forbidden');
-    });
-
     it('Returns 404 for membershipId not found', async () => {
         const res = await supertestServer.get(`${TAG_ROOT}/9999`).set('Authorization', 'Bearer membershipAdmin');
         expect(mockVerifyMembershipAdmin).toHaveBeenCalled();
