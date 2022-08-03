@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import AWS from 'aws-sdk';
 import { checkHeader, verify } from '../util/auth';
 import {
     getMember, getMemberByPhone, getMemberList,
@@ -14,6 +13,7 @@ import {
     PostNewMemberResponse,
 } from '../typedefs/member';
 import logger from '../logger';
+import { createCognitoUser, deleteCognitoUser } from '../util/cognito';
 
 const member = Router();
 
@@ -29,20 +29,14 @@ member.post('/new', async (req: Request, res: Response) => {
             await verify(headerCheck.token, 'Admin');
             if (req.body.email) {
                 logger.info(`Creating new user for email ${req.body.email}`);
-                AWS.config.update({ region: 'us-east-1' });
-                const poolId = process.env.COGNITO_POOL_ID || '';
-                const cognitoIdp = new AWS.CognitoIdentityServiceProvider();
-                const createResponse = await cognitoIdp.adminCreateUser({
-                    UserPoolId: poolId,
-                    Username: req.body.email,
-                }).promise();
-                logger.info(createResponse);
-                req.body.uuid = createResponse.User?.Username;
-                const groupResponse = await cognitoIdp.adminAddUserToGroup({
-                    UserPoolId: poolId,
-                    GroupName: 'member',
-                    Username: req.body.uuid,
-                }).promise();
+                try {
+                    const uuid = await createCognitoUser(req.body.email);
+                    req.body.uuid = uuid;
+                    logger.info(`Successfully created ${req.body.email} in cognito as ${uuid}`);
+                } catch (error: any) {
+                    logger.error(`Failure creating ${req.body.email} in cognito.  Continuing on trackboss side`);
+                    logger.error(error);
+                }
             }
             const insertId = await insertMember(req.body);
             response = await getMember(`${insertId}`);
@@ -180,6 +174,10 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
             const { memberId } = req.params;
             await verify(headerCheck.token, 'Membership Admin', Number(memberId));
             await patchMember(memberId, req.body);
+            if (req.body.active === false) {
+                await deleteCognitoUser(req.body.uuid);
+                logger.info(`Deactivated Cognito user for ${req.body.email}`);
+            }
             response = await getMember(memberId);
             res.status(200);
         } catch (e: any) {

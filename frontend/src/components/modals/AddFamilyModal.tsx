@@ -18,10 +18,12 @@ import { Member, PostNewMemberRequest } from '../../../../src/typedefs/member';
 
 import 'react-date-picker/dist/DatePicker.css';
 import '../../css/date-picker.css';
+import { createMember } from '../../controller/member';
 
 interface modalProps {
   isOpen: boolean,
   membershipAdmin: Member | undefined,
+  token: string,
   onClose: () => void,
 }
 
@@ -140,10 +142,7 @@ export default function AddFamilyModal(props: modalProps) {
                                 if (allowOnlineAccess) {
                                     familyMemberAdd.email = email;
                                 }
-                                // eslint-disable-next-line no-alert
-                                alert('Save coming soon!');
-                                // eslint-disable-next-line no-console
-                                console.log(JSON.stringify(familyMemberAdd));
+                                await createMember(props.token, familyMemberAdd);
                                 props.onClose();
                             }
                         }

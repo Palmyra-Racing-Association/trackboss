@@ -19,7 +19,7 @@ import { BsChevronDown } from 'react-icons/bs';
 import { Job } from '../../../src/typedefs/job';
 import { UserContext } from '../contexts/UserContext';
 import { getJobList } from '../controller/job';
-import { getWorkPointsByMember, getWorkPointsTotal } from '../controller/workPoints';
+import { getWorkPointsByMembership, getWorkPointsTotal } from '../controller/workPoints';
 import { getYearlyThreshold, getYearlyThresholdValue } from '../controller/billing';
 // eslint-disable-next-line import/no-named-as-default
 import AddPointsModal from './AddPointsModal';
@@ -57,6 +57,12 @@ const columns: any = [
         sortable: true,
         hide: 'sm',
     },
+    {
+        name: 'Earned By',
+        selector: (row: Job) => `${row.member}`,
+        wrap: true,
+        sortable: true,
+    },
 ];
 
 const customStyles = {
@@ -86,7 +92,8 @@ export default function WorkPointsHistory() {
     const { state } = useContext(UserContext);
 
     async function getJobsData() {
-        const jobs = await getJobList(state.token, 'memberID', state.user!.memberId as unknown as string) as Job[];
+        const jobs =
+            await getJobList(state.token, 'membershipID', state.user!.membershipId as unknown as string) as Job[];
         jobs.sort((a, b) => {
             let order = 0;
             if (a.start < b.start) {
@@ -125,7 +132,7 @@ export default function WorkPointsHistory() {
     useEffect(() => {
         setCells(_.filter(allJobs, (job) => new Date(job.start).getFullYear() === year));
         async function getData() {
-            const workPoints = await getWorkPointsByMember(state.token, state.user!.memberId, year);
+            const workPoints = await getWorkPointsByMembership(state.token, state.user!.membershipId);
             const threshold = await getYearlyThreshold(state.token, year);
             if ('reason' in workPoints) {
                 setWorkPointsEarned(0);

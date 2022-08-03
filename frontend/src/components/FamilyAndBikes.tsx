@@ -264,6 +264,7 @@ export default function GeneralInfo(props: cardProps) {
                         isOpen={isAddFamilyOpen}
                         onClose={onAddFamilyClose}
                         membershipAdmin={state.user}
+                        token={state.token}
                     />
                 )
             }

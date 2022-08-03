@@ -20,8 +20,8 @@ async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     return props;
 }
 
-async function getWorkPointsPercentage(token: string, memberId: number) {
-    const workPoints = await getWorkPointsTotal(token, memberId);
+async function getWorkPointsPercentage(token: string, membershipId: number) {
+    const workPoints = await getWorkPointsTotal(token, membershipId);
     const threshold = await getYearlyThresholdValue(token);
     if (workPoints && threshold) {
         return Math.ceil((workPoints / threshold) * 100);
@@ -40,7 +40,7 @@ function Dashboard() {
         async function getData() {
             setEventCardProps(await getEventCardPropsLocal(state.token));
             if (state.user) {
-                setPercent(await getWorkPointsPercentage(state.token, state.user.memberId));
+                setPercent(await getWorkPointsPercentage(state.token, state.user.membershipId));
             }
         }
         getData();
