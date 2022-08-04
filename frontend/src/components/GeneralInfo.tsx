@@ -110,6 +110,7 @@ export default function GeneralInfo(props: cardProps) {
                             <Text fontSize="xl" fontWeight="bold">Phone:</Text>
                             <Text fontSize="xl" fontWeight="bold">Joined:</Text>
                             <Text fontSize="xl" fontWeight="bold">DOB:</Text>
+                            <Text fontSize="xl" fontWeight="bold">Membership Admin:</Text>
                         </VStack>
                         {
                             editingMemberInfo ? (
@@ -134,6 +135,7 @@ export default function GeneralInfo(props: cardProps) {
                                     />
                                     <Text fontSize="xl">{memberInfo.dateJoined}</Text>
                                     <Text fontSize="xl">{memberInfo.birthdate}</Text>
+                                    <Text fontSize="xl">{memberInfo.membershipAdmin}</Text>
                                     <Button
                                         ml={10}
                                         variant="outline"
@@ -151,7 +153,7 @@ export default function GeneralInfo(props: cardProps) {
                                     </Button>
                                 </VStack>
                             ) : (
-                                <VStack ml="-20px" align="left">
+                                <VStack align="left">
                                     <Text fontSize="xl">
                                         {`${memberInfo.firstName} ${memberInfo.lastName}`}
                                     </Text>
@@ -159,6 +161,7 @@ export default function GeneralInfo(props: cardProps) {
                                     <Text fontSize="xl">{memberInfo.phoneNumber}</Text>
                                     <Text fontSize="xl">{memberInfo.dateJoined}</Text>
                                     <Text fontSize="xl">{memberInfo.birthdate}</Text>
+                                    <Text fontSize="xl">{memberInfo.membershipAdmin}</Text>
                                 </VStack>
                             )
                         }

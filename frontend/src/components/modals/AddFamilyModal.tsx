@@ -25,6 +25,7 @@ interface modalProps {
   membershipAdmin: Member | undefined,
   token: string,
   onClose: () => void,
+  refreshList: () => void,
 }
 
 export default function AddFamilyModal(props: modalProps) {
@@ -143,6 +144,7 @@ export default function AddFamilyModal(props: modalProps) {
                                     familyMemberAdd.email = email;
                                 }
                                 await createMember(props.token, familyMemberAdd);
+                                await props.refreshList();
                                 props.onClose();
                             }
                         }

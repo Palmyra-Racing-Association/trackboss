@@ -16,7 +16,7 @@ import DeleteAlert from './DeleteAlert';
 import EditBikesModal from './EditBikeModal';
 import AddFamilyModal from './modals/AddFamilyModal';
 import AddBikeModal from './AddBikeModal';
-import { updateMember } from '../controller/member';
+import { getFamilyMembers, updateMember } from '../controller/member';
 import { UserContext } from '../contexts/UserContext';
 import { createBike, deleteBike, getBikeList, updateBike } from '../controller/bike';
 
@@ -47,6 +47,13 @@ export default function GeneralInfo(props: cardProps) {
         setMemberBikes(newBikeList);
     }
 
+    async function refreshFamilyList() {
+        const membershipId = state.user?.membershipId || 0;
+        let family = await getFamilyMembers(state.token, membershipId);
+        family = (family as Member[]).filter((m) => m.active);
+        setMemberFamily(family);
+    }
+
     async function removeFamilyMember() {
         if (memberToRemove !== undefined && state.user !== undefined) {
             await updateMember(
@@ -55,6 +62,7 @@ export default function GeneralInfo(props: cardProps) {
                 { active: false, modifiedBy: state.user.memberId },
             );
         }
+        await refreshFamilyList();
     }
 
     async function removeBike() {
@@ -127,7 +135,7 @@ export default function GeneralInfo(props: cardProps) {
                                             {` ${member.firstName} ${member.lastName}`}
                                         </ListItem>
                                         {
-                                            props.admin && (
+                                            (props.admin && (member.memberType === 'Member')) && (
                                                 <Button
                                                     textDecoration="underline"
                                                     color="red"
@@ -263,6 +271,8 @@ export default function GeneralInfo(props: cardProps) {
                     <AddFamilyModal
                         isOpen={isAddFamilyOpen}
                         onClose={onAddFamilyClose}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        refreshList={refreshFamilyList}
                         membershipAdmin={state.user}
                         token={state.token}
                     />
