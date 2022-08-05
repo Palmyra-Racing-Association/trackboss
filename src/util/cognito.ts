@@ -8,7 +8,6 @@ import logger from '../logger';
  * @returns the user UUID in cognito.
  */
 export async function createCognitoUser(email: string) {
-    AWS.config.update({ region: 'us-east-1' });
     const poolId = process.env.COGNITO_POOL_ID || '';
     const cognitoIdp = new AWS.CognitoIdentityServiceProvider();
     const createResponse = await cognitoIdp.adminCreateUser({
@@ -27,7 +26,7 @@ export async function createCognitoUser(email: string) {
             logger.info(`User ${email} added to group member`);
             logger.debug(JSON.stringify(groupResponse));
         } catch (error) {
-            logger.error(`Unable to add ${email} to group member.  User still exist, login may not work correctly`);
+            logger.error(`Unable to add ${email} to group member.  User still exists but login may not work correctly`);
             logger.error(error);
             throw error;
         }
@@ -36,5 +35,12 @@ export async function createCognitoUser(email: string) {
 }
 
 export async function deleteCognitoUser(uuid: string) {
-    logger.info('delete function coming soon!');
+    logger.info(`Removing user ${uuid} from Cognito`);
+    const poolId = process.env.COGNITO_POOL_ID || '';
+    const cognitoIdp = new AWS.CognitoIdentityServiceProvider();
+    const deleteResponse = await cognitoIdp.adminDeleteUser({
+        UserPoolId: poolId,
+        Username: uuid,
+    }).promise();
+    console.log(deleteResponse);
 }

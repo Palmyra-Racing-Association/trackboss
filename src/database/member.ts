@@ -150,7 +150,7 @@ export async function getMember(searchParam: string): Promise<Member> {
         membershipAdmin: results[0].membership_admin,
         membershipAdminId: results[0].membership_admin_id,
         uuid: results[0].uuid,
-        active: true,
+        active: (results[0].active > 0),
         memberTypeId: results[0].member_type_id,
         memberType: results[0].member_type,
         membershipType: results[0].membership_type,
@@ -260,4 +260,20 @@ export async function getValidActors(member: number): Promise<number[]> {
         throw new Error('not found');
     }
     return _.map(results, (result) => result.member_id);
+}
+
+export async function deleteFamilyMember(memberId: number): Promise<number> {
+    // remove the member but only if they are a sub member. Magic numberism here, fix it later.
+    const sql =
+        'delete from member where member_id = ? and member_type_id = 9';
+    const values = [memberId];
+
+    let result;
+    try {
+        [result] = await getPool().query<OkPacket>(sql, values);
+    } catch (e) {
+        logger.error(`DB error deleting event: ${e}`);
+        throw new Error('internal server error');
+    }
+    return result.affectedRows;
 }
