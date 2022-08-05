@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import { checkHeader, verify } from '../util/auth';
 import {
+    deleteFamilyMember,
     getMember, getMemberByPhone, getMemberList,
     insertMember, MEMBER_TYPE_MAP, patchMember,
 } from '../database/member';
@@ -174,11 +175,21 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
             const { memberId } = req.params;
             await verify(headerCheck.token, 'Membership Admin', Number(memberId));
             await patchMember(memberId, req.body);
-            if (req.body.active === false) {
-                await deleteCognitoUser(req.body.uuid);
-                logger.info(`Deactivated Cognito user for ${req.body.email}`);
-            }
             response = await getMember(memberId);
+            // if it's a family member ("member") and inactivated, then delete the cognito user
+            // and the member record.  This is just cleanup stuff. and may change later.
+            if (!response.active && (response.memberType === 'Member')) {
+                try {
+                    const removeCount = await deleteFamilyMember(response.memberId);
+                    logger.info(`Removed ${removeCount} rows for user ${response.email}`);
+                    if (response.email) {
+                        await deleteCognitoUser(response.uuid);
+                    }
+                    logger.info(`Deactivated Cognito user for ${response.email}`);
+                } catch (error: any) {
+                    logger.error(`Error deleting Cognito user ${response.email}.  User will be abandoned in Cognito.`);
+                }
+            }
             res.status(200);
         } catch (e: any) {
             if (e.message === 'user input error') {
