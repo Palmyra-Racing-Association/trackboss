@@ -5,6 +5,7 @@ export type Member = {
     memberId: number,
     membershipId: number,
     membershipAdmin: string,
+    membershipAdminId: number,
     uuid: string,
     active: boolean,
     memberTypeId: number,

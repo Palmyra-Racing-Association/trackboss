@@ -107,8 +107,8 @@ workPoints.get('/list/excel', async (req: Request, res: Response) => {
     const workbook = startWorkbook(workbookTitle);
     const worksheet = workbook.getWorksheet(1);
     worksheet.columns = [
-        { header: 'First Name', key: 'firstName', width: 15 },
         { header: 'Last Name', key: 'lastName', width: 10 },
+        { header: 'First Name', key: 'firstName', width: 15 },
         { header: 'Membership Type', key: 'membershipType', width: 15 },
         { header: 'Points', key: 'points', width: 6 },
         { header: 'Signature', key: 'signature', width: 25 },

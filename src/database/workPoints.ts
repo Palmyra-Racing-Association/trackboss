@@ -51,8 +51,9 @@ export async function getWorkPointsByMembership(membershipId: number, year: numb
 
 export async function getWorkPointsList(year: number) : Promise<WorkPoints[]> {
     const sql = `select b.last_name, b.first_name, m.membership_type, b.points_earned from
-    v_bill b, v_member m where  b.year = 2022 and m.membership_id = b.membership_id order by
-    last_name, first_name`;
+    v_bill b, v_member m where  b.year = 2022 and m.membership_id = b.membership_id and 
+    m.membership_admin_id = m.member_id 
+    order by last_name, first_name`;
 
     let results = [];
     try {

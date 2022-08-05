@@ -87,7 +87,8 @@ export default function MemberList() {
                         });
                     });
                 }
-                const activeMembers = _.filter(c, (member) => member.active);
+                let activeMembers = _.filter(c, (member) => member.active);
+                activeMembers = activeMembers.filter((member) => (member.memberId === member.membershipAdminId));
                 setCells(activeMembers);
                 setAllCells(activeMembers);
                 setError(undefined);
@@ -104,7 +105,7 @@ export default function MemberList() {
                 allCells.filter((cell: any) => {
                     const firstNameFound = cell.firstName.toLowerCase().includes(searchTerm);
                     const lastNameFound = cell.lastName.toLowerCase().includes(searchTerm);
-                    const typeFound = cell.membershipType.toLowerCase().includes(searchTerm);
+                    const typeFound = cell.membershipType?.toLowerCase().includes(searchTerm);
                     return (firstNameFound || lastNameFound || typeFound);
                 });
             setCells(newCells);
