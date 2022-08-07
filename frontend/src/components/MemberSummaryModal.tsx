@@ -24,6 +24,7 @@ import {
     Input,
     Select,
     useToast,
+    Switch,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
@@ -33,6 +34,7 @@ import { getMembersByMembership, updateMember } from '../controller/member';
 import { getBikeList } from '../controller/bike';
 import { BoardMemberType } from '../../../src/typedefs/boardMemberType';
 import { createBoardMember, getBoardRoles, updateBoardMember } from '../controller/boardMember';
+import AddPointsModal from './AddPointsModal';
 
 interface modalProps {
     isOpen: boolean,
@@ -65,6 +67,7 @@ export default function MemberSummaryModal(props: modalProps) {
     const [editedBoardMember, setEditedBoardMember] = useState<string>('');
     const [boardRoles, setBoardRoles] = useState<BoardMemberType[]>([]);
     const [isBoard, setIsBoard] = useState<boolean>(false);
+    const [deactivateEnabled, setDeactivateEnabled] = useState<boolean>(false);
 
     const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
     const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
@@ -446,6 +449,16 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <VStack align="left">
                                                 <Text textAlign="left" fontSize="3xl" fontWeight="bold">Actions</Text>
                                                 <HStack align="left">
+                                                    <AddPointsModal
+                                                        memberName={`${selectedMember.firstName} ${selectedMember.lastName}` || ''}
+                                                        memberId={selectedMember.memberId as number}
+                                                        visible={(state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin')}
+                                                        token={state.token}
+                                                        buttonText="Add points"
+                                                        // do nothing if after adding points in this instance - we are on the member modal and there is nothing visible
+                                                        // to refresh here.
+                                                        refreshPoints={() => 0}
+                                                    />
                                                     <Button
                                                         variant="outline"
                                                         style={
@@ -464,9 +477,12 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     >
                                                         Act As Member
                                                     </Button>
+                                                </HStack>
+                                                <HStack>
                                                     <Button
                                                         backgroundColor="red"
                                                         variant="outline"
+                                                        disabled={!deactivateEnabled}
                                                         style={
                                                             {
                                                                 whiteSpace: 'normal',
@@ -488,7 +504,19 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     >
                                                         De-Activate Member
                                                     </Button>
+                                                    <Switch
+                                                        colorScheme="orange"
+                                                        isChecked={deactivateEnabled}
+                                                        onChange={
+                                                            () => {
+                                                                setDeactivateEnabled(!deactivateEnabled);
+                                                            }
+                                                        }
+                                                    />
                                                 </HStack>
+                                                <Text size="sm">
+                                                    Deactivating a member removes them from the list.  Use this feature carefully!
+                                                </Text>
                                                 {/* <Button
                                                     textDecoration="underline"
                                                     color="orange"

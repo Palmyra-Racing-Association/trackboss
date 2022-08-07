@@ -19,6 +19,7 @@ interface AddPointsModalProps {
     visible: boolean,
     refreshPoints: Function,
     token: string,
+    buttonText?: string,
 }
 export default function AddPointsModal(props: AddPointsModalProps) {
     const {
@@ -30,9 +31,8 @@ export default function AddPointsModal(props: AddPointsModalProps) {
     const [pointValue, setPointValue] = useState<number>(0);
     const [dirty, setDirty] = useState<boolean>(false);
     const toast = useToast();
-
-    return (
-        <>
+    let addButton =
+        (
             <IconButton
                 aria-label="add"
                 icon={<BsPlus />}
@@ -41,6 +41,29 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                 hidden={!props.visible}
                 onClick={onOpen}
             />
+        );
+    // if the button text is passed in, use a text button instead of the default Plus icon.
+    if (props.buttonText) {
+        addButton =
+            (
+                <Button
+                    variant="outline"
+                    style={
+                        {
+                            whiteSpace: 'normal',
+                            wordWrap: 'break-word',
+                        }
+                    }
+                    hidden={!props.visible}
+                    onClick={onOpen}
+                >
+                    {props.buttonText}
+                </Button>
+            );
+    }
+    return (
+        <>
+            {addButton}
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -151,3 +174,6 @@ export default function AddPointsModal(props: AddPointsModalProps) {
         </>
     );
 }
+AddPointsModal.defaultProps = {
+    buttonText: '',
+};
