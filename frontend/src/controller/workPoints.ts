@@ -31,13 +31,23 @@ export async function getWorkPointsByMember(
     return response.json();
 }
 
-export async function getWorkPointsByMembership(token: string, membershipId: number):
-                                                    Promise<GetMembershipWorkPointsResponse> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/byMembership/${membershipId}`, {
+export async function getWorkPointsByMembership(token: string, membershipId: number, year?: number):
+    Promise<GetMembershipWorkPointsResponse> {
+    if (typeof year === 'undefined') {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/byMembership/${membershipId}`, {
+            method: 'GET',
+            mode: 'cors',
+            headers: generateHeaders(token),
+        });
+        return response.json();
+    }
+    // eslint-disable-next-line max-len
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/workPoints/byMembership/${membershipId}?year=${year}`, {
         method: 'GET',
         mode: 'cors',
         headers: generateHeaders(token),
     });
+
     return response.json();
 }
 

@@ -29,6 +29,7 @@ const columns: any = [
         name: 'Date',
         selector: (row: Job) => `${moment(row.start).utc().format('MM/DD/YYYY')}`,
         sortable: true,
+        wrap: true,
     },
     {
         name: 'Job',
@@ -132,7 +133,7 @@ export default function WorkPointsHistory() {
     useEffect(() => {
         setCells(_.filter(allJobs, (job) => new Date(job.start).getFullYear() === year));
         async function getData() {
-            const workPoints = await getWorkPointsByMembership(state.token, state.user!.membershipId);
+            const workPoints = await getWorkPointsByMembership(state.token, state.user!.membershipId, year);
             const threshold = await getYearlyThreshold(state.token, year);
             if ('reason' in workPoints) {
                 setWorkPointsEarned(0);

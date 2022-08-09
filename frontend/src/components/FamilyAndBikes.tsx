@@ -10,6 +10,7 @@ import {
     ListItem,
     useDisclosure,
 } from '@chakra-ui/react';
+import moment from 'moment';
 import { GetMemberListResponse, Member } from '../../../src/typedefs/member';
 import { Bike, GetBikeListResponse } from '../../../src/typedefs/bike';
 import DeleteAlert from './DeleteAlert';
@@ -132,7 +133,11 @@ export default function GeneralInfo(props: cardProps) {
                                         <ListItem
                                             fontSize="xl"
                                         >
-                                            {` ${member.firstName} ${member.lastName}`}
+                                            {
+                                                `${member.firstName} 
+                                                ${member.lastName} 
+                                                (Age: ${moment().diff(member.birthdate, 'years')})`
+                                            }
                                         </ListItem>
                                         {
                                             (props.admin && (member.memberType === 'Member')) && (
