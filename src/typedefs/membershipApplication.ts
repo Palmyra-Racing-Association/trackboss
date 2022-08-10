@@ -31,5 +31,7 @@ export type MembershipApplication = {
     familyMember4Age?: number,
     familyMember5FirstName?: string,
     familyMember5LastName?: string,
-    familyMember5Age?: number
+    familyMember5Age?: number,
+    internalNotes?: string,
+    sharedNotes?: string,
 }
