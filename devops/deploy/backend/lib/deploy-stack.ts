@@ -8,6 +8,7 @@ import * as acm from '@aws-cdk/aws-certificatemanager';
 import * as rds from '@aws-cdk/aws-rds';
 import * as cdk from '@aws-cdk/core';
 import { Tags } from '@aws-cdk/core';
+import * as logs from '@aws-cdk/aws-logs';
 
 export class DeployStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -153,6 +154,12 @@ export class DeployStack extends cdk.Stack {
       Tags.of(infraElement).add('EnvironmentName', environmentName);
       Tags.of(infraElement).add('Name', `${environmentName}-api`);  
     });
+
+    const applicationLogsGroup = new logs.LogGroup(
+      this, 'LogGroup', {
+        logGroupName: `${environmentName}-api-logs`
+      }
+    );
 
     new cdk.CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,

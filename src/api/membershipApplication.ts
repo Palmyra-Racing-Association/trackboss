@@ -56,7 +56,7 @@ membershipApplication.post('/', async (req: Request, res: Response) => {
     } catch (error: any) {
         logger.error(error);
         res.status(500);
-        res.send('Unable to process application due to error');
+        res.send(error);
     }
 });
 
