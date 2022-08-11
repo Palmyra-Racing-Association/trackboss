@@ -38,7 +38,8 @@ async function validateAdminAccess(req: Request, res: Response) {
 const sendApplicationStatus = async (req: Request, res: Response, status: string) => {
     await validateAdminAccess(req, res);
     const id = parseInt(req.params.id, 10);
-    const updatedApplication = await updateApplicationStatus(id, status);
+    const { internalNotes, applicantNotes } = req.body;
+    const updatedApplication = await updateApplicationStatus(id, status, internalNotes, applicantNotes);
     res.send(updatedApplication);
 };
 

@@ -20,10 +20,11 @@ interface appModalProps {
 }
 
 export default function MembershipApplicationModal(props: appModalProps) {
-    const [applicantNotes, setApplicantNotes] = useState<string>();
-    const [internalNotes, setInternalNotes] = useState<string>();
-
     const { membershipApplication, isOpen, onClose } = props;
+
+    const [applicantNotes, setApplicantNotes] = useState<string>(membershipApplication.sharedNotes || '');
+    const [internalNotes, setInternalNotes] = useState<string>(membershipApplication.internalNotes || '');
+
     props.addAction();
     return (
         <Modal isCentered size="xl" isOpen={isOpen} onClose={onClose}>
@@ -124,6 +125,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                             </TabPanel>
                             <TabPanel>
                                 <VStack spacing={2}>
+                                    <Text>Notes to applicant (emailed to applicant)</Text>
                                     <Textarea
                                         placeholder="Notes to applicant (sent in email)"
                                         onChange={
@@ -134,6 +136,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                     >
                                         {applicantNotes}
                                     </Textarea>
+                                    <Text>Internal PRA Notes (not shared)</Text>
                                     <Textarea
                                         placeholder="Internal PRA notes (not shared)"
                                         onChange={
@@ -169,7 +172,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         size="lg"
                         onClick={
                             async () => {
-                                await reviewMembershipApplication(props.token, membershipApplication.id);
+                                await reviewMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
                                 props.addAction();
                                 onClose();
                             }
@@ -183,7 +186,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         size="lg"
                         onClick={
                             async () => {
-                                await rejectMembershipApplication(props.token, membershipApplication.id);
+                                await rejectMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
                                 props.addAction();
                                 onClose();
                             }
@@ -197,7 +200,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         size="lg"
                         onClick={
                             async () => {
-                                await acceptMembershipApplication(props.token, membershipApplication.id);
+                                await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
                                 props.addAction();
                                 onClose();
                             }
