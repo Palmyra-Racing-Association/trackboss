@@ -6,8 +6,8 @@ import { MembershipApplication } from '../typedefs/membershipApplication';
 export async function insertMembershipApplication(membershipApplication: any): Promise<number> {
     const values = ['Review', membershipApplication.email, JSON.stringify(membershipApplication)];
     let result;
-    const insertSql = `insert into membership_application (application_status, application_email, application_json,
-      application_notes_internal, application_notes_shared) values (?, ?, ?, ?, ?)`;
+    // eslint-disable-next-line max-len
+    const insertSql = 'insert into membership_application (application_status, application_email, application_json) values (?, ?, ?)';
     try {
         [result] = await getPool().query<OkPacket>(insertSql, values);
         logger.info(`Inserted application with id ${result.insertId}`);
