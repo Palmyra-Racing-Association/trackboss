@@ -20,7 +20,7 @@ health.get('/', async (req: Request, res: Response) => {
         response.dbtime = results[0].dbtime;
         status = 200;
     } catch (e: any) {
-        logger.error(e.getMessage());
+        logger.error(e);
         response.ok = false;
         response.dbtime = '';
         response.error = e.getMessage();

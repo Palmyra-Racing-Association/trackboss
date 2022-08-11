@@ -68,7 +68,7 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
                 }
             }
         }
-        logger.info(JSON.stringify(payload));
+        logger.debug(JSON.stringify(payload));
         return payload;
     } catch (e: any) {
         logger.error('invalid token');

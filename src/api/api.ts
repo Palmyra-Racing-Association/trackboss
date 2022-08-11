@@ -18,6 +18,7 @@ import workPoints from './workPoints';
 import health from './health';
 import gateCode from './gateCode';
 import membershipApplication from './membershipApplication';
+import logger from '../logger';
 
 const api = Router();
 
@@ -42,8 +43,10 @@ api.get('/me', async (req: Request, res: Response) => {
             const uuid = payload['cognito:username'];
             try {
                 response = await getMember(uuid);
+                logger.info(`Login successful for ${response.email} (user id: ${uuid})`);
                 res.status(200);
             } catch (e: any) {
+                logger.error(e);
                 if (e.message === 'not found') {
                     res.status(404);
                     response = { reason: 'not found' };

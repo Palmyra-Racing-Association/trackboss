@@ -29,7 +29,7 @@ member.post('/new', async (req: Request, res: Response) => {
         try {
             await verify(headerCheck.token, 'Admin');
             if (req.body.email) {
-                logger.info(`Creating new user for email ${req.body.email}`);
+                logger.info(`Creating new user for email ${req.body.email} on membership ${req.body.membershipId}`);
                 try {
                     const uuid = await createCognitoUser(req.body.email);
                     req.body.uuid = uuid;
@@ -188,6 +188,7 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
                     logger.info(`Deactivated Cognito user for ${response.email}`);
                 } catch (error: any) {
                     logger.error(`Error deleting Cognito user ${response.email}.  User will be abandoned in Cognito.`);
+                    logger.error(error);
                 }
             }
             res.status(200);

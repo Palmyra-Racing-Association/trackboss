@@ -53,4 +53,5 @@ export async function sendAppConfirmationEmail(application: any) {
     confirmEmail.to = application.email;
 
     await sendTextEmail(confirmEmail);
+    logger.info(`application emails sent for application ${application.application.id}`);
 }

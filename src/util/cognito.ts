@@ -14,7 +14,8 @@ export async function createCognitoUser(email: string) {
         UserPoolId: poolId,
         Username: email,
     }).promise();
-    logger.info(JSON.stringify(createResponse));
+    logger.debug(JSON.stringify(createResponse));
+    logger.info(`created Cognito user ${createResponse.User?.Username}`);
     const uuid = createResponse.User?.Username;
     if (uuid) {
         try {
@@ -42,5 +43,6 @@ export async function deleteCognitoUser(uuid: string) {
         UserPoolId: poolId,
         Username: uuid,
     }).promise();
-    console.log(deleteResponse);
+    logger.info(`Removed user ${uuid} from Cognito`);
+    logger.debug(deleteResponse);
 }
