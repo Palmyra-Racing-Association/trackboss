@@ -181,13 +181,24 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
             if (!response.active && (response.memberType === 'Member')) {
                 try {
                     const removeCount = await deleteFamilyMember(response.memberId);
+                    const userEmail = response.email;
                     logger.info(`Removed ${removeCount} rows for user ${response.email}`);
                     if (response.email) {
-                        await deleteCognitoUser(response.uuid);
+                        // use this loathesome promises hipster syntax here because I want this to run
+                        // asychronously so the UI doesn't wait 5 seconds for the cognito delete to work.
+                        deleteCognitoUser(response.uuid)
+                            .then((
+                                () => {
+                                    logger.info(`Deactivated Cognito user for ${userEmail}`);
+                                }))
+                            .catch((error) => {
+                                // eslint-disable-next-line max-len
+                                logger.error(`Error deleting Cognito user ${userEmail}.  User will be abandoned in Cognito.`);
+                                logger.error(error);
+                            });
                     }
-                    logger.info(`Deactivated Cognito user for ${response.email}`);
                 } catch (error: any) {
-                    logger.error(`Error deleting Cognito user ${response.email}.  User will be abandoned in Cognito.`);
+                    logger.error('Error deleting user from database. Something is probably really wrong!');
                     logger.error(error);
                 }
             }

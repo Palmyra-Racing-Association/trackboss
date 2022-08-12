@@ -9,6 +9,7 @@ import {
     Divider,
     Box,
     Input,
+    Spinner,
     Text,
 } from '@chakra-ui/react';
 import DatePicker from 'react-date-picker';
@@ -34,6 +35,7 @@ export default function AddFamilyModal(props: modalProps) {
     const [email, setEmail] = useState<string>();
     const [allowOnlineAccess, setAllowOnlineAccess] = useState<boolean>(true);
     const [birthDate, setBirthDate] = useState<Date>();
+    const [isSaving, setIsSaving] = useState<boolean>(false);
 
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
@@ -104,6 +106,7 @@ export default function AddFamilyModal(props: modalProps) {
                     <Button
                         color="black"
                         variant="ghost"
+                        hidden={isSaving}
                         mr={3}
                         size="lg"
                         onClick={
@@ -125,6 +128,7 @@ export default function AddFamilyModal(props: modalProps) {
                             (!birthDate) ||
                             (allowOnlineAccess && !email)
                         }
+                        hidden={isSaving}
                         onClick={
                             async () => {
                                 const familyMemberAdd : PostNewMemberRequest = {
@@ -144,7 +148,9 @@ export default function AddFamilyModal(props: modalProps) {
                                 if (allowOnlineAccess) {
                                     familyMemberAdd.email = email;
                                 }
+                                setIsSaving(true);
                                 await createMember(props.token, familyMemberAdd);
+                                setIsSaving(false);
                                 await props.refreshList();
                                 props.onClose();
                             }
@@ -152,6 +158,8 @@ export default function AddFamilyModal(props: modalProps) {
                     >
                         Save
                     </Button>
+                    <Text hidden={!isSaving}>{`Saving ${firstName}, please wait`}</Text>
+                    <Spinner hidden={!isSaving} color="orange" />
                 </ModalFooter>
             </ModalContent>
         </Modal>
