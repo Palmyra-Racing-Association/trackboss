@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import { checkHeader, verify } from '../util/auth';
 import {
     deleteFamilyMember,
-    getMember, getMemberByPhone, getMemberList,
+    getMember, getMemberByEmail, getMemberByPhone, getMemberList,
     insertMember, MEMBER_TYPE_MAP, patchMember,
 } from '../database/member';
 import {
@@ -146,6 +146,35 @@ member.get('/phone/:phoneNumber', async (req: Request, res: Response) => {
             await verify(headerCheck.token);
             const { phoneNumber } = req.params;
             response = await getMemberByPhone(phoneNumber);
+            res.status(200);
+        } catch (e: any) {
+            if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
+});
+
+member.get('/email/:email', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: GetMemberResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const { email } = req.params;
+            response = await getMemberByEmail(email);
             res.status(200);
         } catch (e: any) {
             if (e.message === 'not found') {

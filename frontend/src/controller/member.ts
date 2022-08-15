@@ -77,3 +77,12 @@ export async function getMembersByMembership(token: string, membershipId: number
     });
     return response.json();
 }
+
+export async function getMemberByEmail(token: string, email: string): Promise<Member> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/email/${email}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}

@@ -19,7 +19,7 @@ import { Member, PostNewMemberRequest } from '../../../../src/typedefs/member';
 
 import 'react-date-picker/dist/DatePicker.css';
 import '../../css/date-picker.css';
-import { createMember } from '../../controller/member';
+import { createMember, getMemberByEmail } from '../../controller/member';
 
 interface modalProps {
   isOpen: boolean,
@@ -36,6 +36,7 @@ export default function AddFamilyModal(props: modalProps) {
     const [allowOnlineAccess, setAllowOnlineAccess] = useState<boolean>(true);
     const [birthDate, setBirthDate] = useState<Date>();
     const [isSaving, setIsSaving] = useState<boolean>(false);
+    const [emailExists, setEmailExists] = useState<boolean>(false);
 
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
@@ -87,11 +88,20 @@ export default function AddFamilyModal(props: modalProps) {
                             placeholder="email (if applicable)"
                             value={email}
                             onChange={
-                                (e) => {
+                                async (e) => {
                                     setEmail(e.target.value);
+                                    const existingMember = await getMemberByEmail(props.token, e.target.value);
+                                    if (existingMember.memberId) {
+                                        setEmailExists(true);
+                                    } else {
+                                        setEmailExists(false);
+                                    }
                                 }
                             }
                         />
+                        <Text color="red" hidden={!emailExists}>
+                            Email is used for an existing member.
+                        </Text>
                     </Box>
                     <Box m={3}>
                         <WrappedSwitchInput
@@ -126,7 +136,8 @@ export default function AddFamilyModal(props: modalProps) {
                             (!firstName) ||
                             (!lastName) ||
                             (!birthDate) ||
-                            (allowOnlineAccess && !email)
+                            (allowOnlineAccess && !email) ||
+                            (allowOnlineAccess && emailExists)
                         }
                         hidden={isSaving}
                         onClick={
