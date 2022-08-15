@@ -84,7 +84,7 @@ export class DeployStack extends cdk.Stack {
       vpc,
       autoScalingGroupName: `${environmentName}-backend-asg`,
       instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.T2,
+        ec2.InstanceClass.T3,
         ec2.InstanceSize.SMALL,
       ),
       // see https://aws.amazon.com/ec2/pricing/on-demand/ for this number. This should be checked against
