@@ -13,6 +13,7 @@ import GreetingText from '../components/GreetingText';
 import { getTodaysDate } from '../controller/utils';
 import { getGateCodeLatest } from '../controller/gateCode';
 import { GateCode } from '../../../src/typedefs/gateCode';
+import TrackStatusCard from '../components/TrackStatusCard';
 
 async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     const nowString = getTodaysDate();
@@ -85,6 +86,7 @@ function Dashboard() {
                     </SimpleGrid>
                 </Center>
             </VStack>
+            <TrackStatusCard />
         </ChakraProvider>
     );
 }
