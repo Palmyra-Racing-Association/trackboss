@@ -9,7 +9,7 @@ export const INSERTED_EVENT_ID_OUT = '@event_id';
 export const INSERT_EVENT_SQL = `CALL sp_event_job_generation(?, ?, ?, ?, ?, ${INSERTED_EVENT_ID_OUT})`;
 export const GET_INSERTED_EVENT_ID_SQL = `SELECT ${INSERTED_EVENT_ID_OUT}`;
 export const GET_EVENT_LIST_SQL = 'SELECT * FROM v_event';
-export const GET_EVENT_LIST_DATERANGE_SQL = `${GET_EVENT_LIST_SQL} WHERE start >= ? AND start <= ? order by start`;
+export const GET_EVENT_LIST_DATERANGE_SQL = `${GET_EVENT_LIST_SQL} WHERE start <= ? AND end >= ? order by start`;
 export const GET_EVENT_SQL = `${GET_EVENT_LIST_SQL} WHERE event_id = ?`;
 export const PATCH_EVENT_SQL = 'CALL sp_patch_event(?, ?, ?, ?, ?)';
 export const DELETE_EVENT_SQL = 'CALL sp_delete_event(?)';
@@ -68,7 +68,7 @@ export async function getEventList(startDate?: string, endDate?: string): Promis
         if (typeof endDate !== 'undefined') {
             eDate = endDate;
         } else {
-            eDate = '2999-01-01';
+            eDate = sDate;
         }
         sql = GET_EVENT_LIST_DATERANGE_SQL;
         values = [sDate, eDate];

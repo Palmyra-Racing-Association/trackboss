@@ -7,6 +7,7 @@ interface cardProps {
     date: string,
     startTime: string,
     name: string,
+    endDate: string,
 }
 
 export default function EventCard(props: cardProps) {
@@ -44,7 +45,11 @@ export default function EventCard(props: cardProps) {
                         <Heading pr={5} size="lg">Next Event</Heading>
                     </HStack>
                     <Divider />
-                    <Text pt={10} color="orange" fontSize="2xl">{props.date}</Text>
+                    <Text pt={10} color="orange" fontSize="2xl">
+                        {props.date}
+                        -
+                        {props.endDate}
+                    </Text>
                     <Text fontSize="2xl">{props.startTime}</Text>
                     <Text fontSize="2xl">{props.name}</Text>
                 </VStack>

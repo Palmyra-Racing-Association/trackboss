@@ -52,7 +52,6 @@ export default function TrackStatusCard(props: cardProps) {
             borderColor="gray.200"
             w={[470, 470, 1494]}
             p={2}
-            m={2}
         >
             <VStack align="left" spacing="2em">
                 <Heading alignContent="left" size="lg">Track Status</Heading>

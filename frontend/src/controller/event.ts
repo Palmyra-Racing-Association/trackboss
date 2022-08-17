@@ -84,6 +84,7 @@ export async function getEventCardProps(token: string, listType: string) {
         return {
             title: upcomingEvents[0].title,
             start: formattedEventDate,
+            end: getEventMonthDay(upcomingEvents[0].end.toString()),
             time: formattedEventTime,
             fullDate: moment(upcomingEvents[0].start).format('MM-DD-YYYY'),
         };

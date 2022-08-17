@@ -87,12 +87,14 @@ function Dashboard() {
                                     date={eventCardProps.start}
                                     startTime={eventCardProps.time}
                                     name={eventCardProps.title}
+                                    endDate={eventCardProps.end}
                                 />
                             ) : (
                                 <EventCard
                                     date=""
                                     startTime=""
                                     name=""
+                                    endDate=""
                                 />
                             )
                         }
