@@ -6,12 +6,12 @@ export type RidingAreaStatus = {
     isOpen: boolean,
 }
 
-export type PostRidingAreaStatusRequest = {
+export type PatchRidingAreaStatusRequest = {
     name: string
     isOpen: boolean,
 }
 
-export type PostRidingAreaStatusResponse = RidingAreaStatus | ErrorResponse;
+export type PatchRidingAreaStatusResponse = RidingAreaStatus | ErrorResponse;
 
 export type GetRidingAreaStatusRequest = Record<string, never>;
 

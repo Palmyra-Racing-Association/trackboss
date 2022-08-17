@@ -14,7 +14,7 @@ import { getTodaysDate } from '../controller/utils';
 import { getGateCodeLatest } from '../controller/gateCode';
 import { GateCode } from '../../../src/typedefs/gateCode';
 import TrackStatusCard from '../components/TrackStatusCard';
-import getRidingAreaStatuses from '../controller/ridingAreaStatus';
+import { getRidingAreaStatuses, updateRidingAreaStatus } from '../controller/ridingAreaStatus';
 import { RidingAreaStatus } from '../../../src/typedefs/ridingAreaStatus';
 
 async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
@@ -39,15 +39,19 @@ function Dashboard() {
     const [percent, setPercent] = useState<number>(0);
     const [gateCode, setGateCode] = useState<string>('');
     const [ridingAreaStatuses, setRidingAreaStatuses] = useState<RidingAreaStatus[]>([]);
+
+    async function loadTrackStatuses() {
+        const statuses = await getRidingAreaStatuses(state.token);
+        setRidingAreaStatuses(statuses);
+    }
+
     useEffect(() => {
         async function getData() {
             setEventCardProps(await getEventCardPropsLocal(state.token));
             if (state.user) {
                 setPercent(await getWorkPointsPercentage(state.token, state.user.membershipId));
             }
-            const statuses = await getRidingAreaStatuses(state.token);
-            setRidingAreaStatuses(statuses);
-            console.log(JSON.stringify(ridingAreaStatuses));
+            await loadTrackStatuses();
         }
         getData();
     }, [state.user]);
@@ -59,6 +63,11 @@ function Dashboard() {
         }
         getData();
     });
+
+    async function updateArea(updatedArea: RidingAreaStatus) {
+        await updateRidingAreaStatus(state.token, (updatedArea.id || 0), updatedArea);
+        await loadTrackStatuses();
+    }
 
     return (
         <ChakraProvider theme={theme}>
@@ -91,7 +100,14 @@ function Dashboard() {
                     </SimpleGrid>
                 </Center>
             </VStack>
-            <TrackStatusCard areaStatusList={ridingAreaStatuses} />
+            <Center>
+                <TrackStatusCard
+                    areaStatusList={ridingAreaStatuses}
+                    isAdmin={state.user?.memberType === 'Admin'}
+                    // eslint-disable-next-line react/jsx-no-bind
+                    updateArea={updateArea}
+                />
+            </Center>
         </ChakraProvider>
     );
 }

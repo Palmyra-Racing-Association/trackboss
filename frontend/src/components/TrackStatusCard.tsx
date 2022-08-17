@@ -1,13 +1,17 @@
 import React from 'react';
-import { Box, Divider, Heading, HStack, SimpleGrid, Text, VStack } from '@chakra-ui/react';
+import { Box, Divider, Heading, HStack, SimpleGrid, Switch, Text, VStack } from '@chakra-ui/react';
 import { RidingAreaStatus } from '../../../src/typedefs/ridingAreaStatus';
 
 interface cardProps {
     areaStatusList: RidingAreaStatus[],
+    isAdmin: boolean,
+    // this param is here for clarity, so I disabled the eslint rule since it doesn't make sense here.
+    // eslint-disable-next-line no-unused-vars
+    updateArea: (updatedArea: RidingAreaStatus) => void,
 }
 
 export default function TrackStatusCard(props: cardProps) {
-    const { areaStatusList } = props;
+    const { areaStatusList, isAdmin } = props;
 
     const ridingAreaDisplay = areaStatusList.map((area) => {
         let color = '';
@@ -17,10 +21,25 @@ export default function TrackStatusCard(props: cardProps) {
             color = 'red';
         }
         return (
-            <Box bgColor={color} color="white" w="100%">
+            <Box p={2} borderWidth="1px" borderRadius="lg" bgColor={color} color="white" w="100%">
                 <Text fontSize="xl" fontStyle="bold">
                     {area.name}
                 </Text>
+                {
+                    isAdmin && (
+                        <Switch
+                            colorScheme="orange"
+                            size="lg"
+                            defaultChecked={area.isOpen}
+                            onChange={
+                                async () => {
+                                    area.isOpen = !area.isOpen;
+                                    await props.updateArea(area);
+                                }
+                            }
+                        />
+                    )
+                }
             </Box>
         );
     });
@@ -31,8 +50,8 @@ export default function TrackStatusCard(props: cardProps) {
             boxShadow="md"
             border="1px"
             borderColor="gray.200"
-            w={[470, 470, '99%']}
-            p={3}
+            w={[470, 470, 1494]}
+            p={2}
             m={2}
         >
             <VStack align="left" spacing="2em">
