@@ -19,6 +19,7 @@ import health from './health';
 import gateCode from './gateCode';
 import membershipApplication from './membershipApplication';
 import logger from '../logger';
+import ridingAreaStatus from './ridingAreaStatus';
 
 const api = Router();
 
@@ -79,5 +80,6 @@ api.use('/boardMemberType', boardMemberType);
 api.use('/health', health);
 api.use('/gateCode', gateCode);
 api.use('/membershipApplication', membershipApplication);
+api.use('/ridingAreaStatus', ridingAreaStatus);
 
 export default api;
