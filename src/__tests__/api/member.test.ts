@@ -1,4 +1,5 @@
 import supertest from 'supertest';
+import AWS from 'aws-sdk';
 import server from '../../server';
 import { createVerifier } from '../../util/auth';
 import { mockInvalidToken, mockValidToken, mockVerifyAdmin, mockVerifyMember } from '../util/authMocks';
@@ -11,6 +12,7 @@ const supertestServer = supertest(server);
 
 beforeAll(() => {
     createVerifier();
+    AWS.config.update({ region: 'us-east-1' });
 });
 
 afterAll((done) => {

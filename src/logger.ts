@@ -11,19 +11,25 @@ const { combine, timestamp: timestampFn, label: labelFn, printf } = format;
 const logFormat =
     printf(({ level, message, label, timestamp }) => `${timestamp} [${label}] ${level}: ${message}`);
 
+let logTransports = [
+    new transports.Console(),
+    new WinstonCloudWatch({
+        logGroupName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}-api-logs`,
+        logStreamName: `${hostname()}-${new Date().toLocaleDateString('en-CA')}`,
+    }),
+];
+if (process.env.CW_LOGS_OFF === 'true') {
+    logTransports = [
+        new transports.Console(),
+    ];
+}
 const logger = createLogger({
     format: combine(
-        labelFn({ label: 'Club Manager' }),
+        labelFn({ label: 'trackbossapi' }),
         timestampFn({ format: 'YYYY-MM-DD HH:mm:ss' }),
         logFormat,
     ),
-    transports: [
-        new transports.Console(),
-        new WinstonCloudWatch({
-            logGroupName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}-api-logs`,
-            logStreamName: `${hostname()}-${new Date().toLocaleDateString('en-CA')}`,
-        }),
-    ],
+    transports: logTransports,
 });
 
 export default logger;
