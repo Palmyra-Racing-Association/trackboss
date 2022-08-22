@@ -141,6 +141,8 @@ export default function MemberList() {
                 fixedHeaderScrollHeight="300px"
                 highlightOnHover
                 pagination
+                paginationPerPage={100}
+                paginationRowsPerPageOptions={[100, 200, cells.length]}
                 responsive
                 striped
                 subHeaderWrap

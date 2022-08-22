@@ -16,6 +16,11 @@ export default function EventCard(props: cardProps) {
         const path = '/calendar';
         navigate(path);
     };
+    const singleDayEvent = (props.date === props.endDate);
+    let eventDates = `${props.date} - ${props.endDate}`;
+    if (singleDayEvent) {
+        eventDates = props.date;
+    }
 
     return (
         <Box
@@ -46,9 +51,7 @@ export default function EventCard(props: cardProps) {
                     </HStack>
                     <Divider />
                     <Text pt={10} color="orange" fontSize="2xl">
-                        {props.date}
-                        -
-                        {props.endDate}
+                        {eventDates}
                     </Text>
                     <Text fontSize="2xl">{props.startTime}</Text>
                     <Text fontSize="2xl">{props.name}</Text>
