@@ -61,7 +61,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     fontFamily="heading"
                                     fontSize="2xl"
                                     leftIcon={<AiFillHome />}
-                                    isFullWidth
+                                    width="100%"
                                     bg="white"
                                     color="black"
                                     borderRadius="0"
@@ -83,7 +83,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     fontFamily="heading"
                                     fontSize="2xl"
                                     leftIcon={<AiFillCalendar />}
-                                    isFullWidth
+                                    width="100%"
                                     bg="white"
                                     color="black"
                                     _hover={{ bg: 'gray.100' }}
@@ -105,7 +105,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     fontFamily="heading"
                                     fontSize="2xl"
                                     leftIcon={<HiUsers />}
-                                    isFullWidth
+                                    width="100%"
                                     bg="white"
                                     color="black"
                                     borderRadius="0"
@@ -127,7 +127,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     fontFamily="heading"
                                     fontSize="2xl"
                                     leftIcon={<HiCog />}
-                                    isFullWidth
+                                    width="100%"
                                     bg="white"
                                     color="black"
                                     borderRadius="0"
@@ -154,7 +154,7 @@ export default function HamburgerMenu(props: pageProps) {
                                             fontFamily="heading"
                                             fontSize="2xl"
                                             leftIcon={<AiFillBank />}
-                                            isFullWidth
+                                            width="100%"
                                             bg="white"
                                             color="black"
                                             borderRadius="0"
@@ -176,7 +176,7 @@ export default function HamburgerMenu(props: pageProps) {
                                             fontFamily="heading"
                                             fontSize="2xl"
                                             leftIcon={<AiFillFolderOpen />}
-                                            isFullWidth
+                                            width="100%"
                                             bg="white"
                                             color="black"
                                             borderRadius="0"

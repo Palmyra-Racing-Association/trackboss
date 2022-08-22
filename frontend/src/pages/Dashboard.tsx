@@ -47,11 +47,7 @@ function Dashboard() {
 
     useEffect(() => {
         async function getData() {
-            try {
-                setEventCardProps(await getEventCardPropsLocal(state.token));
-            } catch (error: any) {
-                console.log(error);
-            }
+            setEventCardProps(await getEventCardPropsLocal(state.token));
             if (state.user) {
                 setPercent(await getWorkPointsPercentage(state.token, state.user.membershipId));
             }
