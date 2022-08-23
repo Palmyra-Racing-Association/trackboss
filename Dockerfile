@@ -12,8 +12,6 @@ COPY package*.json ./
 COPY . .
 
 RUN npm install
-# or for prod
-# RUN npm ci --only=production
 
 EXPOSE ${PORT}
 CMD [ "npm", "run", "server-prod" ]

@@ -4,7 +4,7 @@ import {
     BoardMemberType,
     PostNewBoardMemberTypeRequest,
     PatchBoardMemberTypeRequest,
-} from 'src/typedefs/boardMemberType';
+} from '../typedefs/boardMemberType';
 
 import logger from '../logger';
 import { getPool } from './pool';

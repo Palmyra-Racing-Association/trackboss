@@ -9,7 +9,7 @@ import {
     GetJobResponse,
     PatchJobResponse,
     DeleteJobResponse,
-} from 'src/typedefs/job';
+} from '../typedefs/job';
 import { checkHeader, verify } from '../util/auth';
 
 import { insertJob, getJob, getJobList, patchJob, deleteJob, setJobVerifiedState, removeSignup } from '../database/job';

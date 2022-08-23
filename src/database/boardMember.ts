@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
-import { BoardMember, PatchBoardMemberRequest, PostNewBoardMemberRequest } from 'src/typedefs/boardMember';
+import { BoardMember, PatchBoardMemberRequest, PostNewBoardMemberRequest } from '../typedefs/boardMember';
 
 import logger from '../logger';
 import { getPool } from './pool';

@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { Bill, GetBillListRequestFilters, WorkPointThreshold } from 'src/typedefs/bill';
-import { Membership } from 'src/typedefs/membership';
+import { Bill, GetBillListRequestFilters, WorkPointThreshold } from '../../../typedefs/bill';
+import { Membership } from '../../../typedefs/membership';
 import * as billing from '../../../database/billing';
 import * as billingUtil from '../../../util/billing';
 
@@ -15,6 +15,12 @@ export const billList: Bill[] = [
         membershipAdminEmail: 'em@il.com',
         emailedBill: '2022-03-21',
         curYearPaid: true,
+        pointsEarned: 2,
+        pointsThreshold: 21,
+        membershipId: 4,
+        firstName: 'Jimbus',
+        lastName: 'Gimbus',
+        dueDate: '2023-02-15',
     }, {
         billId: 1,
         generatedDate: '2022-03-21',
@@ -25,6 +31,12 @@ export const billList: Bill[] = [
         membershipAdminEmail: 'em@il.com',
         emailedBill: '2022-03-21',
         curYearPaid: false,
+        pointsEarned: 2,
+        pointsThreshold: 21,
+        membershipId: 4,
+        firstName: 'Jimbus',
+        lastName: 'Gimbus',
+        dueDate: '2023-02-15',
     }, {
         billId: 2,
         generatedDate: '2022-03-21',
@@ -35,6 +47,12 @@ export const billList: Bill[] = [
         membershipAdminEmail: 'em@il.com',
         emailedBill: '2022-03-21',
         curYearPaid: false,
+        pointsEarned: 2,
+        pointsThreshold: 21,
+        membershipId: 4,
+        firstName: 'Jimbus',
+        lastName: 'Gimbus',
+        dueDate: '2023-02-15',
     }, {
         billId: 3,
         generatedDate: '2022-03-21',
@@ -45,6 +63,12 @@ export const billList: Bill[] = [
         membershipAdminEmail: 'em@il.com',
         emailedBill: '2022-03-21',
         curYearPaid: true,
+        pointsEarned: 2,
+        pointsThreshold: 21,
+        membershipId: 4,
+        firstName: 'Jimbus',
+        lastName: 'Gimbus',
+        dueDate: '2023-02-15',
     },
 ];
 
