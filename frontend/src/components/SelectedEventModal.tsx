@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
     Modal,
@@ -16,6 +16,7 @@ import {
     HStack,
     VStack,
     Text,
+    Switch,
 } from '@chakra-ui/react';
 import moment from 'moment';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
@@ -35,6 +36,7 @@ interface modalProps {
 
 export default function SelectedEventModal(props: modalProps) {
     const { state } = useContext(UserContext);
+    const [enableDelete, setEnableDelete] = useState<boolean>(false);
 
     async function generateJobSignUpPatch() {
         let editedJob: PatchJobRequest;
@@ -134,20 +136,31 @@ export default function SelectedEventModal(props: modalProps) {
                     </Link>
                     {
                         props.admin && (
-                            <Button
-                                mr={3}
-                                size="sm"
-                                variant="ghost"
-                                color="red"
-                                onClick={
-                                    () => {
-                                        props.deleteEvent();
-                                        props.onClose();
+                            <>
+                                <Button
+                                    mr={3}
+                                    size="lg"
+                                    variant="ghost"
+                                    color="red"
+                                    disabled={!enableDelete}
+                                    onClick={
+                                        () => {
+                                            props.deleteEvent();
+                                            props.onClose();
+                                        }
                                     }
-                                }
-                            >
-                                Delete
-                            </Button>
+                                >
+                                    Delete
+                                </Button>
+                                <Switch
+                                    size="sm"
+                                    onChange={
+                                        () => {
+                                            setEnableDelete(!enableDelete);
+                                        }
+                                    }
+                                />
+                            </>
                         )
                     }
                     {

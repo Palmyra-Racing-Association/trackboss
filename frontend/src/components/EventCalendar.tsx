@@ -172,6 +172,7 @@ export default function EventCalendar() {
                 style={{ height: '70vh' }}
                 components={
                     {
+                        // eslint-disable-next-line react/no-unstable-nested-components
                         toolbar: React.memo((toolbarProps: CustomToolbarProps, children) => (
                             <RenderToolbar
                                 // Necessary for the custom toolbar to render properly
