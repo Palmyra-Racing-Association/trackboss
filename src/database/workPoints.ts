@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
-import { WorkPoints } from 'src/typedefs/workPoints';
+import { WorkPoints } from '../typedefs/workPoints';
 import logger from '../logger';
 import { getPool } from './pool';
 

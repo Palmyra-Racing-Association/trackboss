@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
-import membership from 'src/api/membership';
+import membership from '../api/membership';
 
-import { Job, PatchJobRequest, PostNewJobRequest, GetJobListRequestFilters } from 'src/typedefs/job';
+import { Job, PatchJobRequest, PostNewJobRequest, GetJobListRequestFilters } from '../typedefs/job';
 
 import logger from '../logger';
 import { getPool } from './pool';
