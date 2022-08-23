@@ -53,10 +53,7 @@ describe('getEventList()', () => {
         const start = '2002-01-01';
         const results = await getEventList(start);
         expect(mockQuery).toHaveBeenCalled();
-        expect(results.length).toBe(1);
-        results.forEach((result) => {
-            expect(Date.parse(result.start) > Date.parse(start));
-        });
+        expect(results.length).toBe(0);
     });
 
     it('Returns a filtered list of events on end time', async () => {
