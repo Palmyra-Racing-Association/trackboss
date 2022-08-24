@@ -103,6 +103,10 @@ export async function setVerifiedState(token: string, jobId: number, state: bool
 
 export async function setPaidState(token: string, jobId: number) : Promise<any> {
     const paidJob : any = await getJob(token, jobId);
+    const isPaidLaborer = (!paidJob.memberId && paidJob.member);
+    if (isPaidLaborer) {
+        paidJob.paidLabor = paidJob.member;
+    }
     paidJob.paid = !paidJob.paid;
     const modifiedJob : any = await updateJob(token, jobId, paidJob);
     return modifiedJob;
