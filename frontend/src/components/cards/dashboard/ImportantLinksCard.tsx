@@ -7,7 +7,7 @@ export default function ImportantLinksCard(props: any) {
         <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={3} h="365" m={2}>
             <Center>
                 <VStack boxSize="md">
-                    <Heading size="lg">Important Links</Heading>
+                    <Heading size="lg">Club Info and Links</Heading>
                     <Divider />
                     <UnorderedList>
                         <Link
@@ -26,7 +26,15 @@ export default function ImportantLinksCard(props: any) {
                             fontSize="2xl"
                             color="orange"
                         >
-                            <ListItem pt={1} marginLeft={4}>Member Info Phone System</ListItem>
+                            <ListItem pt={1} marginLeft={4}>Member Info Voice # (833) 541-2030</ListItem>
+                        </Link>
+                        <Link
+                            href="sms:+19292426752"
+                            target="_blank"
+                            fontSize="2xl"
+                            color="orange"
+                        >
+                            <ListItem pt={1} marginLeft={4}>Member SMS # (929) 242-6752</ListItem>
                         </Link>
                         <Link
                             href="https://palmyramx.com/pages/track-rules"

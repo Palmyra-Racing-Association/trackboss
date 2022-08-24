@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Divider, Heading, HStack, SimpleGrid, Switch, Text, VStack } from '@chakra-ui/react';
-import { RidingAreaStatus } from '../../../src/typedefs/ridingAreaStatus';
+import { RidingAreaStatus } from '../../../../../src/typedefs/ridingAreaStatus';
 
 interface cardProps {
     areaStatusList: RidingAreaStatus[],

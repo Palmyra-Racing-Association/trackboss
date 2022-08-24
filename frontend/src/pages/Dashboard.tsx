@@ -4,7 +4,7 @@ import { UserContext } from '../contexts/UserContext';
 import theme from '../theme';
 import Header from '../components/Header';
 import WorkPointsCard from '../components/WorkPointsCard';
-import ImportantLinksCard from '../components/ImportantLinksCard';
+import ImportantLinksCard from '../components/cards/dashboard/ImportantLinksCard';
 import EventCard from '../components/EventCard';
 import { getEventCardProps } from '../controller/event';
 import { getWorkPointsTotal } from '../controller/workPoints';
@@ -13,7 +13,7 @@ import GreetingText from '../components/GreetingText';
 import { getTodaysDate } from '../controller/utils';
 import { getGateCodeLatest } from '../controller/gateCode';
 import { GateCode } from '../../../src/typedefs/gateCode';
-import TrackStatusCard from '../components/TrackStatusCard';
+import TrackStatusCard from '../components/cards/dashboard/TrackStatusCard';
 import { getRidingAreaStatuses, updateRidingAreaStatus } from '../controller/ridingAreaStatus';
 import { RidingAreaStatus } from '../../../src/typedefs/ridingAreaStatus';
 
