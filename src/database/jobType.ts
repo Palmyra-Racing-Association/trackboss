@@ -177,7 +177,7 @@ export async function patchJobType(id: number, req: PatchJobTypeRequest): Promis
         // also update any future jobs in the job table that already have this info on them (use case: calendar
         // already made for the year, and now we want to change the point value).
         const jobUpdateSql = `update job set points_awarded = ?, cash_payout = ? 
-            where job_type_id = ? and job_start_date > now()`;
+            where job_type_id = ? and job_start_date > date_sub(now(), interval 21 day)`;
         const [jobUpdateResult] = await getPool().query<OkPacket>(jobUpdateSql, [req.pointValue, req.cashValue, id]);
         logger.info(`updated job: ${JSON.stringify(req)} in future jobs table`);
         logger.info(`${jobUpdateResult.affectedRows} were updated`);

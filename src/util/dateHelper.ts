@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { parse, addDays, format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 
 /**
  * Parse a string and get the correct date based on the job day number.
@@ -8,7 +8,11 @@ import { parse, addDays, format } from 'date-fns';
  * @returns string date with the correct date.
  */
 export function calculateStartDate(stringDate: string, jobDayNumber: number) : string {
-    const eventStart = parse(stringDate, 'yyyy-MM-dd HH:mm:ss', new Date());
+    const eventStart = new Date(Date.parse(stringDate));
+    if (!jobDayNumber) {
+        // eslint-disable-next-line no-param-reassign
+        jobDayNumber = 1;
+    }
     const jobDate = format(addDays(eventStart, (jobDayNumber - 1)), 'yyyy-MM-dd');
     return jobDate;
 }

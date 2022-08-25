@@ -9,6 +9,7 @@ import * as rds from '@aws-cdk/aws-rds';
 import * as cdk from '@aws-cdk/core';
 import { Tags } from '@aws-cdk/core';
 import * as logs from '@aws-cdk/aws-logs';
+import * as ssm from '@aws-cdk/aws-ssm';
 
 export class DeployStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
@@ -19,11 +20,6 @@ export class DeployStack extends cdk.Stack {
     const vpc = ec2.Vpc.fromLookup(this, 'ImportVPC',{isDefault: true});
     
     const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
-    /*
-    const alb = elbv2.ApplicationLoadBalancer.fromLookup(this, 'alb', {
-      loadBalancerArn: 'arn:aws:elasticloadbalancing:us-east-1:425610073499:loadbalancer/app/4343HogbackHill-lb/2bd650d93825f0dd',
-    });
-    */
 
     const alb = new elbv2.ApplicationLoadBalancer(this, 'alb', {
       loadBalancerName: `${environmentName}-alb`,
@@ -160,6 +156,27 @@ export class DeployStack extends cdk.Stack {
         logGroupName: `${environmentName}-api-logs`
       }
     );
+    
+    new ssm.StringParameter(this, 'cognitoPoolId', {
+      allowedPattern: '.*',
+      parameterName: 'cognitoPoolId',
+      stringValue: process.env.COGNITO_POOL_ID || '',
+      tier: ssm.ParameterTier.STANDARD,
+    });
+    
+    new ssm.StringParameter(this, 'cognitoClientId', {
+      allowedPattern: '.*',
+      parameterName: 'cognitoClientId',
+      stringValue: process.env.COGNITO_CLIENT_ID || '',
+      tier: ssm.ParameterTier.STANDARD,
+    });
+
+    new ssm.StringParameter(this, 'clubEmail', {
+      allowedPattern: '.*',
+      parameterName: 'clubEmail',
+      stringValue: process.env.CLUB_EMAIL || '',
+      tier: ssm.ParameterTier.STANDARD,
+    });
 
     new cdk.CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,
