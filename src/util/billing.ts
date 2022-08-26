@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { compareDesc, isFuture } from 'date-fns';
 import { getJobList } from '../database/job';
 import { generateBill, getBillList } from '../database/billing';
 import { getBaseDues } from '../database/membership';
@@ -6,6 +7,7 @@ import { getWorkPointsByMembership } from '../database/workPoints';
 import logger from '../logger';
 import { Bill } from '../typedefs/bill';
 import { Membership } from '../typedefs/membership';
+import { Job } from '../typedefs/job';
 
 /**
  * Generate new bills in the database
@@ -45,7 +47,11 @@ export async function generateNewBills(
                 if (owed === 0) {
                     fee = 0;
                 }
-                const workDetail = await getJobList({ membershipId: membership.membershipId, year });
+                let workDetail = await getJobList({ membershipId: membership.membershipId, year });
+                workDetail = workDetail.filter((job: Job) => (!job.paid && !isFuture(job.start as Date)));
+                // sort by date.  I have to do this in JS due to the way jobs are stored in two different tables and
+                // messed with here.  Post 2022 this will no longer be required.
+                workDetail.sort((a: Job, b: Job) => compareDesc(a.start as Date, b.start as Date));
                 await generateBill({
                     amount: owed,
                     amountWithFee: (owed + fee),
