@@ -40,6 +40,10 @@ const columns: any = [
     {
         name: 'Points',
         selector: (row: Job) => {
+            const isFutureSignup = moment(row.end).isAfter();
+            if (isFutureSignup) {
+                return `(${row.pointsAwarded} pending)`;
+            }
             if (row.paid) {
                 return 0;
             }
@@ -51,7 +55,7 @@ const columns: any = [
         name: 'Cash ($)',
         selector: (row: Job) => {
             if (row.paid) {
-                return row.cashPayout;
+                return `$${row.cashPayout}`;
             }
             return 0;
         },
