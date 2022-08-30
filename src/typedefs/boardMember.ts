@@ -4,7 +4,10 @@ export type BoardMember = {
     boardId: number,
     title: string,
     year: number,
-    memberId: number
+    memberId: number,
+    firstName?: string,
+    lastName?: string,
+    email?: string,
 }
 
 export type GetBoardMemberRequest = Record<string, never>;

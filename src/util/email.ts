@@ -2,6 +2,7 @@ import AWS from 'aws-sdk';
 import { RowDataPacket } from 'mysql2';
 import logger from '../logger';
 import { getPool } from '../database/pool';
+import { getBoardMemberList } from '../database/boardMember';
 
 async function getEmailById(purpose: string) {
     const values = [purpose];
@@ -11,11 +12,13 @@ async function getEmailById(purpose: string) {
     } catch (e: any) {
         logger.error(`DB error gettting email with ID ${purpose}`, e);
     }
+    const bccList : string[] = [];
     const emails = results?.map((result) => ({
         purpose: result.purpose,
         subject: result.subject,
         text: result.text,
         to: '',
+        bcc: bccList,
     })) || [];
     return emails[0];
 }
@@ -28,6 +31,7 @@ export async function sendTextEmail(email: any) {
         Destination: {
             ToAddresses: [email.to],
             CcAddresses: [clubEmail],
+            BccAddresses: email.bcc,
         },
         Message: {
             Subject: { Data: email.subject },
@@ -41,7 +45,12 @@ export async function sendTextEmail(email: any) {
         ReplyToAddresses: [clubEmail],
         Source: 'admin@palmyramx.com',
     };
-    await ses.sendEmail(emailParams).promise();
+    try {
+        await ses.sendEmail(emailParams).promise();
+    } catch (error: any) {
+        logger.error('Unable to send email via SES');
+        logger.error(error);
+    }
 }
 
 export async function sendAppConfirmationEmail(application: any) {
@@ -51,7 +60,8 @@ export async function sendAppConfirmationEmail(application: any) {
     confirmEmail.text = confirmEmail.text.replace(/appId/, application.id);
 
     confirmEmail.to = application.email;
-
+    const boardMembers = await getBoardMemberList((new Date().getFullYear().toString()));
+    boardMembers.forEach((member) => confirmEmail.bcc.push(member.email || ''));
     await sendTextEmail(confirmEmail);
-    logger.info(`application emails sent for application ${application.application.id}`);
+    logger.info(`application emails sent for application ${application.id}`);
 }

@@ -29,9 +29,10 @@ export default function MembershipApplicationModal(props: appModalProps) {
     return (
         <Modal isCentered size="xl" isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent>
-                <Heading>
+            <ModalContent m={3}>
+                <Heading ml={3}>
                     Application -
+                    &nbsp;
                     {membershipApplication.firstName}
                     &nbsp;
                     {membershipApplication.lastName}

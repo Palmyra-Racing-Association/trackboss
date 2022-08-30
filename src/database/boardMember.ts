@@ -65,6 +65,7 @@ export async function getBoardMemberList(year?: string): Promise<BoardMember[]> 
         title: result.title,
         year: result.year,
         memberId: result.member_id,
+        email: result.email,
     }));
 }
 

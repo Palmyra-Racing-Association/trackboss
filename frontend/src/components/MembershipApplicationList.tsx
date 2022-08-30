@@ -8,6 +8,11 @@ import MembershipApplicationModal from './modals/MembershipApplicationModal';
 
 const columns: any = [
     {
+        name: 'ID',
+        selector: (row: MembershipApplication) => row.id,
+        sortable: true,
+    },
+    {
         name: 'Last Name',
         selector: (row: MembershipApplication) => row.lastName,
         sortable: true,
@@ -16,11 +21,14 @@ const columns: any = [
         name: 'First Name',
         selector: (row: MembershipApplication) => row.firstName,
         sortable: true,
+        hide: 'sm',
     },
     {
         name: 'Application date',
         selector: (row: MembershipApplication) => row.receivedDate,
         sortable: true,
+        wrap: true,
+        hide: 'sm',
     },
     {
         name: 'Status',
