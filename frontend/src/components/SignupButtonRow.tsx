@@ -176,6 +176,7 @@ export default function SignupButtonRow(props: any) {
                                     async () => {
                                         await signupForJobFreeForm(state.token, props.data.jobId, paidLabor);
                                         await props.refreshData();
+                                        setMarkedPaid(true);
                                         onNonMemberClose();
                                     }
                                 }
