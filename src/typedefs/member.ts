@@ -24,6 +24,7 @@ export type Member = {
     zip: string,
     lastModifiedDate: string,
     lastModifiedBy: string,
+    isBoardMember: boolean,
     boardMemberData? : BoardMember // optional field to be used only by the frontend to store data
 }
 

@@ -20,11 +20,66 @@ import { Link, useNavigate } from 'react-router-dom';
 interface pageProps {
     activeButtonId: number,
     admin: boolean,
+    boardMember: boolean,
 }
 
 export default function HamburgerMenu(props: pageProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const history = useNavigate();
+    const adminButtons = (
+        <VStack width="100%" divider={<StackDivider borderColor="gray.300" />} spacing="0">
+            <StackDivider borderColor="gray.300" />
+            <Button
+                justifyContent="flex-start"
+                height="80px"
+                fontFamily="heading"
+                fontSize="2xl"
+                leftIcon={<AiFillBank />}
+                width="100%"
+                bg="white"
+                color="black"
+                borderRadius="0"
+                _hover={{ bg: 'gray.100' }}
+                _active={
+                    {
+                        bg: 'orange',
+                        color: 'white',
+                    }
+                }
+                id="5"
+                isActive={props.activeButtonId === 5}
+            >
+                <Link to="/jobs">Administer Event Jobs</Link>
+            </Button>
+            <StackDivider borderColor="gray.300" />
+        </VStack>
+    );
+    const boardMemberButtons = (
+        <VStack width="100%" divider={<StackDivider borderColor="gray.300" />} spacing="0">
+            <Button
+                justifyContent="flex-start"
+                height="80px"
+                fontFamily="heading"
+                fontSize="2xl"
+                leftIcon={<AiFillFolderOpen />}
+                width="100%"
+                bg="white"
+                color="black"
+                borderRadius="0"
+                _hover={{ bg: 'gray.100' }}
+                _active={
+                    {
+                        bg: 'orange',
+                        color: 'white',
+                    }
+                }
+                id="6"
+                isActive={props.activeButtonId === 6}
+            >
+                <Link to="/applications">Membership Applications</Link>
+            </Button>
+        </VStack>
+    );
     return (
         <HStack>
             <IconButton
@@ -144,57 +199,8 @@ export default function HamburgerMenu(props: pageProps) {
                                     <Link to="/settings">My Account</Link>
                                 </Button>
                             </VStack>
-                            {
-                                (props.admin) && (
-                                    <VStack width="100%" divider={<StackDivider borderColor="gray.300" />} spacing="0">
-                                        <StackDivider borderColor="gray.300" />
-                                        <Button
-                                            justifyContent="flex-start"
-                                            height="80px"
-                                            fontFamily="heading"
-                                            fontSize="2xl"
-                                            leftIcon={<AiFillBank />}
-                                            width="100%"
-                                            bg="white"
-                                            color="black"
-                                            borderRadius="0"
-                                            _hover={{ bg: 'gray.100' }}
-                                            _active={
-                                                {
-                                                    bg: 'orange',
-                                                    color: 'white',
-                                                }
-                                            }
-                                            id="5"
-                                            isActive={props.activeButtonId === 5}
-                                        >
-                                            <Link to="/jobs">Administer Event Jobs</Link>
-                                        </Button>
-                                        <Button
-                                            justifyContent="flex-start"
-                                            height="80px"
-                                            fontFamily="heading"
-                                            fontSize="2xl"
-                                            leftIcon={<AiFillFolderOpen />}
-                                            width="100%"
-                                            bg="white"
-                                            color="black"
-                                            borderRadius="0"
-                                            _hover={{ bg: 'gray.100' }}
-                                            _active={
-                                                {
-                                                    bg: 'orange',
-                                                    color: 'white',
-                                                }
-                                            }
-                                            id="6"
-                                            isActive={props.activeButtonId === 6}
-                                        >
-                                            <Link to="/applications">Membership Applications</Link>
-                                        </Button>
-                                    </VStack>
-                                )
-                            }
+                            { (props.admin) && (adminButtons) }
+                            { (props.boardMember) && (boardMemberButtons)}
                         </DrawerBody>
                     </DrawerContent>
                 </Drawer>

@@ -1,11 +1,12 @@
 DELIMITER //
 CREATE VIEW `v_member` AS
-    SELECT 
+     SELECT 
         m.member_id,
         m.membership_id,
         m.first_name,
         m.last_name,
         ms.membership_admin_id,
+        bm.board_title_id,
         CONCAT(ma.first_name, ' ', ma.last_name) AS membership_admin,        
         m.uuid,
         m.active,
@@ -33,4 +34,6 @@ CREATE VIEW `v_member` AS
         member_types mt ON m.member_type_id = mt.member_type_id
             LEFT JOIN
         membership_types mst ON ms.membership_type_id = mst.membership_type_id
+			left join 
+		board_member bm on m.member_id = bm.member_id and bm.year = year(now())
 //

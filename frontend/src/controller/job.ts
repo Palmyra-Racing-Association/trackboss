@@ -128,7 +128,10 @@ export async function signupForJob(token:string, jobId: number, memberId: number
 
 export async function signupForJobFreeForm(token: string, jobId: number, name: string) : Promise<any> {
     const signupJob : any = await getJob(token, jobId);
+    // when we add paid labor to a job the assumption is that it is paid. Admins can undo this, but this
+    // assumption saves them work.
     signupJob.paidLabor = name;
+    signupJob.paid = true;
     const modifiedJob : any = await updateJob(token, jobId, signupJob);
     return modifiedJob;
 }
