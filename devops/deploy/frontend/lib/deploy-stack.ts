@@ -11,7 +11,6 @@ export class DeployStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
     const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
-    const projectRoot = process.env.PROJECT_ROOT;
     const domains = [`${environmentName}.hogbackmx.com`];
     const bucketName = `${environmentName}-frontend-deploy-bucket`;
     const certArns = ['arn:aws:acm:us-east-1:425610073499:certificate/6bdd2367-df28-4226-866d-8d057ce0f496'];
@@ -32,7 +31,7 @@ export class DeployStack extends Stack {
 
       // eslint-disable-next-line no-unused-vars
       const deployment = new s3Deployment.BucketDeployment(this, 'deployStaticWebsite'+domain, {
-        sources: [s3Deployment.Source.asset(`${projectRoot}/frontend/build`)],
+        sources: [s3Deployment.Source.asset('../../../frontend/build')],
         destinationBucket: deploymentBucket,
       });
 
