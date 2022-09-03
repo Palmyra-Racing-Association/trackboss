@@ -1,15 +1,14 @@
 /* eslint-disable import/prefer-default-export */
-import * as s3 from '@aws-cdk/aws-s3';
-import * as s3Deployment from '@aws-cdk/aws-s3-deployment';
-import * as cdk from '@aws-cdk/core';
-import * as acm from '@aws-cdk/aws-certificatemanager';
-import * as cloudfront from '@aws-cdk/aws-cloudfront';
-import * as origins from '@aws-cdk/aws-cloudfront-origins';
-import * as route53 from '@aws-cdk/aws-route53';
-import { Duration } from '@aws-cdk/core';
+import { App, CfnOutput, Duration, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { aws_s3 as s3 } from 'aws-cdk-lib';
+import { aws_s3_deployment as s3Deployment } from 'aws-cdk-lib';
+import { aws_certificatemanager as acm } from 'aws-cdk-lib';
+import { aws_cloudfront as cloudfront } from 'aws-cdk-lib';
+import { aws_cloudfront_origins as origins } from 'aws-cdk-lib';
+import { aws_route53 as route53 } from 'aws-cdk-lib';
 
-export class DeployStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+export class DeployStack extends Stack {
+  constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
     const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
     const projectRoot = process.env.PROJECT_ROOT;
@@ -21,7 +20,7 @@ export class DeployStack extends cdk.Stack {
       const deploymentBucket = new s3.Bucket(this, bucketName+domain, {
         bucketName: domain+'-frontend',
         // lifecycle rules are flippant, but this is ephemeral build stuff
-        removalPolicy: cdk.RemovalPolicy.DESTROY,
+        removalPolicy: RemovalPolicy.DESTROY,
         autoDeleteObjects: true,
         versioned: false,
         encryption: s3.BucketEncryption.S3_MANAGED,
@@ -80,7 +79,7 @@ export class DeployStack extends cdk.Stack {
         })
       });
 
-      const cloudfrontOutput = new cdk.CfnOutput(this, 'bucketName', {
+      const cloudfrontOutput = new CfnOutput(this, 'bucketName', {
         value: distribution.domainName,
         description: 'Distribution domain name',
         exportName: `distributionDomainName-${process.env.TRACKBOSS_ENVIRONMENT_NAME}`,
