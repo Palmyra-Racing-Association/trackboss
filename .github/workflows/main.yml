@@ -35,6 +35,8 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ env.NODE_VERSION }}
+    - name: wtf is going on
+      run: echo $PROJECT_ROOT && pwd
     - name: Run Docker Build script
       run: bash devops/deploy/backend/buildDockerImage.sh $PROJECT_ROOT
     - name: Terminate existing API backend to reset it
