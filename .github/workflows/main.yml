@@ -36,7 +36,7 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: wtf is going on
-      run: echo $PROJECT_ROOT && pwd && echo $HOME/trackboss
+      run: ls -l $HOME && ls -l $HOME/trackboss
     - name: Run Docker Build script
       run: bash devops/deploy/backend/buildDockerImage.sh $PROJECT_ROOT
     - name: Terminate existing API backend to reset it
