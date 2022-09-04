@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 env:
   NODE_VERSION: "16"
-  PROJECT_ROOT: '${{ env.HOME }}/work/trackboss/trackboss'
+  PROJECT_ROOT: ${{ env.HOME }}/work/trackboss/trackboss
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_AKI }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SAC }}  
@@ -36,7 +36,7 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: wtf is going on
-      run: ls -l $HOME/work && ls -l $HOME/work/trackboss && ls -l $HOME/work/trackboss/trackboss && doesntwork
+      run: ls -l $HOME/work && ls -l $HOME/work/trackboss && ls -l $HOME/work/trackboss/trackboss
     - name: Run Docker Build script
       run: bash devops/deploy/backend/buildDockerImage.sh $PROJECT_ROOT
     - name: Terminate existing API backend to reset it
