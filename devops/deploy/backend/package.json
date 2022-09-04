@@ -11,8 +11,6 @@
     "cdk": "cdk"
   },
   "devDependencies": {
-    "aws-cdk": "1.148.0",
-    "@aws-cdk/assert": "1.148.0",
     "@types/jest": "^26.0.10",
     "@types/node": "10.17.27",
     "jest": "^26.4.2",
@@ -21,20 +19,8 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@aws-cdk/aws-autoscaling": "^1.148.0",
-    "@aws-cdk/aws-certificatemanager": "^1.148.0",
-    "@aws-cdk/aws-cloudfront": "^1.148.0",
-    "@aws-cdk/aws-cloudfront-origins": "1.148.0",
-    "@aws-cdk/aws-ecs-patterns": "^1.148.0",
-    "@aws-cdk/aws-rds": "^1.148.0",
-    "@aws-cdk/aws-route53": "^1.148.0",
-    "@aws-cdk/aws-route53-targets": "^1.148.0",
-    "@aws-cdk/aws-s3": "^1.148.0",
-    "@aws-cdk/aws-s3-deployment": "1.148.0",
-    "@aws-cdk/aws-sns": "1.148.0",
-    "@aws-cdk/aws-sns-subscriptions": "1.148.0",
-    "@aws-cdk/aws-sqs": "1.148.0",
-    "@aws-cdk/aws-ssm": "^1.169.0",
-    "@aws-cdk/core": "1.148.0"
+    "aws-cdk": "^2.40.0",
+    "aws-cdk-lib": "^2.0.0",
+    "constructs": "^10.0.0"
   }
 }

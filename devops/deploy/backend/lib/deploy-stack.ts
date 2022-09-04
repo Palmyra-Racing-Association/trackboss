@@ -1,21 +1,20 @@
-import * as autoscaling from '@aws-cdk/aws-autoscaling';
-import * as ec2 from '@aws-cdk/aws-ec2';
-import * as ecs from '@aws-cdk/aws-ecs';
-import * as elbv2 from '@aws-cdk/aws-elasticloadbalancingv2';
-import * as iam from '@aws-cdk/aws-iam';
-import * as route53 from '@aws-cdk/aws-route53';
-import * as acm from '@aws-cdk/aws-certificatemanager';
-import * as rds from '@aws-cdk/aws-rds';
-import * as cdk from '@aws-cdk/core';
-import { Tags } from '@aws-cdk/core';
-import * as logs from '@aws-cdk/aws-logs';
-import * as ssm from '@aws-cdk/aws-ssm';
+import { App, CfnOutput, Duration, Stack, StackProps, Tags } from 'aws-cdk-lib';
+import { aws_autoscaling as autoscaling } from 'aws-cdk-lib';
+import { aws_ec2 as ec2 } from 'aws-cdk-lib';
+import { aws_ecs as ecs } from 'aws-cdk-lib';
+import { aws_elasticloadbalancingv2 as elbv2 } from 'aws-cdk-lib';
+import { aws_iam as iam } from 'aws-cdk-lib';
+import { aws_certificatemanager as acm } from 'aws-cdk-lib';
+import { aws_route53 as route53 } from 'aws-cdk-lib';
+import { aws_rds as rds } from 'aws-cdk-lib';
+import { aws_logs as logs } from 'aws-cdk-lib';
+import { aws_ssm as ssm } from 'aws-cdk-lib';
 
-export class DeployStack extends cdk.Stack {
-  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
+export class DeployStack extends Stack {
+  constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
-    const account = cdk.Stack.of(this).account;
-    const region = cdk.Stack.of(this).region;
+    const account = Stack.of(this).account;
+    const region = Stack.of(this).region;
 
     const vpc = ec2.Vpc.fromLookup(this, 'ImportVPC',{isDefault: true});
     
@@ -108,7 +107,7 @@ export class DeployStack extends cdk.Stack {
         path: '/api/health',
         unhealthyThresholdCount: 2,
         healthyThresholdCount: 5,
-        interval: cdk.Duration.seconds(30),
+        interval: Duration.seconds(30),
       },
     });
 
@@ -178,11 +177,11 @@ export class DeployStack extends cdk.Stack {
       tier: ssm.ParameterTier.STANDARD,
     });
 
-    new cdk.CfnOutput(this, 'albDNS', {
+    new CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,
     });
 
-    new cdk.CfnOutput(this, 'apiDns', {
+    new CfnOutput(this, 'apiDns', {
       value: dnsARecord.domainName,
     });
   }
