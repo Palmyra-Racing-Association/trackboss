@@ -228,6 +228,42 @@ export async function getJob(id: number): Promise<Job> {
     };
 }
 
+export async function getOpenEventJob(eventId: number): Promise<Job> {
+    const sql = 'select * from job where event_id = ? and member_id is null';
+    let results;
+    try {
+        [results] = await getPool().query<RowDataPacket[]>(sql, [eventId]);
+    } catch (e) {
+        logger.error(`DB error getting job: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (_.isEmpty(results)) {
+        throw new Error('not found');
+    }
+
+    return {
+        jobId: results[0].job_id,
+        member: results[0].member,
+        memberId: results[0].member_id,
+        membershipId: results[0].membership_id,
+        eventId: results[0].event_id,
+        event: results[0].event,
+        start: results[0].start,
+        end: results[0].end,
+        title: results[0].title,
+        verified: !!results[0].verified[0],
+        verifiedDate: results[0].verified_date,
+        pointsAwarded: results[0].points_awarded,
+        paid: !!results[0].paid[0],
+        paidDate: results[0].paid_date,
+        cashPayout: results[0].cash_payout,
+        mealTicket: results[0].meal_ticket,
+        lastModifiedDate: results[0].last_modified_date,
+        lastModifiedBy: results[0].last_modified_by,
+    };
+}
+
 export async function patchJob(id: number, req: PatchJobRequest): Promise<void> {
     if (_.isEmpty(req)) {
         throw new Error('user input error');

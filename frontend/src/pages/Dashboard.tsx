@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { ChakraProvider, Center, SimpleGrid, VStack } from '@chakra-ui/react';
+import { ChakraProvider, Center, SimpleGrid, VStack, useToast } from '@chakra-ui/react';
 import { UserContext } from '../contexts/UserContext';
 import theme from '../theme';
 import Header from '../components/Header';
@@ -35,6 +35,7 @@ async function getWorkPointsPercentage(token: string, membershipId: number) {
 
 function Dashboard() {
     const { state } = useContext(UserContext);
+    const toast = useToast();
     const [eventCardProps, setEventCardProps] = useState<any>();
     const [percent, setPercent] = useState<number>(0);
     const [gateCode, setGateCode] = useState<string>('');
@@ -88,6 +89,23 @@ function Dashboard() {
                                     startTime={eventCardProps.time}
                                     name={eventCardProps.title}
                                     endDate={eventCardProps.end}
+                                    id={eventCardProps.id}
+                                    allowsSignIn
+                                    signupHandler={
+                                        () => {
+                                            toast({
+                                                containerStyle: {
+                                                    background: 'orange',
+                                                },
+                                                // eslint-disable-next-line max-len
+                                                title: 'Signed in!',
+                                                description: `You've been signed into ${eventCardProps.title}`,
+                                                status: 'success',
+                                                duration: 5000,
+                                                isClosable: true,
+                                            });
+                                        }
+                                    }
                                 />
                             ) : (
                                 <EventCard
@@ -95,6 +113,9 @@ function Dashboard() {
                                     startTime=""
                                     name=""
                                     endDate=""
+                                    id={0}
+                                    signupHandler={() => false}
+                                    allowsSignIn={false}
                                 />
                             )
                         }

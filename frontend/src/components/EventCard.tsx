@@ -1,13 +1,16 @@
-import React from 'react';
-import { Box, Center, Text, Heading, VStack, HStack, IconButton, Divider } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Box, Center, Text, Heading, VStack, HStack, IconButton, Divider, Button } from '@chakra-ui/react';
 import { GoKebabVertical } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
 
 interface cardProps {
+    signupHandler: () => void,
     date: string,
     startTime: string,
     name: string,
     endDate: string,
+    id: number,
+    allowsSignIn: boolean,
 }
 
 export default function EventCard(props: cardProps) {
@@ -21,10 +24,12 @@ export default function EventCard(props: cardProps) {
     if (singleDayEvent) {
         eventDates = props.date;
     }
+    const DISABLE_EVENT_SIGNIN_BUTTON = 'disableSigninButton';
+    const [disableSignInButton, setDisableSignInButton] =
+        useState<boolean>(!!(sessionStorage.getItem(DISABLE_EVENT_SIGNIN_BUTTON)));
 
     return (
         <Box
-            onClick={navigateToCalendar}
             cursor="pointer"
             bg="white"
             boxShadow="md"
@@ -35,7 +40,11 @@ export default function EventCard(props: cardProps) {
             h="365"
         >
             <Center>
-                <VStack p={0} boxSize="md">
+                <VStack
+                    p={0}
+                    boxSize="md"
+                    onClick={navigateToCalendar}
+                >
                     <HStack>
                         <IconButton
                             aria-label="Calendar"
@@ -55,6 +64,26 @@ export default function EventCard(props: cardProps) {
                     </Text>
                     <Text fontSize="2xl">{props.startTime}</Text>
                     <Text fontSize="2xl">{props.name}</Text>
+                    <Button
+                        backgroundColor="orange.300"
+                        color="white"
+                        disabled={disableSignInButton}
+                        hidden={!props.allowsSignIn}
+                        onClick={
+                            (e) => {
+                                // sessionStorage.setItem(DISABLE_EVENT_SIGNIN_BUTTON, 'true');
+                                props.signupHandler();
+                                setDisableSignInButton(true);
+                                e.stopPropagation();
+                            }
+                        }
+                    >
+                        Sign in
+                    </Button>
+                    <Text fontSize="xx-small">
+                        EventID:
+                        {props.id}
+                    </Text>
                 </VStack>
             </Center>
         </Box>
