@@ -71,7 +71,7 @@ export default function EventCard(props: cardProps) {
                         hidden={!props.allowsSignIn}
                         onClick={
                             (e) => {
-                                // sessionStorage.setItem(DISABLE_EVENT_SIGNIN_BUTTON, 'true');
+                                sessionStorage.setItem(DISABLE_EVENT_SIGNIN_BUTTON, 'true');
                                 props.signupHandler();
                                 setDisableSignInButton(true);
                                 e.stopPropagation();

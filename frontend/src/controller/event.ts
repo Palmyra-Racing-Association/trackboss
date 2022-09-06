@@ -88,7 +88,7 @@ export async function getEventCardProps(token: string, listType: string) {
             time: formattedEventTime,
             fullDate: moment(upcomingEvents[0].start).format('MM-DD-YYYY'),
             id: upcomingEvents[0].eventId,
-            eventType: upcomingEvents[0].eventType,
+            eventType: upcomingEvents[0].eventType.toLowerCase(),
         };
     }
 

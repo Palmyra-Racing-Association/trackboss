@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
-import membership from '../api/membership';
 
 import { Job, PatchJobRequest, PostNewJobRequest, GetJobListRequestFilters } from '../typedefs/job';
 

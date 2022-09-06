@@ -136,6 +136,15 @@ export async function signupForJobFreeForm(token: string, jobId: number, name: s
     return modifiedJob;
 }
 
+export async function signupForOpenEventJob(token: string, eventId: number, memberId: number) : Promise<any> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/event/${eventId}/${memberId}`, {
+        method: 'PATCH',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
+
 export async function removeSignup(token:string, jobId: number) : Promise<any> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/job/remove/signup/${jobId}`, {
         method: 'PATCH',

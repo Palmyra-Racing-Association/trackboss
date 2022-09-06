@@ -16,6 +16,7 @@ import { GateCode } from '../../../src/typedefs/gateCode';
 import TrackStatusCard from '../components/cards/dashboard/TrackStatusCard';
 import { getRidingAreaStatuses, updateRidingAreaStatus } from '../controller/ridingAreaStatus';
 import { RidingAreaStatus } from '../../../src/typedefs/ridingAreaStatus';
+import { signupForOpenEventJob } from '../controller/job';
 
 async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     const nowString = getTodaysDate();
@@ -90,9 +91,22 @@ function Dashboard() {
                                     name={eventCardProps.title}
                                     endDate={eventCardProps.end}
                                     id={eventCardProps.id}
-                                    allowsSignIn
+                                    allowsSignIn={
+                                        (eventCardProps.eventType === 'work day') ||
+                                        (eventCardProps.eventType === 'meeting')
+                                    }
                                     signupHandler={
-                                        () => {
+                                        async () => {
+                                            try {
+                                                await signupForOpenEventJob(
+                                                    state.token,
+                                                    eventCardProps.id,
+                                                    state.user?.memberId || 0,
+                                                );
+                                            } catch (error) {
+                                                // eslint-disable-next-line no-console
+                                                console.error(error);
+                                            }
                                             toast({
                                                 containerStyle: {
                                                     background: 'orange',
