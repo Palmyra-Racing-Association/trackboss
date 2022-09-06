@@ -60,7 +60,7 @@ export type PatchJobRequest = {
     pointsAwarded?: number,
     verified?: boolean,
     paid?: boolean,
-    modifiedBy: number
+    modifiedBy?: number
 }
 
 export type PatchJobResponse = Job | ErrorResponse

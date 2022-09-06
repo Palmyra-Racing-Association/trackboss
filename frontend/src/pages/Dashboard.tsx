@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { ChakraProvider, Center, SimpleGrid, VStack } from '@chakra-ui/react';
+import { ChakraProvider, Center, SimpleGrid, VStack, useToast } from '@chakra-ui/react';
 import { UserContext } from '../contexts/UserContext';
 import theme from '../theme';
 import Header from '../components/Header';
@@ -16,6 +16,7 @@ import { GateCode } from '../../../src/typedefs/gateCode';
 import TrackStatusCard from '../components/cards/dashboard/TrackStatusCard';
 import { getRidingAreaStatuses, updateRidingAreaStatus } from '../controller/ridingAreaStatus';
 import { RidingAreaStatus } from '../../../src/typedefs/ridingAreaStatus';
+import { signupForOpenEventJob } from '../controller/job';
 
 async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     const nowString = getTodaysDate();
@@ -35,6 +36,7 @@ async function getWorkPointsPercentage(token: string, membershipId: number) {
 
 function Dashboard() {
     const { state } = useContext(UserContext);
+    const toast = useToast();
     const [eventCardProps, setEventCardProps] = useState<any>();
     const [percent, setPercent] = useState<number>(0);
     const [gateCode, setGateCode] = useState<string>('');
@@ -88,6 +90,36 @@ function Dashboard() {
                                     startTime={eventCardProps.time}
                                     name={eventCardProps.title}
                                     endDate={eventCardProps.end}
+                                    id={eventCardProps.id}
+                                    allowsSignIn={
+                                        (eventCardProps.eventType === 'work day') ||
+                                        (eventCardProps.eventType === 'meeting')
+                                    }
+                                    signupHandler={
+                                        async () => {
+                                            try {
+                                                await signupForOpenEventJob(
+                                                    state.token,
+                                                    eventCardProps.id,
+                                                    state.user?.memberId || 0,
+                                                );
+                                            } catch (error) {
+                                                // eslint-disable-next-line no-console
+                                                console.error(error);
+                                            }
+                                            toast({
+                                                containerStyle: {
+                                                    background: 'orange',
+                                                },
+                                                // eslint-disable-next-line max-len
+                                                title: 'Signed in!',
+                                                description: `You've been signed into ${eventCardProps.title}`,
+                                                status: 'success',
+                                                duration: 5000,
+                                                isClosable: true,
+                                            });
+                                        }
+                                    }
                                 />
                             ) : (
                                 <EventCard
@@ -95,6 +127,9 @@ function Dashboard() {
                                     startTime=""
                                     name=""
                                     endDate=""
+                                    id={0}
+                                    signupHandler={() => false}
+                                    allowsSignIn={false}
                                 />
                             )
                         }

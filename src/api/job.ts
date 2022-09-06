@@ -12,7 +12,16 @@ import {
 } from '../typedefs/job';
 import { checkHeader, verify } from '../util/auth';
 
-import { insertJob, getJob, getJobList, patchJob, deleteJob, setJobVerifiedState, removeSignup } from '../database/job';
+import {
+    insertJob,
+    getJob,
+    getJobList,
+    patchJob,
+    deleteJob,
+    setJobVerifiedState,
+    removeSignup,
+    getOpenEventJob,
+} from '../database/job';
 
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 
@@ -160,6 +169,24 @@ job.post('/new', async (req: Request, res: Response) => {
                 response = { reason: 'internal server error' };
             }
         }
+    }
+    res.send(response);
+});
+
+job.patch('/event/:eventId/:memberId', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: PatchJobResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        const { eventId, memberId } = req.params;
+        // get an open event job.  This would normally be a meeting or a work day so there should be plenty.
+        const eventJob = await getOpenEventJob(parseInt(eventId, 10));
+        eventJob.memberId = parseInt(memberId, 10);
+        await patchJob(eventJob.jobId, eventJob);
+        response = eventJob;
     }
     res.send(response);
 });
