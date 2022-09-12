@@ -1,4 +1,4 @@
-name: Test DB
+name: Test DB destroy
 on:
   - workflow_dispatch
 env:
@@ -19,4 +19,4 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: CDK destroy test database
-      run: cd devops/deploy/backend && npm ci && npx cdk destroy trackboss-testdb
+      run: cd devops/deploy/backend && npm ci && npx cdk destroy --force $TRACKBOSS_ENVIRONMENT_NAME-testdb

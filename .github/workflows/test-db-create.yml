@@ -1,4 +1,4 @@
-name: Test DB
+name: Test DB create
 on:
   - workflow_dispatch
 env:
@@ -19,4 +19,4 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
     - name: CDK create test database
-      run: cd devops/deploy/backend && npm ci && export TRACKBOSS_RDS_LATEST=`aws rds describe-db-snapshots | jq -r '.DBSnapshots[-1].DBSnapshotIdentifier'` && npx cdk deploy --require-approval never trackboss-testdb
+      run: cd devops/deploy/backend && npm ci && export TRACKBOSS_RDS_LATEST=`aws rds describe-db-snapshots | jq -r '.DBSnapshots[-1].DBSnapshotIdentifier'` && npx cdk deploy --require-approval never $TRACKBOSS_ENVIRONMENT_NAME-testdb
