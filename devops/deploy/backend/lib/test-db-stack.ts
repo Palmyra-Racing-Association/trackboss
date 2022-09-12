@@ -31,8 +31,10 @@ export class TestDbStack extends Stack {
 
     testRds.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
 
+    /*
     new CfnOutput(this, 'apiDns', {
       value: testRds.dbInstanceEndpointAddress,
     });
+    */
   }
 }
