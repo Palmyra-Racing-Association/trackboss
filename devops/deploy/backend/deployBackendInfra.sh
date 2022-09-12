@@ -8,5 +8,5 @@ cd $PROJECT_ROOT/devops/deploy/backend
 npm install
 echo "Deploy backend infrastructure.  Here is the CDK diff..."
 npx cdk diff
-npx cdk deploy --require-approval never
+npx cdk deploy --require-approval never $TRACKBOSS_ENVIRONMENT_NAME-backendhost-stack
 echo "Back end infra is built!"
