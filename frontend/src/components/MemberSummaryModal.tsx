@@ -107,9 +107,11 @@ export default function MemberSummaryModal(props: modalProps) {
             }
             memberTypeId = 1;
         } else if (editedMemberType === 'member') {
-            memberTypeId = 3;
+            memberTypeId = 9;
+        } else if (editedMemberType === 'membership admin') {
+            memberTypeId = 8;
         } else if (editedMemberType === 'admin') {
-            memberTypeId = 1;
+            memberTypeId = 7;
         } else {
             return false;
         }
@@ -315,6 +317,30 @@ export default function MemberSummaryModal(props: modalProps) {
                                             ))
                                         }
                                     </UnorderedList>
+                                </VStack>
+                                <VStack>
+                                    <Text
+                                        textAlign="left"
+                                        fontSize="3xl"
+                                        fontWeight="bold"
+                                    >
+                                        Application role
+                                    </Text>
+                                    <Select
+                                        size="md"
+                                        variant="outline"
+                                    >
+                                        {
+                                            ['Admin', 'Member', 'Membership Admin'].map((memberType) => (
+                                                <option
+                                                    value={memberType}
+                                                    selected={memberType === selectedMember.memberType}
+                                                >
+                                                    {memberType}
+                                                </option>
+                                            ))
+                                        }
+                                    </Select>
                                 </VStack>
                                 <VStack align="left">
                                     <HStack>
