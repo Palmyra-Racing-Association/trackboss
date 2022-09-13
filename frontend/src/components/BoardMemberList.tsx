@@ -1,15 +1,10 @@
-import { Box, Center, Input, InputGroup, InputLeftElement, useDisclosure } from '@chakra-ui/react';
-import _ from 'lodash';
+import { Box, Center, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsSearch } from 'react-icons/bs';
 import { BoardMember } from '../../../src/typedefs/boardMember';
-import { ErrorResponse } from '../../../src/typedefs/errorResponse';
-import { Member } from '../../../src/typedefs/member';
 import { UserContext } from '../contexts/UserContext';
 import { getAllBoardMembersForCurrentYear } from '../controller/boardMember';
-import { getMemberList } from '../controller/member';
-import MemberSummaryModal from './MemberSummaryModal';
 
 const columns: any = [
     {
@@ -56,47 +51,30 @@ const customStyles = {
     },
 };
 
-export default function MemberList() {
-    const [selectedMember, setSelectedMember] = useState<Member>();
+export default function BoardMemberList() {
+    // const [selectedMember, setSelectedMember] = useState<BoardMember>();
     const [cells, setCells] = useState<BoardMember[]>([]);
     const [allCells, setAllCells] = useState<BoardMember[]>([]);
 
     const { state } = useContext(UserContext);
-    const [error, setError] = useState<ErrorResponse | undefined>(undefined);
-    const [dirty, setDirty] = useState<boolean>(false);
-    const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((oldDirty) => !oldDirty) });
+    const [error, setError] = useState<any | undefined>(undefined);
+    // const [dirty, setDirty] = useState<boolean>(false);
+    // const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((oldDirty) => !oldDirty) });
     const [searchTerm, setSearchTerm] = useState<string>('');
 
     useEffect(() => {
         async function getData() {
-            const c: Member[] | ErrorResponse = await getMemberList(state.token);
-            const boardMembers = await getAllBoardMembersForCurrentYear(state.token) as BoardMember[];
+            let boardMembers : BoardMember[] = [];
+            try {
+                boardMembers = await getAllBoardMembersForCurrentYear(state.token) as BoardMember[];
+            } catch (e) {
+                setError(e);
+            }
             setCells(boardMembers);
             setAllCells(boardMembers);
-            if ('reason' in c) {
-                setError(c);
-            } else {
-                if ('reason' in boardMembers) {
-                    // do nothing, an error here isn't a big deal, it just means we can't show board member data
-                } else {
-                    _.forEach(boardMembers, (boardMember) => {
-                        _.forEach(c, (member: Member) => {
-                            if (member.memberId === boardMember.memberId) {
-                                member.membershipType = `Board Member - ${boardMember.title}(${member.membershipType})`;
-                                member.boardMemberData = boardMember;
-                                return false;
-                            }
-                            return true;
-                        });
-                    });
-                }
-                // setCells(activeMembers);
-                // setAllCells(activeMembers);
-                setError(undefined);
-            }
         }
         getData();
-    }, [dirty]);
+    }, []);
 
     useEffect(() => {
         if (searchTerm === '') {
@@ -106,8 +84,8 @@ export default function MemberList() {
                 allCells.filter((cell: any) => {
                     const firstNameFound = cell.firstName.toLowerCase().includes(searchTerm);
                     const lastNameFound = cell.lastName.toLowerCase().includes(searchTerm);
-                    const typeFound = cell.membershipType?.toLowerCase().includes(searchTerm);
-                    return (firstNameFound || lastNameFound || typeFound);
+                    const titleFound = cell.title?.toLowerCase().includes(searchTerm);
+                    return (firstNameFound || lastNameFound || titleFound);
                 });
             setCells(newCells);
         }
@@ -154,22 +132,7 @@ export default function MemberList() {
                         selectAllRowsItem: true,
                     }
                 }
-                onRowClicked={
-                    (row: Member) => {
-                        setSelectedMember(row);
-                        onOpen();
-                    }
-                }
             />
-            {
-                selectedMember && (
-                    <MemberSummaryModal
-                        isOpen={isOpen}
-                        onClose={onClose}
-                        memberInfo={selectedMember}
-                    />
-                )
-            }
         </div>
     );
 }
