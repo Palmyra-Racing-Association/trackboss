@@ -107,9 +107,11 @@ export default function MemberSummaryModal(props: modalProps) {
             }
             memberTypeId = 1;
         } else if (editedMemberType === 'member') {
-            memberTypeId = 3;
+            memberTypeId = 9;
+        } else if (editedMemberType === 'membership admin') {
+            memberTypeId = 8;
         } else if (editedMemberType === 'admin') {
-            memberTypeId = 1;
+            memberTypeId = 7;
         } else {
             return false;
         }
@@ -117,6 +119,7 @@ export default function MemberSummaryModal(props: modalProps) {
         if ('reason' in updatedMember) {
             return false;
         }
+        setSelectedMember(updatedMember);
         return true;
     }, [state, props.memberInfo, editedBoardMember, editedMemberType]);
 
@@ -379,15 +382,15 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     <Button
                                                         onClick={
                                                             () => {
-                                                                if (editedMemberType !== 'board') {
-                                                                    setEditedMemberType('board');
+                                                                if (editedMemberType !== 'membership admin') {
+                                                                    setEditedMemberType('membership admin');
                                                                 }
                                                             }
                                                         }
                                                         mr="-px"
-                                                        backgroundColor={(editingMemberRole && editedMemberType === 'board') || (!editingMemberRole && isBoard) ? 'blue' : ''}
+                                                        backgroundColor={(editingMemberRole && editedMemberType === 'membership admin') || (!editingMemberRole && props.memberInfo.memberType === 'Membership Admin') ? 'blue' : ''}
                                                     >
-                                                        Board
+                                                        Membership Admin
                                                     </Button>
                                                 </ButtonGroup>
                                                 <Select
@@ -423,22 +426,22 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <ButtonGroup size="sm" isAttached variant="outline">
                                                 <Button
                                                     mr="-px"
-                                                    backgroundColor={(!isBoard && selectedMember.memberType.toLowerCase().includes('member')) ? 'blue' : ''}
+                                                    backgroundColor={(!isBoard && selectedMember.memberType.toLowerCase() === ('member')) ? 'blue' : ''}
                                                 >
                                                     Member
                                                 </Button>
                                                 <Button
                                                     userSelect="none"
                                                     mr="-px"
-                                                    backgroundColor={selectedMember.memberType.toLowerCase().includes('admin') ? 'blue' : ''}
+                                                    backgroundColor={selectedMember.memberType.toLowerCase() === ('admin') ? 'blue' : ''}
                                                 >
                                                     Admin
                                                 </Button>
                                                 <Button
                                                     mr="-px"
-                                                    backgroundColor={isBoard ? 'blue' : ''}
+                                                    backgroundColor={selectedMember.memberType.toLowerCase() === ('membership admin') ? 'blue' : ''}
                                                 >
-                                                    Board
+                                                    Membership Admin
                                                 </Button>
                                             </ButtonGroup>
                                         )
