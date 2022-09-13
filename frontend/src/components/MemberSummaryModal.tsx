@@ -318,7 +318,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                         }
                                     </UnorderedList>
                                 </VStack>
-                                <VStack>
+                                <VStack align="left">
                                     <Text
                                         textAlign="left"
                                         fontSize="3xl"
@@ -327,13 +327,21 @@ export default function MemberSummaryModal(props: modalProps) {
                                         Application role
                                     </Text>
                                     <Select
+                                        disabled={state.user?.memberType !== 'Admin'}
                                         size="md"
                                         variant="outline"
+                                        onChange={
+                                            async (e) => {
+                                                const selectedRole = e.target.value;
+                                                alert(selectedRole);
+                                                setEditedMemberType(selectedRole);
+                                            }
+                                        }
                                     >
                                         {
                                             ['Admin', 'Member', 'Membership Admin'].map((memberType) => (
                                                 <option
-                                                    value={memberType}
+                                                    value={memberType.toLowerCase()}
                                                     selected={memberType === selectedMember.memberType}
                                                 >
                                                     {memberType}
