@@ -119,6 +119,7 @@ export default function MemberSummaryModal(props: modalProps) {
         if ('reason' in updatedMember) {
             return false;
         }
+        setSelectedMember(updatedMember);
         return true;
     }, [state, props.memberInfo, editedBoardMember, editedMemberType]);
 
@@ -319,38 +320,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                     </UnorderedList>
                                 </VStack>
                                 <VStack align="left">
-                                    <Text
-                                        textAlign="left"
-                                        fontSize="3xl"
-                                        fontWeight="bold"
-                                    >
-                                        Application role
-                                    </Text>
-                                    <Select
-                                        disabled={state.user?.memberType !== 'Admin'}
-                                        size="md"
-                                        variant="outline"
-                                        onChange={
-                                            async (e) => {
-                                                const selectedRole = e.target.value;
-                                                alert(selectedRole);
-                                                setEditedMemberType(selectedRole);
-                                            }
-                                        }
-                                    >
-                                        {
-                                            ['Admin', 'Member', 'Membership Admin'].map((memberType) => (
-                                                <option
-                                                    value={memberType.toLowerCase()}
-                                                    selected={memberType === selectedMember.memberType}
-                                                >
-                                                    {memberType}
-                                                </option>
-                                            ))
-                                        }
-                                    </Select>
-                                </VStack>
-                                <VStack align="left">
                                     <HStack>
                                         <Text
                                             textAlign="left"
@@ -413,15 +382,15 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     <Button
                                                         onClick={
                                                             () => {
-                                                                if (editedMemberType !== 'board') {
-                                                                    setEditedMemberType('board');
+                                                                if (editedMemberType !== 'membership admin') {
+                                                                    setEditedMemberType('membership admin');
                                                                 }
                                                             }
                                                         }
                                                         mr="-px"
-                                                        backgroundColor={(editingMemberRole && editedMemberType === 'board') || (!editingMemberRole && isBoard) ? 'blue' : ''}
+                                                        backgroundColor={(editingMemberRole && editedMemberType === 'membership admin') || (!editingMemberRole && props.memberInfo.memberType === 'Membership Admin') ? 'blue' : ''}
                                                     >
-                                                        Board
+                                                        Membership Admin
                                                     </Button>
                                                 </ButtonGroup>
                                                 <Select
@@ -457,22 +426,22 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <ButtonGroup size="sm" isAttached variant="outline">
                                                 <Button
                                                     mr="-px"
-                                                    backgroundColor={(!isBoard && selectedMember.memberType.toLowerCase().includes('member')) ? 'blue' : ''}
+                                                    backgroundColor={(!isBoard && selectedMember.memberType.toLowerCase() === ('member')) ? 'blue' : ''}
                                                 >
                                                     Member
                                                 </Button>
                                                 <Button
                                                     userSelect="none"
                                                     mr="-px"
-                                                    backgroundColor={selectedMember.memberType.toLowerCase().includes('admin') ? 'blue' : ''}
+                                                    backgroundColor={selectedMember.memberType.toLowerCase() === ('admin') ? 'blue' : ''}
                                                 >
                                                     Admin
                                                 </Button>
                                                 <Button
                                                     mr="-px"
-                                                    backgroundColor={isBoard ? 'blue' : ''}
+                                                    backgroundColor={selectedMember.memberType.toLowerCase() === ('membership admin') ? 'blue' : ''}
                                                 >
-                                                    Board
+                                                    Membership Admin
                                                 </Button>
                                             </ButtonGroup>
                                         )
