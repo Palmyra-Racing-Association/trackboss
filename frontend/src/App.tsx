@@ -9,6 +9,7 @@ import SignUpPage from './pages/SignUpPage';
 import me from './controller/api';
 import JobsByEventType from './pages/JobsByEventType';
 import MembershipApplications from './pages/MembershipApplications';
+import BoardMemberListPage from './pages/BoardMemberListPage';
 
 export function App() {
     const { state, update } = useContext(UserContext);
@@ -41,6 +42,7 @@ export function App() {
             <Route path="calendar/signups/:date/:eventId/:eventType" element={<SignUpPage />} />
             <Route path="jobs" element={<JobsByEventType />} />
             <Route path="applications" element={<MembershipApplications />} />
+            <Route path="board" element={<BoardMemberListPage />} />
         </Routes>
     );
 }

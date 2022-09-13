@@ -62,6 +62,9 @@ export async function getBoardMemberList(year?: string): Promise<BoardMember[]> 
 
     return results.map((result) => ({
         boardId: result.board_id,
+        firstName: result.first_name,
+        lastName: result.last_name,
+        phone: result.phone,
         title: result.title,
         year: result.year,
         memberId: result.member_id,
