@@ -7,7 +7,7 @@ import BoardMemberList from '../components/BoardMemberList';
 function BoardMemberListPage() {
     return (
         <ChakraProvider theme={theme}>
-            <Header title="Board Members" activeButtonId={3} />
+            <Header title="Board Members" activeButtonId={5} />
             <Box mt={0} pt={0}>
                 <BoardMemberList />
             </Box>

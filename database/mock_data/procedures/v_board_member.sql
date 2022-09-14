@@ -3,6 +3,7 @@ CREATE VIEW `v_board_member` AS
     SELECT 
         board_id,
         bt.title as title,
+        bt.board_title_id as title_id,
         year,
         m.member_id,
         m.first_name, 

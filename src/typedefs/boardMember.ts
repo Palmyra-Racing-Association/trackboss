@@ -3,6 +3,7 @@ import { ErrorResponse } from './errorResponse';
 export type BoardMember = {
     boardId: number,
     title: string,
+    titleId: number,
     year: number,
     memberId: number,
     firstName?: string,

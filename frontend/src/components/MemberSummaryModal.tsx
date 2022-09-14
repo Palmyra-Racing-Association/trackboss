@@ -22,7 +22,6 @@ import {
     ListItem,
     ButtonGroup,
     Input,
-    Select,
     useToast,
     Switch,
 } from '@chakra-ui/react';
@@ -32,8 +31,6 @@ import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
 import { getMembersByMembership, updateMember } from '../controller/member';
 import { getBikeList } from '../controller/bike';
-import { BoardMemberType } from '../../../src/typedefs/boardMemberType';
-import { createBoardMember, getBoardRoles, updateBoardMember } from '../controller/boardMember';
 import AddPointsModal from './AddPointsModal';
 
 interface modalProps {
@@ -64,15 +61,11 @@ export default function MemberSummaryModal(props: modalProps) {
     const [editedPhone, setEditedPhone] = useState<string>('');
 
     const [editedMemberType, setEditedMemberType] = useState<string>('');
-    const [editedBoardMember, setEditedBoardMember] = useState<string>('');
-    const [boardRoles, setBoardRoles] = useState<BoardMemberType[]>([]);
-    const [isBoard, setIsBoard] = useState<boolean>(false);
     const [deactivateEnabled, setDeactivateEnabled] = useState<boolean>(false);
 
     const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
     const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
     const handleEditedPhoneChange = (event: { target: { value: any; }; }) => setEditedPhone(event.target.value);
-    const handleEditedBoardMember = (event: { target: { value: any; }; }) => setEditedBoardMember(event.target.value);
 
     const [error, setError] = useState<string>('');
 
@@ -86,27 +79,7 @@ export default function MemberSummaryModal(props: modalProps) {
 
     const handlePatchMemberType = useCallback(async () => {
         let memberTypeId: number;
-        if (editedMemberType === 'board') {
-            if (isBoard) {
-                const response = await updateBoardMember(
-                    state.token,
-                    props.memberInfo.boardMemberData!.boardId,
-                    { boardMemberTitleId: Number(editedBoardMember) },
-                );
-                if ('reason' in response) {
-                    setError(`error updating board member data: ${response.reason}`);
-                }
-            } else {
-                const response = await createBoardMember(
-                    state.token,
-                    { boardMemberTitleId: Number(editedBoardMember), year: new Date().getFullYear(), memberId: props.memberInfo.memberId },
-                );
-                if ('reason' in response) {
-                    setError(`error updating board member data: ${response.reason}`);
-                }
-            }
-            memberTypeId = 1;
-        } else if (editedMemberType === 'member') {
+        if (editedMemberType === 'member') {
             memberTypeId = 9;
         } else if (editedMemberType === 'membership admin') {
             memberTypeId = 8;
@@ -121,7 +94,7 @@ export default function MemberSummaryModal(props: modalProps) {
         }
         setSelectedMember(updatedMember);
         return true;
-    }, [state, props.memberInfo, editedBoardMember, editedMemberType]);
+    }, [state, props.memberInfo, editedMemberType]);
 
     const handlePatchMemberContactInfo = useCallback(async (
         name: string,
@@ -185,19 +158,6 @@ export default function MemberSummaryModal(props: modalProps) {
                 setError(`error fetching bikes: ${bikeResponse.reason}`);
             } else {
                 setBikes(bikeResponse);
-            }
-            if (state.user?.memberType === 'Admin') {
-                const boardRoleData = await getBoardRoles(state.token);
-                if ('reason' in boardRoleData) {
-                    setError(`error loading board roles: ${boardRoleData.reason}`);
-                } else {
-                    setBoardRoles(boardRoleData);
-                }
-            }
-            if (props.memberInfo.memberType.includes('Board Member')) {
-                setIsBoard(true);
-            } else {
-                setIsBoard(false);
             }
         }
         setModalData();
@@ -393,19 +353,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         Membership Admin
                                                     </Button>
                                                 </ButtonGroup>
-                                                <Select
-                                                    disabled={editedMemberType !== 'board'}
-                                                    variant="outline"
-                                                    size="xs"
-                                                    value={editedBoardMember}
-                                                    onChange={handleEditedBoardMember}
-                                                >
-                                                    {
-                                                        _.map(boardRoles, (role) => (
-                                                            <option value={role.boardTypeId} key={role.boardTypeId}>{role.title}</option>
-                                                        ))
-                                                    }
-                                                </Select>
                                                 <Button
                                                     ml={10}
                                                     variant="outline"
@@ -426,7 +373,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <ButtonGroup size="sm" isAttached variant="outline">
                                                 <Button
                                                     mr="-px"
-                                                    backgroundColor={(!isBoard && selectedMember.memberType.toLowerCase() === ('member')) ? 'blue' : ''}
+                                                    backgroundColor={(selectedMember.memberType.toLowerCase() === ('member')) ? 'blue' : ''}
                                                 >
                                                     Member
                                                 </Button>

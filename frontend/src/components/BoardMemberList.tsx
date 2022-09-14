@@ -5,6 +5,7 @@ import { BsSearch } from 'react-icons/bs';
 import { BoardMember } from '../../../src/typedefs/boardMember';
 import { UserContext } from '../contexts/UserContext';
 import { getAllBoardMembersForYear } from '../controller/boardMember';
+import BoardMemberListRow from './BoardMemberListRow';
 import YearsDropDown from './shared/YearsDropDown';
 
 const columns: any = [
@@ -53,29 +54,28 @@ const customStyles = {
 };
 
 export default function BoardMemberList() {
-    // const [selectedMember, setSelectedMember] = useState<BoardMember>();
     const [cells, setCells] = useState<BoardMember[]>([]);
     const [allCells, setAllCells] = useState<BoardMember[]>([]);
     const [year, setYear] = useState<number>((new Date()).getFullYear());
 
     const { state } = useContext(UserContext);
     const [error, setError] = useState<any | undefined>(undefined);
-    // const [dirty, setDirty] = useState<boolean>(false);
-    // const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((oldDirty) => !oldDirty) });
+
     const [searchTerm, setSearchTerm] = useState<string>('');
 
-    useEffect(() => {
-        async function getData() {
-            let boardMembers : BoardMember[] = [];
-            try {
-                boardMembers = await getAllBoardMembersForYear(state.token, year) as BoardMember[];
-            } catch (e) {
-                setError(e);
-            }
-            setCells(boardMembers);
-            setAllCells(boardMembers);
+    async function getBoardMemberData() {
+        let boardMembers : BoardMember[] = [];
+        try {
+            boardMembers = await getAllBoardMembersForYear(state.token, year) as BoardMember[];
+        } catch (e) {
+            setError(e);
         }
-        getData();
+        setCells(boardMembers);
+        setAllCells(boardMembers);
+    }
+
+    useEffect(() => {
+        getBoardMemberData();
     }, [year]);
 
     useEffect(() => {
@@ -128,9 +128,16 @@ export default function BoardMemberList() {
                 data={cells}
                 fixedHeaderScrollHeight="300px"
                 highlightOnHover
+                expandableRows={state.user?.memberType === 'Admin'}
+                expandableRowsComponent={BoardMemberListRow}
+                expandableRowsComponentProps={
+                    {
+                        year,
+                        updateCallback: getBoardMemberData,
+                    }
+                }
                 pagination
-                paginationPerPage={100}
-                paginationRowsPerPageOptions={[100, 200, cells.length]}
+                paginationPerPage={20}
                 responsive
                 striped
                 subHeaderWrap
