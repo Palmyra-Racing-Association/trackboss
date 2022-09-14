@@ -1,10 +1,11 @@
-import { Box, Center, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import { Box, Center, Input, InputGroup, InputLeftElement, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsSearch } from 'react-icons/bs';
 import { BoardMember } from '../../../src/typedefs/boardMember';
 import { UserContext } from '../contexts/UserContext';
-import { getAllBoardMembersForCurrentYear } from '../controller/boardMember';
+import { getAllBoardMembersForYear } from '../controller/boardMember';
+import YearsDropDown from './shared/YearsDropDown';
 
 const columns: any = [
     {
@@ -55,6 +56,7 @@ export default function BoardMemberList() {
     // const [selectedMember, setSelectedMember] = useState<BoardMember>();
     const [cells, setCells] = useState<BoardMember[]>([]);
     const [allCells, setAllCells] = useState<BoardMember[]>([]);
+    const [year, setYear] = useState<number>((new Date()).getFullYear());
 
     const { state } = useContext(UserContext);
     const [error, setError] = useState<any | undefined>(undefined);
@@ -66,7 +68,7 @@ export default function BoardMemberList() {
         async function getData() {
             let boardMembers : BoardMember[] = [];
             try {
-                boardMembers = await getAllBoardMembersForCurrentYear(state.token) as BoardMember[];
+                boardMembers = await getAllBoardMembersForYear(state.token, year) as BoardMember[];
             } catch (e) {
                 setError(e);
             }
@@ -74,7 +76,7 @@ export default function BoardMemberList() {
             setAllCells(boardMembers);
         }
         getData();
-    }, []);
+    }, [year]);
 
     useEffect(() => {
         if (searchTerm === '') {
@@ -101,18 +103,25 @@ export default function BoardMemberList() {
     return (
         <div>
             <Center>
-                <Box maxWidth={300}>
-                    <InputGroup>
-                        <InputLeftElement pointerEvents="none">
-                            <BsSearch color="gray.300" />
-                        </InputLeftElement>
-                        <Input
-                            size="lg"
-                            placeholder="Search..."
-                            onChange={(e) => setSearchTerm(e.target.value?.toLowerCase())}
-                        />
-                    </InputGroup>
-                </Box>
+                <VStack>
+                    <Box maxWidth={300}>
+                        <InputGroup>
+                            <InputLeftElement pointerEvents="none">
+                                <BsSearch color="gray.300" />
+                            </InputLeftElement>
+                            <Input
+                                size="lg"
+                                placeholder="Search..."
+                                onChange={(e) => setSearchTerm(e.target.value?.toLowerCase())}
+                            />
+                        </InputGroup>
+                    </Box>
+                    <YearsDropDown
+                        years={[2023, 2022, 2021]}
+                        header=""
+                        setYear={setYear}
+                    />
+                </VStack>
             </Center>
             <DataTable
                 columns={columns}
