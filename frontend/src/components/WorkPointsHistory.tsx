@@ -23,6 +23,7 @@ import { getWorkPointsByMembership, getWorkPointsTotal } from '../controller/wor
 import { getYearlyThreshold, getYearlyThresholdValue } from '../controller/billing';
 // eslint-disable-next-line import/no-named-as-default
 import AddPointsModal from './AddPointsModal';
+import YearsDropDown from './shared/YearsDropDown';
 
 const columns: any = [
     {
@@ -155,25 +156,11 @@ export default function WorkPointsHistory() {
 
     return (
         <VStack bg="white">
-            <HStack>
-                <Menu>
-                    <MenuButton bg="orange" color="white" as={Button} rightIcon={<BsChevronDown />}>
-                        Past Years
-                    </MenuButton>
-                    <MenuList>
-                        {
-                            _.map(years, (listYear) => (
-                                <MenuItem key={listYear} onClick={() => setYear(listYear)}>{listYear}</MenuItem>
-                            ))
-                        }
-                    </MenuList>
-                </Menu>
-                <Heading>
-                    Work Points History (
-                    {year}
-                    )
-                </Heading>
-            </HStack>
+            <YearsDropDown
+                years={years}
+                header="Work Points History"
+                setYear={setYear}
+            />
             <Heading color="orange" size="2xl">
                 {`${workPointsEarned}/${workPointsThreshold}`}
             </Heading>

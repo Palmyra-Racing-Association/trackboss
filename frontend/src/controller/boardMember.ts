@@ -8,6 +8,15 @@ import {
 } from '../../../src/typedefs/boardMember';
 import { generateHeaders } from './utils';
 
+export async function getAllBoardMembersForYear(token: string, year: number): Promise<GetBoardMemberListResponse> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/boardMember/list?year=${year}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
+
 export async function getAllBoardMembersForCurrentYear(token: string): Promise<GetBoardMemberListResponse> {
     const currentYear = new Date().getFullYear();
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/boardMember/list?year=${currentYear}`, {

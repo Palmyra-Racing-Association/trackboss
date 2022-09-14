@@ -46,8 +46,8 @@ export default function HamburgerMenu(props: pageProps) {
                         color: 'white',
                     }
                 }
-                id="5"
-                isActive={props.activeButtonId === 5}
+                id="6"
+                isActive={props.activeButtonId === 6}
             >
                 <Link to="/jobs">Administer Event Jobs</Link>
             </Button>
@@ -73,8 +73,8 @@ export default function HamburgerMenu(props: pageProps) {
                         color: 'white',
                     }
                 }
-                id="6"
-                isActive={props.activeButtonId === 6}
+                id="7"
+                isActive={props.activeButtonId === 7}
             >
                 <Link to="/applications">Membership Applications</Link>
             </Button>
@@ -197,6 +197,28 @@ export default function HamburgerMenu(props: pageProps) {
                                     isActive={props.activeButtonId === 4}
                                 >
                                     <Link to="/settings">My Account</Link>
+                                </Button>
+                                <Button
+                                    justifyContent="flex-start"
+                                    height="80px"
+                                    fontFamily="heading"
+                                    fontSize="2xl"
+                                    leftIcon={<HiCog />}
+                                    width="100%"
+                                    bg="white"
+                                    color="black"
+                                    borderRadius="0"
+                                    _hover={{ bg: 'gray.100' }}
+                                    _active={
+                                        {
+                                            bg: 'orange',
+                                            color: 'white',
+                                        }
+                                    }
+                                    id="5"
+                                    isActive={props.activeButtonId === 5}
+                                >
+                                    <Link to="/board">Board Members</Link>
                                 </Button>
                             </VStack>
                             { (props.admin) && (adminButtons) }

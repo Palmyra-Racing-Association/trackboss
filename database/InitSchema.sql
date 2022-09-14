@@ -214,7 +214,7 @@ DROP TABLE IF EXISTS `pradb`.`board_member` ;
 CREATE TABLE IF NOT EXISTS `pradb`.`board_member` (
   `board_id` INT NOT NULL AUTO_INCREMENT,
   `year` INT NULL,
-  `member_id` INT NOT NULL,
+  `member_id` INT NULL,
   `board_title_id` INT NOT NULL,
   PRIMARY KEY (`board_id`),
   INDEX `board_title_id_idx` (`board_title_id` ASC) VISIBLE,

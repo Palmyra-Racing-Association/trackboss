@@ -4,19 +4,16 @@ import {
     ModalOverlay, SimpleGrid, useDisclosure, useToast,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
-import Select from 'react-select';
 import _ from 'lodash';
 import { BsCurrencyDollar, BsTrash2 } from 'react-icons/bs';
 
 import { signupForJob, removeSignup, signupForJobFreeForm, setPaidState } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
-import { Member } from '../../../src/typedefs/member';
-import { getMemberList, getMembersByMembership } from '../controller/member';
+import MemberSelector from './shared/MemberSelector';
 
 export default function SignupButtonRow(props: any) {
     const { state } = useContext(UserContext);
     const [paidLabor, setPaidLabor] = useState<string>('');
-    const [eligibleMembers, setEligibleMembers] = useState<any[]>([]);
     const [selectedOption, setSelectedOption] = useState<any>();
     const [markedPaid, setMarkedPaid] = useState<boolean>(props.data.paid);
 
@@ -35,25 +32,6 @@ export default function SignupButtonRow(props: any) {
     const eventAllowsPayment = ((props.eventType.toLowerCase() === 'race') ||
         (props.eventType.toLowerCase() === 'harescramble')
     );
-
-    useEffect(() => {
-        async function getData() {
-            let activeMembers = await getMembersByMembership(state.token, state.user?.membershipId || 0);
-            if (isAdmin) {
-                activeMembers = await getMemberList(state.token) as Member[];
-            }
-            activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
-            const options = activeMembers.map((member) => {
-                const option = {
-                    value: member.memberId,
-                    label: `${member.lastName}, ${member.firstName}`,
-                };
-                return option;
-            });
-            setEligibleMembers(options);
-        }
-        getData();
-    }, []);
 
     useEffect(() => {
         async function signupForJobDropdown() {
@@ -110,29 +88,9 @@ export default function SignupButtonRow(props: any) {
                 {
                     isAdmin && (
                         <>
-                            <Select
-                                placeholder="Choose a member or start typing to narrow down the list"
-                                styles={
-                                    {
-                                        option: (provided, optionState) => ({
-                                            ...provided,
-                                            backgroundColor: optionState.isSelected ? '#ffa24d' : 'white',
-                                            borderBottom: '1px solid #ffa24d',
-                                        }),
-                                    }
-                                }
-                                getOptionLabel={(option) => option.label}
-                                getOptionValue={(option) => option.value}
-                                isSearchable
-                                isClearable
-                                backspaceRemovesValue
-                                options={eligibleMembers}
-                                value={selectedOption}
-                                onChange={
-                                    async (e) => {
-                                        setSelectedOption(e);
-                                    }
-                                }
+                            <MemberSelector
+                                isAdmin
+                                setSelectedOption={setSelectedOption}
                             />
                             <Button
                                 backgroundColor="orange.300"
