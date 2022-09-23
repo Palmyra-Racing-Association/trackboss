@@ -28,6 +28,7 @@ const columns: any = [
         name: 'Email',
         selector: (row: BoardMember) => row.email,
         sortable: true,
+        hide: 'sm',
     },
 ];
 
