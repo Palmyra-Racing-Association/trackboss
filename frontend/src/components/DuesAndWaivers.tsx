@@ -107,7 +107,17 @@ export default function DuesAndWaivers() {
                 token={state.token}
                 isOpen={isOpen}
                 onClose={onClose}
-                payAction={() => false}
+                payOnlineAction={
+                    () => {
+                        window.open(`https://paypal.me/palmyraracing/${selectedBill?.amount}`);
+                    }
+                }
+                paySnailMailAction={
+                    () => {
+                        // eslint-disable-next-line max-len, no-unsafe-optional-chaining
+                        window.open(`mailto:hogbacksecretary@gmail.com?subject=Dues%20Payment%20for%20${selectedBill?.firstName}%20${selectedBill?.lastName}&body=I%20intend%20to%20pay%20my%202023%20dues%20via%20%3CYour%20method%20here%3E%20by%20${selectedBill?.dueDate}`);
+                    }
+                }
             />
             );
         </VStack>
