@@ -54,6 +54,11 @@ export default function DuesAndWaivers() {
             maxWidth: '25',
         },
         {
+            name: 'Insurance Validated',
+            selector: (row: Bill) => `${row.curYearIns}`,
+            maxWidth: '10',
+        },
+        {
             name: 'Generated on',
             selector: (row: Bill) => `${row.generatedDate}`,
             sortable: true,
@@ -105,6 +110,7 @@ export default function DuesAndWaivers() {
             <DuesAndWaiversModal
                 viewBill={selectedBill}
                 token={state.token}
+                insuranceAttested={selectedBill?.curYearIns || false}
                 isOpen={isOpen}
                 onClose={
                     () => {

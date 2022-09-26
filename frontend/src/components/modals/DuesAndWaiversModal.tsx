@@ -13,15 +13,93 @@ interface duesModalProps {
     token: string,
     // eslint-disable-next-line react/require-default-props
     viewBill?: Bill;
+    insuranceAttested: boolean,
     onClose: () => void,
     payOnlineAction: () => void,
     paySnailMailAction: () => void,
 }
 
 export default function DuesAndWaiversModal(props: duesModalProps) {
-    const billingYear = props.viewBill?.year || 0;
+    const billingYear = props.viewBill?.year || new Date().getFullYear();
 
-    const [insuranceAttested, setInsuranceAttested] = useState<boolean>(props.viewBill?.curYearIns || false);
+    const [insuranceAttested, setInsuranceAttested] = useState<boolean>(false);
+
+    const attested = (props.insuranceAttested || insuranceAttested);
+
+    const currentTime = new Date().getTime();
+    const firstOfYear = new Date(billingYear, 0, 1).getTime();
+
+    let renewalPaymentComponent = (
+        <>
+            <Box>
+                {`Renewal and payment options are available after January 1st, ${billingYear + 1}.`}
+            </Box>
+            <Box>
+                <Button
+                    variant="outline"
+                    size="lg"
+                    bgColor="orange.300"
+                    color="white"
+                    onClick={
+                        () => {
+                            props.onClose();
+                        }
+                    }
+                >
+                    Close
+                </Button>
+            </Box>
+        </>
+    );
+    if (currentTime >= firstOfYear) {
+        renewalPaymentComponent = (
+            <>
+                <Button
+                    variant="outline"
+                    mr={3}
+                    size="lg"
+                    color="white"
+                    bgColor={attested ? 'green' : 'red'}
+                    onClick={
+                        () => {
+                            props.onClose();
+                        }
+                    }
+                >
+                    {attested ? 'All set!' : 'I\'m not ready'}
+                </Button>
+                <Button
+                    backgroundColor="orange.300"
+                    color="white"
+                    variant="outline"
+                    size="lg"
+                    hidden={!attested || (props.viewBill?.amount === 0)}
+                    onClick={
+                        async () => {
+                            props.payOnlineAction();
+                        }
+                    }
+                >
+                    Pay With Paypal
+                </Button>
+                <Button
+                    ml={2}
+                    backgroundColor="orange.300"
+                    color="white"
+                    variant="outline"
+                    size="lg"
+                    hidden={!attested || (props.viewBill?.amount === 0)}
+                    onClick={
+                        async () => {
+                            props.paySnailMailAction();
+                        }
+                    }
+                >
+                    Pay another way
+                </Button>
+            </>
+        );
+    }
 
     return (
         <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
@@ -68,7 +146,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     </Box>
                     <WrappedSwitchInput
                         wrapperText="(Payment options appear after you agree to this if applicable)"
-                        defaultChecked={insuranceAttested}
+                        defaultChecked={attested}
                         onSwitchChange={setInsuranceAttested}
                         maxWidth={400}
                     />
@@ -76,49 +154,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
 
                 <Divider />
                 <ModalFooter>
-                    <Button
-                        variant="outline"
-                        mr={3}
-                        size="lg"
-                        color="white"
-                        bgColor={insuranceAttested ? 'green' : 'red'}
-                        onClick={
-                            () => {
-                                props.onClose();
-                            }
-                        }
-                    >
-                        {insuranceAttested ? 'All set!' : 'I\'m not ready'}
-                    </Button>
-                    <Button
-                        backgroundColor="orange.300"
-                        color="white"
-                        variant="outline"
-                        size="lg"
-                        hidden={!insuranceAttested}
-                        onClick={
-                            async () => {
-                                props.payOnlineAction();
-                            }
-                        }
-                    >
-                        Pay With Paypal
-                    </Button>
-                    <Button
-                        ml={2}
-                        backgroundColor="orange.300"
-                        color="white"
-                        variant="outline"
-                        size="lg"
-                        hidden={!insuranceAttested}
-                        onClick={
-                            async () => {
-                                props.paySnailMailAction();
-                            }
-                        }
-                    >
-                        Pay another way
-                    </Button>
+                    {renewalPaymentComponent}
                 </ModalFooter>
             </ModalContent>
 
