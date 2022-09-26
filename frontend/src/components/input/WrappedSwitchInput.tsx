@@ -19,8 +19,8 @@ export default function WrappedSwitchInput(props: wrappedSwitchProps) {
                 defaultChecked={defaultChecked}
                 size="lg"
                 onChange={
-                    (value) => {
-                        onSwitchChange(!value);
+                    (event) => {
+                        onSwitchChange(event.currentTarget.checked);
                     }
                 }
             />

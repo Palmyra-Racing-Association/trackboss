@@ -111,6 +111,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         membershipAdminEmail: result.membership_admin_email,
         emailedBill: result.emailed_bill,
         curYearPaid: !!result.cur_year_paid[0],
+        curYearIns: !!result.cur_year_ins[0],
         dueDate: new Date((result.year + 1), 1, 15).toDateString(),
         pointsEarned: result.points_earned,
         pointsThreshold: result.threshold,
@@ -136,6 +137,21 @@ export async function markBillPaid(id: number): Promise<void> {
     let result;
     try {
         [result] = await getPool().query<OkPacket>(PATCH_BILL_SQL, [id, null, 1]);
+    } catch (e) {
+        logger.error(`DB error marking bill as paid: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+}
+
+export async function markInsuranceAttestation(id: number): Promise<void> {
+    let result;
+    try {
+        const sql = 'update member_bill set cur_year_ins = 1 where bill_id = ?';
+        [result] = await getPool().query<OkPacket>(sql, [id]);
     } catch (e) {
         logger.error(`DB error marking bill as paid: ${e}`);
         throw new Error('internal server error');

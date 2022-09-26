@@ -16,6 +16,7 @@ export type Bill = {
     lastName: string,
     emailedBill?: string, // undefined if not emailed, date otherwise
     curYearPaid: boolean,
+    curYearIns: boolean,
     dueDate: string,
     detail?: string,
 }

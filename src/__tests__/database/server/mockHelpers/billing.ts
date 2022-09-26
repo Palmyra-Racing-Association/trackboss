@@ -10,6 +10,7 @@ export function getBillListResponse(values: (string | number)[]): Promise<any[]>
             membership_admin_email: 'em@il.com',
             emailed_bill: null,
             cur_year_paid: [0],
+            cur_year_ins: [0],
         }, {
             bill_id: 19,
             generated_date: '2022-02-24',
@@ -20,6 +21,7 @@ export function getBillListResponse(values: (string | number)[]): Promise<any[]>
             membership_admin_email: 'em@il.com',
             emailed_bill: null,
             cur_year_paid: [0],
+            cur_year_ins: [0],
         }, {
             bill_id: 20,
             generated_date: '2022-02-24',
@@ -30,6 +32,7 @@ export function getBillListResponse(values: (string | number)[]): Promise<any[]>
             membership_admin_email: 'em@il.com',
             emailed_bill: null,
             cur_year_paid: [1],
+            cur_year_ins: [0],
         }, {
             bill_id: 21,
             generated_date: '2021-02-24',
@@ -40,6 +43,7 @@ export function getBillListResponse(values: (string | number)[]): Promise<any[]>
             membership_admin_email: 'em@il.com',
             emailed_bill: null,
             cur_year_paid: [1],
+            cur_year_ins: [0],
         },
     ];
     if (values.length === 0) {

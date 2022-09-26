@@ -1,13 +1,17 @@
-import { Heading, HStack, Text, VStack } from '@chakra-ui/react';
+import { Heading, HStack, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Bill } from '../../../src/typedefs/bill';
 import { UserContext } from '../contexts/UserContext';
-import { getBillsForMembership } from '../controller/billing';
+import { attestInsurance, getBillsForMembership } from '../controller/billing';
+import DuesAndWaiversModal from './modals/DuesAndWaiversModal';
 
 export default function DuesAndWaivers() {
     const { state } = useContext(UserContext);
     const [allBills, setAllBills] = useState<Bill[]>();
+    const [selectedBill, setSelectedBill] = useState<Bill>();
+    const { isOpen, onClose, onOpen } = useDisclosure();
+
     useEffect(() => {
         async function getData() {
             const membershipId = state.user?.membershipId || -1;
@@ -86,11 +90,43 @@ export default function DuesAndWaivers() {
                         },
                     }
                 }
+                onRowClicked={
+                    (row: Bill) => {
+                        setSelectedBill(row);
+                        onOpen();
+                    }
+                }
                 fixedHeaderScrollHeight="300px"
                 highlightOnHover
                 responsive
                 subHeaderWrap
             />
+            (selectedBill &&
+            <DuesAndWaiversModal
+                viewBill={selectedBill}
+                token={state.token}
+                isOpen={isOpen}
+                onClose={
+                    () => {
+                        if (selectedBill?.billId) {
+                            attestInsurance(state.token, selectedBill?.billId);
+                        }
+                        onClose();
+                    }
+                }
+                payOnlineAction={
+                    () => {
+                        window.open(`https://paypal.me/palmyraracing/${selectedBill?.amount}`);
+                    }
+                }
+                paySnailMailAction={
+                    () => {
+                        // eslint-disable-next-line max-len
+                        window.open(`mailto:hogbacksecretary@gmail.com?subject=Dues%20Payment%20for%20${selectedBill?.firstName}%20${selectedBill?.lastName}&body=I%20intend%20to%20pay%20my%202023%20dues%20via%20%3CYour%20method%20here%3E%20by%20${selectedBill?.dueDate}`);
+                    }
+                }
+            />
+            );
         </VStack>
     );
 }
