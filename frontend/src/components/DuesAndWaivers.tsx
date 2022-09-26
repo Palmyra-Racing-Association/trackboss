@@ -12,13 +12,14 @@ export default function DuesAndWaivers() {
     const [selectedBill, setSelectedBill] = useState<Bill>();
     const { isOpen, onClose, onOpen } = useDisclosure();
 
+    async function getMembershipBillData() {
+        const membershipId = state.user?.membershipId || -1;
+        const memberBills = await getBillsForMembership(state.token, membershipId);
+        setAllBills(memberBills as Bill[]);
+    }
+
     useEffect(() => {
-        async function getData() {
-            const membershipId = state.user?.membershipId || -1;
-            const memberBills = await getBillsForMembership(state.token, membershipId);
-            setAllBills(memberBills as Bill[]);
-        }
-        getData();
+        getMembershipBillData();
     }, []);
 
     const columns: any = [
@@ -112,12 +113,14 @@ export default function DuesAndWaivers() {
                 token={state.token}
                 insuranceAttested={selectedBill?.curYearIns || false}
                 isOpen={isOpen}
-                onClose={
+                onClose={onClose}
+                attestationAction={
                     () => {
                         if (selectedBill?.billId) {
                             attestInsurance(state.token, selectedBill?.billId);
+                            // after attesting, reload the list.
+                            getMembershipBillData();
                         }
-                        onClose();
                     }
                 }
                 payOnlineAction={

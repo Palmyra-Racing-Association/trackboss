@@ -15,6 +15,7 @@ interface duesModalProps {
     viewBill?: Bill;
     insuranceAttested: boolean,
     onClose: () => void,
+    attestationAction: () => void,
     payOnlineAction: () => void,
     paySnailMailAction: () => void,
 }
@@ -27,7 +28,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
     const attested = (props.insuranceAttested || insuranceAttested);
 
     const currentTime = new Date().getTime();
-    const firstOfYear = new Date(billingYear, 0, 1).getTime();
+    const firstOfYear = new Date(billingYear + 1, 0, 1).getTime();
 
     let renewalPaymentComponent = (
         <>
@@ -62,6 +63,9 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     bgColor={attested ? 'green' : 'red'}
                     onClick={
                         () => {
+                            if (attested) {
+                                props.attestationAction();
+                            }
                             props.onClose();
                         }
                     }
