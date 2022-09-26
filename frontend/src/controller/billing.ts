@@ -78,3 +78,12 @@ export async function payBill(token: string, membershipID: number): Promise<Post
     });
     return response.json();
 }
+
+export async function attestInsurance(token: string, billId: number): Promise<PostPayBillResponse> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/attestIns/${billId}`, {
+        method: 'PATCH',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}

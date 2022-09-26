@@ -21,7 +21,7 @@ interface duesModalProps {
 export default function DuesAndWaiversModal(props: duesModalProps) {
     const billingYear = props.viewBill?.year || 0;
 
-    const [insuranceAttested, setInsuranceAttested] = useState<boolean>(false);
+    const [insuranceAttested, setInsuranceAttested] = useState<boolean>(props.viewBill?.curYearIns || false);
 
     return (
         <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
@@ -77,21 +77,23 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                 <Divider />
                 <ModalFooter>
                     <Button
-                        variant="ghost"
+                        variant="outline"
                         mr={3}
                         size="lg"
+                        color="white"
+                        bgColor={insuranceAttested ? 'green' : 'red'}
                         onClick={
                             () => {
                                 props.onClose();
                             }
                         }
                     >
-                        {insuranceAttested ? 'Close' : 'Close without agreeing'}
+                        {insuranceAttested ? 'All set!' : 'I\'m not ready'}
                     </Button>
                     <Button
                         backgroundColor="orange.300"
                         color="white"
-                        variant="ghost"
+                        variant="outline"
                         size="lg"
                         hidden={!insuranceAttested}
                         onClick={
@@ -106,7 +108,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                         ml={2}
                         backgroundColor="orange.300"
                         color="white"
-                        variant="ghost"
+                        variant="outline"
                         size="lg"
                         hidden={!insuranceAttested}
                         onClick={

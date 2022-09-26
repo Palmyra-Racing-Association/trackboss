@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Bill } from '../../../src/typedefs/bill';
 import { UserContext } from '../contexts/UserContext';
-import { getBillsForMembership } from '../controller/billing';
+import { attestInsurance, getBillsForMembership } from '../controller/billing';
 import DuesAndWaiversModal from './modals/DuesAndWaiversModal';
 
 export default function DuesAndWaivers() {
@@ -106,7 +106,14 @@ export default function DuesAndWaivers() {
                 viewBill={selectedBill}
                 token={state.token}
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={
+                    () => {
+                        if (selectedBill?.billId) {
+                            attestInsurance(state.token, selectedBill?.billId);
+                        }
+                        onClose();
+                    }
+                }
                 payOnlineAction={
                     () => {
                         window.open(`https://paypal.me/palmyraracing/${selectedBill?.amount}`);
@@ -114,7 +121,7 @@ export default function DuesAndWaivers() {
                 }
                 paySnailMailAction={
                     () => {
-                        // eslint-disable-next-line max-len, no-unsafe-optional-chaining
+                        // eslint-disable-next-line max-len
                         window.open(`mailto:hogbacksecretary@gmail.com?subject=Dues%20Payment%20for%20${selectedBill?.firstName}%20${selectedBill?.lastName}&body=I%20intend%20to%20pay%20my%202023%20dues%20via%20%3CYour%20method%20here%3E%20by%20${selectedBill?.dueDate}`);
                     }
                 }
