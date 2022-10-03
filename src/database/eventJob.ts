@@ -147,8 +147,7 @@ export async function updateJobsOnEventJob(id: number, req: PatchEventJobRequest
     try {
         const countSql = `select distinct(event), event_id, job_type_id, start, end, points_awarded, cash_payout,
             meal_ticket, count(*) job_count, (?)-count(*) difference
-            from v_job where member is null and
-            event_type_id = ? and job_type_id = ? and start > date_sub(now(), interval 21 day)
+            from v_job where event_type_id = ? and job_type_id = ? and start > date_sub(now(), interval 21 day)
             group by event`;
         [results] = await getPool().query<RowDataPacket[]>(countSql, [req.count, req.eventTypeId, req.jobTypeId]);
         results.forEach(async (row) => {
