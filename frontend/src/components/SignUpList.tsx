@@ -108,7 +108,7 @@ export default function SignUpList(props: SignupListProps) {
             const newCells =
                 allCells.filter((cell: any) => {
                     const titleSearch = cell.title.toLowerCase().includes(searchTerm.toLowerCase());
-                    const daySearch = cell.jobDay.toLowerCase().includes(searchTerm.toLowerCase());
+                    const daySearch = cell.jobDay?.toLowerCase().includes(searchTerm.toLowerCase());
                     const nameSearch = cell.member?.toLowerCase().includes(searchTerm.toLowerCase());
                     return (titleSearch || daySearch || nameSearch);
                 });
