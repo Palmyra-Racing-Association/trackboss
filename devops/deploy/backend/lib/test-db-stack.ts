@@ -11,7 +11,7 @@ export class TestDbStack extends Stack {
     const vpc = ec2.Vpc.fromLookup(this, 'vpc', { isDefault:true });
     const testRds = new rds.DatabaseInstanceFromSnapshot(this, 'TbTest', {
       snapshotIdentifier: process.env.TRACKBOSS_RDS_LATEST || '',
-      engine: rds.DatabaseInstanceEngine.mysql({ version: rds.MysqlEngineVersion.VER_5_7_33 }),
+      engine: rds.DatabaseInstanceEngine.mysql({ version: rds.MysqlEngineVersion.VER_5_7_38 }),
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.BURSTABLE3, ec2.InstanceSize.MICRO),
       publiclyAccessible: true,
       subnetGroup: SubnetGroup.fromSubnetGroupName(this, 'subnets', 'default'),

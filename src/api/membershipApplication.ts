@@ -85,7 +85,10 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
 
 membershipApplication.post('/reject/:id', async (req: Request, res: Response) => {
     try {
+        // update the last_modified_date field in here.
         await sendApplicationStatus(req, res, 'Rejected');
+        // send an email saying they were rejected, with the application_notes_shared as the primary
+        // field in the email
     } catch (error: any) {
         logger.error(error);
         res.status(500);
