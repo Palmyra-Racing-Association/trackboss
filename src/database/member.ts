@@ -4,6 +4,7 @@ import { OkPacket, RowDataPacket } from 'mysql2';
 import logger from '../logger';
 import { getPool } from './pool';
 import { GetMemberListFilters, Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
+import { createCognitoUser } from '../util/cognito';
 
 // Map the API values for the member types to the DB values
 export const MEMBER_TYPE_MAP = new Map([
@@ -25,6 +26,17 @@ export const GET_VALID_ACTORS_SQL = 'select member_id from pradb.member m where 
     'm.membership_id=ms.membership_id where member_id=?)) or m.member_type_id=1';
 
 export async function insertMember(req: PostNewMemberRequest): Promise<number> {
+    if (req.email) {
+        logger.info(`Creating new user for email ${req.email} on membership ${req.membershipId}`);
+        try {
+            const uuid = await createCognitoUser(req.email);
+            req.uuid = uuid;
+            logger.info(`Successfully created ${req.email} in cognito as ${uuid}`);
+        } catch (error: any) {
+            logger.error(`Failure creating ${req.email} in cognito.  Continuing on trackboss database side`);
+            logger.error(error);
+        }
+    }
     const values = [
         req.membershipId,
         req.uuid,

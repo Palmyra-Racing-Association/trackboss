@@ -14,7 +14,7 @@ import {
     PostNewMemberResponse,
 } from '../typedefs/member';
 import logger from '../logger';
-import { createCognitoUser, deleteCognitoUser } from '../util/cognito';
+import { deleteCognitoUser } from '../util/cognito';
 
 const member = Router();
 
@@ -28,17 +28,6 @@ member.post('/new', async (req: Request, res: Response) => {
     } else {
         try {
             await verify(headerCheck.token, 'Admin');
-            if (req.body.email) {
-                logger.info(`Creating new user for email ${req.body.email} on membership ${req.body.membershipId}`);
-                try {
-                    const uuid = await createCognitoUser(req.body.email);
-                    req.body.uuid = uuid;
-                    logger.info(`Successfully created ${req.body.email} in cognito as ${uuid}`);
-                } catch (error: any) {
-                    logger.error(`Failure creating ${req.body.email} in cognito.  Continuing on trackboss side`);
-                    logger.error(error);
-                }
-            }
             const insertId = await insertMember(req.body);
             response = await getMember(`${insertId}`);
             res.status(201);

@@ -76,6 +76,12 @@ membershipApplication.get('/', async (req: Request, res: Response) => {
 membershipApplication.post('/accept/:id', async (req: Request, res: Response) => {
     try {
         await sendApplicationStatus(req, res, 'Accepted');
+        // get the application, and convert the primary member to a member. This call will create a
+        // Cognito user, and send an email to the user letting them know they have one.
+
+        // once you have the member, create a membership with the member is the membership admin
+
+        // now send a welcome email to the member.
     } catch (error: any) {
         logger.error(error);
         res.status(500);
