@@ -9,6 +9,9 @@ import { aws_route53 as route53 } from 'aws-cdk-lib';
 import { aws_rds as rds } from 'aws-cdk-lib';
 import { aws_logs as logs } from 'aws-cdk-lib';
 import { aws_ssm as ssm } from 'aws-cdk-lib';
+import { aws_sqs as sqs } from 'aws-cdk-lib';
+import { aws_sns as sns } from 'aws-cdk-lib';
+import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
 
 export class DeployStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
@@ -155,6 +158,15 @@ export class DeployStack extends Stack {
         logGroupName: `${environmentName}-api-logs`
       }
     );
+
+    // create queue
+    const queue = new sqs.Queue(this, 'trackboss-email-queue');
+
+    // create sns topic
+    const topic = new sns.Topic(this, 'trackboss-email-topic');
+
+    // subscribe queue to topic
+    topic.addSubscription(new subs.SqsSubscription(queue));
     
     new ssm.StringParameter(this, 'cognitoPoolId', {
       allowedPattern: '.*',

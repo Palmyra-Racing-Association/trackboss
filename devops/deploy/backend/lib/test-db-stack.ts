@@ -16,7 +16,7 @@ export class TestDbStack extends Stack {
       publiclyAccessible: true,
       subnetGroup: SubnetGroup.fromSubnetGroupName(this, 'subnets', 'default'),
       vpc,
-      storageType: rds.StorageType.GP2,
+      storageType: rds.StorageType.STANDARD,
       allocatedStorage: 20,
     });
     // create DB security group that allows attaching to auto scaling group
