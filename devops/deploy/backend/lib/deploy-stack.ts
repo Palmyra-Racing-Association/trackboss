@@ -161,12 +161,6 @@ export class DeployStack extends Stack {
 
     // create queue
     const queue = new sqs.Queue(this, 'trackboss-email-queue');
-
-    // create sns topic
-    const topic = new sns.Topic(this, 'trackboss-email-topic');
-
-    // subscribe queue to topic
-    topic.addSubscription(new subs.SqsSubscription(queue));
     
     new ssm.StringParameter(this, 'cognitoPoolId', {
       allowedPattern: '.*',
