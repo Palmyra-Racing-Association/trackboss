@@ -1,10 +1,18 @@
 import { Request, Response, Router } from 'express';
+import { parseISO } from 'date-fns';
 import { sendAppConfirmationEmail } from '../util/email';
 import {
-    getMembershipApplications, insertMembershipApplication, updateApplicationStatus,
+    getMembershipApplication, getMembershipApplications,
+    insertMembershipApplication, updateApplicationStatus,
 } from '../database/membershipApplication';
+import {
+    insertMember,
+} from '../database/member';
+
 import logger from '../logger';
 import { checkHeader, verify } from '../util/auth';
+import { PostNewMemberRequest } from '../typedefs/member';
+import { MembershipApplication } from '../typedefs/membershipApplication';
 
 const membershipApplication = Router();
 
@@ -78,9 +86,36 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         await sendApplicationStatus(req, res, 'Accepted');
         // get the application, and convert the primary member to a member. This call will create a
         // Cognito user, and send an email to the user letting them know they have one.
-
+        const application : MembershipApplication = await getMembershipApplication(Number(req.params.id));
+        /**
+                                         const familyMemberAdd : PostNewMemberRequest = {
+                                    membershipId: props.membershipAdmin?.membershipId,
+                                    // magic numberism - this is 'Member'.  anyone created this way will be a member
+                                    // created by a membership admin.
+                                    memberTypeId: 9,
+                                    firstName,
+                                    lastName,
+                                    phoneNumber: props.membershipAdmin?.phoneNumber,
+                                    occupation: '',
+                                    email: '',
+                                    birthdate: birthDate?.toLocaleDateString('en-CA'),
+                                    dateJoined: props.membershipAdmin?.dateJoined,
+                                    modifiedBy: props.membershipAdmin?.memberId || 0,
+                                };
+         */
+        const newMember : PostNewMemberRequest = {
+            memberTypeId: 8,
+            firstName: application.firstName,
+            lastName: application.lastName,
+            phoneNumber: application.phone,
+            occupation: application.occupation,
+            email: application.email,
+            birthdate: parseISO(application.birthDate).toLocaleDateString('en-CA'),
+            dateJoined: new Date().toLocaleDateString('en-CA'),
+            modifiedBy: 0,
+        };
         // once you have the member, create a membership with the member is the membership admin
-
+        insertMember(newMember);
         // now send a welcome email to the member.
     } catch (error: any) {
         logger.error(error);
