@@ -152,6 +152,10 @@ export default function MembershipApplicationModal(props: appModalProps) {
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
+                    <Text>
+                        Please note: Clicking the Accept or Reject buttons sends emails to the
+                        applicant, and also finalizes their application in our database.
+                    </Text>
                 </SimpleGrid>
                 <ModalFooter>
                     <Button

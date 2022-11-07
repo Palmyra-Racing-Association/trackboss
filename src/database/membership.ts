@@ -22,8 +22,9 @@ export const GET_MEMBERSHIP_LIST_SQL = 'SELECT * FROM v_membership';
 export const GET_MEMBERSHIP_LIST_BY_STATUS_SQL = `${GET_MEMBERSHIP_LIST_SQL} WHERE status = ?`;
 export const GET_MEMBERSHIP_SQL = `${GET_MEMBERSHIP_LIST_SQL} WHERE membership_id = ?`;
 export const INSERT_MEMBERSHIP_SQL = 'INSERT INTO membership (membership_admin_id, status, cur_year_renewed, ' +
-    'view_online, renewal_sent, year_joined, address, city, state, zip, last_modified_date, last_modified_by) ' +
-    'VALUES (?, "Active", 0, 1, 0, ?, ?, ?, ?, ?, CURDATE(), ?)';
+    'view_online, renewal_sent, year_joined, address, city, state, zip, last_modified_date, last_modified_by, ' +
+    'membership_type_id) ' +
+    'VALUES (?, "Active", 0, 1, 0, ?, ?, ?, ?, ?, CURDATE(), ?, 4)';
 export const PATCH_MEMBERSHIP_SQL = 'CALL sp_patch_membership(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 export const REGISTERED_MEMBER_ID_OUT = '@member_id';
 export const REGISTERED_MEMBERSHIP_ID_OUT = '@membership_id';

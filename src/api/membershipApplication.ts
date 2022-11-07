@@ -6,13 +6,15 @@ import {
     insertMembershipApplication, updateApplicationStatus,
 } from '../database/membershipApplication';
 import {
-    insertMember,
+    insertMember, patchMember,
 } from '../database/member';
 
 import logger from '../logger';
 import { checkHeader, verify } from '../util/auth';
-import { PostNewMemberRequest } from '../typedefs/member';
+import { PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
 import { MembershipApplication } from '../typedefs/membershipApplication';
+import { PostNewMembershipRequest } from '../typedefs/membership';
+import { insertMembership } from '../database/membership';
 
 const membershipApplication = Router();
 
@@ -22,19 +24,21 @@ const membershipApplication = Router();
  * this is a "catch all" function that does the work so you don't have to.
  *
  */
-async function validateAdminAccess(req: Request, res: Response) {
+async function validateAdminAccess(req: Request, res: Response) : Promise<any> {
     const { authorization } = req.headers;
+    let token = {};
     const headerCheck = checkHeader(authorization);
     if (!headerCheck.valid) {
         throw new Error(headerCheck.reason);
     } else {
         try {
-            await verify(headerCheck.token, 'Admin');
+            token = await verify(headerCheck.token, 'Admin');
         } catch (error: any) {
             logger.error('Error authorizing user token as admin', error);
             throw error;
         }
     }
+    return token;
 }
 
 /**
@@ -83,26 +87,11 @@ membershipApplication.get('/', async (req: Request, res: Response) => {
 
 membershipApplication.post('/accept/:id', async (req: Request, res: Response) => {
     try {
+        const actingUser = await validateAdminAccess(req, res);
         await sendApplicationStatus(req, res, 'Accepted');
         // get the application, and convert the primary member to a member. This call will create a
         // Cognito user, and send an email to the user letting them know they have one.
         const application : MembershipApplication = await getMembershipApplication(Number(req.params.id));
-        /**
-                                         const familyMemberAdd : PostNewMemberRequest = {
-                                    membershipId: props.membershipAdmin?.membershipId,
-                                    // magic numberism - this is 'Member'.  anyone created this way will be a member
-                                    // created by a membership admin.
-                                    memberTypeId: 9,
-                                    firstName,
-                                    lastName,
-                                    phoneNumber: props.membershipAdmin?.phoneNumber,
-                                    occupation: '',
-                                    email: '',
-                                    birthdate: birthDate?.toLocaleDateString('en-CA'),
-                                    dateJoined: props.membershipAdmin?.dateJoined,
-                                    modifiedBy: props.membershipAdmin?.memberId || 0,
-                                };
-         */
         const newMember : PostNewMemberRequest = {
             // Magic numberism warning: this means "Membership Admin", aka, the default account on a
             // membership.  At some point, need to go back and fix this nonsense.
@@ -116,11 +105,25 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             // when did they join? RIGHT FREAKING NOW THAT'S WHEN! :)
             dateJoined: new Date().toLocaleDateString('en-CA'),
             // magic number hack fuckery: API user is the default creator.
-            modifiedBy: 530,
+            modifiedBy: actingUser.memberId,
         };
-        const membershipId = insertMember(newMember);
-        // once you have the new member, create a membership with the member is the membership admin
-
+        const primaryMemberId = await insertMember(newMember);
+        const newMembership : PostNewMembershipRequest = {
+            // Associate member
+            membershipAdminId: primaryMemberId,
+            yearJoined: (new Date()).getFullYear(),
+            address: application.address,
+            city: application.city,
+            state: application.state,
+            zip: application.zip,
+            modifiedBy: newMember.modifiedBy,
+        };
+        const newMembershipId = await insertMembership(newMembership);
+        const memberUpdate : PatchMemberRequest = {
+            membershipId: newMembershipId,
+            modifiedBy: newMember.modifiedBy,
+        };
+        await patchMember(`${primaryMemberId}`, memberUpdate);
         // now send a welcome email to the member.
     } catch (error: any) {
         logger.error(error);
