@@ -104,18 +104,23 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
                                 };
          */
         const newMember : PostNewMemberRequest = {
+            // Magic numberism warning: this means "Membership Admin", aka, the default account on a
+            // membership.  At some point, need to go back and fix this nonsense.
             memberTypeId: 8,
             firstName: application.firstName,
             lastName: application.lastName,
             phoneNumber: application.phone,
             occupation: application.occupation,
-            email: application.email,
+            email: `mailbin+${application.lastName}@gmail.com`, // application.email
             birthdate: parseISO(application.birthDate).toLocaleDateString('en-CA'),
+            // when did they join? RIGHT FREAKING NOW THAT'S WHEN! :)
             dateJoined: new Date().toLocaleDateString('en-CA'),
-            modifiedBy: 0,
+            // magic number hack fuckery: API user is the default creator.
+            modifiedBy: 530,
         };
-        // once you have the member, create a membership with the member is the membership admin
-        insertMember(newMember);
+        const membershipId = insertMember(newMember);
+        // once you have the new member, create a membership with the member is the membership admin
+
         // now send a welcome email to the member.
     } catch (error: any) {
         logger.error(error);
