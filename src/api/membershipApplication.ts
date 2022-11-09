@@ -1,10 +1,20 @@
 import { Request, Response, Router } from 'express';
-import { sendAppConfirmationEmail } from '../util/email';
+import { parseISO } from 'date-fns';
+import { sendAppConfirmationEmail, sendAppRejectedEmail, sendNewMemberEmail } from '../util/email';
 import {
-    getMembershipApplications, insertMembershipApplication, updateApplicationStatus,
+    getMembershipApplication, getMembershipApplications,
+    insertMembershipApplication, updateApplicationStatus,
 } from '../database/membershipApplication';
+import {
+    insertMember, patchMember,
+} from '../database/member';
+
 import logger from '../logger';
 import { checkHeader, verify } from '../util/auth';
+import { PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
+import { MembershipApplication } from '../typedefs/membershipApplication';
+import { PostNewMembershipRequest } from '../typedefs/membership';
+import { insertMembership } from '../database/membership';
 
 const membershipApplication = Router();
 
@@ -14,19 +24,21 @@ const membershipApplication = Router();
  * this is a "catch all" function that does the work so you don't have to.
  *
  */
-async function validateAdminAccess(req: Request, res: Response) {
+async function validateAdminAccess(req: Request, res: Response) : Promise<any> {
     const { authorization } = req.headers;
+    let token = {};
     const headerCheck = checkHeader(authorization);
     if (!headerCheck.valid) {
         throw new Error(headerCheck.reason);
     } else {
         try {
-            await verify(headerCheck.token, 'Admin');
+            token = await verify(headerCheck.token, 'Admin');
         } catch (error: any) {
             logger.error('Error authorizing user token as admin', error);
             throw error;
         }
     }
+    return token;
 }
 
 /**
@@ -75,13 +87,44 @@ membershipApplication.get('/', async (req: Request, res: Response) => {
 
 membershipApplication.post('/accept/:id', async (req: Request, res: Response) => {
     try {
+        const actingUser = await validateAdminAccess(req, res);
         await sendApplicationStatus(req, res, 'Accepted');
         // get the application, and convert the primary member to a member. This call will create a
         // Cognito user, and send an email to the user letting them know they have one.
-
-        // once you have the member, create a membership with the member is the membership admin
-
+        const application : MembershipApplication = await getMembershipApplication(Number(req.params.id));
+        const newMember : PostNewMemberRequest = {
+            // Magic numberism warning: this means "Membership Admin", aka, the default account on a
+            // membership.  At some point, need to go back and fix this nonsense.
+            memberTypeId: 8,
+            firstName: application.firstName,
+            lastName: application.lastName,
+            phoneNumber: application.phone,
+            occupation: application.occupation,
+            email: application.email,
+            birthdate: parseISO(application.birthDate).toLocaleDateString('en-CA'),
+            // when did they join? RIGHT FREAKING NOW THAT'S WHEN! :)
+            dateJoined: new Date().toLocaleDateString('en-CA'),
+            modifiedBy: actingUser.memberId,
+        };
+        const primaryMemberId = await insertMember(newMember);
+        const newMembership : PostNewMembershipRequest = {
+            // Associate member
+            membershipAdminId: primaryMemberId,
+            yearJoined: (new Date()).getFullYear(),
+            address: application.address,
+            city: application.city,
+            state: application.state,
+            zip: application.zip,
+            modifiedBy: actingUser.memberId,
+        };
+        const newMembershipId = await insertMembership(newMembership);
+        const memberUpdate : PatchMemberRequest = {
+            membershipId: newMembershipId,
+            modifiedBy: actingUser.memberId,
+        };
+        await patchMember(`${primaryMemberId}`, memberUpdate);
         // now send a welcome email to the member.
+        await sendNewMemberEmail(application);
     } catch (error: any) {
         logger.error(error);
         res.status(500);
@@ -93,8 +136,10 @@ membershipApplication.post('/reject/:id', async (req: Request, res: Response) =>
     try {
         // update the last_modified_date field in here.
         await sendApplicationStatus(req, res, 'Rejected');
+        const application : MembershipApplication = await getMembershipApplication(Number(req.params.id));
         // send an email saying they were rejected, with the application_notes_shared as the primary
         // field in the email
+        await sendAppRejectedEmail(application);
     } catch (error: any) {
         logger.error(error);
         res.status(500);

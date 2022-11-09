@@ -19,6 +19,7 @@ async function getEmailById(purpose: string) {
         text: result.text,
         to: '',
         bcc: bccList,
+        cc: '',
     })) || [];
     return emails[0];
 }
@@ -53,6 +54,10 @@ export async function sendTextEmail(email: any) {
     }
 }
 
+function addNameToEmail(firstName: string, lastName: string, emailText: string) {
+    return emailText.replace(/firstName/, firstName).replace(/lastName/, lastName);
+}
+
 export async function sendAppConfirmationEmail(application: any) {
     const confirmEmail = await getEmailById('APP_CONFIRMATION');
     confirmEmail.text = confirmEmail.text.replace(/firstName/, application.firstName);
@@ -64,4 +69,22 @@ export async function sendAppConfirmationEmail(application: any) {
     boardMembers.forEach((member) => confirmEmail.bcc.push(member.email || ''));
     await sendTextEmail(confirmEmail);
     logger.info(`application emails sent for application ${application.id}`);
+}
+
+export async function sendNewMemberEmail(application: any) {
+    const newMemberEmail = await getEmailById('NEW_MEMBERSHIP');
+    newMemberEmail.text = addNameToEmail(application.firstName, application.lastName, newMemberEmail.text);
+    newMemberEmail.text = newMemberEmail.text.replace(/applicationNotesShared/, application.applicationNotesShared);
+    newMemberEmail.to = application.email;
+    await sendTextEmail(newMemberEmail);
+    logger.info(`new applicant acceptance sent for application ${application.id} (${application.lastName})`);
+}
+
+export async function sendAppRejectedEmail(application: any) {
+    const appRejectedEmail = await getEmailById('APPLICATION_REJECTED');
+    appRejectedEmail.text = addNameToEmail(application.firstName, application.lastName, appRejectedEmail.text);
+    appRejectedEmail.text = appRejectedEmail.text.replace(/applicationNotesShared/, application.applicationNotesShared);
+    appRejectedEmail.to = application.email;
+    await sendTextEmail(appRejectedEmail);
+    logger.info(`new applicant rejection sent for application ${application.id} (${application.lastName})`);
 }

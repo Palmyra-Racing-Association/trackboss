@@ -35,6 +35,7 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
         const payload = await verifier.verify(token);
         if (permissionLevel) {
             const member = await getMember(payload['cognito:username']);
+            payload.memberId = member.memberId;
             let actingAs = targetActingAs;
             if (typeof actingAs === 'undefined') {
                 actingAs = member.memberId;
