@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
 import {
-    Button, Divider, Heading, Link, ListItem, Modal, ModalContent, ModalFooter,
+    Alert, AlertIcon, Button, Divider, Heading, Link, ListItem, Modal, ModalContent, ModalFooter,
     ModalOverlay, OrderedList, SimpleGrid, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack,
 } from '@chakra-ui/react';
 import { MembershipApplication } from '../../../../src/typedefs/membershipApplication';
@@ -24,6 +24,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
 
     const [applicantNotes, setApplicantNotes] = useState<string>(membershipApplication.sharedNotes || '');
     const [internalNotes, setInternalNotes] = useState<string>(membershipApplication.internalNotes || '');
+    const isInReview = (membershipApplication.status === 'Review');
 
     props.addAction();
     return (
@@ -152,10 +153,11 @@ export default function MembershipApplicationModal(props: appModalProps) {
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
-                    <Text>
-                        Please note: Clicking the Accept or Reject buttons sends emails to the
-                        applicant, and also finalizes their application in our database.
-                    </Text>
+                    <Alert status="warning">
+                        <AlertIcon />
+                        Clicking the Accept or Reject buttons sends emails to the applicant, and also finalizes their
+                        application status.
+                    </Alert>
                 </SimpleGrid>
                 <ModalFooter>
                     <Button
@@ -175,6 +177,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         color="white"
                         variant="ghost"
                         size="lg"
+                        disabled={!isInReview}
                         onClick={
                             async () => {
                                 await reviewMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
@@ -189,6 +192,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         color="red"
                         variant="ghost"
                         size="lg"
+                        disabled={!isInReview}
                         onClick={
                             async () => {
                                 await rejectMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
@@ -203,6 +207,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         color="green"
                         variant="ghost"
                         size="lg"
+                        disabled={!isInReview}
                         onClick={
                             async () => {
                                 await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);

@@ -19,6 +19,7 @@ async function getEmailById(purpose: string) {
         text: result.text,
         to: '',
         bcc: bccList,
+        cc: '',
     })) || [];
     return emails[0];
 }
@@ -27,6 +28,11 @@ export async function sendTextEmail(email: any) {
     AWS.config.update({ region: process.env.AWS_REGION });
     const clubEmail = process.env.CLUB_EMAIL || '';
     const ses = new AWS.SES();
+    const sendRealEmail = (clubEmail === 'hogbacksecretary@gmail.com');
+    let emailTo = email.to;
+    if (!sendRealEmail) {
+        emailTo = clubEmail;
+    }
     const emailParams = {
         Destination: {
             ToAddresses: [email.to],
@@ -53,6 +59,10 @@ export async function sendTextEmail(email: any) {
     }
 }
 
+function addNameToEmail(firstName: string, lastName: string, emailText: string) {
+    return emailText.replace(/firstName/, firstName).replace(/lastName/, lastName);
+}
+
 export async function sendAppConfirmationEmail(application: any) {
     const confirmEmail = await getEmailById('APP_CONFIRMATION');
     confirmEmail.text = confirmEmail.text.replace(/firstName/, application.firstName);
@@ -64,4 +74,13 @@ export async function sendAppConfirmationEmail(application: any) {
     boardMembers.forEach((member) => confirmEmail.bcc.push(member.email || ''));
     await sendTextEmail(confirmEmail);
     logger.info(`application emails sent for application ${application.id}`);
+}
+
+export async function sendNewMemberEmail(application: any) {
+    const newMemberEmail = await getEmailById('NEW_MEMBERSHIP');
+    newMemberEmail.text = addNameToEmail(application.firstName, application.lastName, newMemberEmail.text);
+    newMemberEmail.text = newMemberEmail.text.replace(/applicationNotesShared/, application.applicationNotesShared);
+    newMemberEmail.to = application.email;
+    await sendTextEmail(newMemberEmail);
+    logger.info(`new applicant acceptance sent for application ${application.id} (${application.lastName})`);
 }

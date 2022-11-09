@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import { parseISO } from 'date-fns';
-import { sendAppConfirmationEmail } from '../util/email';
+import { sendAppConfirmationEmail, sendNewMemberEmail } from '../util/email';
 import {
     getMembershipApplication, getMembershipApplications,
     insertMembershipApplication, updateApplicationStatus,
@@ -100,7 +100,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             lastName: application.lastName,
             phoneNumber: application.phone,
             occupation: application.occupation,
-            email: `mailbin+${application.lastName}@gmail.com`, // application.email
+            email: `adelimon+${application.lastName}@gmail.com`, // application.email
             birthdate: parseISO(application.birthDate).toLocaleDateString('en-CA'),
             // when did they join? RIGHT FREAKING NOW THAT'S WHEN! :)
             dateJoined: new Date().toLocaleDateString('en-CA'),
@@ -116,15 +116,16 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             city: application.city,
             state: application.state,
             zip: application.zip,
-            modifiedBy: newMember.modifiedBy,
+            modifiedBy: actingUser.memberId,
         };
         const newMembershipId = await insertMembership(newMembership);
         const memberUpdate : PatchMemberRequest = {
             membershipId: newMembershipId,
-            modifiedBy: newMember.modifiedBy,
+            modifiedBy: actingUser.memberId,
         };
         await patchMember(`${primaryMemberId}`, memberUpdate);
         // now send a welcome email to the member.
+        await sendNewMemberEmail(application);
     } catch (error: any) {
         logger.error(error);
         res.status(500);
