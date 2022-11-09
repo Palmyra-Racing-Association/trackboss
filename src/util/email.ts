@@ -28,11 +28,6 @@ export async function sendTextEmail(email: any) {
     AWS.config.update({ region: process.env.AWS_REGION });
     const clubEmail = process.env.CLUB_EMAIL || '';
     const ses = new AWS.SES();
-    const sendRealEmail = (clubEmail === 'hogbacksecretary@gmail.com');
-    let emailTo = email.to;
-    if (!sendRealEmail) {
-        emailTo = clubEmail;
-    }
     const emailParams = {
         Destination: {
             ToAddresses: [email.to],
@@ -83,4 +78,13 @@ export async function sendNewMemberEmail(application: any) {
     newMemberEmail.to = application.email;
     await sendTextEmail(newMemberEmail);
     logger.info(`new applicant acceptance sent for application ${application.id} (${application.lastName})`);
+}
+
+export async function sendAppRejectedEmail(application: any) {
+    const appRejectedEmail = await getEmailById('APPLICATION_REJECTED');
+    appRejectedEmail.text = addNameToEmail(application.firstName, application.lastName, appRejectedEmail.text);
+    appRejectedEmail.text = appRejectedEmail.text.replace(/applicationNotesShared/, application.applicationNotesShared);
+    appRejectedEmail.to = application.email;
+    await sendTextEmail(appRejectedEmail);
+    logger.info(`new applicant rejection sent for application ${application.id} (${application.lastName})`);
 }

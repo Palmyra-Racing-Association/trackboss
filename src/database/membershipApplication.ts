@@ -55,6 +55,7 @@ export async function getMembershipApplication(id: number) : Promise<MembershipA
     }
     const applications = results[0].application_json;
     applications.id = results[0].membership_application_id;
+    applications.email = results[0].application_email;
     applications.status = results[0].application_status;
     applications.internalNotes = results[0].application_notes_internal;
     applications.sharedNotes = results[0].application_notes_shared;
