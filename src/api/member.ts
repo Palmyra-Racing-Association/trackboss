@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { checkHeader, verify } from '../util/auth';
 import {
     deleteFamilyMember,
+    getEligibleVoters,
     getMember, getMemberByEmail, getMemberByPhone, getMemberList,
     insertMember, MEMBER_TYPE_MAP, patchMember,
 } from '../database/member';
@@ -15,6 +16,8 @@ import {
 } from '../typedefs/member';
 import logger from '../logger';
 import { deleteCognitoUser } from '../util/cognito';
+import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
+import { result } from 'lodash';
 
 const member = Router();
 
@@ -241,6 +244,48 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
         }
     }
     res.send(response);
+});
+
+member.get('/list/voterEligibility/excel', async (req: Request, res: Response) => {
+    /*
+        lastName: result.last_name,
+        firstName: result.first_name,
+        year: result.year,
+        membershipType: result.membership_type,
+        meetingsAttended: result.meetings_attended,
+        percentageMeetings: result.percentage_meetings,
+        pointsEarned: result.points_earned,
+        eligibleByPoints: result.eligible_by_points,
+        eligibleByMeetings: result.eligible_by_meetings,
+    */
+    const rightNow = new Date();
+    const eligibleVoters = await getEligibleVoters(rightNow.getFullYear());
+    const workbookTitle = `Eligible Voters ${new Date().toLocaleDateString().replace(/\//gi, '-')}`;
+    const workbook = startWorkbook(workbookTitle);
+    const worksheet = workbook.getWorksheet(1);
+    worksheet.columns = [
+        { header: 'Last Name', key: 'lastName', width: 10 },
+        { header: 'First Name', key: 'firstName', width: 15 },
+        { header: 'Membership Type', key: 'membershipType', width: 15 },
+        { header: 'Meetings Attended', key: 'meetingsAttended', width: 6 },
+        { header: 'Points Earned', key: 'pointsEarned', width: 6 },
+        { header: 'Eligible By Points', key: 'eligibleByPoints', width: 6 },
+        { header: 'Eligible By Meetings', key: 'eligibleByMeetings', width: 6 },
+    ];
+    eligibleVoters.forEach((voter: any) => {
+        worksheet.addRow({
+            lastName: voter.lastName,
+            firstName: voter.firstName,
+            membershipType: voter.membershipType,
+            meetingsAttended: voter.meetingsAttended,
+            pointsEarned: voter.pointsEarned,
+            eligibleByPoints: voter.eligibleByPoints,
+            eligibleByMeetings: voter.eligibleByMeetings,
+        });
+    });
+    formatWorkbook(worksheet);
+    // write workbook to buffer.
+    httpOutputWorkbook(workbook, res, `members${new Date().getTime()}`);
 });
 
 export default member;
