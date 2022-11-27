@@ -69,3 +69,12 @@ export async function getMemberPointsExcel(token: string): Promise<Blob> {
     });
     return response.blob();
 }
+
+export async function getEligibleVoters(token: string): Promise<Blob> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/list/voterEligibility/excel`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.blob();
+}

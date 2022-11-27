@@ -1,5 +1,6 @@
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import { CognitoJwtVerifierSingleUserPool } from 'aws-jwt-verify/cognito-verifier';
+import { Request, Response } from 'express';
 import { getMember, getValidActors } from '../database/member';
 import logger from '../logger';
 
@@ -114,4 +115,27 @@ const checkHeader = (header?: string): HeaderCheck => {
     return { valid, reason, token };
 };
 
-export { checkHeader, createVerifier, destroyVerifier, verify };
+/**
+ * All in one function to validate administrative access for a given user token. This will throw
+ * an error if the token is not valid.  Callers can call this and then process the rest of the endpoint normally, as
+ * this is a "catch all" function that does the work so you don't have to.
+ *
+ */
+async function validateAdminAccess(req: Request, res: Response) : Promise<any> {
+    const { authorization } = req.headers;
+    let token = {};
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        throw new Error(headerCheck.reason);
+    } else {
+        try {
+            token = await verify(headerCheck.token, 'Admin');
+        } catch (error: any) {
+            logger.error('Error authorizing user token as admin', error);
+            throw error;
+        }
+    }
+    return token;
+}
+
+export { checkHeader, createVerifier, destroyVerifier, verify, validateAdminAccess };

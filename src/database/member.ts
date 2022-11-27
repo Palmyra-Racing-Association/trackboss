@@ -332,3 +332,25 @@ export async function deleteFamilyMember(memberId: number): Promise<number> {
     }
     return result.affectedRows;
 }
+
+export async function getEligibleVoters(votingYear: number) : Promise<any> {
+    const sql = 'select * from v_eligible_voters where year = ?';
+    let results;
+    try {
+        [results] = await getPool().query<RowDataPacket[]>(sql, [votingYear]);
+    } catch (e) {
+        logger.error(e);
+        throw e;
+    }
+    return results.map((result) => ({
+        lastName: result.last_name,
+        firstName: result.first_name,
+        year: result.year,
+        membershipType: result.membership_type,
+        meetingsAttended: result.meetings_attended,
+        percentageMeetings: result.percentage_meetings,
+        pointsEarned: result.points_earned,
+        eligibleByPoints: result.eligible_by_points,
+        eligibleByMeetings: result.eligible_by_meetings,
+    }));
+}
