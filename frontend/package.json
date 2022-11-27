@@ -18,7 +18,7 @@
         "react-date-picker": "^8.4.0",
         "react-datetime-picker": "^3.5.0",
         "react-dom": "^18.2.0",
-        "react-gauge-chart": "^0.4.0",
+        "react-gauge-chart": "^0.4.1",
         "react-icons": "^4.4.0",
         "react-router-dom": "^6.2.1",
         "react-select": "^5.4.0",

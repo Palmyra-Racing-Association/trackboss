@@ -1,6 +1,6 @@
-create view v_meeting_attendance as 
+create or replace view v_meeting_attendance as 
 select membership_id, member, start meeting_date from v_job 
-where event = 'Meeting' and member is not null
+where event_type_id = 5 and member is not null
 union 
 select 
 eph.membership_id, m.membership_admin, eph.date meeting_date

@@ -259,6 +259,7 @@ member.get('/list/voterEligibility/excel', async (req: Request, res: Response) =
         { header: 'Meetings Attended', key: 'meetingsAttended', width: 6 },
         { header: '% of meetings', key: 'percentageMeetings', width: 6 },
         { header: 'Points Earned', key: 'pointsEarned', width: 6 },
+        { header: 'Eligible?', key: 'eligible', width: 6 },
         { header: 'Eligible By Points', key: 'eligibleByPoints', width: 6 },
         { header: 'Eligible By Meetings', key: 'eligibleByMeetings', width: 6 },
     ];
@@ -270,6 +271,7 @@ member.get('/list/voterEligibility/excel', async (req: Request, res: Response) =
             meetingsAttended: voter.meetingsAttended,
             percentageMeetings: voter.percentageMeetings,
             pointsEarned: voter.pointsEarned,
+            eligible: ((voter.eligibleByPoints === 'Yes') || (voter.eligibleByMeetings === 'Yes')) ? 'Yes' : 'No',
             eligibleByPoints: voter.eligibleByPoints,
             eligibleByMeetings: voter.eligibleByMeetings,
         });
