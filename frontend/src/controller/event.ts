@@ -15,12 +15,7 @@ import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import { Job } from '../../../src/typedefs/job';
 
 function isEventList(res: Event[] | ErrorResponse): res is Event[] {
-    const eventResponse = res as Event[];
-    const isList : boolean = (
-        (eventResponse !== undefined) &&
-        (eventResponse.length > 0)
-    );
-    return isList;
+    return (res as Event[]) !== undefined;
 }
 
 export async function createEvent(token: string, eventData: PostNewEventRequest): Promise<PostNewEventResponse> {
@@ -98,10 +93,7 @@ export async function getEventCardProps(token: string, listType: string) {
     }
 
     // else
-    return {
-        title: 'No upcoming events',
-        start: 'No upcoming events',
-    };
+    return undefined;
 }
 
 export async function getEvent(token: string, eventID: number): Promise<GetEventResponse> {

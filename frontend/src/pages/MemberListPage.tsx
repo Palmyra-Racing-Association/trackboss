@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
 import { Box, Center, ChakraProvider, IconButton } from '@chakra-ui/react';
-import { BsPrinter } from 'react-icons/bs';
+import { BsNewspaper, BsPrinter } from 'react-icons/bs';
 import theme from '../theme';
 import Header from '../components/Header';
 import MemberList from '../components/MemberList';
-import { getMemberPointsExcel } from '../controller/workPoints';
+import { getEligibleVoters, getMemberPointsExcel } from '../controller/workPoints';
 import { UserContext } from '../contexts/UserContext';
 
 function MemberListPage() {
@@ -20,6 +20,7 @@ function MemberListPage() {
                         aria-label="Print"
                         background="orange.300"
                         color="white"
+                        mr={2}
                         onClick={
                             async () => {
                                 const memberWorkListExcel = await getMemberPointsExcel(state.token);
@@ -28,6 +29,20 @@ function MemberListPage() {
                             }
                         }
                         icon={<BsPrinter />}
+                    />
+                    <IconButton
+                        size="lg"
+                        aria-label="Eligible Voters"
+                        background="orange.300"
+                        color="white"
+                        onClick={
+                            async () => {
+                                const memberWorkListExcel = await getEligibleVoters(state.token);
+                                const objectUrl = URL.createObjectURL(memberWorkListExcel);
+                                window.location.href = objectUrl;
+                            }
+                        }
+                        icon={<BsNewspaper />}
                     />
                 </Center>
                 <MemberList />

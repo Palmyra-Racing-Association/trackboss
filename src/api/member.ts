@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { checkHeader, verify } from '../util/auth';
+import { checkHeader, validateAdminAccess, verify } from '../util/auth';
 import {
     deleteFamilyMember,
     getEligibleVoters,
@@ -17,7 +17,6 @@ import {
 import logger from '../logger';
 import { deleteCognitoUser } from '../util/cognito';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
-import { result } from 'lodash';
 
 const member = Router();
 
@@ -247,17 +246,7 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
 });
 
 member.get('/list/voterEligibility/excel', async (req: Request, res: Response) => {
-    /*
-        lastName: result.last_name,
-        firstName: result.first_name,
-        year: result.year,
-        membershipType: result.membership_type,
-        meetingsAttended: result.meetings_attended,
-        percentageMeetings: result.percentage_meetings,
-        pointsEarned: result.points_earned,
-        eligibleByPoints: result.eligible_by_points,
-        eligibleByMeetings: result.eligible_by_meetings,
-    */
+    await validateAdminAccess(req, res);
     const rightNow = new Date();
     const eligibleVoters = await getEligibleVoters(rightNow.getFullYear());
     const workbookTitle = `Eligible Voters ${new Date().toLocaleDateString().replace(/\//gi, '-')}`;
@@ -268,6 +257,7 @@ member.get('/list/voterEligibility/excel', async (req: Request, res: Response) =
         { header: 'First Name', key: 'firstName', width: 15 },
         { header: 'Membership Type', key: 'membershipType', width: 15 },
         { header: 'Meetings Attended', key: 'meetingsAttended', width: 6 },
+        { header: '% of meetings', key: 'percentageMeetings', width: 6 },
         { header: 'Points Earned', key: 'pointsEarned', width: 6 },
         { header: 'Eligible By Points', key: 'eligibleByPoints', width: 6 },
         { header: 'Eligible By Meetings', key: 'eligibleByMeetings', width: 6 },
@@ -278,6 +268,7 @@ member.get('/list/voterEligibility/excel', async (req: Request, res: Response) =
             firstName: voter.firstName,
             membershipType: voter.membershipType,
             meetingsAttended: voter.meetingsAttended,
+            percentageMeetings: voter.percentageMeetings,
             pointsEarned: voter.pointsEarned,
             eligibleByPoints: voter.eligibleByPoints,
             eligibleByMeetings: voter.eligibleByMeetings,
