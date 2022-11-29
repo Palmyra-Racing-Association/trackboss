@@ -264,17 +264,24 @@ member.get('/list/voterEligibility/excel', async (req: Request, res: Response) =
         { header: 'Eligible By Meetings', key: 'eligibleByMeetings', width: 6 },
     ];
     eligibleVoters.forEach((voter: any) => {
-        worksheet.addRow({
+        let isEligible;
+        if (voter.membershipType === 'Associate Member') {
+            isEligible = ((voter.eligibleByPoints === 'Yes') && (voter.eligibleByMeetings === 'Yes'));
+        } else {
+            isEligible = ((voter.eligibleByPoints === 'Yes') || (voter.eligibleByMeetings === 'Yes'));
+        }
+        const row = {
             lastName: voter.lastName,
             firstName: voter.firstName,
             membershipType: voter.membershipType,
             meetingsAttended: voter.meetingsAttended,
             percentageMeetings: voter.percentageMeetings,
             pointsEarned: voter.pointsEarned,
-            eligible: ((voter.eligibleByPoints === 'Yes') || (voter.eligibleByMeetings === 'Yes')) ? 'Yes' : 'No',
+            eligible: isEligible ? 'Yes' : 'No',
             eligibleByPoints: voter.eligibleByPoints,
             eligibleByMeetings: voter.eligibleByMeetings,
-        });
+        };
+        worksheet.addRow(row);
     });
     formatWorkbook(worksheet);
     // write workbook to buffer.
