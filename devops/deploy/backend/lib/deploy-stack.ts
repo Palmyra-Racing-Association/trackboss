@@ -19,9 +19,15 @@ export class DeployStack extends Stack {
     const account = Stack.of(this).account;
     const region = Stack.of(this).region;
 
+    const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
+
     const vpc = ec2.Vpc.fromLookup(this, 'ImportVPC',{isDefault: true});
     
-    const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
+    const vpc2 = new ec2.Vpc(this, 'trackbossVpc', {
+      enableDnsHostnames: false,
+      enableDnsSupport: false,
+      vpcName: `${environmentName}-vpc`, 
+    });
 
     const alb = new elbv2.ApplicationLoadBalancer(this, 'alb', {
       loadBalancerName: `${environmentName}-alb`,
