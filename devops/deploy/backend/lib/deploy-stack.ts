@@ -23,10 +23,12 @@ export class DeployStack extends Stack {
 
     const vpc = ec2.Vpc.fromLookup(this, 'ImportVPC',{isDefault: true});
     
-    const vpc2 = new ec2.Vpc(this, 'trackbossVpc', {
+    const trackbossApiVpc = new ec2.Vpc(this, 'trackbossApiVpc', {
       enableDnsHostnames: false,
       enableDnsSupport: false,
-      vpcName: `${environmentName}-vpc`, 
+      maxAzs: 2,
+      natGateways: 0,
+      vpcName: `${environmentName}-vpc`,       
     });
 
     const alb = new elbv2.ApplicationLoadBalancer(this, 'alb', {

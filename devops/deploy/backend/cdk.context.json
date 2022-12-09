@@ -110,5 +110,13 @@
   "security-group:account=425610073499:region=us-east-1:securityGroupId=sg-0838b1e730e6fdcec": {
     "securityGroupId": "sg-0838b1e730e6fdcec",
     "allowAllOutbound": false
-  }
+  },
+  "availability-zones:account=425610073499:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ]
 }
