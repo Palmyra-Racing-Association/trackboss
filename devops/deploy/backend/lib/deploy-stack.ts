@@ -123,15 +123,32 @@ export class DeployStack extends Stack {
       }),
     });
 
+    const windowsBastion = new ec2.Instance(this, 'windowsBastion', {
+      vpc,
+      instanceName: `${environmentName}-bastion`,
+      instanceType: ec2.InstanceType.of(
+        ec2.InstanceClass.T3,
+        ec2.InstanceSize.SMALL,
+      ),
+      machineImage: new ec2.WindowsImage(ec2.WindowsVersion.WINDOWS_SERVER_2022_ENGLISH_CORE_BASE),
+      keyName: 'prakeyz',     
+    });
+
     // create DB security group that allows attaching to auto scaling group
     const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
       vpc,
       allowAllOutbound: true,
       description: 'inbound rules for database',
     })
+
+    const rdsInboundGroups = asg.connections.securityGroups;
+    windowsBastion.connections.securityGroups.forEach((group) => {
+      rdsInboundGroups.push(group);
+    });
+
     rdsSecurityInBound.connections.allowFrom(
       new ec2.Connections({
-        securityGroups: asg.connections.securityGroups
+        securityGroups: rdsInboundGroups,
       }), 
       ec2.Port.tcp(3306),
       'allow access to database from application server.'
