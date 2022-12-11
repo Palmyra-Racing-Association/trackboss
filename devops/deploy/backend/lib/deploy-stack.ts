@@ -147,6 +147,13 @@ export class DeployStack extends Stack {
       choco install mysql.workbench;
       & "C:\Program Files\MySQL\MySQL Workbench 8.0 CE\MySQLWorkbench.exe"`);
 
+    // Elastic IP
+    const eip = new ec2.CfnEIP(this, "Ip", 
+      { 
+        instanceId: windowsBastion.instanceId,
+      }
+    )
+
     // create DB security group that allows attaching to auto scaling group
     const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
       vpc,
@@ -222,7 +229,7 @@ export class DeployStack extends Stack {
     });
 
     new CfnOutput(this, 'bastionDns', {
-      value: windowsBastion.instancePublicDnsName,
+      value: eip.attrPublicIp,
     })
   }
 }
