@@ -1,4 +1,4 @@
-import { App, CfnOutput, Duration, Stack, StackProps, Tags } from 'aws-cdk-lib';
+import { App, CfnOutput, Duration, Size, Stack, StackProps, Tags } from 'aws-cdk-lib';
 import { aws_autoscaling as autoscaling } from 'aws-cdk-lib';
 import { aws_ec2 as ec2 } from 'aws-cdk-lib';
 import { aws_ecs as ecs } from 'aws-cdk-lib';
@@ -122,6 +122,30 @@ export class DeployStack extends Stack {
         messageBody: '<h1>TrackBoss API</h1>',
       }),
     });
+    
+    const bastionDisk: ec2.BlockDevice = {
+      deviceName: '/dev/sda1',
+      volume: ec2.BlockDeviceVolume.ebs(30, {encrypted: true}),
+    };
+    
+    const windowsBastion = new ec2.Instance(this, 'windowsBastion', {
+      vpc,
+      instanceName: `${environmentName}-bastion`,
+      instanceType: ec2.InstanceType.of(
+        ec2.InstanceClass.T3,
+        ec2.InstanceSize.SMALL,
+      ),      
+      machineImage: new ec2.WindowsImage(ec2.WindowsVersion.WINDOWS_SERVER_2022_ENGLISH_FULL_BASE),
+      keyName: 'prakeyz',
+      blockDevices: [bastionDisk],
+    });
+
+    windowsBastion.addUserData(`
+      Set-ExecutionPolicy Bypass -Scope Process -Force; 
+      [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; 
+      iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'));
+      choco install mysql.workbench;
+      & "C:\Program Files\MySQL\MySQL Workbench 8.0 CE\MySQLWorkbench.exe"`);
 
     // create DB security group that allows attaching to auto scaling group
     const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
@@ -129,9 +153,15 @@ export class DeployStack extends Stack {
       allowAllOutbound: true,
       description: 'inbound rules for database',
     })
+
+    const rdsInboundGroups = asg.connections.securityGroups;
+    windowsBastion.connections.securityGroups.forEach((group) => {
+      rdsInboundGroups.push(group);
+    });
+
     rdsSecurityInBound.connections.allowFrom(
       new ec2.Connections({
-        securityGroups: asg.connections.securityGroups
+        securityGroups: rdsInboundGroups,
       }), 
       ec2.Port.tcp(3306),
       'allow access to database from application server.'
@@ -190,5 +220,9 @@ export class DeployStack extends Stack {
     new CfnOutput(this, 'apiDns', {
       value: dnsARecord.domainName,
     });
+
+    new CfnOutput(this, 'bastionDns', {
+      value: windowsBastion.instancePublicDnsName,
+    })
   }
 }
