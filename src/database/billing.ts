@@ -136,7 +136,9 @@ export async function markBillEmailed(id: number): Promise<void> {
 export async function markBillPaid(id: number): Promise<void> {
     let result;
     try {
-        [result] = await getPool().query<OkPacket>(PATCH_BILL_SQL, [id, null, 1]);
+        const sql =
+          'update member_bill set cur_year_paid = (CASE WHEN cur_year_paid = 1 THEN 0 ELSE 1 END) where bill_id = ?';
+        [result] = await getPool().query<OkPacket>(sql, [id]);
     } catch (e) {
         logger.error(`DB error marking bill as paid: ${e}`);
         throw new Error('internal server error');
@@ -150,7 +152,8 @@ export async function markBillPaid(id: number): Promise<void> {
 export async function markInsuranceAttestation(id: number): Promise<void> {
     let result;
     try {
-        const sql = 'update member_bill set cur_year_ins = 1 where bill_id = ?';
+        const sql =
+          'update member_bill set cur_year_ins = (CASE WHEN cur_year_ins = 1 THEN 0 ELSE 1 END) where bill_id = ?';
         [result] = await getPool().query<OkPacket>(sql, [id]);
     } catch (e) {
         logger.error(`DB error marking bill as paid: ${e}`);

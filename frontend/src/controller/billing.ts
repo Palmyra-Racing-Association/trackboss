@@ -42,7 +42,7 @@ export async function getYearlyThresholdValue(token: string) {
 export async function getBills(token: string): Promise<GetBillListResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/list`, {
         method: 'GET',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
@@ -73,7 +73,7 @@ export async function generateBills(token: string): Promise<PostCalculateBillsRe
 export async function payBill(token: string, membershipID: number): Promise<PostPayBillResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/${membershipID}`, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();

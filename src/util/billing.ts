@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { compareDesc, isFuture } from 'date-fns';
 import { getJobList } from '../database/job';
-import { generateBill, getBillList } from '../database/billing';
+import { generateBill, getBillList, markBillPaid } from '../database/billing';
 import { getBaseDues } from '../database/membership';
 import { getWorkPointsByMembership } from '../database/workPoints';
 import logger from '../logger';
@@ -52,7 +52,7 @@ export async function generateNewBills(
                 // sort by date.  I have to do this in JS due to the way jobs are stored in two different tables and
                 // messed with here.  Post 2022 this will no longer be required.
                 workDetail.sort((a: Job, b: Job) => compareDesc(a.start as Date, b.start as Date));
-                await generateBill({
+                const billId = await generateBill({
                     amount: owed,
                     amountWithFee: (owed + fee),
                     membershipId: membership.membershipId,
@@ -60,6 +60,10 @@ export async function generateNewBills(
                     pointsThreshold: threshold,
                     workDetail,
                 });
+                if (owed === 0) {
+                    // flip the bill to paid if they owe zero. This is just easy record keeping.
+                    await markBillPaid(billId);
+                }
             } catch (e) {
                 // generate more bills even if this one failed
                 logger.error(`Failed to generate bill for membership with ID ${membership.membershipId}: ${e}`);

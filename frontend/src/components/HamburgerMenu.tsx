@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 
 import { AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank, AiFillFolderOpen } from 'react-icons/ai';
+import { FaMoneyBillAlt } from 'react-icons/fa';
 import { HiUsers, HiCog } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
@@ -26,6 +27,10 @@ interface pageProps {
 export default function HamburgerMenu(props: pageProps) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const history = useNavigate();
+    const activeButtonStyle = {
+        bg: 'orange',
+        color: 'white',
+    };
     const adminButtons = (
         <VStack width="100%" divider={<StackDivider borderColor="gray.300" />} spacing="0">
             <StackDivider borderColor="gray.300" />
@@ -40,12 +45,7 @@ export default function HamburgerMenu(props: pageProps) {
                 color="black"
                 borderRadius="0"
                 _hover={{ bg: 'gray.100' }}
-                _active={
-                    {
-                        bg: 'orange',
-                        color: 'white',
-                    }
-                }
+                _active={activeButtonStyle}
                 id="6"
                 isActive={props.activeButtonId === 6}
             >
@@ -67,16 +67,28 @@ export default function HamburgerMenu(props: pageProps) {
                 color="black"
                 borderRadius="0"
                 _hover={{ bg: 'gray.100' }}
-                _active={
-                    {
-                        bg: 'orange',
-                        color: 'white',
-                    }
-                }
+                _active={activeButtonStyle}
                 id="7"
                 isActive={props.activeButtonId === 7}
             >
                 <Link to="/applications">Membership Applications</Link>
+            </Button>
+            <Button
+                justifyContent="flex-start"
+                height="80px"
+                fontFamily="heading"
+                fontSize="2xl"
+                leftIcon={<FaMoneyBillAlt />}
+                width="100%"
+                bg="white"
+                color="black"
+                borderRadius="0"
+                _hover={{ bg: 'gray.100' }}
+                _active={activeButtonStyle}
+                id="8"
+                isActive={props.activeButtonId === 8}
+            >
+                <Link to="/billing">Members Dues/Waivers</Link>
             </Button>
         </VStack>
     );
@@ -121,12 +133,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     color="black"
                                     borderRadius="0"
                                     _hover={{ bg: 'gray.100' }}
-                                    _active={
-                                        {
-                                            bg: 'orange',
-                                            color: 'white',
-                                        }
-                                    }
+                                    _active={activeButtonStyle}
                                     id="1"
                                     isActive={props.activeButtonId === 1}
                                 >
@@ -142,12 +149,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     bg="white"
                                     color="black"
                                     _hover={{ bg: 'gray.100' }}
-                                    _active={
-                                        {
-                                            bg: 'orange',
-                                            color: 'white',
-                                        }
-                                    }
+                                    _active={activeButtonStyle}
                                     borderRadius="0"
                                     id="2"
                                     isActive={props.activeButtonId === 2}
@@ -165,12 +167,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     color="black"
                                     borderRadius="0"
                                     _hover={{ bg: 'gray.100' }}
-                                    _active={
-                                        {
-                                            bg: 'orange',
-                                            color: 'white',
-                                        }
-                                    }
+                                    _active={activeButtonStyle}
                                     id="3"
                                     isActive={props.activeButtonId === 3}
                                 >
@@ -187,12 +184,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     color="black"
                                     borderRadius="0"
                                     _hover={{ bg: 'gray.100' }}
-                                    _active={
-                                        {
-                                            bg: 'orange',
-                                            color: 'white',
-                                        }
-                                    }
+                                    _active={activeButtonStyle}
                                     id="4"
                                     isActive={props.activeButtonId === 4}
                                 >
@@ -209,12 +201,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     color="black"
                                     borderRadius="0"
                                     _hover={{ bg: 'gray.100' }}
-                                    _active={
-                                        {
-                                            bg: 'orange',
-                                            color: 'white',
-                                        }
-                                    }
+                                    _active={activeButtonStyle}
                                     id="5"
                                     isActive={props.activeButtonId === 5}
                                 >

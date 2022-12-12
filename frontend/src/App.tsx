@@ -10,6 +10,7 @@ import me from './controller/api';
 import JobsByEventType from './pages/JobsByEventType';
 import MembershipApplications from './pages/MembershipApplications';
 import BoardMemberListPage from './pages/BoardMemberListPage';
+import BillingListPage from './pages/BillingListPage';
 
 export function App() {
     const { state, update } = useContext(UserContext);
@@ -43,6 +44,7 @@ export function App() {
             <Route path="jobs" element={<JobsByEventType />} />
             <Route path="applications" element={<MembershipApplications />} />
             <Route path="board" element={<BoardMemberListPage />} />
+            <Route path="billing" element={<BillingListPage />} />
         </Routes>
     );
 }
