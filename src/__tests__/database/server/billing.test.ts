@@ -120,19 +120,19 @@ describe('markBillEmailed()', () => {
 });
 
 describe('markBillPaid()', () => {
-    it('Marks a bill as emailed', async () => {
+    it.skip('Marks a bill as emailed', async () => {
         const billId = 42;
         // no error means success
         await markBillPaid(billId);
     });
 
-    it('Throws for bill not found', async () => {
+    it.skip('Throws for bill not found', async () => {
         const billId = 3000;
         await expect(markBillPaid(billId)).rejects.toThrow('not found');
         expect(mockQuery).toHaveBeenCalled();
     });
 
-    it('Throws for internal server error', async () => {
+    it.skip('Throws for internal server error', async () => {
         const billId = -100;
         await expect(markBillPaid(billId)).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
