@@ -13,18 +13,33 @@ import WrappedSwitchInput from '../input/WrappedSwitchInput';
 
 export default function DuesAndWaiversList() {
     const { state } = useContext(UserContext);
-    const [allBills, setAllBills] = useState<Bill[]>();
+    const [billsData, setBillsData] = useState<Bill[]>([]);
     const [selectedBill, setSelectedBill] = useState<Bill>();
+    const [searchTerm] = useState<string>('');
+
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     async function getMembershipBillData() {
-        const memberBills = await getBills(state.token);
-        setAllBills(memberBills as Bill[]);
+        const memberBills = await getBills(state.token) as Bill[];
+        setBillsData(memberBills as Bill[]);
     }
 
     useEffect(() => {
         getMembershipBillData();
     }, []);
+
+    useEffect(() => {
+        if (searchTerm === '') {
+            setBillsData(billsData);
+        } else {
+            const filteredBills = billsData.filter((bill) => {
+                const firstNameFound = (bill.firstName.toLowerCase().includes(searchTerm));
+                const lastNameFound = (bill.lastName.toLowerCase().includes(searchTerm));
+                return firstNameFound || lastNameFound;
+            });
+            setBillsData(filteredBills);
+        }
+    }, [searchTerm, billsData]);
 
     const columns: any = [
         {
@@ -70,7 +85,7 @@ export default function DuesAndWaiversList() {
         <VStack mt={25}>
             <DataTable
                 columns={columns}
-                data={allBills as Bill[]}
+                data={billsData as Bill[]}
                 customStyles={
                     {
                         headCells: {
@@ -96,8 +111,13 @@ export default function DuesAndWaiversList() {
                 }
                 fixedHeaderScrollHeight="300px"
                 highlightOnHover
+                pagination
+                paginationPerPage={50}
+                paginationRowsPerPageOptions={[50, (billsData?.length || 999)]}
                 responsive
+                striped
                 subHeaderWrap
+                defaultSortFieldId={1}
             />
             <Modal isCentered size="lg" isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />

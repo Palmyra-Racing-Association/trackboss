@@ -1,13 +1,13 @@
-import { Box, Center, Input, InputGroup, InputLeftElement, useDisclosure } from '@chakra-ui/react';
+import { useDisclosure } from '@chakra-ui/react';
 import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { BsSearch } from 'react-icons/bs';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import { Member } from '../../../src/typedefs/member';
 import { UserContext } from '../contexts/UserContext';
 import { getAllBoardMembersForCurrentYear } from '../controller/boardMember';
 import { getMemberList } from '../controller/member';
+import DataSearchBox from './input/DataSearchBox';
 import MemberSummaryModal from './MemberSummaryModal';
 
 const columns: any = [
@@ -121,20 +121,10 @@ export default function MemberList() {
     }
     return (
         <div>
-            <Center>
-                <Box maxWidth={300}>
-                    <InputGroup>
-                        <InputLeftElement pointerEvents="none">
-                            <BsSearch color="gray.300" />
-                        </InputLeftElement>
-                        <Input
-                            size="lg"
-                            placeholder="Search..."
-                            onChange={(e) => setSearchTerm(e.target.value?.toLowerCase())}
-                        />
-                    </InputGroup>
-                </Box>
-            </Center>
+            <DataSearchBox
+                searchValue={searchTerm}
+                onTextChange={setSearchTerm}
+            />
             <DataTable
                 columns={columns}
                 data={cells}
