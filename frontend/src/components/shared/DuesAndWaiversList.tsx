@@ -9,19 +9,23 @@ import { Bill } from '../../../../src/typedefs/bill';
 import { UserContext } from '../../contexts/UserContext';
 
 import { attestInsurance, getBills, payBill } from '../../controller/billing';
+import DataSearchBox from '../input/DataSearchBox';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
 
 export default function DuesAndWaiversList() {
     const { state } = useContext(UserContext);
-    const [billsData, setBillsData] = useState<Bill[]>([]);
+    const [allBillsData, setAllBillsData] = useState<Bill[]>([]);
+    const [filteredBills, setFilteredBills] = useState<Bill[]>([]);
+
     const [selectedBill, setSelectedBill] = useState<Bill>();
-    const [searchTerm] = useState<string>('');
+    const [searchTerm, setSearchTerm] = useState<string>('');
 
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     async function getMembershipBillData() {
         const memberBills = await getBills(state.token) as Bill[];
-        setBillsData(memberBills as Bill[]);
+        setAllBillsData(memberBills as Bill[]);
+        setFilteredBills(memberBills as Bill[]);
     }
 
     useEffect(() => {
@@ -30,16 +34,16 @@ export default function DuesAndWaiversList() {
 
     useEffect(() => {
         if (searchTerm === '') {
-            setBillsData(billsData);
+            setFilteredBills(allBillsData);
         } else {
-            const filteredBills = billsData.filter((bill) => {
+            const nameBills = allBillsData.filter((bill) => {
                 const firstNameFound = (bill.firstName.toLowerCase().includes(searchTerm));
                 const lastNameFound = (bill.lastName.toLowerCase().includes(searchTerm));
                 return firstNameFound || lastNameFound;
             });
-            setBillsData(filteredBills);
+            setFilteredBills(nameBills);
         }
-    }, [searchTerm, billsData]);
+    }, [searchTerm]);
 
     const columns: any = [
         {
@@ -83,9 +87,13 @@ export default function DuesAndWaiversList() {
 
     return (
         <VStack mt={25}>
+            <DataSearchBox
+                onTextChange={setSearchTerm}
+                searchValue={searchTerm}
+            />
             <DataTable
                 columns={columns}
-                data={billsData as Bill[]}
+                data={filteredBills as Bill[]}
                 customStyles={
                     {
                         headCells: {
@@ -113,7 +121,7 @@ export default function DuesAndWaiversList() {
                 highlightOnHover
                 pagination
                 paginationPerPage={50}
-                paginationRowsPerPageOptions={[50, (billsData?.length || 999)]}
+                paginationRowsPerPageOptions={[50, (allBillsData?.length || 999)]}
                 responsive
                 striped
                 subHeaderWrap

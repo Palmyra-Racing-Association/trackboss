@@ -11,7 +11,7 @@ interface dataSearchBoxProps {
 export default function DataSearchBox(props: dataSearchBoxProps) {
     return (
         <Center>
-            <Box maxWidth={500}>
+            <Box maxWidth={500} padding={5}>
                 <InputGroup>
                     <InputLeftElement pointerEvents="none">
                         <BsSearch color="gray.300" />

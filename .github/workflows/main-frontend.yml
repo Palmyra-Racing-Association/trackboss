@@ -4,7 +4,7 @@ on:
       branches:    
         - 'main'
       paths:
-       - src
+       - frontend
   workflow_dispatch:
 env:
   NODE_VERSION: "16"
@@ -16,30 +16,6 @@ env:
   COGNITO_POOL_ID: ${{ secrets.COGNITO_POOL_ID }}
   CLUB_EMAIL: ${{ secrets.CLUB_EMAIL }}
 jobs:
-  backend-cdk-build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Specify Node version
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Run CDK backend deployment
-      run: bash devops/deploy/backend/deployBackendInfra.sh $HOME/work/trackboss/trackboss
-  backend-docker-build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Specify Node version
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Run Docker Build script
-      run: bash devops/deploy/backend/buildDockerImage.sh $HOME/work/trackboss/trackboss
-    - name: Terminate existing API backend to reset it
-      run: bash devops/deploy/backend/redeployApiBackend.sh $TRACKBOSS_ENVIRONMENT_NAME
   frontend-cdk-build:
     runs-on: ubuntu-latest
     steps:
