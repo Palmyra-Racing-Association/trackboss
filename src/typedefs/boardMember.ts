@@ -6,6 +6,7 @@ export type BoardMember = {
     titleId: number,
     year: number,
     memberId: number,
+    membershipId: number,
     firstName?: string,
     lastName?: string,
     email?: string,

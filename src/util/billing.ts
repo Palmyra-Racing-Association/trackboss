@@ -8,6 +8,7 @@ import logger from '../logger';
 import { Bill } from '../typedefs/bill';
 import { Membership } from '../typedefs/membership';
 import { Job } from '../typedefs/job';
+import { getBoardMemberList } from '../database/boardMember';
 
 /**
  * Generate new bills in the database
@@ -31,6 +32,8 @@ export async function generateNewBills(
     threshold: number,
     year: number,
 ): Promise<Bill[]> {
+    // look at the next year's board members because they pay $0.
+    const boardMembers = await getBoardMemberList((year + 1).toString(10));
     await Promise.all(membershipList.map(async (membership) => {
         // only generate a bill if one hasn't already been generated
         if (typeof _.find(
@@ -40,11 +43,17 @@ export async function generateNewBills(
             try {
                 const baseDues = await getBaseDues(membership.membershipId);
                 const earned = (await getWorkPointsByMembership(membership.membershipId, year)).total;
-                const owed = Math.max((1 - earned / threshold) * baseDues, 0);
+                let owed = Math.max((1 - earned / threshold) * baseDues, 0);
                 // the Paypal Fee is 0.0290%, plus $0.30.  We hard code this here, with a big ole comment
                 // describing what it is.  It's not great but their rule is generally static.
                 let fee = (owed * 0.0290) + 0.30;
                 if (owed === 0) {
+                    fee = 0;
+                }
+                const isBoardNextYear = boardMembers.find((m) => (m.membershipId === membership.membershipId));
+                // if they are on next year's Board, dues are also waived.
+                if (isBoardNextYear) {
+                    owed = 0;
                     fee = 0;
                 }
                 let workDetail = await getJobList({ membershipId: membership.membershipId, year });

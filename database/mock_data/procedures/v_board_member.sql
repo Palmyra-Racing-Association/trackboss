@@ -6,6 +6,7 @@ CREATE VIEW `v_board_member` AS
         bt.board_title_id as title_id,
         year,
         m.member_id,
+        m.membership_id,
         m.first_name, 
         m.last_name,
         m.email

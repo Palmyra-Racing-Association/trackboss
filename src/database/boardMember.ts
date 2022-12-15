@@ -69,6 +69,7 @@ export async function getBoardMemberList(year?: string): Promise<BoardMember[]> 
         titleId: result.title_id,
         year: result.year,
         memberId: result.member_id,
+        membershipId: result.membership_id,
         email: result.email,
     }));
 }
@@ -94,6 +95,7 @@ export async function getBoardMember(id: number): Promise<BoardMember> {
         titleId: results[0].title_id,
         year: results[0].year,
         memberId: results[0].member_id,
+        membershipId: results[0].membership_id,
     };
 }
 

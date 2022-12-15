@@ -2,8 +2,10 @@ name: Back end deployment
 on:
   push:
       branches:    
-        - 'main'
+        - main
       paths:
+        - .github/
+        - devops/
         - src/
   workflow_dispatch:
 env:
@@ -40,17 +42,6 @@ jobs:
       run: bash devops/deploy/backend/buildDockerImage.sh $HOME/work/trackboss/trackboss
     - name: Terminate existing API backend to reset it
       run: bash devops/deploy/backend/redeployApiBackend.sh $TRACKBOSS_ENVIRONMENT_NAME
-  frontend-cdk-build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Specify Node version
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Run CDK frontend deployment
-      run: bash devops/deploy/frontend/deployFrontEnd.sh $TRACKBOSS_ENVIRONMENT_NAME $HOME/work/trackboss/trackboss
   # backend-build:
   #   runs-on: ubuntu-latest
   #   steps:
