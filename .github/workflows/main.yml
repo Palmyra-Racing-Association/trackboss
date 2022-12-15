@@ -1,10 +1,10 @@
-name: Main
+name: Back end deployment
 on:
   push:
       branches:    
         - 'main'
       paths:
-       - src
+        - src/
   workflow_dispatch:
 env:
   NODE_VERSION: "16"
