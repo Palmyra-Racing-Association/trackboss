@@ -3,10 +3,6 @@ on:
   push:
       branches:    
         - main
-      paths:
-        - .github/
-        - devops/
-        - src/
   workflow_dispatch:
 env:
   NODE_VERSION: "16"
