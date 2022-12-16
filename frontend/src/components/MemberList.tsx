@@ -88,7 +88,7 @@ export default function MemberList() {
                     });
                 }
                 let activeMembers = _.filter(c, (member) => member.active);
-                activeMembers = activeMembers.filter((member) => (member.memberId === member.membershipAdminId));
+                activeMembers = activeMembers.filter((member) => (member.memberType.toLowerCase().includes('admin')));
                 setCells(activeMembers);
                 setAllCells(activeMembers);
                 setError(undefined);
