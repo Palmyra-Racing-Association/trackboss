@@ -209,7 +209,7 @@ export default function HamburgerMenu(props: pageProps) {
                                 </Button>
                             </VStack>
                             { (props.admin) && (adminButtons) }
-                            { (props.boardMember) && (boardMemberButtons)}
+                            { (props.boardMember || props.admin) && (boardMemberButtons)}
                         </DrawerBody>
                     </DrawerContent>
                 </Drawer>
