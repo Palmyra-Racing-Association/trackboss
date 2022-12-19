@@ -37,7 +37,7 @@ jobs:
     - name: Run Docker Build script
       run: bash devops/deploy/backend/buildDockerImage.sh $HOME/work/trackboss/trackboss
     - name: Terminate existing API backend to reset it
-      run: bash devops/deploy/backend/redeployApiBackend.sh $TRACKBOSS_ENVIRONMENT_NAME
+      run: bash devops/deploy/backend/redeployApiBackend.sh $TRACKBOSS_ENVIRONMENT_NAME $HOME/work/trackboss/trackboss
   # backend-build:
   #   runs-on: ubuntu-latest
   #   steps:
