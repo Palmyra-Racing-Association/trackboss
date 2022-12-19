@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import moment from 'moment';
-import { Calendar, DateLocalizer, Messages, momentLocalizer, View, Views, ViewsProps } from 'react-big-calendar';
-import { Text, Flex, Spacer, useDisclosure, Box } from '@chakra-ui/react';
+import { Calendar, DateLocalizer, momentLocalizer, Views } from 'react-big-calendar';
+import { useDisclosure, Box } from '@chakra-ui/react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import FamilySignUpModal from './FamilySignUpModal';
@@ -15,26 +15,7 @@ import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import CreateEventModal from './CreateEventModal';
 import { GetMemberListResponse } from '../../../src/typedefs/member';
 
-const RenderToolbar = require('react-big-calendar/lib/Toolbar');
-
 const localizer: DateLocalizer = momentLocalizer(moment);
-
-interface CustomToolbarProps {
-    date: Date,
-    view: View,
-    views: ViewsProps<any, never>,
-    label: string,
-}
-
-const customMessages: Messages = {
-    next: 'Next',
-    previous: 'Previous',
-    today: 'Today',
-    day: 'Day',
-    week: 'Week',
-    month: 'Month',
-    agenda: 'Agenda',
-};
 
 export default function EventCalendar() {
     const { state } = useContext(UserContext);
@@ -170,42 +151,6 @@ export default function EventCalendar() {
                     }
                 }
                 style={{ height: '70vh' }}
-                components={
-                    {
-                        // eslint-disable-next-line react/no-unstable-nested-components
-                        toolbar: React.memo((toolbarProps: CustomToolbarProps, children) => (
-                            <RenderToolbar
-                                // Necessary for the custom toolbar to render properly
-                                // eslint-disable-next-line react/jsx-props-no-spreading
-                                {...toolbarProps}
-                                localizer={
-                                    {
-                                        messages: {
-                                            ...customMessages,
-                                        },
-                                    }
-                                }
-                                label={
-                                    (
-                                        <Flex pl={20}>
-                                            <Spacer />
-                                            <Text
-                                                fontFamily="sans-serif"
-                                                fontWeight={30}
-                                                fontSize="3xl"
-                                            >
-                                                {toolbarProps.label}
-                                            </Text>
-                                            <Spacer />
-                                        </Flex>
-                                    )
-                                }
-                            >
-                                {children}
-                            </RenderToolbar>
-                        )),
-                    }
-                }
             />
             {
                 selectedEvent && (
