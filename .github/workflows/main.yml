@@ -1,9 +1,6 @@
 name: Back end deployment
 on:
   push:
-      paths:
-        - 'devops/backend/'
-        - 'src/'
       branches:    
         - main
   workflow_dispatch:
