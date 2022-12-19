@@ -7,17 +7,14 @@ fi;
 cd $PROJECT_ROOT
 gitCommitId=`git rev-parse --short HEAD`
 backendChanges=`git status --porcelain src/`
-if [ -z $backendChanges ]; then
-  echo "There are no backend changes, so not building Docker image for commit $gitCommitId this time.  Enjoy the faster build!"
-else
-  imageName="pra/trackbossapi:latest"
-  imageNameCommit="pra/trackbossapi:$gitCommitId"
-  dockerRegistry="425610073499.dkr.ecr.us-east-1.amazonaws.com"
-  echo "Building docker image for $gitCommitId"
-  docker build --platform linux/amd64 -t $imageName .
-  aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $dockerRegistry
-  docker tag $imageName $dockerRegistry/$imageName
-  docker tag $imageName $dockerRegistry/$imageNameCommit
-  docker push $dockerRegistry/$imageName
-  docker push $dockerRegistry/$imageNameCommit
-fi
+
+imageName="pra/trackbossapi:latest"
+imageNameCommit="pra/trackbossapi:$gitCommitId"
+dockerRegistry="425610073499.dkr.ecr.us-east-1.amazonaws.com"
+echo "Building docker image for $gitCommitId"
+docker build --platform linux/amd64 -t $imageName .
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $dockerRegistry
+docker tag $imageName $dockerRegistry/$imageName
+docker tag $imageName $dockerRegistry/$imageNameCommit
+docker push $dockerRegistry/$imageName
+docker push $dockerRegistry/$imageNameCommit
