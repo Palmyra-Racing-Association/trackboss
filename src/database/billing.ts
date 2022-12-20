@@ -185,3 +185,34 @@ export async function cleanBilling(year: number, memberId?: number): Promise<num
     logger.info(`billing cleanup for ${year}, ${result.affectedRows} bills cleaned up`);
     return result.affectedRows;
 }
+
+export async function getBill(billId: number) : Promise<Bill> {
+    let results;
+    try {
+        [results] = await getPool().query<RowDataPacket[]>('select * from v_bill where bill_id = ?', [billId]);
+    } catch (e) {
+        logger.error(`DB error getting bill list: ${e}`);
+        throw new Error('internal server error');
+    }
+    const billResultSingle = results[0];
+    const bill = {
+        billId: billResultSingle.bill_id,
+        generatedDate: billResultSingle.generated_date,
+        year: billResultSingle.year,
+        amount: billResultSingle.amount,
+        amountWithFee: billResultSingle.amount_with_fee,
+        membershipAdmin: billResultSingle.membership_admin,
+        membershipId: billResultSingle.membership_id,
+        firstName: billResultSingle.first_name,
+        lastName: billResultSingle.last_name,
+        membershipAdminEmail: billResultSingle.membership_admin_email,
+        emailedBill: billResultSingle.emailed_bill,
+        curYearPaid: !!billResultSingle.cur_year_paid[0],
+        curYearIns: !!billResultSingle.cur_year_ins[0],
+        dueDate: new Date((billResultSingle.year + 1), 1, 15).toDateString(),
+        pointsEarned: billResultSingle.points_earned,
+        pointsThreshold: billResultSingle.threshold,
+        detail: billResultSingle.work_detail,
+    };
+    return bill;
+}

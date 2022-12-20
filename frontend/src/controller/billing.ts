@@ -70,8 +70,8 @@ export async function generateBills(token: string): Promise<PostCalculateBillsRe
     return response.json();
 }
 
-export async function payBill(token: string, membershipID: number): Promise<PostPayBillResponse> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/${membershipID}`, {
+export async function payBill(token: string, billId: number): Promise<PostPayBillResponse> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/${billId}`, {
         method: 'POST',
         mode: 'cors',
         headers: generateHeaders(token),

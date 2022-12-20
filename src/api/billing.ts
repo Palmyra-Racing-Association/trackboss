@@ -3,7 +3,7 @@ import _ from 'lodash';
 // import { format } from 'date-fns';
 import { getMembershipList } from '../database/membership';
 import {
-    cleanBilling, getBillList, getWorkPointThreshold, markBillPaid,
+    cleanBilling, getBill, getBillList, getWorkPointThreshold, markBillPaid,
     markInsuranceAttestation,
 } from '../database/billing';
 import {
@@ -16,6 +16,7 @@ import {
 } from '../typedefs/bill';
 import { checkHeader, verify } from '../util/auth';
 import { emailBills, generateNewBills } from '../util/billing';
+import { sendInsuranceConfirmEmail, sendPaymentConfirmationEmail } from '../util/email';
 
 //
 // TODO: Emails are not sent for generated bills (see emailBills helper function in util)
@@ -127,7 +128,7 @@ billing.get('/:membershipID', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-billing.post('/:membershipID', async (req: Request, res: Response) => {
+billing.post('/:billId', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: PostPayBillResponse;
     const headerCheck = checkHeader(authorization);
@@ -137,11 +138,16 @@ billing.post('/:membershipID', async (req: Request, res: Response) => {
     } else {
         try {
             await verify(headerCheck.token, 'Membership Admin');
-            const membershipId = Number(req.params.membershipID);
-            if (Number.isNaN(membershipId)) {
+            const billId = Number(req.params.billId);
+            if (Number.isNaN(billId)) {
                 throw new Error('not found');
             }
-            await markBillPaid(membershipId);
+            await markBillPaid(billId);
+            const bill = await getBill(billId);
+            // if they marked the attestation as complete, send an email.
+            if (bill.curYearPaid) {
+                await sendPaymentConfirmationEmail(bill);
+            }
             response = {};
             res.status(200);
         } catch (e: any) {
@@ -215,6 +221,11 @@ billing.patch('/attestIns/:billId', async (req: Request, res: Response) => {
                 throw new Error('not found');
             }
             await markInsuranceAttestation(billId);
+            const bill = await getBill(billId);
+            // if they marked the attestation as complete, send an email.
+            if (bill.curYearIns) {
+                await sendInsuranceConfirmEmail(bill);
+            }
             response = {};
             res.status(200);
         } catch (e: any) {

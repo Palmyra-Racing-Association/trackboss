@@ -3,6 +3,7 @@ import { RowDataPacket } from 'mysql2';
 import logger from '../logger';
 import { getPool } from '../database/pool';
 import { getBoardMemberList } from '../database/boardMember';
+import { Bill } from '../typedefs/bill';
 
 async function getEmailById(purpose: string) {
     const values = [purpose];
@@ -87,4 +88,20 @@ export async function sendAppRejectedEmail(application: any) {
     appRejectedEmail.to = application.email;
     await sendTextEmail(appRejectedEmail);
     logger.info(`new applicant rejection sent for application ${application.id} (${application.lastName})`);
+}
+
+async function sendConfirmationEmail(bill: Bill, id: string) {
+    const confirmationEmail = await getEmailById(id);
+    confirmationEmail.text = addNameToEmail(bill.firstName, bill.lastName, confirmationEmail.text);
+    confirmationEmail.to = bill.membershipAdminEmail;
+    await sendTextEmail(confirmationEmail);
+    logger.info(`${confirmationEmail.purpose} sent to ${bill.membershipAdminEmail}`);
+}
+
+export async function sendPaymentConfirmationEmail(bill: Bill) {
+    await sendConfirmationEmail(bill, 'PAYMENT_CONFIRMED');
+}
+
+export async function sendInsuranceConfirmEmail(bill: Bill) {
+    await sendConfirmationEmail(bill, 'INSURANCE_CONFIRMED');
 }
