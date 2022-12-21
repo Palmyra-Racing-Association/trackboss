@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import {
     Box,
     Button, Divider, Heading, Modal, ModalContent, ModalFooter, ModalOverlay,
-    Stat, StatHelpText, StatLabel, StatNumber,
 } from '@chakra-ui/react';
 import { Bill } from '../../../../src/typedefs/bill';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
+import BillingStatsDisplay from '../shared/BillingStatsDisplay';
 
 interface duesModalProps {
     isOpen: boolean,
@@ -116,32 +116,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     <Box mb={2}>
                         Your dues are listed below.  You can pay via mail, in person, or via the Paypal button.
                     </Box>
-                    <Stat>
-                        <StatLabel>
-                            Points Earned in &nbsp;
-                            {props.viewBill?.year}
-                        </StatLabel>
-                        <StatNumber>
-                            {props.viewBill?.pointsEarned}
-                            &nbsp;
-                        </StatNumber>
-                        <StatHelpText>
-                            of
-                            &nbsp;
-                            {props.viewBill?.pointsThreshold}
-                        </StatHelpText>
-                    </Stat>
-                    <Stat>
-                        <StatLabel>
-                            Amount Due
-                        </StatLabel>
-                        <StatNumber>
-                            {`$${props.viewBill?.amount}`}
-                        </StatNumber>
-                        <StatHelpText>
-                            {`$${props.viewBill?.amountWithFee} w/ PayPal`}
-                        </StatHelpText>
-                    </Stat>
+                    <BillingStatsDisplay bill={props.viewBill} />
                     <Box mb={1}>
                         By clicking this box, I attest that I have, and will maintain, valid health insurance for the
                         {` ${billingYear + 1} season.  I further agree that failure to maintain such valid `}

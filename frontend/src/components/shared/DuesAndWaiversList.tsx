@@ -1,7 +1,6 @@
 import {
     Button,
-    Heading, Modal, ModalContent, ModalOverlay, Stat, StatHelpText,
-    StatLabel, StatNumber, useDisclosure, VStack,
+    Heading, Modal, ModalContent, ModalOverlay, useDisclosure, VStack,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -11,6 +10,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { attestInsurance, getBills, payBill } from '../../controller/billing';
 import DataSearchBox from '../input/DataSearchBox';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
+import BillingStatsDisplay from './BillingStatsDisplay';
 
 export default function DuesAndWaiversList() {
     const { state } = useContext(UserContext);
@@ -133,32 +133,7 @@ export default function DuesAndWaiversList() {
                     <Heading>
                         {`Billing detail for ${selectedBill?.membershipAdmin} - ${selectedBill?.year}`}
                     </Heading>
-                    <Stat>
-                        <StatLabel>
-                            Points Earned in &nbsp;
-                            {selectedBill?.year}
-                        </StatLabel>
-                        <StatNumber>
-                            {selectedBill?.pointsEarned}
-                            &nbsp;
-                        </StatNumber>
-                        <StatHelpText>
-                            of
-                            &nbsp;
-                            {selectedBill?.pointsThreshold}
-                        </StatHelpText>
-                    </Stat>
-                    <Stat>
-                        <StatLabel>
-                            Amount Due
-                        </StatLabel>
-                        <StatNumber>
-                            {`$${selectedBill?.amount}`}
-                        </StatNumber>
-                        <StatHelpText>
-                            {`$${selectedBill?.amountWithFee} w/ PayPal`}
-                        </StatHelpText>
-                    </Stat>
+                    <BillingStatsDisplay bill={selectedBill} />
                     <WrappedSwitchInput
                         wrapperText="Mark (or unmark) as paid"
                         defaultChecked={selectedBill?.curYearPaid || false}
