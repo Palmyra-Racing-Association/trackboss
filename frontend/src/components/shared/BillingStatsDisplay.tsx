@@ -36,6 +36,14 @@ export default function BillingStatsDisplay(props: billStatsProps) {
                     {`$${bill?.amountWithFee} w/ PayPal`}
                 </StatHelpText>
             </Stat>
+            <Stat>
+                <StatLabel>
+                    Bill generated on
+                </StatLabel>
+                <StatHelpText>
+                    {`${bill?.generatedDate}`}
+                </StatHelpText>
+            </Stat>
         </Box>
     );
 }

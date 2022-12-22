@@ -28,12 +28,13 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
     const attested = (props.insuranceAttested || insuranceAttested);
 
     const currentTime = new Date().getTime();
-    const firstOfYear = new Date(billingYear + 1, 0, 1).getTime();
+
+    const startOfBillingPeriod = new Date(billingYear, 11, 21).getTime();
 
     let renewalPaymentComponent = (
         <>
             <Box>
-                {`Renewal and payment options are available after January 1st, ${billingYear + 1}.`}
+                {`Renewal and payment options are available on or after January 1st, ${billingYear + 1}.`}
             </Box>
             <Box>
                 <Button
@@ -52,7 +53,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
             </Box>
         </>
     );
-    if (currentTime >= firstOfYear) {
+    if (currentTime >= startOfBillingPeriod) {
         renewalPaymentComponent = (
             <>
                 <Button
@@ -115,6 +116,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                 <Box m={3}>
                     <Box mb={2}>
                         Your dues are listed below.  You can pay via mail, in person, or via the Paypal button.
+                        If your dues are $0 no payment options are presented as we just need attestation of insurance.
                     </Box>
                     <BillingStatsDisplay bill={props.viewBill} />
                     <Box mb={1}>
