@@ -121,9 +121,12 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     <BillingStatsDisplay bill={props.viewBill} />
                     <Box mb={1}>
                         By clicking this box, I attest that I have, and will maintain, valid health insurance for the
-                        {` ${billingYear + 1} season.  I further agree that failure to maintain such valid `}
-                        health insurance can lead to suspension or revocation of my membership. I agree to notify
-                        PRA of any change in my insurance status.
+                        {` ${billingYear + 1} season.  I agree to notify PRA of any change in my insurance status.`}
+                        <p />
+                        I also agree to the PRA sound rule and code of conduct found at
+                        &nbsp;
+                        <a target="_blank" href="https://palmyramx.com" rel="noreferrer">palmyramx.com</a>
+                        .
                     </Box>
                     <WrappedSwitchInput
                         wrapperText="(Payment options appear after you agree to this if applicable)"
