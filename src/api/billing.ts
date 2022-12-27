@@ -220,10 +220,13 @@ billing.patch('/attestIns/:billId', async (req: Request, res: Response) => {
             if (Number.isNaN(billId)) {
                 throw new Error('not found');
             }
-            await markInsuranceAttestation(billId);
+            const originalBill = await getBill(billId);
+            if (!originalBill.curYearIns) {
+                await markInsuranceAttestation(billId);
+            }
             const bill = await getBill(billId);
             // if they marked the attestation as complete, send an email.
-            if (bill.curYearIns) {
+            if (!originalBill.curYearIns && bill.curYearIns) {
                 await sendInsuranceConfirmEmail(bill);
             }
             response = {};

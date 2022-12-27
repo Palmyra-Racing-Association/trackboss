@@ -7,10 +7,11 @@ interface wrappedSwitchProps {
     // eslint-disable-next-line no-unused-vars
     onSwitchChange: (value: boolean) => void,
     maxWidth: number,
+    locked?: boolean,
 }
 
 export default function WrappedSwitchInput(props: wrappedSwitchProps) {
-    const { wrapperText, defaultChecked, onSwitchChange, maxWidth } = props;
+    const { wrapperText, defaultChecked, onSwitchChange, maxWidth, locked } = props;
     return (
         <Box maxWidth={maxWidth}>
             <Text fontSize="sm">{wrapperText}</Text>
@@ -23,7 +24,12 @@ export default function WrappedSwitchInput(props: wrappedSwitchProps) {
                         onSwitchChange(event.currentTarget.checked);
                     }
                 }
+                isDisabled={locked}
             />
         </Box>
     );
 }
+
+WrappedSwitchInput.defaultProps = {
+    locked: false,
+};

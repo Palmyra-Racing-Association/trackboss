@@ -23,7 +23,7 @@ interface duesModalProps {
 export default function DuesAndWaiversModal(props: duesModalProps) {
     const billingYear = props.viewBill?.year || new Date().getFullYear();
 
-    const [insuranceAttested, setInsuranceAttested] = useState<boolean>(false);
+    const [insuranceAttested, setInsuranceAttested] = useState<boolean>(props.viewBill?.curYearIns || false);
 
     const attested = (props.insuranceAttested || insuranceAttested);
 
@@ -133,6 +133,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                         defaultChecked={attested}
                         onSwitchChange={setInsuranceAttested}
                         maxWidth={400}
+                        locked={attested}
                     />
                 </Box>
 

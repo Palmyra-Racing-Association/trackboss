@@ -11,6 +11,7 @@ import { aws_logs as logs } from 'aws-cdk-lib';
 import { aws_ssm as ssm } from 'aws-cdk-lib';
 import { aws_sqs as sqs } from 'aws-cdk-lib';
 import { aws_sns as sns } from 'aws-cdk-lib';
+import { DatabaseInstanceEngine, MysqlEngineVersion } from 'aws-cdk-lib/aws-rds';
 import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
 
 export class DeployStack extends Stack {
@@ -198,6 +199,12 @@ export class DeployStack extends Stack {
 
     // create queue
     const queue = new sqs.Queue(this, 'trackboss-email-queue');
+
+    const rdsParamGroup = new rds.ParameterGroup(this, 'trackbossRdsParamGroup', {
+      engine: DatabaseInstanceEngine.mysql({ version: MysqlEngineVersion.VER_5_7 }),
+      description: 'RDS MySql parameter group to allow the use of triggers.', 
+    });  
+    rdsParamGroup.addParameter('log_bin_trust_function_creators','1');
     
     new ssm.StringParameter(this, 'cognitoPoolId', {
       allowedPattern: '.*',

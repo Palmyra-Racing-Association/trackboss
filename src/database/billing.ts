@@ -153,7 +153,7 @@ export async function markInsuranceAttestation(id: number): Promise<void> {
     let result;
     try {
         const sql =
-          'update member_bill set cur_year_ins = (CASE WHEN cur_year_ins = 1 THEN 0 ELSE 1 END) where bill_id = ?';
+          'update member_bill set cur_year_ins = 1 where bill_id = ?';
         [result] = await getPool().query<OkPacket>(sql, [id]);
     } catch (e) {
         logger.error(`DB error marking bill as paid: ${e}`);

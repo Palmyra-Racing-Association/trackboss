@@ -1,6 +1,6 @@
 import {
     Button,
-    Heading, Modal, ModalContent, ModalOverlay, useDisclosure, VStack,
+    Heading, Modal, ModalContent, ModalOverlay, Text, useDisclosure, VStack,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -158,8 +158,14 @@ export default function DuesAndWaiversList() {
                                 }
                             }
                         }
+                        locked={selectedBill?.curYearIns}
                         maxWidth={400}
                     />
+                    <Text
+                        fontSize="sm"
+                    >
+                        Once insurance is attested, this checkbox locks so contact support if you need to undo it.
+                    </Text>
                     <Button
                         mt={10}
                         variant="outline"
