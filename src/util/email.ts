@@ -75,7 +75,9 @@ export async function sendAppConfirmationEmail(application: any) {
 export async function sendNewMemberEmail(application: any) {
     const newMemberEmail = await getEmailById('NEW_MEMBERSHIP');
     newMemberEmail.text = addNameToEmail(application.firstName, application.lastName, newMemberEmail.text);
-    newMemberEmail.text = newMemberEmail.text.replace(/applicationNotesShared/, application.applicationNotesShared);
+    if (application.applicationNotesShared) {
+        newMemberEmail.text = newMemberEmail.text.replace(/applicationNotesShared/, application.applicationNotesShared);
+    }
     newMemberEmail.to = application.email;
     await sendTextEmail(newMemberEmail);
     logger.info(`new applicant acceptance sent for application ${application.id} (${application.lastName})`);
@@ -84,7 +86,10 @@ export async function sendNewMemberEmail(application: any) {
 export async function sendAppRejectedEmail(application: any) {
     const appRejectedEmail = await getEmailById('APPLICATION_REJECTED');
     appRejectedEmail.text = addNameToEmail(application.firstName, application.lastName, appRejectedEmail.text);
-    appRejectedEmail.text = appRejectedEmail.text.replace(/applicationNotesShared/, application.applicationNotesShared);
+    if (application.applicationNotesShared) {
+        appRejectedEmail.text =
+            appRejectedEmail.text.replace(/applicationNotesShared/, application.applicationNotesShared);
+    }
     appRejectedEmail.to = application.email;
     await sendTextEmail(appRejectedEmail);
     logger.info(`new applicant rejection sent for application ${application.id} (${application.lastName})`);

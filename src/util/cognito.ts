@@ -14,6 +14,16 @@ export async function createCognitoUser(email: string, isMembershipAdmin: boolea
     const createResponse = await cognitoIdp.adminCreateUser({
         UserPoolId: poolId,
         Username: email,
+        UserAttributes: [
+            {
+                Name: 'email',
+                Value: email,
+            },
+            {
+                Name: 'email_verified',
+                Value: 'True',
+            },
+        ],
     }).promise();
     logger.debug(JSON.stringify(createResponse));
     logger.info(`created Cognito user ${createResponse.User?.Username}`);

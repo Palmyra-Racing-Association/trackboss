@@ -134,6 +134,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                         onSwitchChange={setInsuranceAttested}
                         maxWidth={400}
                         locked={attested}
+                        toastMessage="Insurance attestation has been recorded and will be emailed to you."
                     />
                 </Box>
 
