@@ -1,4 +1,4 @@
-import { Box, Switch, Text } from '@chakra-ui/react';
+import { Box, Switch, Text, useToast } from '@chakra-ui/react';
 import React from 'react';
 
 interface wrappedSwitchProps {
@@ -8,10 +8,12 @@ interface wrappedSwitchProps {
     onSwitchChange: (value: boolean) => void,
     maxWidth: number,
     locked?: boolean,
+    toastMessage?: string,
 }
 
 export default function WrappedSwitchInput(props: wrappedSwitchProps) {
     const { wrapperText, defaultChecked, onSwitchChange, maxWidth, locked } = props;
+    const toast = useToast();
     return (
         <Box maxWidth={maxWidth}>
             <Text fontSize="sm">{wrapperText}</Text>
@@ -22,6 +24,17 @@ export default function WrappedSwitchInput(props: wrappedSwitchProps) {
                 onChange={
                     (event) => {
                         onSwitchChange(event.currentTarget.checked);
+                        if (props.toastMessage) {
+                            toast({
+                                containerStyle: {
+                                    background: 'orange',
+                                },
+                                description: props.toastMessage,
+                                status: 'success',
+                                duration: 5000,
+                                isClosable: true,
+                            });
+                        }
                     }
                 }
                 isDisabled={locked}
@@ -32,4 +45,5 @@ export default function WrappedSwitchInput(props: wrappedSwitchProps) {
 
 WrappedSwitchInput.defaultProps = {
     locked: false,
+    toastMessage: '',
 };

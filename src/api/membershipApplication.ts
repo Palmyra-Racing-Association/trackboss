@@ -15,6 +15,7 @@ import { PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
 import { MembershipApplication } from '../typedefs/membershipApplication';
 import { PostNewMembershipRequest } from '../typedefs/membership';
 import { insertMembership } from '../database/membership';
+import { generateBill, getWorkPointThreshold } from '../database/billing';
 
 const membershipApplication = Router();
 
@@ -107,10 +108,11 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             modifiedBy: actingUser.memberId,
         };
         const primaryMemberId = await insertMember(newMember);
+        const currentYear = (new Date()).getFullYear();
         const newMembership : PostNewMembershipRequest = {
             // Associate member
             membershipAdminId: primaryMemberId,
-            yearJoined: (new Date()).getFullYear(),
+            yearJoined: currentYear,
             address: application.address,
             city: application.city,
             state: application.state,
@@ -125,6 +127,16 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         await patchMember(`${primaryMemberId}`, memberUpdate);
         // now send a welcome email to the member.
         await sendNewMemberEmail(application);
+        const { threshold } = await getWorkPointThreshold(currentYear - 1);
+        const billId = await generateBill({
+            amount: 575,
+            amountWithFee: 591.98,
+            membershipId: newMembershipId,
+            pointsEarned: 0,
+            pointsThreshold: threshold,
+            workDetail: [],
+        });
+        logger.info(`Generated bill ${billId} for membership ${newMembershipId} - application converted to member.`);
     } catch (error: any) {
         logger.error(error);
         res.status(500);
