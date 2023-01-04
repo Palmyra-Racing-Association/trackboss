@@ -82,7 +82,7 @@ function Dashboard() {
                 }
                 <Center>
                     <SimpleGrid columns={[1, null, 3]} spacing="20px">
-                        <WorkPointsCard percent={percent} />
+                        <WorkPointsCard percent={percent} year={(new Date()).getFullYear()} />
                         {
                             eventCardProps ? (
                                 <EventCard

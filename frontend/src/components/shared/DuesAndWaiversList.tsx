@@ -145,6 +145,7 @@ export default function DuesAndWaiversList() {
                                 }
                             }
                         }
+                        toastMessage={`${selectedBill?.firstName} ${selectedBill?.lastName} marked as paid.`}
                         maxWidth={400}
                     />
                     <WrappedSwitchInput
@@ -159,6 +160,7 @@ export default function DuesAndWaiversList() {
                             }
                         }
                         locked={selectedBill?.curYearIns}
+                        toastMessage={`${selectedBill?.firstName} ${selectedBill?.lastName} paperwork complete.`}
                         maxWidth={400}
                     />
                     <Text

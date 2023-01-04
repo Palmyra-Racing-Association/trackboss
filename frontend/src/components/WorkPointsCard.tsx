@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface cardProps {
     percent: number,
+    year: number,
 }
 
 export default function WorkPointsCard(props: cardProps) {
@@ -46,7 +47,7 @@ export default function WorkPointsCard(props: cardProps) {
                             {props.percent}
                             %
                         </Text>
-                        <Text fontSize="xl">of this year&apos;s work points</Text>
+                        <Text fontSize="xl">{`of ${props.year}'s work points`}</Text>
                         <Text fontSize="xx-small">
                             Any work that you have been paid for is not included in this total.  This also includes
                             work that is signed up for but not completed, which will be removed if it is not completed.

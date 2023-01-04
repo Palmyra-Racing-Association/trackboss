@@ -1,8 +1,8 @@
 name: Back end deployment
 on:
-  push:
-      branches:    
-        - main
+  # push:
+  #    branches:    
+  #      - main
   workflow_dispatch:
 env:
   NODE_VERSION: "16"
