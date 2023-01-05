@@ -1,6 +1,7 @@
 import {
     Button,
-    Heading, Modal, ModalContent, ModalOverlay, Text, useDisclosure, VStack,
+    Heading, Modal, ModalContent, ModalOverlay, Stat, StatGroup, StatHelpText, StatLabel,
+    StatNumber, Text, useDisclosure, VStack,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -16,7 +17,9 @@ export default function DuesAndWaiversList() {
     const { state } = useContext(UserContext);
     const [allBillsData, setAllBillsData] = useState<Bill[]>([]);
     const [filteredBills, setFilteredBills] = useState<Bill[]>([]);
-
+    const [markedPaid, setMarkedPaid] = useState<number>(0);
+    const [markedAttested, setMarkedAttested] = useState<number>(0);
+    const [owesZero, setOwesZero] = useState<number>(0);
     const [selectedBill, setSelectedBill] = useState<Bill>();
     const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -24,8 +27,19 @@ export default function DuesAndWaiversList() {
 
     async function getMembershipBillData() {
         const memberBills = await getBills(state.token) as Bill[];
+        let attested = 0;
+        let paid = 0;
+        let owesNothing = 0;
+        memberBills.forEach((bill) => {
+            if (bill.curYearIns) attested++;
+            if (bill.curYearPaid) paid++;
+            if (bill.amount === 0) owesNothing++;
+        });
         setAllBillsData(memberBills as Bill[]);
         setFilteredBills(memberBills as Bill[]);
+        setMarkedPaid(paid);
+        setMarkedAttested(attested);
+        setOwesZero(owesNothing);
     }
 
     useEffect(() => {
@@ -87,6 +101,18 @@ export default function DuesAndWaiversList() {
 
     return (
         <VStack mt={25}>
+            <StatGroup>
+                <Stat>
+                    <StatLabel>Paid or Owes $0</StatLabel>
+                    <StatNumber>{markedPaid}</StatNumber>
+                    <StatHelpText>{`${owesZero} owe $0`}</StatHelpText>
+                </Stat>
+                <Stat>
+                    <StatLabel>Rules and Insurance</StatLabel>
+                    <StatNumber>{markedAttested}</StatNumber>
+                    <StatHelpText>{`Of ${allBillsData.length}`}</StatHelpText>
+                </Stat>
+            </StatGroup>
             <DataSearchBox
                 onTextChange={setSearchTerm}
                 searchValue={searchTerm}
