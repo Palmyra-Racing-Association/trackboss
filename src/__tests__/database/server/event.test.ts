@@ -61,7 +61,8 @@ describe('getEventList()', () => {
         const results = await getEventList(undefined, end);
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
-            expect(Date.parse(result.start) < Date.parse(end));
+            const startDate = result.start.toString();
+            expect(Date.parse(startDate) < Date.parse(end));
         });
     });
 

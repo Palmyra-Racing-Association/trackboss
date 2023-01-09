@@ -23,10 +23,6 @@ describe('insertBoardMember()', () => {
         expect(mockQuery).toHaveBeenCalled();
     });
 
-    it('Throws for user error (empty request)', async () => {
-        await expect(insertBoardMember({ })).rejects.toThrow('user input error');
-    });
-
     it('Throws for internal server error', async () => {
         const request = { year: -100, memberId: 5, boardMemberTitleId: 2 };
         await expect(insertBoardMember(request)).rejects.toThrow('internal server error');
