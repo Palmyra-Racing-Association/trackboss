@@ -153,6 +153,10 @@ describe('generateNewBills()', () => {
             pointsEarned: 0,
             pointsThreshold: 0,
             dueDate: new Date().toDateString(),
+            firstName: 'Rando',
+            lastName: 'Mando',
+            membershipId: 69420,
+            curYearIns: false,
         }];
         const year = new Date().getFullYear();
         const threshold = 100;
@@ -241,6 +245,13 @@ describe.skip('emailBills()', () => {
             membershipAdminEmail: 'em@il.com',
             emailedBill: undefined,
             curYearPaid: true,
+            firstName: 'Jimbus',
+            lastName: 'Gimbus',
+            membershipId: 69420,
+            curYearIns: false,
+            dueDate: '2023-02-15',
+            pointsEarned: 1,
+            pointsThreshold: 10,
         }];
         const today = format(new Date(), 'yyyy-MM-dd');
 
@@ -263,6 +274,12 @@ describe.skip('emailBills()', () => {
             curYearPaid: true,
             pointsEarned: 0,
             threshold: 0,
+            membershipId: 69420,
+            curYearIns: false,
+            dueDate: '2023-02-15',
+            pointsThreshold: 10,
+            firstName: 'Jimbus',
+            lastName: 'Gimbus',
         }];
 
         // TODO: probably gonna need additional mock(s) here
@@ -282,6 +299,14 @@ describe.skip('emailBills()', () => {
             membershipAdminEmail: 'em@il.com',
             emailedBill: undefined,
             curYearPaid: true,
+            pointsEarned: 0,
+            threshold: 0,
+            membershipId: 69420,
+            curYearIns: false,
+            dueDate: '2023-02-15',
+            pointsThreshold: 10,
+            firstName: 'Jimbus',
+            lastName: 'Gimbus',
         }, {
             billId: 1,
             generatedDate: '2022-03-21',
@@ -293,7 +318,12 @@ describe.skip('emailBills()', () => {
             emailedBill: undefined,
             curYearPaid: false,
             pointsEarned: 0,
-            threshold: 0,
+            membershipId: 69420,
+            curYearIns: false,
+            dueDate: '2023-02-15',
+            pointsThreshold: 10,
+            firstName: 'Jimbus',
+            lastName: 'Gimbus',
         }];
         const today = format(new Date(), 'yyyy-MM-dd');
 

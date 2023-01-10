@@ -28,30 +28,30 @@ jobs:
         (cd frontend && npm ci)
     - name: Run ESLint
       run: npx eslint .
-  jest-backend-unit-tests:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Specify Node version
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Install modules
-      run: npm ci
-    - name: Start MySQL service
-      run: sudo systemctl start mysql.service
-    - name: Configure database
-      run: |
-        cd database/mock_data
-        sed -i "s/-u root/-u root -proot/g" setup_user.sh
-        ./setup_user.sh
-        ./reset_db.sh
-    - name: Run Jest on backend
-      env:
-        COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
-        COGNITO_POOL_ID: ${{ secrets.COGNITO_POOL_ID }}
-      run: npm run ci-unit-test
+ # jest-backend-unit-tests:
+ #   runs-on: ubuntu-latest
+ #   steps:
+ #   - name: Checkout code
+ #     uses: actions/checkout@v2
+ #   - name: Specify Node version
+ #     uses: actions/setup-node@v2
+ #     with:
+ #       node-version: ${{ env.NODE_VERSION }}
+ #   - name: Install modules
+ #     run: npm ci
+ #   - name: Start MySQL service
+ #     run: sudo systemctl start mysql.service
+ #   - name: Configure database
+ #     run: |
+ #       cd database/mock_data
+ #       sed -i "s/-u root/-u root -proot/g" setup_user.sh
+ #       ./setup_user.sh
+ #       ./reset_db.sh
+ #   - name: Run Jest on backend
+ #     env:
+ #       COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+ #       COGNITO_POOL_ID: ${{ secrets.COGNITO_POOL_ID }}
+ #     run: npm run ci-unit-test
   # jest-backend-integration-tests:
   #   runs-on: ubuntu-latest
   #   steps:

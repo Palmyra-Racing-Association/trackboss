@@ -117,7 +117,8 @@ describe('getJobList()', () => {
         const results = await getJobList(getListRequestFilters);
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
-            expect(Date.parse(result.start)).toBeGreaterThan(Date.parse(date));
+            const startDate = result.start.toString();
+            expect(Date.parse(startDate)).toBeGreaterThan(Date.parse(date));
         });
     });
     it('Returns a filtered list of jobs by endDate', async () => {
@@ -129,7 +130,8 @@ describe('getJobList()', () => {
         const results = await getJobList(getListRequestFilters);
         expect(mockQuery).toHaveBeenCalled();
         results.forEach((result) => {
-            expect(Date.parse(result.start)).toBeLessThanOrEqual(Date.parse(date));
+            const startDate = result.start.toString();
+            expect(Date.parse(startDate)).toBeLessThanOrEqual(Date.parse(date));
         });
     });
     it('Throws for internal server error', async () => {

@@ -12,7 +12,7 @@ import { mockQuery } from './mockQuery';
 
 describe('generateBill()', () => {
     it.skip('Generates a single bill', async () => {
-        const request = { amount: 42, amountWithFee: 1, membershipId: 1 };
+        const request = { amount: 42, amountWithFee: 1, membershipId: 1, pointsEarned: 1, pointsThreshold: 10 };
 
         const result = await generateBill(request);
         expect(result).toBe(321);
@@ -20,7 +20,7 @@ describe('generateBill()', () => {
     });
 
     it('Throws for internal server error', async () => {
-        const request = { amount: -100, amountWithFee: 1, membershipId: 1 };
+        const request = { amount: -100, amountWithFee: 1, membershipId: 1, pointsEarned: 1, pointsThreshold: 10 };
 
         await expect(generateBill(request)).rejects.toThrow('internal server error');
         expect(mockQuery).toHaveBeenCalled();
