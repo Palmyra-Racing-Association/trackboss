@@ -29,11 +29,12 @@ member.post('/new', async (req: Request, res: Response) => {
         response = { reason: headerCheck.reason };
     } else {
         try {
-            await verify(headerCheck.token, 'Admin');
+            await verify(headerCheck.token, 'Membership Admin');
             const insertId = await insertMember(req.body);
             response = await getMember(`${insertId}`);
             res.status(201);
         } catch (e: any) {
+            logger.error('Error adding new member', e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };

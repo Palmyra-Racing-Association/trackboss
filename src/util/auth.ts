@@ -43,15 +43,16 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
             }
             if (permissionLevel === 'Admin') {
                 if (member.memberType !== 'Admin') {
-                    throw new Error('Forbidden');
+                    throw new Error(`Tried to perform an admin action as ${member.memberType}.  This isn't allowed!`);
                 }
             } else if (permissionLevel === 'Membership Admin') {
                 if (member.memberType !== 'Admin') {
                     if (member.memberType === 'Membership Admin') {
                         // make sure they have permission to act on this
-                        const validActors: number[] = await getValidActors(actingAs);
-                        if (!validActors.includes(member.memberId)) {
-                            throw new Error('Forbidden');
+                        const memberActingAs = await getMember(`${actingAs}`);
+                        if (memberActingAs.membershipAdminId !== member.memberId) {
+                            throw new Error(`${member.firstName} ${member.lastName} perform an action 
+                                on ${memberActingAs.firstName} ${memberActingAs.lastName}.  This is probably a bug.`);
                         }
                     } else {
                         throw new Error('Forbidden');
@@ -78,7 +79,7 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
         if (e.message === 'Forbidden') {
             throw new Error('Forbidden');
         }
-        throw new Error('Authorization Failed');
+        throw e;
     }
 };
 

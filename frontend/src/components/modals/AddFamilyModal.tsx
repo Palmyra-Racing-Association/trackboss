@@ -128,8 +128,8 @@ export default function AddFamilyModal(props: modalProps) {
                         Cancel
                     </Button>
                     <Button
-                        color="green"
-                        variant="ghost"
+                        color="black"
+                        bgColor="green"
                         mr={3}
                         size="lg"
                         disabled={
