@@ -1,6 +1,6 @@
 import {
     Button,
-    Heading, Modal, ModalContent, ModalOverlay, Stat, StatGroup, StatHelpText, StatLabel,
+    Heading, HStack, Modal, ModalContent, ModalOverlay, Stat, StatGroup, StatHelpText, StatLabel,
     StatNumber, Text, useDisclosure, VStack,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
@@ -22,6 +22,9 @@ export default function DuesAndWaiversList() {
     const [owesZero, setOwesZero] = useState<number>(0);
     const [selectedBill, setSelectedBill] = useState<Bill>();
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [filterNoPayment, setFilterNoPayment] = useState<boolean>(false);
+    const [filterPaperwork, setFilterPaperwork] = useState<boolean>(false);
+    const [filterPaid, setFilterPaid] = useState<boolean>(false);
 
     const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -59,6 +62,33 @@ export default function DuesAndWaiversList() {
         }
     }, [searchTerm]);
 
+    useEffect(() => {
+        if (!filterNoPayment) {
+            setFilteredBills(allBillsData);
+        } else {
+            const zeroDollarBills = allBillsData.filter((bill) => (bill.amount > 0));
+            setFilteredBills(zeroDollarBills);
+        }
+    }, [filterNoPayment]);
+
+    useEffect(() => {
+        if (!filterPaid) {
+            setFilteredBills(allBillsData);
+        } else {
+            const paidBills = allBillsData.filter((bill) => (!bill.curYearPaid));
+            setFilteredBills(paidBills);
+        }
+    }, [filterPaid]);
+
+    useEffect(() => {
+        if (!filterPaperwork) {
+            setFilteredBills(allBillsData);
+        } else {
+            const paperworkBills = allBillsData.filter((bill) => (!bill.curYearIns));
+            setFilteredBills(paperworkBills);
+        }
+    }, [filterPaperwork]);
+
     const columns: any = [
         {
             name: 'Last Name',
@@ -87,13 +117,13 @@ export default function DuesAndWaiversList() {
         },
         {
             name: 'Insurance Validated',
-            selector: (row: Bill) => `${row.curYearIns}`,
+            selector: (row: Bill) => (row.curYearIns ? 'Yes' : 'No'),
             sortable: true,
             maxWidth: '5',
         },
         {
             name: 'Bill paid',
-            selector: (row:Bill) => `${row.curYearPaid}`,
+            selector: (row:Bill) => (row.curYearPaid ? 'Yes' : 'No'),
             sortable: true,
             maxWidth: '5',
         },
@@ -117,6 +147,38 @@ export default function DuesAndWaiversList() {
                 onTextChange={setSearchTerm}
                 searchValue={searchTerm}
             />
+            <HStack>
+                <WrappedSwitchInput
+                    defaultChecked={false}
+                    maxWidth={300}
+                    wrapperText="Hide members paying $0"
+                    onSwitchChange={
+                        () => {
+                            setFilterNoPayment(!filterNoPayment);
+                        }
+                    }
+                />
+                <WrappedSwitchInput
+                    defaultChecked={false}
+                    maxWidth={300}
+                    wrapperText="Hide members with completed paperwork"
+                    onSwitchChange={
+                        () => {
+                            setFilterPaperwork(!filterPaperwork);
+                        }
+                    }
+                />
+                <WrappedSwitchInput
+                    defaultChecked={false}
+                    maxWidth={300}
+                    wrapperText="Hide members that have paid"
+                    onSwitchChange={
+                        () => {
+                            setFilterPaid(!filterPaid);
+                        }
+                    }
+                />
+            </HStack>
             <DataTable
                 columns={columns}
                 data={filteredBills as Bill[]}
