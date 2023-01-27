@@ -37,8 +37,10 @@
     },
     "dependencies": {
         "@aws-sdk/client-cloudwatch-logs": "^3.231.0",
+        "@mailchimp/mailchimp_marketing": "^3.0.80",
         "@types/body-parser": "^1.19.2",
         "@types/lodash": "^4.14.178",
+        "@types/mailchimp__mailchimp_marketing": "^3.0.6",
         "aws-jwt-verify": "^3.2.0",
         "aws-sdk": "^2.1278.0",
         "body-parser": "^1.20.1",

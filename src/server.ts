@@ -14,6 +14,11 @@ createVerifier();
 AWS.config.update({ region: 'us-east-1' });
 
 app.use('/api', api);
+app.use((err: any, req: any, res: any, next: () => void) => {
+    logger.error(`got an error going to ${req.route}.  That error was`);
+    logger.error(err);
+    next();
+});
 
 const server = app.listen(port, () => {
     logger.info(`PRA Club Manager API listening on port ${port}`);
