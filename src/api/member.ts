@@ -18,6 +18,12 @@ import logger from '../logger';
 import { deleteCognitoUser } from '../util/cognito';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 
+// this is here, in this way, because mailchimmp marketing doesn't have a proper typescript library and
+// so as a result, i'm using it in a Javasript way.  Once the @types/mailchimp-markeing thing gets updated we
+// can use that here. It doesn't really matter too much as I know what I am doing anyway and explinaed it here.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const mailchimpClient = require('@mailchimp/mailchimp_marketing');
+
 const member = Router();
 
 member.post('/new', async (req: Request, res: Response) => {
@@ -287,6 +293,64 @@ member.get('/list/voterEligibility/excel', async (req: Request, res: Response) =
     formatWorkbook(worksheet);
     // write workbook to buffer.
     httpOutputWorkbook(workbook, res, `members${new Date().getTime()}`);
+});
+
+member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
+    validateAdminAccess(req, res);
+    mailchimpClient.setConfig({
+        apiKey: process.env.MAILCHIMP,
+        server: 'us15',
+    });
+    try {
+        // magic numberism - this is the client ID that we are assigned by mailchimp because they only allow us one list
+        const response = await mailchimpClient.lists.getListMembersInfo('099d152f4d', { count: 1000 });
+        const mailchimpMembersList = response.members;
+        logger.info(`running reconcilation on mailchimp vs trackboss. Mailchimp shows ${mailchimpMembersList.length}`);
+        const removedEmails : object[] = [];
+        const missingEmails : object[] = [];
+        const result = {
+            mailchimpRecordCount: mailchimpMembersList.length,
+            trackbossFound: 0,
+            mailchipRemoved: removedEmails,
+            mailchimpMissing: missingEmails,
+        };
+        // not using forEach here because I want to build the response in sequence before sending it.
+        // eslint-disable-next-line no-restricted-syntax
+        for (const mailchimpMember of mailchimpMembersList) {
+            // eslint-disable-next-line no-await-in-loop
+            const memberByEmail = await getMemberByEmail(mailchimpMember.email_address);
+            if (!memberByEmail.memberId) {
+                logger.info(`${mailchimpMember.email_address} tagged for removal from mailchimp - not in trackboss.`);
+                result.mailchipRemoved.push({
+                    name: `${memberByEmail.lastName}, ${memberByEmail.firstName}`,
+                    email: mailchimpMember.email_address,
+                });
+            } else {
+                result.trackbossFound++;
+            }
+        }
+        let activeMembers = await getMemberList({});
+        activeMembers = activeMembers.filter((m) => m.active);
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const activeMember of activeMembers) {
+            // check and see if the active member is already in mailchimp.
+            const found = mailchimpMembersList.find((element:any) => (element.email_address === activeMember.email));
+            if (!found && activeMember.email) {
+                result.mailchimpMissing.push({
+                    name: `${activeMember.lastName}, ${activeMember.firstName}`,
+                    email: activeMember.email,
+                });
+            }
+        }
+        res.status(200);
+        res.send(result);
+    } catch (error) {
+        logger.error(`Error running mailchimp/trackboss reconciliation at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
 });
 
 export default member;
