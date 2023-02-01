@@ -49,7 +49,13 @@ async function validateAdminAccess(req: Request, res: Response) : Promise<any> {
  * @param status status
  */
 const sendApplicationStatus = async (req: Request, res: Response, status: string) => {
-    await validateAdminAccess(req, res);
+    try {
+        await validateAdminAccess(req, res);
+    } catch (error) {
+        logger.error('Error updating application status', error);
+        res.status(500);
+        res.send(error);
+    }
     const id = parseInt(req.params.id, 10);
     const { internalNotes, applicantNotes } = req.body;
     const updatedApplication = await updateApplicationStatus(id, status, internalNotes, applicantNotes);

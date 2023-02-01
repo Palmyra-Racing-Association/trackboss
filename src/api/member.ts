@@ -296,12 +296,12 @@ member.get('/list/voterEligibility/excel', async (req: Request, res: Response) =
 });
 
 member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
-    validateAdminAccess(req, res);
-    mailchimpClient.setConfig({
-        apiKey: process.env.MAILCHIMP,
-        server: 'us15',
-    });
     try {
+        await validateAdminAccess(req, res);
+        mailchimpClient.setConfig({
+            apiKey: process.env.MAILCHIMP,
+            server: 'us15',
+        });
         // magic numberism - this is the client ID that we are assigned by mailchimp because they only allow us one list
         const response = await mailchimpClient.lists.getListMembersInfo('099d152f4d', { count: 1000 });
         const mailchimpMembersList = response.members;
@@ -338,9 +338,17 @@ member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
             const found = mailchimpMembersList.find((element:any) => (element.email_address === activeMember.email));
             if (!found && activeMember.email) {
                 result.mailchimpMissing.push({
-                    name: `${activeMember.lastName}, ${activeMember.firstName}`,
-                    email: activeMember.email,
+                    full_name: `${activeMember.firstName} ${activeMember.lastName}`,
+                    email_address: activeMember.email,
+                    merge_fields: {
+                        FNAME: activeMember.firstName,
+                        LNAME: activeMember.lastName,
+                        PHONE: activeMember.phoneNumber,
+                    },
+                    status: 'subscribed',
                 });
+                // eslint-disable-next-line max-len
+                logger.info(`${activeMember.firstName} ${activeMember.lastName} is not in mailchimp with ${activeMember.email}`);
             }
         }
         res.status(200);
