@@ -26,7 +26,6 @@ export default function MembershipApplicationModal(props: appModalProps) {
     const [internalNotes, setInternalNotes] = useState<string>(membershipApplication.internalNotes || '');
     const isInReview = (membershipApplication.status === 'Review');
 
-    props.addAction();
     return (
         <Modal isCentered size="xl" isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />

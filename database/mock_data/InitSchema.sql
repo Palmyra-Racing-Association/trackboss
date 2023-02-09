@@ -405,6 +405,7 @@ CREATE TABLE `membership_application` (
   `application_json` json DEFAULT NULL,
   `application_notes_internal` varchar(4000) DEFAULT NULL,
   `application_notes_shared` varchar(4000) DEFAULT NULL,
+  `application_priority` int(11) default null,
   PRIMARY KEY (`membership_application_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 

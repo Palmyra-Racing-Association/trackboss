@@ -34,4 +34,5 @@ export type MembershipApplication = {
     familyMember5Age?: number,
     internalNotes?: string,
     sharedNotes?: string,
+    applicationPriority?: number,
 }

@@ -29,14 +29,6 @@ CREATE TABLE IF NOT EXISTS `pradb`.`member_types` (
   PRIMARY KEY (`member_type_id`))
 ENGINE = InnoDB;
 
-drop table if exists pradb.membership_types;
-
-CREATE TABLE IF NOT EXISTS `pradb`.`membership_types` (
-  `membership_type_id` INT NOT NULL AUTO_INCREMENT,
-  `type` VARCHAR(255) NOT NULL,
-  `base_dues_amt` FLOAT NULL,
-  PRIMARY KEY (`membership_type_id`))
-ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `pradb`.`member`
@@ -115,15 +107,6 @@ CREATE TABLE IF NOT EXISTS `pradb`.`membership` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-ALTER TABLE `pradb`.`membership`
-ADD COLUMN `membership_type_id` INT(11) NULL AFTER `OLD_MEMBERSHIP_ID`,
-ADD INDEX `FK_membership_type_idx` (`membership_type_id` ASC);
-ALTER TABLE `pradb`.`membership`
-ADD CONSTRAINT `FK_membership_type`
-  FOREIGN KEY (`membership_type_id`)
-  REFERENCES `pradb`.`membership_types` (`membership_type_id`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
 
 -- -----------------------------------------------------
 -- Table `pradb`.`member_bikes`
@@ -171,9 +154,6 @@ CREATE TABLE IF NOT EXISTS `pradb`.`member_bill` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-ALTER TABLE `pradb`.`member_bill` 
-ADD COLUMN `threshold` DOUBLE NULL DEFAULT NULL AFTER `cur_year_paid`,
-ADD COLUMN `points_earned` DOUBLE NULL DEFAULT NULL AFTER `threshold`;
 
 -- -----------------------------------------------------
 -- Table `pradb`.`member_status`
@@ -336,6 +316,7 @@ CREATE TABLE IF NOT EXISTS `pradb`.`job` (
   `verified` BIT NOT NULL,
   `verified_date` DATE NULL,
   `points_awarded` FLOAT NULL,
+  `cash_payout` FLOAT NULL,
   `paid` BIT NOT NULL,
   `paid_date` DATE NULL,
   PRIMARY KEY (`job_id`),
@@ -365,8 +346,6 @@ CREATE TABLE IF NOT EXISTS `pradb`.`job` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-ALTER TABLE `pradb`.`job` 
-ADD COLUMN `paid_labor` VARCHAR(255) NULL AFTER `member_id`;
 
 -- -----------------------------------------------------
 -- Table `pradb`.`event_job`
@@ -405,13 +384,41 @@ CREATE TABLE IF NOT EXISTS `pradb`.`point_threshold` (
   PRIMARY KEY (`year`))
 ENGINE = InnoDB;
 
-CREATE TABLE `pradb`.`gate_code` (
-  `gate_code_id` INT NOT NULL AUTO_INCREMENT,
-  `year` INT NULL,
-  `gate_code` VARCHAR(20) NULL,
-  PRIMARY KEY (`gate_code_id`),
-  UNIQUE INDEX `gate_code_id_UNIQUE` (`gate_code_id` ASC),
-  INDEX `idx_gate_code_year` (`year` ASC));
+CREATE TABLE `pradb`.`earned_points_history` (
+  `earned_points_history_id` int(11) NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL,
+  `date` datetime DEFAULT NULL,
+  `description` text,
+  `point_value` int(11) DEFAULT NULL,
+  `old_member_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`earned_points_history_id`),
+  KEY `idx_points_history_date_member` (`date`,`old_member_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=4211;
+
+DROP TABLE IF EXISTS `pradb`.`membership_application`;
+
+CREATE TABLE `membership_application` (
+  `membership_application_id` int(11) NOT NULL AUTO_INCREMENT,
+  `application_status` varchar(50) NOT NULL,
+  `application_email` varchar(255) NOT NULL,
+  `application_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `application_json` json DEFAULT NULL,
+  `application_notes_internal` varchar(4000) DEFAULT NULL,
+  `application_notes_shared` varchar(4000) DEFAULT NULL,
+  `application_priority` int(11) default null,
+  PRIMARY KEY (`membership_application_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `pradb`.`emails`;
+
+CREATE TABLE `pradb`.`emails` (
+  `email_id` INT NOT NULL AUTO_INCREMENT,
+  `purpose` VARCHAR(45) NOT NULL,
+  `subject` VARCHAR(255) NULL,
+  `text` VARCHAR(4000) NULL,
+  PRIMARY KEY (`email_id`),
+  UNIQUE INDEX `email_id_UNIQUE` (`email_id` ASC)) ENGINE=InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

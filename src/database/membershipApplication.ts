@@ -36,6 +36,7 @@ export async function getMembershipApplications() : Promise<MembershipApplicatio
         app.status = result.application_status;
         app.internalNotes = result.application_notes_internal;
         app.sharedNotes = result.application_notes_shared;
+        app.applicationPriority = result.application_priority;
         applications.push(app);
     });
     return applications;

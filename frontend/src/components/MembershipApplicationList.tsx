@@ -14,6 +14,11 @@ const columns: any = [
         sortable: true,
     },
     {
+        name: 'Priority',
+        selector: (row: MembershipApplication) => (row.applicationPriority ? 'High' : 'Medium'),
+        sortable: true,
+    },
+    {
         name: 'Last Name',
         selector: (row: MembershipApplication) => row.lastName,
         sortable: true,
@@ -64,7 +69,11 @@ export default function MembershipApplicationList() {
     const [cells, setCells] = useState<MembershipApplication[]>([]);
     const [filteredCells, setFilteredCells] = useState<MembershipApplication[]>([]);
     const { state } = useContext(UserContext);
-    const { isOpen, onClose, onOpen } = useDisclosure();
+    const [dirty, setDirty] = useState<boolean>(false);
+
+    const { isOpen, onClose, onOpen } = useDisclosure(
+        { onClose: () => setDirty((olDirtyGotYaMoney) => !olDirtyGotYaMoney) },
+    );
     const [selectedApplication, setSelectedApplication] = useState<MembershipApplication>();
     const [searchTerm, setSearchTerm] = useState<string>('');
 
@@ -76,7 +85,7 @@ export default function MembershipApplicationList() {
 
     useEffect(() => {
         getMembershipApplicationsData();
-    }, []);
+    }, [dirty]);
 
     useEffect(() => {
         if (searchTerm === '') {
@@ -106,7 +115,7 @@ export default function MembershipApplicationList() {
                 responsive
                 striped
                 subHeaderWrap
-                defaultSortFieldId={1}
+                defaultSortFieldId={2}
                 customStyles={customStyles}
                 paginationComponentOptions={
                     {
