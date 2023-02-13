@@ -5,6 +5,20 @@ import api from './api/api';
 import logger from './logger';
 import { createVerifier } from './util/auth';
 
+process.on('uncaughtException', (error, origin) => {
+    logger.error('----- Uncaught exception -----');
+    logger.error(error);
+    logger.error('----- Exception origin -----');
+    logger.error(origin);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+    logger.error('----- Unhandled Rejection at -----');
+    logger.error(promise);
+    logger.error('----- Reason -----');
+    logger.error(reason);
+});
+
 const app = express();
 
 const port = process.env.PORT || 8080;
