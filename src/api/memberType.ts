@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import logger from '../logger';
 import { checkHeader, verify } from '../util/auth';
 import {
     GetMemberTypeListResponse,
@@ -24,6 +25,8 @@ memberType.get('/list', async (req: Request, res: Response) => {
             res.status(200);
             response = memberTypeList;
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -50,6 +53,8 @@ memberType.get('/:memberTypeID', async (req: Request, res: Response) => {
             response = await getMemberType(Number(memberTypeID));
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -80,6 +85,8 @@ memberType.patch('/:memberTypeID', async (req: Request, res: Response) => {
             response = await getMemberType(Number(memberTypeID));
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };

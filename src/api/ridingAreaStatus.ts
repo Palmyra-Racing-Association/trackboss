@@ -43,6 +43,8 @@ ridingAreaStatus.get('/', async (req: Request, res: Response) => {
             response = await getRidingAreaStatuses();
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -67,6 +69,7 @@ ridingAreaStatus.patch('/:id', async (req: Request, res: Response) => {
         const updatedArea = await flipRidingAreaStatus(Number(id), ridingArea);
         res.send(updatedArea);
     } catch (error: any) {
+        logger.error(`Error at path ${req.path}`);
         logger.error(error);
         res.status(500);
         res.send('Unable to process application due to error');

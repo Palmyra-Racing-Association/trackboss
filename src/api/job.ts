@@ -187,51 +187,73 @@ job.patch('/event/:eventId/:memberId', async (req: Request, res: Response) => {
         res.status(401);
         response = { reason: headerCheck.reason };
     } else {
-        const { eventId, memberId } = req.params;
-        // get an open event job.  This would normally be a meeting or a work day so there should be plenty.
-        const eventJob = await getOpenEventJob(parseInt(eventId, 10));
-        eventJob.memberId = parseInt(memberId, 10);
-        await patchJob(eventJob.jobId, eventJob);
-        response = eventJob;
+        try {
+            const { eventId, memberId } = req.params;
+            // get an open event job.  This would normally be a meeting or a work day so there should be plenty.
+            const eventJob = await getOpenEventJob(parseInt(eventId, 10));
+            eventJob.memberId = parseInt(memberId, 10);
+            await patchJob(eventJob.jobId, eventJob);
+            response = eventJob;
+        } catch (error: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(error);
+            res.status(500);
+            response = { reason: error.getMessage() };
+        }
     }
     res.send(response);
 });
 
 job.get('/list', async (req: Request, res: Response) => {
-    const response = await GetJobList(req, res);
+    let response: GetJobListResponse;
+    try {
+        response = await GetJobList(req, res);
+    } catch (error: any) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        response = { reason: error.getMessage() };
+    }
     res.send(response);
 });
 
 job.get('/list/excel', async (req: Request, res: Response) => {
-    // get the jobs list with the given parameters.
-    const jobsList = await GetJobList(req, res) as Job[];
-    // Create workbook and some meta datars about it.
-    const workbook = startWorkbook(`Signups for ${jobsList[0].event}`);
-    const worksheet = workbook.getWorksheet(1);
-    worksheet.columns = [
-        { header: 'Name', key: 'name', width: 13 },
-        { header: 'Job', key: 'job', width: 23 },
-        { header: 'Day', key: 'day', width: 10 },
-        { header: 'Points', key: 'pointValue', width: 6 },
-        { header: 'Cash', key: 'cashValue', width: 5 },
-        { header: 'Meal Ticket', key: 'mealTicket', width: 6 },
-        { header: 'Signature', key: 'signature', width: 32 },
-    ];
-    // add data
-    jobsList.forEach((jobRow) => {
-        worksheet.addRow({
-            name: jobRow.member,
-            job: jobRow.title,
-            day: jobRow.jobDay,
-            pointValue: jobRow.pointsAwarded,
-            cashValue: jobRow.cashPayout,
-            mealTicket: jobRow.mealTicket,
-            signature: '',
+    try {
+        // get the jobs list with the given parameters.
+        const jobsList = await GetJobList(req, res) as Job[];
+        // Create workbook and some meta datars about it.
+        const workbook = startWorkbook(`Signups for ${jobsList[0].event}`);
+        const worksheet = workbook.getWorksheet(1);
+        worksheet.columns = [
+            { header: 'Name', key: 'name', width: 13 },
+            { header: 'Job', key: 'job', width: 23 },
+            { header: 'Day', key: 'day', width: 10 },
+            { header: 'Points', key: 'pointValue', width: 6 },
+            { header: 'Cash', key: 'cashValue', width: 5 },
+            { header: 'Meal Ticket', key: 'mealTicket', width: 6 },
+            { header: 'Signature', key: 'signature', width: 32 },
+        ];
+        // add data
+        jobsList.forEach((jobRow) => {
+            worksheet.addRow({
+                name: jobRow.member,
+                job: jobRow.title,
+                day: jobRow.jobDay,
+                pointValue: jobRow.pointsAwarded,
+                cashValue: jobRow.cashPayout,
+                mealTicket: jobRow.mealTicket,
+                signature: '',
+            });
         });
-    });
-    formatWorkbook(worksheet);
-    // write workbook to buffer.
-    httpOutputWorkbook(workbook, res, `signups${new Date().getTime()}.xlsx`);
+        formatWorkbook(worksheet);
+        // write workbook to buffer.
+        httpOutputWorkbook(workbook, res, `signups${new Date().getTime()}.xlsx`);
+    } catch (error: any) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send({ reason: error.getMessage() });
+    }
 });
 
 job.get('/:jobId', async (req: Request, res: Response) => {
@@ -252,6 +274,8 @@ job.get('/:jobId', async (req: Request, res: Response) => {
             response = await getJob(id);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -286,6 +310,8 @@ job.patch('/:jobId', async (req: Request, res: Response) => {
             response = await getJob(id);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -327,6 +353,8 @@ job.patch('/verify/:jobId/:state', async (req: Request, res: Response) => {
             response = await getJob(id);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -361,6 +389,8 @@ job.patch('/remove/signup/:jobId', async (req: Request, res: Response) => {
             response = await getJob(id);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -403,6 +433,8 @@ job.delete('/:jobId', async (req: Request, res: Response) => {
             response = { jobId: id };
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };

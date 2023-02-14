@@ -3,6 +3,7 @@ import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/work
 import { getWorkPointsByMember, getWorkPointsByMembership, getWorkPointsList } from '../database/workPoints';
 import { GetMemberWorkPointsResponse, WorkPoints } from '../typedefs/workPoints';
 import { checkHeader, verify } from '../util/auth';
+import logger from '../logger';
 
 const workPoints = Router();
 
@@ -42,6 +43,8 @@ workPoints.get('/byMember/:memberID', async (req: Request, res: Response) => {
             response = await getWorkPointsByMember(id, year);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             switch (e.message) {
                 case 'user input error':
                     res.status(400);
@@ -78,6 +81,8 @@ workPoints.get('/byMembership/:membershipID', async (req: Request, res: Response
             response = await getWorkPointsByMembership(id, year);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             switch (e.message) {
                 case 'user input error':
                     res.status(400);
@@ -101,30 +106,37 @@ workPoints.get('/byMembership/:membershipID', async (req: Request, res: Response
 });
 
 workPoints.get('/list/excel', async (req: Request, res: Response) => {
-    const rightNow = new Date();
-    const workPointsByMember = await getWorkPointsList(rightNow.getFullYear()) as WorkPoints[];
-    const workbookTitle = `PRA members ${new Date().toLocaleDateString().replace(/\//gi, '-')}`;
-    const workbook = startWorkbook(workbookTitle);
-    const worksheet = workbook.getWorksheet(1);
-    worksheet.columns = [
-        { header: 'Last Name', key: 'lastName', width: 10 },
-        { header: 'First Name', key: 'firstName', width: 15 },
-        { header: 'Membership Type', key: 'membershipType', width: 15 },
-        { header: 'Points', key: 'points', width: 6 },
-        { header: 'Signature', key: 'signature', width: 25 },
-    ];
-    workPointsByMember.forEach((member) => {
-        worksheet.addRow({
-            firstName: member.firstName,
-            lastName: member.lastName,
-            membershipType: member.membershipType,
-            points: member.total,
-            signature: '',
+    try {
+        const rightNow = new Date();
+        const workPointsByMember = await getWorkPointsList(rightNow.getFullYear()) as WorkPoints[];
+        const workbookTitle = `PRA members ${new Date().toLocaleDateString().replace(/\//gi, '-')}`;
+        const workbook = startWorkbook(workbookTitle);
+        const worksheet = workbook.getWorksheet(1);
+        worksheet.columns = [
+            { header: 'Last Name', key: 'lastName', width: 10 },
+            { header: 'First Name', key: 'firstName', width: 15 },
+            { header: 'Membership Type', key: 'membershipType', width: 15 },
+            { header: 'Points', key: 'points', width: 6 },
+            { header: 'Signature', key: 'signature', width: 25 },
+        ];
+        workPointsByMember.forEach((member) => {
+            worksheet.addRow({
+                firstName: member.firstName,
+                lastName: member.lastName,
+                membershipType: member.membershipType,
+                points: member.total,
+                signature: '',
+            });
         });
-    });
-    formatWorkbook(worksheet);
-    // write workbook to buffer.
-    httpOutputWorkbook(workbook, res, `members${new Date().getTime()}`);
+        formatWorkbook(worksheet);
+        // write workbook to buffer.
+        httpOutputWorkbook(workbook, res, `members${new Date().getTime()}`);
+    } catch (error: any) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
 });
 
 export default workPoints;
