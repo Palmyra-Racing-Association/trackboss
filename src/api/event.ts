@@ -10,6 +10,7 @@ import {
     PostNewEventResponse,
 } from '../typedefs/event';
 import { checkHeader, verify } from '../util/auth';
+import logger from '../logger';
 
 const event = Router();
 
@@ -27,6 +28,8 @@ event.post('/new', async (req: Request, res: Response) => {
             response = await getEvent(insertId);
             res.status(201);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -101,6 +104,8 @@ event.get('/list', async (req: Request, res: Response) => {
             }
             response = eventList;
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -138,6 +143,8 @@ event.get('/:eventID', async (req: Request, res: Response) => {
             }
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -172,6 +179,8 @@ event.patch('/:eventID', async (req: Request, res: Response) => {
             response = await getEvent(id);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -212,6 +221,8 @@ event.delete('/:eventID', async (req: Request, res: Response) => {
             response = { eventId: id };
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };

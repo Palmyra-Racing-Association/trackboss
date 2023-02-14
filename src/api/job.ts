@@ -25,6 +25,8 @@ import {
 
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 
+import logger from '../logger';
+
 async function GetJobList(req: Request, res:Response) {
     const { authorization } = req.headers;
     let response: GetJobListResponse;
@@ -124,6 +126,8 @@ async function GetJobList(req: Request, res:Response) {
                 response = jobList;
             }
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -155,6 +159,8 @@ job.post('/new', async (req: Request, res: Response) => {
             response = await getJob(insertId);
             res.status(201);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
