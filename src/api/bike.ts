@@ -9,6 +9,7 @@ import {
     PostNewBikeResponse,
 } from '../typedefs/bike';
 import { checkHeader, verify } from '../util/auth';
+import logger from '../logger';
 
 const bike = Router();
 
@@ -26,6 +27,8 @@ bike.post('/new', async (req: Request, res: Response) => {
             response = await getBike(insertId);
             res.status(201);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -68,6 +71,8 @@ bike.get('/list', async (req: Request, res: Response) => {
             res.status(200);
             response = bikeList;
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -97,6 +102,8 @@ bike.get('/:bikeID', async (req: Request, res: Response) => {
             response = await getBike(Number(bikeID));
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -131,6 +138,8 @@ bike.patch('/:bikeID', async (req: Request, res: Response) => {
             response = await getBike(bikeIdNum);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -171,6 +180,8 @@ bike.delete('/:bikeID', async (req: Request, res: Response) => {
             response = { bikeId: bikeIdNum };
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
