@@ -15,6 +15,7 @@ import {
     patchBoardMember,
 } from '../database/boardMember';
 import { checkHeader, verify } from '../util/auth';
+import logger from '../logger';
 
 const boardMember = Router();
 
@@ -32,6 +33,8 @@ boardMember.post('/new', async (req: Request, res: Response) => {
             response = await getBoardMember(insertId);
             res.status(201);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -64,6 +67,8 @@ boardMember.get('/list', async (req: Request, res: Response) => {
             res.status(200);
             response = memberList;
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -94,6 +99,8 @@ boardMember.get('/:boardMemberId', async (req: Request, res: Response) => {
             response = await getBoardMember(id);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -128,6 +135,8 @@ boardMember.patch('/:boardMemberId', async (req: Request, res: Response) => {
             response = await getBoardMember(id);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -168,6 +177,8 @@ boardMember.delete('/:boardMemberId', async (req: Request, res: Response) => {
             response = { boardMemberId: id };
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };

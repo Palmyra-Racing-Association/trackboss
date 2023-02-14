@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import logger from '../logger';
 import { checkHeader, verify } from '../util/auth';
 import {
     GetJobTypeListResponse,
@@ -25,6 +26,8 @@ jobType.post('/new', async (req: Request, res: Response) => {
             response = await getJobType(insertId);
             res.status(201);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -57,6 +60,8 @@ jobType.get('/list', async (req: Request, res: Response) => {
             res.status(200);
             response = jobTypeList;
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -83,6 +88,8 @@ jobType.get('/list/:eventTypeName', async (req: Request, res: Response) => {
             res.status(200);
             response = jobTypeList;
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -109,6 +116,8 @@ jobType.get('/:jobTypeID', async (req: Request, res: Response) => {
             response = await getJobType(Number(jobTypeID));
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -139,6 +148,8 @@ jobType.patch('/:jobTypeID', async (req: Request, res: Response) => {
             response = await getJobType(Number(jobTypeID));
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };

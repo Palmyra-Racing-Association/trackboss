@@ -7,6 +7,7 @@ import {
     PostNewEventJobResponse,
 } from '../typedefs/eventJob';
 import { checkHeader, verify } from '../util/auth';
+import logger from '../logger';
 
 const eventJob = Router();
 
@@ -24,6 +25,8 @@ eventJob.post('/new', async (req: Request, res: Response) => {
             response = await getEventJob(insertId);
             res.status(201);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -56,6 +59,8 @@ eventJob.get('/:eventJobID', async (req: Request, res: Response) => {
             response = await getEventJob(Number(eventJobID));
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -90,6 +95,8 @@ eventJob.patch('/:eventJobID', async (req: Request, res: Response) => {
             response = await getEventJob(eventJobIdNum);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -130,6 +137,8 @@ eventJob.delete('/:eventJobID', async (req: Request, res: Response) => {
             response = { eventJobId: eventJobIdNum };
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };

@@ -43,6 +43,8 @@ gateCode.get('/latest', async (req: Request, res: Response) => {
             response = await getGateCodeLatest();
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -74,6 +76,8 @@ gateCode.get('/:year', async (req: Request, res: Response) => {
             response = await getGateCodeByYear(year);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -110,6 +114,8 @@ gateCode.post('/:year', async (req: Request, res: Response) => {
             response = await getGateCodeByYear(year);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -146,6 +152,8 @@ gateCode.put('/:year', async (req: Request, res: Response) => {
             response = await getGateCodeByYear(year);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };

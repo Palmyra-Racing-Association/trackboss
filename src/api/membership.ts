@@ -16,6 +16,7 @@ import {
     PostRegisterMembershipResponse,
 } from '../typedefs/membership';
 import { checkHeader, verify } from '../util/auth';
+import logger from '../logger';
 
 const membership = Router();
 
@@ -33,6 +34,8 @@ membership.post('/new', async (req: Request, res: Response) => {
             response = await getMembership(insertId);
             res.status(201);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -66,6 +69,8 @@ membership.get('/list', async (req: Request, res: Response) => {
             res.status(200);
             response = membershipList;
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -86,6 +91,8 @@ membership.post('/register', async (req: Request, res: Response) => {
         response = await getRegistration(insertId);
         res.status(201);
     } catch (e: any) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(e);
         if (e.message === 'user input error') {
             res.status(400);
             response = { reason: 'bad request' };
@@ -111,6 +118,8 @@ membership.get('/:membershipID', async (req: Request, res: Response) => {
             response = await getMembership(Number(membershipID));
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -145,6 +154,8 @@ membership.patch('/:membershipID', async (req: Request, res: Response) => {
             response = await getMembership(membershipIdNum);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };

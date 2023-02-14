@@ -91,6 +91,8 @@ member.get('/list', async (req: Request, res: Response) => {
                 response = memberList;
             }
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -117,6 +119,9 @@ member.get('/:memberId', async (req: Request, res: Response) => {
             response = await getMember(memberId);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -146,6 +151,9 @@ member.get('/phone/:phoneNumber', async (req: Request, res: Response) => {
             response = await getMemberByPhone(phoneNumber);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -175,6 +183,9 @@ member.get('/email/:email', async (req: Request, res: Response) => {
             response = await getMemberByEmail(email);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+
             if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };
@@ -231,6 +242,9 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
             }
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+
             if (e.message === 'user input error') {
                 res.status(400);
                 response = { reason: 'bad request' };
@@ -253,46 +267,53 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
 });
 
 member.get('/list/voterEligibility/excel', async (req: Request, res: Response) => {
-    await validateAdminAccess(req, res);
-    const rightNow = new Date();
-    const eligibleVoters = await getEligibleVoters(rightNow.getFullYear());
-    const workbookTitle = `Eligible Voters ${new Date().toLocaleDateString().replace(/\//gi, '-')}`;
-    const workbook = startWorkbook(workbookTitle);
-    const worksheet = workbook.getWorksheet(1);
-    worksheet.columns = [
-        { header: 'Last Name', key: 'lastName', width: 10 },
-        { header: 'First Name', key: 'firstName', width: 15 },
-        { header: 'Membership Type', key: 'membershipType', width: 15 },
-        { header: 'Meetings Attended', key: 'meetingsAttended', width: 6 },
-        { header: '% of meetings', key: 'percentageMeetings', width: 6 },
-        { header: 'Points Earned', key: 'pointsEarned', width: 6 },
-        { header: 'Eligible?', key: 'eligible', width: 6 },
-        { header: 'Eligible By Points', key: 'eligibleByPoints', width: 6 },
-        { header: 'Eligible By Meetings', key: 'eligibleByMeetings', width: 6 },
-    ];
-    eligibleVoters.forEach((voter: any) => {
-        let isEligible;
-        if (voter.membershipType === 'Associate Member') {
-            isEligible = ((voter.eligibleByPoints === 'Yes') && (voter.eligibleByMeetings === 'Yes'));
-        } else {
-            isEligible = ((voter.eligibleByPoints === 'Yes') || (voter.eligibleByMeetings === 'Yes'));
-        }
-        const row = {
-            lastName: voter.lastName,
-            firstName: voter.firstName,
-            membershipType: voter.membershipType,
-            meetingsAttended: voter.meetingsAttended,
-            percentageMeetings: voter.percentageMeetings,
-            pointsEarned: voter.pointsEarned,
-            eligible: isEligible ? 'Yes' : 'No',
-            eligibleByPoints: voter.eligibleByPoints,
-            eligibleByMeetings: voter.eligibleByMeetings,
-        };
-        worksheet.addRow(row);
-    });
-    formatWorkbook(worksheet);
-    // write workbook to buffer.
-    httpOutputWorkbook(workbook, res, `members${new Date().getTime()}`);
+    try {
+        await validateAdminAccess(req, res);
+        const rightNow = new Date();
+        const eligibleVoters = await getEligibleVoters(rightNow.getFullYear());
+        const workbookTitle = `Eligible Voters ${new Date().toLocaleDateString().replace(/\//gi, '-')}`;
+        const workbook = startWorkbook(workbookTitle);
+        const worksheet = workbook.getWorksheet(1);
+        worksheet.columns = [
+            { header: 'Last Name', key: 'lastName', width: 10 },
+            { header: 'First Name', key: 'firstName', width: 15 },
+            { header: 'Membership Type', key: 'membershipType', width: 15 },
+            { header: 'Meetings Attended', key: 'meetingsAttended', width: 6 },
+            { header: '% of meetings', key: 'percentageMeetings', width: 6 },
+            { header: 'Points Earned', key: 'pointsEarned', width: 6 },
+            { header: 'Eligible?', key: 'eligible', width: 6 },
+            { header: 'Eligible By Points', key: 'eligibleByPoints', width: 6 },
+            { header: 'Eligible By Meetings', key: 'eligibleByMeetings', width: 6 },
+        ];
+        eligibleVoters.forEach((voter: any) => {
+            let isEligible;
+            if (voter.membershipType === 'Associate Member') {
+                isEligible = ((voter.eligibleByPoints === 'Yes') && (voter.eligibleByMeetings === 'Yes'));
+            } else {
+                isEligible = ((voter.eligibleByPoints === 'Yes') || (voter.eligibleByMeetings === 'Yes'));
+            }
+            const row = {
+                lastName: voter.lastName,
+                firstName: voter.firstName,
+                membershipType: voter.membershipType,
+                meetingsAttended: voter.meetingsAttended,
+                percentageMeetings: voter.percentageMeetings,
+                pointsEarned: voter.pointsEarned,
+                eligible: isEligible ? 'Yes' : 'No',
+                eligibleByPoints: voter.eligibleByPoints,
+                eligibleByMeetings: voter.eligibleByMeetings,
+            };
+            worksheet.addRow(row);
+        });
+        formatWorkbook(worksheet);
+        // write workbook to buffer.
+        httpOutputWorkbook(workbook, res, `members${new Date().getTime()}`);
+    } catch (error) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
 });
 
 member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {

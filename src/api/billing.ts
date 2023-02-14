@@ -17,6 +17,7 @@ import {
 import { checkHeader, verify } from '../util/auth';
 import { emailBills, generateNewBills } from '../util/billing';
 import { sendInsuranceConfirmEmail, sendPaymentConfirmationEmail } from '../util/email';
+import logger from '../logger';
 
 //
 // TODO: Emails are not sent for generated bills (see emailBills helper function in util)
@@ -42,6 +43,8 @@ billing.get('/yearlyWorkPointThreshold', async (req: Request, res: Response) => 
             response = await getWorkPointThreshold(year);
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -72,6 +75,8 @@ billing.get('/list', async (req: Request, res: Response) => {
             res.status(200);
             response = billingList;
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -110,6 +115,8 @@ billing.get('/:membershipID', async (req: Request, res: Response) => {
             response = results;
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -151,6 +158,8 @@ billing.post('/:billId', async (req: Request, res: Response) => {
             response = {};
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -191,6 +200,8 @@ billing.post('/', async (req: Request, res: Response) => {
             res.status(201);
             response = generatedBills;
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
@@ -232,6 +243,8 @@ billing.patch('/attestIns/:billId', async (req: Request, res: Response) => {
             response = {};
             res.status(200);
         } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
             if (e.message === 'Authorization Failed') {
                 res.status(401);
                 response = { reason: 'not authorized' };
