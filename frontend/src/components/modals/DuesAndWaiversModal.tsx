@@ -78,7 +78,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     color="white"
                     variant="outline"
                     size="lg"
-                    hidden={!attested || (props.viewBill?.amount === 0)}
+                    hidden={!attested || (props.viewBill?.amount === 0) || (props.viewBill?.curYearPaid)}
                     onClick={
                         async () => {
                             props.payOnlineAction();
@@ -93,7 +93,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     color="white"
                     variant="outline"
                     size="lg"
-                    hidden={!attested || (props.viewBill?.amount === 0)}
+                    hidden={!attested || (props.viewBill?.amount === 0) || (props.viewBill?.curYearPaid)}
                     onClick={
                         async () => {
                             props.paySnailMailAction();
