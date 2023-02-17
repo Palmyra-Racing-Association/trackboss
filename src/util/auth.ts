@@ -42,7 +42,7 @@ const verify = async (token: string, permissionLevel?: string, targetActingAs?: 
                 actingAs = member.memberId;
             }
             if (permissionLevel === 'Admin') {
-                if (member.memberType !== 'Admin') {
+                if ((member.memberType !== 'Admin') && (!member.isBoardMember)) {
                     throw new Error(`Tried to perform an admin action as ${member.memberType}.  This isn't allowed!`);
                 }
             } else if (permissionLevel === 'Membership Admin') {
