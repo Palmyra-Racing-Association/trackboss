@@ -66,7 +66,6 @@ billing.get('/list', async (req: Request, res: Response) => {
         response = { reason: headerCheck.reason };
     } else {
         try {
-            await verify(headerCheck.token, 'Admin');
             const { paymentStatus, year } = req.query;
             const billingList: Bill[] = await getBillList({
                 paymentStatus: paymentStatus as string,
