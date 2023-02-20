@@ -208,6 +208,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <Text fontWeight="bold">Name:</Text>
                                             <Text fontWeight="bold">Email:</Text>
                                             <Text fontWeight="bold">Phone:</Text>
+                                            <Text fontWeight="bold">Address:</Text>
                                         </VStack>
                                         {
                                             editingMemberInfo ? (
@@ -253,6 +254,10 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     </Text>
                                                     <Text>{selectedMember.email}</Text>
                                                     <Text>{selectedMember.phoneNumber}</Text>
+                                                    <Text>{selectedMember.address}</Text>
+                                                    <Text>
+                                                        {`${selectedMember.city}, ${selectedMember.state} ${selectedMember.zip}`}
+                                                    </Text>
                                                 </VStack>
                                             )
                                         }

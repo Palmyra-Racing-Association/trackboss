@@ -106,6 +106,7 @@ export default function GeneralInfo(props: cardProps) {
                     <SimpleGrid pt={10} columns={2}>
                         <VStack spacing={2} align="left">
                             <Text fontSize="xl" fontWeight="bold">Name:</Text>
+                            <Text fontSize="xl" fontWeight="bold">Address:</Text>
                             <Text fontSize="xl" fontWeight="bold">Email:</Text>
                             <Text fontSize="xl" fontWeight="bold">Phone:</Text>
                             <Text fontSize="xl" fontWeight="bold">Joined:</Text>
@@ -156,6 +157,12 @@ export default function GeneralInfo(props: cardProps) {
                                 <VStack align="left">
                                     <Text fontSize="xl">
                                         {`${memberInfo.firstName} ${memberInfo.lastName}`}
+                                    </Text>
+                                    <Text fontSize="xl">
+                                        {
+                                            `${memberInfo.address} ${memberInfo.city},
+                                            ${memberInfo.state} ${memberInfo.zip}`
+                                        }
                                     </Text>
                                     <Text fontSize="xl">{memberInfo.email}</Text>
                                     <Text fontSize="xl">{memberInfo.phoneNumber}</Text>
