@@ -32,6 +32,7 @@ import { Bike } from '../../../src/typedefs/bike';
 import { getMembersByMembership, updateMember } from '../controller/member';
 import { getBikeList } from '../controller/bike';
 import AddPointsModal from './AddPointsModal';
+import EditMemberModal from './modals/EditMemberModal';
 
 interface modalProps {
     isOpen: boolean,
@@ -184,22 +185,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                         <Text textAlign="left" fontSize="3xl" fontWeight="bold">Contact Info</Text>
                                         {
                                             state.user?.memberType === 'Admin' && (
-                                                <Button
-                                                    textDecoration="underline"
-                                                    color="orange"
-                                                    variant="ghost"
-                                                    onClick={
-                                                        () => {
-                                                            if (editingMemberInfo) {
-                                                                setEditingMemberInfo(false);
-                                                            } else {
-                                                                setEditingMemberInfo(true);
-                                                            }
-                                                        }
-                                                    }
-                                                >
-                                                    Edit
-                                                </Button>
+                                                <EditMemberModal member={selectedMember} />
                                             )
                                         }
                                     </HStack>
