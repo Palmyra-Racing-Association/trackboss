@@ -1,4 +1,5 @@
 import {
+    Alert,
     Button,
     Heading, HStack, Link, Modal, ModalContent, ModalOverlay, Stat, StatGroup, StatHelpText, StatLabel,
     StatNumber, Text, useDisclosure, VStack,
@@ -261,17 +262,17 @@ export default function DuesAndWaiversList() {
                     >
                         Once insurance is attested, this checkbox locks so contact support if you need to undo it.
                     </Text>
-                    <Text
-                        fontSize="sm"
-                    >
-                        To contact this member, use the links below for the contact info we have on file.
-                    </Text>
-                    <Link href={`mailto:${selectedBill?.membershipAdminEmail}`} isExternal>
-                        {`Email at ${selectedBill?.membershipAdminEmail}`}
-                    </Link>
-                    <Link href={`tel:${selectedBill?.phone}`} isExternal>
-                        {`Call or text at ${selectedBill?.phone}`}
-                    </Link>
+                    <Alert status="warning">
+                        <Link fontSize="sm" href={`sms:${selectedBill?.phone}`} isExternal>
+                            {`Text at ${selectedBill?.phone}`}
+                        </Link>
+                        <Link fontSize="sm" href={`mailto:${selectedBill?.membershipAdminEmail}`} isExternal>
+                            {`Email at ${selectedBill?.membershipAdminEmail}`}
+                        </Link>
+                        <Link fontSize="sm" href={`tel:${selectedBill?.phone}`} isExternal>
+                            {`Call at ${selectedBill?.phone}`}
+                        </Link>
+                    </Alert>
                     <Button
                         mt={10}
                         variant="outline"
