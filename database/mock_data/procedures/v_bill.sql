@@ -12,6 +12,8 @@ CREATE VIEW `v_bill` AS
         ma.first_name,
         CONCAT(ma.first_name, ' ', ma.last_name) AS membership_admin,
         ma.email AS membership_admin_email,
+        ma.phone_number,
+        mt.type membership_type,
         mb.emailed_bill,
         mb.cur_year_paid,
         mb.cur_year_ins,
@@ -23,6 +25,8 @@ CREATE VIEW `v_bill` AS
         membership ms ON mb.membership_id = ms.membership_id
             LEFT JOIN
         member ma ON ms.membership_admin_id = ma.member_id
+			left join 
+		membership_types mt on ms.membership_type_id = mt.membership_type_id
 	WHERE 
 		ms.status = 'active'
 	ORDER BY

@@ -1,6 +1,6 @@
 import {
     Button,
-    Heading, HStack, Modal, ModalContent, ModalOverlay, Stat, StatGroup, StatHelpText, StatLabel,
+    Heading, HStack, Link, Modal, ModalContent, ModalOverlay, Stat, StatGroup, StatHelpText, StatLabel,
     StatNumber, Text, useDisclosure, VStack,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
@@ -114,6 +114,11 @@ export default function DuesAndWaiversList() {
             selector: (row: Bill) => `$${row.amount} ($${row.amountWithFee})`,
             sortable: true,
             maxWidth: '5',
+        },
+        {
+            name: 'Type',
+            selector: (row: Bill) => row.membershipType,
+            sortable: true,
         },
         {
             name: 'Insurance Validated',
@@ -256,6 +261,17 @@ export default function DuesAndWaiversList() {
                     >
                         Once insurance is attested, this checkbox locks so contact support if you need to undo it.
                     </Text>
+                    <Text
+                        fontSize="sm"
+                    >
+                        To contact this member, use the links below for the contact info we have on file.
+                    </Text>
+                    <Link href={`mailto:${selectedBill?.membershipAdminEmail}`} isExternal>
+                        {`Email at ${selectedBill?.membershipAdminEmail}`}
+                    </Link>
+                    <Link href={`tel:${selectedBill?.phone}`} isExternal>
+                        {`Call or text at ${selectedBill?.phone}`}
+                    </Link>
                     <Button
                         mt={10}
                         variant="outline"

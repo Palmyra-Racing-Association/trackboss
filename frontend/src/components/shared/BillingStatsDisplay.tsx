@@ -12,6 +12,9 @@ export default function BillingStatsDisplay(props: billStatsProps) {
         <Box>
             <HStack>
                 <Stat>
+                    <StatNumber>
+                        {bill?.membershipType}
+                    </StatNumber>
                     <StatLabel>
                         Points Earned in &nbsp;
                         {bill?.year}
