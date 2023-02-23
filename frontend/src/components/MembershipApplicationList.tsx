@@ -94,7 +94,8 @@ export default function MembershipApplicationList() {
             const filteredApplications = cells.filter((application) => {
                 const firstNameFound = (application.firstName.toLowerCase().includes(searchTerm));
                 const lastNameFound = (application.lastName.toLowerCase().includes(searchTerm));
-                return firstNameFound || lastNameFound;
+                const statusFound = (application.status.toLowerCase().includes(searchTerm));
+                return firstNameFound || lastNameFound || statusFound;
             });
             setFilteredCells(filteredApplications);
         }

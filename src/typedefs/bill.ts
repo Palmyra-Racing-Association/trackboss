@@ -11,9 +11,11 @@ export type Bill = {
     pointsThreshold: number,
     membershipAdmin: string,
     membershipAdminEmail: string,
+    phone: string,
     membershipId: number,
     firstName: string,
     lastName: string,
+    membershipType: string,
     emailedBill?: string, // undefined if not emailed, date otherwise
     curYearPaid: boolean,
     curYearIns: boolean,
