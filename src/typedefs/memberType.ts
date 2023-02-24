@@ -3,7 +3,9 @@ import { ErrorResponse } from './errorResponse';
 export type MemberType = {
     memberTypeId: number,
     type: string,
-    baseDuesAmt: number
+    baseDuesAmt: number,
+    // count is an optional parameter for pages that want to know how many of each type we have.
+    count?: number,
 }
 
 export type GetMemberTypeRequest = Record<string, never>;

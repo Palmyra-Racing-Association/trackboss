@@ -7,7 +7,7 @@ import {
     MemberType,
     PatchMemberTypeResponse,
 } from '../typedefs/memberType';
-import { getMemberType, getMemberTypeList, patchMemberType } from '../database/memberType';
+import { getMemberType, getMemberTypeCounts, getMemberTypeList, patchMemberType } from '../database/memberType';
 
 const memberType = Router();
 
@@ -22,6 +22,34 @@ memberType.get('/list', async (req: Request, res: Response) => {
         try {
             await verify(headerCheck.token);
             const memberTypeList: MemberType[] = await getMemberTypeList();
+            res.status(200);
+            response = memberTypeList;
+        } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+            if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
+});
+
+memberType.get('/counts', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: GetMemberTypeListResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const memberTypeList: MemberType[] = await getMemberTypeCounts();
             res.status(200);
             response = memberTypeList;
         } catch (e: any) {
