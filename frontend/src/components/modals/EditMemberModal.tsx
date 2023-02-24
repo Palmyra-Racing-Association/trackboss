@@ -2,7 +2,7 @@
 import React, { useContext, useState } from 'react';
 import {
     Button, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
-    ModalOverlay, Text, useDisclosure,
+    ModalOverlay, Text, useDisclosure, useToast,
 } from '@chakra-ui/react';
 import isEmail from 'validator/es/lib/isEmail';
 import isMobilePhone from 'validator/es/lib/isMobilePhone';
@@ -17,7 +17,7 @@ import { updateMembership } from '../../controller/membership';
 
 interface EditMemberModalProps {
     member: Member,
-    refresh: Function,
+    refreshMemberFunction: () => void,
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -28,6 +28,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
         onOpen,
         onClose,
     } = useDisclosure();
+    const toast = useToast();
     const [streetAddress, setStreetAddress] = useState<string>(selectedMember.address);
     const [city, setCity] = useState<string>(selectedMember.city);
     const [memberAddressState, setMemberAddressState] = useState<string>(selectedMember.state);
@@ -113,7 +114,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                 />
                             </GridItem>
                             <GridItem colSpan={2}>
-                                <Text>email</Text>
+                                <Text>email (Changing this changes the login email too)</Text>
                                 <Text color="red" size="xs" hidden={emailValid}>
                                     email must be a valid email address
                                 </Text>
@@ -181,7 +182,19 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         modifiedBy: state.user?.memberId || 0,
                                     };
                                     await updateMembership(state.token, selectedMember.membershipId, membershipUpdate);
-                                    props.refresh(selectedMember);
+                                    props.refreshMemberFunction();
+                                    toast({
+                                        containerStyle: {
+                                            background: 'orange',
+                                        },
+                                        // eslint-disable-next-line max-len
+                                        title: 'Member info updated',
+                                        description: `${JSON.stringify(selectedMember)}`,
+                                        status: 'success',
+                                        duration: 5000,
+                                        isClosable: true,
+                                    });
+                                    onClose();
                                 }
                             }
                         >

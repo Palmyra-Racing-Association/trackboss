@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk';
 import logger from '../logger';
+import { Member } from '../typedefs/member';
 
 /**
  * Create a new user in Cognito to allow them to login.
@@ -65,4 +66,26 @@ export async function deleteCognitoUser(uuid: string) {
     }).promise();
     logger.info(`Removed user ${uuid} from Cognito`);
     logger.debug(deleteResponse);
+}
+
+export async function updateCognitoUserEmail(member: Member) {
+    logger.info(`Updating an email address for ${member.uuid} in Cognito`);
+    const poolId = process.env.COGNITO_POOL_ID || '';
+    const cognitoIdp = new AWS.CognitoIdentityServiceProvider();
+    const updateResponse = cognitoIdp.adminUpdateUserAttributes({
+        UserPoolId: poolId,
+        Username: member.uuid,
+        UserAttributes: [
+            {
+                Name: 'email',
+                Value: member.email,
+            },
+            {
+                Name: 'email_verified',
+                Value: 'true',
+            },
+        ],
+    }).promise();
+    logger.info(`Updated user ${member.uuid}'s email to ${member.email}`);
+    logger.debug(updateResponse);
 }
