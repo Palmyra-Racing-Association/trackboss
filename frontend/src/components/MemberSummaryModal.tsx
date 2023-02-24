@@ -21,17 +21,17 @@ import {
     UnorderedList,
     ListItem,
     ButtonGroup,
-    Input,
     useToast,
     Switch,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
-import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
+import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
-import { getMembersByMembership, updateMember } from '../controller/member';
+import { getMember, getMembersByMembership, updateMember } from '../controller/member';
 import { getBikeList } from '../controller/bike';
 import AddPointsModal from './AddPointsModal';
+import EditMemberModal from './modals/EditMemberModal';
 
 interface modalProps {
     isOpen: boolean,
@@ -53,19 +53,9 @@ export default function MemberSummaryModal(props: modalProps) {
     const [family, setFamily] = useState<Member[]>();
     const [bikes, setBikes] = useState<Bike[]>();
 
-    const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
     const [editingMemberRole, setEditingMemberRole] = useState<boolean>(false);
-
-    const [editedName, setEditedName] = useState<string>('');
-    const [editedEmail, setEditedEmail] = useState<string>('');
-    const [editedPhone, setEditedPhone] = useState<string>('');
-
     const [editedMemberType, setEditedMemberType] = useState<string>('');
     const [deactivateEnabled, setDeactivateEnabled] = useState<boolean>(false);
-
-    const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
-    const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
-    const handleEditedPhoneChange = (event: { target: { value: any; }; }) => setEditedPhone(event.target.value);
 
     const [error, setError] = useState<string>('');
 
@@ -95,57 +85,6 @@ export default function MemberSummaryModal(props: modalProps) {
         setSelectedMember(updatedMember);
         return true;
     }, [state, props.memberInfo, editedMemberType]);
-
-    const handlePatchMemberContactInfo = useCallback(async (
-        name: string,
-        email: string,
-        phone: string,
-    ) => {
-        let request: PatchMemberRequest = { modifiedBy: state.user!.memberId };
-        if (name === '') {
-            request = {
-                firstName: props.memberInfo.firstName,
-                lastName: props.memberInfo.lastName,
-                ...request,
-            };
-        } else {
-            const nameSplit = name?.split(' ');
-            request = {
-                firstName: nameSplit[0],
-                lastName: nameSplit[1],
-                ...request,
-            };
-        }
-        if (email === '') {
-            request = {
-                email: props.memberInfo.email,
-                ...request,
-            };
-        } else {
-            request = {
-                email,
-                ...request,
-            };
-        }
-        if (phone === '') {
-            request = {
-                phoneNumber: props.memberInfo.phoneNumber,
-                ...request,
-            };
-        } else {
-            request = {
-                phoneNumber: phone,
-                ...request,
-            };
-        }
-
-        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, request);
-        if ('reason' in updatedMember) {
-            setError(`error patching contact info: ${updatedMember.reason}`);
-            return props.memberInfo;
-        }
-        return updatedMember;
-    }, [state, props.memberInfo]);
 
     useEffect(() => {
         async function setModalData() {
@@ -184,83 +123,37 @@ export default function MemberSummaryModal(props: modalProps) {
                                         <Text textAlign="left" fontSize="3xl" fontWeight="bold">Contact Info</Text>
                                         {
                                             state.user?.memberType === 'Admin' && (
-                                                <Button
-                                                    textDecoration="underline"
-                                                    color="orange"
-                                                    variant="ghost"
-                                                    onClick={
-                                                        () => {
-                                                            if (editingMemberInfo) {
-                                                                setEditingMemberInfo(false);
-                                                            } else {
-                                                                setEditingMemberInfo(true);
-                                                            }
+                                                <EditMemberModal
+                                                    member={selectedMember}
+                                                    refreshMemberFunction={
+                                                        async () => {
+                                                            const memberRefresh = await getMember(state.token, selectedMember.memberId);
+                                                            setSelectedMember(memberRefresh as Member);
                                                         }
                                                     }
-                                                >
-                                                    Edit
-                                                </Button>
+                                                />
                                             )
                                         }
                                     </HStack>
                                     <SimpleGrid pb={4} columns={2}>
-                                        <VStack maxWidth={40} spacing={2} align="left">
-                                            <Text fontWeight="bold">Name:</Text>
-                                            <Text fontWeight="bold">Email:</Text>
-                                            <Text fontWeight="bold">Phone:</Text>
-                                            <Text fontWeight="bold">Address:</Text>
+                                        <VStack spacing={2} align="left">
+                                            <Text fontSize="sm" fontWeight="bold">Name:</Text>
+                                            <Text fontSize="sm" fontWeight="bold">Email:</Text>
+                                            <Text fontSize="sm" fontWeight="bold">Phone:</Text>
+                                            <Text fontSize="sm" fontWeight="bold">Address:</Text>
                                         </VStack>
-                                        {
-                                            editingMemberInfo ? (
-                                                <VStack ml="-65px" align="left">
-                                                    <Input
-                                                        placeholder={`${selectedMember.firstName} ${selectedMember.lastName}`}
-                                                        value={editedName}
-                                                        onChange={handleEditedNameChange}
-                                                        size="xs"
-                                                    />
-                                                    <Input
-                                                        placeholder={selectedMember.email}
-                                                        value={editedEmail}
-                                                        onChange={handleEditedEmailChange}
-                                                        size="xs"
-                                                    />
-                                                    <Input
-                                                        placeholder={selectedMember.phoneNumber}
-                                                        value={editedPhone}
-                                                        onChange={handleEditedPhoneChange}
-                                                        size="xs"
-                                                    />
-                                                    <Button
-                                                        ml={10}
-                                                        variant="outline"
-                                                        size="xs"
-                                                        color="green"
-                                                        onClick={
-                                                            async () => {
-                                                                setSelectedMember(await handlePatchMemberContactInfo(editedName, editedEmail, editedPhone));
-                                                                setEditingMemberInfo(false);
-                                                                setEditingMemberRole(false);
-                                                            }
-                                                        }
-                                                    >
-                                                        Save
-                                                    </Button>
-                                                </VStack>
-                                            ) : (
-                                                <VStack ml="-65px" align="left">
-                                                    <Text>
-                                                        {`${selectedMember.firstName} ${selectedMember.lastName}`}
-                                                    </Text>
-                                                    <Text>{selectedMember.email}</Text>
-                                                    <Text>{selectedMember.phoneNumber}</Text>
-                                                    <Text>{selectedMember.address}</Text>
-                                                    <Text>
-                                                        {`${selectedMember.city}, ${selectedMember.state} ${selectedMember.zip}`}
-                                                    </Text>
-                                                </VStack>
-                                            )
-                                        }
+
+                                        <VStack ml="-70px" align="left">
+                                            <Text fontSize="sm">
+                                                {`${selectedMember.firstName} ${selectedMember.lastName}`}
+                                            </Text>
+                                            <Text fontSize="sm">{selectedMember.email}</Text>
+                                            <Text fontSize="sm">{selectedMember.phoneNumber}</Text>
+                                            <Text fontSize="sm">{selectedMember.address}</Text>
+                                            <Text fontSize="sm">
+                                                {`${selectedMember.city}, ${selectedMember.state} ${selectedMember.zip}`}
+                                            </Text>
+                                        </VStack>
                                     </SimpleGrid>
                                     <HStack>
                                         <Text textAlign="left" fontSize="3xl" fontWeight="bold">Family</Text>
@@ -367,7 +260,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         async () => {
                                                             await handlePatchMemberType();
                                                             setEditingMemberRole(false);
-                                                            setEditingMemberInfo(false);
                                                         }
                                                     }
                                                 >

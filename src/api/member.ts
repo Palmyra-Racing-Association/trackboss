@@ -15,7 +15,7 @@ import {
     PostNewMemberResponse,
 } from '../typedefs/member';
 import logger from '../logger';
-import { deleteCognitoUser } from '../util/cognito';
+import { deleteCognitoUser, updateCognitoUserEmail } from '../util/cognito';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 
 // this is here, in this way, because mailchimmp marketing doesn't have a proper typescript library and
@@ -213,18 +213,19 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
             const { memberId } = req.params;
             await verify(headerCheck.token, 'Membership Admin', Number(memberId));
             await patchMember(memberId, req.body);
-            response = await getMember(memberId);
+            const updatedMember = await getMember(memberId);
+            response = updatedMember;
             // if it's a family member ("member") and inactivated, then delete the cognito user
             // and the member record.  This is just cleanup stuff. and may change later.
-            if (!response.active && (response.memberType === 'Member')) {
+            if (!updatedMember.active && (updatedMember.memberType === 'Member')) {
                 try {
-                    const removeCount = await deleteFamilyMember(response.memberId);
-                    const userEmail = response.email;
-                    logger.info(`Removed ${removeCount} rows for user ${response.email}`);
-                    if (response.email) {
+                    const removeCount = await deleteFamilyMember(updatedMember.memberId);
+                    const userEmail = updatedMember.email;
+                    logger.info(`Removed ${removeCount} rows for user ${updatedMember.email}`);
+                    if (updatedMember.email) {
                         // use this loathesome promises hipster syntax here because I want this to run
                         // asychronously so the UI doesn't wait 5 seconds for the cognito delete to work.
-                        deleteCognitoUser(response.uuid)
+                        deleteCognitoUser(updatedMember.uuid)
                             .then((
                                 () => {
                                     logger.info(`Deactivated Cognito user for ${userEmail}`);
@@ -240,6 +241,19 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
                     logger.error(error);
                 }
             }
+            // more loathesome hipster garbage for dealing with cognito's slowness.  Not sure which I like less -
+            // nested hipster promise syntax, or slow back ends that require it.  probably a tie.
+            updateCognitoUserEmail(updatedMember)
+                .then((
+                    () => {
+                        logger.info(`Changed user email for ${updatedMember.memberId} to ${updatedMember.email}`);
+                    }
+                ))
+                .catch((error) => {
+                    logger.error(`Error updating Cognito user email for member ID ${updatedMember.memberId}.`);
+                    logger.error('As a result their login is probably broken now.');
+                    logger.error(error);
+                });
             res.status(200);
         } catch (e: any) {
             logger.error(`Error at path ${req.path}`);

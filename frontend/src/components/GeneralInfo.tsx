@@ -6,64 +6,19 @@ import {
     HStack,
     Divider,
     SimpleGrid,
-    Button,
-    Input,
 } from '@chakra-ui/react';
-import { Member, PatchMemberRequest } from '../../../src/typedefs/member';
-import { updateMember } from '../controller/member';
+import { Member } from '../../../src/typedefs/member';
+import { getMember } from '../controller/member';
 import { UserContext } from '../contexts/UserContext';
+import EditMemberModal from './modals/EditMemberModal';
 
 interface cardProps {
     user: Member,
 }
 
 export default function GeneralInfo(props: cardProps) {
-    const { state, update } = useContext(UserContext);
+    const { state } = useContext(UserContext);
     const [memberInfo, setMemberInfo] = useState<Member>();
-    const [editingMemberInfo, setEditingMemberInfo] = useState<boolean>(false);
-    const [editedName, setEditedName] = useState<string>('');
-    const [editedEmail, setEditedEmail] = useState<string>('');
-    const [editedPhone, setEditedPhone] = useState<string>('');
-    const [error, setError] = useState<string>('');
-
-    const handleEditedNameChange = (event: { target: { value: any; }; }) => setEditedName(event.target.value);
-    const handleEditedEmailChange = (event: { target: { value: any; }; }) => setEditedEmail(event.target.value);
-    const handleEditedPhoneChange = (event: { target: { value: any; }; }) => setEditedPhone(event.target.value);
-
-    async function handlePatchMemberContactInfo(
-        memberPatchInfo: Member,
-        name: string | undefined,
-        email: string | undefined,
-        phone: string | undefined,
-    ) {
-        const nameArray = name?.split(' ');
-        if (nameArray && state.user) {
-            const first = nameArray[0];
-            const last = nameArray[1];
-            const patch: PatchMemberRequest = {
-                membershipId: memberPatchInfo.membershipId,
-                uuid: memberPatchInfo.uuid,
-                memberTypeId: memberPatchInfo.memberTypeId,
-                firstName: first || memberPatchInfo.firstName,
-                lastName: last || memberPatchInfo.lastName,
-                phoneNumber: phone || memberPatchInfo.phoneNumber,
-                occupation: memberPatchInfo.occupation,
-                email: email || memberPatchInfo.email,
-                birthdate: memberPatchInfo.birthdate,
-                dateJoined: memberPatchInfo.dateJoined,
-                modifiedBy: memberPatchInfo.memberId,
-            };
-
-            const res = await updateMember(state.token, state.user.memberId, patch);
-            if ('reason' in res) {
-                setError(res.reason);
-            } else {
-                update({ loggedIn: true, token: state.token, user: res, storedUser: undefined });
-                setMemberInfo(res);
-            }
-        }
-        return undefined;
-    }
 
     useEffect(() => {
         async function setMemberData() {
@@ -75,28 +30,18 @@ export default function GeneralInfo(props: cardProps) {
     return (
         <VStack mt={25}>
             <HStack>
-                { error !== '' && ({ error })}
                 <Heading>General Information</Heading>
                 {
-                    props.user.memberType === 'Admin' && (
-                        <Button
-                            mr={400}
-                            textDecoration="underline"
-                            color="orange"
-                            variant="ghost"
-                            size="lg"
-                            onClick={
-                                () => {
-                                    if (editingMemberInfo) {
-                                        setEditingMemberInfo(false);
-                                    } else {
-                                        setEditingMemberInfo(true);
-                                    }
+                    props.user.memberType.includes('Admin') && (
+                        <EditMemberModal
+                            member={props.user}
+                            refreshMemberFunction={
+                                async () => {
+                                    const memberRefresh = await getMember(state.token, props.user.memberId);
+                                    setMemberInfo(memberRefresh as Member);
                                 }
                             }
-                        >
-                            Edit
-                        </Button>
+                        />
                     )
                 }
             </HStack>
@@ -113,65 +58,23 @@ export default function GeneralInfo(props: cardProps) {
                             <Text fontSize="xl" fontWeight="bold">DOB:</Text>
                             <Text fontSize="xl" fontWeight="bold">Membership Admin:</Text>
                         </VStack>
-                        {
-                            editingMemberInfo ? (
-                                <VStack mt={1.5} ml="-50px" align="left" spacing={3}>
-                                    <Input
-                                        placeholder={`${memberInfo.firstName} ${memberInfo.lastName}`}
-                                        value={editedName}
-                                        onChange={handleEditedNameChange}
-                                        size="md"
-                                    />
-                                    <Input
-                                        placeholder={memberInfo.email}
-                                        value={editedEmail}
-                                        onChange={handleEditedEmailChange}
-                                        size="md"
-                                    />
-                                    <Input
-                                        placeholder={memberInfo.phoneNumber}
-                                        value={editedPhone}
-                                        onChange={handleEditedPhoneChange}
-                                        size="md"
-                                    />
-                                    <Text fontSize="xl">{memberInfo.dateJoined}</Text>
-                                    <Text fontSize="xl">{memberInfo.birthdate}</Text>
-                                    <Text fontSize="xl">{memberInfo.membershipAdmin}</Text>
-                                    <Button
-                                        ml={10}
-                                        variant="outline"
-                                        size="md"
-                                        color="green"
-                                        onClick={
-                                            async () => {
-                                                // eslint-disable-next-line max-len
-                                                await handlePatchMemberContactInfo(memberInfo, editedName, editedEmail, editedPhone);
-                                                setEditingMemberInfo(false);
-                                            }
-                                        }
-                                    >
-                                        Save
-                                    </Button>
-                                </VStack>
-                            ) : (
-                                <VStack align="left">
-                                    <Text fontSize="xl">
-                                        {`${memberInfo.firstName} ${memberInfo.lastName}`}
-                                    </Text>
-                                    <Text fontSize="xl">
-                                        {
-                                            `${memberInfo.address} ${memberInfo.city},
+                        <VStack align="left">
+                            <Text fontSize="xl">
+                                {`${memberInfo.firstName} ${memberInfo.lastName}`}
+                            </Text>
+                            <Text fontSize="xl">
+                                {
+                                    `${memberInfo.address} ${memberInfo.city},
                                             ${memberInfo.state} ${memberInfo.zip}`
-                                        }
-                                    </Text>
-                                    <Text fontSize="xl">{memberInfo.email}</Text>
-                                    <Text fontSize="xl">{memberInfo.phoneNumber}</Text>
-                                    <Text fontSize="xl">{memberInfo.dateJoined}</Text>
-                                    <Text fontSize="xl">{memberInfo.birthdate}</Text>
-                                    <Text fontSize="xl">{memberInfo.membershipAdmin}</Text>
-                                </VStack>
-                            )
-                        }
+                                }
+                            </Text>
+                            <Text fontSize="xl">{memberInfo.email}</Text>
+                            <Text fontSize="xl">{memberInfo.phoneNumber}</Text>
+                            <Text fontSize="xl">{memberInfo.dateJoined}</Text>
+                            <Text fontSize="xl">{memberInfo.birthdate}</Text>
+                            <Text fontSize="xl">{memberInfo.membershipAdmin}</Text>
+                        </VStack>
+
                     </SimpleGrid>
                 )
             }
