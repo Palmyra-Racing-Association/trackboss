@@ -57,7 +57,7 @@ export async function updateMembership(
 ): Promise<PatchMembershipResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membership/${membershipID}`, {
         method: 'PATCH',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
         body: JSON.stringify(memberData),
     });

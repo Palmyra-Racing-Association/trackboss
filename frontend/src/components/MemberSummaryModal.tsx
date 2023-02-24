@@ -185,7 +185,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                         <Text textAlign="left" fontSize="3xl" fontWeight="bold">Contact Info</Text>
                                         {
                                             state.user?.memberType === 'Admin' && (
-                                                <EditMemberModal member={selectedMember} />
+                                                <EditMemberModal member={selectedMember} refresh={setSelectedMember} />
                                             )
                                         }
                                     </HStack>

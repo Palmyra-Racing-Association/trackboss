@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useContext, useState } from 'react';
 import {
-    Button, HStack, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
-    ModalOverlay, SimpleGrid, Text, useDisclosure, VStack,
+    Button, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
+    ModalOverlay, Text, useDisclosure,
 } from '@chakra-ui/react';
+import isEmail from 'validator/es/lib/isEmail';
+import isMobilePhone from 'validator/es/lib/isMobilePhone';
 
-import { Member } from '../../../../src/typedefs/member';
+import { UserContext } from '../../contexts/UserContext';
+
+import { Member, PatchMemberRequest } from '../../../../src/typedefs/member';
+import { PatchMembershipRequest } from '../../../../src/typedefs/membership';
+
+import { updateMember } from '../../controller/member';
+import { updateMembership } from '../../controller/membership';
 
 interface EditMemberModalProps {
-    // eslint-disable-next-line react/no-unused-prop-types
     member: Member,
+    refresh: Function,
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -21,11 +30,16 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     } = useDisclosure();
     const [streetAddress, setStreetAddress] = useState<string>(selectedMember.address);
     const [city, setCity] = useState<string>(selectedMember.city);
-    const [state, setState] = useState<string>(selectedMember.state);
+    const [memberAddressState, setMemberAddressState] = useState<string>(selectedMember.state);
     const [zip, setZip] = useState<string>(selectedMember.zip);
     const [phoneNumber, setPhoneNumber] = useState<string>(selectedMember.phoneNumber);
     const [email, setEmail] = useState<string>(selectedMember.email);
     const [dirty, setDirty] = useState<boolean>(false);
+    const [phoneValid, setPhoneValid] = useState<boolean>(isMobilePhone(phoneNumber, 'en-US'));
+    const [emailValid, setEmailValid] = useState<boolean>(isEmail(email));
+
+    const { state, update } = useContext(UserContext);
+
     return (
         <>
             <Button
@@ -44,89 +58,97 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                         {`Edit member info - ${selectedMember.firstName} ${props.member.lastName}`}
                     </ModalHeader>
                     <ModalBody>
-                        <SimpleGrid columns={1} spacing={2}>
-                            <VStack align="left">
-                                <HStack>
-                                    <Text>Street Address</Text>
-                                    <Input
-                                        value={streetAddress}
-                                        size="md"
-                                        onChange={
-                                            (e) => {
-                                                setDirty(true);
-                                                setStreetAddress(e.target.value);
-                                            }
+                        <Grid templateRows="repeat(5, 1fr)" templateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
+                            <GridItem colSpan={2}>
+                                <Text>Street Address</Text>
+                                <Input
+                                    value={streetAddress}
+                                    size="md"
+                                    onChange={
+                                        (e) => {
+                                            setDirty(true);
+                                            setStreetAddress(e.target.value);
                                         }
-                                    />
-                                </HStack>
-                                <HStack>
-                                    <Text>City</Text>
-                                    <Input
-                                        value={city}
-                                        size="md"
-                                        onChange={
-                                            (e) => {
-                                                setDirty(true);
-                                                setCity(e.target.value);
-                                            }
+                                    }
+                                />
+                            </GridItem>
+                            <GridItem colSpan={1}>
+                                <Text>City</Text>
+                                <Input
+                                    value={city}
+                                    size="md"
+                                    onChange={
+                                        (e) => {
+                                            setDirty(true);
+                                            setCity(e.target.value);
                                         }
-                                    />
-                                </HStack>
-                                <HStack>
-                                    <Text>State</Text>
-                                    <Input
-                                        value={state}
-                                        size="md"
-                                        onChange={
-                                            (e) => {
-                                                setDirty(true);
-                                                setState(e.target.value);
-                                            }
+                                    }
+                                />
+                            </GridItem>
+                            <GridItem>
+                                <Text>State</Text>
+                                <Input
+                                    value={memberAddressState}
+                                    size="md"
+                                    onChange={
+                                        (e) => {
+                                            setDirty(true);
+                                            setMemberAddressState(e.target.value);
                                         }
-                                    />
-                                    <Text>Zip</Text>
-                                    <Input
-                                        value={zip}
-                                        size="md"
-                                        width="auto"
-                                        onChange={
-                                            (e) => {
-                                                setDirty(true);
-                                                setZip(e.target.value);
-                                            }
+                                    }
+                                />
+                            </GridItem>
+                            <GridItem>
+                                <Text>Zip</Text>
+                                <Input
+                                    value={zip}
+                                    size="md"
+                                    width="auto"
+                                    onChange={
+                                        (e) => {
+                                            setDirty(true);
+                                            setZip(e.target.value);
                                         }
-                                    />
-                                </HStack>
-                            </VStack>
-                            <VStack align="left">
-                                <HStack>
-                                    <Text>eMail</Text>
-                                    <Input
-                                        size="md"
-                                        value={email}
-                                        onChange={
-                                            (e) => {
-                                                setDirty(true);
-                                                setEmail(e.target.value);
-                                            }
+                                    }
+                                />
+                            </GridItem>
+                            <GridItem colSpan={2}>
+                                <Text>email</Text>
+                                <Text color="red" size="xs" hidden={emailValid}>
+                                    email must be a valid email address
+                                </Text>
+                                <Input
+                                    size="md"
+                                    value={email}
+                                    onChange={
+                                        (e) => {
+                                            const typedEmail = e.target.value;
+                                            setEmailValid(isEmail(typedEmail));
+                                            setEmail(typedEmail);
+                                            setDirty(emailValid);
                                         }
-                                    />
-                                </HStack>
-                                <HStack>
-                                    <Text>Phone</Text>
-                                    <Input
-                                        value={phoneNumber}
-                                        size="md"
-                                        onChange={
-                                            (e) => {
-                                                setDirty(true);
-                                                setPhoneNumber(e.target.value);
-                                            }
+                                    }
+                                />
+                            </GridItem>
+                            <GridItem colSpan={2}>
+                                <Text>Phone</Text>
+                                <Text color="red" size="xs" hidden={phoneValid}>
+                                    Phone must be ten digits and include area code
+                                </Text>
+                                <Input
+                                    value={phoneNumber}
+                                    size="md"
+                                    onChange={
+                                        (e) => {
+                                            const typedPhoneNumber = e.target.value;
+                                            setPhoneValid(isMobilePhone(typedPhoneNumber, 'en-US'));
+                                            setPhoneNumber(typedPhoneNumber);
+                                            setDirty(phoneValid);
                                         }
-                                    />
-                                </HStack>
-                            </VStack>
-                        </SimpleGrid>
+                                    }
+                                />
+                            </GridItem>
+                        </Grid>
                     </ModalBody>
                     <ModalFooter>
                         <Button
@@ -135,14 +157,31 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                             disabled={!dirty}
                             color="white"
                             onClick={
-                                () => {
+                                async () => {
                                     selectedMember.address = streetAddress;
                                     selectedMember.city = city;
-                                    selectedMember.state = state;
+                                    selectedMember.state = memberAddressState;
                                     selectedMember.zip = zip;
                                     selectedMember.email = email;
                                     selectedMember.phoneNumber = phoneNumber;
-                                    alert(JSON.stringify(selectedMember));
+                                    if (!phoneNumber.startsWith('+1')) {
+                                        setPhoneNumber(`+1${phoneNumber}`);
+                                    }
+                                    const memberUpdate : PatchMemberRequest = {
+                                        email,
+                                        phoneNumber,
+                                        modifiedBy: state.user?.memberId || 0,
+                                    };
+                                    await updateMember(state.token, selectedMember.memberId, memberUpdate);
+                                    const membershipUpdate: PatchMembershipRequest = {
+                                        address: streetAddress,
+                                        city,
+                                        state: memberAddressState,
+                                        zip,
+                                        modifiedBy: state.user?.memberId || 0,
+                                    };
+                                    await updateMembership(state.token, selectedMember.membershipId, membershipUpdate);
+                                    props.refresh(selectedMember);
                                 }
                             }
                         >
