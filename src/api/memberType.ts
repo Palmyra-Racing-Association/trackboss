@@ -7,7 +7,7 @@ import {
     MemberType,
     PatchMemberTypeResponse,
 } from '../typedefs/memberType';
-import { getMemberType, getMemberTypeCounts, getMemberTypeList, patchMemberType } from '../database/memberType';
+import { getMemberType, getMembershipTypeCounts, getMemberTypeList, patchMemberType } from '../database/memberType';
 
 const memberType = Router();
 
@@ -39,7 +39,7 @@ memberType.get('/list', async (req: Request, res: Response) => {
     res.send(response);
 });
 
-memberType.get('/counts', async (req: Request, res: Response) => {
+memberType.get('/membershipCounts', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: GetMemberTypeListResponse;
     const headerCheck = checkHeader(authorization);
@@ -49,7 +49,7 @@ memberType.get('/counts', async (req: Request, res: Response) => {
     } else {
         try {
             await verify(headerCheck.token);
-            const memberTypeList: MemberType[] = await getMemberTypeCounts();
+            const memberTypeList: MemberType[] = await getMembershipTypeCounts();
             res.status(200);
             response = memberTypeList;
         } catch (e: any) {
