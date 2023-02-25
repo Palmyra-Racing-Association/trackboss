@@ -68,3 +68,29 @@ export async function patchMemberType(id: number, req: PatchMemberTypeRequest): 
         throw new Error('not found');
     }
 }
+
+export async function getMembershipTypeCounts(): Promise<MemberType[]> {
+    const sql = `
+        select ms.membership_type, mt.base_dues_amt, mt.membership_type_id, count(*) howmany
+        from v_membership ms, membership_types mt where 
+        ms.status = 'active' and
+        ms.membership_type is not null and
+        ms.membership_type = mt.type
+        group by ms.membership_type
+    `;
+    const values: string[] = [];
+
+    let results;
+    try {
+        [results] = await getPool().query<RowDataPacket[]>(sql, values);
+    } catch (e) {
+        logger.error(`DB error getting member type list: ${e}`);
+        throw new Error('internal server error');
+    }
+    return results.map((result) => ({
+        memberTypeId: result.membership_type_id,
+        type: result.membership_type,
+        baseDuesAmt: result.base_dues_amt,
+        count: result.howmany,
+    }));
+}

@@ -1,12 +1,14 @@
-import { useDisclosure } from '@chakra-ui/react';
+import { SimpleGrid, Stat, StatLabel, StatNumber, useDisclosure } from '@chakra-ui/react';
 import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { ErrorResponse } from '../../../src/typedefs/errorResponse';
 import { Member } from '../../../src/typedefs/member';
+import { MemberType } from '../../../src/typedefs/memberType';
 import { UserContext } from '../contexts/UserContext';
 import { getAllBoardMembersForCurrentYear } from '../controller/boardMember';
 import { getMemberList } from '../controller/member';
+import { getMembershipTypeCounts } from '../controller/memberType';
 import DataSearchBox from './input/DataSearchBox';
 import MemberSummaryModal from './MemberSummaryModal';
 
@@ -59,6 +61,7 @@ export default function MemberList() {
     const [selectedMember, setSelectedMember] = useState<Member>();
     const [cells, setCells] = useState<Member[]>([]);
     const [allCells, setAllCells] = useState<Member[]>([]);
+    const [membershipCounts, setMembershipCounts] = useState<MemberType[]>([]);
 
     const { state } = useContext(UserContext);
     const [error, setError] = useState<ErrorResponse | undefined>(undefined);
@@ -112,6 +115,14 @@ export default function MemberList() {
         }
     }, [searchTerm, allCells]);
 
+    useEffect(() => {
+        async function getData() {
+            const counts = await getMembershipTypeCounts(state.token);
+            setMembershipCounts(counts);
+            // alert(JSON.stringify(counts));
+        }
+        getData();
+    }, [membershipCounts]);
     if (error) {
         return (
             <div>
@@ -121,6 +132,16 @@ export default function MemberList() {
     }
     return (
         <div>
+            <SimpleGrid columns={[3, null, 6]} m={20}>
+                {
+                    membershipCounts.map((membershipType) => (
+                        <Stat>
+                            <StatLabel>{membershipType.type}</StatLabel>
+                            <StatNumber>{membershipType.count}</StatNumber>
+                        </Stat>
+                    ))
+                }
+            </SimpleGrid>
             <DataSearchBox
                 searchValue={searchTerm}
                 onTextChange={setSearchTerm}
