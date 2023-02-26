@@ -1,4 +1,7 @@
-import { SimpleGrid, Stat, StatLabel, StatNumber, useDisclosure } from '@chakra-ui/react';
+import {
+    Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel,
+    SimpleGrid, Stat, StatLabel, StatNumber, useDisclosure,
+} from '@chakra-ui/react';
 import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
@@ -62,6 +65,7 @@ export default function MemberList() {
     const [cells, setCells] = useState<Member[]>([]);
     const [allCells, setAllCells] = useState<Member[]>([]);
     const [membershipCounts, setMembershipCounts] = useState<MemberType[]>([]);
+    const [totalMemberships, setTotalMemberships] = useState<number>(0);
 
     const { state } = useContext(UserContext);
     const [error, setError] = useState<ErrorResponse | undefined>(undefined);
@@ -94,6 +98,7 @@ export default function MemberList() {
                 activeMembers = activeMembers.filter((member) => (member.memberType.toLowerCase().includes('admin')));
                 setCells(activeMembers);
                 setAllCells(activeMembers);
+                setTotalMemberships(activeMembers.length);
                 setError(undefined);
             }
         }
@@ -118,11 +123,13 @@ export default function MemberList() {
     useEffect(() => {
         async function getData() {
             const counts = await getMembershipTypeCounts(state.token);
+            // sort in reverse order. This || 0 nonsense is because .type is optional.  It will never be
+            // undefined in this context so this just gets eslint to stop complaining.
+            counts.sort((a, b) => ((b.count || 0) - (a.count || 0)));
             setMembershipCounts(counts);
-            // alert(JSON.stringify(counts));
         }
         getData();
-    }, [membershipCounts]);
+    }, []);
     if (error) {
         return (
             <div>
@@ -132,16 +139,26 @@ export default function MemberList() {
     }
     return (
         <div>
-            <SimpleGrid columns={[3, null, 6]} m={20}>
-                {
-                    membershipCounts.map((membershipType) => (
-                        <Stat>
-                            <StatLabel>{membershipType.type}</StatLabel>
-                            <StatNumber>{membershipType.count}</StatNumber>
-                        </Stat>
-                    ))
-                }
-            </SimpleGrid>
+            <Accordion allowToggle maxWidth="75%">
+                <AccordionItem>
+                    <AccordionButton>
+                        {`${totalMemberships} total memberships (click for detailed view)`}
+                        <AccordionIcon />
+                    </AccordionButton>
+                    <AccordionPanel>
+                        <SimpleGrid columns={[3, null, 6]} m={5}>
+                            {
+                                membershipCounts.map((membershipType) => (
+                                    <Stat>
+                                        <StatLabel>{membershipType.type}</StatLabel>
+                                        <StatNumber>{membershipType.count}</StatNumber>
+                                    </Stat>
+                                ))
+                            }
+                        </SimpleGrid>
+                    </AccordionPanel>
+                </AccordionItem>
+            </Accordion>
             <DataSearchBox
                 searchValue={searchTerm}
                 onTextChange={setSearchTerm}
