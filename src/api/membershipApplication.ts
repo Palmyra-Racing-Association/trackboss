@@ -6,6 +6,7 @@ import {
     insertMembershipApplication, updateApplicationStatus,
 } from '../database/membershipApplication';
 import {
+    getMember,
     insertMember, patchMember,
 } from '../database/member';
 
@@ -16,6 +17,7 @@ import { MembershipApplication } from '../typedefs/membershipApplication';
 import { PostNewMembershipRequest } from '../typedefs/membership';
 import { insertMembership } from '../database/membership';
 import { generateBill, getWorkPointThreshold } from '../database/billing';
+import { addMailchimpMember } from '../util/mailchimp';
 
 const membershipApplication = Router();
 
@@ -93,6 +95,7 @@ membershipApplication.get('/', async (req: Request, res: Response) => {
 });
 
 membershipApplication.post('/accept/:id', async (req: Request, res: Response) => {
+    let newMemberId : number;
     try {
         const actingUser = await validateAdminAccess(req, res);
         await sendApplicationStatus(req, res, 'Accepted');
@@ -114,6 +117,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             modifiedBy: actingUser.memberId,
         };
         const primaryMemberId = await insertMember(newMember);
+        newMemberId = primaryMemberId;
         const currentYear = (new Date()).getFullYear();
         const newMembership : PostNewMembershipRequest = {
             // Associate member
@@ -143,6 +147,8 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             workDetail: [],
         });
         logger.info(`Generated bill ${billId} for membership ${newMembershipId} - application converted to member.`);
+        const newMemberRecord = await getMember(`${primaryMemberId}`);
+        await addMailchimpMember(newMemberRecord);
     } catch (error: any) {
         logger.error(error);
         res.status(500);
