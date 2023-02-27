@@ -17,6 +17,7 @@ import {
 import logger from '../logger';
 import { deleteCognitoUser, updateCognitoUserEmail } from '../util/cognito';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
+import { markMembershipFormer } from '../database/membership';
 
 // this is here, in this way, because mailchimmp marketing doesn't have a proper typescript library and
 // so as a result, i'm using it in a Javasript way.  Once the @types/mailchimp-markeing thing gets updated we
@@ -240,6 +241,22 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
                     logger.error('Error deleting user from database. Something is probably really wrong!');
                     logger.error(error);
                 }
+            }
+            if (!updatedMember.active && (updatedMember.memberId === updatedMember.membershipAdminId)) {
+                // if this is the membership admin then we are de-activating the whole membership.
+                // Set Membership to former
+                const id = await markMembershipFormer(updatedMember.membershipId);
+                logger.info(`${updatedMember.firstName} ${updatedMember.lastName} set to Former member.`);
+                deleteCognitoUser(updatedMember.uuid)
+                    .then((
+                        () => {
+                            logger.info(`Deactivated Cognito user for ${updatedMember.email}`);
+                        }))
+                    .catch((error) => {
+                        // eslint-disable-next-line max-len
+                        logger.error(`Error deleting Cognito user ${updatedMember.email}.  User will be abandoned in Cognito.`);
+                        logger.error(error);
+                    });
             }
             // more loathesome hipster garbage for dealing with cognito's slowness.  Not sure which I like less -
             // nested hipster promise syntax, or slow back ends that require it.  probably a tie.

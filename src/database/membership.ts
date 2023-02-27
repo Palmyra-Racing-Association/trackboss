@@ -14,7 +14,7 @@ import {
 // Map the API values for the membership statuses to the DB values
 const MEMBERSHIP_STATUS_MAP = new Map([
     ['active', 'Active'],
-    ['inactive', 'Disabled'],
+    ['inactive', 'Former'],
     ['pending', 'Pending'],
 ]);
 export const GET_BASE_DUES_SQL = 'SELECT base_dues_amt FROM v_membership_base_dues WHERE membership_id = ?';
@@ -181,6 +181,21 @@ export async function patchMembership(id: number, req: PatchMembershipRequest): 
     if (result.affectedRows < 1) {
         throw new Error('not found');
     }
+}
+
+export async function markMembershipFormer(id: number) : Promise<number> {
+    const values = [id];
+
+    const sql = 'update membership set status = \'Former\' where membership_id = ?';
+    let result;
+    try {
+        [result] = await getPool().query<RowDataPacket[]>(sql, values);
+    } catch (e) {
+        logger.error(`DB error marking membership ${id} as former`, e);
+        throw e;
+    }
+
+    return id;
 }
 
 export async function registerMembership(req: PostRegisterMembershipRequest): Promise<number> {
