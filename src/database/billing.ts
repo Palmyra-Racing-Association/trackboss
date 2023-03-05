@@ -24,16 +24,9 @@ export async function generateBill(req: GenerateSingleBillRequest): Promise<numb
             return value;
         },
     );
-    const rightNow = new Date();
-    // billing year is the current year
-    let billingYear = rightNow.getFullYear();
-    // UNLESS, we are generating a bill for the prior year, ie the current year hasn't started yet. Generally
-    // defined as "before the season starts" so March 1.
-    if (rightNow.getMonth() <= 5) {
-        billingYear -= 1;
-    }
+
     const values = [
-        billingYear, req.amount.toFixed(2), req.amountWithFee.toFixed(2), req.membershipId,
+        req.billingYear, req.amount.toFixed(2), req.amountWithFee.toFixed(2), req.membershipId,
         req.pointsThreshold, req.pointsEarned, workDetailJson,
     ];
     let result;

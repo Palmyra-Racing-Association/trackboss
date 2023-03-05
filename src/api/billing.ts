@@ -18,6 +18,7 @@ import { checkHeader, verify } from '../util/auth';
 import { emailBills, generateNewBills } from '../util/billing';
 import { sendInsuranceConfirmEmail, sendPaymentConfirmationEmail } from '../util/email';
 import logger from '../logger';
+import { calculateBillingYear } from '../util/dateHelper';
 
 //
 // TODO: Emails are not sent for generated bills (see emailBills helper function in util)
@@ -66,10 +67,16 @@ billing.get('/list', async (req: Request, res: Response) => {
         response = { reason: headerCheck.reason };
     } else {
         try {
+            logger.info('Getting billing list.');
             const { paymentStatus, year } = req.query;
+            let billingYear = Number(year);
+            if (!billingYear) {
+                billingYear = calculateBillingYear();
+                logger.info(`Billing year was undefined so we calculated it as ${billingYear} at request time.`);
+            }
             const billingList: Bill[] = await getBillList({
                 paymentStatus: paymentStatus as string,
-                year: Number(year) || undefined, // if NaN, just ignore
+                year: Number(billingYear),
             });
             res.status(200);
             response = billingList;

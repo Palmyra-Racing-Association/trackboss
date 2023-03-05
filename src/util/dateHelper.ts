@@ -1,5 +1,4 @@
-/* eslint-disable import/prefer-default-export */
-import { addDays, format } from 'date-fns';
+import { addDays, format, isBefore } from 'date-fns';
 
 /**
  * Parse a string and get the correct date based on the job day number.
@@ -15,4 +14,22 @@ export function calculateStartDate(stringDate: string, jobDayNumber: number) : s
     }
     const jobDate = format(addDays(eventStart, (jobDayNumber - 1)), 'yyyy-MM-dd');
     return jobDate;
+}
+
+/**
+ * Calculate the billing year based on the current date.  The rules are as follows:
+ * Before March 15, it's the prior billing year because we are still working on renewals,
+ * new memberships.
+ * After March 15, it's the current billing year because all that paperwork is done so it is business as usual.
+ *
+ * @return number The billing year based on the logic.
+ */
+export function calculateBillingYear() : number {
+    const rightNow = new Date();
+    const rightNowYear = rightNow.getFullYear();
+    let billingYear = rightNowYear;
+    if (isBefore(rightNow, (new Date(rightNowYear, 2, 15)))) {
+        billingYear -= 1;
+    }
+    return billingYear;
 }

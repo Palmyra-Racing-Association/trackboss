@@ -145,6 +145,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             pointsEarned: 0,
             pointsThreshold: threshold,
             workDetail: [],
+            billingYear: (currentYear - 1),
         });
         logger.info(`Generated bill ${billId} for membership ${newMembershipId} - application converted to member.`);
         const newMemberRecord = await getMember(`${primaryMemberId}`);

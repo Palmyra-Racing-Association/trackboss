@@ -55,6 +55,7 @@ export type GenerateSingleBillRequest = {
     pointsEarned: number,
     pointsThreshold: number,
     workDetail?: Job[],
+    billingYear: number,
 }
 
 export type GetMembershipBillListRequest = Record<string, never>

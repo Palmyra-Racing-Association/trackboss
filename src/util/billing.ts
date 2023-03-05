@@ -68,6 +68,7 @@ export async function generateNewBills(
                     pointsEarned: earned,
                     pointsThreshold: threshold,
                     workDetail,
+                    billingYear: year,
                 });
                 if (owed === 0) {
                     // flip the bill to paid if they owe zero. This is just easy record keeping.
