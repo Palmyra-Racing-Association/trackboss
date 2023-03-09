@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "ecc5c7a8-c8c9-4050-91bd-b57e4371deb3",
+		"_postman_id": "6024a92d-eb5c-4053-bd75-60343dad65c3",
 		"name": "PRA requests",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17812964"
 	},
 	"item": [
 		{
@@ -11,14 +12,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/memberType/membershipCounts",
-					"protocol": "http",
+					"raw": "{{BASE_URL}}/memberType/membershipCounts",
 					"host": [
-						"localhost"
+						"{{BASE_URL}}"
 					],
-					"port": "8080",
 					"path": [
-						"api",
 						"memberType",
 						"membershipCounts"
 					]
@@ -42,14 +40,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/billing/list?year=2022",
-					"protocol": "http",
+					"raw": "{{BASE_URL}}i/billing/list?year=2022",
 					"host": [
-						"localhost"
+						"{{BASE_URL}}i"
 					],
-					"port": "8080",
 					"path": [
-						"api",
 						"billing",
 						"list"
 					],
@@ -69,16 +64,11 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://trackbossapi.hogbackmx.com:4443/api/billing/list?year=2022",
-					"protocol": "https",
+					"raw": "{{BASE_URL}}/billing/list?year=2022",
 					"host": [
-						"trackbossapi",
-						"hogbackmx",
-						"com"
+						"{{BASE_URL}}"
 					],
-					"port": "4443",
 					"path": [
-						"api",
 						"billing",
 						"list"
 					],
@@ -107,16 +97,11 @@
 					}
 				},
 				"url": {
-					"raw": "https://trackbossapi.hogbackmx.com:4443/api/gateCode/2023",
-					"protocol": "https",
+					"raw": "{{BASE_URL}}/gateCode/2023",
 					"host": [
-						"trackbossapi",
-						"hogbackmx",
-						"com"
+						"{{BASE_URL}}"
 					],
-					"port": "4443",
 					"path": [
-						"api",
 						"gateCode",
 						"2023"
 					]
@@ -130,17 +115,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/membership/tags/10",
-					"protocol": "http",
+					"raw": "{{BASE_URL}}/membership/tags/247",
 					"host": [
-						"localhost"
+						"{{BASE_URL}}"
 					],
-					"port": "8080",
 					"path": [
-						"api",
 						"membership",
 						"tags",
-						"10"
+						"247"
 					]
 				}
 			},
@@ -153,7 +135,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"membershipId\": 10,\n    \"tag\": \"taggy\"\n}",
+					"raw": "{\n    \"membershipId\": 247,\n    \"tags\": [\"senior\", \"paid\", \"theMan\", \"YourMom\"]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -161,14 +143,38 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/membership/tags",
-					"protocol": "http",
+					"raw": "{{BASE_URL}}/membership/tags",
 					"host": [
-						"localhost"
+						"{{BASE_URL}}"
 					],
-					"port": "8080",
 					"path": [
-						"api",
+						"membership",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletetag",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"tags\": [\"apple\", \"zoo2\", \"yo\", \"banana\"],\n    \"membershipId\": 247\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/membership/tags",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
 						"membership",
 						"tags"
 					]
@@ -191,16 +197,11 @@
 					}
 				},
 				"url": {
-					"raw": "https://trackbossapi.hogbackmx.com:4443/api/membershipApplication",
-					"protocol": "https",
+					"raw": "{{BASE_URL}}/membershipApplication",
 					"host": [
-						"trackbossapi",
-						"hogbackmx",
-						"com"
+						"{{BASE_URL}}"
 					],
-					"port": "4443",
 					"path": [
-						"api",
 						"membershipApplication"
 					]
 				}
@@ -236,6 +237,13 @@
 					""
 				]
 			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "https://trackbossapi.hogbackmx.com:4443/api/",
+			"type": "string"
 		}
 	]
 }

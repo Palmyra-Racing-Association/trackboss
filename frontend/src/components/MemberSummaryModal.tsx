@@ -23,7 +23,12 @@ import {
     ButtonGroup,
     useToast,
     Switch,
+    Tag,
+    TagLabel,
+    TagCloseButton,
+    Input,
 } from '@chakra-ui/react';
+import { BsTags } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { Member } from '../../../src/typedefs/member';
@@ -32,6 +37,8 @@ import { getMember, getMembersByMembership, updateMember } from '../controller/m
 import { getBikeList } from '../controller/bike';
 import AddPointsModal from './AddPointsModal';
 import EditMemberModal from './modals/EditMemberModal';
+import { MembershipTag } from '../../../src/typedefs/membershipTag';
+import { addMembershipTags, deleteMembershipTags, getMembershipTags } from '../controller/membershipTags';
 
 interface modalProps {
     isOpen: boolean,
@@ -52,6 +59,10 @@ export default function MemberSummaryModal(props: modalProps) {
     const [selectedMember, setSelectedMember] = useState<Member>();
     const [family, setFamily] = useState<Member[]>();
     const [bikes, setBikes] = useState<Bike[]>();
+    const tagArray : MembershipTag[] = [];
+    const [tags, setTags] = useState<MembershipTag[]>(tagArray);
+    const [tagsDirty, setTagsDirty] = useState<boolean>(true);
+    const [newTagValue, setNewTagValue] = useState<string>();
 
     const [editingMemberRole, setEditingMemberRole] = useState<boolean>(false);
     const [editedMemberType, setEditedMemberType] = useState<string>('');
@@ -101,6 +112,15 @@ export default function MemberSummaryModal(props: modalProps) {
         }
         setModalData();
     }, [props.memberInfo]);
+
+    useEffect(() => {
+        async function getMembershipTagsData() {
+            const membershipTags = await getMembershipTags(state.token, props.memberInfo.membershipId);
+            setTags(membershipTags);
+            setTagsDirty(false);
+        }
+        getMembershipTagsData();
+    }, [tagsDirty]);
 
     return (
         <Modal
@@ -294,6 +314,52 @@ export default function MemberSummaryModal(props: modalProps) {
                                     {
                                         state.user?.memberType === 'Admin' && (
                                             <VStack align="left">
+                                                <Text textAlign="left" fontSize="3xl" fontWeight="bold">Tags</Text>
+                                                <HStack align="left">
+                                                    <SimpleGrid columns={2} spacing={4}>
+                                                        {
+                                                            tags.map((tag) => (
+                                                                <Tag key={tag.id} variant="subtle" colorScheme="orange">
+                                                                    <TagLabel>{tag.value}</TagLabel>
+                                                                    <TagCloseButton onClick={
+                                                                        async () => {
+                                                                            await deleteMembershipTags(state.token, props.memberInfo.membershipId, [tag.value]);
+                                                                            setTagsDirty(true);
+                                                                        }
+                                                                    }
+                                                                    />
+                                                                </Tag>
+                                                            ))
+                                                        }
+                                                        <Input
+                                                            size="xs"
+                                                            id="newTag"
+                                                            value={newTagValue}
+                                                            onChange={
+                                                                (e) => {
+                                                                    setNewTagValue(e.target.value);
+                                                                }
+                                                            }
+                                                        />
+                                                        <Button
+                                                            rightIcon={<BsTags />}
+                                                            background="orange"
+                                                            size="xs"
+                                                            color="white"
+                                                            onClick={
+                                                                async () => {
+                                                                    if (newTagValue) {
+                                                                        await addMembershipTags(state.token, props.memberInfo.membershipId, [newTagValue]);
+                                                                        setTagsDirty(true);
+                                                                        setNewTagValue('');
+                                                                    }
+                                                                }
+                                                            }
+                                                        >
+                                                            Add Tag
+                                                        </Button>
+                                                    </SimpleGrid>
+                                                </HStack>
                                                 <Text textAlign="left" fontSize="3xl" fontWeight="bold">Actions</Text>
                                                 <HStack align="left">
                                                     <AddPointsModal

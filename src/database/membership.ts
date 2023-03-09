@@ -10,6 +10,7 @@ import {
     PostRegisterMembershipRequest,
     Registration,
 } from '../typedefs/membership';
+import { MembershipTag } from '../typedefs/membershipTag';
 
 // Map the API values for the membership statuses to the DB values
 const MEMBERSHIP_STATUS_MAP = new Map([
@@ -296,30 +297,52 @@ export async function getBaseDues(membershipId: number): Promise<number> {
     return result[0].base_dues_amt;
 }
 
-export async function getMembershipTags(membershipId: number) : Promise<string[]> {
+export async function getMembershipTags(membershipId: number) : Promise<MembershipTag[]> {
     let result;
 
     try {
         [result] = await getPool().query<RowDataPacket[]>(
-            'select membership_tag from membership_tags where membership_id = ?',
+            // eslint-disable-next-line max-len
+            'select membership_tag_id, membership_tag from membership_tags where membership_id = ? order by membership_tag',
             [membershipId],
         );
     } catch (e) {
-        logger.error(`DB error getting tags for membership ID ${membershipId}`);
+        logger.error(`DB error getting tags for membership ID ${membershipId}`, e);
     }
-    const tags : string[] = [];
+    const tags : MembershipTag[] = [];
     result?.forEach((row) => {
-        tags.push(row.membership_tag);
+        const tag : MembershipTag = {
+            id: row.membership_tag_id,
+            value: row.membership_tag,
+            membershipId,
+        };
+        tags.push(tag);
     });
     return tags;
 }
 
-export async function createMembershipTag(membershipId: number, tag: string) : Promise<string[]> {
+export async function createMembershipTag(membershipId: number, tags: string[]) : Promise<MembershipTag[]> {
     try {
         const insertSql = 'insert into membership_tags(membership_id, membership_tag) values (?, ?)';
-        await getPool().query<OkPacket>(insertSql, [membershipId, tag]);
+        tags.forEach(async (tag) => {
+            await getPool().query<OkPacket>(insertSql, [membershipId, tag]);
+        });
     } catch (error) {
-        logger.error(`Error inserting tag ${tag} for membershipID ${membershipId}`);
+        logger.error(`Error inserting tags ${tags.join(',')} for membershipID ${membershipId}`, error);
     }
-    return getMembershipTags(membershipId);
+    const newTags = await getMembershipTags(membershipId);
+    return newTags;
+}
+
+export async function deleteMembershipTag(membershipId: number, tags: string[]) : Promise<MembershipTag[]> {
+    try {
+        const deleteSql = 'delete from membership_tags where membership_id = ? and membership_tag = ?';
+        tags.forEach(async (tag) => {
+            await getPool().query<OkPacket>(deleteSql, [membershipId, tag]);
+        });
+    } catch (error) {
+        logger.error(`Error deleting tags ${tags.join(',')} for membershipID ${membershipId}`, error);
+    }
+    const newTags = await getMembershipTags(membershipId);
+    return newTags;
 }

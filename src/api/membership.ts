@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import {
     createMembershipTag,
+    deleteMembershipTag,
     getMembership,
     getMembershipList,
     getMembershipTags,
@@ -20,6 +21,7 @@ import {
 import { checkHeader, verify } from '../util/auth';
 import logger from '../logger';
 import { ErrorResponse } from '../typedefs/errorResponse';
+import { MembershipTag } from '../typedefs/membershipTag';
 
 const membership = Router();
 
@@ -182,7 +184,7 @@ membership.patch('/:membershipID', async (req: Request, res: Response) => {
 
 membership.post('/tags', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
-    let response: string[] | ErrorResponse;
+    let response: MembershipTag[] | ErrorResponse;
     const headerCheck = checkHeader(authorization);
     if (!headerCheck.valid) {
         res.status(401);
@@ -190,8 +192,8 @@ membership.post('/tags', async (req: Request, res: Response) => {
     } else {
         try {
             await verify(headerCheck.token);
-            const { membershipId, tag } = req.body;
-            response = await createMembershipTag(membershipId, tag);
+            const { membershipId, tags } = req.body;
+            response = await createMembershipTag(membershipId, tags);
             res.status(200);
         } catch (e: any) {
             logger.error(`Error at path ${req.path}`);
@@ -213,7 +215,7 @@ membership.post('/tags', async (req: Request, res: Response) => {
 
 membership.get('/tags/:membershipID', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
-    let response: string[] | ErrorResponse;
+    let response: MembershipTag[] | ErrorResponse;
     const headerCheck = checkHeader(authorization);
     if (!headerCheck.valid) {
         res.status(401);
@@ -223,6 +225,37 @@ membership.get('/tags/:membershipID', async (req: Request, res: Response) => {
             await verify(headerCheck.token);
             const { membershipID } = req.params;
             response = await getMembershipTags(Number(membershipID));
+            res.status(200);
+        } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+            if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
+});
+
+membership.delete('/tags', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: MembershipTag[] | ErrorResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const { membershipId, tags } = req.body;
+            response = await deleteMembershipTag(membershipId, tags);
             res.status(200);
         } catch (e: any) {
             logger.error(`Error at path ${req.path}`);
