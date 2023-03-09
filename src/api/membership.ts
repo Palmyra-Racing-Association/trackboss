@@ -1,7 +1,9 @@
 import { Request, Response, Router } from 'express';
 import {
+    createMembershipTag,
     getMembership,
     getMembershipList,
+    getMembershipTags,
     getRegistration,
     insertMembership,
     patchMembership,
@@ -17,6 +19,7 @@ import {
 } from '../typedefs/membership';
 import { checkHeader, verify } from '../util/auth';
 import logger from '../logger';
+import { ErrorResponse } from '../typedefs/errorResponse';
 
 const membership = Router();
 
@@ -165,6 +168,68 @@ membership.patch('/:membershipID', async (req: Request, res: Response) => {
             } else if (e.message === 'Forbidden') {
                 res.status(403);
                 response = { reason: 'forbidden' };
+            } else if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
+});
+
+membership.post('/tags', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: string[] | ErrorResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const { membershipId, tag } = req.body;
+            response = await createMembershipTag(membershipId, tag);
+            res.status(200);
+        } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+            if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
+});
+
+membership.get('/tags/:membershipID', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: string[] | ErrorResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token);
+            const { membershipID } = req.params;
+            response = await getMembershipTags(Number(membershipID));
+            res.status(200);
+        } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+            if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
             } else if (e.message === 'not found') {
                 res.status(404);
                 response = { reason: 'not found' };

@@ -420,6 +420,16 @@ CREATE TABLE `pradb`.`emails` (
   PRIMARY KEY (`email_id`),
   UNIQUE INDEX `email_id_UNIQUE` (`email_id` ASC)) ENGINE=InnoDB;
 
+DROP TABLE IF EXISTS `pradb`.`membership_tags`;
+
+CREATE TABLE `pradb`.`membership_tags` (
+  `membership_tag_id` INT NOT NULL AUTO_INCREMENT,
+  `membership_id` INT NOT NULL,
+  `membership_tag` VARCHAR(255) NULL,
+  PRIMARY KEY (`membership_tag_id`),
+  INDEX `MEMBERSHIP_ID_IDX` (`membership_tag` ASC, `membership_id` ASC),
+  INDEX `MEMBERSHIP_TAG_IDX` (`membership_tag` ASC));
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

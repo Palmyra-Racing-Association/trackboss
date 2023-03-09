@@ -295,3 +295,31 @@ export async function getBaseDues(membershipId: number): Promise<number> {
 
     return result[0].base_dues_amt;
 }
+
+export async function getMembershipTags(membershipId: number) : Promise<string[]> {
+    let result;
+
+    try {
+        [result] = await getPool().query<RowDataPacket[]>(
+            'select membership_tag from membership_tags where membership_id = ?',
+            [membershipId],
+        );
+    } catch (e) {
+        logger.error(`DB error getting tags for membership ID ${membershipId}`);
+    }
+    const tags : string[] = [];
+    result?.forEach((row) => {
+        tags.push(row.membership_tag);
+    });
+    return tags;
+}
+
+export async function createMembershipTag(membershipId: number, tag: string) : Promise<string[]> {
+    try {
+        const insertSql = 'insert into membership_tags(membership_id, membership_tag) values (?, ?)';
+        await getPool().query<OkPacket>(insertSql, [membershipId, tag]);
+    } catch (error) {
+        logger.error(`Error inserting tag ${tag} for membershipID ${membershipId}`);
+    }
+    return getMembershipTags(membershipId);
+}
