@@ -1,0 +1,241 @@
+{
+	"info": {
+		"_postman_id": "ecc5c7a8-c8c9-4050-91bd-b57e4371deb3",
+		"name": "PRA requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Membership Counts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/memberType/membershipCounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"memberType",
+						"membershipCounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getBillingList",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/billing/list?year=2022",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"billing",
+						"list"
+					],
+					"query": [
+						{
+							"key": "year",
+							"value": "2022"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Billing",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://trackbossapi.hogbackmx.com:4443/api/billing/list?year=2022",
+					"protocol": "https",
+					"host": [
+						"trackbossapi",
+						"hogbackmx",
+						"com"
+					],
+					"port": "4443",
+					"path": [
+						"api",
+						"billing",
+						"list"
+					],
+					"query": [
+						{
+							"key": "year",
+							"value": "2022"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gateCode",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"year\": 2023,\n    \"gateCode\": \"0912\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://trackbossapi.hogbackmx.com:4443/api/gateCode/2023",
+					"protocol": "https",
+					"host": [
+						"trackbossapi",
+						"hogbackmx",
+						"com"
+					],
+					"port": "4443",
+					"path": [
+						"api",
+						"gateCode",
+						"2023"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tags",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/membership/tags/10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"membership",
+						"tags",
+						"10"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createtag",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"membershipId\": 10,\n    \"tag\": \"taggy\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/membership/tags",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"membership",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "membershipApplication",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Test\",\n    \"state\": \"NY\",\n    \"lastName\": \"Apply\",\n    \"address\": \"213.5 Main Street\",\n    \"city\": \"Palmyra\",\n    \"zip\": \"14450\",\n    \"phone\": \"5855551234\",\n    \"email\": \"test@test.com\",\n    \"birthDate\": \"2001-08-22T04:00:00.000Z\",\n    \"occupation\": \"dirtbiker\",\n    \"recommendedBy\": \"Everyone\",\n    \"familyMember0FirstName\": \"Wife\",\n    \"familyMember0LastName\": \"Wife\",\n    \"familyMember0Age\": \"20\",\n    \"familyMember1FirstName\": \"child\",\n    \"familyMember1LastName\": \"child\",\n    \"familyMember1Age\": \"2\",\n    \"familyMember2FirstName\": \"child\",\n    \"familyMember2LastName\": \"child\",\n    \"familyMember2Age\": \"2\",\n    \"familyMember3FirstName\": \"triplet\",\n    \"familyMember3LastName\": \"triplet\",\n    \"familyMember3Age\": \"2\",\n    \"familyMember4FirstName\": \"Lotsa\",\n    \"familyMember4LastName\": \"Babies\",\n    \"familyMember4Age\": \"1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://trackbossapi.hogbackmx.com:4443/api/membershipApplication",
+					"protocol": "https",
+					"host": [
+						"trackbossapi",
+						"hogbackmx",
+						"com"
+					],
+					"port": "4443",
+					"path": [
+						"api",
+						"membershipApplication"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
