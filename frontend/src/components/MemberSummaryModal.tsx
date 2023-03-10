@@ -61,7 +61,6 @@ export default function MemberSummaryModal(props: modalProps) {
     const [bikes, setBikes] = useState<Bike[]>();
     const tagArray : MembershipTag[] = [];
     const [tags, setTags] = useState<MembershipTag[]>(tagArray);
-    const [tagsDirty, setTagsDirty] = useState<boolean>(true);
     const [newTagValue, setNewTagValue] = useState<string>();
 
     const [editingMemberRole, setEditingMemberRole] = useState<boolean>(false);
@@ -117,10 +116,9 @@ export default function MemberSummaryModal(props: modalProps) {
         async function getMembershipTagsData() {
             const membershipTags = await getMembershipTags(state.token, props.memberInfo.membershipId);
             setTags(membershipTags);
-            setTagsDirty(false);
         }
         getMembershipTagsData();
-    }, [tagsDirty]);
+    }, [props.memberInfo]);
 
     return (
         <Modal
@@ -130,7 +128,9 @@ export default function MemberSummaryModal(props: modalProps) {
         >
             <ModalOverlay />
             <ModalContent pb={5}>
-                <ModalHeader><Heading textAlign="center">Member Summary</Heading></ModalHeader>
+                <ModalHeader>
+                    <Heading textAlign="center">Member Summary</Heading>
+                </ModalHeader>
                 <Divider />
                 <ModalCloseButton />
                 <ModalBody>
@@ -140,7 +140,7 @@ export default function MemberSummaryModal(props: modalProps) {
                             <SimpleGrid columns={[1, null, 2]} spacing={4}>
                                 <VStack borderRightWidth={1} borderRightColor="light-grey" align="left">
                                     <HStack>
-                                        <Text textAlign="left" fontSize="3xl" fontWeight="bold">Contact Info</Text>
+                                        <Text textAlign="left" fontSize="3xl" fontWeight="bold">Info</Text>
                                         {
                                             state.user?.memberType === 'Admin' && (
                                                 <EditMemberModal
@@ -158,6 +158,8 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <SimpleGrid pb={4} columns={2}>
                                         <VStack spacing={2} align="left">
                                             <Text fontSize="sm" fontWeight="bold">Name:</Text>
+                                            <Text fontSize="sm" fontWeight="bold">Joined:</Text>
+                                            <Text fontSize="sm" fontWeight="bold">Status:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Email:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Phone:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Address:</Text>
@@ -167,6 +169,8 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <Text fontSize="sm">
                                                 {`${selectedMember.firstName} ${selectedMember.lastName}`}
                                             </Text>
+                                            <Text fontSize="sm">{selectedMember.dateJoined.substring(0, 4)}</Text>
+                                            <Text fontSize="sm">{selectedMember.membershipType}</Text>
                                             <Text fontSize="sm">{selectedMember.email}</Text>
                                             <Text fontSize="sm">{selectedMember.phoneNumber}</Text>
                                             <Text fontSize="sm">{selectedMember.address}</Text>
@@ -324,7 +328,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                                                     <TagCloseButton onClick={
                                                                         async () => {
                                                                             await deleteMembershipTags(state.token, props.memberInfo.membershipId, [tag.value]);
-                                                                            setTagsDirty(true);
                                                                         }
                                                                     }
                                                                     />
@@ -351,7 +354,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                                                     async () => {
                                                                         if (newTagValue) {
                                                                             await addMembershipTags(state.token, props.memberInfo.membershipId, [newTagValue]);
-                                                                            setTagsDirty(true);
                                                                             setNewTagValue('');
                                                                         }
                                                                     }
