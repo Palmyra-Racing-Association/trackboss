@@ -310,13 +310,14 @@ export default function MemberSummaryModal(props: modalProps) {
                                             </ButtonGroup>
                                         )
                                     }
-                                    <Container pt={20} mb={20} />
+                                    <Container mb={20} />
                                     {
                                         state.user?.memberType === 'Admin' && (
                                             <VStack align="left">
                                                 <Text textAlign="left" fontSize="3xl" fontWeight="bold">Tags</Text>
+                                                <Text fontSize="xs">We recommend a max of 3-5 tags</Text>
                                                 <HStack align="left">
-                                                    <SimpleGrid columns={2} spacing={4}>
+                                                    <SimpleGrid columns={1} spacing={2}>
                                                         {
                                                             tags.map((tag) => (
                                                                 <Tag key={tag.id} variant="subtle" colorScheme="orange">
@@ -331,33 +332,33 @@ export default function MemberSummaryModal(props: modalProps) {
                                                                 </Tag>
                                                             ))
                                                         }
-                                                        <Input
-                                                            size="xs"
-                                                            id="newTag"
-                                                            value={newTagValue}
-                                                            onChange={
-                                                                (e) => {
-                                                                    setNewTagValue(e.target.value);
-                                                                }
-                                                            }
-                                                        />
-                                                        <Button
-                                                            rightIcon={<BsTags />}
-                                                            background="orange"
-                                                            size="xs"
-                                                            color="white"
-                                                            onClick={
-                                                                async () => {
-                                                                    if (newTagValue) {
-                                                                        await addMembershipTags(state.token, props.memberInfo.membershipId, [newTagValue]);
-                                                                        setTagsDirty(true);
-                                                                        setNewTagValue('');
+                                                        <HStack>
+                                                            <Input
+                                                                size="xs"
+                                                                id="newTag"
+                                                                value={newTagValue}
+                                                                onChange={
+                                                                    (e) => {
+                                                                        setNewTagValue(e.target.value);
                                                                     }
                                                                 }
-                                                            }
-                                                        >
-                                                            Add Tag
-                                                        </Button>
+                                                            />
+                                                            <Button
+                                                                rightIcon={<BsTags />}
+                                                                background="orange"
+                                                                size="xs"
+                                                                color="white"
+                                                                onClick={
+                                                                    async () => {
+                                                                        if (newTagValue) {
+                                                                            await addMembershipTags(state.token, props.memberInfo.membershipId, [newTagValue]);
+                                                                            setTagsDirty(true);
+                                                                            setNewTagValue('');
+                                                                        }
+                                                                    }
+                                                                }
+                                                            />
+                                                        </HStack>
                                                     </SimpleGrid>
                                                 </HStack>
                                                 <Text textAlign="left" fontSize="3xl" fontWeight="bold">Actions</Text>

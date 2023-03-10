@@ -207,6 +207,34 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "post mailchimp tags to trackboss",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/membership/admin/copyTags",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"membership",
+						"admin",
+						"copyTags"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"auth": {

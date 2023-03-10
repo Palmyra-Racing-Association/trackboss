@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import {
+    cleanMembershipTags,
     createMembershipTag,
     deleteMembershipTag,
     getMembership,
@@ -18,10 +19,18 @@ import {
     PostNewMembershipResponse,
     PostRegisterMembershipResponse,
 } from '../typedefs/membership';
-import { checkHeader, verify } from '../util/auth';
+import { checkHeader, validateAdminAccess, verify } from '../util/auth';
 import logger from '../logger';
 import { ErrorResponse } from '../typedefs/errorResponse';
 import { MembershipTag } from '../typedefs/membershipTag';
+import { getMemberByEmail } from '../database/member';
+import { Member } from '../typedefs/member';
+
+// this is here, in this way, because mailchimp marketing doesn't have a proper typescript library and
+// so as a result, i'm using it in a Javasript way.  Once the @types/mailchimp-markeing thing gets updated we
+// can use that here. It doesn't really matter too much as I know what I am doing anyway and explinaed it here.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const mailchimpClient = require('@mailchimp/mailchimp_marketing');
 
 const membership = Router();
 
@@ -273,6 +282,53 @@ membership.delete('/tags', async (req: Request, res: Response) => {
         }
     }
     res.send(response);
+});
+
+membership.post('/admin/copyTags', async (req: Request, res: Response) => {
+    try {
+        logger.info(`Running the ${req.path} with a ${req.method} request`);
+        await validateAdminAccess(req, res);
+        mailchimpClient.setConfig({
+            apiKey: process.env.MAILCHIMP,
+            server: 'us15',
+        });
+        // magic numberism - this is the client ID that we are assigned by mailchimp because they only allow us one list
+        const response = await mailchimpClient.lists.getListMembersInfo('099d152f4d', { count: 1000 });
+        logger.info(`Got ${response.length} members in mailchimp`);
+        const mailchimpMembersList = response.members;
+        const result: any[] = [];
+        // eslint-disable-next-line no-restricted-syntax
+        for (const mailchimpMember of mailchimpMembersList) {
+            const mcTags : string[] = [];
+            mailchimpMember.tags.forEach((tag :any) => {
+                mcTags.push(tag.name);
+            });
+            // eslint-disable-next-line no-await-in-loop
+            const member : Member = await getMemberByEmail(mailchimpMember.email_address);
+            logger.info(`Found ${member.lastName} for email address ${mailchimpMember.email_address}`);
+            logger.info('Getting mailchimp tags for them.');
+            if (member) {
+                result.push({
+                    name: `${member.lastName}, ${member.firstName}`,
+                    membershipId: member.membershipId,
+                    email: mailchimpMember.email_address,
+                    tags: mcTags,
+                });
+            }
+            logger.info('Cleaning all membership tags to take the import from mailchimp');
+            // eslint-disable-next-line no-await-in-loop
+            await cleanMembershipTags(member.membershipId);
+            // eslint-disable-next-line no-await-in-loop
+            await createMembershipTag(member.membershipId, mcTags);
+        }
+        res.status(200);
+        res.send(result);
+    } catch (error) {
+        logger.error(`Error running mailchimp/trackboss reconciliation at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
 });
 
 export default membership;

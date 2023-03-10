@@ -346,3 +346,14 @@ export async function deleteMembershipTag(membershipId: number, tags: string[]) 
     const newTags = await getMembershipTags(membershipId);
     return newTags;
 }
+
+export async function cleanMembershipTags(membershipId: number) : Promise<MembershipTag[]> {
+    try {
+        const deleteSql = 'delete from membership_tags where membership_id = ?';
+        await getPool().query<OkPacket>(deleteSql, [membershipId]);
+    } catch (error) {
+        logger.error(`Error deleting tags for membershipID ${membershipId}`, error);
+    }
+    const newTags = await getMembershipTags(membershipId);
+    return newTags;
+}
