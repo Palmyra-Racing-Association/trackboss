@@ -315,7 +315,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                         state.user?.memberType === 'Admin' && (
                                             <VStack align="left">
                                                 <Text textAlign="left" fontSize="3xl" fontWeight="bold">Tags</Text>
-                                                <Text fontSize="xs">We recommend a max of 3-5 tags</Text>
                                                 <HStack align="left">
                                                     <SimpleGrid columns={1} spacing={2}>
                                                         {
