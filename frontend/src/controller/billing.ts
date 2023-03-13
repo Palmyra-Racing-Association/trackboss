@@ -87,3 +87,12 @@ export async function attestInsurance(token: string, billId: number): Promise<Po
     });
     return response.json();
 }
+
+export async function getBillListExcel(token: string): Promise<Blob> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/list/excel`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.blob();
+}

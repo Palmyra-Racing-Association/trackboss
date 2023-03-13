@@ -14,11 +14,12 @@ import {
     PostCalculateBillsResponse,
     PostPayBillResponse,
 } from '../typedefs/bill';
-import { checkHeader, verify } from '../util/auth';
+import { checkHeader, validateAdminAccess, verify } from '../util/auth';
 import { emailBills, generateNewBills } from '../util/billing';
 import { sendInsuranceConfirmEmail, sendPaymentConfirmationEmail } from '../util/email';
 import logger from '../logger';
 import { calculateBillingYear } from '../util/dateHelper';
+import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 
 //
 // TODO: Emails are not sent for generated bills (see emailBills helper function in util)
@@ -267,6 +268,56 @@ billing.patch('/attestIns/:billId', async (req: Request, res: Response) => {
         }
     }
     res.send(response);
+});
+
+billing.get('/list/excel', async (req: Request, res: Response) => {
+    try {
+        await validateAdminAccess(req, res);
+        logger.info('Getting billing list.');
+        const { paymentStatus, year } = req.query;
+        let billingYear = Number(year);
+        if (!billingYear) {
+            billingYear = calculateBillingYear();
+            logger.info(`Billing year was undefined so we calculated it as ${billingYear} at request time.`);
+        }
+        const billingList: Bill[] = await getBillList({
+            paymentStatus: paymentStatus as string,
+            year: Number(billingYear),
+        });
+
+        const workbookTitle = `PRA billing ${billingYear}`;
+        const workbook = startWorkbook(workbookTitle);
+        const worksheet = workbook.getWorksheet(1);
+        worksheet.columns = [
+            { header: 'Last Name', key: 'lastName', width: 10 },
+            { header: 'First Name', key: 'firstName', width: 15 },
+            { header: 'Points Earned', key: 'pointsEarned', width: 6 },
+            { header: 'Amount', key: 'amount', width: 8 },
+            { header: 'Membership Type', key: 'membershipType', width: 15 },
+            { header: 'Insurance?', key: 'insurance', width: 6 },
+            { header: 'Paid?', key: 'paid', width: 6 },
+        ];
+        billingList.forEach((bill: any) => {
+            const row = {
+                lastName: bill.lastName,
+                firstName: bill.firstName,
+                pointsEarned: bill.pointsEarned,
+                amount: bill.amount,
+                membershipType: bill.membershipType,
+                insurance: bill.curYearIns ? 'Yes' : 'No',
+                paid: bill.curYearPaid ? 'Yes' : 'No',
+            };
+            worksheet.addRow(row);
+        });
+        formatWorkbook(worksheet);
+        // write workbook to buffer.
+        httpOutputWorkbook(workbook, res, `billing${new Date().getTime()}`);
+    } catch (error) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
 });
 
 export default billing;

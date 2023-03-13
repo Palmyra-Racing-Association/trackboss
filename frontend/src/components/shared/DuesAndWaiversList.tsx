@@ -1,15 +1,16 @@
 import {
     Alert,
     Button,
-    Heading, HStack, Link, Modal, ModalContent, ModalOverlay, Stat, StatGroup, StatHelpText, StatLabel,
+    Heading, HStack, IconButton, Link, Modal, ModalContent, ModalOverlay, Stat, StatGroup, StatHelpText, StatLabel,
     StatNumber, Text, useDisclosure, VStack,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import { BsPrinter } from 'react-icons/bs';
 import { Bill } from '../../../../src/typedefs/bill';
 import { UserContext } from '../../contexts/UserContext';
 
-import { attestInsurance, getBills, payBill } from '../../controller/billing';
+import { attestInsurance, getBillListExcel, getBills, payBill } from '../../controller/billing';
 import DataSearchBox from '../input/DataSearchBox';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
 import BillingStatsDisplay from './BillingStatsDisplay';
@@ -140,10 +141,27 @@ export default function DuesAndWaiversList() {
                     <StatHelpText>{`Of ${allBillsData.length}`}</StatHelpText>
                 </Stat>
             </StatGroup>
-            <DataSearchBox
-                onTextChange={setSearchTerm}
-                searchValue={searchTerm}
-            />
+            <HStack>
+                <DataSearchBox
+                    onTextChange={setSearchTerm}
+                    searchValue={searchTerm}
+                />
+                <IconButton
+                    size="lg"
+                    aria-label="Print"
+                    background="orange.300"
+                    color="white"
+                    mr={2}
+                    onClick={
+                        async () => {
+                            const excelData = await getBillListExcel(state.token);
+                            const objectUrl = URL.createObjectURL(excelData);
+                            window.location.href = objectUrl;
+                        }
+                    }
+                    icon={<BsPrinter />}
+                />
+            </HStack>
             <HStack>
                 <WrappedSwitchInput
                     defaultChecked={false}
