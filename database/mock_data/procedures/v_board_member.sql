@@ -9,7 +9,7 @@ CREATE VIEW `v_board_member` AS
         m.membership_id,
         m.first_name, 
         m.last_name,
-        m.email
+        ifnull(bt.assigned_email, m.email) email
     FROM
         board_member bm
         LEFT JOIN board_member_title bt ON bm.board_title_id = bt.board_title_id

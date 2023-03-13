@@ -24,10 +24,6 @@ export default function DuesAndWaivers() {
 
     const columns: any = [
         {
-            name: 'Paid?',
-            selector: (row: Bill) => (row.curYearPaid ? 'Yes' : 'No'),
-        },
-        {
             name: 'Insurance Validated',
             selector: (row: Bill) => (row.curYearIns ? 'Yes' : 'No'),
             maxWidth: '10',
@@ -59,8 +55,13 @@ export default function DuesAndWaivers() {
             hide: 'sm',
         },
         {
-            name: 'Amount',
-            selector: (row: Bill) => `$${row.amount} ($${row.amountWithFee})`,
+            name: 'Balance Due',
+            selector: (row: Bill) => {
+                if (!row.curYearPaid) {
+                    return `$${row.amount} ($${row.amountWithFee})`;
+                }
+                return '$0.00 ($0.00)';
+            },
             sortable: true,
             maxWidth: '25',
         },

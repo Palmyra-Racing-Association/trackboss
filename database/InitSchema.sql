@@ -183,6 +183,7 @@ DROP TABLE IF EXISTS `pradb`.`board_member_title` ;
 CREATE TABLE IF NOT EXISTS `pradb`.`board_member_title` (
   `board_title_id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL,
+  `assigned_email` varchar(255) not null,
   PRIMARY KEY (`board_title_id`))
 ENGINE = InnoDB;
 
