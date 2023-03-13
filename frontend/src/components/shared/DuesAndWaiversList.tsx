@@ -46,49 +46,40 @@ export default function DuesAndWaiversList() {
         setOwesZero(owesNothing);
     }
 
-    useEffect(() => {
-        getMembershipBillData();
-    }, []);
-
-    useEffect(() => {
-        if (searchTerm === '') {
-            setFilteredBills(allBillsData);
-        } else {
-            const nameBills = allBillsData.filter((bill) => {
+    async function runFilters() {
+        if (filterNoPayment) {
+            const zeroDollarBills = filteredBills.filter((bill) => (bill.amount > 0));
+            setFilteredBills(zeroDollarBills);
+        }
+        if (filterPaperwork) {
+            const paperworkBills = filteredBills.filter((bill) => (!bill.curYearIns));
+            setFilteredBills(paperworkBills);
+        }
+        if (filterPaid) {
+            const paidBills = filteredBills.filter((bill) => (!bill.curYearPaid));
+            setFilteredBills(paidBills);
+        }
+        if (searchTerm) {
+            const nameBills = filteredBills.filter((bill) => {
                 const firstNameFound = (bill.firstName.toLowerCase().includes(searchTerm));
                 const lastNameFound = (bill.lastName.toLowerCase().includes(searchTerm));
                 return firstNameFound || lastNameFound;
             });
             setFilteredBills(nameBills);
         }
-    }, [searchTerm]);
+        // if no filters, set data to all data
+        if ((searchTerm === '') && !filterNoPayment && !filterPaperwork && !filterPaid) {
+            setFilteredBills(allBillsData);
+        }
+    }
 
     useEffect(() => {
-        if (!filterNoPayment) {
-            setFilteredBills(allBillsData);
-        } else {
-            const zeroDollarBills = allBillsData.filter((bill) => (bill.amount > 0));
-            setFilteredBills(zeroDollarBills);
-        }
-    }, [filterNoPayment]);
+        getMembershipBillData();
+    }, []);
 
     useEffect(() => {
-        if (!filterPaid) {
-            setFilteredBills(allBillsData);
-        } else {
-            const paidBills = allBillsData.filter((bill) => (!bill.curYearPaid));
-            setFilteredBills(paidBills);
-        }
-    }, [filterPaid]);
-
-    useEffect(() => {
-        if (!filterPaperwork) {
-            setFilteredBills(allBillsData);
-        } else {
-            const paperworkBills = allBillsData.filter((bill) => (!bill.curYearIns));
-            setFilteredBills(paperworkBills);
-        }
-    }, [filterPaperwork]);
+        runFilters();
+    }, [searchTerm, filterNoPayment, filterPaid, filterPaperwork]);
 
     const columns: any = [
         {
