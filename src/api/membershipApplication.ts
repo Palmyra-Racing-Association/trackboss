@@ -149,7 +149,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         });
         logger.info(`Generated bill ${billId} for membership ${newMembershipId} - application converted to member.`);
         const newMemberRecord = await getMember(`${primaryMemberId}`);
-        await addMailchimpMember(newMemberRecord);
+        // await addMailchimpMember(newMemberRecord);
     } catch (error: any) {
         logger.error(error);
         res.status(500);
