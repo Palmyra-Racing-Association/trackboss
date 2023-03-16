@@ -165,7 +165,7 @@ export async function getMember(searchParam: string): Promise<Member> {
         membershipAdminId: results[0].membership_admin_id,
         isBoardMember: !!results[0].board_title_id,
         uuid: results[0].uuid,
-        active: (results[0].active > 0),
+        active: !!results[0].active,
         memberTypeId: results[0].member_type_id,
         memberType: results[0].member_type,
         membershipType: results[0].membership_type,
