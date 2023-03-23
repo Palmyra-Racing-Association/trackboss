@@ -177,6 +177,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <Text fontSize="sm">
                                                 {`${selectedMember.city}, ${selectedMember.state} ${selectedMember.zip}`}
                                             </Text>
+                                            <Text fontSize="xx-small">{selectedMember.uuid}</Text>
                                         </VStack>
                                     </SimpleGrid>
                                     <HStack>
