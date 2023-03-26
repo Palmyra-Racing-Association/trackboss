@@ -20,6 +20,7 @@ import gateCode from './gateCode';
 import membershipApplication from './membershipApplication';
 import logger from '../logger';
 import ridingAreaStatus from './ridingAreaStatus';
+import memberCommunication from './memberCommunication';
 
 const api = Router();
 
@@ -81,5 +82,5 @@ api.use('/health', health);
 api.use('/gateCode', gateCode);
 api.use('/membershipApplication', membershipApplication);
 api.use('/ridingAreaStatus', ridingAreaStatus);
-
+api.use('/memberCommunication', memberCommunication);
 export default api;
