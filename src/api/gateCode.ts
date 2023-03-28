@@ -4,6 +4,8 @@ import { GetGateCodeResponse, PostGateCodeResponse } from '../typedefs/gateCode'
 import { checkHeader, verify } from '../util/auth';
 import { getPool } from '../database/pool';
 import logger from '../logger';
+import { getMember } from '../database/member';
+import { getLatestBillMembership } from '../database/billing';
 
 const getGateCodeByYear = async (year:string) => {
     const [results] =
@@ -39,8 +41,18 @@ gateCode.get('/latest', async (req: Request, res: Response) => {
         response = { reason: headerCheck.reason };
     } else {
         try {
-            await verify(headerCheck.token);
-            response = await getGateCodeLatest();
+            const tokenPayload = await verify(headerCheck.token);
+            const member = await getMember(tokenPayload['cognito:username']);
+            const latestBill = await getLatestBillMembership(member.membershipId);
+            if (latestBill.curYearIns && latestBill.curYearPaid) {
+                response = await getGateCodeLatest();
+            } else {
+                response = {
+                    id: -99,
+                    year: (new Date()).getFullYear(),
+                    message: 'Billing or insurance required',
+                };
+            }
             res.status(200);
         } catch (e: any) {
             logger.error(`Error at path ${req.path}`);

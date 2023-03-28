@@ -3,7 +3,8 @@ import { ErrorResponse } from './errorResponse';
 export type GateCode = {
     id?: number,
     year: number,
-    gateCode: string,
+    gateCode?: string,
+    message?: string,
 }
 
 export type PostGateCodeRequest = {

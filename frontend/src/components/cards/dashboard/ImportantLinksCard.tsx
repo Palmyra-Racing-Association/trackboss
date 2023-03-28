@@ -3,6 +3,11 @@ import React from 'react';
 import { Box, Center, ListItem, Link, UnorderedList, Heading, VStack, Divider } from '@chakra-ui/react';
 
 export default function ImportantLinksCard(props: any) {
+    let gateCodeDisplayMessage = `Current Gate Code: ${props.gateCode}`;
+    // eslint-disable-next-line no-restricted-globals
+    if (isNaN(Number(props.gateCode))) {
+        gateCodeDisplayMessage = 'Insurance and payment required for gate code';
+    }
     return (
         <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={3} h="365" m={2}>
             <Center>
@@ -16,8 +21,7 @@ export default function ImportantLinksCard(props: any) {
                             color="orange"
                         >
                             <ListItem marginLeft={4}>
-                                Current Gate Code:
-                                {props.gateCode}
+                                {gateCodeDisplayMessage}
                             </ListItem>
                         </Link>
                         <Link

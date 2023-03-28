@@ -61,7 +61,7 @@ function Dashboard() {
     useEffect(() => {
         async function getData() {
             const latestGateCode = await getGateCodeLatest(state.token) as GateCode;
-            setGateCode(latestGateCode.gateCode);
+            setGateCode(latestGateCode.gateCode || latestGateCode.message || '');
         }
         getData();
     });
