@@ -1,16 +1,18 @@
 import { Request, Response, Router } from 'express';
 import {
-    cleanMembershipTags,
-    createMembershipTag,
-    deleteMembershipTag,
     getMembership,
     getMembershipList,
-    getMembershipTags,
     getRegistration,
     insertMembership,
     patchMembership,
     registerMembership,
 } from '../database/membership';
+import {
+    cleanMembershipTags,
+    createMembershipTag,
+    deleteMembershipTag,
+    getMembershipTags,
+} from '../database/membershipTags';
 import {
     GetMembershipListResponse,
     GetMembershipResponse,

@@ -432,6 +432,32 @@ CREATE TABLE `pradb`.`membership_tags` (
   INDEX `MEMBERSHIP_ID_IDX` (`membership_tag` ASC, `membership_id` ASC),
   INDEX `MEMBERSHIP_TAG_IDX` (`membership_tag` ASC));
 
+DROP TABLE IF EXISTS `pradb`.`member_communication`;
+
+CREATE TABLE `member_communication` (
+  `member_communication_id` int(11) NOT NULL AUTO_INCREMENT,
+  `subject` varchar(255) DEFAULT NULL,
+  `sender_id` int(11) DEFAULT NULL,
+  `text` varchar(4000) DEFAULT NULL,
+  `mechanism` varchar(50) DEFAULT NULL,
+  `audience_id` int(11) DEFAULT NULL,
+  `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`member_communication_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `pradb`.`member_communication_audience`;
+
+CREATE TABLE `member_communication_audience` (
+  `member_communication_audience_id` int(11) NOT NULL AUTO_INCREMENT,
+  `selected_tag` varchar(45) DEFAULT NULL,
+  `recipient_id` int(11) DEFAULT NULL,
+  `member_communication_id` int(11) DEFAULT NULL,
+  `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`member_communication_audience_id`),
+  KEY `member_communication_audience_email_id_idx` (`member_communication_id`),
+  CONSTRAINT `member_communication_audience_email_id` FOREIGN KEY (`member_communication_id`) REFERENCES `member_communications` (`member_communication_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
