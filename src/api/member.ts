@@ -4,6 +4,7 @@ import {
     deleteFamilyMember,
     getEligibleVoters,
     getMember, getMemberByEmail, getMemberByPhone, getMemberList,
+    getMembersWithTag,
     insertMember, MEMBER_TYPE_MAP, patchMember,
 } from '../database/member';
 import {
@@ -64,6 +65,7 @@ member.get('/list', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: GetMemberListResponse;
     const headerCheck = checkHeader(authorization);
+    const tagParam = req.query.tag as string;
     if (!headerCheck.valid) {
         res.status(401);
         response = { reason: headerCheck.reason };
@@ -80,6 +82,10 @@ member.get('/list', async (req: Request, res: Response) => {
             } else if (Number.isNaN(membershipNum) && typeof membershipFilter !== 'undefined') {
                 res.status(400);
                 response = { reason: 'invalid membership id' };
+            } else if (tagParam) {
+                const list = await getMembersWithTag(tagParam);
+                res.status(200);
+                response = list;
             } else {
                 if (typeof filterRole !== 'undefined') {
                     filters.type = filterRole;

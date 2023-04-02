@@ -21,6 +21,7 @@ import membershipApplication from './membershipApplication';
 import logger from '../logger';
 import ridingAreaStatus from './ridingAreaStatus';
 import memberCommunication from './memberCommunication';
+import membershipTags from './membershipTags';
 
 const api = Router();
 
@@ -83,4 +84,5 @@ api.use('/gateCode', gateCode);
 api.use('/membershipApplication', membershipApplication);
 api.use('/ridingAreaStatus', ridingAreaStatus);
 api.use('/memberCommunication', memberCommunication);
+api.use('/membershipTags', membershipTags);
 export default api;

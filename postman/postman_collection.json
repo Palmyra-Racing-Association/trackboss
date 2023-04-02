@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "6024a92d-eb5c-4053-bd75-60343dad65c3",
+		"_postman_id": "1f564c10-5349-4b32-98ea-ecb2afc1e18d",
 		"name": "PRA requests",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "17812964"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -27,22 +26,12 @@
 		{
 			"name": "getBillingList",
 			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "",
-							"type": "string"
-						}
-					]
-				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{BASE_URL}}i/billing/list?year=2022",
+					"raw": "{{BASE_URL}}/billing/list?year=2022",
 					"host": [
-						"{{BASE_URL}}i"
+						"{{BASE_URL}}"
 					],
 					"path": [
 						"billing",
@@ -231,6 +220,63 @@
 						"membership",
 						"admin",
 						"copyTags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "latestGateCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}gateCode/latest",
+					"host": [
+						"{{BASE_URL}}gateCode"
+					],
+					"path": [
+						"latest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "uniqueTags",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}membershipTags/unique",
+					"host": [
+						"{{BASE_URL}}membershipTags"
+					],
+					"path": [
+						"unique"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "memberList",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}member/list?tag=associate",
+					"host": [
+						"{{BASE_URL}}member"
+					],
+					"path": [
+						"list"
+					],
+					"query": [
+						{
+							"key": "tag",
+							"value": "associate"
+						}
 					]
 				}
 			},

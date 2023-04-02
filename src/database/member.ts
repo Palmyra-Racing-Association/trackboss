@@ -25,6 +25,35 @@ export const GET_VALID_ACTORS_SQL = 'select member_id from pradb.member m where 
     'and m.member_id=(select ms.membership_admin_id from pradb.member m left join pradb.membership ms on ' +
     'm.membership_id=ms.membership_id where member_id=?)) or m.member_type_id=1';
 
+async function mapMemberFromResult(results: any) {
+    const members = results.map((result: any) => ({
+        memberId: result.member_id,
+        membershipId: result.membership_id,
+        firstName: result.first_name,
+        lastName: result.last_name,
+        membershipAdmin: result.membership_admin,
+        membershipAdminId: result.membership_admin_id,
+        isBoardMember: !!result.board_title_id,
+        uuid: result.uuid,
+        active: !!result.active[0],
+        memberTypeId: result.member_type_id,
+        memberType: result.member_type,
+        membershipType: result.membership_type,
+        phoneNumber: result.phone_number,
+        occupation: result.occupation,
+        email: result.email,
+        birthdate: result.birthdate,
+        dateJoined: result.date_joined,
+        address: result.address,
+        city: result.city,
+        state: result.state,
+        zip: result.zip,
+        lastModifiedDate: result.last_modified_date,
+        lastModifiedBy: result.last_modified_by,
+    }));
+    return members;
+}
+
 export async function insertMember(req: PostNewMemberRequest): Promise<number> {
     if (req.email) {
         logger.info(`Creating new user for email ${req.email} on membership ${req.membershipId}`);
@@ -104,31 +133,7 @@ export async function getMemberList(filters: GetMemberListFilters): Promise<Memb
         throw new Error('internal server error');
     }
 
-    return results.map((result) => ({
-        memberId: result.member_id,
-        membershipId: result.membership_id,
-        firstName: result.first_name,
-        lastName: result.last_name,
-        membershipAdmin: result.membership_admin,
-        membershipAdminId: result.membership_admin_id,
-        isBoardMember: !!result.board_title_id,
-        uuid: result.uuid,
-        active: !!result.active[0],
-        memberTypeId: result.member_type_id,
-        memberType: result.member_type,
-        membershipType: result.membership_type,
-        phoneNumber: result.phone_number,
-        occupation: result.occupation,
-        email: result.email,
-        birthdate: result.birthdate,
-        dateJoined: result.date_joined,
-        address: result.address,
-        city: result.city,
-        state: result.state,
-        zip: result.zip,
-        lastModifiedDate: result.last_modified_date,
-        lastModifiedBy: result.last_modified_by,
-    }));
+    return mapMemberFromResult(results);
 }
 
 export async function getMember(searchParam: string): Promise<Member> {
@@ -353,4 +358,23 @@ export async function getEligibleVoters(votingYear: number) : Promise<any> {
         eligibleByPoints: result.eligible_by_points,
         eligibleByMeetings: result.eligible_by_meetings,
     }));
+}
+
+export async function getMembersWithTag(tagValue: string) : Promise<Member[]> {
+    const sql =
+        `select m.* from
+        membership ms
+            left join membership_tags mt on ms.membership_id = mt.membership_id
+            left join v_member m on m.member_id = ms.membership_admin_id
+        where
+        lower(mt.membership_tag) = ?
+        order by m.last_name, m.first_name`;
+    let results;
+    try {
+        [results] = await getPool().query<RowDataPacket[]>(sql, tagValue.toLowerCase());
+    } catch (e) {
+        logger.error(e);
+        throw e;
+    }
+    return mapMemberFromResult(results);
 }
