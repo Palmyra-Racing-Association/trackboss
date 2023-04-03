@@ -389,7 +389,7 @@ member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
             }
         }
         let activeMembers = await getMemberList({});
-        activeMembers = activeMembers.filter((m) => m.active);
+        activeMembers = activeMembers.filter((m) => (m.active && m.email));
 
         // eslint-disable-next-line no-restricted-syntax
         for (const activeMember of activeMembers) {
