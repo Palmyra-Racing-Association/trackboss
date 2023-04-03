@@ -371,6 +371,7 @@ member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
             trackbossFound: 0,
             mailchipRemoved: removedEmails,
             mailchimpMissing: missingEmails,
+            csv: '',
         };
         // not using forEach here because I want to build the response in sequence before sending it.
         // eslint-disable-next-line no-restricted-syntax
@@ -393,8 +394,13 @@ member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
         // eslint-disable-next-line no-restricted-syntax
         for (const activeMember of activeMembers) {
             // check and see if the active member is already in mailchimp.
-            const found = mailchimpMembersList.find((element:any) => (element.email_address === activeMember.email));
-            if (!found && activeMember.email) {
+            // chose between a long line and a style change. I choose style.
+            // eslint-disable-next-line arrow-body-style
+            const found = mailchimpMembersList.find((element:any) => {
+                return (element.email_address.toLowerCase() === activeMember.email.toLowerCase());
+            });
+            const { firstName, lastName, phoneNumber, email } = activeMember;
+            if (!found && activeMember.email && (activeMember.memberId === activeMember.membershipAdminId)) {
                 result.mailchimpMissing.push({
                     full_name: `${activeMember.firstName} ${activeMember.lastName}`,
                     email_address: activeMember.email,
@@ -405,8 +411,10 @@ member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
                     },
                     status: 'subscribed',
                 });
+                result.csv += `${firstName},${lastName},${phoneNumber},${email}`;
+                result.csv += '|';
                 // eslint-disable-next-line max-len
-                logger.info(`${activeMember.firstName} ${activeMember.lastName} is not in mailchimp with ${activeMember.email}`);
+                logger.info(`${firstName} ${lastName} is not in mailchimp with ${email}`);
             }
         }
         res.status(200);
