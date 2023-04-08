@@ -12,7 +12,10 @@ import {
     HStack,
 } from '@chakra-ui/react';
 
-import { AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank, AiFillFolderOpen } from 'react-icons/ai';
+import {
+    AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank, AiFillFolderOpen,
+    AiOutlineNotification,
+} from 'react-icons/ai';
 import { FaMoneyBillAlt } from 'react-icons/fa';
 import { HiUsers, HiCog } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
@@ -90,6 +93,24 @@ export default function HamburgerMenu(props: pageProps) {
             >
                 <Link to="/billing">Members Dues/Waivers</Link>
             </Button>
+            <Button
+                justifyContent="flex-start"
+                height="80px"
+                fontFamily="heading"
+                fontSize="2xl"
+                leftIcon={<AiOutlineNotification />}
+                width="100%"
+                bg="white"
+                color="black"
+                borderRadius="0"
+                _hover={{ bg: 'gray.100' }}
+                _active={activeButtonStyle}
+                id="8"
+                isActive={props.activeButtonId === 9}
+            >
+                <Link to="/communicate">Communicate</Link>
+            </Button>
+
         </VStack>
     );
     return (
