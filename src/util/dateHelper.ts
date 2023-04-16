@@ -18,9 +18,9 @@ export function calculateStartDate(stringDate: string, jobDayNumber: number) : s
 
 /**
  * Calculate the billing year based on the current date.  The rules are as follows:
- * Before March 20, it's the prior billing year because we are still working on renewals,
+ * Before April 30, it's the prior billing year because we are still working on renewals,
  * new memberships.
- * After March 20, it's the current billing year because all that paperwork is done so it is business as usual.
+ * After April 30, it's the current billing year because all that paperwork is done so it is business as usual.
  *
  * @return number The billing year based on the logic.
  */
@@ -28,7 +28,7 @@ export function calculateBillingYear() : number {
     const rightNow = new Date();
     const rightNowYear = rightNow.getFullYear();
     let billingYear = rightNowYear;
-    if (isBefore(rightNow, (new Date(rightNowYear, 3, 15)))) {
+    if (isBefore(rightNow, (new Date(rightNowYear, 4)))) {
         billingYear -= 1;
     }
     return billingYear;
