@@ -129,7 +129,7 @@ export default function DuesAndWaiversList() {
 
     return (
         <VStack mt={25}>
-            <Text fontSize="2xl">{`${allBillsData[0].year} Data`}</Text>
+            <Text fontSize="2xl">{`${allBillsData[0]?.year} Data`}</Text>
             <Text fontSize="x-small">Year changes over on 5/1</Text>
             <StatGroup>
                 <Stat>
