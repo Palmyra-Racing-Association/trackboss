@@ -14,6 +14,7 @@ import { attestInsurance, getBillListExcel, getBills, payBill } from '../../cont
 import DataSearchBox from '../input/DataSearchBox';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
 import BillingStatsDisplay from './BillingStatsDisplay';
+import dataTableStyles from './DataTableStyles';
 
 export default function DuesAndWaiversList() {
     const { state } = useContext(UserContext);
@@ -199,23 +200,7 @@ export default function DuesAndWaiversList() {
             <DataTable
                 columns={columns}
                 data={filteredBills as Bill[]}
-                customStyles={
-                    {
-                        headCells: {
-                            style: {
-                                paddingTop: '0',
-                                fontSize: '1.5em',
-                                backgroundColor: '#f9f9f9',
-                                color: '#626262',
-                            },
-                        },
-                        cells: {
-                            style: {
-                                fontSize: '1.2em',
-                            },
-                        },
-                    }
-                }
+                customStyles={dataTableStyles()}
                 onRowClicked={
                     (row: Bill) => {
                         setSelectedBill(row);
