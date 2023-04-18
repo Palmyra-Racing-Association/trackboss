@@ -1,27 +1,126 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-    Button, Divider, Heading, Modal, ModalContent, ModalFooter, ModalOverlay,
+    Accordion, AccordionButton, AccordionItem, AccordionPanel, Button, Checkbox, Divider, Grid, GridItem, Heading,
+    Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Select, Text, Textarea,
 } from '@chakra-ui/react';
+import { MembershipTag } from '../../../../src/typedefs/membershipTag';
 
 interface alertProps {
     isOpen: boolean,
     // token: string,
     // userId: number,
     onClose: () => void,
+    // eslint-disable-next-line react/require-default-props
+    tags?: MembershipTag[],
     // addAction: () => void,
 }
 
 export default function CreateCommunicationModal(props: alertProps) {
+    // internal state management for the UI.
+    const [characterLimit, setCharacterLimit] = useState<number>(140);
+    const [totalCount, setTotalCount] = useState<number>(0);
+
+    // Data that gets pushed across the wire.
+    const [subject, setSubject] = useState<string>('');
+    const { tags } = props;
+
+    const tagCheckBoxes = tags?.map((tag) => {
+        const tagCheckBox = (
+            <Checkbox
+                colorScheme="orange"
+                key={tag.id}
+                onChange={
+                    (e) => {
+                        // tie the tag count to the checkbox, then subtract it if the box is unchecked.
+                        // this allows updating the count in the UI in a fancy way.
+                        let tagCount = tag.count || 0;
+                        if (!e.target.checked) {
+                            tagCount *= -1;
+                        }
+                        setTotalCount(totalCount + tagCount);
+                    }
+                }
+            >
+                <Text fontSize="sm">{tag.value}</Text>
+            </Checkbox>
+        );
+        return tagCheckBox;
+    });
+
     return (
-        <Modal isCentered size="md" isOpen={props.isOpen} onClose={props.onClose}>
+        <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
             <ModalContent>
                 <Heading
                     textAlign="center"
                 >
-                    Add a communication to PRA membership.
+                    Add a communication to PRA membership
                 </Heading>
                 <Divider />
+                <ModalBody>
+                    <Grid columnGap={2} rowGap={2}>
+                        <GridItem colSpan={2}>
+                            <Text>Subject</Text>
+                            <Input
+                                size="md"
+                                onChange={
+                                    (e) => {
+                                        setSubject(e.target.value);
+                                        console.log(subject);
+                                    }
+                                }
+                            />
+                        </GridItem>
+                        <GridItem colSpan={2}>
+                            <Text>Communication Type</Text>
+                            <Select
+                                colorScheme="orange"
+                                onChange={
+                                    (e) => {
+                                        const selectedType = e.target.value;
+                                        if (selectedType === 'TEXT') {
+                                            setCharacterLimit(140);
+                                        } else {
+                                            setCharacterLimit(4000);
+                                        }
+                                    }
+                                }
+                            >
+                                <option value="EMAIL">Email</option>
+                                <option value="TEXT">Text (limited to 140 characters)</option>
+                            </Select>
+                        </GridItem>
+                        <GridItem colSpan={2}>
+                            <Accordion allowToggle>
+                                <AccordionItem>
+                                    <AccordionButton>
+                                        Audience Tags (choose one or many). Choosing no tags will send to all members.
+                                    </AccordionButton>
+                                    <AccordionPanel>
+                                        <Text fontSize="xs">{`${totalCount} members with selected tag(s)`}</Text>
+                                        <Grid templateRows="repeat(5, 1fr)" templateColumns="repeat(3, 1fr)">
+                                            {tagCheckBoxes}
+                                        </Grid>
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            </Accordion>
+                        </GridItem>
+                        <GridItem colSpan={2}>
+                            <Text>Communication Content</Text>
+                            <Textarea
+                                size="lg"
+                                onChange={
+                                    (e) => {
+                                        const content = e.target.value;
+                                        if (content.length > characterLimit) {
+                                            e.target.value = content.substring(0, characterLimit);
+                                        }
+                                    }
+                                }
+                            />
+                        </GridItem>
+                    </Grid>
+                </ModalBody>
                 <ModalFooter>
                     <Button
                         variant="ghost"

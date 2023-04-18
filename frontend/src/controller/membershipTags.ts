@@ -49,3 +49,12 @@ export async function deleteMembershipTags(
     });
     return response.json();
 }
+
+export async function getUniqueTags(token: string) : Promise<MembershipTag[]> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membershipTags/unique`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
