@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
-    Accordion, AccordionButton, AccordionItem, AccordionPanel, Button, Checkbox, Divider, Grid, GridItem, Heading,
-    Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Select, Text, Textarea,
+    Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, Checkbox, Divider,
+    Grid, GridItem, Heading, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Select,
+    Text, Textarea,
 } from '@chakra-ui/react';
 import { MembershipTag } from '../../../../src/typedefs/membershipTag';
 
-interface alertProps {
+interface CreateCommunicationModalProps {
     isOpen: boolean,
     // token: string,
     // userId: number,
@@ -15,13 +16,16 @@ interface alertProps {
     // addAction: () => void,
 }
 
-export default function CreateCommunicationModal(props: alertProps) {
+export default function CreateCommunicationModal(props: CreateCommunicationModalProps) {
     // internal state management for the UI.
     const [characterLimit, setCharacterLimit] = useState<number>(140);
     const [totalCount, setTotalCount] = useState<number>(0);
 
     // Data that gets pushed across the wire.
     const [subject, setSubject] = useState<string>('');
+    const [mechanism, setMechanism] = useState<string>('EMAIL');
+    const [messageText, setMessageText] = useState<string>('');
+
     const { tags } = props;
 
     const tagCheckBoxes = tags?.map((tag) => {
@@ -83,6 +87,8 @@ export default function CreateCommunicationModal(props: alertProps) {
                                         } else {
                                             setCharacterLimit(4000);
                                         }
+                                        setMechanism(selectedType);
+                                        console.log(mechanism);
                                     }
                                 }
                             >
@@ -94,10 +100,14 @@ export default function CreateCommunicationModal(props: alertProps) {
                             <Accordion allowToggle>
                                 <AccordionItem>
                                     <AccordionButton>
-                                        Audience Tags (choose one or many). Choosing no tags will send to all members.
+                                        <AccordionIcon />
+                                        <Text fontSize="sm">
+                                            Audience Tags (choose one or many).
+                                            Choosing no tags will send to all members.
+                                        </Text>
                                     </AccordionButton>
                                     <AccordionPanel>
-                                        <Text fontSize="xs">{`${totalCount} members with selected tag(s)`}</Text>
+                                        <Text fontSize="xs">{`${totalCount} ${mechanism} with selected tag(s)`}</Text>
                                         <Grid templateRows="repeat(5, 1fr)" templateColumns="repeat(3, 1fr)">
                                             {tagCheckBoxes}
                                         </Grid>
@@ -111,10 +121,13 @@ export default function CreateCommunicationModal(props: alertProps) {
                                 size="lg"
                                 onChange={
                                     (e) => {
-                                        const content = e.target.value;
+                                        let content = e.target.value;
                                         if (content.length > characterLimit) {
                                             e.target.value = content.substring(0, characterLimit);
+                                            content = e.target.value;
                                         }
+                                        setMessageText(content);
+                                        console.log(messageText);
                                     }
                                 }
                             />
