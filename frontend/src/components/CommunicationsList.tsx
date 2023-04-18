@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, VStack } from '@chakra-ui/react';
+import { Button, useDisclosure, VStack } from '@chakra-ui/react';
 import DataTable from 'react-data-table-component';
 
 import { MemberCommunication } from '../../../src/typedefs/memberCommunication';
@@ -8,10 +8,12 @@ import { getCommunications } from '../controller/communication';
 import { UserContext } from '../contexts/UserContext';
 
 import dataTableStyles from './shared/DataTableStyles';
+import CreateCommunicationModal from './modals/CreateCommunicationModal';
 
 export default function CommunicationsList() {
     const { state } = useContext(UserContext);
     const [allCommunications, setAllCommunications] = useState<MemberCommunication[]>();
+    const { isOpen, onClose, onOpen } = useDisclosure();
 
     async function initCommunicationsData() {
         const allCommunicationsData = await getCommunications(state.token);
@@ -50,7 +52,7 @@ export default function CommunicationsList() {
                 color="white"
                 onClick={
                     () => {
-                        alert('This feature is in progress, and coming soon.  It will allow email and text from here!');
+                        onOpen();
                     }
                 }
             >
@@ -75,6 +77,7 @@ export default function CommunicationsList() {
                 subHeaderWrap
                 defaultSortFieldId={1}
             />
+            <CreateCommunicationModal isOpen={isOpen} onClose={onClose} />
         </VStack>
     );
 }
