@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-    Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, Checkbox, Divider,
+    Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, Checkbox, CheckboxGroup, Divider,
     Grid, GridItem, Heading, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Select,
     Text, Textarea,
 } from '@chakra-ui/react';
@@ -25,6 +25,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
     const [subject, setSubject] = useState<string>('');
     const [mechanism, setMechanism] = useState<string>('EMAIL');
     const [messageText, setMessageText] = useState<string>('');
+    const [selectedTags, setSelectedTags] = useState<any>({});
 
     const { tags } = props;
 
@@ -40,6 +41,11 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                         let tagCount = tag.count || 0;
                         if (!e.target.checked) {
                             tagCount *= -1;
+                            delete selectedTags[tag.value];
+                            setSelectedTags(selectedTags);
+                        } else {
+                            selectedTags[tag.value] = tag;
+                            setSelectedTags(selectedTags);
                         }
                         setTotalCount(totalCount + tagCount);
                     }
@@ -52,13 +58,13 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
     });
 
     return (
-        <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
+        <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
             <ModalContent>
                 <Heading
                     textAlign="center"
                 >
-                    Add a communication to PRA membership
+                    Communication to PRA membership
                 </Heading>
                 <Divider />
                 <ModalBody>
@@ -102,14 +108,20 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                     <AccordionButton>
                                         <AccordionIcon />
                                         <Text fontSize="sm">
-                                            Audience Tags (choose one or many).
-                                            Choosing no tags will send to all members.
+                                            Audience Tags (choose zero to many).
+                                            Choose no tags to send to all members.
                                         </Text>
                                     </AccordionButton>
                                     <AccordionPanel>
-                                        <Text fontSize="xs">{`${totalCount} ${mechanism} with selected tag(s)`}</Text>
+                                        <Text fontSize="xs">
+                                            {`${totalCount} ${mechanism.toLowerCase()}(s) with selected tag(s).  `}
+                                            Note that duplicates will be filters when the message is sent, and some
+                                            members can have the same tag.
+                                        </Text>
                                         <Grid templateRows="repeat(5, 1fr)" templateColumns="repeat(3, 1fr)">
-                                            {tagCheckBoxes}
+                                            <CheckboxGroup>
+                                                {tagCheckBoxes}
+                                            </CheckboxGroup>
                                         </Grid>
                                     </AccordionPanel>
                                 </AccordionItem>
@@ -119,6 +131,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                             <Text>Communication Content</Text>
                             <Textarea
                                 size="lg"
+                                isRequired
                                 onChange={
                                     (e) => {
                                         let content = e.target.value;
@@ -153,6 +166,13 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                         size="lg"
                         onClick={
                             async () => {
+                                const communication = {
+                                    subject,
+                                    mechanism,
+                                    messageText,
+                                    selectedTags,
+                                };
+                                alert(JSON.stringify(communication));
                                 props.onClose();
                             }
                         }
