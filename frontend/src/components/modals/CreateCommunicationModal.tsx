@@ -5,11 +5,13 @@ import {
     Text, Textarea,
 } from '@chakra-ui/react';
 import { MembershipTag } from '../../../../src/typedefs/membershipTag';
+import { createCommunication } from '../../controller/communication';
+import { MemberCommunication } from '../../../../src/typedefs/memberCommunication';
 
 interface CreateCommunicationModalProps {
     isOpen: boolean,
-    // token: string,
-    // userId: number,
+    token: string,
+    userId: number,
     onClose: () => void,
     // eslint-disable-next-line react/require-default-props
     tags?: MembershipTag[],
@@ -18,7 +20,7 @@ interface CreateCommunicationModalProps {
 
 export default function CreateCommunicationModal(props: CreateCommunicationModalProps) {
     // internal state management for the UI.
-    const [characterLimit, setCharacterLimit] = useState<number>(140);
+    const [characterLimit, setCharacterLimit] = useState<number>(4000);
     const [totalCount, setTotalCount] = useState<number>(0);
 
     // Data that gets pushed across the wire.
@@ -27,7 +29,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
     const [messageText, setMessageText] = useState<string>('');
     const [selectedTags, setSelectedTags] = useState<any>({});
 
-    const { tags } = props;
+    const { tags, token, userId } = props;
 
     const tagCheckBoxes = tags?.map((tag) => {
         const tagCheckBox = (
@@ -76,7 +78,6 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                 onChange={
                                     (e) => {
                                         setSubject(e.target.value);
-                                        console.log(subject);
                                     }
                                 }
                             />
@@ -94,7 +95,6 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                             setCharacterLimit(4000);
                                         }
                                         setMechanism(selectedType);
-                                        console.log(mechanism);
                                     }
                                 }
                             >
@@ -140,7 +140,6 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                             content = e.target.value;
                                         }
                                         setMessageText(content);
-                                        console.log(messageText);
                                     }
                                 }
                             />
@@ -166,13 +165,15 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                         size="lg"
                         onClick={
                             async () => {
-                                const communication = {
+                                const communication : MemberCommunication = {
                                     subject,
                                     mechanism,
-                                    messageText,
-                                    selectedTags,
+                                    text: messageText,
+                                    senderId: userId,
+                                    selectedTags: Object.keys(selectedTags),
                                 };
                                 alert(JSON.stringify(communication));
+                                await createCommunication(token, communication);
                                 props.onClose();
                             }
                         }

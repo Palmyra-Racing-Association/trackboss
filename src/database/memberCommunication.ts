@@ -21,7 +21,7 @@ export async function getMemberCommunications(): Promise<MemberCommunication[]> 
         mechanism: result.mechanism,
         senderId: result.sender_id,
         text: result.text,
-        recipientAudienceId: result.audience_id,
+        selectedTags: result.selectedTags,
     }));
 }
 
@@ -42,23 +42,24 @@ export async function getMemberCommunicationById(id :number) : Promise<MemberCom
         mechanism: results[0].mechanism,
         senderId: results[0].sender_id,
         text: results[0].text,
-        recipientAudienceId: results[0].audience_id,
+        selectedTags: results[0].selected_tags,
     };
 }
 
-export async function insertMemberCommunication(communication: MemberCommunication) : Promise<number> {
+export async function insertMemberCommunication(communication: MemberCommunication) : Promise<MemberCommunication> {
     const values: any[] = [communication.subject, communication.senderId, communication.text,
-        communication.mechanism, communication.recipientAudienceId,
+        communication.mechanism, JSON.stringify(communication.selectedTags),
     ];
     let result;
     // eslint-disable-next-line max-len
-    const insertSql = 'insert into member_communication (subject, sender_id, text, mechanism, audience_id) values (?, ?, ?, ?, ?)';
+    const insertSql = 'insert into member_communication (subject, sender_id, text, mechanism, selected_tags) values (?, ?, ?, ?, ?)';
     try {
         [result] = await getPool().query<OkPacket>(insertSql, values);
-        logger.info(`Inserted application with id ${result.insertId}`);
+        logger.info(`Inserted communication with id ${result.insertId}`);
     } catch (e: any) {
         logger.error(e);
         throw e;
     }
-    return result.insertId;
+    const newComm = await getMemberCommunicationById(result.insertId);
+    return newComm;
 }

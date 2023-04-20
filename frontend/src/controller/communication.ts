@@ -12,7 +12,7 @@ export async function getCommunications(token: string) : Promise<MemberCommunica
 }
 
 export async function createCommunication(token: string, req: MemberCommunication) {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/memberCommunication/new`, {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/memberCommunication`, {
         method: 'POST',
         mode: 'cors',
         headers: generateHeaders(token),

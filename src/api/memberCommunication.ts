@@ -36,7 +36,8 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
     try {
         await validateAdminAccess(req, res);
         const communication = req.body;
-        insertMemberCommunication(communication);
+        const response = await insertMemberCommunication(communication);
+        res.json(response);
     } catch (error: any) {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);

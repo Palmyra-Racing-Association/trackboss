@@ -440,22 +440,9 @@ CREATE TABLE `member_communication` (
   `sender_id` int(11) DEFAULT NULL,
   `text` varchar(4000) DEFAULT NULL,
   `mechanism` varchar(50) DEFAULT NULL,
-  `audience_id` int(11) DEFAULT NULL,
+  `selected_tags` json default null,
   `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`member_communication_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `pradb`.`member_communication_audience`;
-
-CREATE TABLE `member_communication_audience` (
-  `member_communication_audience_id` int(11) NOT NULL AUTO_INCREMENT,
-  `selected_tag` varchar(45) DEFAULT NULL,
-  `recipient_id` int(11) DEFAULT NULL,
-  `member_communication_id` int(11) DEFAULT NULL,
-  `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`member_communication_audience_id`),
-  KEY `member_communication_audience_email_id_idx` (`member_communication_id`),
-  CONSTRAINT `member_communication_audience_email_id` FOREIGN KEY (`member_communication_id`) REFERENCES `member_communications` (`member_communication_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 SET SQL_MODE=@OLD_SQL_MODE;

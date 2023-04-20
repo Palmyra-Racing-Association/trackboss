@@ -83,7 +83,13 @@ export default function CommunicationsList() {
                 subHeaderWrap
                 defaultSortFieldId={1}
             />
-            <CreateCommunicationModal isOpen={isOpen} onClose={onClose} tags={uniqueTags} />
+            <CreateCommunicationModal
+                isOpen={isOpen}
+                onClose={onClose}
+                tags={uniqueTags}
+                userId={state.user?.memberId || 0}
+                token={state.token}
+            />
         </VStack>
     );
 }
