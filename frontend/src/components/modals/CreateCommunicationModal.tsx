@@ -20,13 +20,15 @@ interface CreateCommunicationModalProps {
 export default function CreateCommunicationModal(props: CreateCommunicationModalProps) {
     // internal state management for the UI.
     const [characterLimit, setCharacterLimit] = useState<number>(4000);
+    const [characterCount, setCharacterCount] = useState<number>(0);
+
     const [totalCount, setTotalCount] = useState<number>(0);
 
     // Data that gets pushed across the wire.
     const [subject, setSubject] = useState<string>('');
     const [mechanism, setMechanism] = useState<string>('EMAIL');
     const [messageText, setMessageText] = useState<string>('');
-    const [selectedTags, setSelectedTags] = useState<any>({});
+    const [selectedTags, setSelectedTags] = useState<any>([]);
 
     const { tags, token, userId } = props;
 
@@ -139,9 +141,13 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                             content = e.target.value;
                                         }
                                         setMessageText(content);
+                                        setCharacterCount(content.length);
                                     }
                                 }
                             />
+                            <Text fontSize="xs">
+                                {`${characterCount} / ${characterLimit} character limit`}
+                            </Text>
                         </GridItem>
                     </Grid>
                 </ModalBody>

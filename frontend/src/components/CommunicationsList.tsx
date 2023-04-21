@@ -75,6 +75,7 @@ export default function CommunicationsList() {
                 customStyles={dataTableStyles()}
                 onRowClicked={
                     (row: MemberCommunication) => {
+                        // eslint-disable-next-line no-alert
                         alert(JSON.stringify(row));
                     }
                 }
