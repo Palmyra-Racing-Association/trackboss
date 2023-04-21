@@ -3,6 +3,8 @@ export type MemberCommunication = {
     subject: string,
     mechanism: string,
     senderId: number,
+    senderName?: string,
     text: string,
     selectedTags: string[],
+    sentDate?: Date,
 };

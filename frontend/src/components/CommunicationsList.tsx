@@ -39,7 +39,7 @@ export default function CommunicationsList() {
         },
         {
             name: 'Sender',
-            selector: (row: MemberCommunication) => row.senderId,
+            selector: (row: MemberCommunication) => row.senderName,
             sortable: true,
             maxWidth: '10',
         },
@@ -48,6 +48,11 @@ export default function CommunicationsList() {
             selector: (row: MemberCommunication) => row.mechanism,
             sortable: true,
             maxWidth: '10',
+        },
+        {
+            name: 'Sent',
+            selector: (row: MemberCommunication) => row.sentDate,
+            sortable: true,
         },
     ];
 
@@ -86,6 +91,7 @@ export default function CommunicationsList() {
             <CreateCommunicationModal
                 isOpen={isOpen}
                 onClose={onClose}
+                addAction={() => initCommunicationsData()}
                 tags={uniqueTags}
                 userId={state.user?.memberId || 0}
                 token={state.token}

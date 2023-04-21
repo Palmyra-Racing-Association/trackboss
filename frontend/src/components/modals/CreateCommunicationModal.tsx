@@ -13,9 +13,8 @@ interface CreateCommunicationModalProps {
     token: string,
     userId: number,
     onClose: () => void,
-    // eslint-disable-next-line react/require-default-props
     tags?: MembershipTag[],
-    // addAction: () => void,
+    addAction: () => void,
 }
 
 export default function CreateCommunicationModal(props: CreateCommunicationModalProps) {
@@ -172,8 +171,8 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                     senderId: userId,
                                     selectedTags: Object.keys(selectedTags),
                                 };
-                                alert(JSON.stringify(communication));
                                 await createCommunication(token, communication);
+                                props.addAction();
                                 props.onClose();
                             }
                         }
@@ -185,3 +184,6 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
         </Modal>
     );
 }
+CreateCommunicationModal.defaultProps = {
+    tags: [],
+};

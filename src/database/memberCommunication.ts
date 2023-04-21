@@ -5,7 +5,13 @@ import logger from '../logger';
 import { getPool } from './pool';
 
 export async function getMemberCommunications(): Promise<MemberCommunication[]> {
-    const sql = 'select * from member_communication';
+    const sql = `
+        select 
+        mc.*, concat_ws(', ', m.last_name, m.first_name) sender_name
+        FROM 
+        member_communication mc left join member m on 
+        sender_id = member_id
+    `;
     const values: string[] = [];
 
     let results;
@@ -20,13 +26,22 @@ export async function getMemberCommunications(): Promise<MemberCommunication[]> 
         subject: result.subject,
         mechanism: result.mechanism,
         senderId: result.sender_id,
+        senderName: result.sender_name,
         text: result.text,
-        selectedTags: result.selectedTags,
+        selectedTags: result.selected_tags,
+        sentDate: new Date(result.creation_date),
     }));
 }
 
 export async function getMemberCommunicationById(id :number) : Promise<MemberCommunication> {
-    const sql = 'select * from member_communication where member_communication_id = ?';
+    const sql = `
+        select 
+        mc.*, concat_ws(', ', m.last_name, m.first_name) sender_name
+        FROM 
+        member_communication mc left join member m on 
+        sender_id = member_id
+        where mc.member_communication_id = ?
+    `;
     const values: number[] = [id];
 
     let results;
@@ -41,8 +56,10 @@ export async function getMemberCommunicationById(id :number) : Promise<MemberCom
         subject: results[0].subject,
         mechanism: results[0].mechanism,
         senderId: results[0].sender_id,
+        senderName: results[0].sender_name,
         text: results[0].text,
         selectedTags: results[0].selected_tags,
+        sentDate: results[0].creation_date,
     };
 }
 
