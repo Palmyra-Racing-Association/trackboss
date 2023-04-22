@@ -9,5 +9,5 @@ export type MemberCommunication = {
     text: string,
     selectedTags: string[],
     sentDate?: Date,
-    members?: Member[],
+    members?: any,
 };

@@ -39,8 +39,9 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
     try {
         await validateAdminAccess(req, res);
         const communication : MemberCommunication = req.body;
-        const response = await insertMemberCommunication(communication);
-        const uniqueRecipients = new Map<number, Member>();
+        // use the base object type as a hashmap with any keys you want in there.
+        // learned this trick ages ago.
+        const uniqueRecipients : any = {};
         // I want array iteration here because I want things to be in order.
         // eslint-disable-next-line no-restricted-syntax
         for (const tag of communication.selectedTags) {
@@ -48,9 +49,22 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
             // eslint-disable-next-line no-await-in-loop
             const membersWithTags = await getMembersWithTag(tag);
             membersWithTags.forEach((member) => {
-                uniqueRecipients.set(member.memberId, member);
+                uniqueRecipients[member.memberId] = (member.memberId, member);
             });
         }
+        communication.members = [];
+        const uniqueRecipientIds = Object.keys(uniqueRecipients);
+        uniqueRecipientIds.forEach((id: any) => {
+            const memberRecord = uniqueRecipients[id];
+            const paredDownRecord = {
+                firstName: memberRecord.firstName,
+                lastName: memberRecord.lastName,
+                email: memberRecord.email,
+                phone: memberRecord.phoneNumber,
+            };
+            communication.members?.push(paredDownRecord);
+        });
+        const response = await insertMemberCommunication(communication);
         res.json(response);
     } catch (error: any) {
         logger.error(`Error at path ${req.path}`);
