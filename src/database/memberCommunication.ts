@@ -65,11 +65,11 @@ export async function getMemberCommunicationById(id :number) : Promise<MemberCom
 
 export async function insertMemberCommunication(communication: MemberCommunication) : Promise<MemberCommunication> {
     const values: any[] = [communication.subject, communication.senderId, communication.text,
-        communication.mechanism, JSON.stringify(communication.selectedTags),
+        communication.mechanism, JSON.stringify(communication.members), JSON.stringify(communication.selectedTags),
     ];
     let result;
     // eslint-disable-next-line max-len
-    const insertSql = 'insert into member_communication (subject, sender_id, text, mechanism, selected_tags) values (?, ?, ?, ?, ?)';
+    const insertSql = 'insert into member_communication (subject, sender_id, text, mechanism, recipients, selected_tags) values (?, ?, ?, ?, ?, ?)';
     try {
         [result] = await getPool().query<OkPacket>(insertSql, values);
         logger.info(`Inserted communication with id ${result.insertId}`);

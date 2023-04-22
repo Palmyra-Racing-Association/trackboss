@@ -1,3 +1,5 @@
+import { Member } from './member';
+
 export type MemberCommunication = {
     memberCommunicationId?: number,
     subject: string,
@@ -7,4 +9,5 @@ export type MemberCommunication = {
     text: string,
     selectedTags: string[],
     sentDate?: Date,
+    members?: any,
 };

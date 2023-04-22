@@ -440,6 +440,7 @@ CREATE TABLE `member_communication` (
   `text` varchar(4000) DEFAULT NULL,
   `mechanism` varchar(50) DEFAULT NULL,
   `selected_tags` json default null,
+  `recipients` json DEFAULT NULL,
   `creation_date` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`member_communication_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

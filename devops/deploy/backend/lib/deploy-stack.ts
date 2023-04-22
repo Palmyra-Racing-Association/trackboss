@@ -198,13 +198,14 @@ export class DeployStack extends Stack {
     );
 
     // create queue
-    const queue = new sqs.Queue(this, 'trackboss-messageSend-queue');
-    
-    // Topics for Text message as well as email.  These can be handled via separate Lambdas, and published
-    // separately also via the API based on selected type.
-    const snsTextTopic = new sns.Topic(this, 'trackboss-textMessages');
-    const snsEmailTopic = new sns.Topic(this, 'trackboss-EmailMessages');
+    const emailQueue = new sqs.Queue(this, 'trackboss-email-queue', {
+        queueName: 'trackBoss-EmailMessages'
+    });
 
+    const textQueue = new sqs.Queue(this, 'trackboss-text-queue', {
+        queueName: 'trackBoss-TextMessage'
+    });
+    
     const rdsParamGroup = new rds.ParameterGroup(this, 'trackbossRdsParamGroup', {
       engine: DatabaseInstanceEngine.mysql({ version: MysqlEngineVersion.VER_5_7 }),
       description: 'RDS MySql parameter group to allow the use of triggers.', 
