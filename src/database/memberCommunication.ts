@@ -59,6 +59,7 @@ export async function getMemberCommunicationById(id :number) : Promise<MemberCom
         senderName: results[0].sender_name,
         text: results[0].text,
         selectedTags: results[0].selected_tags,
+        members: results[0].recipients,
         sentDate: results[0].creation_date,
     };
 }
