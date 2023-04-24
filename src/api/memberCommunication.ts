@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import AWS from 'aws-sdk';
 import {
     getMemberCommunicationById, getMemberCommunications, insertMemberCommunication,
 } from '../database/memberCommunication';
@@ -6,7 +7,6 @@ import { validateAdminAccess } from '../util/auth';
 import logger from '../logger';
 import { getMembersWithTag } from '../database/member';
 import { MemberCommunication } from '../typedefs/memberCommunication';
-import { Member } from '../typedefs/member';
 
 const memberCommunication = Router();
 
@@ -65,6 +65,22 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
             communication.members?.push(paredDownRecord);
         });
         const response = await insertMemberCommunication(communication);
+        // now stick the message in the respctive SQS queue for further processing, but not here.
+        const outboundQueueName = `trackboss-queue-${communication.mechanism}`;
+        AWS.config.update({ region: process.env.AWS_REGION });
+        const sqs = new AWS.SQS();
+        try {
+            logger.info(`sending communication id ${response.memberCommunicationId} to outbound queue`);
+            const sqsParams = {
+                MessageBody: JSON.stringify(response),
+                QueueUrl: `${process.env.SQS_URL}/${outboundQueueName}`,
+            };
+            const snsResponse = await sqs.sendMessage(sqsParams).promise();
+            logger.info(`communication ${response.memberCommunicationId} sent to queue.  Id: ${snsResponse.MessageId}`);
+        } catch (error) {
+            logger.info(`queue send failed for communication ${response.memberCommunicationId} due to `, error);
+            logger.info(`The message with subject ${response.subject} will not be delivered.`);
+        }
         res.json(response);
     } catch (error: any) {
         logger.error(`Error at path ${req.path}`);

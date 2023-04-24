@@ -199,11 +199,11 @@ export class DeployStack extends Stack {
 
     // create queue
     const emailQueue = new sqs.Queue(this, 'trackboss-email-queue', {
-        queueName: 'trackBoss-EmailMessages'
+        queueName: 'trackboss-queue-EMAIL'
     });
 
     const textQueue = new sqs.Queue(this, 'trackboss-text-queue', {
-        queueName: 'trackBoss-TextMessage'
+        queueName: 'trackboss-queue-TEXT'
     });
     
     const rdsParamGroup = new rds.ParameterGroup(this, 'trackbossRdsParamGroup', {
