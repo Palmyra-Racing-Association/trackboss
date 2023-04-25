@@ -11,7 +11,9 @@ import { aws_logs as logs } from 'aws-cdk-lib';
 import { aws_ssm as ssm } from 'aws-cdk-lib';
 import { aws_sqs as sqs } from 'aws-cdk-lib';
 import { aws_lambda as lambda } from 'aws-cdk-lib';
+import { aws_lambda_event_sources as lambdaEventSources } from 'aws-cdk-lib';
 import { DatabaseInstanceEngine, MysqlEngineVersion } from 'aws-cdk-lib/aws-rds';
+
 export class DeployStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -211,7 +213,7 @@ export class DeployStack extends Stack {
     rdsParamGroup.addParameter('log_bin_trust_function_creators','1');
     
     // inbound handling for text messages
-    const inboundMemberCommLambda = new lambda.Function(this, 'InboundTextLambda', {
+    const inboundMemberCommLambda = new lambda.Function(this, 'inboundMemberCommHandler', {
         runtime: lambda.Runtime.NODEJS_16_X,
         tracing: lambda.Tracing.ACTIVE,
         code: lambda.Code.fromAsset('../../../lambda'),
@@ -228,6 +230,8 @@ export class DeployStack extends Stack {
     memberCommIamPolicy.addActions('sns:Publish');
     memberCommIamPolicy.addResources('*');
     inboundMemberCommLambda.addToRolePolicy(memberCommIamPolicy);
+    inboundMemberCommLambda.addEventSource(new lambdaEventSources.SqsEventSource(emailQueue));
+    inboundMemberCommLambda.addEventSource(new lambdaEventSources.SqsEventSource(textQueue));
 
     new ssm.StringParameter(this, 'cognitoPoolId', {
       allowedPattern: '.*',
