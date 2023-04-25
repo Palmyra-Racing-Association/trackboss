@@ -159,6 +159,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                         onClick={
                             () => {
                                 setCharacterCount(0);
+                                setSelectedTags([]);
                                 props.onClose();
                             }
                         }
@@ -180,6 +181,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                 };
                                 await createCommunication(token, communication);
                                 setCharacterCount(0);
+                                setSelectedTags([]);
                                 props.addAction();
                                 props.onClose();
                             }
