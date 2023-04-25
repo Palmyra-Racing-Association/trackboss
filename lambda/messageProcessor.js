@@ -4,7 +4,9 @@ const fs = require('fs');
 exports.handler = async function (event) {
     console.log(JSON.stringify(event));
     const notificationMessage = JSON.parse(event.Records[0].body);
-    const { members, mechanism, subject, text } = notificationMessage;
+    const { members, mechanism, subject } = notificationMessage;
+    let { text } = notificationMessage;
+    text = text.replace(/\n/g, "<p>\n");
     console.log(`there are ${members.length} recipients.`);
     if (mechanism === 'TEXT') {
         console.log('Trackboss messaging lambda - starting text messages');
@@ -35,10 +37,9 @@ exports.handler = async function (event) {
         }
         console.log(`Trackboss messaging lambda - added ${memberRecipients.length}`);
         let template = fs.readFileSync('lambda/emailtemplate.html', 'utf8');
-        template = template.replace('PRA_NOTIFICATION_TITLE', subject);
+        template = template.replace(/PRA_NOTIFICATION_TITLE/g, subject);
         template = template.replace('PRA_NOTIFICATION_BODY', text);
         template = template.replace('PRA_NOTIFICATION_SEND_TIME', new Date().toISOString());
-        template = template.replace(/\n/g, '<p/>');
         const ses = new AWS.SES({ region: 'us-east-1' });
         const emailParams = {
             Destination: {
