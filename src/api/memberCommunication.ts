@@ -39,6 +39,8 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
     try {
         await validateAdminAccess(req, res);
         const communication : MemberCommunication = req.body;
+        // I add this here because we figure out what they are in this upcomign code block.
+        communication.members = [];
         // use the base object type as a hashmap with any keys you want in there.
         // learned this trick ages ago.
         const uniqueRecipients : any = {};
@@ -53,7 +55,6 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
                     uniqueRecipients[member.memberId] = (member.memberId, member);
                 });
             }
-            communication.members = [];
             const uniqueRecipientIds = Object.keys(uniqueRecipients);
             uniqueRecipientIds.forEach((id: any) => {
                 const memberRecord = uniqueRecipients[id];

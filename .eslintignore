@@ -2,3 +2,4 @@ build
 frontend/build
 devops/deploy/frontend
 devops/deploy/backend
+lambda/

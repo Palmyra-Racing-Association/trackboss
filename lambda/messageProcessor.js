@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const AWS = require('aws-sdk');
 
 exports.handler = async function(event) {
