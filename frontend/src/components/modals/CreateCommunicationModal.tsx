@@ -132,6 +132,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                         <GridItem colSpan={2}>
                             <Text>Communication Content</Text>
                             <Textarea
+                                minHeight={350}
                                 size="lg"
                                 isRequired
                                 onChange={

@@ -11,13 +11,16 @@ import { getUniqueTags } from '../controller/membershipTags';
 
 import dataTableStyles from './shared/DataTableStyles';
 import CreateCommunicationModal from './modals/CreateCommunicationModal';
+import ViewCommunicationModal from './modals/ViewCommunicationModal';
 
 export default function CommunicationsList() {
     const { state } = useContext(UserContext);
     const [allCommunications, setAllCommunications] = useState<MemberCommunication[]>();
     const [uniqueTags, setUniqueTags] = useState<MembershipTag[]>();
+    const [selectedCommunication, setSelectedCommunication] = useState<MemberCommunication>();
 
     const { isOpen, onClose, onOpen } = useDisclosure();
+    const { isOpen: isViewOpen, onClose: onViewClose, onOpen: onViewOpen } = useDisclosure();
 
     async function initCommunicationsData() {
         const allCommunicationsData = await getCommunications(state.token);
@@ -75,8 +78,8 @@ export default function CommunicationsList() {
                 customStyles={dataTableStyles()}
                 onRowClicked={
                     (row: MemberCommunication) => {
-                        // eslint-disable-next-line no-alert
-                        alert(JSON.stringify(row));
+                        setSelectedCommunication(row);
+                        onViewOpen();
                     }
                 }
                 fixedHeaderScrollHeight="300px"
@@ -96,6 +99,11 @@ export default function CommunicationsList() {
                 tags={uniqueTags}
                 userId={state.user?.memberId || 0}
                 token={state.token}
+            />
+            <ViewCommunicationModal
+                communication={selectedCommunication}
+                isOpen={isViewOpen}
+                onClose={onViewClose}
             />
         </VStack>
     );
