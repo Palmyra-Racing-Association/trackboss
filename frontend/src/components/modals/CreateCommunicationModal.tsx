@@ -116,8 +116,9 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                     <AccordionPanel>
                                         <Text fontSize="xs">
                                             {`${totalCount} ${mechanism.toLowerCase()}(s) with selected tag(s).  `}
-                                            Note that duplicates will be filters when the message is sent, and some
-                                            members can have the same tag.
+                                            Note multiple members can have the same tag.  Duplicates will be filtered on
+                                            send, and each member will only get a notification one time.  These only go
+                                            to membership admins (primary person on the membership).
                                         </Text>
                                         <Grid templateRows="repeat(5, 1fr)" templateColumns="repeat(3, 1fr)">
                                             <CheckboxGroup>
@@ -159,6 +160,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                         onClick={
                             () => {
                                 setCharacterCount(0);
+                                setTotalCount(0);
                                 setSelectedTags([]);
                                 props.onClose();
                             }
@@ -182,6 +184,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                 await createCommunication(token, communication);
                                 setCharacterCount(0);
                                 setSelectedTags([]);
+                                setTotalCount(0);
                                 props.addAction();
                                 props.onClose();
                             }

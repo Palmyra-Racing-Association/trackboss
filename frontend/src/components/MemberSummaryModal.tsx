@@ -118,7 +118,7 @@ export default function MemberSummaryModal(props: modalProps) {
             setTags(membershipTags);
         }
         getMembershipTagsData();
-    }, [props.memberInfo]);
+    }, [props.memberInfo, newTagValue]);
 
     return (
         <Modal
@@ -329,6 +329,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                                     <TagCloseButton onClick={
                                                                         async () => {
                                                                             await deleteMembershipTags(state.token, props.memberInfo.membershipId, [tag.value]);
+                                                                            setNewTagValue(tag.value);
                                                                         }
                                                                     }
                                                                     />
