@@ -31,14 +31,8 @@ export default function DuesAndWaivers() {
             id: 'year',
         },
         {
-            name: 'Points Earned',
-            selector: (row: Bill) => row.pointsEarned,
-            sortable: true,
-            maxWidth: '25',
-        },
-        {
-            name: 'Points required',
-            selector: (row:Bill) => row.pointsThreshold,
+            name: 'Points',
+            selector: (row: Bill) => `${row.pointsEarned} of ${row.pointsThreshold}`,
             sortable: true,
             maxWidth: '25',
         },
