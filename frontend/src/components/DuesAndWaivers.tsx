@@ -24,22 +24,11 @@ export default function DuesAndWaivers() {
 
     const columns: any = [
         {
-            name: 'Insurance Validated',
-            selector: (row: Bill) => (row.curYearIns ? 'Yes' : 'No'),
-            maxWidth: '10',
-        },
-        {
-            name: 'Due Date',
-            selector: (row: Bill) => `${row.dueDate}`,
-            wrap: true,
-            hide: 'sm',
-        },
-        {
-            name: 'Billing Year',
+            name: 'Year',
             selector: (row: Bill) => row.year,
             sortable: true,
             maxWidth: '25',
-            hide: 'sm',
+            id: 'year',
         },
         {
             name: 'Points Earned',
@@ -52,7 +41,6 @@ export default function DuesAndWaivers() {
             selector: (row:Bill) => row.pointsThreshold,
             sortable: true,
             maxWidth: '25',
-            hide: 'sm',
         },
         {
             name: 'Balance Due',
@@ -64,6 +52,18 @@ export default function DuesAndWaivers() {
             },
             sortable: true,
             maxWidth: '25',
+        },
+        {
+            name: 'Insurance Validated',
+            selector: (row: Bill) => (row.curYearIns ? 'Yes' : 'No'),
+            maxWidth: '10',
+            hide: 'sm',
+        },
+        {
+            name: 'Due Date',
+            selector: (row: Bill) => `${row.dueDate}`,
+            wrap: true,
+            hide: 'sm',
         },
         {
             name: 'Generated on',
@@ -85,6 +85,8 @@ export default function DuesAndWaivers() {
             <DataTable
                 columns={columns}
                 data={allBills as Bill[]}
+                defaultSortFieldId="year"
+                defaultSortAsc={false}
                 customStyles={
                     {
                         headCells: {

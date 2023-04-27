@@ -39,23 +39,27 @@ export default function CommunicationsList() {
             selector: (row: MemberCommunication) => row.subject,
             sortable: true,
             maxWidth: '10',
+            id: 'subject',
         },
         {
             name: 'Sender',
             selector: (row: MemberCommunication) => row.senderName,
             sortable: true,
             maxWidth: '10',
+            id: 'sender',
         },
         {
             name: 'Mechanism',
             selector: (row: MemberCommunication) => row.mechanism,
             sortable: true,
             maxWidth: '10',
+            id: 'mechanism',
         },
         {
             name: 'Sent',
             selector: (row: MemberCommunication) => row.sentDate,
             sortable: true,
+            id: 'sent',
         },
     ];
 
@@ -90,7 +94,8 @@ export default function CommunicationsList() {
                 responsive
                 striped
                 subHeaderWrap
-                defaultSortFieldId={1}
+                defaultSortFieldId="sent"
+                defaultSortAsc={false}
             />
             <CreateCommunicationModal
                 isOpen={isOpen}
