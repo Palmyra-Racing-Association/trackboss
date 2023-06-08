@@ -50,6 +50,7 @@ function SignupSheetJobsRow(props: any) {
                     <Text fontSize="sm">Description</Text>
                     <Input
                         placeholder={data.title}
+                        defaultValue={data.title}
                         onChange={
                             (event) => {
                                 setDescription(event.target.value);
