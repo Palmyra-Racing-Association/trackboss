@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
     Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, Checkbox, CheckboxGroup, Divider,
     Grid, GridItem, Heading, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Select,
-    Text, Textarea,
+    Text, Textarea, useToast,
 } from '@chakra-ui/react';
 import { MembershipTag } from '../../../../src/typedefs/membershipTag';
 import { createCommunication } from '../../controller/communication';
@@ -59,6 +59,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
         );
         return tagCheckBox;
     });
+    const toast = useToast();
 
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
@@ -170,8 +171,8 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                         Cancel
                     </Button>
                     <Button
-                        color="red"
-                        variant="ghost"
+                        backgroundColor="orange"
+                        color="white"
                         size="lg"
                         onClick={
                             async () => {
@@ -187,11 +188,21 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                 setSelectedTags([]);
                                 setTotalCount(0);
                                 props.addAction();
+                                toast({
+                                    containerStyle: {
+                                        background: 'orange',
+                                    },
+                                    title: 'Member communication queued for sending.',
+                                    description: `Subject: ${communication.subject} via ${communication.mechanism}`,
+                                    status: 'success',
+                                    duration: 5000,
+                                    isClosable: true,
+                                });
                                 props.onClose();
                             }
                         }
                     >
-                        Save
+                        Send
                     </Button>
                 </ModalFooter>
             </ModalContent>
