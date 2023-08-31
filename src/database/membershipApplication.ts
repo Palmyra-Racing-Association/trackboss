@@ -2,10 +2,12 @@ import { OkPacket, RowDataPacket } from 'mysql2';
 import { getPool } from './pool';
 import logger from '../logger';
 import { MembershipApplication } from '../typedefs/membershipApplication';
+import { calculateApplicationYear } from '../util/dateHelper';
 
 export async function insertMembershipApplication(membershipApplication: any): Promise<number> {
     const values = ['Review', membershipApplication.email, JSON.stringify(membershipApplication)];
     let result;
+    const applicationYear = calculateApplicationYear();
     // eslint-disable-next-line max-len
     const insertSql = 'insert into membership_application (application_status, application_email, application_json) values (?, ?, ?)';
     try {

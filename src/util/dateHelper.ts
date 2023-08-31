@@ -1,4 +1,4 @@
-import { addDays, format, isBefore } from 'date-fns';
+import { addDays, format, isBefore, isAfter } from 'date-fns';
 
 /**
  * Parse a string and get the correct date based on the job day number.
@@ -32,4 +32,23 @@ export function calculateBillingYear() : number {
         billingYear -= 1;
     }
     return billingYear;
+}
+
+/**
+ * Calculate the application year based on the current date.  The rules are as follows:
+ *
+ * After 8/31, the applications go to the next billing year (now + 1)
+ * After 1/1, they go to the current year (now)
+ * After 3/1, only special applications are taken (two week temp ones) until 8/31 again.
+ *
+ * @return number The application's year based on the logic.
+ */
+export function calculateApplicationYear() : number {
+    const rightNow = new Date();
+    const rightNowYear = rightNow.getFullYear();
+    let applicationyear = rightNowYear;
+    if (isAfter(rightNow, (new Date(rightNowYear, 7)))) {
+        applicationyear += 1;
+    }
+    return applicationyear;
 }
