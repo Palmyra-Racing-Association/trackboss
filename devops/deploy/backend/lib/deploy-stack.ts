@@ -123,6 +123,7 @@ export class DeployStack extends Stack {
         messageBody: '<h1>TrackBoss API</h1>',
       }),
     });
+    
     /*
     const bastionDisk: ec2.BlockDevice = {
       deviceName: '/dev/sda1',
@@ -155,6 +156,7 @@ export class DeployStack extends Stack {
       }
     )
     */
+
 
     // create DB security group that allows attaching to auto scaling group
     const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
@@ -272,5 +274,6 @@ export class DeployStack extends Stack {
       value: eip.attrPublicIp,
     })
     */
+    
   }
 }
