@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:20-alpine
 ENV PORT=3000
 ENV MYSQL_DB=pradb
 
