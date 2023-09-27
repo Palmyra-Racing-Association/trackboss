@@ -123,7 +123,7 @@ export class DeployStack extends Stack {
         messageBody: '<h1>TrackBoss API</h1>',
       }),
     });
-    
+    /*
     const bastionDisk: ec2.BlockDevice = {
       deviceName: '/dev/sda1',
       volume: ec2.BlockDeviceVolume.ebs(30, {encrypted: true}),
@@ -154,6 +154,7 @@ export class DeployStack extends Stack {
         instanceId: windowsBastion.instanceId,
       }
     )
+    */
 
     // create DB security group that allows attaching to auto scaling group
     const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
@@ -163,9 +164,11 @@ export class DeployStack extends Stack {
     })
 
     const rdsInboundGroups = asg.connections.securityGroups;
+    /*
     windowsBastion.connections.securityGroups.forEach((group) => {
       rdsInboundGroups.push(group);
     });
+    */
 
     rdsSecurityInBound.connections.allowFrom(
       new ec2.Connections({
@@ -264,8 +267,10 @@ export class DeployStack extends Stack {
       value: dnsARecord.domainName,
     });
 
+    /*
     new CfnOutput(this, 'bastionDns', {
       value: eip.attrPublicIp,
     })
+    */
   }
 }
