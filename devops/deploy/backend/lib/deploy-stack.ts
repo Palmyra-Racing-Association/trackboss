@@ -1,4 +1,4 @@
-import { App, CfnOutput, Duration, Size, Stack, StackProps, Tags } from 'aws-cdk-lib';
+import { App, CfnOutput, Duration, RemovalPolicy, Size, Stack, StackProps, Tags } from 'aws-cdk-lib';
 import { aws_autoscaling as autoscaling } from 'aws-cdk-lib';
 import { aws_ec2 as ec2 } from 'aws-cdk-lib';
 import { aws_ecs as ecs } from 'aws-cdk-lib';
@@ -147,14 +147,13 @@ export class DeployStack extends Stack {
       iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'));
       choco install mysql.workbench;
       & "C:\Program Files\MySQL\MySQL Workbench 8.0 CE\MySQLWorkbench.exe"`);
-
+    */
     // Elastic IP
     const eip = new ec2.CfnEIP(this, "Ip", 
       { 
-        instanceId: windowsBastion.instanceId,
       }
     )
-    */
+    eip.applyRemovalPolicy(RemovalPolicy.RETAIN)
 
     // create DB security group that allows attaching to auto scaling group
     const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
