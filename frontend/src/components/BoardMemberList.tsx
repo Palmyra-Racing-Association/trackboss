@@ -58,6 +58,7 @@ export default function BoardMemberList() {
     const [cells, setCells] = useState<BoardMember[]>([]);
     const [allCells, setAllCells] = useState<BoardMember[]>([]);
     const [year, setYear] = useState<number>((new Date()).getFullYear());
+    const [dropdownYears, setDropdownYears] = useState<number[]>([]);
 
     const { state } = useContext(UserContext);
     const [error, setError] = useState<any | undefined>(undefined);
@@ -94,6 +95,14 @@ export default function BoardMemberList() {
         }
     }, [searchTerm, allCells]);
 
+    useEffect(() => {
+        const years = [2022, 2021];
+        const now = new Date();
+        years.push(now.getFullYear());
+        years.push(now.getFullYear() + 1);
+        setDropdownYears(years.sort());
+    });
+
     if (error) {
         return (
             <div>
@@ -118,7 +127,7 @@ export default function BoardMemberList() {
                         </InputGroup>
                     </Box>
                     <YearsDropDown
-                        years={[2023, 2022, 2021]}
+                        years={dropdownYears}
                         header=""
                         setYear={setYear}
                     />

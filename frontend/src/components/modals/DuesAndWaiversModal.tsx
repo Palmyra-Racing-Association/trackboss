@@ -34,7 +34,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
     let renewalPaymentComponent = (
         <>
             <Box>
-                {`Renewal and payment options are available on or after January 1st, ${billingYear + 1}.`}
+                {`Renewal and payment options are available on or after December 1st, ${billingYear}.`}
             </Box>
             <Box>
                 <Button
