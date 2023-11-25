@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Bill } from '../../../src/typedefs/bill';
 import { UserContext } from '../contexts/UserContext';
-import { attestInsurance, getBillsForMembership } from '../controller/billing';
+import { getBillsForMembership } from '../controller/billing';
 import DuesAndWaiversModal from './modals/DuesAndWaiversModal';
 
 export default function DuesAndWaivers() {
@@ -73,7 +73,7 @@ export default function DuesAndWaivers() {
             </HStack>
             <Text align="left">
                 Your dues for 2023 and beyond are displayed below.  Note that payment links will be available on or
-                around January 1.  Until then, you can see your projected amount based on the work you have completed
+                around December 1.  Until then, you can see your projected amount based on the work you have completed
                 so far.  This will change as you earn more points.  Billing is updated daily.
             </Text>
             <DataTable
@@ -115,14 +115,10 @@ export default function DuesAndWaivers() {
                 token={state.token}
                 insuranceAttested={selectedBill?.curYearIns || false}
                 isOpen={isOpen}
-                onClose={onClose}
-                attestationAction={
-                    () => {
-                        if (selectedBill?.billId) {
-                            attestInsurance(state.token, selectedBill?.billId);
-                            // after attesting, reload the list.
-                            getMembershipBillData();
-                        }
+                onClose={
+                    async () => {
+                        await getMembershipBillData();
+                        onClose();
                     }
                 }
                 payOnlineAction={

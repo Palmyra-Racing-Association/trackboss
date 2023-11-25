@@ -96,11 +96,14 @@ export default function BoardMemberList() {
     }, [searchTerm, allCells]);
 
     useEffect(() => {
-        const years = [2022, 2021];
-        const now = new Date();
-        years.push(now.getFullYear());
-        years.push(now.getFullYear() + 1);
-        setDropdownYears(years.sort());
+        const years = [];
+        const startYear = 2021; // this is the first year we put this data in here.
+        const endYear = (new Date().getFullYear()) + 1;
+        for (let index = startYear; index <= endYear; index++) {
+            years.push(index);
+        }
+        setDropdownYears(years.sort().reverse());
+        setYear(years[0]);
     });
 
     if (error) {

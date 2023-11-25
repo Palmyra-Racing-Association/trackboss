@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     Box,
     Button, Divider, Heading, Modal, ModalContent, ModalFooter, ModalOverlay,
 } from '@chakra-ui/react';
 import { Bill } from '../../../../src/typedefs/bill';
+import { UserContext } from '../../contexts/UserContext';
+
+import { attestInsurance } from '../../controller/billing';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
 import BillingStatsDisplay from '../shared/BillingStatsDisplay';
 
@@ -15,12 +18,13 @@ interface duesModalProps {
     viewBill?: Bill;
     insuranceAttested: boolean,
     onClose: () => void,
-    attestationAction: () => void,
     payOnlineAction: () => void,
     paySnailMailAction: () => void,
 }
 
 export default function DuesAndWaiversModal(props: duesModalProps) {
+    const { state } = useContext(UserContext);
+
     const billingYear = props.viewBill?.year || new Date().getFullYear();
 
     const [insuranceAttested, setInsuranceAttested] = useState<boolean>(props.viewBill?.curYearIns || false);
@@ -29,7 +33,9 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
 
     const currentTime = new Date().getTime();
 
-    const startOfBillingPeriod = new Date(billingYear, 11, 21).getTime();
+    // months are zero based, so January is 0, November is 10, December is 11, and there is no 12. I can never remember
+    // this fun fact and always mess it up, so making this note here next time I need this.
+    const startOfBillingPeriod = new Date(billingYear, 10, 21).getTime();
 
     let renewalPaymentComponent = (
         <>
@@ -63,10 +69,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     color="white"
                     bgColor={attested ? 'green' : 'red'}
                     onClick={
-                        () => {
-                            if (attested) {
-                                props.attestationAction();
-                            }
+                        async () => {
                             props.onClose();
                         }
                     }
@@ -131,7 +134,12 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     <WrappedSwitchInput
                         wrapperText="(Payment options appear after you agree to this if applicable)"
                         defaultChecked={attested}
-                        onSwitchChange={setInsuranceAttested}
+                        onSwitchChange={
+                            async () => {
+                                setInsuranceAttested(true);
+                                await attestInsurance(state.token, props.viewBill?.billId || 0);
+                            }
+                        }
                         maxWidth={400}
                         locked={attested}
                         toastMessage="Insurance attestation has been recorded and will be emailed to you."
