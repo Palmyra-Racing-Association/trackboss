@@ -28,6 +28,7 @@ export default function DuesAndWaiversList() {
     const [filterNoPayment, setFilterNoPayment] = useState<boolean>(false);
     const [filterPaperwork, setFilterPaperwork] = useState<boolean>(false);
     const [filterPaid, setFilterPaid] = useState<boolean>(false);
+    const [paymentType, setPaymentType] = useState<string>('');
 
     const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -230,7 +231,7 @@ export default function DuesAndWaiversList() {
                         onSwitchChange={
                             async () => {
                                 if (selectedBill?.billId) {
-                                    await payBill(state.token, selectedBill?.billId);
+                                    await payBill(state.token, selectedBill?.billId, '');
                                     getMembershipBillData();
                                 }
                             }

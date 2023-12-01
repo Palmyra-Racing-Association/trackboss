@@ -1,5 +1,5 @@
 DELIMITER //
-CREATE VIEW `v_bill` AS
+CREATE or replace VIEW `v_bill` AS
     SELECT 
         mb.bill_id,
         DATE_FORMAT(mb.generated_date, '%Y-%m-%d') AS generated_date,
@@ -28,7 +28,7 @@ CREATE VIEW `v_bill` AS
 			left join 
 		membership_types mt on ms.membership_type_id = mt.membership_type_id
 	WHERE 
-		ms.status = 'active'
+		ms.status = 'active' and ma.active = true
 	ORDER BY
 		last_name, first_name, year;
 //
