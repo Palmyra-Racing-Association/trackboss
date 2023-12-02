@@ -114,7 +114,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         emailedBill: result.emailed_bill,
         curYearPaid: !!result.cur_year_paid[0],
         curYearIns: !!result.cur_year_ins[0],
-        dueDate: new Date((result.year + 1), 1, 15).toDateString(),
+        dueDate: new Date((result.year + 1), 1, 1).toDateString(),
         pointsEarned: result.points_earned,
         pointsThreshold: result.threshold,
         detail: result.work_detail,
