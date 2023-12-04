@@ -1,7 +1,9 @@
 import {
     Alert,
+    Box,
     Button,
-    Heading, HStack, IconButton, Link, Modal, ModalContent, ModalOverlay, Stat, StatGroup, StatHelpText, StatLabel,
+    Heading, HStack, IconButton, Link, Modal, ModalContent, ModalOverlay,
+    Select, Stat, StatGroup, StatHelpText, StatLabel,
     StatNumber, Text, useDisclosure, VStack,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
@@ -23,12 +25,13 @@ export default function DuesAndWaiversList() {
     const [markedPaid, setMarkedPaid] = useState<number>(0);
     const [markedAttested, setMarkedAttested] = useState<number>(0);
     const [owesZero, setOwesZero] = useState<number>(0);
+    const [allDone, setAllDone] = useState<number>(0);
     const [selectedBill, setSelectedBill] = useState<Bill>();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [filterNoPayment, setFilterNoPayment] = useState<boolean>(false);
     const [filterPaperwork, setFilterPaperwork] = useState<boolean>(false);
     const [filterPaid, setFilterPaid] = useState<boolean>(false);
-
+    const [paymentMethod, setPaymentMethod] = useState<string>('');
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     async function getMembershipBillData() {
@@ -36,16 +39,19 @@ export default function DuesAndWaiversList() {
         let attested = 0;
         let paid = 0;
         let owesNothing = 0;
+        let completed = 0;
         memberBills.forEach((bill) => {
             if (bill.curYearIns) attested++;
             if (bill.curYearPaid) paid++;
-            if (bill.amount === 0) owesNothing++;
+            if (bill.amount.toString() === '0.00') owesNothing++;
+            if (bill.curYearIns && bill.curYearPaid) completed++;
         });
         setAllBillsData(memberBills as Bill[]);
         setFilteredBills(memberBills as Bill[]);
         setMarkedPaid(paid);
         setMarkedAttested(attested);
         setOwesZero(owesNothing);
+        setAllDone(completed);
     }
 
     async function runFilters() {
@@ -139,9 +145,21 @@ export default function DuesAndWaiversList() {
                     <StatHelpText>{`${owesZero} owe $0`}</StatHelpText>
                 </Stat>
                 <Stat>
+                    <StatLabel>
+                        {`${allBillsData.length - owesZero} members owe`}
+                    </StatLabel>
+                    <StatNumber>{`${markedPaid - owesZero}`}</StatNumber>
+                    <StatHelpText>are paid</StatHelpText>
+                </Stat>
+                <Stat>
                     <StatLabel>Rules and Insurance</StatLabel>
                     <StatNumber>{markedAttested}</StatNumber>
                     <StatHelpText>{`Of ${allBillsData.length}`}</StatHelpText>
+                </Stat>
+                <Stat>
+                    <StatLabel>Completed all</StatLabel>
+                    <StatNumber>{`${((allDone / allBillsData.length) * 100).toFixed(2)}%`}</StatNumber>
+                    <StatHelpText>{allDone}</StatHelpText>
                 </Stat>
             </StatGroup>
             <HStack>
@@ -230,7 +248,7 @@ export default function DuesAndWaiversList() {
                         onSwitchChange={
                             async () => {
                                 if (selectedBill?.billId) {
-                                    await payBill(state.token, selectedBill?.billId);
+                                    await payBill(state.token, selectedBill?.billId, paymentMethod);
                                     getMembershipBillData();
                                 }
                             }
@@ -238,6 +256,30 @@ export default function DuesAndWaiversList() {
                         toastMessage={`${selectedBill?.firstName} ${selectedBill?.lastName} marked as paid.`}
                         maxWidth={400}
                     />
+                    {
+                        selectedBill?.curYearPaid && selectedBill.paymentMethod &&
+                        <Text>{`Paid via ${selectedBill?.paymentMethod}`}</Text>
+                    }
+                    {
+                        !selectedBill?.curYearPaid && (
+                            <Box maxWidth={175}>
+                                <Select
+                                    placeholder="Payment Method"
+                                    size="sm"
+                                    onChange={
+                                        (event) => {
+                                            setPaymentMethod(event.target.value);
+                                        }
+                                    }
+                                >
+                                    <option value="Cash">Cash</option>
+                                    <option value="Check">Check</option>
+                                    <option value="PayPal">PayPal</option>
+                                    <option value="Square">Square</option>
+                                </Select>
+                            </Box>
+                        )
+                    }
                     <WrappedSwitchInput
                         wrapperText="Mark (or unmark) as insurance submitted"
                         defaultChecked={selectedBill?.curYearIns || false}

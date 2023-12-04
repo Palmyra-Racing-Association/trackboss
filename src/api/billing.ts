@@ -153,10 +153,11 @@ billing.post('/:billId', async (req: Request, res: Response) => {
         try {
             await verify(headerCheck.token, 'Membership Admin');
             const billId = Number(req.params.billId);
+            const { paymentMethod } = req.query || '';
             if (Number.isNaN(billId)) {
                 throw new Error('not found');
             }
-            await markBillPaid(billId);
+            await markBillPaid(billId, paymentMethod?.toString());
             const bill = await getBill(billId);
             // if they marked the attestation as complete, send an email.
             if (bill.curYearPaid) {

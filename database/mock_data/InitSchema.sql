@@ -145,6 +145,7 @@ CREATE TABLE IF NOT EXISTS `pradb`.`member_bill` (
   `cur_year_paid` BIT NOT NULL,
   `work_detail` JSON NULL,
   `cur_year_ins` BIT NOT NULL,
+  `payment_method` varchar(45) DEFAULT NULL,  
   PRIMARY KEY (`bill_id`),
   INDEX `membership_id_idx` (`membership_id` ASC) VISIBLE,
   CONSTRAINT `FK_bill_membership`

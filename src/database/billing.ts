@@ -117,6 +117,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         dueDate: new Date((result.year + 1), 1, 1).toDateString(),
         pointsEarned: result.points_earned,
         pointsThreshold: result.threshold,
+        paymentMethod: result.payment_method,
         detail: result.work_detail,
     }));
 }
@@ -135,12 +136,13 @@ export async function markBillEmailed(id: number): Promise<void> {
     }
 }
 
-export async function markBillPaid(id: number): Promise<void> {
+export async function markBillPaid(id: number, paymentMethod?: string): Promise<void> {
     let result;
     try {
         const sql =
-          'update member_bill set cur_year_paid = (CASE WHEN cur_year_paid = 1 THEN 0 ELSE 1 END) where bill_id = ?';
-        [result] = await getPool().query<OkPacket>(sql, [id]);
+          // eslint-disable-next-line max-len
+          'update member_bill set cur_year_paid = (CASE WHEN cur_year_paid = 1 THEN 0 ELSE 1 END), payment_method = ? where bill_id = ?';
+        [result] = await getPool().query<OkPacket>(sql, [paymentMethod, id]);
     } catch (e) {
         logger.error(`DB error marking bill as paid: ${e}`);
         throw new Error('internal server error');

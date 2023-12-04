@@ -57,7 +57,12 @@ const customStyles = {
 export default function BoardMemberList() {
     const [cells, setCells] = useState<BoardMember[]>([]);
     const [allCells, setAllCells] = useState<BoardMember[]>([]);
-    const [year, setYear] = useState<number>((new Date()).getFullYear());
+    const now = new Date();
+    let initialYear = now.getFullYear();
+    if (now.getMonth() >= 11) {
+        initialYear += 1;
+    }
+    const [year, setYear] = useState<number>(initialYear);
     const [dropdownYears, setDropdownYears] = useState<number[]>([]);
 
     const { state } = useContext(UserContext);
@@ -103,7 +108,6 @@ export default function BoardMemberList() {
             years.push(index);
         }
         setDropdownYears(years.sort().reverse());
-        setYear(years[0]);
     });
 
     if (error) {
@@ -131,6 +135,7 @@ export default function BoardMemberList() {
                     </Box>
                     <YearsDropDown
                         years={dropdownYears}
+                        initialYear={initialYear}
                         header=""
                         setYear={setYear}
                     />

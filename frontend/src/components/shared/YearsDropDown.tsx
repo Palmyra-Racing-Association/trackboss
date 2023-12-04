@@ -8,11 +8,12 @@ interface YearsDropDownProps {
     header: string,
     // eslint-disable-next-line no-unused-vars
     setYear: (value: number) => void,
+    initialYear: number,
 }
 
 export default function YearsDropDown(props: YearsDropDownProps) {
     const currentYear = (new Date()).getFullYear();
-    const [year, setYear] = useState<number>(currentYear);
+    const [year, setYear] = useState<number>(props.initialYear);
     if (!props.years || (props.years.length === 0)) {
         props.years.push(currentYear);
     }

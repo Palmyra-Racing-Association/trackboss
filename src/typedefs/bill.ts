@@ -20,6 +20,7 @@ export type Bill = {
     curYearPaid: boolean,
     curYearIns: boolean,
     dueDate: string,
+    paymentMethod?: string,
     detail?: string,
 }
 
