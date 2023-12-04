@@ -160,6 +160,7 @@ export default function WorkPointsHistory() {
                 years={years}
                 header="Work Points History"
                 setYear={setYear}
+                initialYear={(new Date()).getFullYear()}
             />
             <Heading color="orange" size="2xl">
                 {`${workPointsEarned}/${workPointsThreshold}`}
