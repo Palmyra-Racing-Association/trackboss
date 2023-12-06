@@ -118,6 +118,8 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         pointsEarned: result.points_earned,
         pointsThreshold: result.threshold,
         paymentMethod: result.payment_method,
+        squareLink: result.square_link,
+        squareOrderId: result.square_order_id,
         detail: result.work_detail,
     }));
 }
@@ -161,6 +163,22 @@ export async function markInsuranceAttestation(id: number): Promise<void> {
         [result] = await getPool().query<OkPacket>(sql, [id]);
     } catch (e) {
         logger.error(`DB error marking bill as paid: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+}
+
+export async function addSquareAttributes(bill: Bill): Promise<void> {
+    let result;
+    try {
+        const sql =
+          'update member_bill set square_link = ?, square_order_id = ? where bill_id = ?';
+        [result] = await getPool().query<OkPacket>(sql, [bill.squareLink, bill.squareOrderId, bill.billId]);
+    } catch (e) {
+        logger.error(`DB error adding square attributes: ${e}`);
         throw new Error('internal server error');
     }
 
@@ -218,6 +236,9 @@ export async function getBill(billId: number) : Promise<Bill> {
         dueDate: new Date((billResultSingle.year + 1), 1, 15).toDateString(),
         pointsEarned: billResultSingle.points_earned,
         pointsThreshold: billResultSingle.threshold,
+        paymentMethod: billResultSingle.payment_method,
+        squareLink: billResultSingle.square_link,
+        squareOrderId: billResultSingle.square_order_id,
         detail: billResultSingle.work_detail,
     };
     return bill;
@@ -254,6 +275,9 @@ export async function getLatestBillMembership(membershipId: number) : Promise<Bi
         dueDate: new Date((billResultSingle.year + 1), 1, 15).toDateString(),
         pointsEarned: billResultSingle.points_earned,
         pointsThreshold: billResultSingle.threshold,
+        paymentMethod: billResultSingle.payment_method,
+        squareLink: billResultSingle.square_link,
+        squareOrderId: billResultSingle.square_order_id,
         detail: billResultSingle.work_detail,
     };
     return bill;
