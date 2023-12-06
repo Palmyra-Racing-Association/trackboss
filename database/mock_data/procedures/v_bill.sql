@@ -19,6 +19,8 @@ CREATE VIEW `v_bill` AS
         mb.cur_year_ins,
         mb.membership_id,
         mb.payment_method,
+        mb.square_link,
+        mb.square_order_id,
         mb.work_detail
     FROM
         member_bill mb

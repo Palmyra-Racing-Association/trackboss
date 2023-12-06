@@ -21,6 +21,8 @@ export type Bill = {
     curYearIns: boolean,
     dueDate: string,
     paymentMethod?: string,
+    squareLink?: string,
+    squareOrderId?: string,
     detail?: string,
 }
 
