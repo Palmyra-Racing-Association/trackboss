@@ -16,6 +16,9 @@ export async function createPaymentLink(memberBill: Bill) {
 
     try {
         const start = Date.now();
+        // Square uses cents for payment so we convert here.  and force two decimal places becuase the
+        // calculation gets jacked up otherwise.
+        const paymentAmount = (memberBill.amountWithFee * 100).toFixed(0);
         const response = await client.checkoutApi.createPaymentLink({
             idempotencyKey: v4(),
             order: {
@@ -24,11 +27,11 @@ export async function createPaymentLink(memberBill: Bill) {
                 referenceId: memberBill.billId.toString(),
                 lineItems: [
                     {
-                        name: `Palmyra Racing Assocation - dues for ${memberBill.year}`,
+                        name: `Palmyra Racing Association - ${memberBill.membershipAdmin} dues for ${memberBill.year}`,
                         quantity: '1',
                         note: memberBill.membershipAdmin,
                         basePriceMoney: {
-                            amount: BigInt(memberBill.amountWithFee * 100),
+                            amount: BigInt(paymentAmount),
                             currency: 'USD',
                         },
                     },
@@ -60,6 +63,7 @@ export async function createPaymentLink(memberBill: Bill) {
             squareOrderId: response?.result?.paymentLink?.orderId,
         };
     } catch (error) {
+        logger.error(JSON.stringify(memberBill));
         logger.error(error);
         throw (error);
     }

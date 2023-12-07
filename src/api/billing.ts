@@ -3,6 +3,7 @@ import _ from 'lodash';
 // import { format } from 'date-fns';
 import { getMembershipList } from '../database/membership';
 import {
+    addSquareAttributes,
     cleanBilling, getBill, getBillList, getWorkPointThreshold, markBillPaid,
     markInsuranceAttestation,
 } from '../database/billing';
@@ -20,6 +21,7 @@ import { sendInsuranceConfirmEmail, sendPaymentConfirmationEmail } from '../util
 import logger from '../logger';
 import { calculateBillingYear } from '../util/dateHelper';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
+import { createPaymentLink } from '../integrations/square';
 
 //
 // TODO: Emails are not sent for generated bills (see emailBills helper function in util)
@@ -313,6 +315,45 @@ billing.get('/list/excel', async (req: Request, res: Response) => {
         formatWorkbook(worksheet);
         // write workbook to buffer.
         httpOutputWorkbook(workbook, res, `billing${new Date().getTime()}`);
+    } catch (error) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
+});
+
+billing.put('/checkoutlinks', async (req: Request, res: Response) => {
+    try {
+        await validateAdminAccess(req, res);
+        logger.info('Getting billing list.');
+        const { year } = req.query;
+        let billingYear = Number(year);
+        if (!billingYear) {
+            billingYear = calculateBillingYear();
+            logger.info(`Billing year was undefined so we calculated it as ${billingYear} at request time.`);
+        }
+        const billingList: Bill[] = await getBillList({
+            year: Number(billingYear),
+        });
+
+        // I don't care if this is slower, I would actualy prefer it so I don't hit Square's rate limits.
+        // This runs once a year so who cares how fast it is anyway?
+        // eslint-disable-next-line no-restricted-syntax
+        for (const bill of billingList) {
+            // no need to create checkout links for anyone who owes zero.  It's pointless.
+            if (bill.amount > 0) {
+                // see above for why this is this way.
+                // eslint-disable-next-line no-await-in-loop
+                const paymentInfo = await createPaymentLink(bill);
+                bill.squareLink = paymentInfo.squareUrl;
+                bill.squareOrderId = paymentInfo.squareOrderId;
+                // slow down sally, you're moving too fast.....
+                // eslint-disable-next-line no-await-in-loop
+                await addSquareAttributes(bill);
+            }
+        }
+        res.json(billingList);
     } catch (error) {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);
