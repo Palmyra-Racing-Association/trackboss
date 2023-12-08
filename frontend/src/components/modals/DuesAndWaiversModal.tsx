@@ -79,6 +79,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                 <Button
                     backgroundColor="orange.300"
                     color="white"
+                    disabled
                     variant="outline"
                     size="lg"
                     hidden={!attested || (props.viewBill?.amount === 0) || (props.viewBill?.curYearPaid)}
@@ -88,7 +89,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                         }
                     }
                 >
-                    Pay With Paypal
+                    Pay With Square
                 </Button>
                 <Button
                     ml={2}
@@ -103,7 +104,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                         }
                     }
                 >
-                    Pay another way
+                    Pay with cash/check
                 </Button>
             </>
         );

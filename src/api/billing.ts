@@ -344,7 +344,7 @@ billing.put('/create/checkoutlinks', async (req: Request, res: Response) => {
         // eslint-disable-next-line no-restricted-syntax
         for (const bill of billingList) {
             // no need to create checkout links for anyone who owes zero.  It's pointless.
-            if (bill.amount > 0) {
+            if (bill.membershipAdminEmail) {
                 // see above for why this is this way.
                 // eslint-disable-next-line no-await-in-loop
                 const paymentInfo = await createPaymentLink(bill);

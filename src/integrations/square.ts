@@ -10,7 +10,7 @@ export async function createPaymentLink(memberBill: Bill) {
 
     // Set Square credentials and environment
     const client = new Client({
-        environment: Environment.Sandbox, // Change this to Environment.Production for live transactions
+        environment: Environment.Production, // Change this to Environment.Production for live transactions
         accessToken,
     });
 
