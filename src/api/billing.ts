@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { getMembershipList } from '../database/membership';
 import {
     addSquareAttributes,
-    cleanBilling, getBill, getBillList, getWorkPointThreshold, markBillPaid,
+    cleanBilling, getBill, getBillByOrderId, getBillList, getWorkPointThreshold, markBillPaid,
     markInsuranceAttestation,
 } from '../database/billing';
 import {
@@ -16,8 +16,8 @@ import {
     PostPayBillResponse,
 } from '../typedefs/bill';
 import { checkHeader, validateAdminAccess, verify } from '../util/auth';
-import { emailBills, generateNewBills } from '../util/billing';
-import { sendInsuranceConfirmEmail, sendPaymentConfirmationEmail } from '../util/email';
+import { emailBills, generateNewBills, processBillPayment } from '../util/billing';
+import { sendInsuranceConfirmEmail } from '../util/email';
 import logger from '../logger';
 import { calculateBillingYear } from '../util/dateHelper';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
@@ -159,12 +159,7 @@ billing.post('/:billId', async (req: Request, res: Response) => {
             if (Number.isNaN(billId)) {
                 throw new Error('not found');
             }
-            await markBillPaid(billId, paymentMethod?.toString());
-            const bill = await getBill(billId);
-            // if they marked the attestation as complete, send an email.
-            if (bill.curYearPaid) {
-                await sendPaymentConfirmationEmail(bill);
-            }
+            await processBillPayment(billId, paymentMethod?.toString() || '');
             response = {};
             res.status(200);
         } catch (e: any) {
@@ -323,9 +318,16 @@ billing.get('/list/excel', async (req: Request, res: Response) => {
     }
 });
 
-billing.put('/checkoutlinks', async (req: Request, res: Response) => {
+billing.put('/create/checkoutlinks', async (req: Request, res: Response) => {
     try {
-        await validateAdminAccess(req, res);
+        const { authorization } = req.headers;
+        let response: GetBillListResponse;
+        const headerCheck = checkHeader(authorization);
+        if (!headerCheck.valid) {
+            res.status(401);
+            response = { reason: headerCheck.reason };
+            return;
+        }
         logger.info('Getting billing list.');
         const { year } = req.query;
         let billingYear = Number(year);
@@ -354,6 +356,31 @@ billing.put('/checkoutlinks', async (req: Request, res: Response) => {
             }
         }
         res.json(billingList);
+    } catch (error) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
+});
+
+billing.post('/webhook/incoming', async (req: Request, res: Response) => {
+    try {
+        const orderUpdate = req.body;
+        const paymentData = orderUpdate.data.object.payment;
+        const squareOrderId = paymentData.order_id;
+        const ourBill = await getBillByOrderId(squareOrderId);
+        // verify payment amount, status
+        const paymentInFull = (paymentData.total_money.amount === (ourBill.amountWithFee * 100));
+        const completed = (paymentData.status === 'COMPLETED');
+        let billResponse;
+        if (paymentInFull && completed) {
+            billResponse = await processBillPayment(ourBill.billId, 'Square');
+        } else {
+            logger.error(`Marking bill ${ourBill.billId} as paid, but there could be a problem pelase verify manually`);
+            billResponse = await processBillPayment(ourBill.billId, 'Square');
+        }
+        res.json(billResponse);
     } catch (error) {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);

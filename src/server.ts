@@ -35,7 +35,8 @@ app.use((err: any, req: any, res: any, next: () => void) => {
 });
 
 const server = app.listen(port, () => {
-    logger.info(`PRA Club Manager API listening on port ${port} on database at ${process.env.MYSQL_HOST}`);
+    logger.info(`PRA Club Manager API environment ${process.env.TRACKBOSS_ENVIRONMENT_NAME} 
+        listening on port ${port} on database at ${process.env.MYSQL_HOST}`);
 });
 
 // export the HTTP server so that it can be closed if necessary (mostly for testing)
