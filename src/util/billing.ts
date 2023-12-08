@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { compareDesc, isFuture } from 'date-fns';
 import { getJobList } from '../database/job';
-import { generateBill, getBillList, markBillPaid } from '../database/billing';
+import { generateBill, getBill, getBillList, markBillPaid } from '../database/billing';
 import { getBaseDues } from '../database/membership';
 import { getWorkPointsByMembership } from '../database/workPoints';
 import logger from '../logger';
@@ -9,6 +9,7 @@ import { Bill } from '../typedefs/bill';
 import { Membership } from '../typedefs/membership';
 import { Job } from '../typedefs/job';
 import { getBoardMemberList } from '../database/boardMember';
+import { sendPaymentConfirmationEmail } from './email';
 
 /**
  * Generate new bills in the database
@@ -121,4 +122,14 @@ export async function emailBills(billList: Bill[]): Promise<Bill[]> {
         }
     }));
     return billList;
+}
+
+export async function processBillPayment(billId: number, paymentMethod: string) {
+    await markBillPaid(billId, paymentMethod);
+    const bill = await getBill(billId);
+    // if they marked the attestation as complete, send an email.
+    if (bill.curYearPaid) {
+        await sendPaymentConfirmationEmail(bill);
+    }
+    return bill;
 }

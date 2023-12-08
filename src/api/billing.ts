@@ -3,7 +3,8 @@ import _ from 'lodash';
 // import { format } from 'date-fns';
 import { getMembershipList } from '../database/membership';
 import {
-    cleanBilling, getBill, getBillList, getWorkPointThreshold, markBillPaid,
+    addSquareAttributes,
+    cleanBilling, getBill, getBillByOrderId, getBillList, getWorkPointThreshold, markBillPaid,
     markInsuranceAttestation,
 } from '../database/billing';
 import {
@@ -15,11 +16,12 @@ import {
     PostPayBillResponse,
 } from '../typedefs/bill';
 import { checkHeader, validateAdminAccess, verify } from '../util/auth';
-import { emailBills, generateNewBills } from '../util/billing';
-import { sendInsuranceConfirmEmail, sendPaymentConfirmationEmail } from '../util/email';
+import { emailBills, generateNewBills, processBillPayment } from '../util/billing';
+import { sendInsuranceConfirmEmail } from '../util/email';
 import logger from '../logger';
 import { calculateBillingYear } from '../util/dateHelper';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
+import { createPaymentLink } from '../integrations/square';
 
 //
 // TODO: Emails are not sent for generated bills (see emailBills helper function in util)
@@ -157,12 +159,7 @@ billing.post('/:billId', async (req: Request, res: Response) => {
             if (Number.isNaN(billId)) {
                 throw new Error('not found');
             }
-            await markBillPaid(billId, paymentMethod?.toString());
-            const bill = await getBill(billId);
-            // if they marked the attestation as complete, send an email.
-            if (bill.curYearPaid) {
-                await sendPaymentConfirmationEmail(bill);
-            }
+            await processBillPayment(billId, paymentMethod?.toString() || '');
             response = {};
             res.status(200);
         } catch (e: any) {
@@ -313,6 +310,77 @@ billing.get('/list/excel', async (req: Request, res: Response) => {
         formatWorkbook(worksheet);
         // write workbook to buffer.
         httpOutputWorkbook(workbook, res, `billing${new Date().getTime()}`);
+    } catch (error) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
+});
+
+billing.put('/create/checkoutlinks', async (req: Request, res: Response) => {
+    try {
+        const { authorization } = req.headers;
+        let response: GetBillListResponse;
+        const headerCheck = checkHeader(authorization);
+        if (!headerCheck.valid) {
+            res.status(401);
+            response = { reason: headerCheck.reason };
+            return;
+        }
+        logger.info('Getting billing list.');
+        const { year } = req.query;
+        let billingYear = Number(year);
+        if (!billingYear) {
+            billingYear = calculateBillingYear();
+            logger.info(`Billing year was undefined so we calculated it as ${billingYear} at request time.`);
+        }
+        const billingList: Bill[] = await getBillList({
+            year: Number(billingYear),
+        });
+
+        // I don't care if this is slower, I would actualy prefer it so I don't hit Square's rate limits.
+        // This runs once a year so who cares how fast it is anyway?
+        // eslint-disable-next-line no-restricted-syntax
+        for (const bill of billingList) {
+            // no need to create checkout links for anyone who owes zero.  It's pointless.
+            if (bill.amount > 0) {
+                // see above for why this is this way.
+                // eslint-disable-next-line no-await-in-loop
+                const paymentInfo = await createPaymentLink(bill);
+                bill.squareLink = paymentInfo.squareUrl;
+                bill.squareOrderId = paymentInfo.squareOrderId;
+                // slow down sally, you're moving too fast.....
+                // eslint-disable-next-line no-await-in-loop
+                await addSquareAttributes(bill);
+            }
+        }
+        res.json(billingList);
+    } catch (error) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
+});
+
+billing.post('/webhook/incoming', async (req: Request, res: Response) => {
+    try {
+        const orderUpdate = req.body;
+        const paymentData = orderUpdate.data.object.payment;
+        const squareOrderId = paymentData.order_id;
+        const ourBill = await getBillByOrderId(squareOrderId);
+        // verify payment amount, status
+        const paymentInFull = (paymentData.total_money.amount === (ourBill.amountWithFee * 100));
+        const completed = (paymentData.status === 'COMPLETED');
+        let billResponse;
+        if (paymentInFull && completed) {
+            billResponse = await processBillPayment(ourBill.billId, 'Square');
+        } else {
+            logger.error(`Marking bill ${ourBill.billId} as paid, but there could be a problem pelase verify manually`);
+            billResponse = await processBillPayment(ourBill.billId, 'Square');
+        }
+        res.json(billResponse);
     } catch (error) {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);
