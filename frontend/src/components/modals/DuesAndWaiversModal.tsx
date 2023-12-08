@@ -88,7 +88,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                         }
                     }
                 >
-                    Pay With Square
+                    Pay With Paypal
                 </Button>
                 <Button
                     ml={2}

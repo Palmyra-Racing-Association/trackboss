@@ -123,7 +123,7 @@ export default function DuesAndWaivers() {
                 }
                 payOnlineAction={
                     () => {
-                        window.open(`${selectedBill?.squareLink}`);
+                        window.open(`https://paypal.me/palmyraracing/${selectedBill?.amountWithFee}`);
                     }
                 }
                 paySnailMailAction={
