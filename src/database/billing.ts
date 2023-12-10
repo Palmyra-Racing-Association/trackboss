@@ -143,7 +143,7 @@ export async function markBillPaid(id: number, paymentMethod?: string): Promise<
     try {
         const sql =
           // eslint-disable-next-line max-len
-          'update member_bill set cur_year_paid = (CASE WHEN cur_year_paid = 1 THEN 0 ELSE 1 END), payment_method = ?, last_updated_date = current_timestamp()  where bill_id = ?';
+          'update member_bill set cur_year_paid = 1, payment_method = ?, last_updated_date = current_timestamp()  where bill_id = ?';
         [result] = await getPool().query<OkPacket>(sql, [paymentMethod, id]);
     } catch (e) {
         logger.error(`DB error marking bill as paid: ${e}`);
