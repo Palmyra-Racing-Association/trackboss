@@ -125,11 +125,15 @@ export async function emailBills(billList: Bill[]): Promise<Bill[]> {
 }
 
 export async function processBillPayment(billId: number, paymentMethod: string) {
+    logger.info(`marking bill ${billId} paid with payment method ${paymentMethod}`);
     await markBillPaid(billId, paymentMethod);
     const bill = await getBill(billId);
+    logger.info(`Got bill id ${billId} and its paid status is ${bill.curYearPaid}`);
     // if they marked the attestation as complete, send an email.
     if (bill.curYearPaid) {
+        logger.info(`Sending email for bill ID ${billId}`);
         await sendPaymentConfirmationEmail(bill);
+        logger.info(`bill ID ${billId} confirmation email was sent.`);
     }
     return bill;
 }

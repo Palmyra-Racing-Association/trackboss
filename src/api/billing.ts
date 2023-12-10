@@ -370,16 +370,20 @@ billing.post('/webhook/incoming', async (req: Request, res: Response) => {
         const paymentData = orderUpdate.data.object.payment;
         const squareOrderId = paymentData.order_id;
         const ourBill = await getBillByOrderId(squareOrderId);
+        logger.info(`Payment webhook incoming for ${squareOrderId}`);
+        logger.info(orderUpdate);
         // verify payment amount, status
         const paymentInFull = (paymentData.total_money.amount === (ourBill.amountWithFee * 100));
         const completed = (paymentData.status === 'COMPLETED');
         let billResponse;
-        if (paymentInFull && completed) {
+        if (completed) {
+            logger.info(`Processing payment on our side for ${squareOrderId}, ${ourBill.billId}`);
             billResponse = await processBillPayment(ourBill.billId, 'Square');
         } else {
             logger.error(`Marking bill ${ourBill.billId} as paid, but there could be a problem pelase verify manually`);
             billResponse = await processBillPayment(ourBill.billId, 'Square');
         }
+        logger.info(`Payment complete for ${squareOrderId} and ${ourBill.membershipAdmin}`);
         res.json(billResponse);
     } catch (error) {
         logger.error(`Error at path ${req.path}`);
