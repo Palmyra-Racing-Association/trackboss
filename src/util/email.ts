@@ -51,11 +51,12 @@ export async function sendTextEmail(email: any) {
         // only send emails on real production trackboss. Anywhere else, just dump em to a log.  This is basically
         // intercepting the process at the last possible point but keeps us from messing up and sending emails to
         // members from dev which we never want to do.
-        if (process.env.ENVIRONMENT_NAME === 'trackboss') {
-            await ses.sendEmail(emailParams).promise();
-        } else {
-            logger.info(JSON.stringify(emailParams));
-        }
+        // if (process.env.ENVIRONMENT_NAME === 'trackboss') {
+        await ses.sendEmail(emailParams).promise();
+        // } else {
+        //    logger.info(`This is environment ${process.env.ENVIRONMENT_NAME} so I'm logging this email`);
+        //    logger.info(JSON.stringify(emailParams));
+        // }
     } catch (error: any) {
         logger.error('Unable to send email via SES');
         logger.error(error);

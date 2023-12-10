@@ -79,10 +79,9 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                 <Button
                     backgroundColor="orange.300"
                     color="white"
-                    disabled
                     variant="outline"
                     size="lg"
-                    hidden={!attested || (props.viewBill?.amount === 0) || (props.viewBill?.curYearPaid)}
+                    hidden={!attested} // || (props.viewBill?.amount === 0) || (props.viewBill?.curYearPaid)}
                     onClick={
                         async () => {
                             props.payOnlineAction();
