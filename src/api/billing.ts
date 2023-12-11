@@ -376,12 +376,16 @@ billing.post('/webhook/incoming', async (req: Request, res: Response) => {
         const paymentInFull = (paymentData.total_money.amount === (ourBill.amountWithFee * 100));
         const completed = (paymentData.status === 'COMPLETED');
         let billResponse;
-        if (completed) {
-            logger.info(`Processing payment on our side for ${squareOrderId}, ${ourBill.billId}`);
-            billResponse = await processBillPayment(ourBill.billId, 'Square');
+        if (!ourBill.curYearPaid) {
+            if (completed) {
+                logger.info(`Processing payment on our side for ${squareOrderId}, ${ourBill.billId}`);
+                billResponse = await processBillPayment(ourBill.billId, 'Square');
+            } else {
+                logger.error(`Marking bill ${ourBill.billId} as paid, but there could be a problem - verify manually`);
+                billResponse = await processBillPayment(ourBill.billId, 'Square');
+            }
         } else {
-            logger.error(`Marking bill ${ourBill.billId} as paid, but there could be a problem pelase verify manually`);
-            billResponse = await processBillPayment(ourBill.billId, 'Square');
+            logger.info(`Got another webhook for ${ourBill.billId} as order Id ${ourBill.squareOrderId}. Ignoring.`);
         }
         logger.info(`Payment complete for ${squareOrderId} and ${ourBill.membershipAdmin}`);
         res.json(billResponse);
