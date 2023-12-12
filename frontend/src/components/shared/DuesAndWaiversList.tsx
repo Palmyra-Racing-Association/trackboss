@@ -257,8 +257,11 @@ export default function DuesAndWaiversList() {
                         maxWidth={400}
                     />
                     {
-                        selectedBill?.curYearPaid && selectedBill.paymentMethod &&
-                        <Text>{`Paid via ${selectedBill?.paymentMethod}`}</Text>
+                        selectedBill?.curYearPaid && selectedBill.paymentMethod && (
+                            <a href={`${selectedBill.squareLink}`} target="_blank" rel="noreferrer">
+                                {`Paid via ${selectedBill?.paymentMethod}`}
+                            </a>
+                        )
                     }
                     {
                         !selectedBill?.curYearPaid && (
