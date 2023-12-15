@@ -17,7 +17,6 @@ import { MembershipApplication } from '../typedefs/membershipApplication';
 import { PostNewMembershipRequest } from '../typedefs/membership';
 import { insertMembership } from '../database/membership';
 import { generateBill, getWorkPointThreshold } from '../database/billing';
-import { addMailchimpMember } from '../util/mailchimp';
 
 const membershipApplication = Router();
 
@@ -149,7 +148,6 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         });
         logger.info(`Generated bill ${billId} for membership ${newMembershipId} - application converted to member.`);
         const newMemberRecord = await getMember(`${primaryMemberId}`);
-        // await addMailchimpMember(newMemberRecord);
     } catch (error: any) {
         logger.error(error);
         res.status(500);
