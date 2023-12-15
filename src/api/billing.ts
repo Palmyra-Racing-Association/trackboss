@@ -5,6 +5,7 @@ import { getMembershipList } from '../database/membership';
 import {
     addSquareAttributes,
     cleanBilling, getBill, getBillByOrderId, getBillList, getWorkPointThreshold, markBillPaid,
+    markContactedAndRenewing,
     markInsuranceAttestation,
 } from '../database/billing';
 import {
@@ -245,6 +246,44 @@ billing.patch('/attestIns/:billId', async (req: Request, res: Response) => {
             if (!originalBill.curYearIns && bill.curYearIns) {
                 await sendInsuranceConfirmEmail(bill);
             }
+            response = {};
+            res.status(200);
+        } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+            if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'Forbidden') {
+                res.status(403);
+                response = { reason: 'forbidden' };
+            } else if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
+});
+
+billing.patch('/markContacted/:billId', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: PostPayBillResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token, 'Membership Admin');
+            const billId = Number(req.params.billId);
+            if (Number.isNaN(billId)) {
+                throw new Error('not found');
+            }
+            await markContactedAndRenewing(billId);
             response = {};
             res.status(200);
         } catch (e: any) {

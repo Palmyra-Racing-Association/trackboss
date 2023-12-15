@@ -148,6 +148,7 @@ CREATE TABLE IF NOT EXISTS `pradb`.`member_bill` (
   `payment_method` varchar(45) DEFAULT NULL,
   `square_link` varchar(255) default null,
   `square_order_id` varchar(45) default null,
+  `renewal_contacted` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`bill_id`),
   INDEX `membership_id_idx` (`membership_id` ASC) VISIBLE,
   CONSTRAINT `FK_bill_membership`

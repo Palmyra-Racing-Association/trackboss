@@ -120,6 +120,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         paymentMethod: result.payment_method,
         squareLink: result.square_link,
         squareOrderId: result.square_order_id,
+        contactedAndRenewing: result.renewal_contacted,
         detail: result.work_detail,
     }));
 }
@@ -160,6 +161,22 @@ export async function markInsuranceAttestation(id: number): Promise<void> {
     try {
         const sql =
           'update member_bill set cur_year_ins = 1 where bill_id = ?';
+        [result] = await getPool().query<OkPacket>(sql, [id]);
+    } catch (e) {
+        logger.error(`DB error marking bill as paid: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+}
+
+export async function markContactedAndRenewing(id: number): Promise<void> {
+    let result;
+    try {
+        const sql =
+          'update member_bill set renewal_contacted = 1 where bill_id = ?';
         [result] = await getPool().query<OkPacket>(sql, [id]);
     } catch (e) {
         logger.error(`DB error marking bill as paid: ${e}`);

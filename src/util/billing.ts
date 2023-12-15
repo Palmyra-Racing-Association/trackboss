@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { compareDesc, isFuture } from 'date-fns';
 import { getJobList } from '../database/job';
-import { generateBill, getBill, getBillList, markBillPaid } from '../database/billing';
+import { generateBill, getBill, getBillList, markBillPaid, markContactedAndRenewing } from '../database/billing';
 import { getBaseDues } from '../database/membership';
 import { getWorkPointsByMembership } from '../database/workPoints';
 import logger from '../logger';
@@ -127,6 +127,7 @@ export async function emailBills(billList: Bill[]): Promise<Bill[]> {
 export async function processBillPayment(billId: number, paymentMethod: string) {
     logger.info(`marking bill ${billId} paid with payment method ${paymentMethod}`);
     await markBillPaid(billId, paymentMethod);
+    await markContactedAndRenewing(billId);
     const bill = await getBill(billId);
     logger.info(`Got bill id ${billId} and its paid status is ${bill.curYearPaid}`);
     // if they marked the attestation as complete, send an email.

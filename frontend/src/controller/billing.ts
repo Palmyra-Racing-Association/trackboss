@@ -89,6 +89,15 @@ export async function attestInsurance(token: string, billId: number): Promise<Po
     return response.json();
 }
 
+export async function markContactedAndRenewing(token: string, billId: number): Promise<PostPayBillResponse> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/markContacted/${billId}`, {
+        method: 'PATCH',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
+
 export async function getBillListExcel(token: string): Promise<Blob> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/list/excel`, {
         method: 'GET',

@@ -12,7 +12,9 @@ import { BsPrinter } from 'react-icons/bs';
 import { Bill } from '../../../../src/typedefs/bill';
 import { UserContext } from '../../contexts/UserContext';
 
-import { attestInsurance, getBillListExcel, getBills, payBill } from '../../controller/billing';
+import {
+    attestInsurance, getBillListExcel, getBills, markContactedAndRenewing, payBill,
+} from '../../controller/billing';
 import DataSearchBox from '../input/DataSearchBox';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
 import BillingStatsDisplay from './BillingStatsDisplay';
@@ -119,6 +121,7 @@ export default function DuesAndWaiversList() {
             name: 'Type',
             selector: (row: Bill) => row.membershipType,
             sortable: true,
+            hide: 'sm',
         },
         {
             name: 'Insurance Validated',
@@ -129,6 +132,12 @@ export default function DuesAndWaiversList() {
         {
             name: 'Bill paid',
             selector: (row:Bill) => (row.curYearPaid ? 'Yes' : 'No'),
+            sortable: true,
+            maxWidth: '5',
+        },
+        {
+            name: 'Contacted/Renewing',
+            selector: (row:Bill) => (row.contactedAndRenewing ? 'Yes' : 'No'),
             sortable: true,
             maxWidth: '5',
         },
@@ -242,6 +251,20 @@ export default function DuesAndWaiversList() {
                         {`Billing detail for ${selectedBill?.membershipAdmin} - ${selectedBill?.year}`}
                     </Heading>
                     <BillingStatsDisplay bill={selectedBill} />
+                    <WrappedSwitchInput
+                        wrapperText="Contacted and renewing?"
+                        defaultChecked={(selectedBill?.contactedAndRenewing) || false}
+                        onSwitchChange={
+                            async () => {
+                                // eslint-disable-next-line no-empty
+                                if (selectedBill?.billId) {
+                                    await markContactedAndRenewing(state.token, selectedBill?.billId);
+                                }
+                            }
+                        }
+                        toastMessage={`${selectedBill?.firstName} ${selectedBill?.lastName} tagged as renewing.`}
+                        maxWidth={400}
+                    />
                     <WrappedSwitchInput
                         wrapperText="Mark (or unmark) as paid"
                         defaultChecked={selectedBill?.curYearPaid || false}

@@ -24,6 +24,7 @@ export type Bill = {
     squareLink?: string,
     squareOrderId?: string,
     detail?: string,
+    contactedAndRenewing?: boolean,
 }
 
 export type WorkPointThreshold = {

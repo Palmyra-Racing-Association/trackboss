@@ -21,7 +21,8 @@ CREATE VIEW `v_bill` AS
         mb.payment_method,
         mb.square_link,
         mb.square_order_id,
-        mb.work_detail
+        mb.work_detail,
+        mb.renewal_contacted,
     FROM
         member_bill mb
             LEFT JOIN
