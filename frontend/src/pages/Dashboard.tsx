@@ -42,6 +42,11 @@ function Dashboard() {
     const [gateCode, setGateCode] = useState<string>('');
     const [ridingAreaStatuses, setRidingAreaStatuses] = useState<RidingAreaStatus[]>([]);
 
+    const allowsSignIn = (
+        ((eventCardProps?.eventType === 'work day') || (eventCardProps?.eventType === 'meeting')) &&
+        (state.user?.memberType === 'Admin')
+    );
+
     async function loadTrackStatuses() {
         const statuses = await getRidingAreaStatuses(state.token);
         setRidingAreaStatuses(statuses);
@@ -91,10 +96,7 @@ function Dashboard() {
                                     name={eventCardProps.title}
                                     endDate={eventCardProps.end}
                                     id={eventCardProps.id}
-                                    allowsSignIn={
-                                        (eventCardProps.eventType === 'work day') ||
-                                        (eventCardProps.eventType === 'meeting')
-                                    }
+                                    allowsSignIn={allowsSignIn}
                                     signupHandler={
                                         async () => {
                                             try {
