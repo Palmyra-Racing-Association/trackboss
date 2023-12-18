@@ -239,19 +239,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     <Button
                                                         onClick={
                                                             () => {
-                                                                if (editedMemberType !== 'member') {
-                                                                    setEditedMemberType('member');
-                                                                }
-                                                            }
-                                                        }
-                                                        mr="-px"
-                                                        backgroundColor={(editingMemberRole && editedMemberType === 'member') || (!editingMemberRole && props.memberInfo.memberType === 'Member') ? 'blue' : ''}
-                                                    >
-                                                        Member
-                                                    </Button>
-                                                    <Button
-                                                        onClick={
-                                                            () => {
                                                                 if (editedMemberType !== 'admin') {
                                                                     setEditedMemberType('admin');
                                                                 }
@@ -260,7 +247,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         mr="-px"
                                                         backgroundColor={(editingMemberRole && editedMemberType === 'admin') || (!editingMemberRole && props.memberInfo.memberType === 'Admin') ? 'blue' : ''}
                                                     >
-                                                        Admin
+                                                        PRA Admin
                                                     </Button>
                                                     <Button
                                                         onClick={
@@ -294,17 +281,11 @@ export default function MemberSummaryModal(props: modalProps) {
                                         ) : (
                                             <ButtonGroup size="sm" isAttached variant="outline">
                                                 <Button
-                                                    mr="-px"
-                                                    backgroundColor={(selectedMember.memberType.toLowerCase() === ('member')) ? 'blue' : ''}
-                                                >
-                                                    Member
-                                                </Button>
-                                                <Button
                                                     userSelect="none"
                                                     mr="-px"
                                                     backgroundColor={selectedMember.memberType.toLowerCase() === ('admin') ? 'blue' : ''}
                                                 >
-                                                    Admin
+                                                    PRA Admin
                                                 </Button>
                                                 <Button
                                                     mr="-px"
