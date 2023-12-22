@@ -209,13 +209,28 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         disabled={!isInReview}
                         onClick={
                             async () => {
-                                await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
+                                await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes, false);
                                 props.addAction();
                                 onClose();
                             }
                         }
                     >
                         Accept
+                    </Button>
+                    <Button
+                        color="green"
+                        size="lg"
+                        variant="ghost"
+                        disabled
+                        onClick={
+                            async () => {
+                                await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes, false);
+                                props.addAction();
+                                onClose();
+                            }
+                        }
+                    >
+                        Accept as Guest
                     </Button>
                 </ModalFooter>
             </ModalContent>

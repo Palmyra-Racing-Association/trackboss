@@ -96,8 +96,15 @@ membershipApplication.get('/', async (req: Request, res: Response) => {
 membershipApplication.post('/accept/:id', async (req: Request, res: Response) => {
     let newMemberId : number;
     try {
+        const isGuest = req.params.guest;
+        let applicationStatus = 'Accepted';
+        let membershipType = 4;
+        if (isGuest) {
+            applicationStatus = 'Guest';
+            membershipType = 7;
+        }
         const actingUser = await validateAdminAccess(req, res);
-        await sendApplicationStatus(req, res, 'Accepted');
+        await sendApplicationStatus(req, res, applicationStatus);
         // get the application, and convert the primary member to a member. This call will create a
         // Cognito user, and send an email to the user letting them know they have one.
         const application : MembershipApplication = await getMembershipApplication(Number(req.params.id));
@@ -119,7 +126,8 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         newMemberId = primaryMemberId;
         const currentYear = (new Date()).getFullYear();
         const newMembership : PostNewMembershipRequest = {
-            // Associate member
+            // Associate member. Magic numberism again.
+            membershipTypeId: membershipType,
             membershipAdminId: primaryMemberId,
             yearJoined: currentYear,
             address: application.address,

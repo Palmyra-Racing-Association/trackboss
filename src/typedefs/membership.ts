@@ -30,6 +30,7 @@ export type Registration = {
 }
 
 export type PostNewMembershipRequest = {
+    membershipTypeId: number,
     membershipAdminId?: number,
     yearJoined?: number,
     address?: string,

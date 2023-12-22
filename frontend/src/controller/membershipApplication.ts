@@ -35,13 +35,17 @@ export async function acceptMembershipApplication(
     id: number,
     internalNotes: string,
     applicantNotes: string,
+    isGuest: boolean,
 ): Promise<MembershipApplication[]> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication/accept/${id}`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: generateHeaders(token),
-        body: buildNotesBody(internalNotes, applicantNotes),
-    });
+    const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/membershipApplication/accept/${id}?guest=${isGuest}`,
+        {
+            method: 'POST',
+            mode: 'cors',
+            headers: generateHeaders(token),
+            body: buildNotesBody(internalNotes, applicantNotes),
+        },
+    );
     return response.json();
 }
 export async function rejectMembershipApplication(
