@@ -49,28 +49,20 @@ export default function ImportantLinksCard(props: any) {
                             <ListItem pt={1} marginLeft={4}>Member Rules</ListItem>
                         </Link>
                         <Link
-                            href="https://twitter.com/palmyramx"
+                            href="https://drive.google.com/file/d/1ZOoKkTt2c0wjlB_-XXug3hRdwxkUJZ6-/view?usp=sharing"
                             target="_blank"
                             fontSize="2xl"
                             color="orange"
                         >
-                            <ListItem pt={1} marginLeft={4}>Twitter</ListItem>
+                            <ListItem pt={1} marginLeft={4}>Club Bylaws</ListItem>
                         </Link>
                         <Link
-                            href="https://www.facebook.com/palmyramx/"
+                            href="https://www.facebook.com/groups/362613047833426"
                             target="_blank"
                             fontSize="2xl"
                             color="orange"
                         >
-                            <ListItem pt={1} marginLeft={4}>Facebook</ListItem>
-                        </Link>
-                        <Link
-                            href="https://www.instagram.com/palmyramx_hogback_hill/?hl=en"
-                            target="_blank"
-                            fontSize="2xl"
-                            color="orange"
-                        >
-                            <ListItem pt={1} marginLeft={4}>Instagram</ListItem>
+                            <ListItem pt={1} marginLeft={4}>Facebook Group</ListItem>
                         </Link>
                     </UnorderedList>
                 </VStack>
