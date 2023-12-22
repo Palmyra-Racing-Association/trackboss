@@ -57,6 +57,14 @@ export default function ImportantLinksCard(props: any) {
                             <ListItem pt={1} marginLeft={4}>Club Bylaws</ListItem>
                         </Link>
                         <Link
+                            href="https://palmyramx.com/pages/new-member-orientation"
+                            target="_blank"
+                            fontSize="2xl"
+                            color="orange"
+                        >
+                            <ListItem pt={1} marginLeft={4}>New Member Orientation</ListItem>
+                        </Link>
+                        <Link
                             href="https://www.facebook.com/groups/362613047833426"
                             target="_blank"
                             fontSize="2xl"
