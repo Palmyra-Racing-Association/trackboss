@@ -59,9 +59,11 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
         logger.info(`Creating new user for email ${req.email} on membership ${req.membershipId}`);
         try {
             const isMembershipAdmin = (req.memberTypeId === 8);
-            const uuid = await createCognitoUser(req.email, isMembershipAdmin);
-            req.uuid = uuid;
-            logger.info(`Successfully created ${req.email} in cognito as ${uuid}`);
+            if (req.membershipType && req.membershipType !== 'Guest Member') {
+                const uuid = await createCognitoUser(req.email, isMembershipAdmin);
+                req.uuid = uuid;
+                logger.info(`Successfully created ${req.email} in cognito as ${uuid}`);
+            }
         } catch (error: any) {
             logger.error(`Failure creating ${req.email} in cognito.  Continuing on trackboss database side`);
             logger.error(error);

@@ -17,6 +17,7 @@ import { MembershipApplication } from '../typedefs/membershipApplication';
 import { PostNewMembershipRequest } from '../typedefs/membership';
 import { insertMembership } from '../database/membership';
 import { generateBill, getWorkPointThreshold } from '../database/billing';
+import { getMembershipType } from '../database/memberType';
 
 const membershipApplication = Router();
 
@@ -96,13 +97,18 @@ membershipApplication.get('/', async (req: Request, res: Response) => {
 membershipApplication.post('/accept/:id', async (req: Request, res: Response) => {
     let newMemberId : number;
     try {
-        const isGuest = req.params.guest;
+        const isGuest = req.query.guest;
         let applicationStatus = 'Accepted';
-        let membershipType = 4;
+        let membershipType = 'Associate Member';
+        const currentYear = (new Date()).getFullYear();
+        let billingYear = (currentYear - 1);
         if (isGuest) {
+            // Guests will be members for the current year only, and time limited.
             applicationStatus = 'Guest';
-            membershipType = 7;
+            membershipType = 'Guest Member';
+            billingYear = currentYear;
         }
+        const membershipInfo = await getMembershipType(membershipType);
         const actingUser = await validateAdminAccess(req, res);
         await sendApplicationStatus(req, res, applicationStatus);
         // get the application, and convert the primary member to a member. This call will create a
@@ -117,17 +123,17 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             phoneNumber: application.phone,
             occupation: application.occupation,
             email: application.email,
-            birthdate: parseISO(application.birthDate).toLocaleDateString('en-CA'),
+            birthdate: parseISO(application.birthDate).toISOString().slice(0, 10).replace('T', ' '),
             // when did they join? RIGHT FREAKING NOW THAT'S WHEN! :)
-            dateJoined: new Date().toLocaleDateString('en-CA'),
+            dateJoined: new Date().toISOString().slice(0, 10).replace('T', ' '),
             modifiedBy: actingUser.memberId,
+            membershipType,
         };
         const primaryMemberId = await insertMember(newMember);
         newMemberId = primaryMemberId;
-        const currentYear = (new Date()).getFullYear();
         const newMembership : PostNewMembershipRequest = {
             // Associate member. Magic numberism again.
-            membershipTypeId: membershipType,
+            membershipTypeId: membershipInfo.memberTypeId,
             membershipAdminId: primaryMemberId,
             yearJoined: currentYear,
             address: application.address,
@@ -146,13 +152,13 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         await sendNewMemberEmail(application);
         const { threshold } = await getWorkPointThreshold(currentYear - 1);
         const billId = await generateBill({
-            amount: 575,
-            amountWithFee: 591.98,
+            amount: membershipInfo.baseDuesAmt,
+            amountWithFee: ((membershipInfo.baseDuesAmt) + (membershipInfo.baseDuesAmt * 0.0290) + 0.30),
             membershipId: newMembershipId,
             pointsEarned: 0,
             pointsThreshold: threshold,
             workDetail: [],
-            billingYear: (currentYear - 1),
+            billingYear,
         });
         logger.info(`Generated bill ${billId} for membership ${newMembershipId} - application converted to member.`);
         const newMemberRecord = await getMember(`${primaryMemberId}`);

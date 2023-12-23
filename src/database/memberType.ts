@@ -31,6 +31,29 @@ export async function getMemberType(id: number): Promise<MemberType> {
     };
 }
 
+export async function getMembershipType(typeName: string): Promise<MemberType> {
+    const values = [typeName];
+
+    let results;
+    try {
+        // eslint-disable-next-line max-len
+        [results] = await getPool().query<RowDataPacket[]>('select * from membership_types mt where mt.type = ?', values);
+    } catch (e) {
+        logger.error(`DB error getting member type: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (_.isEmpty(results)) {
+        throw new Error('not found');
+    }
+
+    return {
+        memberTypeId: results[0].membership_type_id,
+        type: results[0].type,
+        baseDuesAmt: results[0].base_dues_amt,
+    };
+}
+
 export async function getMemberTypeList(): Promise<MemberType[]> {
     const sql = GET_MEMBER_TYPE_LIST_SQL;
     const values: string[] = [];

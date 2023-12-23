@@ -35,10 +35,14 @@ export async function acceptMembershipApplication(
     id: number,
     internalNotes: string,
     applicantNotes: string,
-    isGuest: boolean,
+    isGuest?: boolean,
 ): Promise<MembershipApplication[]> {
+    let acceptUrl = `${process.env.REACT_APP_API_URL}/api/membershipApplication/accept/${id}`;
+    if (isGuest) {
+        acceptUrl = `${acceptUrl}?guest=${isGuest}`;
+    }
     const response = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/membershipApplication/accept/${id}?guest=${isGuest}`,
+        acceptUrl,
         {
             method: 'POST',
             mode: 'cors',

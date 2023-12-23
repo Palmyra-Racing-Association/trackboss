@@ -54,8 +54,8 @@ export async function sendTextEmail(email: any) {
         // if (process.env.ENVIRONMENT_NAME === 'trackboss') {
         await ses.sendEmail(emailParams).promise();
         // } else {
-        //    logger.info(`This is environment ${process.env.ENVIRONMENT_NAME} so I'm logging this email`);
-        //    logger.info(JSON.stringify(emailParams));
+        logger.info(`This is environment ${process.env.ENVIRONMENT_NAME} so I'm logging this email`);
+        logger.info(JSON.stringify(emailParams));
         // }
     } catch (error: any) {
         logger.error('Unable to send email via SES');

@@ -221,10 +221,10 @@ export default function MembershipApplicationModal(props: appModalProps) {
                         color="green"
                         size="lg"
                         variant="ghost"
-                        disabled
+                        disabled={!isInReview}
                         onClick={
                             async () => {
-                                await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes, false);
+                                await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes, true);
                                 props.addAction();
                                 onClose();
                             }

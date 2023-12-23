@@ -39,6 +39,7 @@ export type PostNewMemberRequest = {
     email?: string,
     birthdate?: string,
     dateJoined?: string,
+    membershipType?: string,
     modifiedBy: number
 }
 
