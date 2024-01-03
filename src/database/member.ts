@@ -162,7 +162,6 @@ export async function getMember(searchParam: string): Promise<Member> {
     if (_.isEmpty(results)) {
         throw new Error('not found');
     }
-
     return {
         memberId: results[0].member_id,
         membershipId: results[0].membership_id,
@@ -172,7 +171,9 @@ export async function getMember(searchParam: string): Promise<Member> {
         membershipAdminId: results[0].membership_admin_id,
         isBoardMember: !!results[0].board_title_id,
         uuid: results[0].uuid,
-        active: !!results[0].active,
+        // MySQL returns a boolean as a buffer of bytes, because why the fuck not right?  C programming style
+        // still hanging around necessitates this horseshit.
+        active: (results[0].active[0] !== 0),
         memberTypeId: results[0].member_type_id,
         memberType: results[0].member_type,
         membershipType: results[0].membership_type,
