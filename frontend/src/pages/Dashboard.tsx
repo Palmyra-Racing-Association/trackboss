@@ -17,6 +17,8 @@ import TrackStatusCard from '../components/cards/dashboard/TrackStatusCard';
 import { getRidingAreaStatuses, updateRidingAreaStatus } from '../controller/ridingAreaStatus';
 import { RidingAreaStatus } from '../../../src/typedefs/ridingAreaStatus';
 import { signupForOpenEventJob } from '../controller/job';
+import { Link } from '../../../src/typedefs/link';
+import { getLinks } from '../controller/links';
 
 async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     const nowString = getTodaysDate();
@@ -41,6 +43,8 @@ function Dashboard() {
     const [percent, setPercent] = useState<number>(0);
     const [gateCode, setGateCode] = useState<string>('');
     const [ridingAreaStatuses, setRidingAreaStatuses] = useState<RidingAreaStatus[]>([]);
+    // eslint-disable-next-line no-unused-vars
+    const [dashboardLinks, setDashboardLinks] = useState<Link[]>([]);
 
     const allowsSignIn = (
         ((eventCardProps?.eventType === 'work day') || (eventCardProps?.eventType === 'meeting')) &&
@@ -52,6 +56,11 @@ function Dashboard() {
         setRidingAreaStatuses(statuses);
     }
 
+    async function loadLinks() {
+        const links = await getLinks(state.token);
+        setDashboardLinks(links as Link[]);
+    }
+
     useEffect(() => {
         async function getData() {
             setEventCardProps(await getEventCardPropsLocal(state.token));
@@ -59,6 +68,7 @@ function Dashboard() {
                 setPercent(await getWorkPointsPercentage(state.token, state.user.membershipId));
             }
             await loadTrackStatuses();
+            await loadLinks();
         }
         getData();
     }, [state.user]);
@@ -135,7 +145,7 @@ function Dashboard() {
                                 />
                             )
                         }
-                        <ImportantLinksCard gateCode={gateCode} />
+                        <ImportantLinksCard gateCode={gateCode} dashboardLinks={dashboardLinks} />
                     </SimpleGrid>
                 </Center>
             </VStack>

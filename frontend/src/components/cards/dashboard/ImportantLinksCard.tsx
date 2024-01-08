@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
+// import _ from 'lodash';
 import { Box, Center, ListItem, Link, UnorderedList, Heading, VStack, Divider } from '@chakra-ui/react';
 
 export default function ImportantLinksCard(props: any) {
@@ -8,6 +9,19 @@ export default function ImportantLinksCard(props: any) {
     if (isNaN(Number(props.gateCode))) {
         gateCodeDisplayMessage = 'Insurance and payment required for gate code';
     }
+    // const links = _.map(props.dashboardLinks, (link) => (
+    //     <Link
+    //         href={link.linkUrl}
+    //         target="_blank"
+    //         fontSize="2xl"
+    //         color="orange"
+    //     >
+    //         <ListItem pt={1} marginLeft={4}>{link.linkDescription}</ListItem>
+    //     </Link>
+    // ));
+    props.dashboardLinks.forEach((link :any) => {
+        console.log(JSON.stringify(link));
+    });
     return (
         <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={3} h="365" m={2}>
             <Center>
