@@ -133,7 +133,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
     if (useMemberFilter && memberId > 0) {
         const historicalResults = await getPool().query<RowDataPacket[]>(
             `select 
-              m.member_id, m.membership_id, concat(m.first_name, ' ', m.last_name) member, eph.date, 
+              m.member_id, m.membership_id, concat(m.first_name, ' ', m.last_name) 'member', eph.date,
               eph.description title, eph.point_value points_awarded, year(eph.date) year
               from member m, earned_points_history eph where 
               eph.old_member_id = m.old_member_id and 
@@ -160,7 +160,7 @@ export async function getJobList(filters: GetJobListRequestFilters): Promise<Job
     if (useMembershipFilter && membershipId > 0) {
         const historicalResults = await getPool().query<RowDataPacket[]>(
             `select 
-              m.member_id, m.membership_id, concat(m.first_name, ' ', m.last_name) member, eph.date, 
+              m.member_id, m.membership_id, concat(m.first_name, ' ', m.last_name) 'member', eph.date,
               eph.description title, eph.point_value points_awarded, year(eph.date) year
               from member m, earned_points_history eph where 
               eph.old_member_id = m.old_member_id and 
