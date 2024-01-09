@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { BsPlus } from 'react-icons/bs';
 import moment from 'moment';
-
+import DatePicker from 'react-date-picker';
 import { createJobType } from '../controller/jobType';
 import { JobType, PostNewJobTypeRequest } from '../../../src/typedefs/jobType';
 import { Job, PostNewJobRequest } from '../../../src/typedefs/job';
@@ -30,6 +30,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
     const [description, setDescription] = useState<string>('');
     const [pointValue, setPointValue] = useState<number>(0);
     const [dirty, setDirty] = useState<boolean>(false);
+    const [workDate, setWorkDate] = useState<any>(new Date());
     const toast = useToast();
     let addButton =
         (
@@ -108,6 +109,12 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                                     <NumberDecrementStepper />
                                 </NumberInputStepper>
                             </NumberInput>
+                            <DatePicker
+                                onChange={setWorkDate}
+                                value={workDate}
+                                required
+                                maxDate={new Date()}
+                            />
                         </VStack>
                     </ModalBody>
 
@@ -130,17 +137,17 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                                     };
                                     const createdJobType : JobType =
                                         await createJobType(props.token, createJobTypeRequest) as JobType;
-                                    const rightNow = moment().format('YYYY-MM-DD HH:mm');
+                                    const workDateFormatted = moment(workDate).format('YYYY-MM-DD HH:mm');
                                     const createJobRequest : PostNewJobRequest = {
                                         jobTypeId: createdJobType.jobTypeId,
                                         memberId: props.memberId,
-                                        jobStartDate: rightNow,
-                                        jobEndDate: rightNow,
+                                        jobStartDate: workDateFormatted,
+                                        jobEndDate: workDateFormatted,
                                         pointsAwarded: createdJobType.pointValue,
                                         cashPayout: 0,
                                         verified: true,
                                         paid: false,
-                                        verifiedDate: rightNow,
+                                        verifiedDate: workDateFormatted,
                                         modifiedBy: props.memberId,
                                     };
                                     const createdJob : Job =
