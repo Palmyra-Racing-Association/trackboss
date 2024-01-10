@@ -6,7 +6,7 @@ import { Link } from '../typedefs/link';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function getLinks(): Promise<Link[]> {
-    const sql = 'select * from link order by display_order';
+    const sql = 'select * from link where online = 1 order by display_order';
     const values: string[] = [];
 
     let results;
