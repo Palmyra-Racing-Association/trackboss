@@ -26,6 +26,7 @@ export type Member = {
     lastModifiedBy: string,
     isBoardMember: boolean,
     boardMemberData? : BoardMember // optional field to be used only by the frontend to store data
+    deactivationReason?: string,
 }
 
 export type PostNewMemberRequest = {
@@ -61,7 +62,8 @@ export type PatchMemberRequest = {
     email?: string,
     birthdate?: string,
     dateJoined?: string,
-    modifiedBy: number
+    modifiedBy: number,
+    deactivationReason?: string,
 }
 
 export type PatchMemberResponse = Member | ErrorResponse;

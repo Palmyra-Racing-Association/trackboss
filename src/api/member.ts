@@ -251,32 +251,41 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
             if (!updatedMember.active && (updatedMember.memberId === updatedMember.membershipAdminId)) {
                 // if this is the membership admin then we are de-activating the whole membership.
                 // Set Membership to former
-                const id = await markMembershipFormer(updatedMember.membershipId);
-                logger.info(`${updatedMember.firstName} ${updatedMember.lastName} set to Former member.`);
-                deleteCognitoUser(updatedMember.uuid)
+                const id = await markMembershipFormer(
+                    updatedMember.membershipId,
+                    req.body.deactivationReason || '',
+                );
+                // eslint-disable-next-line max-len
+                logger.info(`${updatedMember.firstName} ${updatedMember.lastName} set to Former member, reason code ${req.body.deactivationReason}`);
+                // not all members have users, especially older ones who are still in our data, so check for dat.
+                if (updatedMember.uuid) {
+                    deleteCognitoUser(updatedMember.uuid)
+                        .then((
+                            () => {
+                                logger.info(`Deactivated Cognito user for ${updatedMember.email}`);
+                            }))
+                        .catch((error) => {
+                            // eslint-disable-next-line max-len
+                            logger.error(`Error deleting Cognito user ${updatedMember.email}.  User will be abandoned in Cognito.`);
+                            logger.error(error);
+                        });
+                }
+            }
+            if (updatedMember.email) {
+                // more loathesome hipster garbage for dealing with cognito's slowness.  Not sure which I like less -
+                // nested hipster promise syntax, or slow back ends that require it.  probably a tie.
+                updateCognitoUserEmail(updatedMember)
                     .then((
                         () => {
-                            logger.info(`Deactivated Cognito user for ${updatedMember.email}`);
-                        }))
+                            logger.info(`Changed user email for ${updatedMember.memberId} to ${updatedMember.email}`);
+                        }
+                    ))
                     .catch((error) => {
-                        // eslint-disable-next-line max-len
-                        logger.error(`Error deleting Cognito user ${updatedMember.email}.  User will be abandoned in Cognito.`);
+                        logger.error(`Error updating Cognito user email for member ID ${updatedMember.memberId}.`);
+                        logger.error('As a result their login is probably broken now.');
                         logger.error(error);
                     });
             }
-            // more loathesome hipster garbage for dealing with cognito's slowness.  Not sure which I like less -
-            // nested hipster promise syntax, or slow back ends that require it.  probably a tie.
-            updateCognitoUserEmail(updatedMember)
-                .then((
-                    () => {
-                        logger.info(`Changed user email for ${updatedMember.memberId} to ${updatedMember.email}`);
-                    }
-                ))
-                .catch((error) => {
-                    logger.error(`Error updating Cognito user email for member ID ${updatedMember.memberId}.`);
-                    logger.error('As a result their login is probably broken now.');
-                    logger.error(error);
-                });
             res.status(200);
         } catch (e: any) {
             logger.error(`Error at path ${req.path}`);

@@ -72,6 +72,7 @@ export default function MemberList() {
     const [dirty, setDirty] = useState<boolean>(false);
     const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((oldDirty) => !oldDirty) });
     const [searchTerm, setSearchTerm] = useState<string>('');
+    const [showActive] = useState<boolean>(true);
 
     useEffect(() => {
         async function getData() {
@@ -94,7 +95,7 @@ export default function MemberList() {
                         });
                     });
                 }
-                let activeMembers = _.filter(c, (member) => member.active);
+                let activeMembers = _.filter(c, (member) => (member.active === showActive));
                 activeMembers = activeMembers.filter((member) => (member.memberType.toLowerCase().includes('admin')));
                 setCells(activeMembers);
                 setAllCells(activeMembers);

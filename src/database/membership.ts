@@ -184,10 +184,10 @@ export async function patchMembership(id: number, req: PatchMembershipRequest): 
     }
 }
 
-export async function markMembershipFormer(id: number) : Promise<number> {
-    const values = [id];
+export async function markMembershipFormer(id: number, deactivationReason: string) : Promise<number> {
+    const values = [deactivationReason, id];
 
-    const sql = 'update membership set status = \'Former\' where membership_id = ?';
+    const sql = 'update membership set status = \'Former\', cancel_reason = ? where membership_id = ?';
     let result;
     try {
         [result] = await getPool().query<RowDataPacket[]>(sql, values);

@@ -28,6 +28,7 @@ import {
     TagCloseButton,
     Input,
 } from '@chakra-ui/react';
+import Select from 'react-select';
 import { BsTags } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
@@ -66,11 +67,16 @@ export default function MemberSummaryModal(props: modalProps) {
     const [editingMemberRole, setEditingMemberRole] = useState<boolean>(false);
     const [editedMemberType, setEditedMemberType] = useState<string>('');
     const [deactivateEnabled, setDeactivateEnabled] = useState<boolean>(false);
+    const [deactivationReason, setDeactivationReason] = useState<string>();
 
     const [error, setError] = useState<string>('');
 
-    const deactivateMember = useCallback(async () => {
-        const response = await updateMember(state.token, props.memberInfo.memberId, { active: false, modifiedBy: state.user!.memberId });
+    const deactivateMember = useCallback(async (reason) => {
+        const response = await updateMember(
+            state.token,
+            props.memberInfo.memberId,
+            { active: false, modifiedBy: state.user!.memberId, deactivationReason: reason },
+        );
         if ('reason' in response) {
             return false;
         }
@@ -158,6 +164,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <SimpleGrid pb={4} columns={2}>
                                         <VStack spacing={2} align="left">
                                             <Text fontSize="sm" fontWeight="bold">Name:</Text>
+                                            <Text fontSize="sm" fontWeight="bold">DOB:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Joined:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Status:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Email:</Text>
@@ -169,6 +176,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <Text fontSize="sm">
                                                 {`${selectedMember.firstName} ${selectedMember.lastName}`}
                                             </Text>
+                                            <Text fontSize="sm">{selectedMember.birthdate}</Text>
                                             <Text fontSize="sm">{selectedMember.dateJoined.substring(0, 4)}</Text>
                                             <Text fontSize="sm">{selectedMember.membershipType}</Text>
                                             <Text fontSize="sm">{selectedMember.email}</Text>
@@ -377,31 +385,62 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     </Button>
                                                 </HStack>
                                                 <HStack>
-                                                    <Button
-                                                        backgroundColor="red"
-                                                        variant="outline"
-                                                        disabled={!deactivateEnabled}
-                                                        style={
-                                                            {
-                                                                whiteSpace: 'normal',
-                                                                wordWrap: 'break-word',
+                                                    <VStack>
+                                                        <HStack>
+                                                            <Text fontSize="sm" fontWeight="bold">Reason:</Text>
+                                                            <Select
+                                                                isDisabled={!deactivateEnabled}
+                                                                getOptionLabel={(option) => option.label}
+                                                                getOptionValue={(option) => option.value}
+                                                                onChange={
+                                                                    async (e) => {
+                                                                        setDeactivationReason(e?.value);
+                                                                    }
+                                                                }
+                                                                options={
+                                                                    [
+                                                                        { value: 'Did not renew', label: 'Did not renew' },
+                                                                        { value: 'Did not pay', label: 'Did not pay' },
+                                                                        { value: 'Deceased', label: 'Deceased' },
+                                                                    ]
+                                                                }
+                                                                styles={
+                                                                    {
+                                                                        option: (provided, optionState) => ({
+                                                                            ...provided,
+                                                                            backgroundColor: optionState.isSelected ? '#ffa24d' : 'white',
+                                                                            borderBottom: '1px solid #ffa24d',
+                                                                        }),
+                                                                    }
+                                                                }
+                                                            />
+                                                        </HStack>
+                                                        <Button
+                                                            backgroundColor="red"
+                                                            variant="outline"
+                                                            disabled={!deactivateEnabled}
+                                                            style={
+                                                                {
+                                                                    whiteSpace: 'normal',
+                                                                    wordWrap: 'break-word',
+                                                                }
                                                             }
-                                                        }
-                                                        onClick={
-                                                            async () => {
-                                                                const res = await deactivateMember();
-                                                                toast({
-                                                                    variant: 'subtle',
-                                                                    title: res ? 'Member Deactivated.' : 'Action Failed',
-                                                                    status: res ? 'success' : 'error',
-                                                                    duration: 3000,
-                                                                    isClosable: true,
-                                                                });
+                                                            onClick={
+                                                                async () => {
+                                                                    const res = await deactivateMember(deactivationReason);
+                                                                    toast({
+                                                                        variant: 'subtle',
+                                                                        title: res ? 'Member Deactivated.' : 'Action Failed',
+                                                                        status: res ? 'success' : 'error',
+                                                                        duration: 3000,
+                                                                        isClosable: true,
+                                                                    });
+                                                                }
                                                             }
-                                                        }
-                                                    >
-                                                        De-Activate Member
-                                                    </Button>
+                                                        >
+                                                            De-Activate Member
+                                                        </Button>
+                                                    </VStack>
                                                     <Switch
                                                         colorScheme="orange"
                                                         isChecked={deactivateEnabled}
