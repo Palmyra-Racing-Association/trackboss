@@ -54,6 +54,27 @@ export async function getMembershipType(typeName: string): Promise<MemberType> {
     };
 }
 
+export async function getMembershipTypes(): Promise<MemberType[]> {
+    let results;
+    try {
+        // eslint-disable-next-line max-len
+        [results] = await getPool().query<RowDataPacket[]>('select * from membership_types mt where');
+    } catch (e) {
+        logger.error(`DB error getting member type: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (_.isEmpty(results)) {
+        throw new Error('not found');
+    }
+
+    return results.map((result) => ({
+        memberTypeId: result.member_type_id,
+        type: result.type,
+        baseDuesAmt: result.base_dues_amt,
+    }));
+}
+
 export async function getMemberTypeList(): Promise<MemberType[]> {
     const sql = GET_MEMBER_TYPE_LIST_SQL;
     const values: string[] = [];

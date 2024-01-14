@@ -204,13 +204,13 @@ export async function addSquareAttributes(bill: Bill): Promise<void> {
     }
 }
 
-export async function cleanBilling(year: number, memberId?: number): Promise<number> {
+export async function cleanBilling(year: number, membershipId?: number): Promise<number> {
     let param;
     let result;
     let sql;
-    if (memberId) {
-        sql = 'delete from member_bill where member_id = ? and year = ? and cur_year_ins = 0';
-        param = [memberId, year];
+    if (membershipId) {
+        sql = 'delete from member_bill where membership_id = ? and year = ? and cur_year_ins = 0';
+        param = [membershipId, year];
     } else {
         sql = 'delete from member_bill where year = ? and cur_year_ins = 0';
         param = [year];
