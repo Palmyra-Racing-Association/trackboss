@@ -13,6 +13,7 @@ CREATE VIEW `v_member` AS
         mt.member_type_id,
         mt.type as member_type,
         mst.type as membership_type,
+        mst.membership_type_id,
         m.phone_number,
         m.occupation,
         m.email,

@@ -162,6 +162,10 @@ export async function patchMembership(id: number, req: PatchMembershipRequest): 
     let result;
     try {
         [result] = await getPool().query<OkPacket>(PATCH_MEMBERSHIP_SQL, values);
+        if (req.membershipTypeId) {
+            const membershipTypeUpdateQuery = 'update membership set membership_type_id = ? where membership_id = ?';
+            await getPool().query<OkPacket>(membershipTypeUpdateQuery, [req.membershipTypeId, id]);
+        }
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {

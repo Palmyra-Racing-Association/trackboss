@@ -48,6 +48,7 @@ export type GetMembershipResponse = Membership | ErrorResponse
 
 export type PatchMembershipRequest = {
     membershipAdminId?: number,
+    membershipTypeId?: number,
     status?: string,
     curYearRenewed?: boolean,
     renewalSent?: boolean,

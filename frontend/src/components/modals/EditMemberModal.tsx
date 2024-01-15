@@ -18,6 +18,8 @@ import { PatchMembershipRequest } from '../../../../src/typedefs/membership';
 import { updateMember } from '../../controller/member';
 import { updateMembership } from '../../controller/membership';
 
+import MembershipTypeSelector from '../shared/MembershipTypeSelector';
+
 interface EditMemberModalProps {
     member: Member,
     refreshMemberFunction: () => void,
@@ -42,6 +44,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [phoneValid, setPhoneValid] = useState<boolean>(isMobilePhone(phoneNumber, 'en-US'));
     const [emailValid, setEmailValid] = useState<boolean>(isEmail(email));
     const [birthdate, setBirthDate] = useState<Date>(moment(selectedMember.birthdate).toDate());
+    const [membershipType, setMembershipType] = useState<number>(selectedMember.membershipTypeId);
 
     const { state, update } = useContext(UserContext);
 
@@ -66,12 +69,12 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                         <Grid templateRows="repeat(7, 1fr)" templateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
                             <GridItem colSpan={2}>
                                 <Text>Membership Type</Text>
-                                <Input
-                                    value={selectedMember.membershipType}
-                                    size="md"
-                                    disabled
-                                    onChange={
-                                        (e) => {
+                                <MembershipTypeSelector
+                                    isAdmin={state.user?.memberType === 'Admin'}
+                                    currentType={selectedMember.membershipType}
+                                    setSelectedOption={
+                                        (mt: number) => {
+                                            setMembershipType(mt);
                                             setDirty(true);
                                         }
                                     }
@@ -207,6 +210,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     };
                                     await updateMember(state.token, selectedMember.memberId, memberUpdate);
                                     const membershipUpdate: PatchMembershipRequest = {
+                                        membershipTypeId: membershipType,
                                         address: streetAddress,
                                         city,
                                         state: memberAddressState,

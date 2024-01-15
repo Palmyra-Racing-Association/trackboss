@@ -11,6 +11,7 @@ export type Member = {
     memberTypeId: number,
     memberType: string,
     membershipType: string,
+    membershipTypeId: number,
     firstName: string,
     lastName: string,
     phoneNumber: string,
