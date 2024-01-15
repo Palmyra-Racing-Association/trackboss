@@ -6,6 +6,9 @@ import {
 } from '@chakra-ui/react';
 import isEmail from 'validator/es/lib/isEmail';
 import isMobilePhone from 'validator/es/lib/isMobilePhone';
+import DatePicker from 'react-date-picker';
+import moment from 'moment';
+import Select from 'react-select';
 
 import { UserContext } from '../../contexts/UserContext';
 
@@ -38,6 +41,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [dirty, setDirty] = useState<boolean>(false);
     const [phoneValid, setPhoneValid] = useState<boolean>(isMobilePhone(phoneNumber, 'en-US'));
     const [emailValid, setEmailValid] = useState<boolean>(isEmail(email));
+    const [birthdate, setBirthDate] = useState<Date>(moment(selectedMember.birthdate).toDate());
 
     const { state, update } = useContext(UserContext);
 
@@ -59,7 +63,34 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                         {`Edit member info - ${selectedMember.firstName} ${props.member.lastName}`}
                     </ModalHeader>
                     <ModalBody>
-                        <Grid templateRows="repeat(5, 1fr)" templateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
+                        <Grid templateRows="repeat(7, 1fr)" templateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
+                            <GridItem colSpan={2}>
+                                <Text>Membership Type</Text>
+                                <Input
+                                    value={selectedMember.membershipType}
+                                    size="md"
+                                    disabled
+                                    onChange={
+                                        (e) => {
+                                            setDirty(true);
+                                        }
+                                    }
+                                />
+                            </GridItem>
+                            <GridItem colSpan={2}>
+                                <Text>DOB</Text>
+                                <DatePicker
+                                    onChange={
+                                        (date:any) => {
+                                            setBirthDate(date);
+                                            setDirty(true);
+                                        }
+                                    }
+                                    value={birthdate}
+                                    required
+                                    maxDate={new Date()}
+                                />
+                            </GridItem>
                             <GridItem colSpan={2}>
                                 <Text>Street Address</Text>
                                 <Input
@@ -171,6 +202,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     const memberUpdate : PatchMemberRequest = {
                                         email,
                                         phoneNumber,
+                                        birthdate: moment(birthdate).format('YYYY-MM-DD'),
                                         modifiedBy: state.user?.memberId || 0,
                                     };
                                     await updateMember(state.token, selectedMember.memberId, memberUpdate);
