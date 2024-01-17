@@ -96,7 +96,9 @@ export default function MemberList() {
                     });
                 }
                 let activeMembers = _.filter(c, (member) => (member.active === showActive));
-                activeMembers = activeMembers.filter((member) => (member.memberType.toLowerCase().includes('admin')));
+                // only show membership admins on this page, where the memberId and the admin ID is the same because
+                // they ARE the admin.
+                activeMembers = activeMembers.filter((member) => (member.memberId === member.membershipAdminId));
                 setCells(activeMembers);
                 setAllCells(activeMembers);
                 setTotalMemberships(activeMembers.length);

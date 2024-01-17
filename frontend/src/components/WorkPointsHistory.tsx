@@ -3,14 +3,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import {
-    Button,
     Heading,
-    HStack,
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuList,
-    Text,
     VStack,
 } from '@chakra-ui/react';
 import React, { createRef, RefObject, useContext, useEffect, useState } from 'react';
@@ -113,16 +106,15 @@ export default function WorkPointsHistory() {
             // squash error
         } else {
             const allYears: number[] = [];
-            _.forEach(jobs, (job) => {
-                if (job.start === null) return;
-                const jobYear = new Date(job.start).getFullYear();
-                if (!allYears.includes(jobYear)) {
-                    allYears.push(jobYear);
-                }
-            });
+            // find the first year they were a member.
+            let firstYear = parseInt(state.user?.dateJoined.substring(0, 4) || '0', 10);
+            // but we tracked points offline before 2016 so we can only go from then on.
+            if (firstYear < 2016) {
+                firstYear = 2016;
+            }
             const currentYear = new Date().getFullYear();
-            if (!allYears.includes(currentYear)) {
-                allYears.push(currentYear);
+            for (let dropdownYear = firstYear; dropdownYear <= currentYear; dropdownYear++) {
+                allYears.push(dropdownYear);
             }
             // reverse sort the years so that most recent is always at the top
             const sortedYears = allYears.sort((a, b) => (b - a));
