@@ -17,7 +17,7 @@ import {
     PostPayBillResponse,
 } from '../typedefs/bill';
 import { checkHeader, validateAdminAccess, verify } from '../util/auth';
-import { emailBills, generateNewBills, processBillPayment } from '../util/billing';
+import { emailBills, generateNewBills, processBillPayment, runBillingComplete } from '../util/billing';
 import { sendInsuranceConfirmEmail } from '../util/email';
 import logger from '../logger';
 import { calculateBillingYear } from '../util/dateHelper';
@@ -196,13 +196,7 @@ billing.post('/', async (req: Request, res: Response) => {
             await verify(headerCheck.token, 'Admin');
             const curYear = new Date().getFullYear();
             const membershipList = await getMembershipList('active');
-            const { threshold } = await getWorkPointThreshold(curYear);
-            // to protect against generating duplicate bills
-            const cleanedUp = await cleanBilling(curYear);
-            const preGeneratedBills = await getBillList({ year: curYear });
-            const generatedBills = await generateNewBills(membershipList, preGeneratedBills, threshold, curYear);
-            // generatedBills = await emailBills(generatedBills);
-
+            const generatedBills = await runBillingComplete(curYear, membershipList);
             res.status(201);
             response = generatedBills;
         } catch (e: any) {

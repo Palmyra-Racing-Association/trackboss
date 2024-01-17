@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { Request, Response, Router } from 'express';
 
 import {
@@ -9,6 +9,7 @@ import {
     GetJobResponse,
     PatchJobResponse,
     DeleteJobResponse,
+    PostNewJobRequest,
 } from '../typedefs/job';
 import { checkHeader, verify } from '../util/auth';
 
@@ -26,6 +27,8 @@ import {
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 
 import logger from '../logger';
+import { runBillingComplete } from '../util/billing';
+import { getMembership } from '../database/membership';
 
 async function GetJobList(req: Request, res:Response) {
     const { authorization } = req.headers;
@@ -155,8 +158,15 @@ job.post('/new', async (req: Request, res: Response) => {
     } else {
         try {
             await verify(headerCheck.token, 'Admin');
-            const insertId = await insertJob(req.body);
+            const jobInsertRequest : PostNewJobRequest = req.body;
+            const insertId = await insertJob(jobInsertRequest);
             response = await getJob(insertId);
+            // we have added the job so update the user's billing immediately so we can backdate stuff which happens.
+            // it also keeps stuff instantly up to date for verification.
+            const workYear = parse(jobInsertRequest.jobStartDate || '', 'yyyy-MM-dd HH:mm', new Date()).getFullYear();
+            const { membershipId } = jobInsertRequest;
+            const membership = await getMembership(membershipId || 0);
+            runBillingComplete(workYear, [membership], membership.membershipId);
             res.status(201);
         } catch (e: any) {
             logger.error(`Error at path ${req.path}`);

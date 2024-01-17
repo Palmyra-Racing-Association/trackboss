@@ -1,7 +1,10 @@
 import _ from 'lodash';
 import { compareDesc, isFuture } from 'date-fns';
 import { getJobList } from '../database/job';
-import { generateBill, getBill, getBillList, markBillPaid, markContactedAndRenewing } from '../database/billing';
+import {
+    cleanBilling, generateBill, getBill, getBillList,
+    getWorkPointThreshold, markBillPaid, markContactedAndRenewing,
+} from '../database/billing';
 import { getBaseDues } from '../database/membership';
 import { getWorkPointsByMembership } from '../database/workPoints';
 import logger from '../logger';
@@ -137,4 +140,13 @@ export async function processBillPayment(billId: number, paymentMethod: string) 
         logger.info(`bill ID ${billId} confirmation email was sent.`);
     }
     return bill;
+}
+
+export async function runBillingComplete(year: number, membershipList: Membership[], membershipId?: number) {
+    const { threshold } = await getWorkPointThreshold(year);
+    // to protect against generating duplicate bills
+    const cleanedUp = await cleanBilling(year, membershipId);
+    const preGeneratedBills = await getBillList({ year, membershipId });
+    const generatedBills = await generateNewBills(membershipList, preGeneratedBills, threshold, year);
+    return generatedBills;
 }

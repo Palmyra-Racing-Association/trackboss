@@ -359,6 +359,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     <AddPointsModal
                                                         memberName={`${selectedMember.firstName} ${selectedMember.lastName}` || ''}
                                                         memberId={selectedMember.memberId as number}
+                                                        membershipId={selectedMember.membershipId}
                                                         visible={(state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin')}
                                                         token={state.token}
                                                         buttonText="Add points"

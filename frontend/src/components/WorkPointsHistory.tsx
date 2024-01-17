@@ -167,6 +167,7 @@ export default function WorkPointsHistory() {
             </Heading>
             <AddPointsModal
                 memberName={state?.user?.firstName || ''}
+                membershipId={state?.user?.membershipId || 0}
                 memberId={state?.user?.memberId as number}
                 visible={(state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin')}
                 token={state.token}

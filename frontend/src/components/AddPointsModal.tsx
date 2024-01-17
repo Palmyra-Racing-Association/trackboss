@@ -16,6 +16,7 @@ import { createJob } from '../controller/job';
 interface AddPointsModalProps {
     memberName: string,
     memberId: number,
+    membershipId: number,
     visible: boolean,
     refreshPoints: Function,
     token: string,
@@ -141,6 +142,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                                     const createJobRequest : PostNewJobRequest = {
                                         jobTypeId: createdJobType.jobTypeId,
                                         memberId: props.memberId,
+                                        membershipId: props.membershipId,
                                         jobStartDate: workDateFormatted,
                                         jobEndDate: workDateFormatted,
                                         pointsAwarded: createdJobType.pointValue,
