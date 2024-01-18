@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import PDFDocument from 'pdfkit';
 import { checkHeader, validateAdminAccess, verify } from '../util/auth';
 import {
     deleteFamilyMember,
@@ -434,6 +435,35 @@ member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
         res.status(500);
         res.send(error);
     }
+});
+
+member.get('/card/create/:memberId', async (req: Request, res: Response) => {
+    const { memberId } = req.params;
+
+    const memberForCard = await getMember(memberId);
+
+    // Create a PDF document
+    const doc = new PDFDocument();
+
+    // Set response headers for PDF
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'inline; filename=PRAmembershipCard.pdf');
+
+    // Pipe the PDF content to the response stream
+    doc.pipe(res);
+    doc.image('frontend/public/logo512.png');
+
+    // Add content to the PDF with the custom font
+    doc.fontSize(24).text(`Palmyra Racing Association Member - ${new Date().getFullYear()}`);
+    doc.fontSize(14).text(`${memberForCard.firstName} ${memberForCard.lastName}`);
+    doc.fontSize(14).text(`Member id ${memberForCard.memberId}, Membership Id ${memberForCard.membershipId}`);
+    doc.fontSize(14).text(`Primary member ${memberForCard.membershipAdmin}`);
+    doc.fontSize(14).text(memberForCard.membershipType);
+    doc.fontSize(14).text('');
+    doc.fontSize(24).text('President Name');
+    doc.fontSize(12).text('President, Palmyra Racing Association');
+    // Finalize the PDF
+    doc.end();
 });
 
 export default member;
