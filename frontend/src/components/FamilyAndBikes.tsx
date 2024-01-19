@@ -11,6 +11,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import moment from 'moment';
+import _ from 'lodash';
 import { GetMemberListResponse, Member } from '../../../src/typedefs/member';
 import { Bike, GetBikeListResponse } from '../../../src/typedefs/bike';
 import DeleteAlert from './DeleteAlert';
@@ -20,6 +21,7 @@ import AddBikeModal from './AddBikeModal';
 import { getFamilyMembers, updateMember } from '../controller/member';
 import { UserContext } from '../contexts/UserContext';
 import { createBike, deleteBike, getBikeList, updateBike } from '../controller/bike';
+import EditMemberModal from './modals/EditMemberModal';
 
 interface cardProps {
     memberFamily: GetMemberListResponse,
@@ -141,20 +143,31 @@ export default function GeneralInfo(props: cardProps) {
                                         </ListItem>
                                         {
                                             (props.admin && (member.memberType === 'Member')) && (
-                                                <Button
-                                                    textDecoration="underline"
-                                                    color="red"
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={
-                                                        () => {
-                                                            setMemberToRemove(member);
-                                                            onRemoveFamilyOpen();
+                                                <>
+                                                    <EditMemberModal
+                                                        isFamilyMember
+                                                        member={member}
+                                                        hasEmail={!_.isEmpty(member.email)}
+                                                        refreshMemberFunction={
+                                                            async () => {
+                                                            }
                                                         }
-                                                    }
-                                                >
-                                                    Remove
-                                                </Button>
+                                                    />
+                                                    <Button
+                                                        textDecoration="underline"
+                                                        color="red"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={
+                                                            () => {
+                                                                setMemberToRemove(member);
+                                                                onRemoveFamilyOpen();
+                                                            }
+                                                        }
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </>
                                             )
                                         }
                                     </HStack>

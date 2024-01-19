@@ -23,6 +23,8 @@ import MembershipTypeSelector from '../shared/MembershipTypeSelector';
 interface EditMemberModalProps {
     member: Member,
     refreshMemberFunction: () => void,
+    isFamilyMember?: boolean,
+    hasEmail?: boolean,
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -45,6 +47,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [emailValid, setEmailValid] = useState<boolean>(isEmail(email));
     const [birthdate, setBirthDate] = useState<Date>(moment(selectedMember.birthdate).toDate());
     const [membershipType, setMembershipType] = useState<number>(selectedMember.membershipTypeId);
+    const [rowCount, setRowCount] = useState<number>(7);
 
     const { state, update } = useContext(UserContext);
 
@@ -66,8 +69,13 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                         {`Edit member info - ${selectedMember.firstName} ${props.member.lastName}`}
                     </ModalHeader>
                     <ModalBody>
-                        <Grid templateRows="repeat(7, 1fr)" templateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
-                            <GridItem colSpan={2}>
+                        <Grid
+                            templateRows={`repeat(${rowCount}, 1fr)`}
+                            templateColumns="repeat(2, 1fr)"
+                            columnGap={2}
+                            rowGap={2}
+                        >
+                            <GridItem colSpan={2} display={!props.isFamilyMember ? 'block' : 'none'}>
                                 <Text>Membership Type</Text>
                                 <MembershipTypeSelector
                                     isAdmin={state.user?.memberType === 'Admin'}
@@ -94,7 +102,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     maxDate={new Date()}
                                 />
                             </GridItem>
-                            <GridItem colSpan={2}>
+                            <GridItem colSpan={2} display={!props.isFamilyMember ? 'block' : 'none'}>
                                 <Text>Street Address</Text>
                                 <Input
                                     value={streetAddress}
@@ -107,7 +115,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                             </GridItem>
-                            <GridItem colSpan={1}>
+                            <GridItem colSpan={1} display={!props.isFamilyMember ? 'block' : 'none'}>
                                 <Text>City</Text>
                                 <Input
                                     value={city}
@@ -120,7 +128,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                             </GridItem>
-                            <GridItem>
+                            <GridItem display={!props.isFamilyMember ? 'block' : 'none'}>
                                 <Text>State</Text>
                                 <Input
                                     value={memberAddressState}
@@ -133,7 +141,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                             </GridItem>
-                            <GridItem>
+                            <GridItem display={!props.isFamilyMember ? 'block' : 'none'}>
                                 <Text>Zip</Text>
                                 <Input
                                     value={zip}
@@ -147,7 +155,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                             </GridItem>
-                            <GridItem colSpan={2}>
+                            <GridItem colSpan={2} display={props.hasEmail ? 'block' : 'none'}>
                                 <Text>email (Changing this changes the login email too)</Text>
                                 <Text color="red" size="xs" hidden={emailValid}>
                                     email must be a valid email address
@@ -165,7 +173,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                             </GridItem>
-                            <GridItem colSpan={2}>
+                            <GridItem colSpan={2} display={!props.isFamilyMember ? 'block' : 'none'}>
                                 <Text>Phone</Text>
                                 <Text color="red" size="xs" hidden={phoneValid}>
                                     Phone must be ten digits and include area code
@@ -245,3 +253,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
         </>
     );
 }
+EditMemberModal.defaultProps = {
+    isFamilyMember: false,
+    hasEmail: true,
+};
