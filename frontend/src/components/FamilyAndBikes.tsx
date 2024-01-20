@@ -150,6 +150,7 @@ export default function GeneralInfo(props: cardProps) {
                                                         hasEmail={!_.isEmpty(member.email)}
                                                         refreshMemberFunction={
                                                             async () => {
+                                                                await refreshFamilyList();
                                                             }
                                                         }
                                                     />

@@ -20,6 +20,7 @@ import logger from '../logger';
 import { deleteCognitoUser, updateCognitoUserEmail } from '../util/cognito';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 import { markMembershipFormer } from '../database/membership';
+import { getBoardMemberList } from '../database/boardMember';
 
 // this is here, in this way, because mailchimmp marketing doesn't have a proper typescript library and
 // so as a result, i'm using it in a Javasript way.  Once the @types/mailchimp-markeing thing gets updated we
@@ -441,6 +442,8 @@ member.get('/card/create/:memberId', async (req: Request, res: Response) => {
     const { memberId } = req.params;
 
     const memberForCard = await getMember(memberId);
+    const boardMembers = await getBoardMemberList(new Date().getFullYear().toString());
+    const president = boardMembers.find((m) => m.title === 'President');
 
     // Create a PDF document
     const doc = new PDFDocument();
@@ -451,16 +454,36 @@ member.get('/card/create/:memberId', async (req: Request, res: Response) => {
 
     // Pipe the PDF content to the response stream
     doc.pipe(res);
+    // Draw border around the page
+    const borderWidth = 100;
+    const pageWidth = doc.page.width;
+    const pageHeight = doc.page.height;
+
+    // Top border
+    doc.moveTo(0, 0).lineTo(pageWidth, 0).lineWidth(borderWidth).stroke();
+
+    // Right border
+    doc.moveTo(pageWidth, 0).lineTo(pageWidth, pageHeight).lineWidth(borderWidth).stroke();
+
+    // Bottom border
+    doc.moveTo(pageWidth, pageHeight).lineTo(0, pageHeight).lineWidth(borderWidth).stroke();
+
+    // Left border
+    doc.moveTo(0, pageHeight).lineTo(0, 0).lineWidth(borderWidth).stroke();
+
     doc.image('frontend/public/logo512.png');
+    const signatureFontPath = 'frontend/fonts/GreatVibes-Regular.ttf';
 
     // Add content to the PDF with the custom font
+    doc.font('Helvetica');
     doc.fontSize(24).text(`Palmyra Racing Association Member - ${new Date().getFullYear()}`);
     doc.fontSize(14).text(`${memberForCard.firstName} ${memberForCard.lastName}`);
     doc.fontSize(14).text(`Member id ${memberForCard.memberId}, Membership Id ${memberForCard.membershipId}`);
     doc.fontSize(14).text(`Primary member ${memberForCard.membershipAdmin}`);
     doc.fontSize(14).text(memberForCard.membershipType);
     doc.fontSize(14).text('');
-    doc.fontSize(24).text('President Name');
+    doc.font(signatureFontPath).fontSize(24).text(`${president?.firstName} ${president?.lastName}`);
+    doc.font('Helvetica');
     doc.fontSize(12).text('President, Palmyra Racing Association');
     // Finalize the PDF
     doc.end();

@@ -173,7 +173,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                             </GridItem>
-                            <GridItem colSpan={2} display={!props.isFamilyMember ? 'block' : 'none'}>
+                            <GridItem colSpan={2}>
                                 <Text>Phone</Text>
                                 <Text color="red" size="xs" hidden={phoneValid}>
                                     Phone must be ten digits and include area code
@@ -217,15 +217,18 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         modifiedBy: state.user?.memberId || 0,
                                     };
                                     await updateMember(state.token, selectedMember.memberId, memberUpdate);
-                                    const membershipUpdate: PatchMembershipRequest = {
-                                        membershipTypeId: membershipType,
-                                        address: streetAddress,
-                                        city,
-                                        state: memberAddressState,
-                                        zip,
-                                        modifiedBy: state.user?.memberId || 0,
-                                    };
-                                    await updateMembership(state.token, selectedMember.membershipId, membershipUpdate);
+                                    if (!props.isFamilyMember) {
+                                        const membershipUpdate: PatchMembershipRequest = {
+                                            membershipTypeId: membershipType,
+                                            address: streetAddress,
+                                            city,
+                                            state: memberAddressState,
+                                            zip,
+                                            modifiedBy: state.user?.memberId || 0,
+                                        };
+                                        // eslint-disable-next-line max-len
+                                        await updateMembership(state.token, selectedMember.membershipId, membershipUpdate);
+                                    }
                                     props.refreshMemberFunction();
                                     toast({
                                         containerStyle: {
