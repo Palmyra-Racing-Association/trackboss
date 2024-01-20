@@ -3,3 +3,4 @@ frontend/build
 devops/deploy/frontend
 devops/deploy/backend
 lambda/
+database/migrations/migrations
