@@ -480,8 +480,8 @@ member.get('/card/create/:memberId', async (req: Request, res: Response) => {
         // Left border
         doc.moveTo(0, pageHeight).lineTo(0, 0).lineWidth(borderWidth).stroke();
 
-        doc.image('frontend/public/logo512.png');
-        const signatureFontPath = 'frontend/fonts/GreatVibes-Regular.ttf';
+        doc.image('src/assets/logo512.png');
+        const signatureFontPath = 'src/assets/fonts/GreatVibes-Regular.ttf';
 
         // Add content to the PDF with the custom font
         doc.font('Helvetica');
