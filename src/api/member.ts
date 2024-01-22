@@ -441,15 +441,18 @@ member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
 member.get('/card/create/:memberId', async (req: Request, res: Response) => {
     const { memberId } = req.params;
     const authorization = req.query.id as string;
-    checkHeader(authorization);
+    logger.info(`Generating membership card for ${memberId}`);
     const headerCheck = checkHeader(`Bearer ${authorization}`);
     if (!headerCheck.valid) {
         res.status(401);
     } else {
+        logger.info('Generating membership card - verifying token.');
         await verify(headerCheck.token, 'Member', Number(memberId));
         const memberForCard = await getMember(memberId);
         const boardMembers = await getBoardMemberList(new Date().getFullYear().toString());
         const president = boardMembers.find((m) => m.title === 'President');
+
+        logger.info('Generating membership card - got all card data.');
 
         // Create a PDF document
         const doc = new PDFDocument();
@@ -491,8 +494,11 @@ member.get('/card/create/:memberId', async (req: Request, res: Response) => {
         doc.font(signatureFontPath).fontSize(24).text(`${president?.firstName} ${president?.lastName}`);
         doc.font('Helvetica');
         doc.fontSize(12).text('President, Palmyra Racing Association');
+        logger.info('Generating membership card - Card generated, sending to front end.');
+
         // Finalize the PDF
         doc.end();
+        logger.info('Generating membership card - card genertion completed and sent to front end.');
     }
 });
 
