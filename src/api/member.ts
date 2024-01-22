@@ -440,53 +440,60 @@ member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
 
 member.get('/card/create/:memberId', async (req: Request, res: Response) => {
     const { memberId } = req.params;
+    const authorization = req.query.id as string;
+    checkHeader(authorization);
+    const headerCheck = checkHeader(`Bearer ${authorization}`);
+    if (!headerCheck.valid) {
+        res.status(401);
+    } else {
+        await verify(headerCheck.token, 'Member', Number(memberId));
+        const memberForCard = await getMember(memberId);
+        const boardMembers = await getBoardMemberList(new Date().getFullYear().toString());
+        const president = boardMembers.find((m) => m.title === 'President');
 
-    const memberForCard = await getMember(memberId);
-    const boardMembers = await getBoardMemberList(new Date().getFullYear().toString());
-    const president = boardMembers.find((m) => m.title === 'President');
+        // Create a PDF document
+        const doc = new PDFDocument();
 
-    // Create a PDF document
-    const doc = new PDFDocument();
+        // Set response headers for PDF
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'inline; filename=PRAmembershipCard.pdf');
 
-    // Set response headers for PDF
-    res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', 'inline; filename=PRAmembershipCard.pdf');
+        // Pipe the PDF content to the response stream
+        doc.pipe(res);
+        // Draw border around the page
+        const borderWidth = 100;
+        const pageWidth = doc.page.width;
+        const pageHeight = doc.page.height;
 
-    // Pipe the PDF content to the response stream
-    doc.pipe(res);
-    // Draw border around the page
-    const borderWidth = 100;
-    const pageWidth = doc.page.width;
-    const pageHeight = doc.page.height;
+        // Top border
+        doc.moveTo(0, 0).lineTo(pageWidth, 0).lineWidth(borderWidth).stroke();
 
-    // Top border
-    doc.moveTo(0, 0).lineTo(pageWidth, 0).lineWidth(borderWidth).stroke();
+        // Right border
+        doc.moveTo(pageWidth, 0).lineTo(pageWidth, pageHeight).lineWidth(borderWidth).stroke();
 
-    // Right border
-    doc.moveTo(pageWidth, 0).lineTo(pageWidth, pageHeight).lineWidth(borderWidth).stroke();
+        // Bottom border
+        doc.moveTo(pageWidth, pageHeight).lineTo(0, pageHeight).lineWidth(borderWidth).stroke();
 
-    // Bottom border
-    doc.moveTo(pageWidth, pageHeight).lineTo(0, pageHeight).lineWidth(borderWidth).stroke();
+        // Left border
+        doc.moveTo(0, pageHeight).lineTo(0, 0).lineWidth(borderWidth).stroke();
 
-    // Left border
-    doc.moveTo(0, pageHeight).lineTo(0, 0).lineWidth(borderWidth).stroke();
+        doc.image('frontend/public/logo512.png');
+        const signatureFontPath = 'frontend/fonts/GreatVibes-Regular.ttf';
 
-    doc.image('frontend/public/logo512.png');
-    const signatureFontPath = 'frontend/fonts/GreatVibes-Regular.ttf';
-
-    // Add content to the PDF with the custom font
-    doc.font('Helvetica');
-    doc.fontSize(24).text(`Palmyra Racing Association Member - ${new Date().getFullYear()}`);
-    doc.fontSize(14).text(`${memberForCard.firstName} ${memberForCard.lastName}`);
-    doc.fontSize(14).text(`Member id ${memberForCard.memberId}, Membership Id ${memberForCard.membershipId}`);
-    doc.fontSize(14).text(`Primary member ${memberForCard.membershipAdmin}`);
-    doc.fontSize(14).text(memberForCard.membershipType);
-    doc.fontSize(14).text('');
-    doc.font(signatureFontPath).fontSize(24).text(`${president?.firstName} ${president?.lastName}`);
-    doc.font('Helvetica');
-    doc.fontSize(12).text('President, Palmyra Racing Association');
-    // Finalize the PDF
-    doc.end();
+        // Add content to the PDF with the custom font
+        doc.font('Helvetica');
+        doc.fontSize(24).text(`Palmyra Racing Association Member - ${new Date().getFullYear()}`);
+        doc.fontSize(14).text(`${memberForCard.firstName} ${memberForCard.lastName}`);
+        doc.fontSize(14).text(`Member id ${memberForCard.memberId}, Membership Id ${memberForCard.membershipId}`);
+        doc.fontSize(14).text(`Primary member ${memberForCard.membershipAdmin}`);
+        doc.fontSize(14).text(memberForCard.membershipType);
+        doc.fontSize(14).text('');
+        doc.font(signatureFontPath).fontSize(24).text(`${president?.firstName} ${president?.lastName}`);
+        doc.font('Helvetica');
+        doc.fontSize(12).text('President, Palmyra Racing Association');
+        // Finalize the PDF
+        doc.end();
+    }
 });
 
 export default member;

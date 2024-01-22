@@ -145,7 +145,12 @@ function Dashboard() {
                                 />
                             )
                         }
-                        <ImportantLinksCard gateCode={gateCode} dashboardLinks={dashboardLinks} />
+                        <ImportantLinksCard
+                            gateCode={gateCode}
+                            dashboardLinks={dashboardLinks}
+                            memberId={state.user?.memberId || 0}
+                            jwt={state.token}
+                        />
                     </SimpleGrid>
                 </Center>
             </VStack>

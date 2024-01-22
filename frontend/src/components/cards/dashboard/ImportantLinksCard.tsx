@@ -6,6 +6,8 @@ import { Link as DashboardLink } from '../../../../../src/typedefs/link';
 interface cardProps {
     gateCode: string,
     dashboardLinks: DashboardLink[],
+    memberId: number,
+    jwt: string,
 }
 
 export default function ImportantLinksCard(props: cardProps) {
@@ -28,6 +30,17 @@ export default function ImportantLinksCard(props: cardProps) {
                         >
                             <ListItem marginLeft={4}>
                                 {gateCodeDisplayMessage}
+                            </ListItem>
+                        </Link>
+                        <Link
+                            target="_blank"
+                            fontSize="2xl"
+                            // eslint-disable-next-line max-len
+                            href={`${process.env.REACT_APP_API_URL}/api/member/card/create/${props.memberId}?id=${props.jwt}`}
+                            color="orange"
+                        >
+                            <ListItem marginLeft={4}>
+                                Membership Card
                             </ListItem>
                         </Link>
                         {
