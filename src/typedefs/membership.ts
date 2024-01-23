@@ -11,6 +11,7 @@ export type Membership = {
     city: string,
     state: string,
     zip: string,
+    membershipType: string,
     lastModifiedDate: string,
     lastModifiedBy: string
 }

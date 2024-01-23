@@ -5,7 +5,7 @@ import {
     cleanBilling, generateBill, getBill, getBillList,
     getWorkPointThreshold, markBillPaid, markContactedAndRenewing,
 } from '../database/billing';
-import { getBaseDues } from '../database/membership';
+import { getBaseDues, upgradeMembershipSenior } from '../database/membership';
 import { getWorkPointsByMembership } from '../database/workPoints';
 import logger from '../logger';
 import { Bill } from '../typedefs/bill';
@@ -77,6 +77,12 @@ export async function generateNewBills(
                 if (owed === 0) {
                     // flip the bill to paid if they owe zero. This is just easy record keeping.
                     await markBillPaid(billId);
+                }
+                // if they are at or over the threshold, then update their membership type.
+                if ((earned >= threshold) && (membership.membershipType === 'Associate Member')) {
+                    await upgradeMembershipSenior(membership.membershipId);
+                    // eslint-disable-next-line max-len
+                    logger.info(`Automatically updated ${membership.membershipAdmin} membership to Senior based on ${earned} points.`);
                 }
             } catch (e) {
                 // generate more bills even if this one failed

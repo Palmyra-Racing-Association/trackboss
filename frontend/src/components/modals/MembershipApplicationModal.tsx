@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
 import {
-    Alert, AlertIcon, Button, Divider, Heading, Link, ListItem, Modal, ModalContent, ModalFooter,
+    Alert, AlertIcon, Button, Divider, Grid, GridItem, Heading, Link, ListItem, Modal, ModalContent, ModalFooter,
     ModalOverlay, OrderedList, SimpleGrid, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack,
 } from '@chakra-ui/react';
 import { MembershipApplication } from '../../../../src/typedefs/membershipApplication';
@@ -159,79 +159,91 @@ export default function MembershipApplicationModal(props: appModalProps) {
                     </Alert>
                 </SimpleGrid>
                 <ModalFooter>
-                    <Button
-                        variant="ghost"
-                        mr={3}
-                        size="lg"
-                        onClick={
-                            () => {
-                                props.onClose();
-                            }
-                        }
-                    >
-                        Close
-                    </Button>
-                    <Button
-                        backgroundColor="orange.300"
-                        color="white"
-                        variant="ghost"
-                        size="lg"
-                        disabled={!isInReview}
-                        onClick={
-                            async () => {
-                                await reviewMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
-                                props.addAction();
-                                onClose();
-                            }
-                        }
-                    >
-                        Review
-                    </Button>
-                    <Button
-                        color="red"
-                        variant="ghost"
-                        size="lg"
-                        disabled={!isInReview}
-                        onClick={
-                            async () => {
-                                await rejectMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
-                                props.addAction();
-                                onClose();
-                            }
-                        }
-                    >
-                        Reject
-                    </Button>
-                    <Button
-                        color="green"
-                        variant="ghost"
-                        size="lg"
-                        disabled={!isInReview}
-                        onClick={
-                            async () => {
-                                await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
-                                props.addAction();
-                                onClose();
-                            }
-                        }
-                    >
-                        Accept
-                    </Button>
-                    <Button
-                        color="green"
-                        size="lg"
-                        variant="ghost"
-                        disabled={!isInReview}
-                        onClick={
-                            async () => {
-                                await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes, true);
-                                props.addAction();
-                                onClose();
-                            }
-                        }
-                    >
-                        Accept as Guest
-                    </Button>
+                    <Grid templateColumns="repeat(3, 2fr)" gap={3}>
+                        <GridItem>
+                            <Button
+                                variant="ghost"
+                                mr={3}
+                                size="lg"
+                                onClick={
+                                    () => {
+                                        props.onClose();
+                                    }
+                                }
+                            >
+                                Close
+                            </Button>
+                        </GridItem>
+                        <GridItem>
+                            <Button
+                                backgroundColor="orange.300"
+                                color="white"
+                                variant="ghost"
+                                size="lg"
+                                disabled={!isInReview}
+                                onClick={
+                                    async () => {
+                                        await reviewMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
+                                        props.addAction();
+                                        onClose();
+                                    }
+                                }
+                            >
+                                Review
+                            </Button>
+                        </GridItem>
+                        <GridItem>
+                            <Button
+                                color="red"
+                                variant="ghost"
+                                size="lg"
+                                disabled={!isInReview}
+                                onClick={
+                                    async () => {
+                                        await rejectMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
+                                        props.addAction();
+                                        onClose();
+                                    }
+                                }
+                            >
+                                Reject
+                            </Button>
+                        </GridItem>
+                        <GridItem>
+                            <Button
+                                color="green"
+                                variant="ghost"
+                                size="lg"
+                                disabled={!isInReview}
+                                onClick={
+                                    async () => {
+                                        await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
+                                        props.addAction();
+                                        onClose();
+                                    }
+                                }
+                            >
+                                Accept
+                            </Button>
+                        </GridItem>
+                        <GridItem>
+                            <Button
+                                color="green"
+                                size="lg"
+                                variant="ghost"
+                                disabled={!isInReview}
+                                onClick={
+                                    async () => {
+                                        await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes, true);
+                                        props.addAction();
+                                        onClose();
+                                    }
+                                }
+                            >
+                                Accept as Guest
+                            </Button>
+                        </GridItem>
+                    </Grid>
                 </ModalFooter>
             </ModalContent>
         </Modal>

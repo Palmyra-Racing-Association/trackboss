@@ -97,6 +97,7 @@ export async function getMembershipList(status?: string): Promise<Membership[]> 
         membershipId: result.membership_id,
         membershipAdmin: result.membership_admin,
         status: result.status,
+        membershipType: result.membership_type,
         curYearRenewed: !!result.cur_year_renewed[0],
         renewalSent: !!result.renewal_sent[0],
         yearJoined: result.year_joined,
@@ -128,6 +129,7 @@ export async function getMembership(id: number): Promise<Membership> {
         membershipId: results[0].membership_id,
         membershipAdmin: results[0].membership_admin,
         status: results[0].status,
+        membershipType: results[0].membership_type,
         curYearRenewed: !!results[0].cur_year_renewed[0],
         renewalSent: !!results[0].renewal_sent[0],
         yearJoined: results[0].year_joined,
@@ -299,4 +301,20 @@ export async function getBaseDues(membershipId: number): Promise<number> {
     }
 
     return result[0].base_dues_amt;
+}
+
+export async function upgradeMembershipSenior(id: number) : Promise<number> {
+    const values = [id];
+    const sql = `update membership set membership_type_id = 
+        (select membership_type_id from membership_types where type = 'Senior member')
+        where membership_id = ?`;
+    let result;
+    try {
+        [result] = await getPool().query<RowDataPacket[]>(sql, values);
+    } catch (e) {
+        logger.error(`DB error marking membership ${id} as former`, e);
+        throw e;
+    }
+
+    return id;
 }
