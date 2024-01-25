@@ -25,6 +25,7 @@ export type Bill = {
     squareOrderId?: string,
     detail?: string,
     contactedAndRenewing?: boolean,
+    memberActive: boolean,
 }
 
 export type WorkPointThreshold = {
@@ -42,7 +43,8 @@ export type GetBillListRequest = Record<string, never>
 export type GetBillListRequestFilters = {
     membershipId?: number,
     year?: number,
-    paymentStatus?: string
+    paymentStatus?: string,
+    membershipStatus?: string,
 }
 
 export type GetBillListResponse = Bill[] | ErrorResponse

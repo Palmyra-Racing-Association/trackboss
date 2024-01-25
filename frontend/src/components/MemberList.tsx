@@ -172,8 +172,9 @@ export default function MemberList() {
                     <Center>
                         <WrappedSwitchInput
                             wrapperText="Show inactive members?"
+                            duration={1000}
                             defaultChecked={!showActive}
-                            toastMessage={`Flipped to show members with active status ${!showActive}`}
+                            toastMessage={`Showing ${!showActive ? 'active' : 'inactive'} memberships`}
                             maxWidth={600}
                             onSwitchChange={
                                 () => {

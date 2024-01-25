@@ -125,7 +125,6 @@ export default function MemberSummaryModal(props: modalProps) {
         }
         getMembershipTagsData();
     }, [props.memberInfo, newTagValue]);
-
     return (
         <Modal
             size="xl"
@@ -177,7 +176,9 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 {`${selectedMember.firstName} ${selectedMember.lastName}`}
                                             </Text>
                                             <Text fontSize="sm">{selectedMember.birthdate}</Text>
-                                            <Text fontSize="sm">{selectedMember.dateJoined.substring(0, 4)}</Text>
+                                            <Text fontSize="sm">
+                                                {selectedMember.dateJoined.substring(0, 4)}
+                                            </Text>
                                             <Text fontSize="sm">{selectedMember.membershipType}</Text>
                                             <Text fontSize="sm">{selectedMember.email}</Text>
                                             <Text fontSize="sm">{selectedMember.phoneNumber}</Text>
@@ -221,7 +222,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                             Roles
                                         </Text>
                                         {
-                                            state.user?.memberType === 'Admin' && (
+                                            (state.user?.memberType === 'Admin' && selectedMember.active) && (
                                                 <Button
                                                     textDecoration="underline"
                                                     color="orange"

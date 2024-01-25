@@ -57,6 +57,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                 textDecoration="underline"
                 color="orange"
                 variant="ghost"
+                disabled={!selectedMember.active}
                 onClick={onOpen}
             >
                 Edit

@@ -14,6 +14,7 @@ CREATE VIEW `v_bill` AS
         ma.email AS membership_admin_email,
         ma.phone_number,
         mt.type membership_type,
+        ms.status,
         mb.emailed_bill,
         mb.cur_year_paid,
         mb.cur_year_ins,
@@ -22,7 +23,7 @@ CREATE VIEW `v_bill` AS
         mb.square_link,
         mb.square_order_id,
         mb.work_detail,
-        mb.renewal_contacted,
+        mb.renewal_contacted
     FROM
         member_bill mb
             LEFT JOIN

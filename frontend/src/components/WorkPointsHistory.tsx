@@ -146,6 +146,7 @@ export default function WorkPointsHistory() {
         getData();
     }, [year, allJobs]);
 
+    const userActive = state.user?.active || false;
     return (
         <VStack bg="white">
             <YearsDropDown
@@ -161,7 +162,8 @@ export default function WorkPointsHistory() {
                 memberName={state?.user?.firstName || ''}
                 membershipId={state?.user?.membershipId || 0}
                 memberId={state?.user?.memberId as number}
-                visible={(state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin')}
+                // eslint-disable-next-line max-len
+                visible={((state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin') && (userActive))}
                 token={state.token}
                 // eslint-disable-next-line react/jsx-no-bind
                 refreshPoints={getJobsData}

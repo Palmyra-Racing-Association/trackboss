@@ -81,6 +81,7 @@ billing.get('/list', async (req: Request, res: Response) => {
             const billingList: Bill[] = await getBillList({
                 paymentStatus: paymentStatus as string,
                 year: Number(billingYear),
+                membershipStatus: 'active',
             });
             res.status(200);
             response = billingList;
@@ -117,11 +118,7 @@ billing.get('/:membershipID', async (req: Request, res: Response) => {
                 throw new Error('not found');
             }
 
-            const results = await getBillList({ membershipId });
-            if (_.isEmpty(results)) {
-                throw new Error('not found');
-            }
-
+            const results = await getBillList({ membershipId, membershipStatus: 'Active' });
             response = results;
             res.status(200);
         } catch (e: any) {
