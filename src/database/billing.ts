@@ -85,6 +85,10 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
                 dynamicSql += 'cur_year_paid = 1 AND ';
             }
         }
+        if (typeof filters.membershipStatus !== 'undefined') {
+            dynamicSql += 'status = ? AND ';
+            values[counter++] = filters.membershipStatus;
+        }
         sql = GET_BILL_LIST_SQL + dynamicSql.slice(0, -4); // Slice the trailing AND
     } else {
         sql = GET_BILL_LIST_SQL;
@@ -122,6 +126,7 @@ export async function getBillList(filters: GetBillListRequestFilters): Promise<B
         squareOrderId: result.square_order_id,
         contactedAndRenewing: result.renewal_contacted,
         detail: result.work_detail,
+        memberActive: result.status,
     }));
 }
 
@@ -257,6 +262,7 @@ export async function getBill(billId: number) : Promise<Bill> {
         squareLink: billResultSingle.square_link,
         squareOrderId: billResultSingle.square_order_id,
         detail: billResultSingle.work_detail,
+        memberActive: billResultSingle.status,
     };
     return bill;
 }
@@ -293,6 +299,7 @@ export async function getBillByOrderId(orderId: string) : Promise<Bill> {
         squareLink: billResultSingle.square_link,
         squareOrderId: billResultSingle.square_order_id,
         detail: billResultSingle.work_detail,
+        memberActive: billResultSingle.status,
     };
     return bill;
 }
@@ -332,6 +339,7 @@ export async function getLatestBillMembership(membershipId: number) : Promise<Bi
         squareLink: billResultSingle.square_link,
         squareOrderId: billResultSingle.square_order_id,
         detail: billResultSingle.work_detail,
+        memberActive: billResultSingle.status,
     };
     return bill;
 }

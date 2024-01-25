@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { compareDesc, isFuture } from 'date-fns';
 import { getJobList } from '../database/job';
 import {
+    addSquareAttributes,
     cleanBilling, generateBill, getBill, getBillList,
     getWorkPointThreshold, markBillPaid, markContactedAndRenewing,
 } from '../database/billing';
@@ -13,6 +14,7 @@ import { Membership } from '../typedefs/membership';
 import { Job } from '../typedefs/job';
 import { getBoardMemberList } from '../database/boardMember';
 import { sendPaymentConfirmationEmail } from './email';
+import { createPaymentLink } from '../integrations/square';
 
 /**
  * Generate new bills in the database
@@ -155,4 +157,32 @@ export async function runBillingComplete(year: number, membershipList: Membershi
     const preGeneratedBills = await getBillList({ year, membershipId });
     const generatedBills = await generateNewBills(membershipList, preGeneratedBills, threshold, year);
     return generatedBills;
+}
+
+export async function generateSquareLinks(billingYear: number, membershipId: number) {
+    const billingFilters : any = {
+        year: Number(billingYear),
+    };
+    if (membershipId) {
+        billingFilters.membershipId = Number(membershipId);
+    }
+    const billingList: Bill[] = await getBillList(billingFilters);
+
+    // I don't care if this is slower, I would actualy prefer it so I don't hit Square's rate limits.
+    // This runs once a year so who cares how fast it is anyway?
+    // eslint-disable-next-line no-restricted-syntax
+    for (const bill of billingList) {
+        // no need to create checkout links for anyone who owes zero.  It's pointless.
+        if (bill.membershipAdminEmail) {
+            // see above for why this is this way.
+            // eslint-disable-next-line no-await-in-loop
+            const paymentInfo = await createPaymentLink(bill);
+            bill.squareLink = paymentInfo.squareUrl;
+            bill.squareOrderId = paymentInfo.squareOrderId;
+            // slow down sally, you're moving too fast.....
+            // eslint-disable-next-line no-await-in-loop
+            await addSquareAttributes(bill);
+        }
+    }
+    return billingList;
 }

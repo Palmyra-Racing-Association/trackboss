@@ -9,6 +9,7 @@ interface wrappedSwitchProps {
     maxWidth: number,
     locked?: boolean,
     toastMessage?: string,
+    duration?: number,
 }
 
 export default function WrappedSwitchInput(props: wrappedSwitchProps) {
@@ -31,7 +32,7 @@ export default function WrappedSwitchInput(props: wrappedSwitchProps) {
                                 },
                                 description: props.toastMessage,
                                 status: 'success',
-                                duration: 5000,
+                                duration: props.duration,
                                 isClosable: true,
                             });
                         }
@@ -46,4 +47,5 @@ export default function WrappedSwitchInput(props: wrappedSwitchProps) {
 WrappedSwitchInput.defaultProps = {
     locked: false,
     toastMessage: '',
+    duration: 5000,
 };

@@ -1,6 +1,6 @@
 import {
     Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel,
-    SimpleGrid, Stat, StatLabel, StatNumber, useDisclosure,
+    Center, SimpleGrid, Stat, StatLabel, StatNumber, useDisclosure,
 } from '@chakra-ui/react';
 import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
@@ -14,6 +14,7 @@ import { getMemberList } from '../controller/member';
 import { getMembershipTypeCounts } from '../controller/memberType';
 import DataSearchBox from './input/DataSearchBox';
 import MemberSummaryModal from './MemberSummaryModal';
+import WrappedSwitchInput from './input/WrappedSwitchInput';
 
 const columns: any = [
     {
@@ -72,7 +73,7 @@ export default function MemberList() {
     const [dirty, setDirty] = useState<boolean>(false);
     const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((oldDirty) => !oldDirty) });
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [showActive] = useState<boolean>(true);
+    const [showActive, setShowActive] = useState<boolean>(true);
 
     useEffect(() => {
         async function getData() {
@@ -106,7 +107,7 @@ export default function MemberList() {
             }
         }
         getData();
-    }, [dirty]);
+    }, [dirty, showActive]);
 
     useEffect(() => {
         if (searchTerm === '') {
@@ -166,6 +167,25 @@ export default function MemberList() {
                 searchValue={searchTerm}
                 onTextChange={setSearchTerm}
             />
+            {
+                state.user?.memberType === 'Admin' && (
+                    <Center>
+                        <WrappedSwitchInput
+                            wrapperText="Show inactive members?"
+                            duration={1000}
+                            defaultChecked={!showActive}
+                            toastMessage={`Showing ${!showActive ? 'active' : 'inactive'} memberships`}
+                            maxWidth={600}
+                            onSwitchChange={
+                                () => {
+                                    setShowActive(!showActive);
+                                    setDirty(true);
+                                }
+                            }
+                        />
+                    </Center>
+                )
+            }
             <DataTable
                 columns={columns}
                 data={cells}

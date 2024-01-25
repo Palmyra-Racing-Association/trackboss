@@ -125,7 +125,6 @@ export default function MemberSummaryModal(props: modalProps) {
         }
         getMembershipTagsData();
     }, [props.memberInfo, newTagValue]);
-
     return (
         <Modal
             size="xl"
@@ -177,7 +176,9 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 {`${selectedMember.firstName} ${selectedMember.lastName}`}
                                             </Text>
                                             <Text fontSize="sm">{selectedMember.birthdate}</Text>
-                                            <Text fontSize="sm">{selectedMember.dateJoined.substring(0, 4)}</Text>
+                                            <Text fontSize="sm">
+                                                {selectedMember.dateJoined.substring(0, 4)}
+                                            </Text>
                                             <Text fontSize="sm">{selectedMember.membershipType}</Text>
                                             <Text fontSize="sm">{selectedMember.email}</Text>
                                             <Text fontSize="sm">{selectedMember.phoneNumber}</Text>
@@ -221,7 +222,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                             Roles
                                         </Text>
                                         {
-                                            state.user?.memberType === 'Admin' && (
+                                            (state.user?.memberType === 'Admin' && selectedMember.active) && (
                                                 <Button
                                                     textDecoration="underline"
                                                     color="orange"
@@ -360,7 +361,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         memberName={`${selectedMember.firstName} ${selectedMember.lastName}` || ''}
                                                         memberId={selectedMember.memberId as number}
                                                         membershipId={selectedMember.membershipId}
-                                                        visible={(state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin')}
+                                                        visible={(selectedMember.active)}
                                                         token={state.token}
                                                         buttonText="Add points"
                                                         // do nothing if after adding points in this instance - we are on the member modal and there is nothing visible
@@ -392,6 +393,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                             <Text fontSize="sm" fontWeight="bold">Reason:</Text>
                                                             <Select
                                                                 isDisabled={!deactivateEnabled}
+                                                                placeholder={selectedMember.deactivationReason}
                                                                 getOptionLabel={(option) => option.label}
                                                                 getOptionValue={(option) => option.value}
                                                                 onChange={
@@ -445,6 +447,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     </VStack>
                                                     <Switch
                                                         colorScheme="orange"
+                                                        visibility={selectedMember.active ? 'visible' : 'hidden'}
                                                         isChecked={deactivateEnabled}
                                                         onChange={
                                                             () => {
