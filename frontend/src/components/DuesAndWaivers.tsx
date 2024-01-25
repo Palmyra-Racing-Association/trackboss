@@ -18,7 +18,7 @@ export default function DuesAndWaivers() {
         try {
             memberBills = await getBillsForMembership(state.token, membershipId) as Bill[];
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
         setAllBills(memberBills as Bill[]);
     }

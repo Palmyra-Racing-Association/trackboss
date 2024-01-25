@@ -18,6 +18,7 @@ import { PostNewMembershipRequest } from '../typedefs/membership';
 import { insertMembership } from '../database/membership';
 import { generateBill, getWorkPointThreshold } from '../database/billing';
 import { getMembershipType } from '../database/memberType';
+import { generateSquareLinks } from '../util/billing';
 
 const membershipApplication = Router();
 
@@ -160,6 +161,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             workDetail: [],
             billingYear,
         });
+        await generateSquareLinks(billingYear, newMembershipId);
         logger.info(`Generated bill ${billId} for membership ${newMembershipId} - application converted to member.`);
         const newMemberRecord = await getMember(`${primaryMemberId}`);
     } catch (error: any) {

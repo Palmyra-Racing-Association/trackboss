@@ -41,7 +41,7 @@ export default function DuesAndWaiversList() {
         try {
             memberBills = await getBills(state.token) as Bill[];
         } catch (error) {
-            console.log(error);
+            // console.log(error);
         }
         let attested = 0;
         let paid = 0;
