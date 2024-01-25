@@ -37,7 +37,12 @@ export default function DuesAndWaiversList() {
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     async function getMembershipBillData() {
-        const memberBills = await getBills(state.token) as Bill[];
+        let memberBills : Bill[] = [];
+        try {
+            memberBills = await getBills(state.token) as Bill[];
+        } catch (error) {
+            console.log(error);
+        }
         let attested = 0;
         let paid = 0;
         let owesNothing = 0;

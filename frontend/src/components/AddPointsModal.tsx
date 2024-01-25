@@ -56,7 +56,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                             wordWrap: 'break-word',
                         }
                     }
-                    hidden={!props.visible}
+                    disabled={!props.visible}
                     onClick={onOpen}
                 >
                     {props.buttonText}

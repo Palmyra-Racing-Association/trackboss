@@ -14,7 +14,12 @@ export default function DuesAndWaivers() {
 
     async function getMembershipBillData() {
         const membershipId = state.user?.membershipId || -1;
-        const memberBills = await getBillsForMembership(state.token, membershipId);
+        let memberBills : Bill[] = [];
+        try {
+            memberBills = await getBillsForMembership(state.token, membershipId) as Bill[];
+        } catch (error) {
+            console.log(error);
+        }
         setAllBills(memberBills as Bill[]);
     }
 

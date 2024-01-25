@@ -23,6 +23,7 @@ CREATE VIEW `v_member` AS
         ms.city,
         ms.state,
         ms.zip,
+        ms.cancel_reason,
         DATE_FORMAT(m.last_modified_date, '%Y-%m-%d') AS last_modified_date,
         m.last_modified_by
     FROM

@@ -48,6 +48,7 @@ async function mapMemberFromResult(results: any) {
         city: result.city,
         state: result.state,
         zip: result.zip,
+        deactivationReason: result.cancel_reason,
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));
@@ -187,6 +188,7 @@ export async function getMember(searchParam: string): Promise<Member> {
         city: results[0].city,
         state: results[0].state,
         zip: results[0].zip,
+        deactivationReason: results[0].cancel_reason,
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
@@ -224,6 +226,7 @@ export async function getMemberByPhone(phone: string): Promise<Member> {
         city: results[0].city,
         state: results[0].state,
         zip: results[0].zip,
+        deactivationReason: results[0].cancel_reason,
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
@@ -261,6 +264,7 @@ export async function getMemberByEmail(email: string): Promise<any> {
             city: results[0].city,
             state: results[0].state,
             zip: results[0].zip,
+            deactivationReason: results[0].cancel_reason,
             lastModifiedDate: results[0].last_modified_date,
             lastModifiedBy: results[0].last_modified_by,
         };

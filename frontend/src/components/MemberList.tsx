@@ -1,6 +1,6 @@
 import {
     Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel,
-    SimpleGrid, Stat, StatLabel, StatNumber, useDisclosure,
+    Center, SimpleGrid, Stat, StatLabel, StatNumber, useDisclosure,
 } from '@chakra-ui/react';
 import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
@@ -163,22 +163,28 @@ export default function MemberList() {
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>
-            <WrappedSwitchInput
-                wrapperText="Show inactive members?"
-                defaultChecked={!showActive}
-                toastMessage={`Flipped to show members with active status ${!showActive}`}
-                maxWidth={600}
-                onSwitchChange={
-                    () => {
-                        setShowActive(!showActive);
-                        setDirty(true);
-                    }
-                }
-            />
             <DataSearchBox
                 searchValue={searchTerm}
                 onTextChange={setSearchTerm}
             />
+            {
+                state.user?.memberType === 'Admin' && (
+                    <Center>
+                        <WrappedSwitchInput
+                            wrapperText="Show inactive members?"
+                            defaultChecked={!showActive}
+                            toastMessage={`Flipped to show members with active status ${!showActive}`}
+                            maxWidth={600}
+                            onSwitchChange={
+                                () => {
+                                    setShowActive(!showActive);
+                                    setDirty(true);
+                                }
+                            }
+                        />
+                    </Center>
+                )
+            }
             <DataTable
                 columns={columns}
                 data={cells}
