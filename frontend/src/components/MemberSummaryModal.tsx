@@ -62,6 +62,7 @@ export default function MemberSummaryModal(props: modalProps) {
     const [bikes, setBikes] = useState<Bike[]>();
     const tagArray : MembershipTag[] = [];
     const [tags, setTags] = useState<MembershipTag[]>(tagArray);
+    const [updater, setUpdater] = useState<Member>();
     const [newTagValue, setNewTagValue] = useState<string>();
 
     const [editingMemberRole, setEditingMemberRole] = useState<boolean>(false);
@@ -114,6 +115,8 @@ export default function MemberSummaryModal(props: modalProps) {
             } else {
                 setBikes(bikeResponse);
             }
+            const lastUpdater = await getMember(state.token, Number(props.memberInfo.lastModifiedBy));
+            setUpdater(lastUpdater as Member);
         }
         setModalData();
     }, [props.memberInfo]);
@@ -186,8 +189,12 @@ export default function MemberSummaryModal(props: modalProps) {
                                             <Text fontSize="sm">
                                                 {`${selectedMember.city}, ${selectedMember.state} ${selectedMember.zip}`}
                                             </Text>
-                                            <Text fontSize="xx-small">{selectedMember.uuid}</Text>
-                                            <Text fontSize="xx-small">{`Membership ID: ${selectedMember.membershipId}`}</Text>
+                                            <Text fontSize="xx-small">
+                                                {`Member #${selectedMember.memberId}, Membership #${selectedMember.membershipId}`}
+                                            </Text>
+                                            <Text fontSize="x-small">
+                                                {`Modified: ${selectedMember.lastModifiedDate}, by ${updater?.lastName}, ${updater?.firstName}`}
+                                            </Text>
                                         </VStack>
                                     </SimpleGrid>
                                     <HStack>
@@ -389,36 +396,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 </HStack>
                                                 <HStack>
                                                     <VStack>
-                                                        <HStack>
-                                                            <Text fontSize="sm" fontWeight="bold">Reason:</Text>
-                                                            <Select
-                                                                isDisabled={!deactivateEnabled}
-                                                                placeholder={selectedMember.deactivationReason}
-                                                                getOptionLabel={(option) => option.label}
-                                                                getOptionValue={(option) => option.value}
-                                                                onChange={
-                                                                    async (e) => {
-                                                                        setDeactivationReason(e?.value);
-                                                                    }
-                                                                }
-                                                                options={
-                                                                    [
-                                                                        { value: 'Did not renew', label: 'Did not renew' },
-                                                                        { value: 'Did not pay', label: 'Did not pay' },
-                                                                        { value: 'Deceased', label: 'Deceased' },
-                                                                    ]
-                                                                }
-                                                                styles={
-                                                                    {
-                                                                        option: (provided, optionState) => ({
-                                                                            ...provided,
-                                                                            backgroundColor: optionState.isSelected ? '#ffa24d' : 'white',
-                                                                            borderBottom: '1px solid #ffa24d',
-                                                                        }),
-                                                                    }
-                                                                }
-                                                            />
-                                                        </HStack>
                                                         <Button
                                                             backgroundColor="red"
                                                             variant="outline"
@@ -452,6 +429,36 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         onChange={
                                                             () => {
                                                                 setDeactivateEnabled(!deactivateEnabled);
+                                                            }
+                                                        }
+                                                    />
+                                                </HStack>
+                                                <HStack>
+                                                    <Text fontSize="sm" fontWeight="bold">Reason:</Text>
+                                                    <Select
+                                                        isDisabled={!deactivateEnabled}
+                                                        placeholder={selectedMember.deactivationReason || 'Choose a reason'}
+                                                        getOptionLabel={(option) => option.label}
+                                                        getOptionValue={(option) => option.value}
+                                                        onChange={
+                                                            async (e) => {
+                                                                setDeactivationReason(e?.value);
+                                                            }
+                                                        }
+                                                        options={
+                                                            [
+                                                                { value: 'Did not renew', label: 'Did not renew' },
+                                                                { value: 'Did not pay', label: 'Did not pay' },
+                                                                { value: 'Deceased', label: 'Deceased' },
+                                                            ]
+                                                        }
+                                                        styles={
+                                                            {
+                                                                option: (provided, optionState) => ({
+                                                                    ...provided,
+                                                                    backgroundColor: optionState.isSelected ? '#ffa24d' : 'white',
+                                                                    borderBottom: '1px solid #ffa24d',
+                                                                }),
                                                             }
                                                         }
                                                     />
