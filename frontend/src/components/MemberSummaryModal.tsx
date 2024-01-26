@@ -34,7 +34,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
 import { Member } from '../../../src/typedefs/member';
 import { Bike } from '../../../src/typedefs/bike';
-import { getMember, getMembersByMembership, updateMember } from '../controller/member';
+import { getMember, getMembersByMembership, resetMemberPassword, updateMember } from '../controller/member';
 import { getBikeList } from '../controller/bike';
 import AddPointsModal from './AddPointsModal';
 import EditMemberModal from './modals/EditMemberModal';
@@ -393,6 +393,30 @@ export default function MemberSummaryModal(props: modalProps) {
                                                     >
                                                         Act As Member
                                                     </Button>
+                                                    <Button
+                                                        disabled={!selectedMember.active}
+                                                        variant="outline"
+                                                        style={
+                                                            {
+                                                                whiteSpace: 'normal',
+                                                                wordWrap: 'break-word',
+                                                            }
+                                                        }
+                                                        onClick={
+                                                            async () => {
+                                                                const res = await resetMemberPassword(state.token, selectedMember.memberId);
+                                                                toast({
+                                                                    variant: 'subtle',
+                                                                    title: `${selectedMember.email} set to ${res.value}`,
+                                                                    status: res ? 'success' : 'error',
+                                                                    duration: 5000,
+                                                                    isClosable: true,
+                                                                });
+                                                            }
+                                                        }
+                                                    >
+                                                        Reset Password
+                                                    </Button>
                                                 </HStack>
                                                 <HStack>
                                                     <VStack>
@@ -466,18 +490,6 @@ export default function MemberSummaryModal(props: modalProps) {
                                                 <Text size="sm">
                                                     Deactivating a member removes them from the list.  Use this feature carefully!
                                                 </Text>
-                                                {/* <Button
-                                                    textDecoration="underline"
-                                                    color="orange"
-                                                    variant="ghost"
-                                                    onClick={
-                                                        () => {
-
-                                                        }
-                                                    }
-                                                >
-                                                    Reset Password
-                                                </Button> */}
                                             </VStack>
                                         )
                                     }

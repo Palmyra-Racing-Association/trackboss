@@ -86,3 +86,12 @@ export async function getMemberByEmail(token: string, email: string): Promise<Me
     });
     return response.json();
 }
+
+export async function resetMemberPassword(token: string, memberId?: number): Promise<any> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/member/resetpassword/${memberId}`, {
+        method: 'PUT',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}

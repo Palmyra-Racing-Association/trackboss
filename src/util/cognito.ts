@@ -90,14 +90,24 @@ export async function updateCognitoUserEmail(member: Member) {
     logger.debug(updateResponse);
 }
 
-export async function resetCognitoPassword(member: Member) {
+export async function resetCognitoPassword(member: Member, defaultValue: string) {
     logger.info(`Resetting password for user ${member.uuid} in Cognito`);
     const poolId = process.env.COGNITO_POOL_ID || '';
     const cognitoIdp = new AWS.CognitoIdentityServiceProvider();
-    const resetResponse = cognitoIdp.adminResetUserPassword({
-        UserPoolId: poolId,
-        Username: member.uuid,
-    }).promise();
+    let resetResponse;
+    if (!defaultValue) {
+        resetResponse = await cognitoIdp.adminResetUserPassword({
+            UserPoolId: poolId,
+            Username: member.uuid,
+        }).promise();
+    } else {
+        resetResponse = await cognitoIdp.adminSetUserPassword({
+            UserPoolId: poolId,
+            Username: member.uuid,
+            Password: defaultValue,
+            Permanent: false,
+        }).promise();
+    }
     logger.info(`reset password for user ${member.email} (${member.firstName} ${member.lastName})`);
     logger.debug(resetResponse);
 }

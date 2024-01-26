@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import PDFDocument from 'pdfkit';
+
 import { checkHeader, validateAdminAccess, verify } from '../util/auth';
 import {
     deleteFamilyMember,
@@ -17,16 +18,11 @@ import {
     PostNewMemberResponse,
 } from '../typedefs/member';
 import logger from '../logger';
-import { deleteCognitoUser, updateCognitoUserEmail } from '../util/cognito';
+import { deleteCognitoUser, updateCognitoUserEmail, resetCognitoPassword } from '../util/cognito';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 import { markMembershipFormer } from '../database/membership';
 import { getBoardMemberList } from '../database/boardMember';
-
-// this is here, in this way, because mailchimmp marketing doesn't have a proper typescript library and
-// so as a result, i'm using it in a Javasript way.  Once the @types/mailchimp-markeing thing gets updated we
-// can use that here. It doesn't really matter too much as I know what I am doing anyway and explinaed it here.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const mailchimpClient = require('@mailchimp/mailchimp_marketing');
+import { getDefaultSettingValue } from '../database/defaultSettings';
 
 const member = Router();
 
@@ -364,80 +360,6 @@ member.get('/list/voterEligibility/excel', async (req: Request, res: Response) =
     }
 });
 
-member.post('/admin/reconcileMailList', async (req: Request, res: Response) => {
-    try {
-        await validateAdminAccess(req, res);
-        mailchimpClient.setConfig({
-            apiKey: process.env.MAILCHIMP,
-            server: 'us15',
-        });
-        // magic numberism - this is the client ID that we are assigned by mailchimp because they only allow us one list
-        const response = await mailchimpClient.lists.getListMembersInfo('099d152f4d', { count: 1000 });
-        const mailchimpMembersList = response.members;
-        logger.info(`running reconcilation on mailchimp vs trackboss. Mailchimp shows ${mailchimpMembersList.length}`);
-        const removedEmails : object[] = [];
-        const missingEmails : object[] = [];
-        const result = {
-            mailchimpRecordCount: mailchimpMembersList.length,
-            trackbossFound: 0,
-            mailchipRemoved: removedEmails,
-            mailchimpMissing: missingEmails,
-            csv: '',
-        };
-        // not using forEach here because I want to build the response in sequence before sending it.
-        // eslint-disable-next-line no-restricted-syntax
-        for (const mailchimpMember of mailchimpMembersList) {
-            // eslint-disable-next-line no-await-in-loop
-            const memberByEmail = await getMemberByEmail(mailchimpMember.email_address);
-            if (!memberByEmail.memberId) {
-                logger.info(`${mailchimpMember.email_address} tagged for removal from mailchimp - not in trackboss.`);
-                result.mailchipRemoved.push({
-                    name: `${memberByEmail.lastName}, ${memberByEmail.firstName}`,
-                    email: mailchimpMember.email_address,
-                });
-            } else {
-                result.trackbossFound++;
-            }
-        }
-        let activeMembers = await getMemberList({});
-        activeMembers = activeMembers.filter((m) => (m.active && m.email));
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const activeMember of activeMembers) {
-            // check and see if the active member is already in mailchimp.
-            // chose between a long line and a style change. I choose style.
-            // eslint-disable-next-line arrow-body-style
-            const found = mailchimpMembersList.find((element:any) => {
-                return (element.email_address.toLowerCase() === activeMember.email.toLowerCase());
-            });
-            const { firstName, lastName, phoneNumber, email } = activeMember;
-            if (!found && activeMember.email && (activeMember.memberId === activeMember.membershipAdminId)) {
-                result.mailchimpMissing.push({
-                    full_name: `${activeMember.firstName} ${activeMember.lastName}`,
-                    email_address: activeMember.email,
-                    merge_fields: {
-                        FNAME: activeMember.firstName,
-                        LNAME: activeMember.lastName,
-                        PHONE: activeMember.phoneNumber,
-                    },
-                    status: 'subscribed',
-                });
-                result.csv += `${firstName},${lastName},${phoneNumber},${email}`;
-                result.csv += '|';
-                // eslint-disable-next-line max-len
-                logger.info(`${firstName} ${lastName} is not in mailchimp with ${email}`);
-            }
-        }
-        res.status(200);
-        res.send(result);
-    } catch (error) {
-        logger.error(`Error running mailchimp/trackboss reconciliation at path ${req.path}`);
-        logger.error(error);
-        res.status(500);
-        res.send(error);
-    }
-});
-
 member.get('/card/create/:memberId', async (req: Request, res: Response) => {
     const { memberId } = req.params;
     const authorization = req.query.id as string;
@@ -499,6 +421,25 @@ member.get('/card/create/:memberId', async (req: Request, res: Response) => {
         // Finalize the PDF
         doc.end();
         logger.info('Generating membership card - card genertion completed and sent to front end.');
+    }
+});
+
+member.put('/resetpassword/:memberId', async (req: Request, res: Response) => {
+    try {
+        await validateAdminAccess(req, res);
+        const { memberId } = req.params;
+        const memberForReset = await getMember(memberId);
+        const defaultResetValue = await getDefaultSettingValue('USER_DEFAULT_PW');
+        await resetCognitoPassword(memberForReset, defaultResetValue);
+        res.send({
+            member: memberForReset.email,
+            value: defaultResetValue,
+        });
+    } catch (error) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
     }
 });
 
