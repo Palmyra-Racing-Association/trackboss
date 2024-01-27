@@ -27,6 +27,7 @@ import {
     TagLabel,
     TagCloseButton,
     Input,
+    Link,
 } from '@chakra-ui/react';
 import Select from 'react-select';
 import { BsTags } from 'react-icons/bs';
@@ -128,6 +129,9 @@ export default function MemberSummaryModal(props: modalProps) {
         }
         getMembershipTagsData();
     }, [props.memberInfo, newTagValue]);
+    const adminMode = (state.user?.memberType.toLowerCase() === 'admin');
+    const viewingSelf = (state.user?.memberId === props.memberInfo.memberId);
+
     return (
         <Modal
             size="xl"
@@ -150,7 +154,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <HStack>
                                         <Text textAlign="left" fontSize="3xl" fontWeight="bold">Info</Text>
                                         {
-                                            state.user?.memberType === 'Admin' && (
+                                            (adminMode || viewingSelf) && (
                                                 <EditMemberModal
                                                     member={selectedMember}
                                                     refreshMemberFunction={
@@ -166,35 +170,55 @@ export default function MemberSummaryModal(props: modalProps) {
                                     <SimpleGrid pb={4} columns={2}>
                                         <VStack spacing={2} align="left">
                                             <Text fontSize="sm" fontWeight="bold">Name:</Text>
-                                            <Text fontSize="sm" fontWeight="bold">DOB:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Joined:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Status:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Email:</Text>
                                             <Text fontSize="sm" fontWeight="bold">Phone:</Text>
-                                            <Text fontSize="sm" fontWeight="bold">Address:</Text>
+                                            {
+                                                (adminMode || viewingSelf) && (
+                                                    <>
+                                                        <Text fontSize="sm" fontWeight="bold">DOB:</Text>
+                                                        <Text fontSize="sm" fontWeight="bold">Address:</Text>
+                                                    </>
+                                                )
+                                            }
                                         </VStack>
 
                                         <VStack ml="-70px" align="left">
                                             <Text fontSize="sm">
                                                 {`${selectedMember.firstName} ${selectedMember.lastName}`}
                                             </Text>
-                                            <Text fontSize="sm">{selectedMember.birthdate}</Text>
                                             <Text fontSize="sm">
                                                 {selectedMember.dateJoined.substring(0, 4)}
                                             </Text>
                                             <Text fontSize="sm">{selectedMember.membershipType}</Text>
-                                            <Text fontSize="sm">{selectedMember.email}</Text>
-                                            <Text fontSize="sm">{selectedMember.phoneNumber}</Text>
-                                            <Text fontSize="sm">{selectedMember.address}</Text>
-                                            <Text fontSize="sm">
-                                                {`${selectedMember.city}, ${selectedMember.state} ${selectedMember.zip}`}
-                                            </Text>
-                                            <Text fontSize="xx-small">
-                                                {`Member #${selectedMember.memberId}, Membership #${selectedMember.membershipId}`}
-                                            </Text>
-                                            <Text fontSize="x-small">
-                                                {`Modified: ${selectedMember.lastModifiedDate}, by ${updater?.lastName}, ${updater?.firstName}`}
-                                            </Text>
+                                            <Link
+                                                href={`mailto:${selectedMember.email}`}
+                                            >
+                                                <Text fontSize="sm">{selectedMember.email}</Text>
+                                            </Link>
+                                            <Link
+                                                href={`sms:${selectedMember.phoneNumber}`}
+                                            >
+                                                <Text fontSize="sm">{selectedMember.phoneNumber}</Text>
+                                            </Link>
+                                            {
+                                                (adminMode || viewingSelf) && (
+                                                    <>
+                                                        <Text fontSize="sm">{selectedMember.birthdate}</Text>
+                                                        <Text fontSize="sm">{selectedMember.address}</Text>
+                                                        <Text fontSize="sm">
+                                                            {`${selectedMember.city}, ${selectedMember.state} ${selectedMember.zip}`}
+                                                        </Text>
+                                                        <Text fontSize="xx-small">
+                                                            {`Member #${selectedMember.memberId}, Membership #${selectedMember.membershipId}`}
+                                                        </Text>
+                                                        <Text fontSize="x-small">
+                                                            {`Modified: ${selectedMember.lastModifiedDate}, by ${updater?.lastName}, ${updater?.firstName}`}
+                                                        </Text>
+                                                    </>
+                                                )
+                                            }
                                         </VStack>
                                     </SimpleGrid>
                                     <HStack>
@@ -229,7 +253,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                             Roles
                                         </Text>
                                         {
-                                            (state.user?.memberType === 'Admin' && selectedMember.active) && (
+                                            (adminMode && selectedMember.active) && (
                                                 <Button
                                                     textDecoration="underline"
                                                     color="orange"
@@ -315,7 +339,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                     }
                                     <Container mb={20} />
                                     {
-                                        state.user?.memberType === 'Admin' && (
+                                        adminMode && (
                                             <VStack align="left">
                                                 <Text textAlign="left" fontSize="3xl" fontWeight="bold">Tags</Text>
                                                 <HStack align="left">
