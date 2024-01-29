@@ -16,29 +16,6 @@ import DataSearchBox from './input/DataSearchBox';
 import MemberSummaryModal from './MemberSummaryModal';
 import WrappedSwitchInput from './input/WrappedSwitchInput';
 
-const columns: any = [
-    {
-        name: 'Last Name',
-        selector: (row: Member) => row.lastName,
-        sortable: true,
-    },
-    {
-        name: 'First Name',
-        selector: (row: Member) => row.firstName,
-        sortable: true,
-    },
-    {
-        name: 'Membership Type',
-        selector: (row: Member) => row.membershipType,
-        sortable: true,
-    },
-    {
-        name: 'Role',
-        selector: (row: Member) => row.memberType,
-        sortable: true,
-    },
-];
-
 const customStyles = {
     rows: {
         style: {
@@ -74,7 +51,35 @@ export default function MemberList() {
     const { onClose, isOpen, onOpen } = useDisclosure({ onClose: () => setDirty((oldDirty) => !oldDirty) });
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [showActive, setShowActive] = useState<boolean>(true);
-
+    const columns: any = [
+        {
+            name: 'Last Name',
+            selector: (row: Member) => row.lastName,
+            sortable: true,
+        },
+        {
+            name: 'First Name',
+            selector: (row: Member) => row.firstName,
+            sortable: true,
+        },
+        {
+            name: 'Membership Type',
+            selector: (row: Member) => row.membershipType,
+            sortable: true,
+        },
+        {
+            name: 'Role',
+            selector: (row: Member) => row.memberType,
+            sortable: true,
+            omit: !showActive,
+        },
+        {
+            name: 'Deactivation reason',
+            selector: (row: Member) => row.deactivationReason,
+            sortable: true,
+            omit: showActive,
+        },
+    ];
     useEffect(() => {
         async function getData() {
             const c: Member[] | ErrorResponse = await getMemberList(state.token);
