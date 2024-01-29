@@ -431,9 +431,9 @@ export default function MemberSummaryModal(props: modalProps) {
                                                                 const res = await resetMemberPassword(state.token, selectedMember.memberId);
                                                                 toast({
                                                                     variant: 'subtle',
-                                                                    title: `${selectedMember.email} set to ${res.value}`,
+                                                                    title: `${selectedMember.email} set to "${res.value}"`,
                                                                     status: res ? 'success' : 'error',
-                                                                    duration: 5000,
+                                                                    duration: 10000,
                                                                     isClosable: true,
                                                                 });
                                                             }

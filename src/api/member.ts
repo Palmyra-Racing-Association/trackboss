@@ -430,7 +430,8 @@ member.put('/resetpassword/:memberId', async (req: Request, res: Response) => {
         const { memberId } = req.params;
         const memberForReset = await getMember(memberId);
         const defaultResetValue = await getDefaultSettingValue('USER_DEFAULT_PW');
-        await resetCognitoPassword(memberForReset, defaultResetValue);
+        // fire and forget, the back to the UI immediately so this call isn't slow.
+        resetCognitoPassword(memberForReset, defaultResetValue);
         res.send({
             member: memberForReset.email,
             value: defaultResetValue,
