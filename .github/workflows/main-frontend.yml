@@ -3,6 +3,8 @@ on:
   push:
       branches:    
         - main
+      paths:
+        - frontend/src/**
   workflow_dispatch:
 env:
   NODE_VERSION: "18"
