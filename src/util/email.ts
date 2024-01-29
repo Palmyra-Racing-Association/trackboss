@@ -4,6 +4,7 @@ import logger from '../logger';
 import { getPool } from '../database/pool';
 import { getBoardMemberList } from '../database/boardMember';
 import { Bill } from '../typedefs/bill';
+import { Member } from '../typedefs/member';
 
 async function getEmailById(purpose: string) {
     const values = [purpose];
@@ -117,4 +118,14 @@ export async function sendPaymentConfirmationEmail(bill: Bill) {
 
 export async function sendInsuranceConfirmEmail(bill: Bill) {
     await sendConfirmationEmail(bill, 'INSURANCE_CONFIRMED');
+}
+
+export async function sendPasswordReset(member: Member, newValue: string) {
+    const resetEmail = await getEmailById('PASSWORD_RESET');
+    resetEmail.text = addNameToEmail(member.firstName, member.lastName, resetEmail.text);
+    resetEmail.text = resetEmail.text.replace('PASSWORD', newValue);
+    resetEmail.text = resetEmail.text.replace('EMAIL', member.email);
+    resetEmail.to = member.email;
+    await sendTextEmail(resetEmail);
+    logger.info(`Reset email sent to ${member.firstName} ${member.lastName}`);
 }

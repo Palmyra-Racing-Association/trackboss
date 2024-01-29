@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk';
 import logger from '../logger';
 import { Member } from '../typedefs/member';
+import { sendPasswordReset } from './email';
 
 /**
  * Create a new user in Cognito to allow them to login.
@@ -108,6 +109,7 @@ export async function resetCognitoPassword(member: Member, defaultValue: string)
             Permanent: false,
         }).promise();
     }
+    await sendPasswordReset(member, defaultValue);
     logger.info(`reset password for user ${member.email} (${member.firstName} ${member.lastName})`);
     logger.debug(resetResponse);
 }
