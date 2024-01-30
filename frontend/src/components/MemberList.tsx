@@ -74,8 +74,8 @@ export default function MemberList() {
             omit: !showActive,
         },
         {
-            name: 'Deactivation reason',
-            selector: (row: Member) => row.deactivationReason,
+            name: 'Deactivated',
+            selector: (row: Member) => row.lastModifiedDate,
             sortable: true,
             omit: showActive,
         },
