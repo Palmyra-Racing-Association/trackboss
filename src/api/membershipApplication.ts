@@ -115,13 +115,17 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         // get the application, and convert the primary member to a member. This call will create a
         // Cognito user, and send an email to the user letting them know they have one.
         const application : MembershipApplication = await getMembershipApplication(Number(req.params.id));
+        // phone number processing with valid country code etc.
+        let phoneNumber = application.phone;
+        phoneNumber = phoneNumber.replace(/-/g, '');
+        phoneNumber = `+1${phoneNumber}`;
         const newMember : PostNewMemberRequest = {
             // Magic numberism warning: this means "Membership Admin", aka, the default account on a
             // membership.  At some point, need to go back and fix this nonsense.
             memberTypeId: 8,
             firstName: application.firstName,
             lastName: application.lastName,
-            phoneNumber: application.phone,
+            phoneNumber,
             occupation: application.occupation,
             email: application.email,
             birthdate: parseISO(application.birthDate).toISOString().slice(0, 10).replace('T', ' '),
