@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Center, Text, Heading, VStack, HStack, IconButton, Divider, Button } from '@chakra-ui/react';
-import { GoKebabVertical } from 'react-icons/go';
+import { GoCalendar } from 'react-icons/go';
 import { useNavigate } from 'react-router-dom';
 
 interface cardProps {
@@ -54,7 +54,7 @@ export default function EventCard(props: cardProps) {
                             m="0"
                             fontSize="24px"
                             color="gray.200"
-                            icon={<GoKebabVertical />}
+                            icon={<GoCalendar />}
                         />
                         <Heading pr={5} size="lg">Next Event</Heading>
                     </HStack>
