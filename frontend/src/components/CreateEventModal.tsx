@@ -60,7 +60,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
     return (
         <div>
             <Button background="orange.300" color="white" onClick={onOpen}>Create New Event</Button>
-            { error !== '' && ({ error }) }
+            { error !== '' }
             <Modal isCentered size="xl" isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>

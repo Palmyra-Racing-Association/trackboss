@@ -53,7 +53,7 @@ export default function EditBikesModal(props: modalProps) {
                 >
                     <NumberInput
                         variant="outline"
-                        placeholder="Bike year"
+                        defaultValue={maxModelYear}
                         min={minModelYear}
                         max={maxModelYear}
                     >

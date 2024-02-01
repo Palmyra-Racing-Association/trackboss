@@ -56,7 +56,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 <Text size="lg">
                                     Application received at
                                     &nbsp;
-                                    {membershipApplication.receivedDate}
+                                    {membershipApplication.receivedDate.toString()}
                                 </Text>
                                 <Link
                                     isExternal

@@ -73,7 +73,7 @@ export default function MemberSummaryModal(props: modalProps) {
 
     const [error, setError] = useState<string>('');
 
-    const deactivateMember = useCallback(async (reason) => {
+    const deactivateMember = useCallback(async (reason:any) => {
         const response = await updateMember(
             state.token,
             props.memberInfo.memberId,
@@ -146,7 +146,7 @@ export default function MemberSummaryModal(props: modalProps) {
                 <Divider />
                 <ModalCloseButton />
                 <ModalBody>
-                    { error !== '' && ({ error }) }
+                    { error !== '' }
                     {
                         selectedMember && bikes && (
                             <SimpleGrid columns={[1, null, 2]} spacing={4}>
