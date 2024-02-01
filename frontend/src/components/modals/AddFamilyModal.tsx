@@ -75,7 +75,7 @@ export default function AddFamilyModal(props: modalProps) {
                             minDate={moment().subtract(100, 'years').toDate()}
                             maxDate={moment().subtract(1, 'months').toDate()}
                             onChange={
-                                (date: Date) => {
+                                (date: any) => {
                                     setBirthDate(date);
                                 }
                             }
