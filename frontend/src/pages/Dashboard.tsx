@@ -8,7 +8,7 @@ import ImportantLinksCard from '../components/cards/dashboard/ImportantLinksCard
 import EventCard from '../components/EventCard';
 import { getEventCardProps } from '../controller/event';
 import { getWorkPointsTotal } from '../controller/workPoints';
-import { getYearlyThresholdValue } from '../controller/billing';
+import { getBillsForMembership, getYearlyThresholdValue } from '../controller/billing';
 import GreetingText from '../components/GreetingText';
 import { getTodaysDate } from '../controller/utils';
 import { getGateCodeLatest } from '../controller/gateCode';
@@ -19,6 +19,7 @@ import { RidingAreaStatus } from '../../../src/typedefs/ridingAreaStatus';
 import { signupForOpenEventJob } from '../controller/job';
 import { Link } from '../../../src/typedefs/link';
 import { getLinks } from '../controller/links';
+import { Bill } from '../../../src/typedefs/bill';
 
 async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     const nowString = getTodaysDate();
@@ -45,6 +46,7 @@ function Dashboard() {
     const [ridingAreaStatuses, setRidingAreaStatuses] = useState<RidingAreaStatus[]>([]);
     // eslint-disable-next-line no-unused-vars
     const [dashboardLinks, setDashboardLinks] = useState<Link[]>([]);
+    const [lastBill, setLastBill] = useState<Bill>();
 
     const allowsSignIn = (
         ((eventCardProps?.eventType === 'work day') || (eventCardProps?.eventType === 'meeting')) &&
@@ -61,6 +63,11 @@ function Dashboard() {
         setDashboardLinks(links as Link[]);
     }
 
+    async function loadBills() {
+        const bills = await getBillsForMembership(state.token, state.user?.membershipId || 0) as Bill[];
+        setLastBill(bills[bills.length - 1]);
+    }
+
     useEffect(() => {
         async function getData() {
             setEventCardProps(await getEventCardPropsLocal(state.token));
@@ -69,6 +76,7 @@ function Dashboard() {
             }
             await loadTrackStatuses();
             await loadLinks();
+            await loadBills();
         }
         getData();
     }, [state.user]);
@@ -92,7 +100,12 @@ function Dashboard() {
                 <Header title="Track Boss Dashboard" activeButtonId={1} />
                 {
                     state.user && (
-                        <GreetingText name={`${state.user.firstName} ${state.user.lastName}`} />
+                        <GreetingText
+                            name={`${state.user.firstName} ${state.user.lastName}`}
+                            billYear={lastBill?.year || (new Date()).getFullYear() - 1}
+                            billPaid={lastBill?.curYearPaid}
+                            insuranceAttested={lastBill?.curYearIns}
+                        />
                     )
                 }
                 <Center>
