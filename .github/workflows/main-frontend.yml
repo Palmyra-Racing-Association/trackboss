@@ -5,6 +5,8 @@ on:
         - main
       paths:
         - frontend/src/**
+        - frontend/package.json
+        - frontend/package-lock.json
   workflow_dispatch:
 env:
   NODE_VERSION: "18"
