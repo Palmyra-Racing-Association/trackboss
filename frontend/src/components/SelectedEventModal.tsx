@@ -19,6 +19,7 @@ import {
     Switch,
 } from '@chakra-ui/react';
 import moment from 'moment';
+import { BsTrash2 } from 'react-icons/bs';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
 import { UserContext } from '../contexts/UserContext';
 import { PatchJobRequest } from '../../../src/typedefs/job';
@@ -36,6 +37,7 @@ interface modalProps {
 
 export default function SelectedEventModal(props: modalProps) {
     const { state } = useContext(UserContext);
+    // eslint-disable-next-line no-unused-vars
     const [enableDelete, setEnableDelete] = useState<boolean>(false);
 
     async function generateJobSignUpPatch() {
@@ -138,11 +140,13 @@ export default function SelectedEventModal(props: modalProps) {
                         props.admin && (
                             <>
                                 <Button
+                                    ml={3}
                                     mr={3}
                                     size="lg"
-                                    variant="ghost"
-                                    color="red"
-                                    disabled={!enableDelete}
+                                    backgroundColor="red"
+                                    color="white"
+                                    isDisabled={!enableDelete}
+                                    rightIcon={<BsTrash2 />}
                                     onClick={
                                         () => {
                                             props.deleteEvent();
@@ -154,9 +158,10 @@ export default function SelectedEventModal(props: modalProps) {
                                 </Button>
                                 <Switch
                                     size="sm"
+                                    colorScheme="orange"
                                     onChange={
-                                        () => {
-                                            setEnableDelete(!enableDelete);
+                                        (event) => {
+                                            setEnableDelete(event.currentTarget.checked);
                                         }
                                     }
                                 />
