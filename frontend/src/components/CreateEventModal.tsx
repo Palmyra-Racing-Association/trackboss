@@ -17,6 +17,9 @@ import {
     Select,
 } from '@chakra-ui/react';
 import DateTimePicker from 'react-datetime-picker';
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
 import { UserContext } from '../contexts/UserContext';
 import { getEventTypeList } from '../controller/eventType';
 import { EventType } from '../../../src/typedefs/eventType';
@@ -101,7 +104,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                 <DateTimePicker
                                     disableClock
                                     onChange={
-                                        (date: Date) => {
+                                        (date: any) => {
                                             setStartDateTime(date);
                                             // when the start is picked - set the end to the start.  This is just
                                             // for ease of use and picking dates.
@@ -117,7 +120,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                 <DateTimePicker
                                     disableClock
                                     minDate={startDateTime}
-                                    onChange={(date:Date) => setEndDateTime(date)}
+                                    onChange={(date:any) => setEndDateTime(date)}
                                     value={endDateTime}
                                 />
                             </VStack>
