@@ -180,7 +180,9 @@ membershipApplication.post('/reject/:id', async (req: Request, res: Response) =>
         // update the last_modified_date field in here.
         await sendApplicationStatus(req, res, 'Rejected');
         const application : MembershipApplication = await getMembershipApplication(Number(req.params.id));
-        // no longer send rejected emails because it's confusing and better to not do that.
+        // send an email saying they were rejected, with the application_notes_shared as the primary
+        // field in the email
+        await sendAppRejectedEmail(application);
         res.json(application);
     } catch (error: any) {
         logger.error(error);
