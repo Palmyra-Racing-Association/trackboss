@@ -1,4 +1,4 @@
-import { Box, HStack, Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/react';
+import { Box, HStack, Link, Stat, StatHelpText, StatLabel, StatNumber } from '@chakra-ui/react';
 import React from 'react';
 import { Bill } from '../../../../src/typedefs/bill';
 
@@ -37,7 +37,7 @@ export default function BillingStatsDisplay(props: billStatsProps) {
                         {`$${bill?.amount}`}
                     </StatNumber>
                     <StatHelpText>
-                        {`$${bill?.amountWithFee} w/ PayPal`}
+                        {`$${bill?.amountWithFee} w/ Square`}
                     </StatHelpText>
                 </Stat>
             </HStack>
@@ -49,6 +49,11 @@ export default function BillingStatsDisplay(props: billStatsProps) {
                     {`${bill?.generatedDate}`}
                 </StatHelpText>
             </Stat>
+            <Link
+                href={bill?.squareLink}
+            >
+                Square link
+            </Link>
         </Box>
     );
 }
