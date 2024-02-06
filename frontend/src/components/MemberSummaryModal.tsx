@@ -108,7 +108,8 @@ export default function MemberSummaryModal(props: modalProps) {
         async function setModalData() {
             setSelectedMember(props.memberInfo);
             setEditedMemberType(props.memberInfo.memberType);
-            const familyReponse = await getMembersByMembership(state.token, props.memberInfo.membershipId);
+            let familyReponse = await getMembersByMembership(state.token, props.memberInfo.membershipId);
+            familyReponse = familyReponse.filter((familyMember) => familyMember.active);
             setFamily(familyReponse);
             const bikeResponse = await getBikeList(state.token, props.memberInfo.membershipId);
             if ('reason' in bikeResponse) {
