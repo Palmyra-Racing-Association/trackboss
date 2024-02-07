@@ -120,6 +120,7 @@ function Dashboard() {
                                     endDate={eventCardProps.end}
                                     id={eventCardProps.id}
                                     allowsSignIn={allowsSignIn}
+                                    description={eventCardProps.description}
                                     signupHandler={
                                         async () => {
                                             try {
@@ -152,6 +153,7 @@ function Dashboard() {
                                     startTime=""
                                     name=""
                                     endDate=""
+                                    description=""
                                     id={0}
                                     signupHandler={() => false}
                                     allowsSignIn={false}

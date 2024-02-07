@@ -9,6 +9,7 @@ interface cardProps {
     startTime: string,
     name: string,
     endDate: string,
+    description: string,
     id: number,
     allowsSignIn: boolean,
 }
@@ -64,6 +65,7 @@ export default function EventCard(props: cardProps) {
                     </Text>
                     <Text fontSize="2xl">{props.startTime}</Text>
                     <Text fontSize="2xl">{props.name}</Text>
+                    <Text fontSize="sm">{props.description}</Text>
                     <Button
                         backgroundColor="orange.300"
                         color="white"

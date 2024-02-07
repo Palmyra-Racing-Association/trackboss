@@ -61,8 +61,8 @@ export async function getCalendarEvents(token: string) {
     const calendarEvents = await getEventList(token);
     if (isEventList(calendarEvents)) {
         calendarEvents.forEach((event) => {
-            event.start = moment(event.start, 'YYYY-MM-DD').toDate();
-            event.end = moment(event.end, 'YYYY-MM-DD').toDate();
+            event.start = moment(event.start, 'YYYY-MM-DD HH:mm').toDate();
+            event.end = moment(event.end, 'YYYY-MM-DD HH:mm').toDate();
         });
         return calendarEvents;
     }
@@ -89,6 +89,7 @@ export async function getEventCardProps(token: string, listType: string) {
             fullDate: moment(upcomingEvents[0].start).format('MM-DD-YYYY'),
             id: upcomingEvents[0].eventId,
             eventType: upcomingEvents[0].eventType.toLowerCase(),
+            description: upcomingEvents[0].eventDescription,
         };
     }
 

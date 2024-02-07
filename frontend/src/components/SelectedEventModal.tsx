@@ -84,6 +84,9 @@ export default function SelectedEventModal(props: modalProps) {
                             )
                         }
                     </Text>
+                    <Text fontSize="sm" textAlign="center">
+                        {props.selectedEvent.eventDescription}
+                    </Text>
                 </ModalBody>
                 {
                     'jobId' in props.selectedEvent && (
