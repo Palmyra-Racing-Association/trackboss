@@ -9,38 +9,6 @@ import { getSignupList, getSignupListExcel } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 import SignupButtonRow from './SignupButtonRow';
 
-const columns: any = [
-    {
-        name: 'Name',
-        selector: (row: { member: string; }) => row.member,
-        sortable: true,
-        wrap: true,
-    },
-    {
-        name: 'Job',
-        selector: (row: { title: string; }) => row.title,
-        sortable: true,
-        wrap: true,
-    },
-    {
-        name: 'Points',
-        selector: (row: { pointsAwarded: number; }) => row.pointsAwarded,
-        sortable: true,
-    },
-    {
-        name: 'Cash Payout',
-        selector: (row: { cashPayout: number; }) => row.cashPayout,
-        hide: 'sm',
-    },
-    {
-        name: 'Job Day',
-        selector: (row: {jobDay: string; }) => row.jobDay,
-        sortable: true,
-        wrap: true,
-        hide: 'sm',
-    },
-];
-
 interface Worker {
     name: string,
     job: string,
@@ -82,6 +50,38 @@ interface SignupListProps {
 }
 
 export default function SignUpList(props: SignupListProps) {
+    const columns: any = [
+        {
+            name: 'Name',
+            selector: (row: { member: string; }) => row.member,
+            sortable: true,
+            wrap: true,
+        },
+        {
+            name: 'Job',
+            selector: (row: { title: string; }) => row.title,
+            sortable: true,
+            wrap: true,
+        },
+        {
+            name: 'Points',
+            selector: (row: { pointsAwarded: number; }) => row.pointsAwarded,
+            sortable: true,
+        },
+        {
+            name: 'Cash Payout',
+            selector: (row: { cashPayout: number; }) => row.cashPayout,
+            hide: 'sm',
+        },
+        {
+            name: 'Job Day',
+            selector: (row: {jobDay: string; }) => row.jobDay,
+            sortable: true,
+            wrap: true,
+            hide: 'sm',
+            omit: ((props.eventType.toLowerCase() !== 'race') && (props.eventType.toLowerCase() !== 'harescramble')),
+        },
+    ];
     const [cells, setCells] = useState([] as Worker[]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [allCells, setAllCells] = useState<Worker[]>([]);
