@@ -180,7 +180,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 color="white"
                                 variant="ghost"
                                 size="lg"
-                                disabled={!isInReview}
+                                isDisabled={!isInReview}
                                 onClick={
                                     async () => {
                                         await reviewMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
@@ -197,7 +197,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 color="red"
                                 variant="ghost"
                                 size="lg"
-                                disabled={!isInReview}
+                                isDisabled={!isInReview}
                                 onClick={
                                     async () => {
                                         await rejectMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
@@ -214,7 +214,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 color="green"
                                 variant="ghost"
                                 size="lg"
-                                disabled={!isInReview}
+                                isDisabled={!isInReview}
                                 onClick={
                                     async () => {
                                         await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
