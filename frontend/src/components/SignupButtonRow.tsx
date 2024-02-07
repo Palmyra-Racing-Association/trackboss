@@ -29,8 +29,8 @@ export default function SignupButtonRow(props: any) {
 
     const isAdmin = state.user?.memberType === 'Admin';
 
-    const isRaceEvent = ((props.eventType.toLowerCase() === 'race') ||
-        (props.eventType.toLowerCase() === 'harescramble')
+    const selfSignupAllowed = ((props.eventType.toLowerCase() !== 'meeting') &&
+        (props.eventType.toLowerCase() !== 'work day')
     );
 
     useEffect(() => {
@@ -69,7 +69,7 @@ export default function SignupButtonRow(props: any) {
         signupButton = (
             <SimpleGrid columns={[1, null, 3]} spacing="20px">
                 {
-                    (!isAdmin && isRaceEvent) && (
+                    (!isAdmin && selfSignupAllowed) && (
                         <Button
                             // variant={verified ? 'verified' : 'unverified'}
                             aria-label="Sign Up"
@@ -184,7 +184,7 @@ export default function SignupButtonRow(props: any) {
                         }
                     }
                     disabled={!props.data.cashPayout}
-                    hidden={(!isRaceEvent || !isAdmin)}
+                    hidden={(!selfSignupAllowed || !isAdmin)}
                 >
                     {markedPaid ? 'Unmark paid' : 'Mark as Paid' }
                 </Button>
