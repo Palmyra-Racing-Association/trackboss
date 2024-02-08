@@ -56,7 +56,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                             wordWrap: 'break-word',
                         }
                     }
-                    disabled={!props.visible}
+                    isDisabled={!props.visible}
                     onClick={onOpen}
                 >
                     {props.buttonText}
@@ -123,7 +123,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                         <Button
                             mr={4}
                             backgroundColor="orange"
-                            disabled={!dirty}
+                            isDisabled={!dirty}
                             color="white"
                             onClick={
                                 async () => {

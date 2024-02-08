@@ -63,7 +63,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                 textDecoration="underline"
                 color="orange"
                 variant="ghost"
-                disabled={!selectedMember.active}
+                isDisabled={!selectedMember.active}
                 onClick={onOpen}
             >
                 Edit
@@ -204,7 +204,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                         <Button
                             mr={4}
                             backgroundColor="orange"
-                            disabled={!dirty}
+                            isDisabled={!dirty}
                             color="white"
                             onClick={
                                 async () => {

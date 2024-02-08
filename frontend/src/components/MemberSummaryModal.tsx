@@ -419,7 +419,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         Act As Member
                                                     </Button>
                                                     <Button
-                                                        disabled={!selectedMember.active}
+                                                        isDisabled={!selectedMember.active}
                                                         variant="outline"
                                                         style={
                                                             {
@@ -448,7 +448,7 @@ export default function MemberSummaryModal(props: modalProps) {
                                                         <Button
                                                             backgroundColor="red"
                                                             variant="outline"
-                                                            disabled={!deactivateEnabled}
+                                                            isDisabled={!deactivateEnabled}
                                                             style={
                                                                 {
                                                                     whiteSpace: 'normal',

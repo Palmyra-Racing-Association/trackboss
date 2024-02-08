@@ -168,7 +168,7 @@ export default function SignupButtonRow(props: any) {
                             await props.refreshData();
                         }
                     }
-                    disabled={!allowDelete}
+                    isDisabled={!allowDelete}
                 >
                     Remove Signup
                 </Button>
@@ -183,7 +183,7 @@ export default function SignupButtonRow(props: any) {
                             await props.refreshData();
                         }
                     }
-                    disabled={!props.data.cashPayout}
+                    isDisabled={!props.data.cashPayout}
                     hidden={(!selfSignupAllowed || !isAdmin)}
                 >
                     {markedPaid ? 'Unmark paid' : 'Mark as Paid' }

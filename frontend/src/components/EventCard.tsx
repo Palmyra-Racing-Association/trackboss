@@ -69,7 +69,7 @@ export default function EventCard(props: cardProps) {
                     <Button
                         backgroundColor="orange.300"
                         color="white"
-                        disabled={disableSignInButton}
+                        isDisabled={disableSignInButton}
                         hidden={!props.allowsSignIn}
                         onClick={
                             (e) => {

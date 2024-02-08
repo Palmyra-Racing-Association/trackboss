@@ -231,7 +231,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 color="green"
                                 size="lg"
                                 variant="ghost"
-                                disabled={!isInReview}
+                                isDisabled={!isInReview}
                                 onClick={
                                     async () => {
                                         await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes, true);

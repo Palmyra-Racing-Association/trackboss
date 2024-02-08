@@ -132,7 +132,7 @@ export default function AddFamilyModal(props: modalProps) {
                         bgColor="green"
                         mr={3}
                         size="lg"
-                        disabled={
+                        isDisabled={
                             (!firstName) ||
                             (!lastName) ||
                             (!birthDate) ||
