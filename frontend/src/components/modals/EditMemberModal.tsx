@@ -48,6 +48,8 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     // eslint-disable-next-line prefer-const
     let [birthdate, setBirthDate] = useState<Date>(moment(selectedMember.birthdate).toDate());
     const [membershipType, setMembershipType] = useState<number>(selectedMember.membershipTypeId);
+    const [firstName, setFirstName] = useState<string>(selectedMember.firstName);
+    const [lastName, setLastName] = useState<string>(selectedMember.lastName);
     const [rowCount, setRowCount] = useState<number>(7);
 
     const { state, update } = useContext(UserContext);
@@ -79,9 +81,35 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                         <Grid
                             templateRows={`repeat(${rowCount}, 1fr)`}
                             templateColumns="repeat(2, 1fr)"
-                            columnGap={2}
-                            rowGap={2}
+                            columnGap={1}
+                            rowGap={1}
                         >
+                            <GridItem colSpan={1}>
+                                <Text>First Name</Text>
+                                <Input
+                                    value={firstName}
+                                    size="md"
+                                    onChange={
+                                        (e) => {
+                                            setDirty(true);
+                                            setFirstName(e.target.value);
+                                        }
+                                    }
+                                />
+                            </GridItem>
+                            <GridItem colSpan={1}>
+                                <Text>Last Name</Text>
+                                <Input
+                                    value={lastName}
+                                    size="md"
+                                    onChange={
+                                        (e) => {
+                                            setDirty(true);
+                                            setLastName(e.target.value);
+                                        }
+                                    }
+                                />
+                            </GridItem>
                             <GridItem colSpan={2} display={!props.isFamilyMember ? 'block' : 'none'}>
                                 <Text>Membership Type</Text>
                                 <MembershipTypeSelector
@@ -95,7 +123,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                             </GridItem>
-                            <GridItem colSpan={2}>
+                            <GridItem colSpan={1}>
                                 <Text>DOB</Text>
                                 <DatePicker
                                     onChange={
@@ -218,6 +246,8 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         setPhoneNumber(`+1${phoneNumber}`);
                                     }
                                     const memberUpdate : PatchMemberRequest = {
+                                        firstName,
+                                        lastName,
                                         email,
                                         phoneNumber,
                                         birthdate: moment(birthdate).format('YYYY-MM-DD'),
