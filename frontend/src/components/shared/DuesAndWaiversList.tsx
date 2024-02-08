@@ -13,7 +13,7 @@ import { Bill } from '../../../../src/typedefs/bill';
 import { UserContext } from '../../contexts/UserContext';
 
 import {
-    attestInsurance, getBillListExcel, getBills, markContactedAndRenewing, payBill,
+    attestInsurance, discountBill, getBillListExcel, getBills, markContactedAndRenewing, payBill,
 } from '../../controller/billing';
 import DataSearchBox from '../input/DataSearchBox';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
@@ -34,7 +34,6 @@ export default function DuesAndWaiversList() {
     const [filterPaperwork, setFilterPaperwork] = useState<boolean>(false);
     const [filterPaid, setFilterPaid] = useState<boolean>(false);
     const [paymentMethod, setPaymentMethod] = useState<string>('');
-    const [discount, setDiscount] = useState<number>(0);
 
     const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -336,8 +335,7 @@ export default function DuesAndWaiversList() {
                             onClick={
                                 async () => {
                                     await payBill(state.token, selectedBill?.billId || 0, 'Discounted');
-                                    getMembershipBillData();
-                                    console.log(discount);
+                                    await getMembershipBillData();
                                     onClose();
                                 }
                             }
@@ -347,10 +345,11 @@ export default function DuesAndWaiversList() {
                         <Button
                             rightIcon={<BsCashCoin />}
                             colorScheme="orange"
-                            isDisabled
+                            isDisabled={selectedBill?.curYearPaid}
                             onClick={
-                                () => {
-                                    setDiscount(50);
+                                async () => {
+                                    await discountBill(state.token, selectedBill?.billId || 0);
+                                    await getMembershipBillData();
                                     onClose();
                                 }
                             }

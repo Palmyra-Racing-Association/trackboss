@@ -193,6 +193,23 @@ export async function markContactedAndRenewing(id: number): Promise<void> {
     }
 }
 
+export async function discountBill(id: number, amount: number, amountWithFee: number): Promise<void> {
+    let result;
+    const params = [amount, amountWithFee, id];
+    try {
+        const sql =
+          'update member_bill set amount = ?, amount_with_fee = ? where bill_id = ?';
+        [result] = await getPool().query<OkPacket>(sql, params);
+    } catch (e) {
+        logger.error(`DB error marking bill as paid: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+}
+
 export async function addSquareAttributes(bill: Bill): Promise<void> {
     let result;
     try {

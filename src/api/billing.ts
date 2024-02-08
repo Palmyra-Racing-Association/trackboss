@@ -3,6 +3,7 @@ import _ from 'lodash';
 // import { format } from 'date-fns';
 import { getMembershipList } from '../database/membership';
 import {
+    discountBill,
     getBill, getBillByOrderId, getBillList, getWorkPointThreshold,
     markContactedAndRenewing,
     markInsuranceAttestation,
@@ -273,6 +274,48 @@ billing.patch('/markContacted/:billId', async (req: Request, res: Response) => {
                 throw new Error('not found');
             }
             await markContactedAndRenewing(billId);
+            response = {};
+            res.status(200);
+        } catch (e: any) {
+            logger.error(`Error at path ${req.path}`);
+            logger.error(e);
+            if (e.message === 'Authorization Failed') {
+                res.status(401);
+                response = { reason: 'not authorized' };
+            } else if (e.message === 'Forbidden') {
+                res.status(403);
+                response = { reason: 'forbidden' };
+            } else if (e.message === 'not found') {
+                res.status(404);
+                response = { reason: 'not found' };
+            } else {
+                res.status(500);
+                response = { reason: 'internal server error' };
+            }
+        }
+    }
+    res.send(response);
+});
+
+billing.patch('/discount/:billId', async (req: Request, res: Response) => {
+    const { authorization } = req.headers;
+    let response: PostPayBillResponse;
+    const headerCheck = checkHeader(authorization);
+    if (!headerCheck.valid) {
+        res.status(401);
+        response = { reason: headerCheck.reason };
+    } else {
+        try {
+            await verify(headerCheck.token, 'Membership Admin');
+            const billId = Number(req.params.billId);
+            if (Number.isNaN(billId)) {
+                throw new Error('not found');
+            }
+            const bill = await getBill(billId);
+            const discountPercent = 50;
+            const newAmount = bill.amount * (discountPercent / 100);
+            const newAmountWithFee = bill.amountWithFee * (discountPercent / 100);
+            await discountBill(billId, newAmount, newAmountWithFee);
             response = {};
             res.status(200);
         } catch (e: any) {
