@@ -19,7 +19,7 @@ export async function createCognitoUser(email: string, isMembershipAdmin: boolea
         UserAttributes: [
             {
                 Name: 'email',
-                Value: email,
+                Value: email.replace(/\s/g, ''),
             },
             {
                 Name: 'email_verified',

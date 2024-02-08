@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { BsPrinter } from 'react-icons/bs';
+import { BsCashCoin, BsPrinter } from 'react-icons/bs';
 import { Bill } from '../../../../src/typedefs/bill';
 import { UserContext } from '../../contexts/UserContext';
 
@@ -34,6 +34,8 @@ export default function DuesAndWaiversList() {
     const [filterPaperwork, setFilterPaperwork] = useState<boolean>(false);
     const [filterPaid, setFilterPaid] = useState<boolean>(false);
     const [paymentMethod, setPaymentMethod] = useState<string>('');
+    const [discount, setDiscount] = useState<number>(0);
+
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     async function getMembershipBillData() {
@@ -326,6 +328,36 @@ export default function DuesAndWaiversList() {
                         toastMessage={`${selectedBill?.firstName} ${selectedBill?.lastName} paperwork complete.`}
                         maxWidth={400}
                     />
+                    <HStack mt={2} mr={3}>
+                        <Button
+                            rightIcon={<BsCashCoin />}
+                            colorScheme="orange"
+                            isDisabled={selectedBill?.curYearPaid}
+                            onClick={
+                                async () => {
+                                    await payBill(state.token, selectedBill?.billId || 0, 'Discounted');
+                                    getMembershipBillData();
+                                    console.log(discount);
+                                    onClose();
+                                }
+                            }
+                        >
+                            Discount 100%
+                        </Button>
+                        <Button
+                            rightIcon={<BsCashCoin />}
+                            colorScheme="orange"
+                            isDisabled
+                            onClick={
+                                () => {
+                                    setDiscount(50);
+                                    onClose();
+                                }
+                            }
+                        >
+                            Discount 50%
+                        </Button>
+                    </HStack>
                     <Text
                         fontSize="sm"
                     >
