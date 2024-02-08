@@ -1,8 +1,9 @@
 import { Request, Response, Router } from 'express';
-import _ from 'lodash';
+import _, { create } from 'lodash';
 // import { format } from 'date-fns';
 import { getMembershipList } from '../database/membership';
 import {
+    addSquareAttributes,
     discountBill,
     getBill, getBillByOrderId, getBillList, getWorkPointThreshold,
     markContactedAndRenewing,
@@ -22,6 +23,7 @@ import { sendInsuranceConfirmEmail } from '../util/email';
 import logger from '../logger';
 import { calculateBillingYear } from '../util/dateHelper';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
+import { createPaymentLink } from '../integrations/square';
 
 //
 // TODO: Emails are not sent for generated bills (see emailBills helper function in util)
@@ -316,6 +318,12 @@ billing.patch('/discount/:billId', async (req: Request, res: Response) => {
             const newAmount = bill.amount * (discountPercent / 100);
             const newAmountWithFee = bill.amountWithFee * (discountPercent / 100);
             await discountBill(billId, newAmount, newAmountWithFee);
+            bill.amount = newAmount;
+            bill.amountWithFee = newAmountWithFee;
+            const paymentLink = await createPaymentLink(bill);
+            bill.squareLink = paymentLink.squareUrl;
+            bill.squareOrderId = paymentLink.squareOrderId;
+            await addSquareAttributes(bill);
             response = {};
             res.status(200);
         } catch (e: any) {
