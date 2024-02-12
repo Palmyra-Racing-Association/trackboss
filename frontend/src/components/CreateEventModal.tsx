@@ -8,7 +8,6 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
-    useDisclosure,
     Text,
     SimpleGrid,
     Input,
@@ -28,6 +27,10 @@ import { PostNewEventRequest } from '../../../src/typedefs/event';
 interface CreateEventModalProps {
     // eslint-disable-next-line no-unused-vars
     createEvent: (newEvent: PostNewEventRequest) => void,
+    isOpen: boolean,
+    onClose: () => void,
+    startDateTime: Date,
+    endDateTime: Date,
 }
 
 function generateEventTypeOptions(eventTypes: EventType[]) {
@@ -40,15 +43,14 @@ function generateEventTypeOptions(eventTypes: EventType[]) {
 
 export default function CreateEventModal(props: CreateEventModalProps) {
     const { state } = useContext(UserContext);
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [startDateTime, setStartDateTime] = useState(new Date());
-    const [endDateTime, setEndDateTime] = useState(new Date());
+    const { isOpen, onClose } = props;
     const [eventName, setEventName] = useState('');
     const [description, setDescription] = useState('');
     const [eventTypeId, setEventTypeId] = useState(0);
     const [eventTypes, setEventTypes] = useState<EventType[]>([]);
     const [error, setError] = useState<string>('');
-
+    const [startDateTime, setStartDateTime] = useState<Date>(props.startDateTime);
+    const [endDateTime, setEndDateTime] = useState<Date>(props.endDateTime);
     useEffect(() => {
         async function getData() {
             const res = await getEventTypeList(state.token);
@@ -62,7 +64,6 @@ export default function CreateEventModal(props: CreateEventModalProps) {
     }, []);
     return (
         <div>
-            <Button background="orange.300" color="white" onClick={onOpen}>Create New Event</Button>
             { error !== '' }
             <Modal isCentered size="xl" isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />

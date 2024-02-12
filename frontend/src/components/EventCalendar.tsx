@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import moment from 'moment';
-import { Calendar, DateLocalizer, momentLocalizer, Views } from 'react-big-calendar';
-import { useDisclosure, Box } from '@chakra-ui/react';
+import { Calendar, DateLocalizer, momentLocalizer, SlotInfo, Views } from 'react-big-calendar';
+import { useDisclosure, Box, Button } from '@chakra-ui/react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import SelectedEventModal from './SelectedEventModal';
 import FamilySignUpModal from './FamilySignUpModal';
@@ -21,11 +21,15 @@ export default function EventCalendar() {
     const { state } = useContext(UserContext);
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
     const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
+    const { onClose: onCreateClose, isOpen: isCreateOpen, onOpen: onCreateOpen } = useDisclosure();
+
     const [selectedEvent, setSelectedEvent] = useState<Event | Job>();
     const [familyMembers, setFamilyMembers] = useState<any>();
     const [calendarEvents, setCalendarEvents] = useState<Array<Job | Event>>([]);
     const [error, setError] = useState<string>('');
     const [defaultDate, setDefaultDate] = useState<Date>();
+    const [defaultStartDate, setDefaultStartDate] = useState<Date>(new Date());
+    const [defaultEndDate, setDefaultEndDate] = useState<Date>(new Date());
 
     async function setNewEvent(newEvent: PostNewEventRequest) {
         const startDate = moment(newEvent.startDate);
@@ -100,8 +104,20 @@ export default function EventCalendar() {
         <div>
             { error !== '' && ({ error }) }
             <Box pt={5} pb={5}>
-                {/* eslint-disable-next-line react/jsx-no-bind */}
-                <CreateEventModal createEvent={setNewEvent} />
+                <Button
+                    background="orange.300"
+                    color="white"
+                    isDisabled={state.user?.memberType !== 'Admin'}
+                    onClick={
+                        () => {
+                            setDefaultStartDate(new Date());
+                            setDefaultEndDate(new Date());
+                            onCreateOpen();
+                        }
+                    }
+                >
+                    Create New Event
+                </Button>
             </Box>
             <Calendar
                 defaultView={Views.MONTH}
@@ -112,6 +128,14 @@ export default function EventCalendar() {
                     (calendarEvent) => {
                         setSelectedEvent(calendarEvent);
                         onViewEventOpen();
+                    }
+                }
+                selectable={state.user?.memberType === 'Admin'}
+                onSelectSlot={
+                    (selectedSlot: SlotInfo) => {
+                        setDefaultStartDate(selectedSlot.start);
+                        setDefaultEndDate(selectedSlot.end);
+                        onCreateOpen();
                     }
                 }
                 localizer={localizer}
@@ -179,6 +203,14 @@ export default function EventCalendar() {
                     />
                 )
             }
+            <CreateEventModal
+                // eslint-disable-next-line react/jsx-no-bind
+                createEvent={setNewEvent}
+                onClose={onCreateClose}
+                isOpen={isCreateOpen}
+                startDateTime={defaultStartDate}
+                endDateTime={defaultEndDate}
+            />
         </div>
     );
 }
