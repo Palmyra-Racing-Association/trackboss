@@ -116,6 +116,10 @@ export default function SignUpList(props: SignupListProps) {
         }
     }, [searchTerm, allCells]);
 
+    // temporary haxx, remove the cash payout column for non admins becuase REASONS (#449)
+    if (state.user?.memberType !== 'Admin') {
+        delete columns[3];
+    }
     return (
         <div data-testid="table">
             <Center>
