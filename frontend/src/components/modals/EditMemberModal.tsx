@@ -45,8 +45,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [dirty, setDirty] = useState<boolean>(false);
     const [phoneValid, setPhoneValid] = useState<boolean>(isMobilePhone(phoneNumber, 'en-US'));
     const [emailValid, setEmailValid] = useState<boolean>(isEmail(email));
-    // eslint-disable-next-line prefer-const
-    let [birthdate, setBirthDate] = useState<Date>(moment(selectedMember.birthdate).toDate());
+    const [birthdate, setBirthDate] = useState<Date>(moment(selectedMember.birthdate).toDate() || moment().toDate());
     const [membershipType, setMembershipType] = useState<number>(selectedMember.membershipTypeId);
     const [firstName, setFirstName] = useState<string>(selectedMember.firstName);
     const [lastName, setLastName] = useState<string>(selectedMember.lastName);
@@ -54,11 +53,6 @@ export default function EditMemberModal(props: EditMemberModalProps) {
 
     const { state, update } = useContext(UserContext);
 
-    if (selectedMember.birthdate) {
-        birthdate = moment(selectedMember.birthdate).toDate();
-    } else {
-        birthdate = moment(new Date()).toDate();
-    }
     return (
         <>
             <Button
