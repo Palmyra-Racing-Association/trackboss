@@ -12,6 +12,7 @@ import MembershipApplications from './pages/MembershipApplications';
 import BoardMemberListPage from './pages/BoardMemberListPage';
 import BillingListPage from './pages/BillingListPage';
 import MemberCommunicationsPage from './pages/MemberCommunicationsPage';
+import ApplicationForm from './pages/ApplicationForm';
 
 export function App() {
     const { state, update } = useContext(UserContext);
@@ -21,7 +22,7 @@ export function App() {
             const user = await me(token);
             update({ loggedIn: true, token, user, storedUser: undefined });
         }
-        if (!state.loggedIn) {
+        if (!state.loggedIn && !location.pathname.includes('/apply')) {
             const hash = location.hash.split('#id_token=')[1];
             if (hash) {
                 const token = hash.split('&')[0];
@@ -47,6 +48,7 @@ export function App() {
             <Route path="board" element={<BoardMemberListPage />} />
             <Route path="billing" element={<BillingListPage />} />
             <Route path="communicate" element={<MemberCommunicationsPage />} />
+            <Route path="apply" element={<ApplicationForm />} />
         </Routes>
     );
 }
