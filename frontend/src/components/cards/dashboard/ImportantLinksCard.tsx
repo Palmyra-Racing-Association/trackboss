@@ -17,7 +17,7 @@ export default function ImportantLinksCard(props: cardProps) {
         gateCodeDisplayMessage = 'Insurance and payment required for gate code';
     }
     return (
-        <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={2} h="365" m={1}>
+        <Box bg="white" boxShadow="md" border="1px" borderColor="gray.200" p={2} h="365" m={2}>
             <Center>
                 <VStack boxSize="md">
                     <Heading size="lg">Club Info and Links</Heading>
