@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { Box, Button, ChakraProvider, Grid, GridItem, Image, Input, SimpleGrid, Text } from '@chakra-ui/react';
+import { Box, Button, ChakraProvider, Image, Input, SimpleGrid, Text } from '@chakra-ui/react';
 import Autocomplete from 'react-google-autocomplete';
 import DatePicker from 'react-date-picker';
+import moment from 'moment';
 
 import theme from '../theme';
 
@@ -15,6 +16,7 @@ function ApplicationForm() {
     const [city, setCity] = useState<string>();
     const [state, setState] = useState<string>();
     const [phoneNumber, setPhoneNumber] = useState<string>();
+    const [birthDate, setBirthDate] = useState<Date>();
     const [occupation, setOccupation] = useState<string>();
     const [referredBy, setReferredBy] = useState<string>();
 
@@ -47,16 +49,18 @@ function ApplicationForm() {
                         application, please contact us.
                     </Text>
                 </Box>
-                <Grid templateColumns="repeat(2, 1fr)" ml={10}>
-                    <GridItem>
+                <SimpleGrid columns={{ sm: 1, md: 2 }} m={5}>
+                    <Box m={2}>
                         <Text>First Name</Text>
                         <Input />
-                    </GridItem>
-                    <GridItem ml={5}>
+                    </Box>
+                    <Box m={2}>
                         <Text>Last Name</Text>
                         <Input />
-                    </GridItem>
-                    <GridItem colSpan={2}>
+                    </Box>
+                </SimpleGrid>
+                <SimpleGrid m={5}>
+                    <Box m={2}>
                         <Text>Street Address</Text>
                         <Autocomplete
                             style={
@@ -77,7 +81,7 @@ function ApplicationForm() {
                                 }
                             }
                             onPlaceSelected={
-                                (place) => {
+                                (place : any) => {
                                     let mapsStreetAddress = '';
                                     let mapsZipCode = '';
                                     place.address_components.forEach((component: any) => {
@@ -112,29 +116,59 @@ function ApplicationForm() {
                                 }
                             }
                         />
-                    </GridItem>
-                    <GridItem>
+                    </Box>
+                </SimpleGrid>
+                <SimpleGrid columns={{ sm: 1, md: 2 }} m={5}>
+                    <Box m={2}>
                         <Text>Phone</Text>
-                        <Input />
-                    </GridItem>
-                    <GridItem>
+                        <Input
+                            isRequired
+                            onChange={
+                                (e) => {
+                                    let enteredPhone = e.target.value;
+                                    enteredPhone = enteredPhone.replace('-', '');
+                                    enteredPhone = enteredPhone.replace('.', '');
+                                    if (enteredPhone.length === 10) {
+                                        setPhoneNumber(`+1${enteredPhone}`);
+                                    }
+                                }
+                            }
+                        />
+                    </Box>
+                    <Box m={2}>
                         <Text>eMail</Text>
                         <Input />
-                    </GridItem>
-                    <GridItem>
+                    </Box>
+                </SimpleGrid>
+                <SimpleGrid columns={{ sm: 1, md: 3 }} m={5}>
+                    <Box m={2}>
                         <Text>Date of Birth</Text>
-                        <DatePicker />
-                    </GridItem>
-                    <GridItem>
+                        <DatePicker
+                            value={birthDate}
+                            minDate={moment().subtract(18, 'years').toDate()}
+                            onChange={
+                                (e : any) => {
+                                    setBirthDate(e);
+                                }
+                            }
+                        />
+                    </Box>
+                    <Box m={2}>
                         <Text>Occupation</Text>
                         <Input />
-                    </GridItem>
-                    <GridItem>
+                    </Box>
+                    <Box m={2}>
                         <Text>Referred By</Text>
                         <Input />
-                    </GridItem>
-                </Grid>
-                <Button />
+                    </Box>
+                </SimpleGrid>
+                <Button
+                    backgroundColor="orange.300"
+                    color="white"
+                    m={5}
+                >
+                    Submit
+                </Button>
             </Box>
         </ChakraProvider>
     );
