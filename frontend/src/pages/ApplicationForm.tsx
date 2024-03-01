@@ -3,25 +3,40 @@ import React, { useEffect, useState } from 'react';
 import {
     Box, Button, ChakraProvider, Image, Input, InputGroup, InputLeftAddon, SimpleGrid, Text,
 } from '@chakra-ui/react';
+import PhoneInput from 'react-phone-number-input/input';
+import 'react-phone-number-input/style.css';
 import { isEmail, isMobilePhone } from 'validator';
 import Autocomplete from 'react-google-autocomplete';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
+import _ from 'lodash';
 
 import theme from '../theme';
 
 function ApplicationForm() {
+    const chakraStyleForNonChakra = {
+        width: '70%',
+        font: 'Russo One',
+        padding: '12px 20px',
+        margin: '8px 0;',
+        display: 'inline-block',
+        border: '1px solid #ccc',
+        borderRadius: '0.375rem',
+    };
     const [season, setSeason] = useState<number>();
 
     const [firstName, setFirstName] = useState<string>();
+    const [lastName, setLastName] = useState<string>();
     const [streetAddress, setStreetAddress] = useState<string>();
     const [zipCode, setZipCode] = useState<string>();
     const [city, setCity] = useState<string>();
     const [state, setState] = useState<string>();
+    const [email, setEmail] = useState<string>();
     const [phoneNumber, setPhoneNumber] = useState<string>();
     const [birthDate, setBirthDate] = useState<Date>();
     const [occupation, setOccupation] = useState<string>();
     const [referredBy, setReferredBy] = useState<string>();
+    const [allFieldsComplete, setAllFieldsComplete] = useState<boolean>();
 
     const eightteenYearsAgo = moment().subtract(18, 'years').toDate();
     useEffect(() => {
@@ -32,11 +47,12 @@ function ApplicationForm() {
         } else {
             setSeason(date.getFullYear());
         }
+        setAllFieldsComplete(false);
     });
 
     return (
         <ChakraProvider theme={theme}>
-            <Box mt={0} pt={0} borderWidth="5 px" width="90%" backgroundColor="white">
+            <Box mt={0} pt={0} borderWidth="5 px" width="75%" backgroundColor="white">
                 <SimpleGrid columns={2} maxWidth={800} m={5}>
                     <Box maxW={200}>
                         <Image width={200} height={90} src="logo192.png" />
@@ -58,29 +74,50 @@ function ApplicationForm() {
                 </Box>
                 <SimpleGrid columns={{ sm: 1, md: 2 }} m={5}>
                     <Box m={2}>
-                        <Text>First Name</Text>
-                        <Input />
+                        <Text>First Name*</Text>
+                        <Input
+                            isRequired
+                            value={firstName}
+                            onChange={
+                                (e) => {
+                                    let nameValue = e.target.value;
+                                    if (nameValue) {
+                                        nameValue = nameValue.replace(/\s/g, '');
+                                        nameValue = _.capitalize(nameValue);
+                                    }
+                                    setFirstName(nameValue);
+                                }
+                            }
+                        />
                     </Box>
                     <Box m={2}>
-                        <Text>Last Name</Text>
-                        <Input />
+                        <Text>Last Name*</Text>
+                        <Input
+                            isRequired
+                            value={lastName}
+                            onChange={
+                                (e) => {
+                                    let lastNameValue = e.target.value;
+                                    if (lastNameValue) {
+                                        lastNameValue = lastNameValue.replace(/\s/g, '');
+                                        lastNameValue = _.capitalize(lastNameValue);
+                                    }
+                                    setLastName(lastNameValue);
+                                }
+                            }
+                        />
                     </Box>
                 </SimpleGrid>
                 <SimpleGrid m={5}>
                     <Box m={2}>
-                        <Text>Street Address</Text>
+                        <Text>Street Address*</Text>
+                        <Text fontSize="xs">
+                            Please type your address as it will auto complete. We just need a street address - apartment
+                            or unit numbers not required.
+                        </Text>
                         <Autocomplete
-                            style={
-                                {
-                                    width: '50%',
-                                    font: 'Russo One',
-                                    padding: '12px 20px',
-                                    margin: '8px 0;',
-                                    display: 'inline-block',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '0.375rem',
-                                }
-                            }
+                            inputAutocompleteValue="address"
+                            style={chakraStyleForNonChakra}
                             apiKey="AIzaSyA8N7kdBhP-1M3Y393FNDL71-nWanO9lBI"
                             options={
                                 {
@@ -128,37 +165,32 @@ function ApplicationForm() {
                 </SimpleGrid>
                 <SimpleGrid columns={{ sm: 1, md: 2 }} m={5}>
                     <Box m={2}>
-                        <Text>Phone</Text>
-                        <InputGroup>
-                            <InputLeftAddon>
-                                +1
-                            </InputLeftAddon>
-                            <Input
-                                type="tel"
-                                isRequired
-                                onChange={
-                                    (e) => {
-                                        let enteredPhone = e.target.value;
-                                        if (enteredPhone.length >= 10) {
-                                            enteredPhone = enteredPhone.replace(/-/gi, '');
-                                            enteredPhone = enteredPhone.replace(/\./gi, '');
-                                            e.target.value = enteredPhone;
-                                            e.target.value = `${enteredPhone}`;
-                                            setPhoneNumber(`+1${enteredPhone}`);
-                                        }
-                                    }
-                                }
-                            />
-                        </InputGroup>
+                        <Text>Phone*</Text>
+                        <Text fontSize="xs">You can just type the numbers - we handle all the rest!</Text>
+                        <PhoneInput
+                            autocomplete="new-password"
+                            style={chakraStyleForNonChakra}
+                            defaultCountry="US"
+                            value={phoneNumber}
+                            onChange={setPhoneNumber}
+                        />
                     </Box>
                     <Box m={2}>
-                        <Text>eMail</Text>
-                        <Input />
+                        <Text>eMail*</Text>
+                        <Text fontSize="xs">This is used for all communications regarding your application.</Text>
+                        <Input
+                            onChange={
+                                (e) => {
+                                    setEmail(e.target.value);
+                                }
+                            }
+                        />
                     </Box>
                 </SimpleGrid>
                 <SimpleGrid columns={{ sm: 1, md: 3 }} m={5}>
                     <Box m={2}>
-                        <Text>Date of Birth</Text>
+                        <Text>Date of Birth*</Text>
+                        <Text fontSize="xs">Primary members MUST be over 18.</Text>
                         <DatePicker
                             defaultActiveStartDate={eightteenYearsAgo}
                             value={birthDate}
@@ -174,16 +206,34 @@ function ApplicationForm() {
                     </Box>
                     <Box m={2}>
                         <Text>Occupation</Text>
-                        <Input />
+                        <Text fontSize="xs">Let us know what you do - maybe you can help us and we can help you.</Text>
+                        <Input
+                            onChange={
+                                (e) => {
+                                    setOccupation(e.target.value);
+                                }
+                            }
+                        />
                     </Box>
                     <Box m={2}>
                         <Text>Referred By</Text>
-                        <Input />
+                        <Text fontSize="xs">This can be existing, or former, members of PRA.</Text>
+                        <Input
+                            onChange={
+                                (e) => {
+                                    setReferredBy(e.target.value);
+                                }
+                            }
+                        />
                     </Box>
                 </SimpleGrid>
                 <Button
                     backgroundColor="orange.300"
                     color="white"
+                    isDisabled={
+                        !_.every([firstName, lastName, streetAddress, zipCode, city,
+                            state, email, phoneNumber, birthDate])
+                    }
                     m={5}
                 >
                     Submit

@@ -22,7 +22,7 @@ export function App() {
             const user = await me(token);
             update({ loggedIn: true, token, user, storedUser: undefined });
         }
-        if (!state.loggedIn && !location.pathname.includes('/apply')) {
+        if (!state.loggedIn && !location.pathname.includes('apply')) {
             const hash = location.hash.split('#id_token=')[1];
             if (hash) {
                 const token = hash.split('&')[0];
