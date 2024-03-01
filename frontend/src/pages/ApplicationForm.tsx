@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
-    Box, Button, ChakraProvider, Image, Input, InputGroup, InputLeftAddon, SimpleGrid, Text,
+    Box, Button, ChakraProvider, Image, Input, InputGroup, InputLeftAddon, NumberDecrementStepper,
+    NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, SimpleGrid, Text, Textarea,
 } from '@chakra-ui/react';
 import PhoneInput from 'react-phone-number-input/input';
 import 'react-phone-number-input/style.css';
-import { isEmail, isMobilePhone } from 'validator';
+import { isEmail } from 'validator';
 import Autocomplete from 'react-google-autocomplete';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
@@ -31,12 +32,13 @@ function ApplicationForm() {
     const [zipCode, setZipCode] = useState<string>();
     const [city, setCity] = useState<string>();
     const [state, setState] = useState<string>();
-    const [email, setEmail] = useState<string>();
+    const [email, setEmail] = useState<string>('');
     const [phoneNumber, setPhoneNumber] = useState<string>();
     const [birthDate, setBirthDate] = useState<Date>();
     const [occupation, setOccupation] = useState<string>();
     const [referredBy, setReferredBy] = useState<string>();
-    const [allFieldsComplete, setAllFieldsComplete] = useState<boolean>();
+    const [familyMemberCount, setFamilyMemberCount] = useState<number>();
+    const [applicationJson, setApplicationJson] = useState<string>();
 
     const eightteenYearsAgo = moment().subtract(18, 'years').toDate();
     useEffect(() => {
@@ -47,22 +49,33 @@ function ApplicationForm() {
         } else {
             setSeason(date.getFullYear());
         }
-        setAllFieldsComplete(false);
     });
 
     return (
         <ChakraProvider theme={theme}>
-            <Box mt={0} pt={0} borderWidth="5 px" width="75%" backgroundColor="white">
+            <Box
+                mt={0}
+                pt={0}
+                ml={5}
+                borderWidth="5 px"
+                borderRadius="lg"
+                borderColor="orange"
+                width="75%"
+                backgroundColor="white"
+            >
                 <SimpleGrid columns={2} maxWidth={800} m={5}>
                     <Box maxW={200}>
                         <Image width={200} height={90} src="logo192.png" />
                     </Box>
-                    <Text fontSize="2xl">{`Palmyra Racing Association Application - ${season} season`}</Text>
+                    <Text fontSize="2xl">
+                        {`Palmyra Racing Association Application - ${season} season`}
+                    </Text>
                 </SimpleGrid>
                 <Box paddingBottom={5} m={5}>
                     <Text>
                         Please complete all sections. Note that when your application is accepted we will need payment,
-                        waiver of liability, minor waivers, and health insurance information. We do not need any of
+                        waiver of liability, minor waivers, and health insurance information. We will also need names
+                        and dates of birth for all family members.  We do not need any of
                         that at the time of application. The current year dues are $575 (subject to change).
                     </Text>
                 </Box>
@@ -206,25 +219,56 @@ function ApplicationForm() {
                     </Box>
                     <Box m={2}>
                         <Text>Occupation</Text>
-                        <Text fontSize="xs">Let us know what you do - maybe you can help us and we can help you.</Text>
+                        <Text fontSize="xs">Knowing what you do you can help us help you.</Text>
                         <Input
+                            value={occupation}
                             onChange={
                                 (e) => {
-                                    setOccupation(e.target.value);
+                                    setOccupation(_.startCase(e.target.value));
                                 }
                             }
                         />
                     </Box>
                     <Box m={2}>
                         <Text>Referred By</Text>
-                        <Text fontSize="xs">This can be existing, or former, members of PRA.</Text>
+                        <Text fontSize="xs">This can be an existing, or former member of PRA.</Text>
                         <Input
+                            value={referredBy}
                             onChange={
                                 (e) => {
-                                    setReferredBy(e.target.value);
+                                    setReferredBy(_.upperCase(e.target.value));
                                 }
                             }
                         />
+                    </Box>
+                </SimpleGrid>
+                <SimpleGrid m={7}>
+                    <Box maxWidth="75%">
+                        <Text>Number of family members</Text>
+                        <NumberInput
+                            defaultValue={0}
+                            min={0}
+                            max={7}
+                            onChange={
+                                (e) => {
+                                    setFamilyMemberCount(parseInt(e, 10));
+                                }
+                            }
+                        >
+                            <NumberInputField />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                        <Text fontSize="xs">
+                            Family members consist of anyone in a household who is either a child, spouse or domestic
+                            partner. Please note: children aged 18 and up must be in the same household, and either a
+                            student, active miltary, or disabled adult to be on a family membership. Any children
+                            outside of these categories should apply for their own membership, even if they still reside
+                            at your address.  Proof of insurance
+                            is required for all family members if your application is accepted.
+                        </Text>
                     </Box>
                 </SimpleGrid>
                 <Button
@@ -232,13 +276,33 @@ function ApplicationForm() {
                     color="white"
                     isDisabled={
                         !_.every([firstName, lastName, streetAddress, zipCode, city,
-                            state, email, phoneNumber, birthDate])
+                            state, isEmail(email), phoneNumber, birthDate])
+                    }
+                    onClick={
+                        () => {
+                            const application = {
+                                firstName,
+                                lastName,
+                                streetAddress,
+                                city,
+                                state,
+                                zipCode,
+                                email,
+                                phoneNumber,
+                                birthDate,
+                                occupation,
+                                referredBy,
+                                familyMemberCount,
+                            };
+                            setApplicationJson(JSON.stringify(application));
+                        }
                     }
                     m={5}
                 >
                     Submit
                 </Button>
             </Box>
+            <Textarea value={applicationJson} />
         </ChakraProvider>
     );
 }
