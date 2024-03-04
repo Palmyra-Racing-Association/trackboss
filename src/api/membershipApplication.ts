@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express';
 import { parseISO } from 'date-fns';
 import { sendAppConfirmationEmail, sendAppRejectedEmail, sendNewMemberEmail } from '../util/email';
 import {
+    applicationExistsForEmail,
     getMembershipApplication, getMembershipApplications,
     insertMembershipApplication, updateApplicationStatus,
 } from '../database/membershipApplication';
@@ -81,6 +82,22 @@ membershipApplication.post('/', async (req: Request, res: Response) => {
         res.status(500);
         res.send(error);
     }
+});
+
+membershipApplication.get('/exists/:emailAddress', async (req: Request, res: Response) => {
+    const applicationExists = {
+        exists: false,
+    };
+    try {
+        const applicantEmail = req.params.emailAddress;
+        const exists = await applicationExistsForEmail(applicantEmail);
+        applicationExists.exists = exists;
+    } catch (error: any) {
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
+    res.send(applicationExists);
 });
 
 membershipApplication.get('/', async (req: Request, res: Response) => {

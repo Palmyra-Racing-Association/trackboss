@@ -251,7 +251,7 @@ export async function getMemberByEmail(email: string): Promise<any> {
             membershipAdmin: results[0].membership_admin,
             membershipAdminId: results[0].membership_admin_id,
             uuid: results[0].uuid,
-            active: true,
+            active: (results[0].active[0] !== 0),
             memberTypeId: results[0].member_type_id,
             memberType: results[0].member_type,
             membershipType: results[0].membership_type,

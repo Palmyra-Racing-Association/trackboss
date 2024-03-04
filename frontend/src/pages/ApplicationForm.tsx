@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
-    Box, Button, ChakraProvider, Image, Input, InputGroup, InputLeftAddon, NumberDecrementStepper,
+    Box, Button, ChakraProvider, Divider, Image, Input, InputGroup, InputLeftAddon, NumberDecrementStepper,
     NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, SimpleGrid, Text, Textarea,
 } from '@chakra-ui/react';
 import PhoneInput from 'react-phone-number-input/input';
@@ -13,6 +13,9 @@ import moment from 'moment';
 import _ from 'lodash';
 
 import theme from '../theme';
+
+import { applicationExists } from '../controller/membershipApplication';
+import { memberExistsByEmail } from '../controller/member';
 
 function ApplicationForm() {
     const chakraStyleForNonChakra = {
@@ -39,12 +42,14 @@ function ApplicationForm() {
     const [referredBy, setReferredBy] = useState<string>();
     const [familyMemberCount, setFamilyMemberCount] = useState<number>();
     const [applicationJson, setApplicationJson] = useState<string>();
+    const [fullName, setFullName] = useState<string>('');
+    const [hasApplicationIn, setHasApplicationIn] = useState<boolean>();
 
     const eightteenYearsAgo = moment().subtract(18, 'years').toDate();
     useEffect(() => {
         const date = new Date();
         const month = date.getMonth();
-        if (month >= 2) {
+        if (month >= 6) {
             setSeason(date.getFullYear() + 1);
         } else {
             setSeason(date.getFullYear());
@@ -57,9 +62,8 @@ function ApplicationForm() {
                 mt={0}
                 pt={0}
                 ml={5}
-                borderWidth="5 px"
+                borderWidth="20 px"
                 borderRadius="lg"
-                borderColor="orange"
                 width="75%"
                 backgroundColor="white"
             >
@@ -97,6 +101,9 @@ function ApplicationForm() {
                                     if (nameValue) {
                                         nameValue = nameValue.replace(/\s/g, '');
                                         nameValue = _.capitalize(nameValue);
+                                        if (nameValue && lastName) {
+                                            setFullName(`${firstName} ${lastName}`);
+                                        }
                                     }
                                     setFirstName(nameValue);
                                 }
@@ -114,6 +121,9 @@ function ApplicationForm() {
                                     if (lastNameValue) {
                                         lastNameValue = lastNameValue.replace(/\s/g, '');
                                         lastNameValue = _.capitalize(lastNameValue);
+                                        if (lastNameValue && firstName) {
+                                            setFullName(`${firstName} ${lastNameValue}`);
+                                        }
                                     }
                                     setLastName(lastNameValue);
                                 }
@@ -193,8 +203,25 @@ function ApplicationForm() {
                         <Text fontSize="xs">This is used for all communications regarding your application.</Text>
                         <Input
                             onChange={
-                                (e) => {
+                                async (e) => {
                                     setEmail(e.target.value);
+                                    if (isEmail(e.target.value)) {
+                                        const appExists = await applicationExists(e.target.value);
+                                        setHasApplicationIn(appExists.exists);
+                                        if (appExists.exists) {
+                                            // eslint-disable-next-line no-alert, max-len
+                                            alert(`We have an existing application for ${e.target.value}.  Your information is stored; for further info please contact us!`);
+                                            setEmail('');
+                                            e.target.value = '';
+                                        }
+                                        const memberExists = await memberExistsByEmail(e.target.value);
+                                        if (memberExists.exists) {
+                                            // eslint-disable-next-line no-alert, max-len
+                                            alert(`We have an existing membership for ${e.target.value}.  There is no need to re-apply; you can renew annually.`);
+                                            setEmail('');
+                                            e.target.value = '';
+                                        }
+                                    }
                                 }
                             }
                         />
@@ -236,7 +263,7 @@ function ApplicationForm() {
                             value={referredBy}
                             onChange={
                                 (e) => {
-                                    setReferredBy(_.upperCase(e.target.value));
+                                    setReferredBy(e.target.value);
                                 }
                             }
                         />
@@ -268,6 +295,18 @@ function ApplicationForm() {
                             outside of these categories should apply for their own membership, even if they still reside
                             at your address.  Proof of insurance
                             is required for all family members if your application is accepted.
+                        </Text>
+                    </Box>
+                </SimpleGrid>
+                <SimpleGrid m={7}>
+                    <Box maxWidth="50%">
+                        <Text>Signature</Text>
+                        <Text fontSize="2xl" as="em">{`${fullName}`}</Text>
+                        <Divider />
+                        <Text fontSize="xs">
+                            By signing in this field you agree to have your application reviewed by the PRA board
+                            (including background searches) as well as to recieve communications via email and
+                            text message about your application.
                         </Text>
                     </Box>
                 </SimpleGrid>

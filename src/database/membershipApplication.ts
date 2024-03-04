@@ -67,6 +67,20 @@ export async function getMembershipApplication(id: number) : Promise<MembershipA
     return applications;
 }
 
+export async function applicationExistsForEmail(email: string) : Promise<boolean> {
+    let results;
+    try {
+        const applicationsQuery =
+            'select * from membership_application where application_email = ? and application_status = \'Review\'';
+        // eslint-disable-next-line max-len
+        [results] = await getPool().query<RowDataPacket[]>(applicationsQuery, [email]);
+    } catch (e) {
+        logger.error(`DB error getting application by email: ${e}`);
+        throw new Error('internal server error');
+    }
+    return (results.length > 0);
+}
+
 export async function updateApplicationStatus(
     id: number,
     newStatus: string,

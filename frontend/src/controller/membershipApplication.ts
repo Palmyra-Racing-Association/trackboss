@@ -30,6 +30,16 @@ export async function getMembershipApplication(
     return response.json();
 }
 
+export async function applicationExists(
+    email: string,
+) : Promise<any> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication/exists/${email}`, {
+        method: 'GET',
+        mode: 'cors',
+    });
+    return response.json();
+}
+
 export async function acceptMembershipApplication(
     token: string,
     id: number,

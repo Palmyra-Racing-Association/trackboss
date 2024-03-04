@@ -206,6 +206,22 @@ member.get('/email/:email', async (req: Request, res: Response) => {
     res.send(response);
 });
 
+member.get('/email/exists/:email', async (req: Request, res: Response) => {
+    const response = {
+        exists: false,
+    };
+    try {
+        const { email } = req.params;
+        const foundMember = await getMemberByEmail(email);
+        response.exists = (foundMember.active === true);
+        res.status(200);
+    } catch (e: any) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(e);
+    }
+    res.send(response);
+});
+
 member.patch('/:memberId', async (req: Request, res: Response) => {
     const { authorization } = req.headers;
     let response: PatchMemberResponse;
