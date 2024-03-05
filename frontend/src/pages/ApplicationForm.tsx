@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import {
     Box, Button, ChakraProvider, Divider, Image, Input, InputGroup, InputLeftAddon, NumberDecrementStepper,
     NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, SimpleGrid, Text, Textarea,
+    useDisclosure,
 } from '@chakra-ui/react';
 import PhoneInput from 'react-phone-number-input/input';
 import 'react-phone-number-input/style.css';
@@ -16,6 +17,7 @@ import theme from '../theme';
 
 import { applicationExists } from '../controller/membershipApplication';
 import { memberExistsByEmail } from '../controller/member';
+import SimpleAlertModal from '../components/modals/SimpleAlertModal';
 
 function ApplicationForm() {
     const chakraStyleForNonChakra = {
@@ -43,7 +45,9 @@ function ApplicationForm() {
     const [familyMemberCount, setFamilyMemberCount] = useState<number>();
     const [applicationJson, setApplicationJson] = useState<string>();
     const [fullName, setFullName] = useState<string>('');
-    const [hasApplicationIn, setHasApplicationIn] = useState<boolean>();
+    const [alertMsg, setAlertMsg] = useState<string>();
+
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const eightteenYearsAgo = moment().subtract(18, 'years').toDate();
     useEffect(() => {
@@ -207,19 +211,24 @@ function ApplicationForm() {
                                     setEmail(e.target.value);
                                     if (isEmail(e.target.value)) {
                                         const appExists = await applicationExists(e.target.value);
-                                        setHasApplicationIn(appExists.exists);
                                         if (appExists.exists) {
-                                            // eslint-disable-next-line no-alert, max-len
-                                            alert(`We have an existing application for ${e.target.value}.  Your information is stored; for further info please contact us!`);
+                                            setAlertMsg(
+                                                `We have an existing application for ${e.target.value}.  Your
+                                                information is stored; for further info please contact us!`,
+                                            );
                                             setEmail('');
                                             e.target.value = '';
+                                            onOpen();
                                         }
                                         const memberExists = await memberExistsByEmail(e.target.value);
                                         if (memberExists.exists) {
-                                            // eslint-disable-next-line no-alert, max-len
-                                            alert(`We have an existing membership for ${e.target.value}.  There is no need to re-apply; you can renew annually.`);
+                                            setAlertMsg(
+                                                `We have an existing membership for ${e.target.value}.  There is
+                                                no need to re-apply; you can renew annually using Trackboss.`,
+                                            );
                                             setEmail('');
                                             e.target.value = '';
+                                            onOpen();
                                         }
                                     }
                                 }
@@ -342,6 +351,7 @@ function ApplicationForm() {
                 </Button>
             </Box>
             <Textarea value={applicationJson} />
+            <SimpleAlertModal message={alertMsg} isOpen={isOpen} onClose={onClose} />
         </ChakraProvider>
     );
 }
