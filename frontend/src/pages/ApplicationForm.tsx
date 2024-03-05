@@ -208,22 +208,23 @@ function ApplicationForm() {
                         <Input
                             onChange={
                                 async (e) => {
-                                    setEmail(e.target.value);
-                                    if (isEmail(e.target.value)) {
-                                        const appExists = await applicationExists(e.target.value);
+                                    const emailValue = e.target.value;
+                                    setEmail(emailValue);
+                                    if (isEmail(emailValue)) {
+                                        const appExists = await applicationExists(emailValue);
                                         if (appExists.exists) {
                                             setAlertMsg(
-                                                `We have an existing application for ${e.target.value}.  Your
+                                                `We have an existing application for ${emailValue}.  Your
                                                 information is stored; for further info please contact us!`,
                                             );
                                             setEmail('');
                                             e.target.value = '';
                                             onOpen();
                                         }
-                                        const memberExists = await memberExistsByEmail(e.target.value);
-                                        if (memberExists.exists) {
+                                        const memberExists = await memberExistsByEmail(emailValue);
+                                        if (memberExists.exists && emailValue) {
                                             setAlertMsg(
-                                                `We have an existing membership for ${e.target.value}.  There is
+                                                `We have an existing membership for ${emailValue}.  There is
                                                 no need to re-apply; you can renew annually using Trackboss.`,
                                             );
                                             setEmail('');
