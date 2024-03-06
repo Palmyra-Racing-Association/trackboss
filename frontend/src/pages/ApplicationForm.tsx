@@ -58,6 +58,7 @@ function ApplicationForm() {
         } else {
             setSeason(date.getFullYear());
         }
+        document.title = `PRA application - ${season} season`;
     });
 
     return (
@@ -281,29 +282,31 @@ function ApplicationForm() {
                 </SimpleGrid>
                 <SimpleGrid m={7}>
                     <Box maxWidth="75%">
-                        <Text>Number of family members</Text>
-                        <NumberInput
-                            defaultValue={0}
-                            min={0}
-                            max={7}
-                            onChange={
-                                (e) => {
-                                    setFamilyMemberCount(parseInt(e, 10));
+                        <Box maxWidth="50%">
+                            <Text>Number of family members</Text>
+                            <NumberInput
+                                defaultValue={0}
+                                min={0}
+                                max={7}
+                                onChange={
+                                    (e) => {
+                                        setFamilyMemberCount(parseInt(e, 10));
+                                    }
                                 }
-                            }
-                        >
-                            <NumberInputField />
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
-                        </NumberInput>
+                            >
+                                <NumberInputField />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
+                        </Box>
                         <Text fontSize="xs">
                             Family members consist of anyone in a household who is either a child, spouse or domestic
                             partner. Please note: children aged 18 and up must be in the same household, and either a
                             student, active miltary, or disabled adult to be on a family membership. Any children
                             outside of these categories should apply for their own membership, even if they still reside
-                            at your address.  Proof of insurance
+                            at your address.  Attestation of insurance
                             is required for all family members if your application is accepted.
                         </Text>
                     </Box>
