@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     Box, Button, ChakraProvider, Divider, Image, Input, InputGroup, InputLeftAddon, NumberDecrementStepper,
-    NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, SimpleGrid, Text, Textarea,
+    NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, SimpleGrid, Tag, Text, Textarea,
     useDisclosure,
 } from '@chakra-ui/react';
 import PhoneInput from 'react-phone-number-input/input';
@@ -20,6 +20,8 @@ import { memberExistsByEmail } from '../controller/member';
 import SimpleAlertModal from '../components/modals/SimpleAlertModal';
 
 function ApplicationForm() {
+    const MAX_FAMILY_MEMBERS = 5;
+
     const chakraStyleForNonChakra = {
         width: '70%',
         font: 'Russo One',
@@ -33,7 +35,7 @@ function ApplicationForm() {
 
     const [firstName, setFirstName] = useState<string>();
     const [lastName, setLastName] = useState<string>();
-    const [streetAddress, setStreetAddress] = useState<string>();
+    const [address, setAddress] = useState<string>();
     const [zipCode, setZipCode] = useState<string>();
     const [city, setCity] = useState<string>();
     const [state, setState] = useState<string>();
@@ -42,14 +44,16 @@ function ApplicationForm() {
     const [birthDate, setBirthDate] = useState<Date>();
     const [occupation, setOccupation] = useState<string>();
     const [referredBy, setReferredBy] = useState<string>();
-    const [familyMemberCount, setFamilyMemberCount] = useState<number>();
+    const [familyMemberCount, setFamilyMemberCount] = useState<number>(0);
     const [applicationJson, setApplicationJson] = useState<string>();
     const [fullName, setFullName] = useState<string>('');
-    const [alertMsg, setAlertMsg] = useState<string>();
+    const [familyMembers, setFamilyMembers] = useState<any[]>([]);
 
+    const [alertMsg, setAlertMsg] = useState<string>();
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const eightteenYearsAgo = moment().subtract(18, 'years').toDate();
+
     useEffect(() => {
         const date = new Date();
         const month = date.getMonth();
@@ -60,6 +64,27 @@ function ApplicationForm() {
         }
         document.title = `PRA application - ${season} season`;
     });
+
+    const familyMemberList : any[] = [];
+
+    for (let index = 0; index < familyMemberCount; index++) {
+        const familyMemberComponent = (
+            <>
+                <Tag size="md" colorScheme="orange">{`Family member ${index + 1}`}</Tag>
+                <SimpleGrid columns={{ sm: 2, md: 3 }} spacing={4} mb={2}>
+                    <Input placeholder="First Name" value={familyMembers[index].firstName} />
+                    <Input placeholder="Last Name" value={familyMembers[index].lastName} />
+                    <DatePicker
+                        required
+                        minDate={moment().subtract(85, 'years').toDate()}
+                        maxDate={new Date()}
+                        value={familyMembers[index].dob}
+                    />
+                </SimpleGrid>
+            </>
+        );
+        familyMemberList.push(familyMemberComponent);
+    }
 
     return (
         <ChakraProvider theme={theme}>
@@ -184,7 +209,7 @@ function ApplicationForm() {
                                                 break;
                                         }
                                     });
-                                    setStreetAddress(mapsStreetAddress);
+                                    setAddress(mapsStreetAddress);
                                     setZipCode(mapsZipCode);
                                 }
                             }
@@ -282,15 +307,18 @@ function ApplicationForm() {
                 </SimpleGrid>
                 <SimpleGrid m={7}>
                     <Box maxWidth="75%">
-                        <Box maxWidth="50%">
+                        <Box maxWidth="25%">
                             <Text>Number of family members</Text>
                             <NumberInput
                                 defaultValue={0}
                                 min={0}
-                                max={7}
+                                max={MAX_FAMILY_MEMBERS}
                                 onChange={
                                     (e) => {
                                         setFamilyMemberCount(parseInt(e, 10));
+                                        setFamilyMembers(
+                                            [{ firstName: '', lastName: '', dob: new Date() }, ...familyMembers],
+                                        );
                                     }
                                 }
                             >
@@ -300,6 +328,9 @@ function ApplicationForm() {
                                     <NumberDecrementStepper />
                                 </NumberInputStepper>
                             </NumberInput>
+                        </Box>
+                        <Box mt={4}>
+                            {familyMemberList}
                         </Box>
                         <Text fontSize="xs">
                             Family members consist of anyone in a household who is either a child, spouse or domestic
@@ -327,7 +358,7 @@ function ApplicationForm() {
                     backgroundColor="orange.300"
                     color="white"
                     isDisabled={
-                        !_.every([firstName, lastName, streetAddress, zipCode, city,
+                        !_.every([firstName, lastName, address, zipCode, city,
                             state, isEmail(email), phoneNumber, birthDate])
                     }
                     onClick={
@@ -335,7 +366,7 @@ function ApplicationForm() {
                             const application = {
                                 firstName,
                                 lastName,
-                                streetAddress,
+                                address,
                                 city,
                                 state,
                                 zipCode,
@@ -345,6 +376,7 @@ function ApplicationForm() {
                                 occupation,
                                 referredBy,
                                 familyMemberCount,
+                                familyMembers,
                             };
                             setApplicationJson(JSON.stringify(application));
                         }
