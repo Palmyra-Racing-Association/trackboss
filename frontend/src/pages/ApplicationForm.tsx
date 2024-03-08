@@ -1,18 +1,24 @@
+/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import {
-    Box, Button, ChakraProvider, Divider, Image, Input, InputGroup, InputLeftAddon, NumberDecrementStepper,
-    NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, SimpleGrid, Tag, Text, Textarea,
+    Accordion,
+    AccordionButton,
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
+    Box, Button, ChakraProvider, Divider, Image, Input, SimpleGrid, Stat,
+    StatHelpText, StatLabel, StatNumber, Tag, Text, Textarea, VStack,
     useDisclosure,
 } from '@chakra-ui/react';
-import { BsTrash2 } from 'react-icons/bs';
+import { BsTrash2, BsPersonPlus } from 'react-icons/bs';
 import PhoneInput from 'react-phone-number-input/input';
 import 'react-phone-number-input/style.css';
 import { isEmail } from 'validator';
 import Autocomplete from 'react-google-autocomplete';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
-import _, { uniqueId } from 'lodash';
+import _ from 'lodash';
 
 import theme from '../theme';
 
@@ -43,7 +49,6 @@ function ApplicationForm() {
     const [birthDate, setBirthDate] = useState<Date>();
     const [occupation, setOccupation] = useState<string>();
     const [referredBy, setReferredBy] = useState<string>();
-    const [familyMemberCount, setFamilyMemberCount] = useState<number>(0);
     const [applicationJson, setApplicationJson] = useState<string>();
     const [fullName, setFullName] = useState<string>('');
     const [newFamilyFirst, setNewFamilyFirst] = useState<string>('');
@@ -54,7 +59,7 @@ function ApplicationForm() {
 
     const [alertMsg, setAlertMsg] = useState<string>();
     const { isOpen, onOpen, onClose } = useDisclosure();
-
+    const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onClose: onConfirmClose } = useDisclosure();
     const eightteenYearsAgo = moment().subtract(18, 'years').toDate();
 
     useEffect(() => {
@@ -68,7 +73,7 @@ function ApplicationForm() {
         document.title = `PRA application - ${season} season`;
     });
 
-    const familyMemberList : any[] = [];
+    const familyMemberList: any[] = [];
 
     for (let index = 0; index < familyMembers.length; index++) {
         const familyMemberComponent = (
@@ -183,7 +188,7 @@ function ApplicationForm() {
                                 }
                             }
                             onPlaceSelected={
-                                (place : any) => {
+                                (place: any) => {
                                     let mapsStreetAddress = '';
                                     let mapsZipCode = '';
                                     place.address_components.forEach((component: any) => {
@@ -278,7 +283,7 @@ function ApplicationForm() {
                             minDate={moment().subtract(85, 'years').toDate()}
                             maxDate={eightteenYearsAgo}
                             onChange={
-                                (e : any) => {
+                                (e: any) => {
                                     setBirthDate(e);
                                 }
                             }
@@ -309,117 +314,126 @@ function ApplicationForm() {
                         />
                     </Box>
                 </SimpleGrid>
-                <SimpleGrid m={7}>
-                    <Box maxWidth="75%">
-                        <Text>Family members (besides you)</Text>
-                        <Box mt={4}>
-                            <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={4} mb={2}>
-                                <Input
-                                    placeholder="First Name"
-                                    value={newFamilyFirst}
-                                    onChange={
-                                        (e) => {
-                                            let nameValue = e.target.value;
-                                            nameValue = nameValue.replace(/\s/g, '');
-                                            nameValue = _.capitalize(nameValue);
-                                            e.target.value = nameValue;
-                                            setNewFamilyFirst(e.target.value);
+                <Accordion allowToggle>
+                    <AccordionItem>
+                        <AccordionButton>
+                            Family members (besides you)
+                            <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel>
+                            <VStack>
+                                <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={4} mb={2} width="100%">
+                                    <Input
+                                        placeholder="First Name"
+                                        value={newFamilyFirst}
+                                        onChange={
+                                            (e) => {
+                                                let nameValue = e.target.value;
+                                                nameValue = nameValue.replace(/\s/g, '');
+                                                nameValue = _.capitalize(nameValue);
+                                                e.target.value = nameValue;
+                                                setNewFamilyFirst(e.target.value);
+                                            }
                                         }
-                                    }
-                                />
-                                <Input
-                                    placeholder="Last Name"
-                                    value={newFamilyLast}
-                                    onChange={
-                                        (e) => {
-                                            let nameValue = e.target.value;
-                                            nameValue = nameValue.replace(/\s/g, '');
-                                            nameValue = _.capitalize(nameValue);
-                                            e.target.value = nameValue;
-                                            setNewFamilyLast(e.target.value);
+                                    />
+                                    <Input
+                                        placeholder="Last Name"
+                                        value={newFamilyLast}
+                                        onChange={
+                                            (e) => {
+                                                let nameValue = e.target.value;
+                                                nameValue = nameValue.replace(/\s/g, '');
+                                                nameValue = _.capitalize(nameValue);
+                                                e.target.value = nameValue;
+                                                setNewFamilyLast(e.target.value);
+                                            }
                                         }
-                                    }
-                                />
-                                <DatePicker
-                                    required
-                                    minDate={moment().subtract(85, 'years').toDate()}
-                                    maxDate={new Date()}
-                                    value={newFamilyDob}
-                                    onChange={
-                                        (e : any) => {
-                                            setNewFamilyDob(e);
+                                    />
+                                    <DatePicker
+                                        required
+                                        minDate={moment().subtract(85, 'years').toDate()}
+                                        maxDate={new Date()}
+                                        value={newFamilyDob}
+                                        disableCalendar
+                                        onChange={
+                                            (e: any) => {
+                                                setNewFamilyDob(e);
+                                            }
                                         }
-                                    }
-                                />
-                                <Button
-                                    backgroundColor="orange.300"
-                                    color="white"
-                                    isDisabled={!newFamilyFirst || !newFamilyLast || !newFamilyDob}
-                                    onClick={
-                                        () => {
-                                            setFamilyMembers(
-                                                [
-                                                    ...familyMembers,
-                                                    {
-                                                        id: uniqueId(),
-                                                        firstName: newFamilyFirst,
-                                                        lastName: newFamilyLast,
-                                                        dob: newFamilyDob,
-                                                    },
-                                                ],
-                                            );
-                                            setNewFamilyFirst('');
-                                            setNewFamilyLast('');
-                                            setNewFamilyDob(undefined);
+                                    />
+                                    <Button
+                                        backgroundColor="orange.300"
+                                        color="white"
+                                        leftIcon={<BsPersonPlus />}
+                                        width={50}
+                                        isDisabled={!newFamilyFirst || !newFamilyLast || !newFamilyDob}
+                                        onClick={
+                                            () => {
+                                                setFamilyMembers(
+                                                    [
+                                                        ...familyMembers,
+                                                        {
+                                                            id: _.uniqueId(),
+                                                            firstName: newFamilyFirst,
+                                                            lastName: newFamilyLast,
+                                                            dob: newFamilyDob,
+                                                        },
+                                                    ],
+                                                );
+                                                setNewFamilyFirst('');
+                                                setNewFamilyLast('');
+                                                setNewFamilyDob(undefined);
+                                            }
                                         }
+                                    />
+                                </SimpleGrid>
+                                <Box>
+                                    {
+                                        familyMembers.map((familyMember, index) => (
+                                            <SimpleGrid columns={2} spacing={4} mt={2} mb={2}>
+                                                <Stat>
+                                                    <StatLabel>
+                                                        {`Family member ${index + 1}`}
+                                                    </StatLabel>
+                                                    <StatNumber>
+                                                        {`${familyMember.firstName} ${familyMember.lastName}`}
+                                                    </StatNumber>
+                                                    <StatHelpText>
+                                                        {`${moment(new Date()).diff(familyMember.dob, 'years')} years old`}
+                                                    </StatHelpText>
+                                                </Stat>
+                                                <Button
+                                                    backgroundColor="red"
+                                                    color="white"
+                                                    width={55}
+                                                    height={25}
+                                                    leftIcon={<BsTrash2 />}
+                                                    onClick={
+                                                        (e) => {
+                                                            setFamilyMembers(
+                                                                // eslint-disable-next-line max-len
+                                                                familyMembers.filter((a) => a.id !== familyMember.id),
+                                                            );
+                                                        }
+                                                    }
+                                                />
+                                            </SimpleGrid>
+
+                                        ))
                                     }
-                                >
-                                    Add family member
-                                </Button>
-                            </SimpleGrid>
-                        </Box>
-                    </Box>
-                </SimpleGrid>
-                <Box m={7} maxWidth="75%">
-                    {
-                        familyMembers.map((familyMember) => (
-                            <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={4} mb={2}>
-                                <Input placeholder="First Name" value={familyMember.firstName} disabled />
-                                <Input placeholder="Last Name" value={familyMember.lastName} disabled />
-                                <DatePicker
-                                    required
-                                    minDate={moment().subtract(85, 'years').toDate()}
-                                    maxDate={new Date()}
-                                    value={familyMember.dob}
-                                    disabled
-                                />
-                                <Button
-                                    backgroundColor="red"
-                                    color="white"
-                                    maxWidth={100}
-                                    rightIcon={<BsTrash2 />}
-                                    onClick={
-                                        (e) => {
-                                            setFamilyMembers(
-                                                familyMembers.filter((a) => a.id !== familyMember.id),
-                                            );
-                                        }
-                                    }
-                                >
-                                    Remove
-                                </Button>
-                            </SimpleGrid>
-                        ))
-                    }
-                    <Text fontSize="xs">
-                        Family members consist of anyone in a household who is either a child, spouse or domestic
-                        partner. Please note: children aged 18 and up must be in the same household, and either a
-                        student, active miltary, or disabled adult to be on a family membership. Any children
-                        outside of these categories should apply for their own membership, even if they still reside
-                        at your address.  Attestation of insurance
-                        is required for all family members if your application is accepted.
-                    </Text>
-                </Box>
+                                    <Text fontSize="xs">
+                                        Family members consist of anyone in a household who is either a child, spouse
+                                        or domestic partner. Please note: children aged 18 and up must be in the same
+                                        household, and either a student, active miltary, or disabled adult to be on a
+                                        family membership. Any children outside of these categories should apply for
+                                        their own membership, even if they still reside at your address.  Attestation
+                                        of insurance is required for all family members if your application is accepted.
+                                    </Text>
+                                </Box>
+                            </VStack>
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
                 <SimpleGrid m={7}>
                     <Box maxWidth="50%">
                         <Text>Signature</Text>
@@ -453,10 +467,25 @@ function ApplicationForm() {
                                 birthDate,
                                 occupation,
                                 referredBy,
-                                familyMemberCount,
                                 familyMembers,
                             };
                             setApplicationJson(JSON.stringify(application));
+                            /*
+                            fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication`, {
+                                method: 'POST',
+                                mode: 'cors',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Access-Control-Allow-Origin': '*',
+                                    'Access-Control-Allow-Methods': 'POST,PATCH,OPTIONS',
+                                    'Access-Control-Allow-Private-Network': 'true',
+                                },
+                                body: JSON.stringify(application),
+                            });
+                            */
+                            setEmail('');
+                            onConfirmOpen();
+                            // window.location.href = 'https://palmyramx.com';
                         }
                     }
                     m={5}
@@ -465,7 +494,18 @@ function ApplicationForm() {
                 </Button>
             </Box>
             <Textarea value={applicationJson} />
-            <SimpleAlertModal message={alertMsg} isOpen={isOpen} onClose={onClose} />
+            <SimpleAlertModal
+                title="Existing PRA member or applicant"
+                message={alertMsg}
+                isOpen={isOpen}
+                onClose={onClose}
+            />
+            <SimpleAlertModal
+                title="Application submitted"
+                message={`Your application has been submitted and we've sent a confirmation email. ${applicationJson}`}
+                isOpen={isConfirmOpen}
+                onClose={onConfirmClose}
+            />
         </ChakraProvider>
     );
 }

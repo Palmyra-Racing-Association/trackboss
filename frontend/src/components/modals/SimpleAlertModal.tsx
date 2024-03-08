@@ -8,6 +8,7 @@ interface SimpleAlertModalProps {
     isOpen: boolean;
     onClose: () => void;
     message: string | undefined;
+    title: string,
 }
 
 export default function SimpleAlertModal(props: SimpleAlertModalProps) {
@@ -15,7 +16,7 @@ export default function SimpleAlertModal(props: SimpleAlertModalProps) {
         <Modal isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Existing PRA member or applicant</ModalHeader>
+                <ModalHeader>{props.title}</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     {props.message}
