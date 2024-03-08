@@ -354,6 +354,7 @@ function ApplicationForm() {
                                         minDate={moment().subtract(85, 'years').toDate()}
                                         maxDate={new Date()}
                                         value={newFamilyDob}
+                                        defaultValue="hi"
                                         disableCalendar
                                         onChange={
                                             (e: any) => {
@@ -388,39 +389,41 @@ function ApplicationForm() {
                                     />
                                 </SimpleGrid>
                                 <Box>
-                                    {
-                                        familyMembers.map((familyMember, index) => (
-                                            <SimpleGrid columns={2} spacing={4} mt={2} mb={2}>
-                                                <Stat>
-                                                    <StatLabel>
-                                                        {`Family member ${index + 1}`}
-                                                    </StatLabel>
-                                                    <StatNumber>
-                                                        {`${familyMember.firstName} ${familyMember.lastName}`}
-                                                    </StatNumber>
-                                                    <StatHelpText>
-                                                        {`${moment(new Date()).diff(familyMember.dob, 'years')} years old`}
-                                                    </StatHelpText>
-                                                </Stat>
-                                                <Button
-                                                    backgroundColor="red"
-                                                    color="white"
-                                                    width={55}
-                                                    height={25}
-                                                    leftIcon={<BsTrash2 />}
-                                                    onClick={
-                                                        (e) => {
-                                                            setFamilyMembers(
-                                                                // eslint-disable-next-line max-len
-                                                                familyMembers.filter((a) => a.id !== familyMember.id),
-                                                            );
+                                    <SimpleGrid columns={{ sm: 4, md: 6 }} spacing={4} mt={2} mb={2}>
+                                        {
+                                            familyMembers.map((familyMember, index) => (
+                                                <>
+                                                    <Stat>
+                                                        <StatLabel>
+                                                            {`Family member ${index + 1}`}
+                                                        </StatLabel>
+                                                        <StatNumber>
+                                                            {`${familyMember.firstName} ${familyMember.lastName}`}
+                                                        </StatNumber>
+                                                        <StatHelpText>
+                                                            {`${moment(new Date()).diff(familyMember.dob, 'years')} years old`}
+                                                        </StatHelpText>
+                                                    </Stat>
+                                                    <Button
+                                                        backgroundColor="red"
+                                                        color="white"
+                                                        width={55}
+                                                        height={25}
+                                                        leftIcon={<BsTrash2 />}
+                                                        onClick={
+                                                            (e) => {
+                                                                setFamilyMembers(
+                                                                    // eslint-disable-next-line max-len
+                                                                    familyMembers.filter((a) => a.id !== familyMember.id),
+                                                                );
+                                                            }
                                                         }
-                                                    }
-                                                />
-                                            </SimpleGrid>
+                                                    />
+                                                </>
+                                            ))
+                                        }
+                                    </SimpleGrid>
 
-                                        ))
-                                    }
                                     <Text fontSize="xs">
                                         Family members consist of anyone in a household who is either a child, spouse
                                         or domestic partner. Please note: children aged 18 and up must be in the same
