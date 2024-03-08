@@ -5,13 +5,14 @@ import {
     NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, SimpleGrid, Tag, Text, Textarea,
     useDisclosure,
 } from '@chakra-ui/react';
+import { BsTrash2 } from 'react-icons/bs';
 import PhoneInput from 'react-phone-number-input/input';
 import 'react-phone-number-input/style.css';
 import { isEmail } from 'validator';
 import Autocomplete from 'react-google-autocomplete';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
-import _ from 'lodash';
+import _, { uniqueId } from 'lodash';
 
 import theme from '../theme';
 
@@ -20,8 +21,6 @@ import { memberExistsByEmail } from '../controller/member';
 import SimpleAlertModal from '../components/modals/SimpleAlertModal';
 
 function ApplicationForm() {
-    const MAX_FAMILY_MEMBERS = 5;
-
     const chakraStyleForNonChakra = {
         width: '70%',
         font: 'Russo One',
@@ -47,6 +46,10 @@ function ApplicationForm() {
     const [familyMemberCount, setFamilyMemberCount] = useState<number>(0);
     const [applicationJson, setApplicationJson] = useState<string>();
     const [fullName, setFullName] = useState<string>('');
+    const [newFamilyFirst, setNewFamilyFirst] = useState<string>('');
+    const [newFamilyLast, setNewFamilyLast] = useState<string>('');
+    const [newFamilyDob, setNewFamilyDob] = useState<Date>();
+
     const [familyMembers, setFamilyMembers] = useState<any[]>([]);
 
     const [alertMsg, setAlertMsg] = useState<string>();
@@ -67,18 +70,19 @@ function ApplicationForm() {
 
     const familyMemberList : any[] = [];
 
-    for (let index = 0; index < familyMemberCount; index++) {
+    for (let index = 0; index < familyMembers.length; index++) {
         const familyMemberComponent = (
             <>
                 <Tag size="md" colorScheme="orange">{`Family member ${index + 1}`}</Tag>
-                <SimpleGrid columns={{ sm: 2, md: 3 }} spacing={4} mb={2}>
-                    <Input placeholder="First Name" value={familyMembers[index].firstName} />
-                    <Input placeholder="Last Name" value={familyMembers[index].lastName} />
+                <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={4} mb={2}>
+                    <Input placeholder="First Name" value={familyMembers[index].firstName} disabled />
+                    <Input placeholder="Last Name" value={familyMembers[index].lastName} disabled />
                     <DatePicker
                         required
                         minDate={moment().subtract(85, 'years').toDate()}
                         maxDate={new Date()}
                         value={familyMembers[index].dob}
+                        disabled
                     />
                 </SimpleGrid>
             </>
@@ -307,41 +311,115 @@ function ApplicationForm() {
                 </SimpleGrid>
                 <SimpleGrid m={7}>
                     <Box maxWidth="75%">
-                        <Box maxWidth="25%">
-                            <Text>Number of family members</Text>
-                            <NumberInput
-                                defaultValue={0}
-                                min={0}
-                                max={MAX_FAMILY_MEMBERS}
-                                onChange={
-                                    (e) => {
-                                        setFamilyMemberCount(parseInt(e, 10));
-                                        setFamilyMembers(
-                                            [{ firstName: '', lastName: '', dob: new Date() }, ...familyMembers],
-                                        );
-                                    }
-                                }
-                            >
-                                <NumberInputField />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                        </Box>
+                        <Text>Family members (besides you)</Text>
                         <Box mt={4}>
-                            {familyMemberList}
+                            <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={4} mb={2}>
+                                <Input
+                                    placeholder="First Name"
+                                    value={newFamilyFirst}
+                                    onChange={
+                                        (e) => {
+                                            let nameValue = e.target.value;
+                                            nameValue = nameValue.replace(/\s/g, '');
+                                            nameValue = _.capitalize(nameValue);
+                                            e.target.value = nameValue;
+                                            setNewFamilyFirst(e.target.value);
+                                        }
+                                    }
+                                />
+                                <Input
+                                    placeholder="Last Name"
+                                    value={newFamilyLast}
+                                    onChange={
+                                        (e) => {
+                                            let nameValue = e.target.value;
+                                            nameValue = nameValue.replace(/\s/g, '');
+                                            nameValue = _.capitalize(nameValue);
+                                            e.target.value = nameValue;
+                                            setNewFamilyLast(e.target.value);
+                                        }
+                                    }
+                                />
+                                <DatePicker
+                                    required
+                                    minDate={moment().subtract(85, 'years').toDate()}
+                                    maxDate={new Date()}
+                                    value={newFamilyDob}
+                                    onChange={
+                                        (e : any) => {
+                                            setNewFamilyDob(e);
+                                        }
+                                    }
+                                />
+                                <Button
+                                    backgroundColor="orange.300"
+                                    color="white"
+                                    isDisabled={!newFamilyFirst || !newFamilyLast || !newFamilyDob}
+                                    onClick={
+                                        () => {
+                                            setFamilyMembers(
+                                                [
+                                                    ...familyMembers,
+                                                    {
+                                                        id: uniqueId(),
+                                                        firstName: newFamilyFirst,
+                                                        lastName: newFamilyLast,
+                                                        dob: newFamilyDob,
+                                                    },
+                                                ],
+                                            );
+                                            setNewFamilyFirst('');
+                                            setNewFamilyLast('');
+                                            setNewFamilyDob(undefined);
+                                        }
+                                    }
+                                >
+                                    Add family member
+                                </Button>
+                            </SimpleGrid>
                         </Box>
-                        <Text fontSize="xs">
-                            Family members consist of anyone in a household who is either a child, spouse or domestic
-                            partner. Please note: children aged 18 and up must be in the same household, and either a
-                            student, active miltary, or disabled adult to be on a family membership. Any children
-                            outside of these categories should apply for their own membership, even if they still reside
-                            at your address.  Attestation of insurance
-                            is required for all family members if your application is accepted.
-                        </Text>
                     </Box>
                 </SimpleGrid>
+                <Box m={7} maxWidth="75%">
+                    {
+                        familyMembers.map((familyMember) => (
+                            <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={4} mb={2}>
+                                <Input placeholder="First Name" value={familyMember.firstName} disabled />
+                                <Input placeholder="Last Name" value={familyMember.lastName} disabled />
+                                <DatePicker
+                                    required
+                                    minDate={moment().subtract(85, 'years').toDate()}
+                                    maxDate={new Date()}
+                                    value={familyMember.dob}
+                                    disabled
+                                />
+                                <Button
+                                    backgroundColor="red"
+                                    color="white"
+                                    maxWidth={100}
+                                    rightIcon={<BsTrash2 />}
+                                    onClick={
+                                        (e) => {
+                                            setFamilyMembers(
+                                                familyMembers.filter((a) => a.id !== familyMember.id),
+                                            );
+                                        }
+                                    }
+                                >
+                                    Remove
+                                </Button>
+                            </SimpleGrid>
+                        ))
+                    }
+                    <Text fontSize="xs">
+                        Family members consist of anyone in a household who is either a child, spouse or domestic
+                        partner. Please note: children aged 18 and up must be in the same household, and either a
+                        student, active miltary, or disabled adult to be on a family membership. Any children
+                        outside of these categories should apply for their own membership, even if they still reside
+                        at your address.  Attestation of insurance
+                        is required for all family members if your application is accepted.
+                    </Text>
+                </Box>
                 <SimpleGrid m={7}>
                     <Box maxWidth="50%">
                         <Text>Signature</Text>
