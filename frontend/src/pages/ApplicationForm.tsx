@@ -1,5 +1,4 @@
-/* eslint-disable max-len */
-/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-curly-newline */
 import React, { useEffect, useState } from 'react';
 import {
     Accordion,
@@ -8,7 +7,7 @@ import {
     AccordionItem,
     AccordionPanel,
     Box, Button, ChakraProvider, Divider, Image, Input, SimpleGrid, Stat,
-    StatHelpText, StatLabel, StatNumber, Tag, Text, Textarea, VStack,
+    StatHelpText, StatLabel, StatNumber, Text, VStack,
     useDisclosure,
 } from '@chakra-ui/react';
 import { BsTrash2, BsPersonPlus } from 'react-icons/bs';
@@ -72,28 +71,6 @@ function ApplicationForm() {
         }
         document.title = `PRA application - ${season} season`;
     });
-
-    const familyMemberList: any[] = [];
-
-    for (let index = 0; index < familyMembers.length; index++) {
-        const familyMemberComponent = (
-            <>
-                <Tag size="md" colorScheme="orange">{`Family member ${index + 1}`}</Tag>
-                <SimpleGrid columns={{ sm: 2, md: 4 }} spacing={4} mb={2}>
-                    <Input placeholder="First Name" value={familyMembers[index].firstName} disabled />
-                    <Input placeholder="Last Name" value={familyMembers[index].lastName} disabled />
-                    <DatePicker
-                        required
-                        minDate={moment().subtract(85, 'years').toDate()}
-                        maxDate={new Date()}
-                        value={familyMembers[index].dob}
-                        disabled
-                    />
-                </SimpleGrid>
-            </>
-        );
-        familyMemberList.push(familyMemberComponent);
-    }
 
     return (
         <ChakraProvider theme={theme}>
@@ -243,7 +220,9 @@ function ApplicationForm() {
                         <Input
                             onChange={
                                 async (e) => {
-                                    const emailValue = e.target.value;
+                                    let emailValue = e.target.value;
+                                    emailValue = emailValue.replace(/\s/gi, '');
+                                    e.target.value = emailValue;
                                     setEmail(emailValue);
                                     if (isEmail(emailValue)) {
                                         const appExists = await applicationExists(emailValue);
@@ -401,7 +380,10 @@ function ApplicationForm() {
                                                             {`${familyMember.firstName} ${familyMember.lastName}`}
                                                         </StatNumber>
                                                         <StatHelpText>
-                                                            {`${moment(new Date()).diff(familyMember.dob, 'years')} years old`}
+                                                            {
+                                                                // eslint-disable-next-line max-len
+                                                                `${moment(new Date()).diff(familyMember.dob, 'years')} years old`
+                                                            }
                                                         </StatHelpText>
                                                     </Stat>
                                                     <Button
@@ -411,7 +393,7 @@ function ApplicationForm() {
                                                         height={25}
                                                         leftIcon={<BsTrash2 />}
                                                         onClick={
-                                                            (e) => {
+                                                            () => {
                                                                 setFamilyMembers(
                                                                     // eslint-disable-next-line max-len
                                                                     familyMembers.filter((a) => a.id !== familyMember.id),
@@ -496,7 +478,6 @@ function ApplicationForm() {
                     Submit
                 </Button>
             </Box>
-            <Textarea value={applicationJson} />
             <SimpleAlertModal
                 title="Existing PRA member or applicant"
                 message={alertMsg}
