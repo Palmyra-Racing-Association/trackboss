@@ -46,17 +46,6 @@ const columns: any = [
         sortable: true,
     },
     {
-        name: 'Cash ($)',
-        selector: (row: Job) => {
-            if (row.paid) {
-                return `$${row.cashPayout}`;
-            }
-            return 0;
-        },
-        sortable: true,
-        hide: 'sm',
-    },
-    {
         name: 'Earned By',
         selector: (row: Job) => `${row.member}`,
         wrap: true,
