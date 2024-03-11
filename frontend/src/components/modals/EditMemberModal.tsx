@@ -43,7 +43,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [phoneNumber, setPhoneNumber] = useState<string>(selectedMember.phoneNumber);
     const [email, setEmail] = useState<string>(selectedMember.email || '');
     const [dirty, setDirty] = useState<boolean>(false);
-    const [phoneValid, setPhoneValid] = useState<boolean>(isMobilePhone(phoneNumber, 'en-US'));
+    const [phoneValid, setPhoneValid] = useState<boolean>(false);
     const [emailValid, setEmailValid] = useState<boolean>(isEmail(email));
     const [birthdate, setBirthDate] = useState<Date>(moment(selectedMember.birthdate).toDate() || moment().toDate());
     const [membershipType, setMembershipType] = useState<number>(selectedMember.membershipTypeId);

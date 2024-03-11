@@ -40,11 +40,11 @@ function ApplicationForm() {
     const [firstName, setFirstName] = useState<string>();
     const [lastName, setLastName] = useState<string>();
     const [address, setAddress] = useState<string>();
-    const [zipCode, setZipCode] = useState<string>();
+    const [zip, setZip] = useState<string>();
     const [city, setCity] = useState<string>();
     const [state, setState] = useState<string>();
     const [email, setEmail] = useState<string>('');
-    const [phoneNumber, setPhoneNumber] = useState<string>();
+    const [phone, setPhone] = useState<string>();
     const [birthDate, setBirthDate] = useState<Date>();
     const [occupation, setOccupation] = useState<string>();
     const [referredBy, setReferredBy] = useState<string>();
@@ -103,6 +103,11 @@ function ApplicationForm() {
                     <Text>
                         For ease of processing, we are only accepting applications online. If you need a paper
                         application, please contact us.
+                    </Text>
+                </Box>
+                <Box ml={5}>
+                    <Text fontSize="lg">
+                        Primary Member
                     </Text>
                 </Box>
                 <SimpleGrid columns={{ sm: 1, md: 2 }} m={5}>
@@ -196,7 +201,7 @@ function ApplicationForm() {
                                         }
                                     });
                                     setAddress(mapsStreetAddress);
-                                    setZipCode(mapsZipCode);
+                                    setZip(mapsZipCode);
                                 }
                             }
                         />
@@ -210,8 +215,8 @@ function ApplicationForm() {
                             autocomplete="new-password"
                             style={chakraStyleForNonChakra}
                             defaultCountry="US"
-                            value={phoneNumber}
-                            onChange={setPhoneNumber}
+                            value={phone}
+                            onChange={setPhone}
                         />
                     </Box>
                     <Box m={2}>
@@ -435,8 +440,8 @@ function ApplicationForm() {
                     backgroundColor="orange.300"
                     color="white"
                     isDisabled={
-                        !_.every([firstName, lastName, address, zipCode, city,
-                            state, isEmail(email), phoneNumber, birthDate])
+                        !_.every([firstName, lastName, address, zip, city,
+                            state, isEmail(email), phone, birthDate])
                     }
                     onClick={
                         () => {
@@ -446,16 +451,16 @@ function ApplicationForm() {
                                 address,
                                 city,
                                 state,
-                                zipCode,
+                                zip,
                                 email,
-                                phoneNumber,
+                                phone,
                                 birthDate,
                                 occupation,
                                 referredBy,
                                 familyMembers,
                             };
                             setApplicationJson(JSON.stringify(application));
-                            /*
+
                             fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication`, {
                                 method: 'POST',
                                 mode: 'cors',
@@ -467,7 +472,7 @@ function ApplicationForm() {
                                 },
                                 body: JSON.stringify(application),
                             });
-                            */
+
                             setEmail('');
                             onConfirmOpen();
                             // window.location.href = 'https://palmyramx.com';
