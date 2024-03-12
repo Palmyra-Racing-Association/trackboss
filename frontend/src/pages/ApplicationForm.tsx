@@ -460,7 +460,7 @@ function ApplicationForm() {
                                 familyMembers,
                             };
                             setApplicationJson(JSON.stringify(application));
-
+                            /*
                             fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication`, {
                                 method: 'POST',
                                 mode: 'cors',
@@ -472,7 +472,7 @@ function ApplicationForm() {
                                 },
                                 body: JSON.stringify(application),
                             });
-
+                            */
                             setEmail('');
                             onConfirmOpen();
                             // window.location.href = 'https://palmyramx.com';
@@ -491,7 +491,7 @@ function ApplicationForm() {
             />
             <SimpleAlertModal
                 title="Application submitted"
-                message={`Your application has been submitted and we've sent a confirmation email. ${applicationJson}`}
+                message={`Your application has been submitted and we've sent a confirmation email. ${applicationJson}.`}
                 isOpen={isConfirmOpen}
                 onClose={onConfirmClose}
             />

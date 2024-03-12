@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, Text } from '@chakra-ui/react';
+import moment from 'moment';
 
 export default function NameAddressDisplay(props: any) {
     const { addressContainer } = props;
@@ -31,7 +32,8 @@ export default function NameAddressDisplay(props: any) {
             <Text fontSize="md">
                 DOB:
                 &nbsp;
-                {addressContainer.birthDate}
+                {moment(addressContainer.birthDate).format('MM-DD-YYYY')}
+                {`(${moment(new Date()).diff(addressContainer.birthDate, 'years')})`}
             </Text>
         </>
     );

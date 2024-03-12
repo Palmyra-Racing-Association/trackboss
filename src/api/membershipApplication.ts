@@ -13,7 +13,7 @@ import {
 
 import logger from '../logger';
 import { checkHeader, verify } from '../util/auth';
-import { PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
+import { Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
 import { MembershipApplication } from '../typedefs/membershipApplication';
 import { PostNewMembershipRequest } from '../typedefs/membership';
 import { insertMembership } from '../database/membership';
@@ -75,7 +75,7 @@ membershipApplication.post('/', async (req: Request, res: Response) => {
         application.googleLink = `https://www.google.com/search?q=${application.firstName}+${application.lastName}+${application.city}+${application.state}`;
         const insertId = await insertMembershipApplication(application);
         application.id = insertId;
-        // await sendAppConfirmationEmail(application);
+        await sendAppConfirmationEmail(application);
         res.send(application);
     } catch (error: any) {
         logger.error(error);
@@ -183,6 +183,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             billingYear,
         });
         await generateSquareLinks(billingYear, newMembershipId);
+        // TODO: this really needs type checking, otherwise it is prone to typeos and speling erors can mess it up.
         application.familyMembers.forEach(async (familyMember) => {
             // set required fields
             const newMemberFamily = familyMember;
@@ -191,10 +192,10 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             newMemberFamily.occupation = '';
             // no email - they can add this later if they want access
             newMemberFamily.email = '';
-            newMemberFamily.phone = application.phone;
+            newMemberFamily.phoneNumber = phoneNumber;
             newMemberFamily.dateJoined = newMemberJoinDate;
-            // canada does the dates correctly without string processign, eh
-            newMemberFamily.birthDate = format(new Date(familyMember.dob), 'yyyy-MM-dd');
+            newMemberFamily.birthdate = format(new Date(familyMember.dob), 'yyyy-MM-dd');
+            newMemberFamily.lastModifiedBy = actingUser.memberId;
             // now insert the new family member.
             await insertMember(newMemberFamily);
         });

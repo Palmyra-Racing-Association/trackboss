@@ -4,6 +4,7 @@ import {
     Alert, AlertIcon, Button, Divider, Grid, GridItem, Heading, Link, ListItem, Modal, ModalContent, ModalFooter,
     ModalOverlay, OrderedList, SimpleGrid, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack,
 } from '@chakra-ui/react';
+import moment from 'moment';
 import { MembershipApplication } from '../../../../src/typedefs/membershipApplication';
 import NameAddressDisplay from '../shared/NameAddressDisplay';
 import { acceptMembershipApplication, rejectMembershipApplication, reviewMembershipApplication } from '../../controller/membershipApplication';
@@ -81,48 +82,19 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 </Text>
                             </TabPanel>
                             <TabPanel>
-                                {
-                                    (membershipApplication.familyMember0FirstName && (
-                                        <OrderedList>
+                                <OrderedList>
+                                    {
+                                        membershipApplication.familyMembers && (membershipApplication.familyMembers.map((familyMember: any) => (
                                             <ListItem>
-                                                {membershipApplication.familyMember0FirstName}
+                                                {familyMember.firstName}
                                                 &nbsp;
-                                                {membershipApplication.familyMember0LastName}
+                                                {familyMember.lastName}
                                                 &nbsp;
-                                                {membershipApplication.familyMember0Age}
+                                                {`(${moment(new Date()).diff(familyMember.dob, 'years')})`}
                                             </ListItem>
-                                            <ListItem>
-                                                {membershipApplication.familyMember1FirstName}
-                                                &nbsp;
-                                                {membershipApplication.familyMember1LastName}
-                                                &nbsp;
-                                                {membershipApplication.familyMember1Age}
-                                            </ListItem>
-                                            <ListItem>
-                                                {membershipApplication.familyMember2FirstName}
-                                                &nbsp;
-                                                {membershipApplication.familyMember2LastName}
-                                                &nbsp;
-                                                {membershipApplication.familyMember2Age}
-                                            </ListItem>
-                                            <ListItem>
-                                                {membershipApplication.familyMember3FirstName}
-                                                &nbsp;
-                                                {membershipApplication.familyMember3LastName}
-                                                &nbsp;
-                                                {membershipApplication.familyMember3Age}
-                                            </ListItem>
-                                            <ListItem>
-                                                {membershipApplication.familyMember4FirstName}
-                                                &nbsp;
-                                                {membershipApplication.familyMember4LastName}
-                                                &nbsp;
-                                                {membershipApplication.familyMember4Age}
-                                            </ListItem>
-                                        </OrderedList>
-                                    )
-                                    )
-                                }
+                                        )))
+                                    }
+                                </OrderedList>
                             </TabPanel>
                             <TabPanel>
                                 <VStack spacing={2}>
@@ -180,6 +152,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 color="white"
                                 variant="ghost"
                                 size="lg"
+                                isDisabled={!isInReview}
                                 onClick={
                                     async () => {
                                         await reviewMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
