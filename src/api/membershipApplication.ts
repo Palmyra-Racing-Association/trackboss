@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { parseISO } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import { sendAppConfirmationEmail, sendAppRejectedEmail, sendNewMemberEmail } from '../util/email';
 import {
     applicationExistsForEmail,
@@ -13,7 +13,7 @@ import {
 
 import logger from '../logger';
 import { checkHeader, verify } from '../util/auth';
-import { PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
+import { Member, PatchMemberRequest, PostNewMemberRequest } from '../typedefs/member';
 import { MembershipApplication } from '../typedefs/membershipApplication';
 import { PostNewMembershipRequest } from '../typedefs/membership';
 import { insertMembership } from '../database/membership';
@@ -133,9 +133,9 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         // Cognito user, and send an email to the user letting them know they have one.
         const application : MembershipApplication = await getMembershipApplication(Number(req.params.id));
         // phone number processing with valid country code etc.
-        let phoneNumber = application.phone;
+        let phoneNumber = application.phone || application.phoneNumber;
         phoneNumber = phoneNumber.replace(/-/g, '');
-        phoneNumber = `+1${phoneNumber}`;
+        const newMemberJoinDate = new Date().toISOString().slice(0, 10).replace('T', ' ');
         const newMember : PostNewMemberRequest = {
             // Magic numberism warning: this means "Membership Admin", aka, the default account on a
             // membership.  At some point, need to go back and fix this nonsense.
@@ -147,7 +147,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             email: application.email,
             birthdate: parseISO(application.birthDate).toISOString().slice(0, 10).replace('T', ' '),
             // when did they join? RIGHT FREAKING NOW THAT'S WHEN! :)
-            dateJoined: new Date().toISOString().slice(0, 10).replace('T', ' '),
+            dateJoined: newMemberJoinDate,
             modifiedBy: actingUser.memberId,
             membershipType,
         };
@@ -183,6 +183,22 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             billingYear,
         });
         await generateSquareLinks(billingYear, newMembershipId);
+        // TODO: this really needs type checking, otherwise it is prone to typeos and speling erors can mess it up.
+        application.familyMembers.forEach(async (familyMember) => {
+            // set required fields
+            const newMemberFamily = familyMember;
+            newMemberFamily.memberTypeId = 9;
+            newMemberFamily.membershipId = newMembershipId;
+            newMemberFamily.occupation = '';
+            // no email - they can add this later if they want access
+            newMemberFamily.email = '';
+            newMemberFamily.phoneNumber = phoneNumber;
+            newMemberFamily.dateJoined = newMemberJoinDate;
+            newMemberFamily.birthdate = format(new Date(familyMember.dob), 'yyyy-MM-dd');
+            newMemberFamily.lastModifiedBy = actingUser.memberId;
+            // now insert the new family member.
+            await insertMember(newMemberFamily);
+        });
         logger.info(`Generated bill ${billId} for membership ${newMembershipId} - application converted to member.`);
         const newMemberRecord = await getMember(`${primaryMemberId}`);
     } catch (error: any) {
