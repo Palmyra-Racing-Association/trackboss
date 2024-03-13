@@ -65,7 +65,13 @@ function Dashboard() {
 
     async function loadBills() {
         const bills = await getBillsForMembership(state.token, state.user?.membershipId || 0) as Bill[];
-        setLastBill(bills[bills.length - 1]);
+        const today = new Date();
+        let billYear = today.getFullYear() - 1;
+        if ((today.getMonth() > 10) && (today.getDay() > 14)) {
+            billYear = today.getFullYear();
+        }
+        const displayBill = bills.filter((bill) => bill.year === billYear);
+        setLastBill(displayBill[0]);
     }
 
     useEffect(() => {
