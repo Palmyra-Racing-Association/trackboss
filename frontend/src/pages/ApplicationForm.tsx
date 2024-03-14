@@ -11,7 +11,7 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import { BsTrash2, BsPersonPlus } from 'react-icons/bs';
-import PhoneInput from 'react-phone-number-input/input';
+import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input/input';
 import 'react-phone-number-input/style.css';
 import { isEmail } from 'validator';
 import Autocomplete from 'react-google-autocomplete';
@@ -439,10 +439,11 @@ function ApplicationForm() {
                 <Button
                     backgroundColor="orange.300"
                     color="white"
-                    isDisabled={
+                    isLoading={
                         !_.every([firstName, lastName, address, zip, city,
-                            state, isEmail(email), phone, birthDate])
+                            state, isEmail(email), isValidPhoneNumber(phone || ''), birthDate])
                     }
+                    loadingText="Please complete all fields"
                     onClick={
                         () => {
                             const application = {
@@ -460,7 +461,7 @@ function ApplicationForm() {
                                 familyMembers,
                             };
                             setApplicationJson(JSON.stringify(application));
-                            /*
+
                             fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication`, {
                                 method: 'POST',
                                 mode: 'cors',
@@ -472,10 +473,9 @@ function ApplicationForm() {
                                 },
                                 body: JSON.stringify(application),
                             });
-                            */
+
                             setEmail('');
                             onConfirmOpen();
-                            // window.location.href = 'https://palmyramx.com';
                         }
                     }
                     m={5}
@@ -491,9 +491,17 @@ function ApplicationForm() {
             />
             <SimpleAlertModal
                 title="Application submitted"
-                message={`Your application has been submitted and we've sent a confirmation email. ${applicationJson}.`}
+                message={
+                    `Your application has been submitted and we've sent a confirmation email. Redirecting back to our
+                    main website now.${applicationJson}.`
+                }
                 isOpen={isConfirmOpen}
-                onClose={onConfirmClose}
+                onClose={
+                    () => {
+                        onConfirmClose();
+                        window.location.href = 'https://palmyramx.com';
+                    }
+                }
             />
         </ChakraProvider>
     );
