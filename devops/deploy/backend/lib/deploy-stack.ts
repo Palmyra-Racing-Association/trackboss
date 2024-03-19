@@ -240,6 +240,12 @@ export class DeployStack extends Stack {
     inboundMemberCommLambda.addEventSource(new lambdaEventSources.SqsEventSource(emailQueue));
     inboundMemberCommLambda.addEventSource(new lambdaEventSources.SqsEventSource(textQueue));
 
+    const apiLambda = new lambda.Function(this, 'ApiLambda', {
+        runtime: lambda.Runtime.NODEJS_16_X,
+        code: lambda.Code.fromAsset('../../../lambda/api'),
+        handler: 'lambda.handler',
+    });
+    
     new ssm.StringParameter(this, 'cognitoPoolId', {
       allowedPattern: '.*',
       parameterName: 'cognitoPoolId',
