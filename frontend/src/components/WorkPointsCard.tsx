@@ -27,7 +27,7 @@ export default function WorkPointsCard(props: cardProps) {
             boxShadow="md"
             border="1px"
             borderColor="gray.200"
-            h="365"
+            h="375"
             p={3}
             m={2}
         >
