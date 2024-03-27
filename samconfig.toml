@@ -1,0 +1,9 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "trackboss-lambda"
+resolve_s3 = true
+s3_prefix = "trackboss-lambda"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = ["ExpressFunction=425610073499.dkr.ecr.us-east-1.amazonaws.com/trackbosslambda80691ae9/expressfunction9fcbc1barepo"]

@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import express from 'express';
 import AWS from 'aws-sdk';
 import api from './api/api';
