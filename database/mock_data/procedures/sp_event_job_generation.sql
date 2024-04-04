@@ -13,6 +13,7 @@ BEGIN
     DECLARE cur_job_type INTEGER DEFAULT 0;
     DECLARE cur_count INTEGER DEFAULT 0;
 	DECLARE sqlDOW INT;
+    DECLARE _event_type VARCHAR(255);
     
     DECLARE cursorEJ CURSOR FOR
 		select job_type_id, count from event_job 
@@ -25,6 +26,9 @@ BEGIN
 	INSERT INTO event(start_date, end_date, event_type_id, event_name, event_description) VALUES (_event_start_date, _event_end_date, _event_type_id, _event_name, _event_description);
     SELECT LAST_INSERT_ID() INTO _event_id;
     
+    SELECT type INTO _event_type FROM event_type WHERE event_type_id = _event_type_id;
+
+
     ## Open the cursor to start our job generation
     OPEN cursorEJ;
     getEventJob: LOOP
@@ -37,9 +41,15 @@ BEGIN
 		lab1: REPEAT
         
         # Get the JobDayNumber(this was taken from Alan DB)
-        SELECT job_day_number, start_time, end_time, point_value, cash_value INTO @JobDayNumber, @StartTime, @EndTime, @Points, @Cash FROM job_type WHERE job_type_id = cur_job_type; 
-        
-        SET @JobDate = DATE_ADD(_event_start_date, interval @JobDayNumber-1 DAY);
+        SELECT job_day_number, start_time, end_time, point_value, cash_value INTO @JobDayNumber, @StartTime, @EndTime, @Points, @Cash FROM job_type WHERE job_type_id = cur_job_type;
+
+        SET @JobDayInterval = 0;
+        # only Races get job days tied to them as they can be multi day.  Everything else is a single.
+        if (_event_type = 'Race') THEN
+            SET @JobDayInterval = @JobDayNumber - 1;
+        END IF;
+
+        SET @JobDate = DATE_ADD(_event_start_date, interval @JobDayInterval DAY);
 		SET @JobStart = cast(concat(@JobDate, 'T', @StartTime) as datetime);
 		SET @JobEnd = cast(concat(@JobDate, 'T', @EndTime) as datetime);
 		INSERT INTO job(event_id, job_type_id, job_start_date, job_end_date, verified, paid, points_awarded, cash_payout) VALUES
