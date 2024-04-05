@@ -1,24 +1,26 @@
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 import { CognitoJwtVerifierSingleUserPool } from 'aws-jwt-verify/cognito-verifier';
 import { Request, Response } from 'express';
+import { getCognitoClientId, getCognitoPoolId } from './environmentWrapper';
 import { getMember, getValidActors } from '../database/member';
 import logger from '../logger';
 
 let verifier: CognitoJwtVerifierSingleUserPool<{ userPoolId: string; tokenUse: 'id'; clientId: string[]; }> | null;
 
-const createVerifier = () => {
-    if (!process.env.COGNITO_POOL_ID) {
+const createVerifier = async () => {
+    const poolId = await getCognitoPoolId();
+    const clientId = await getCognitoClientId();
+    if (!poolId) {
         logger.error('No Cognito User Pool ID specified in environment');
         throw new Error('Auth setup failed due to missing pool ID');
     }
-    if (!process.env.COGNITO_CLIENT_ID) {
+    if (!clientId) {
         logger.error('No Cognito Client ID in environment');
         throw new Error('Auth setup failed due to missing client ID');
     }
-    const clientId = process.env.COGNITO_CLIENT_ID as string;
     const clientIds = clientId.split(',');
     verifier = CognitoJwtVerifier.create({
-        userPoolId: process.env.COGNITO_POOL_ID,
+        userPoolId: poolId,
         tokenUse: 'id',
         clientId: clientIds,
     });

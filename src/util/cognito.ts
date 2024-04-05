@@ -2,6 +2,7 @@ import AWS from 'aws-sdk';
 import logger from '../logger';
 import { Member } from '../typedefs/member';
 import { sendPasswordReset } from './email';
+import { getCognitoPoolId } from './environmentWrapper';
 
 /**
  * Create a new user in Cognito to allow them to login.
@@ -11,7 +12,7 @@ import { sendPasswordReset } from './email';
  * @returns the user UUID in cognito.
  */
 export async function createCognitoUser(email: string, isMembershipAdmin: boolean) {
-    const poolId = process.env.COGNITO_POOL_ID || '';
+    const poolId = await getCognitoPoolId() || '';
     const cognitoIdp = new AWS.CognitoIdentityServiceProvider();
     const createResponse = await cognitoIdp.adminCreateUser({
         UserPoolId: poolId,
@@ -59,7 +60,7 @@ export async function createCognitoUser(email: string, isMembershipAdmin: boolea
 
 export async function deleteCognitoUser(uuid: string) {
     logger.info(`Removing user ${uuid} from Cognito`);
-    const poolId = process.env.COGNITO_POOL_ID || '';
+    const poolId = await getCognitoPoolId() || '';
     const cognitoIdp = new AWS.CognitoIdentityServiceProvider();
     const deleteResponse = await cognitoIdp.adminDeleteUser({
         UserPoolId: poolId,
@@ -71,7 +72,7 @@ export async function deleteCognitoUser(uuid: string) {
 
 export async function updateCognitoUserEmail(member: Member) {
     logger.info(`Updating an email address for ${member.uuid} in Cognito`);
-    const poolId = process.env.COGNITO_POOL_ID || '';
+    const poolId = await getCognitoPoolId() || '';
     const cognitoIdp = new AWS.CognitoIdentityServiceProvider();
     const updateResponse = cognitoIdp.adminUpdateUserAttributes({
         UserPoolId: poolId,
@@ -93,7 +94,7 @@ export async function updateCognitoUserEmail(member: Member) {
 
 export async function resetCognitoPassword(member: Member, defaultValue: string) {
     logger.info(`Resetting password for user ${member.uuid} in Cognito`);
-    const poolId = process.env.COGNITO_POOL_ID || '';
+    const poolId = await getCognitoPoolId() || '';
     const cognitoIdp = new AWS.CognitoIdentityServiceProvider();
     let resetResponse;
     if (!defaultValue) {
