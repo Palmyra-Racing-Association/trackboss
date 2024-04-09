@@ -13,6 +13,7 @@ import { aws_sqs as sqs } from 'aws-cdk-lib';
 import { aws_lambda as lambda } from 'aws-cdk-lib';
 import { aws_lambda_event_sources as lambdaEventSources } from 'aws-cdk-lib';
 import { DatabaseInstanceEngine, MysqlEngineVersion } from 'aws-cdk-lib/aws-rds';
+import { FckNatInstanceProvider } from 'cdk-fck-nat'
 
 export class DeployStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
@@ -280,6 +281,15 @@ export class DeployStack extends Stack {
         stringValue: account,
         tier: ssm.ParameterTier.STANDARD,
     });
+
+    const fckNatGateway = new FckNatInstanceProvider({
+        instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
+    });
+    const privateVpc = new ec2.Vpc(this, 'privateVpc', {
+        vpcName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}-private-vpc`,
+        natGatewayProvider: fckNatGateway,
+    });
+    fckNatGateway.securityGroup.addIngressRule(ec2.Peer.ipv4(privateVpc.vpcCidrBlock), ec2.Port.allTraffic());
 
     new CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,
