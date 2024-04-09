@@ -25,9 +25,13 @@ export default function MemberSelector(props: MemberSelectorProps) {
             }
             activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
             const options = activeMembers.map((member) => {
+                let memberName = `${member.lastName}, ${member.firstName}`;
+                if (member.memberId !== member.membershipAdminId) {
+                    memberName += '*';
+                }
                 const option = {
                     value: member.memberId,
-                    label: `${member.lastName}, ${member.firstName}`,
+                    label: memberName,
                 };
                 return option;
             });
