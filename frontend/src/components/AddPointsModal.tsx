@@ -85,8 +85,9 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                                 }
                             />
                             <NumberInput
-                                min={1}
+                                min={0}
                                 max={30}
+                                defaultValue={0}
                                 step={0.25}
                                 onChange={
                                     (changeValue) => {
