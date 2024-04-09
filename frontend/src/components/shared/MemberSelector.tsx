@@ -21,8 +21,9 @@ export default function MemberSelector(props: MemberSelectorProps) {
             let activeMembers = await getMembersByMembership(state.token, state.user?.membershipId || 0);
             if (props.isAdmin) {
                 activeMembers = await getMemberList(state.token) as Member[];
+                activeMembers = activeMembers.filter((listedMember) => listedMember.active);
             }
-            // activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
+            activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
             const options = activeMembers.map((member) => {
                 const option = {
                     value: member.memberId,
