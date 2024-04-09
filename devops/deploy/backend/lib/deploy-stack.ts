@@ -267,6 +267,20 @@ export class DeployStack extends Stack {
       tier: ssm.ParameterTier.STANDARD,
     });
 
+    new ssm.StringParameter(this, 'trackbossEnvironmentName', {
+        allowedPattern: '.*',
+        parameterName: 'trackbossEnvironmentName',
+        stringValue: 'trackboss',
+        tier: ssm.ParameterTier.STANDARD,
+    });
+
+    new ssm.StringParameter(this, 'account', {
+        allowedPattern: '.*',
+        parameterName: 'account',
+        stringValue: account,
+        tier: ssm.ParameterTier.STANDARD,
+    });
+
     new CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,
     });
