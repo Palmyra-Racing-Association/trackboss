@@ -282,9 +282,13 @@ export class DeployStack extends Stack {
         tier: ssm.ParameterTier.STANDARD,
     });
 
-    const fckNatGateway = new FckNatInstanceProvider({
+    const fckNatGateway = new ec2.NatInstanceProvider({
         instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
-    });
+        machineImage: new ec2.LookupMachineImage({
+            name: 'fck-nat-al2023-*-arm64-ebs',
+            owners: ['568608671756'],
+        })
+    })
     const privateVpc = new ec2.Vpc(this, 'privateVpc', {
         vpcName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}-private-vpc`,
         natGatewayProvider: fckNatGateway,
