@@ -12,6 +12,7 @@ import { createJobType } from '../controller/jobType';
 import { JobType, PostNewJobTypeRequest } from '../../../src/typedefs/jobType';
 import { Job, PostNewJobRequest } from '../../../src/typedefs/job';
 import { createJob } from '../controller/job';
+import MemberSelector from './shared/MemberSelector';
 
 interface AddPointsModalProps {
     memberName: string,
@@ -32,6 +33,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
     const [pointValue, setPointValue] = useState<number>(0);
     const [dirty, setDirty] = useState<boolean>(false);
     const [workDate, setWorkDate] = useState<any>(new Date());
+    const [selectedOption, setSelectedOption] = useState<any>();
     const toast = useToast();
     let addButton =
         (
@@ -73,6 +75,11 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                     <ModalCloseButton />
                     <ModalBody>
                         <VStack>
+                            <MemberSelector
+                                isAdmin={false}
+                                membershipId={props.membershipId}
+                                setSelectedOption={setSelectedOption}
+                            />
                             <Input
                                 placeholder="Description of work performed"
                                 value={description}
@@ -142,7 +149,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                                     const workDateFormatted = moment(workDate).format('YYYY-MM-DD HH:mm');
                                     const createJobRequest : PostNewJobRequest = {
                                         jobTypeId: createdJobType.jobTypeId,
-                                        memberId: props.memberId,
+                                        memberId: selectedOption.value,
                                         membershipId: props.membershipId,
                                         jobStartDate: workDateFormatted,
                                         jobEndDate: workDateFormatted,
