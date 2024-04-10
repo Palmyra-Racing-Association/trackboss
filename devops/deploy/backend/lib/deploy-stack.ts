@@ -13,7 +13,7 @@ import { aws_sqs as sqs } from 'aws-cdk-lib';
 import { aws_lambda as lambda } from 'aws-cdk-lib';
 import { aws_lambda_event_sources as lambdaEventSources } from 'aws-cdk-lib';
 import { DatabaseInstanceEngine, MysqlEngineVersion } from 'aws-cdk-lib/aws-rds';
-import { FckNatInstanceProvider } from 'cdk-fck-nat'
+import { FckNatInstanceProvider } from 'cdk-fck-nat';
 
 export class DeployStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
@@ -282,19 +282,16 @@ export class DeployStack extends Stack {
         tier: ssm.ParameterTier.STANDARD,
     });
 
-    const fckNatGateway = new ec2.NatInstanceProvider({
+    /*
+    const fckNatGateway = new FckNatInstanceProvider({
         instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
-        machineImage: new ec2.LookupMachineImage({
-            name: 'fck-nat-al2023-*-arm64-ebs',
-            owners: ['568608671756'],
-        })
-    })
+    });
     const privateVpc = new ec2.Vpc(this, 'privateVpc', {
         vpcName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}-private-vpc`,
         natGatewayProvider: fckNatGateway,
     });
     fckNatGateway.securityGroup.addIngressRule(ec2.Peer.ipv4(privateVpc.vpcCidrBlock), ec2.Port.allTraffic());
-
+    */
     new CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,
     });
