@@ -5,7 +5,7 @@ import { getCognitoClientId, getCognitoPoolId } from './environmentWrapper';
 import { getMember, getValidActors } from '../database/member';
 import logger from '../logger';
 
-let verifier: CognitoJwtVerifierSingleUserPool<{ userPoolId: string; tokenUse: 'id'; clientId: string[]; }> | null;
+let verifier: CognitoJwtVerifierSingleUserPool<{ userPoolId: string; tokenUse: 'id'; clientId: string[]; }>;
 
 const createVerifier = async () => {
     const poolId = await getCognitoPoolId();
@@ -26,13 +26,10 @@ const createVerifier = async () => {
     });
 };
 
-const destroyVerifier = () => {
-    verifier = null;
-};
-
 const verify = async (token: string, permissionLevel?: string, targetActingAs?: number) => {
     if (!verifier) {
-        throw new Error('Attempted to use verifier before it was created');
+        // throw new Error('Attempted to use verifier before it was created');
+        await createVerifier();
     }
     try {
         const payload = await verifier.verify(token);
@@ -141,4 +138,4 @@ async function validateAdminAccess(req: Request, res: Response) : Promise<any> {
     return token;
 }
 
-export { checkHeader, createVerifier, destroyVerifier, verify, validateAdminAccess };
+export { checkHeader, createVerifier, verify, validateAdminAccess };
