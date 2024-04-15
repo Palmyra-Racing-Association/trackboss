@@ -34,5 +34,15 @@ export async function getSquareObject() {
     const secretValue = await secretsClient.getSecretValue({
         SecretId: '/trackboss/app/square',
     }).promise();
+    logger.info('Pulled Square login info');
+    return JSON.parse(secretValue.SecretString || '');
+}
+
+export async function getConnectionObject() {
+    const secretsClient = new AWS.SecretsManager();
+    const secretValue = await secretsClient.getSecretValue({
+        SecretId: '/trackboss/app/rds',
+    }).promise();
+    logger.info('Pulled database connection info');
     return JSON.parse(secretValue.SecretString || '');
 }

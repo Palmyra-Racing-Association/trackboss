@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
-import AWS from 'aws-sdk';
+import AWS, { Connect } from 'aws-sdk';
 import api from './api/api';
 import logger from './logger';
 import { createVerifier } from './util/auth';
-import { getEnvironmentParameter } from './util/environmentWrapper';
+import { getConnectionObject, getEnvironmentParameter } from './util/environmentWrapper';
 
 process.on('uncaughtException', (error, origin) => {
     logger.error('----- Uncaught exception -----');
@@ -37,6 +37,11 @@ app.use((err: any, req: any, res: any, next: () => void) => {
 
 const server = app.listen(port, async () => {
     const envName = await getEnvironmentParameter('trackbossEnvironmentName');
+    const connectionObject = await getConnectionObject();
+    process.env.MYSQL_DB = connectionObject.dbname;
+    process.env.MYSQL_HOST = connectionObject.host;
+    process.env.MYSQL_USER = connectionObject.username;
+    process.env.MYSQL_PASS = connectionObject.password;
     logger.info(`PRA Club Manager API environment ${envName} 
         listening on port ${port} on database at ${process.env.MYSQL_HOST}`);
 });
