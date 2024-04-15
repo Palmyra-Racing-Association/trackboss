@@ -7,6 +7,7 @@ import { validateAdminAccess } from '../util/auth';
 import logger from '../logger';
 import { getMemberList, getMembersWithTag } from '../database/member';
 import { MemberCommunication } from '../typedefs/memberCommunication';
+import { getEnvironmentParameter } from '../util/environmentWrapper';
 
 const memberCommunication = Router();
 
@@ -88,9 +89,12 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
         const sqs = new AWS.SQS();
 
         logger.info(`sending communication id ${response.memberCommunicationId} to outbound queue`);
+        const region = await getEnvironmentParameter('region');
+        const account = await getEnvironmentParameter('account');
+        const sqsUrl = `https://sqs.${region}.amazonaws.com/${account}/${outboundQueueName}`;
         sqs.sendMessage({
             MessageBody: JSON.stringify(response),
-            QueueUrl: `${process.env.SQS_URL}/${outboundQueueName}`,
+            QueueUrl: sqsUrl,
         }, (error, messageResult) => {
             if (error) {
                 logger.error(`queue send failed for communication ${response.memberCommunicationId} due to `, error);

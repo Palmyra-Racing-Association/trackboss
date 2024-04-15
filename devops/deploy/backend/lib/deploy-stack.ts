@@ -282,6 +282,13 @@ export class DeployStack extends Stack {
         tier: ssm.ParameterTier.STANDARD,
     });
 
+    new ssm.StringParameter(this, 'region', {
+        allowedPattern: '.*',
+        parameterName: 'region',
+        stringValue: region,
+        tier: ssm.ParameterTier.STANDARD,
+    });
+    
     /*
     const fckNatGateway = new FckNatInstanceProvider({
         instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),

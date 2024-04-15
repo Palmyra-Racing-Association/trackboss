@@ -4,6 +4,7 @@ import AWS from 'aws-sdk';
 import api from './api/api';
 import logger from './logger';
 import { createVerifier } from './util/auth';
+import { getEnvironmentParameter } from './util/environmentWrapper';
 
 process.on('uncaughtException', (error, origin) => {
     logger.error('----- Uncaught exception -----');
@@ -34,8 +35,9 @@ app.use((err: any, req: any, res: any, next: () => void) => {
     next();
 });
 
-const server = app.listen(port, () => {
-    logger.info(`PRA Club Manager API environment ${process.env.TRACKBOSS_ENVIRONMENT_NAME} 
+const server = app.listen(port, async () => {
+    const envName = await getEnvironmentParameter('trackbossEnvironmentName');
+    logger.info(`PRA Club Manager API environment ${envName} 
         listening on port ${port} on database at ${process.env.MYSQL_HOST}`);
 });
 

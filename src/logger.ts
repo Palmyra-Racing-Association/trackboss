@@ -14,7 +14,7 @@ const logFormat =
 let logTransports = [
     new transports.Console(),
     new WinstonCloudWatch({
-        logGroupName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}-api-logs`,
+        logGroupName: 'trackboss-api-logs',
         logStreamName: `${hostname()}-${new Date().toLocaleDateString('en-CA')}`,
     }),
 ];
