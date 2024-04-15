@@ -13,6 +13,7 @@ export async function getEnvironmentParameter(name: string) {
             Name: `/${name}`,
             WithDecryption: true,
         }).promise();
+        logger.info(`Retrieved environment parameter ${name}`);
         return envData.Parameter?.Value;
     } catch (error) {
         logger.error(error);
