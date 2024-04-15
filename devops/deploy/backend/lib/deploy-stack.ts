@@ -13,6 +13,9 @@ import { aws_sqs as sqs } from 'aws-cdk-lib';
 import { aws_lambda as lambda } from 'aws-cdk-lib';
 import { aws_lambda_event_sources as lambdaEventSources } from 'aws-cdk-lib';
 import { DatabaseInstanceEngine, MysqlEngineVersion } from 'aws-cdk-lib/aws-rds';
+import { aws_secretsmanager as secretsmanager } from 'aws-cdk-lib';
+import { SecretValue } from 'aws-cdk-lib';
+
 import { FckNatInstanceProvider } from 'cdk-fck-nat';
 
 export class DeployStack extends Stack {
@@ -289,7 +292,13 @@ export class DeployStack extends Stack {
         tier: ssm.ParameterTier.STANDARD,
     });
 
-    
+    new secretsmanager.Secret(this, 'squareInfo', {
+        secretName: '/trackboss/app/square',
+        secretObjectValue: {
+          locationId: SecretValue.unsafePlainText(process.env.SQUARE_LOCATION || ''),
+          token: new SecretValue(process.env.SQUARE_TOKEN || ''),
+        },
+    });
     /*
     const fckNatGateway = new FckNatInstanceProvider({
         instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
