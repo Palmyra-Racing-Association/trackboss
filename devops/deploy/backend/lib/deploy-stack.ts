@@ -288,6 +288,7 @@ export class DeployStack extends Stack {
         stringValue: region,
         tier: ssm.ParameterTier.STANDARD,
     });
+
     
     /*
     const fckNatGateway = new FckNatInstanceProvider({
