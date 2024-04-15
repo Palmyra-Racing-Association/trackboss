@@ -28,3 +28,11 @@ export async function getCognitoPoolId() {
 export async function getCognitoClientId() {
     return getEnvironmentParameter('cognitoClientId');
 }
+
+export async function getSquareObject() {
+    const secretsClient = new AWS.SecretsManager();
+    const secretValue = await secretsClient.getSecretValue({
+        SecretId: '/trackboss/app/square',
+    }).promise();
+    return JSON.parse(secretValue.SecretString || '');
+}

@@ -2,16 +2,17 @@ import { v4 } from 'uuid';
 import { Client, Environment } from 'square';
 import { Bill } from '../typedefs/bill';
 import logger from '../logger';
+import { getSquareObject } from '../util/environmentWrapper';
 
 // eslint-disable-next-line import/prefer-default-export
 export async function createPaymentLink(memberBill: Bill) {
-    const accessToken = process.env.SQUARE_TOKEN;
-    const locationId = process.env.SQUARE_LOCATION || '';
+    const squareAccess = await getSquareObject();
+    const { locationId, token } = squareAccess;
 
     // Set Square credentials and environment
     const client = new Client({
         environment: Environment.Production, // Change this to Environment.Production for live transactions
-        accessToken,
+        accessToken: token,
     });
 
     try {
@@ -27,7 +28,8 @@ export async function createPaymentLink(memberBill: Bill) {
                 referenceId: memberBill.billId.toString(),
                 lineItems: [
                     {
-                        name: `Palmyra Racing Association - ${memberBill.membershipAdmin} dues for ${memberBill.year}`,
+                        // eslint-disable-next-line max-len
+                        name: `Palmyra Racing Association - ${memberBill.membershipAdmin} dues for ${memberBill.year + 1} season`,
                         quantity: '1',
                         note: memberBill.membershipAdmin,
                         basePriceMoney: {
