@@ -38,7 +38,6 @@ app.use((err: any, req: any, res: any, next: () => void) => {
 
 const server = app.listen(port, async () => {
     const envName = await getEnvironmentParameter('trackbossEnvironmentName');
-    getPool();
     logger.info(`PRA Club Manager API environment ${envName} 
         listening on port ${port}`);
 });
