@@ -1,11 +1,39 @@
 import mysql, { Pool } from 'mysql2/promise';
 import logger from '../logger';
+import { getConnectionObject } from '../util/environmentWrapper';
 
 const DEFAULT_CONN_LIMIT = 10;
 const DEFAULT_QUEUE_LIMIT = 0;
 
 // Singleton database connection pool
 let pool: Pool | undefined;
+
+let dbConnection = {
+    username: '',
+    password: '',
+    host: '',
+    dbname: '',
+};
+
+export async function initConfig() {
+    logger.info('Getting DB connection from SM');
+    dbConnection = await getConnectionObject();
+    logger.info('Got DB connect from SM');
+    // if we can't get the connection from secrets manager then try to get it from the environment.  should only be
+    // for local dev, and even then...
+    if (!dbConnection.username) {
+        logger.info('Unable to get connection from SM so getting it from env');
+        const { MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB } = process.env;
+        dbConnection.username = MYSQL_USER || '';
+        dbConnection.password = MYSQL_PASS || '';
+        dbConnection.host = MYSQL_HOST || '';
+        dbConnection.dbname = MYSQL_DB || '';
+    }
+}
+
+(async () => {
+    await initConfig();
+})();
 
 export function getPool(): Pool {
     if (!pool) {
@@ -14,10 +42,10 @@ export function getPool(): Pool {
         // BUT FIRST: check that all the required vars are present and accounted
         // for - otherwise the server will seem to run fine... until a DB query
         // is attempted at who knows when and it crashes
-        const { MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB } = process.env;
-        [MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB].forEach((requiredEnvVar) => {
+
+        Object.keys(dbConnection).forEach((requiredEnvVar) => {
             if (!requiredEnvVar) {
-                logger.error('Fatal: error in database connection environment variables');
+                logger.error(`Fatal: error in database connection env vars. ${requiredEnvVar} missing!  Check config`);
                 throw new Error('Terminating server');
             }
         });
@@ -28,15 +56,16 @@ export function getPool(): Pool {
         const queueLimit = Number(process.env.MYSQL_QUEUE_LIMIT) || DEFAULT_QUEUE_LIMIT;
 
         pool = mysql.createPool({
-            host: MYSQL_HOST,
-            user: MYSQL_USER,
-            password: MYSQL_PASS,
-            database: MYSQL_DB,
+            host: dbConnection.host,
+            user: dbConnection.username,
+            password: dbConnection.password,
+            database: dbConnection.dbname,
             waitForConnections: true,
             timezone: '+00:00',
             connectionLimit,
             queueLimit,
         });
+        logger.info(`Build a connection pool to ${dbConnection.dbname}`);
     }
     return pool;
 }
