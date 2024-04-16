@@ -51,14 +51,17 @@ export class DeployStack extends Stack {
         })
     });
 
-    const dnsTrackbossRecord = new route53.ARecord(this, 'TrackbossAppRunnerApiAliasRecord', {
+    const dnsAppRunnerRecord = new route53.ARecord(this, 'TrackbossAppRunnerApiAliasRecord', {
         zone, 
         recordName: `${environmentName}-api.hogbackmx.com`,
         target: route53.RecordTarget.fromAlias({
             bind() {
                 return {
                     dnsName: 'ye33uzybj2.us-east-1.awsapprunner.com',
-                    hostedZoneId: zone.hostedZoneId,
+                    // this magic number is actually found here:
+                    // https://docs.aws.amazon.com/general/latest/gr/apprunner.html as AWS services host their own
+                    // hosted zones, only available in documentation.
+                    hostedZoneId: 'Z01915732ZBZKC8D32TPT',
                 }
             }
         })
