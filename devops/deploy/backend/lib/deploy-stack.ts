@@ -77,10 +77,9 @@ export class DeployStack extends Stack {
     userData.addCommands(
       'sudo su',
       'yum install -y awscli',
-      `aws s3 cp s3://praconfig/${environmentName}-env /home/ec2-user`,
       `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${dockerReg}`,
       `docker pull ${dockerImg}`,
-      `docker run -p 3000:3000 --env-file /home/ec2-user/${environmentName}-env ${dockerImg}`,
+      `docker run -p 3000:3000 ${dockerImg}`,
     );
 
     const asg = new autoscaling.AutoScalingGroup(this, 'asg', {
