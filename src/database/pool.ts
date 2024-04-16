@@ -8,7 +8,7 @@ const DEFAULT_QUEUE_LIMIT = 0;
 // Singleton database connection pool
 let pool: Pool | undefined;
 
-let dbConnection = {
+const dbConnection = {
     username: '',
     password: '',
     host: '',
@@ -16,19 +16,12 @@ let dbConnection = {
 };
 
 export async function initConfig() {
-    logger.info('Getting DB connection from SM');
-    dbConnection = await getConnectionObject();
-    logger.info('Got DB connect from SM');
-    // if we can't get the connection from secrets manager then try to get it from the environment.  should only be
-    // for local dev, and even then...
-    if (!dbConnection.username) {
-        logger.info('Unable to get connection from SM so getting it from env');
-        const { MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB } = process.env;
-        dbConnection.username = MYSQL_USER || '';
-        dbConnection.password = MYSQL_PASS || '';
-        dbConnection.host = MYSQL_HOST || '';
-        dbConnection.dbname = MYSQL_DB || '';
-    }
+    logger.info('Unable to get connection from SM so getting it from env');
+    const { MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB } = process.env;
+    dbConnection.username = MYSQL_USER || '';
+    dbConnection.password = MYSQL_PASS || '';
+    dbConnection.host = MYSQL_HOST || '';
+    dbConnection.dbname = MYSQL_DB || '';
 }
 
 (async () => {
