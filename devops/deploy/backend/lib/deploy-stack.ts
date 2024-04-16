@@ -1,4 +1,4 @@
-import { App, CfnOutput, Duration, Size, Stack, StackProps, Tags } from 'aws-cdk-lib';
+import { App, CfnOutput, Duration, Stack, StackProps, Tags } from 'aws-cdk-lib';
 import { aws_autoscaling as autoscaling } from 'aws-cdk-lib';
 import { aws_ec2 as ec2 } from 'aws-cdk-lib';
 import { aws_ecs as ecs } from 'aws-cdk-lib';
@@ -15,8 +15,6 @@ import { aws_lambda_event_sources as lambdaEventSources } from 'aws-cdk-lib';
 import { DatabaseInstanceEngine, MysqlEngineVersion } from 'aws-cdk-lib/aws-rds';
 import { aws_secretsmanager as secretsmanager } from 'aws-cdk-lib';
 import { SecretValue } from 'aws-cdk-lib';
-
-import { FckNatInstanceProvider } from 'cdk-fck-nat';
 
 export class DeployStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
@@ -128,40 +126,6 @@ export class DeployStack extends Stack {
       }),
     });
     
-    /*
-    const bastionDisk: ec2.BlockDevice = {
-      deviceName: '/dev/sda1',
-      volume: ec2.BlockDeviceVolume.ebs(30, {encrypted: true}),
-    };
-    
-    const windowsBastion = new ec2.Instance(this, 'windowsBastion', {
-      vpc,
-      instanceName: `${environmentName}-bastion`,
-      instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.T3,
-        ec2.InstanceSize.SMALL,
-      ),      
-      machineImage: new ec2.WindowsImage(ec2.WindowsVersion.WINDOWS_SERVER_2022_ENGLISH_FULL_BASE),
-      keyName: 'prakeyz',
-      blockDevices: [bastionDisk],
-    });
-
-    windowsBastion.addUserData(`
-      Set-ExecutionPolicy Bypass -Scope Process -Force; 
-      [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; 
-      iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'));
-      choco install mysql.workbench;
-      & "C:\Program Files\MySQL\MySQL Workbench 8.0 CE\MySQLWorkbench.exe"`);
-
-    // Elastic IP
-    const eip = new ec2.CfnEIP(this, "Ip", 
-      { 
-        instanceId: windowsBastion.instanceId,
-      }
-    )
-    */
-
-
     // create DB security group that allows attaching to auto scaling group
     const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
       vpc,
@@ -170,11 +134,6 @@ export class DeployStack extends Stack {
     })
 
     const rdsInboundGroups = asg.connections.securityGroups;
-    /*
-    windowsBastion.connections.securityGroups.forEach((group) => {
-      rdsInboundGroups.push(group);
-    });
-    */
 
     rdsSecurityInBound.connections.allowFrom(
       new ec2.Connections({
@@ -299,16 +258,7 @@ export class DeployStack extends Stack {
           token: new SecretValue(process.env.SQUARE_TOKEN || ''),
         },
     });
-    /*
-    const fckNatGateway = new FckNatInstanceProvider({
-        instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
-    });
-    const privateVpc = new ec2.Vpc(this, 'privateVpc', {
-        vpcName: `${process.env.TRACKBOSS_ENVIRONMENT_NAME}-private-vpc`,
-        natGatewayProvider: fckNatGateway,
-    });
-    fckNatGateway.securityGroup.addIngressRule(ec2.Peer.ipv4(privateVpc.vpcCidrBlock), ec2.Port.allTraffic());
-    */
+
     new CfnOutput(this, 'albDNS', {
       value: alb.loadBalancerDnsName,
     });
@@ -316,12 +266,6 @@ export class DeployStack extends Stack {
     new CfnOutput(this, 'apiDns', {
       value: dnsARecord.domainName,
     });
-
-    /*
-    new CfnOutput(this, 'bastionDns', {
-      value: eip.attrPublicIp,
-    })
-    */
     
   }
 }
