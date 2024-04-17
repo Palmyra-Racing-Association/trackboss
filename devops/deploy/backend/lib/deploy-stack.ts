@@ -25,48 +25,48 @@ export class DeployStack extends Stack {
     const vpc = ec2.Vpc.fromLookup(this, 'ImportVPC',{isDefault: true});
     
     const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
+    
+    // const alb = new elbv2.ApplicationLoadBalancer(this, 'alb', {
+    //   loadBalancerName: `${environmentName}-alb`,
+    //   vpc,
+    //   internetFacing: true,
+    // });
 
-    const alb = new elbv2.ApplicationLoadBalancer(this, 'alb', {
-      loadBalancerName: `${environmentName}-alb`,
-      vpc,
-      internetFacing: true,
-    });
+    // const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'trackbossZone', 
+    //     {
+    //         hostedZoneId: 'Z01677201PBLHEH8PE24N',
+    //         zoneName: 'hogbackmx.com'
+    //     },
+    // );
+    // const dnsARecord = new route53.ARecord(this, 'TrackBossApiAliasRecord', {
+    //     zone,
+    //     recordName: `${environmentName}api.hogbackmx.com`,
+    //     target: route53.RecordTarget.fromAlias({
+    //         bind() {
+    //             return {
+    //                 dnsName: alb.loadBalancerDnsName,
+    //                 hostedZoneId: alb.loadBalancerCanonicalHostedZoneId,
+    //             }
+    //         }
+    //     })
+    // });
 
-    const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'trackbossZone', 
-        {
-            hostedZoneId: 'Z01677201PBLHEH8PE24N',
-            zoneName: 'hogbackmx.com'
-        },
-    );
-    const dnsARecord = new route53.ARecord(this, 'TrackBossApiAliasRecord', {
-        zone,
-        recordName: `${environmentName}api.hogbackmx.com`,
-        target: route53.RecordTarget.fromAlias({
-            bind() {
-                return {
-                    dnsName: alb.loadBalancerDnsName,
-                    hostedZoneId: alb.loadBalancerCanonicalHostedZoneId,
-                }
-            }
-        })
-    });
+    // const hogbackmxCert = new acm.DnsValidatedCertificate(this, 'backendCertificateApi', {
+    //     domainName: '*.hogbackmx.com',
+    //     hostedZone: zone,
+    //     region: 'us-east-1',
+    // });
 
-    const hogbackmxCert = new acm.DnsValidatedCertificate(this, 'backendCertificateApi', {
-        domainName: '*.hogbackmx.com',
-        hostedZone: zone,
-        region: 'us-east-1',
-    });
-
-      const listener = alb.addListener('Listener',
-          {
-              port: 4443,
-              open: true,
-              protocol: elbv2.ApplicationProtocol.HTTPS,
-              certificates: [
-                  hogbackmxCert,
-              ],
-          }
-      );
+    //   const listener = alb.addListener('Listener',
+    //       {
+    //           port: 4443,
+    //           open: true,
+    //           protocol: elbv2.ApplicationProtocol.HTTPS,
+    //           certificates: [
+    //               hogbackmxCert,
+    //           ],
+    //       }
+    //   );
 
     const dockerReg = `${account}.dkr.ecr.${region}.amazonaws.com`;
     const dockerImg = `${dockerReg}/pra/trackbossapi:latest`;
@@ -99,32 +99,32 @@ export class DeployStack extends Stack {
       maxCapacity: 1,
     });
 
-    listener.addTargets('trackboss-api', {
-      port: 3000,
-      protocol: elbv2.ApplicationProtocol.HTTP,
-      targets: [asg],
-      priority: 1,
-      conditions: [
-        elbv2.ListenerCondition.hostHeaders(
-            [`${environmentName}api.hogbackmx.com`]
-        ),
-      ],
-      healthCheck: {
-        path: '/api/health',
-        unhealthyThresholdCount: 2,
-        healthyThresholdCount: 5,
-        interval: Duration.seconds(30),
-      },
-    });
+    // listener.addTargets('trackboss-api', {
+    //   port: 3000,
+    //   protocol: elbv2.ApplicationProtocol.HTTP,
+    //   targets: [asg],
+    //   priority: 1,
+    //   conditions: [
+    //     elbv2.ListenerCondition.hostHeaders(
+    //         [`${environmentName}api.hogbackmx.com`]
+    //     ),
+    //   ],
+    //   healthCheck: {
+    //     path: '/api/health',
+    //     unhealthyThresholdCount: 2,
+    //     healthyThresholdCount: 5,
+    //     interval: Duration.seconds(30),
+    //   },
+    // });
 
-    listener.addAction('trackboss', {
-      // priority: 5,
-      // conditions: [elbv2.ListenerCondition.pathPatterns(['/static'])],
-      action: elbv2.ListenerAction.fixedResponse(200, {
-        contentType: 'text/html',
-        messageBody: '<h1>TrackBoss API</h1>',
-      }),
-    });
+    // listener.addAction('trackboss', {
+    //   // priority: 5,
+    //   // conditions: [elbv2.ListenerCondition.pathPatterns(['/static'])],
+    //   action: elbv2.ListenerAction.fixedResponse(200, {
+    //     contentType: 'text/html',
+    //     messageBody: '<h1>TrackBoss API</h1>',
+    //   }),
+    // });
     
     // create DB security group that allows attaching to auto scaling group
     const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
@@ -153,11 +153,11 @@ export class DeployStack extends Stack {
     
     rdsInstance.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
 
-    const taggableInfra = [asg, alb];
-    taggableInfra.forEach(infraElement => {
-      Tags.of(infraElement).add('EnvironmentName', environmentName);
-      Tags.of(infraElement).add('Name', `${environmentName}-api`);  
-    });
+    // const taggableInfra = [asg, alb];
+    // taggableInfra.forEach(infraElement => {
+    //   Tags.of(infraElement).add('EnvironmentName', environmentName);
+    //   Tags.of(infraElement).add('Name', `${environmentName}-api`);  
+    // });
 
     const applicationLogsGroup = new logs.LogGroup(
       this, 'LogGroup', {
@@ -259,13 +259,13 @@ export class DeployStack extends Stack {
         },
     });
 
-    new CfnOutput(this, 'albDNS', {
-      value: alb.loadBalancerDnsName,
-    });
+    // new CfnOutput(this, 'albDNS', {
+    //   value: alb.loadBalancerDnsName,
+    // });
 
-    new CfnOutput(this, 'apiDns', {
-      value: dnsARecord.domainName,
-    });
+    // new CfnOutput(this, 'apiDns', {
+    //   value: dnsARecord.domainName,
+    // });
     
   }
 }
