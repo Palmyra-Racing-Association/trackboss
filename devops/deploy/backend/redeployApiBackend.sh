@@ -15,3 +15,6 @@ else
   echo $instance_id
   aws ec2 terminate-instances --instance-ids $instance_id
 fi;
+
+apprunner_arn=`aws apprunner list-services | jq -c '.ServiceSummaryList[] | select( .ServiceName | contains("trackbossRunner"))' | jq -r .ServiceArn`
+aws apprunner start-deployment --service-arn $apprunner_arn
