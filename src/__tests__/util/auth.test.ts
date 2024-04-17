@@ -1,5 +1,5 @@
 import 'dotenv/config'; // need env to be properly configured
-import { checkHeader, createVerifier, destroyVerifier, HeaderCheck, verify } from '../../util/auth';
+import { checkHeader, createVerifier, HeaderCheck, verify } from '../../util/auth';
 import { mockGetMember, mockGetValidActors } from '../api/mocks/member';
 import { createSpy, mockedPayloadType, mockInvalidToken } from './authMocks';
 
@@ -16,7 +16,6 @@ beforeEach(() => {
 afterEach(() => {
     process.env.COGNITO_POOL_ID = actualPoolId;
     process.env.COGNITO_CLIENT_ID = actualClientId;
-    destroyVerifier();
 });
 
 describe('setupVerifier()', () => {
