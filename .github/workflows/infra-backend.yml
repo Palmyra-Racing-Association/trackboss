@@ -1,4 +1,4 @@
-name: Back end infrastructure only deploymnet
+name: Back end infrastructure only deployment
 on:
   push:
       branches:

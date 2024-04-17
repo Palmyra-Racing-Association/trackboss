@@ -1,4 +1,4 @@
-name: Back end deployment
+name: Back end deployment - API docker container.
 on:
   push:
       branches:
@@ -18,17 +18,17 @@ env:
   SQUARE_TOKEN: ${{ secrets.SQUARE_TOKEN }}
   SQUARE_LOCATION: ${{ secrets.SQUARE_LOCATION }}
 jobs:
-  backend-cdk-build:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Specify Node version
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ env.NODE_VERSION }}
-    - name: Run CDK backend deployment
-      run: bash devops/deploy/backend/deployBackendInfra.sh $HOME/work/trackboss/trackboss
+#   backend-cdk-build:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+#     - name: Specify Node version
+#       uses: actions/setup-node@v2
+#       with:
+#         node-version: ${{ env.NODE_VERSION }}
+#     - name: Run CDK backend deployment
+#       run: bash devops/deploy/backend/deployBackendInfra.sh $HOME/work/trackboss/trackboss
   backend-docker-build:
     runs-on: ubuntu-latest
     steps:
