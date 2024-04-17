@@ -32,12 +32,12 @@ export class DeployStack extends Stack {
     //   internetFacing: true,
     // });
 
-    // const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'trackbossZone', 
-    //     {
-    //         hostedZoneId: 'Z01677201PBLHEH8PE24N',
-    //         zoneName: 'hogbackmx.com'
-    //     },
-    // );
+    const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'trackbossZone', 
+        {
+            hostedZoneId: 'Z01677201PBLHEH8PE24N',
+            zoneName: 'hogbackmx.com'
+        },
+    );
     // const dnsARecord = new route53.ARecord(this, 'TrackBossApiAliasRecord', {
     //     zone,
     //     recordName: `${environmentName}api.hogbackmx.com`,
@@ -51,11 +51,11 @@ export class DeployStack extends Stack {
     //     })
     // });
 
-    // const hogbackmxCert = new acm.DnsValidatedCertificate(this, 'backendCertificateApi', {
-    //     domainName: '*.hogbackmx.com',
-    //     hostedZone: zone,
-    //     region: 'us-east-1',
-    // });
+    const hogbackmxCert = new acm.DnsValidatedCertificate(this, 'backendCertificateApi', {
+        domainName: '*.hogbackmx.com',
+        hostedZone: zone,
+        region: 'us-east-1',
+    });
 
     //   const listener = alb.addListener('Listener',
     //       {
@@ -71,33 +71,33 @@ export class DeployStack extends Stack {
     const dockerReg = `${account}.dkr.ecr.${region}.amazonaws.com`;
     const dockerImg = `${dockerReg}/pra/trackbossapi:latest`;
 
-    const userData = ec2.UserData.forLinux();
-    userData.addCommands(
-      'sudo su',
-      'yum install -y awscli',
-      `aws s3 cp s3://praconfig/${environmentName}-env /home/ec2-user`,
-      `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${dockerReg}`,
-      `docker pull ${dockerImg}`,
-      `docker run -p 3000:3000 --env-file /home/ec2-user/${environmentName}-env ${dockerImg}`,
-    );
+    // const userData = ec2.UserData.forLinux();
+    // userData.addCommands(
+    //   'sudo su',
+    //   'yum install -y awscli',
+    //   `aws s3 cp s3://praconfig/${environmentName}-env /home/ec2-user`,
+    //   `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${dockerReg}`,
+    //   `docker pull ${dockerImg}`,
+    //   `docker run -p 3000:3000 --env-file /home/ec2-user/${environmentName}-env ${dockerImg}`,
+    // );
 
-    const asg = new autoscaling.AutoScalingGroup(this, 'asg', {
-      vpc,
-      autoScalingGroupName: `${environmentName}-backend-asg`,
-      instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.T3,
-        ec2.InstanceSize.SMALL,
-      ),
-      // see https://aws.amazon.com/ec2/pricing/on-demand/ for this number. This should be checked against
-      // instance classes every once in a while to make sure that this is optimal.
-      spotPrice: '0.023',
-      keyName: 'prakeyz',
-      role: iam.Role.fromRoleName(this, 'ec2-role', 'ec2_aws_access'),
-      machineImage: ecs.EcsOptimizedImage.amazonLinux2(),
-      userData,
-      minCapacity: 1,
-      maxCapacity: 1,
-    });
+    // const asg = new autoscaling.AutoScalingGroup(this, 'asg', {
+    //   vpc,
+    //   autoScalingGroupName: `${environmentName}-backend-asg`,
+    //   instanceType: ec2.InstanceType.of(
+    //     ec2.InstanceClass.T3,
+    //     ec2.InstanceSize.SMALL,
+    //   ),
+    //   // see https://aws.amazon.com/ec2/pricing/on-demand/ for this number. This should be checked against
+    //   // instance classes every once in a while to make sure that this is optimal.
+    //   spotPrice: '0.023',
+    //   keyName: 'prakeyz',
+    //   role: iam.Role.fromRoleName(this, 'ec2-role', 'ec2_aws_access'),
+    //   machineImage: ecs.EcsOptimizedImage.amazonLinux2(),
+    //   userData,
+    //   minCapacity: 1,
+    //   maxCapacity: 1,
+    // });
 
     // listener.addTargets('trackboss-api', {
     //   port: 3000,
@@ -133,15 +133,15 @@ export class DeployStack extends Stack {
       description: 'inbound rules for database',
     })
 
-    const rdsInboundGroups = asg.connections.securityGroups;
+    // const rdsInboundGroups = asg.connections.securityGroups;
 
-    rdsSecurityInBound.connections.allowFrom(
-      new ec2.Connections({
-        securityGroups: rdsInboundGroups,
-      }), 
-      ec2.Port.tcp(3306),
-      'allow access to database from application server.'
-    );
+    // rdsSecurityInBound.connections.allowFrom(
+    //   new ec2.Connections({
+    //     securityGroups: rdsInboundGroups,
+    //   }), 
+    //   ec2.Port.tcp(3306),
+    //   'allow access to database from application server.'
+    // );
 
     
     const rdsInstance = rds.DatabaseInstance.fromDatabaseInstanceAttributes(this, 'trackBossAppDb', {
