@@ -1,10 +1,9 @@
 import { v4 } from 'uuid';
-import { Client, Environment } from 'square';
+import { Client, Environment, Location } from 'square';
 import { Bill } from '../typedefs/bill';
 import logger from '../logger';
 import { getSquareObject } from '../util/environmentWrapper';
 
-// eslint-disable-next-line import/prefer-default-export
 export async function createPaymentLink(memberBill: Bill) {
     const squareAccess = await getSquareObject();
     const { locationId, token } = squareAccess;
@@ -69,4 +68,22 @@ export async function createPaymentLink(memberBill: Bill) {
         logger.error(error);
         throw (error);
     }
+}
+
+export async function getLocations() {
+    const squareAccess = await getSquareObject();
+    const { token } = squareAccess;
+
+    // Set Square credentials and environment
+    const client = new Client({
+        environment: Environment.Production, // Change this to Environment.Production for live transactions
+        accessToken: token,
+    });
+    let squareLocations : Location[] = [];
+    try {
+        squareLocations = (await client.locationsApi.listLocations()).result.locations || [];
+    } catch (error) {
+        logger.error('Error accessing Square', error);
+    }
+    return squareLocations;
 }

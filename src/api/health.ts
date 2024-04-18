@@ -2,13 +2,16 @@ import { Request, Response, Router } from 'express';
 import { RowDataPacket } from 'mysql2';
 import { getPool } from '../database/pool';
 import logger from '../logger';
+import { getLocations } from '../integrations/square';
 
 const health = Router();
 
 health.get('/', async (req: Request, res: Response) => {
+    const squareLocations = await getLocations();
     const response = {
         ok: true,
         dbtime: '',
+        squareLocationCount: squareLocations.length,
         commitId: '',
         githubCommitLink: '',
         error: undefined,

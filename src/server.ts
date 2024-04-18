@@ -1,11 +1,10 @@
 import 'dotenv/config';
 import express from 'express';
-import AWS, { Connect } from 'aws-sdk';
+import AWS from 'aws-sdk';
 import api from './api/api';
 import logger from './logger';
 import { createVerifier } from './util/auth';
-import { getConnectionObject, getEnvironmentParameter } from './util/environmentWrapper';
-import { getPool } from './database/pool';
+import { getEnvironmentParameter } from './util/environmentWrapper';
 
 process.on('uncaughtException', (error, origin) => {
     logger.error('----- Uncaught exception -----');
