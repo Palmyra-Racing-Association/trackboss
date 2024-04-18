@@ -43,18 +43,18 @@ export class DeployStack extends Stack {
     const dockerReg = `${account}.dkr.ecr.${region}.amazonaws.com`;
     const dockerImg = `${dockerReg}/pra/trackbossapi:latest`;
     
-    // create DB security group that allows attaching to auto scaling group
-    const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
-      vpc,
-      allowAllOutbound: true,
-      description: 'inbound rules for database',
-    })
+    // attach to RDS from app runner
+    const appRunnerRdsInbound = new ec2.SecurityGroup(this, 'appRunnerRdsInbound', {
+        vpc,
+        allowAllOutbound: true,
+        description: 'inbound rules for database',
+    });
 
     const rdsInstance = rds.DatabaseInstance.fromDatabaseInstanceAttributes(this, 'trackBossAppDb', {
       instanceIdentifier: 'praclubmanager2-dev',
-      instanceEndpointAddress: 'arn:aws:rds:us-east-1:425610073499:db:praclubmanager2-dev',
+      instanceEndpointAddress: `arn:aws:rds:${region}:${account}:db:praclubmanager2-dev`,
       port: 3306,
-      securityGroups: [rdsSecurityInBound],
+      securityGroups: [appRunnerRdsInbound],
     });
     
     // rdsInstance.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
