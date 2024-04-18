@@ -56,8 +56,8 @@ export class DeployStack extends Stack {
       port: 3306,
       securityGroups: [appRunnerRdsInbound],
     });
-    
-    // rdsInstance.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
+    rdsInstance.connections.addSecurityGroup(appRunnerRdsInbound);
+
     const availabilityZones = ['us-east-1b', 'us-east-1c'];
     const vpcConnector = new apprunner.VpcConnector(this, 'VpcConnector', {
         vpc,
@@ -71,9 +71,9 @@ export class DeployStack extends Stack {
           imageConfiguration: {
             environmentVariables: {
                 MYSQL_DB: 'pradb',
-                MYSQL_HOST: rdsInstance.dbInstanceEndpointAddress,
-                MYSQL_USER: '',
-                MYSQL_PASS: '',
+                MYSQL_HOST: 'instance',
+                MYSQL_USER: 'user',
+                MYSQL_PASS: 'pass',
             },
             port: 3000,
           },
@@ -82,6 +82,7 @@ export class DeployStack extends Stack {
         }),
         vpcConnector,
     });
+
     vpc.selectSubnets({ availabilityZones }).subnets.forEach(subnet => {
         rdsInstance.connections.allowFrom(ec2.Peer.ipv4(subnet.ipv4CidrBlock), ec2.Port.tcp(3306), 'App runner MySQL');
     });
