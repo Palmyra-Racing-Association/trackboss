@@ -8,5 +8,5 @@ if [ -z $2 ]; then
   exit -1
 fi;
 
-apprunner_arn=`aws apprunner list-services | jq -c '.ServiceSummaryList[] | select( .ServiceName | contains("trackbossRunner"))' | jq -r .ServiceArn`
+apprunner_arn=`aws apprunner list-services | jq -c '.ServiceSummaryList[] | select( .ServiceName | contains("trackbossapirunner"))' | jq -r .ServiceArn`
 aws apprunner start-deployment --service-arn $apprunner_arn
