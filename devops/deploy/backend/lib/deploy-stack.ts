@@ -58,7 +58,7 @@ export class DeployStack extends Stack {
     });
     rdsInstance.connections.addSecurityGroup(appRunnerRdsInbound);
 
-    const availabilityZones = ['us-east-1b', 'us-east-1c'];
+    const availabilityZones = [`${region}b`, `${region}c`];
     const vpcConnector = new apprunner.VpcConnector(this, 'VpcConnector', {
         vpc,
         vpcSubnets: vpc.selectSubnets({ availabilityZones }),
@@ -85,6 +85,9 @@ export class DeployStack extends Stack {
 
     vpc.selectSubnets({ availabilityZones }).subnets.forEach(subnet => {
         rdsInstance.connections.allowFrom(ec2.Peer.ipv4(subnet.ipv4CidrBlock), ec2.Port.tcp(3306), 'App runner MySQL');
+    });
+    availabilityZones.forEach((az) => {
+        const publicIp = new ec2.CfnEIP(this, `${environmentName}-${az}-elasticIp`);
     });
     const taggableInfra = [trackbossApiService];
     taggableInfra.forEach(infraElement => {
