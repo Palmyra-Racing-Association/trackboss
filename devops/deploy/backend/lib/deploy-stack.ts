@@ -83,7 +83,7 @@ export class DeployStack extends Stack {
         vpcConnector,
     });
     vpc.selectSubnets({ availabilityZones }).subnets.forEach(subnet => {
-        rdsSecurityInBound.addIngressRule(ec2.Peer.ipv4(subnet.ipv4CidrBlock), ec2.Port.tcp(3306), 'App runner MySQL');
+        rdsInstance.connections.allowFrom(ec2.Peer.ipv4(subnet.ipv4CidrBlock), ec2.Port.tcp(3306), 'App runner MySQL');
     });
     const taggableInfra = [trackbossApiService];
     taggableInfra.forEach(infraElement => {
