@@ -77,7 +77,7 @@ export class DeployStack extends Stack {
             },
             port: 3000,
           },
-          repository: ecr.Repository.fromRepositoryName(this, 'trackboss-repo', 'pra/trackbosapi'),
+          repository: ecr.Repository.fromRepositoryName(this, 'trackboss-repo', 'pra/trackbossapi'),
           tagOrDigest: 'latest',
         }),
         vpcConnector,
