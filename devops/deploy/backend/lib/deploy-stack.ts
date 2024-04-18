@@ -61,7 +61,7 @@ export class DeployStack extends Stack {
 
     const vpcConnector = new apprunner.VpcConnector(this, 'VpcConnector', {
         vpc,
-        vpcSubnets: vpc.selectSubnets({ subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS }),
+        vpcSubnets: vpc.selectSubnets({ availabilityZones: ['us-east-1b', 'us-east-1c']}),
         vpcConnectorName: `${environmentName}vpcConnector`,
     });
 
