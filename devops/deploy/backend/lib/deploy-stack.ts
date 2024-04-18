@@ -15,7 +15,8 @@ import { aws_lambda_event_sources as lambdaEventSources } from 'aws-cdk-lib';
 import { DatabaseInstanceEngine, MysqlEngineVersion } from 'aws-cdk-lib/aws-rds';
 import { aws_secretsmanager as secretsmanager } from 'aws-cdk-lib';
 import { SecretValue } from 'aws-cdk-lib';
-
+import * as apprunner from '@aws-cdk/aws-apprunner-alpha';
+import * as ecr from 'aws-cdk-lib/aws-ecr';
 export class DeployStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -25,12 +26,6 @@ export class DeployStack extends Stack {
     const vpc = ec2.Vpc.fromLookup(this, 'ImportVPC',{isDefault: true});
     
     const environmentName = process.env.TRACKBOSS_ENVIRONMENT_NAME || 'trackboss';
-    
-    // const alb = new elbv2.ApplicationLoadBalancer(this, 'alb', {
-    //   loadBalancerName: `${environmentName}-alb`,
-    //   vpc,
-    //   internetFacing: true,
-    // });
 
     const zone = route53.HostedZone.fromHostedZoneAttributes(this, 'trackbossZone', 
         {
@@ -38,18 +33,6 @@ export class DeployStack extends Stack {
             zoneName: 'hogbackmx.com'
         },
     );
-    // const dnsARecord = new route53.ARecord(this, 'TrackBossApiAliasRecord', {
-    //     zone,
-    //     recordName: `${environmentName}api.hogbackmx.com`,
-    //     target: route53.RecordTarget.fromAlias({
-    //         bind() {
-    //             return {
-    //                 dnsName: alb.loadBalancerDnsName,
-    //                 hostedZoneId: alb.loadBalancerCanonicalHostedZoneId,
-    //             }
-    //         }
-    //     })
-    // });
 
     const hogbackmxCert = new acm.DnsValidatedCertificate(this, 'backendCertificateApi', {
         domainName: '*.hogbackmx.com',
@@ -57,74 +40,8 @@ export class DeployStack extends Stack {
         region: 'us-east-1',
     });
 
-    //   const listener = alb.addListener('Listener',
-    //       {
-    //           port: 4443,
-    //           open: true,
-    //           protocol: elbv2.ApplicationProtocol.HTTPS,
-    //           certificates: [
-    //               hogbackmxCert,
-    //           ],
-    //       }
-    //   );
-
     const dockerReg = `${account}.dkr.ecr.${region}.amazonaws.com`;
     const dockerImg = `${dockerReg}/pra/trackbossapi:latest`;
-
-    // const userData = ec2.UserData.forLinux();
-    // userData.addCommands(
-    //   'sudo su',
-    //   'yum install -y awscli',
-    //   `aws s3 cp s3://praconfig/${environmentName}-env /home/ec2-user`,
-    //   `aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${dockerReg}`,
-    //   `docker pull ${dockerImg}`,
-    //   `docker run -p 3000:3000 --env-file /home/ec2-user/${environmentName}-env ${dockerImg}`,
-    // );
-
-    // const asg = new autoscaling.AutoScalingGroup(this, 'asg', {
-    //   vpc,
-    //   autoScalingGroupName: `${environmentName}-backend-asg`,
-    //   instanceType: ec2.InstanceType.of(
-    //     ec2.InstanceClass.T3,
-    //     ec2.InstanceSize.SMALL,
-    //   ),
-    //   // see https://aws.amazon.com/ec2/pricing/on-demand/ for this number. This should be checked against
-    //   // instance classes every once in a while to make sure that this is optimal.
-    //   spotPrice: '0.023',
-    //   keyName: 'prakeyz',
-    //   role: iam.Role.fromRoleName(this, 'ec2-role', 'ec2_aws_access'),
-    //   machineImage: ecs.EcsOptimizedImage.amazonLinux2(),
-    //   userData,
-    //   minCapacity: 1,
-    //   maxCapacity: 1,
-    // });
-
-    // listener.addTargets('trackboss-api', {
-    //   port: 3000,
-    //   protocol: elbv2.ApplicationProtocol.HTTP,
-    //   targets: [asg],
-    //   priority: 1,
-    //   conditions: [
-    //     elbv2.ListenerCondition.hostHeaders(
-    //         [`${environmentName}api.hogbackmx.com`]
-    //     ),
-    //   ],
-    //   healthCheck: {
-    //     path: '/api/health',
-    //     unhealthyThresholdCount: 2,
-    //     healthyThresholdCount: 5,
-    //     interval: Duration.seconds(30),
-    //   },
-    // });
-
-    // listener.addAction('trackboss', {
-    //   // priority: 5,
-    //   // conditions: [elbv2.ListenerCondition.pathPatterns(['/static'])],
-    //   action: elbv2.ListenerAction.fixedResponse(200, {
-    //     contentType: 'text/html',
-    //     messageBody: '<h1>TrackBoss API</h1>',
-    //   }),
-    // });
     
     // create DB security group that allows attaching to auto scaling group
     const rdsSecurityInBound = new ec2.SecurityGroup(this, 'rdsSecurityGroupInbound', {
@@ -133,17 +50,6 @@ export class DeployStack extends Stack {
       description: 'inbound rules for database',
     })
 
-    // const rdsInboundGroups = asg.connections.securityGroups;
-
-    // rdsSecurityInBound.connections.allowFrom(
-    //   new ec2.Connections({
-    //     securityGroups: rdsInboundGroups,
-    //   }), 
-    //   ec2.Port.tcp(3306),
-    //   'allow access to database from application server.'
-    // );
-
-    
     const rdsInstance = rds.DatabaseInstance.fromDatabaseInstanceAttributes(this, 'trackBossAppDb', {
       instanceIdentifier: 'praclubmanager2-dev',
       instanceEndpointAddress: 'arn:aws:rds:us-east-1:425610073499:db:praclubmanager2-dev',
@@ -153,11 +59,35 @@ export class DeployStack extends Stack {
     
     rdsInstance.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
 
-    // const taggableInfra = [asg, alb];
-    // taggableInfra.forEach(infraElement => {
-    //   Tags.of(infraElement).add('EnvironmentName', environmentName);
-    //   Tags.of(infraElement).add('Name', `${environmentName}-api`);  
-    // });
+    const vpcConnector = new apprunner.VpcConnector(this, 'VpcConnector', {
+        vpc,
+        vpcSubnets: vpc.selectSubnets({ subnetType: ec2.SubnetType.PUBLIC }),
+        vpcConnectorName: `${environmentName}vpcConnector`,
+    });
+
+    const trackbossApiService = new apprunner.Service(this, `${environmentName}-api-runner`, {
+        instanceRole: iam.Role.fromRoleName(this, 'trackboss-role', 'ec2_aws_access'),
+        source: apprunner.Source.fromEcr({
+          imageConfiguration: {
+            environmentVariables: {
+                MYSQL_DB: 'pradb',
+                MYSQL_HOST: rdsInstance.dbInstanceEndpointAddress,
+                MYSQL_USER: '',
+                MYSQL_PASS: '',
+            },
+            port: 3000,
+          },
+          repository: ecr.Repository.fromRepositoryName(this, 'trackboss-repo', 'pra/trackbosapi'),
+          tagOrDigest: 'latest',
+        }),
+        vpcConnector,
+    });
+
+    const taggableInfra = [trackbossApiService];
+    taggableInfra.forEach(infraElement => {
+        Tags.of(infraElement).add('EnvironmentName', environmentName);
+        Tags.of(infraElement).add('Name', `${environmentName}-api`);  
+    });
 
     const applicationLogsGroup = new logs.LogGroup(
       this, 'LogGroup', {
@@ -258,14 +188,6 @@ export class DeployStack extends Stack {
           token: new SecretValue(process.env.SQUARE_TOKEN || ''),
         },
     });
-
-    // new CfnOutput(this, 'albDNS', {
-    //   value: alb.loadBalancerDnsName,
-    // });
-
-    // new CfnOutput(this, 'apiDns', {
-    //   value: dnsARecord.domainName,
-    // });
     
   }
 }
