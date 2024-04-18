@@ -57,7 +57,7 @@ export class DeployStack extends Stack {
       securityGroups: [rdsSecurityInBound],
     });
     
-    rdsInstance.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
+    // rdsInstance.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
     const availabilityZones = ['us-east-1b', 'us-east-1c'];
     const vpcConnector = new apprunner.VpcConnector(this, 'VpcConnector', {
         vpc,
