@@ -58,13 +58,13 @@ export class DeployStack extends Stack {
     });
     
     rdsInstance.connections.allowFrom(rdsSecurityInBound, ec2.Port.tcp(3306), 'Allow connections from app server');
-
+    const availabilityZones = ['us-east-1b', 'us-east-1c'];
     const vpcConnector = new apprunner.VpcConnector(this, 'VpcConnector', {
         vpc,
-        vpcSubnets: vpc.selectSubnets({ availabilityZones: ['us-east-1b', 'us-east-1c']}),
+        vpcSubnets: vpc.selectSubnets({ availabilityZones }),
         vpcConnectorName: `${environmentName}vpcConnector`,
     });
-
+ 
     const trackbossApiService = new apprunner.Service(this, `${environmentName}-api-runner`, {
         instanceRole: iam.Role.fromRoleName(this, 'trackboss-role', 'ec2_aws_access'),
         source: apprunner.Source.fromEcr({
@@ -82,7 +82,9 @@ export class DeployStack extends Stack {
         }),
         vpcConnector,
     });
-
+    vpc.selectSubnets({ availabilityZones }).subnets.forEach(subnet => {
+        rdsSecurityInBound.addIngressRule(ec2.Peer.ipv4(subnet.ipv4CidrBlock), ec2.Port.tcp(3306), 'App runner MySQL');
+    });
     const taggableInfra = [trackbossApiService];
     taggableInfra.forEach(infraElement => {
         Tags.of(infraElement).add('EnvironmentName', environmentName);
