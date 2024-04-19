@@ -2,6 +2,8 @@
 import AWS from 'aws-sdk';
 import logger from '../logger';
 
+let squareObject : any;
+
 export async function getEnvironmentParameter(name: string) {
     const ssmClient = new AWS.SSM({
         apiVersion: '2014-11-06',
@@ -30,12 +32,15 @@ export async function getCognitoClientId() {
 }
 
 export async function getSquareObject() {
-    const secretsClient = new AWS.SecretsManager();
-    const secretValue = await secretsClient.getSecretValue({
-        SecretId: '/trackboss/app/square',
-    }).promise();
-    logger.info('Pulled Square login info');
-    return JSON.parse(secretValue.SecretString || '');
+    if (!squareObject) {
+        const secretsClient = new AWS.SecretsManager();
+        const secretValue = await secretsClient.getSecretValue({
+            SecretId: '/trackboss/app/square',
+        }).promise();
+        logger.info('Pulled Square login info');
+        squareObject = JSON.parse(secretValue.SecretString || '');
+    }
+    return squareObject;
 }
 
 export async function getConnectionObject() {
