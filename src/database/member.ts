@@ -123,8 +123,8 @@ export async function getMemberList(filters: GetMemberListFilters): Promise<Memb
             dynamicSql += 'membership_id = ? AND ';
             values[counter++] = filters.membershipId;
         }
-        // slice trailing AND
-        sql = `${GET_MEMBER_LIST_SQL + dynamicSql.slice(0, -4)} order by member_type_id, last_name, first_name`;
+        // slice the trailing AND
+        sql = `${GET_MEMBER_LIST_SQL + dynamicSql.slice(0, -4)} order by last_name, first_name`;
     } else {
         sql = GET_MEMBER_LIST_SQL;
         values = [];

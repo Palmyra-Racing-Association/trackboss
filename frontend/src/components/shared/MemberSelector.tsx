@@ -26,6 +26,7 @@ export default function MemberSelector(props: MemberSelectorProps) {
                 activeMembers = await getMemberList(state.token) as Member[];
             }
             activeMembers = activeMembers.filter((listedMember) => listedMember.active);
+            activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
             const options = activeMembers.map((member) => {
                 let memberName = `${member.lastName}, ${member.firstName}`;
                 if (member.memberId !== member.membershipAdminId) {
