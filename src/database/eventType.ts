@@ -6,7 +6,7 @@ import { getPool } from './pool';
 import { EventType, PatchEventTypeRequest, PostNewEventTypeRequest } from '../typedefs/eventType';
 
 export const GET_EVENT_TYPE_LIST_SQL =
-'SELECT event_type_id, type, active, last_modified_by, last_modified_date FROM v_event_type';
+'SELECT event_type_id, type, active, last_modified_by, last_modified_date FROM v_event_type order by type';
 export const GET_EVENT_TYPE_SQL = `${GET_EVENT_TYPE_LIST_SQL} WHERE event_type_id = ?`;
 export const INSERT_EVENT_TYPE_SQL =
     'INSERT INTO event_type (type, last_modified_by, last_modified_date, active) VALUES (?, ?, CURDATE(), 1)';
