@@ -53,6 +53,7 @@ export default function BoardMemberListRow(props:BoardMemberRowProps) {
             <MemberSelector
                 isAdmin
                 setSelectedOption={setSelectedOption}
+                disabled={false}
             />
         </Box>
     );

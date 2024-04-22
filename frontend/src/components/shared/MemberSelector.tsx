@@ -6,6 +6,7 @@ import { getMemberList, getMembersByMembership } from '../../controller/member';
 
 interface MemberSelectorProps {
     isAdmin: boolean,
+    disabled: boolean,
     // eslint-disable-next-line no-unused-vars
     setSelectedOption: (option: any) => void,
     membershipId?: number,
@@ -19,17 +20,16 @@ export default function MemberSelector(props: MemberSelectorProps) {
 
     useEffect(() => {
         async function getData() {
-            const membershipId = props.membershipId || state.storedUser?.membershipId || 0;
+            const membershipId = props.membershipId || state.user?.membershipId || 0;
             let activeMembers = await getMembersByMembership(state.token, membershipId);
             if (props.isAdmin) {
                 activeMembers = await getMemberList(state.token) as Member[];
             }
             activeMembers = activeMembers.filter((listedMember) => listedMember.active);
-            activeMembers.sort((a, b) => a.lastName.localeCompare(b.lastName));
             const options = activeMembers.map((member) => {
                 let memberName = `${member.lastName}, ${member.firstName}`;
                 if (member.memberId !== member.membershipAdminId) {
-                    memberName += '*';
+                    memberName += `* (${member.membershipAdmin})`;
                 }
                 const option = {
                     value: member.memberId,
@@ -61,6 +61,7 @@ export default function MemberSelector(props: MemberSelectorProps) {
             backspaceRemovesValue
             options={eligibleMembers}
             value={selectedOption}
+            isDisabled={props.disabled}
             onChange={
                 async (e) => {
                     props.setSelectedOption(e);

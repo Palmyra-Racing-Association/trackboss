@@ -79,6 +79,7 @@ export default function AddPointsModal(props: AddPointsModalProps) {
                                 isAdmin={false}
                                 membershipId={props.membershipId}
                                 setSelectedOption={setSelectedOption}
+                                disabled={false}
                             />
                             <Input
                                 placeholder="Description of work performed"

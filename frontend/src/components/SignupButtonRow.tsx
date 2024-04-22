@@ -1,7 +1,7 @@
 import {
     Button, ButtonGroup, Input,
     Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
-    ModalOverlay, SimpleGrid, useDisclosure, useToast,
+    ModalOverlay, SimpleGrid, useDisclosure,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import _ from 'lodash';
@@ -17,7 +17,7 @@ export default function SignupButtonRow(props: any) {
     const [selectedOption, setSelectedOption] = useState<any>();
     const [markedPaid, setMarkedPaid] = useState<boolean>(props.data.paid);
 
-    const [jobMemberId, setJobMemberId] = useState(props.data.memberId);
+    const [jobMembershipId] = useState(props.data.membershipId);
 
     const {
         isOpen: isNonMemberOpen,
@@ -33,6 +33,8 @@ export default function SignupButtonRow(props: any) {
         (props.eventType.toLowerCase() !== 'work day')
     );
 
+    const disableForMembers = (Date.parse(props.data.start) < Date.now());
+
     useEffect(() => {
         async function signupForJobDropdown() {
             await signupForJob(state.token, props.data.jobId, selectedOption.value);
@@ -41,48 +43,18 @@ export default function SignupButtonRow(props: any) {
         signupForJobDropdown();
     }, [selectedOption]);
 
-    const toast = useToast();
-    const handleSelfSignupClick = async () => {
-        if (Date.parse(props.data.start) >= Date.now()) {
-            const memberId = state?.user?.memberId;
-            if (memberId) {
-                await signupForJob(state.token, jobId, memberId);
-            }
-            setJobMemberId(memberId || -1);
-            await props.refreshData();
-        } else {
-            toast({
-                containerStyle: {
-                    background: 'orange',
-                },
-                // eslint-disable-next-line max-len
-                title: 'This event has already passed, and is no longer eligible for signups',
-                description: `Job ID ${props.data.jobId}`,
-                status: 'error',
-                duration: 5000,
-                isClosable: true,
-            });
-        }
-    };
     let signupButton;
     if (!props.data.member) {
         signupButton = (
             <SimpleGrid columns={[1, null, 3]} spacing="20px">
                 {
                     (!isAdmin && selfSignupAllowed) && (
-                        <Button
-                            // variant={verified ? 'verified' : 'unverified'}
-                            aria-label="Sign Up"
-                            background="orange.300"
-                            size="md"
-                            color="white"
-                            ml={10}
-                            maxWidth={200}
-                            onClick={handleSelfSignupClick}
-                        >
-                            Signup &nbsp;
-                            {state.user?.firstName}
-                        </Button>
+
+                        <MemberSelector
+                            isAdmin={false}
+                            disabled={disableForMembers}
+                            setSelectedOption={setSelectedOption}
+                        />
                     )
                 }
                 {
@@ -90,6 +62,7 @@ export default function SignupButtonRow(props: any) {
                         <>
                             <MemberSelector
                                 isAdmin
+                                disabled={disableForMembers}
                                 setSelectedOption={setSelectedOption}
                             />
                             <Button
@@ -152,7 +125,7 @@ export default function SignupButtonRow(props: any) {
     } else {
         // I can delete my own signups, and of course admins can delete everyone's signups.
         const allowDelete = (
-            (state?.user?.memberId === jobMemberId) ||
+            (state?.user?.membershipId === jobMembershipId) ||
             (isAdmin)
         );
         signupButton = (
@@ -186,7 +159,7 @@ export default function SignupButtonRow(props: any) {
                     isDisabled={!props.data.cashPayout}
                     hidden={(!selfSignupAllowed || !isAdmin)}
                 >
-                    {markedPaid ? 'Unmark paid' : 'Mark as Paid' }
+                    {markedPaid ? 'Unmark paid' : 'Mark as Paid'}
                 </Button>
             </ButtonGroup>
         );
