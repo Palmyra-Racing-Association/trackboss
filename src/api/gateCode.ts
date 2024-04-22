@@ -4,7 +4,6 @@ import { GetGateCodeResponse, PostGateCodeResponse } from '../typedefs/gateCode'
 import { checkHeader, verify } from '../util/auth';
 import { getPool } from '../database/pool';
 import logger from '../logger';
-import { getMember } from '../database/member';
 import { getLatestBillMembership } from '../database/billing';
 
 const getGateCodeByYear = async (year:string) => {
@@ -41,9 +40,8 @@ gateCode.get('/latest', async (req: Request, res: Response) => {
         response = { reason: headerCheck.reason };
     } else {
         try {
-            const tokenPayload = await verify(headerCheck.token);
-            const member = await getMember(tokenPayload['cognito:username']);
-            const latestBill = await getLatestBillMembership(member.membershipId);
+            const membershipId = parseInt(req.query.membershipId?.toString() || '', 10);
+            const latestBill = await getLatestBillMembership(membershipId);
             if (latestBill.curYearIns && latestBill.curYearPaid) {
                 response = await getGateCodeLatest();
             } else {

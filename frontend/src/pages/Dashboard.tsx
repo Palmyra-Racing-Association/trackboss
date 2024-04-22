@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { ChakraProvider, Center, SimpleGrid, VStack, useToast } from '@chakra-ui/react';
-import { UserContext } from '../contexts/UserContext';
 import theme from '../theme';
 import Header from '../components/Header';
 import WorkPointsCard from '../components/WorkPointsCard';
@@ -20,6 +19,7 @@ import { signupForOpenEventJob } from '../controller/job';
 import { Link } from '../../../src/typedefs/link';
 import { getLinks } from '../controller/links';
 import { Bill } from '../../../src/typedefs/bill';
+import { UserContext } from '../contexts/UserContext';
 
 async function getEventCardPropsLocal(token: string): Promise<any | undefined> {
     const nowString = getTodaysDate();
@@ -89,7 +89,7 @@ function Dashboard() {
 
     useEffect(() => {
         async function getData() {
-            const latestGateCode = await getGateCodeLatest(state.token) as GateCode;
+            const latestGateCode = await getGateCodeLatest(state.token, state.user?.membershipId) as GateCode;
             setGateCode(latestGateCode.gateCode || latestGateCode.message || '');
         }
         getData();
@@ -111,6 +111,7 @@ function Dashboard() {
                             billYear={lastBill?.year || (new Date()).getFullYear() - 1}
                             billPaid={lastBill?.curYearPaid}
                             insuranceAttested={lastBill?.curYearIns}
+                            gateCode={gateCode}
                         />
                     )
                 }
@@ -167,7 +168,6 @@ function Dashboard() {
                             )
                         }
                         <ImportantLinksCard
-                            gateCode={gateCode}
                             dashboardLinks={dashboardLinks}
                             memberId={state.user?.memberId || 0}
                             jwt={state.token}

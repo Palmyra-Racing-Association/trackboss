@@ -12,9 +12,9 @@ interface pageProps {
     billYear: number,
     billPaid?: boolean,
     insuranceAttested?: boolean,
+    gateCode?: string,
 }
 
-// the below eslint-disable is needed because of the trailing space in the greeting
 export default function Header(props: pageProps) {
     const { billPaid, insuranceAttested, billYear } = props;
     const allDone = (billPaid && insuranceAttested);
@@ -30,6 +30,7 @@ export default function Header(props: pageProps) {
             status += '(insurance)';
         }
     }
+    const gateCodeMessage = `Current gate code: ${props.gateCode}`;
     return (
         <Center>
             <VStack>
@@ -47,6 +48,9 @@ export default function Header(props: pageProps) {
                         {`${billYear + 1} renewal status: ${status}`}
                     </Highlight>
                 </Text>
+                <Text fontSize="2xl" fontWeight="bold" color="orange">
+                    {gateCodeMessage}
+                </Text>
             </VStack>
         </Center>
     );
@@ -54,4 +58,5 @@ export default function Header(props: pageProps) {
 Header.defaultProps = {
     billPaid: true,
     insuranceAttested: true,
+    gateCode: '',
 };
