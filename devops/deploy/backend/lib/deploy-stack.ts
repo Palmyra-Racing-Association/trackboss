@@ -17,6 +17,8 @@ import { aws_secretsmanager as secretsmanager } from 'aws-cdk-lib';
 import { SecretValue } from 'aws-cdk-lib';
 import * as apprunner from '@aws-cdk/aws-apprunner-alpha';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
+import * as cognito from 'aws-cdk-lib/aws-cognito';
+
 export class DeployStack extends Stack {
   constructor(scope: App, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -233,8 +235,19 @@ export class DeployStack extends Stack {
     
     const appRunnerCloudWatchLogsPolicy = new iam.PolicyStatement();
     appRunnerCloudWatchLogsPolicy.addActions('logs:PutLogEvents');
+    appRunnerCloudWatchLogsPolicy.addActions('logs:DescribeLogStreams');
+    appRunnerCloudWatchLogsPolicy.addActions('logs:CreateLogStreams');
     appRunnerCloudWatchLogsPolicy.addAllResources();
     appRunnerRole.addToPolicy(appRunnerCloudWatchLogsPolicy);
 
+    const cognitoPool = cognito.UserPool.fromUserPoolId(this, 'cognitoUserPool', cognitoPoolId.stringValue);
+    const appRunnerCognitoPolicy = new iam.PolicyStatement();
+    appRunnerCognitoPolicy.addActions('cognito-idp:AdminAddUserToGroup');
+    appRunnerCognitoPolicy.addActions('cognito-idp:AdminCreateUser');
+    appRunnerCognitoPolicy.addActions('cognito-idp:AdminDeleteUser');
+    appRunnerCognitoPolicy.addActions('cognito-idp:AdminSetUserPassword');
+    appRunnerCognitoPolicy.addActions('cognito-idp:AdminUpdateUserAttributes');
+    appRunnerCognitoPolicy.addResources(cognitoPool.userPoolArn);
+    appRunnerRole.addToPolicy(appRunnerCognitoPolicy);
   }
 }
