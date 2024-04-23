@@ -62,7 +62,7 @@ export default function MemberSelector(props: MemberSelectorProps) {
             backspaceRemovesValue
             options={eligibleMembers}
             value={selectedOption}
-            isDisabled={props.disabled}
+            isDisabled={props.disabled && !props.isAdmin}
             onChange={
                 async (e) => {
                     props.setSelectedOption(e);

@@ -145,49 +145,49 @@ export class DeployStack extends Stack {
         handler: 'lambda.handler',
     });
     
-    new ssm.StringParameter(this, 'cognitoPoolId', {
+    const cognitoPoolId = new ssm.StringParameter(this, 'cognitoPoolId', {
       allowedPattern: '.*',
       parameterName: 'cognitoPoolId',
       stringValue: process.env.COGNITO_POOL_ID || '',
       tier: ssm.ParameterTier.STANDARD,
     });
     
-    new ssm.StringParameter(this, 'cognitoClientId', {
+    const cognitoClientId = new ssm.StringParameter(this, 'cognitoClientId', {
       allowedPattern: '.*',
       parameterName: 'cognitoClientId',
       stringValue: process.env.COGNITO_CLIENT_ID || '',
       tier: ssm.ParameterTier.STANDARD,
     });
 
-    new ssm.StringParameter(this, 'clubEmail', {
+    const clubEmail = new ssm.StringParameter(this, 'clubEmail', {
       allowedPattern: '.*',
       parameterName: 'clubEmail',
       stringValue: process.env.CLUB_EMAIL || '',
       tier: ssm.ParameterTier.STANDARD,
     });
 
-    new ssm.StringParameter(this, 'trackbossEnvironmentName', {
+    const trackbossEnvironmentName = new ssm.StringParameter(this, 'trackbossEnvironmentName', {
         allowedPattern: '.*',
         parameterName: 'trackbossEnvironmentName',
         stringValue: 'trackboss',
         tier: ssm.ParameterTier.STANDARD,
     });
 
-    new ssm.StringParameter(this, 'account', {
+    const accountParam = new ssm.StringParameter(this, 'account', {
         allowedPattern: '.*',
         parameterName: 'account',
         stringValue: account,
         tier: ssm.ParameterTier.STANDARD,
     });
 
-    new ssm.StringParameter(this, 'region', {
+    const regionParam = new ssm.StringParameter(this, 'region', {
         allowedPattern: '.*',
         parameterName: 'region',
         stringValue: region,
         tier: ssm.ParameterTier.STANDARD,
     });
 
-    new secretsmanager.Secret(this, 'squareInfo', {
+    const squareSsm = new secretsmanager.Secret(this, 'squareInfo', {
         secretName: '/trackboss/app/square',
         secretObjectValue: {
           locationId: SecretValue.unsafePlainText(process.env.SQUARE_LOCATION || ''),
@@ -195,5 +195,31 @@ export class DeployStack extends Stack {
         },
     });
     
+    const appRunnerRole = new iam.Role(this, 'trackboss-api-role', {
+        assumedBy: new iam.ServicePrincipal('tasks.apprunner.amazonaws.com'),
+    });
+
+    // role for apprunner
+    const appRunnerPermissionsPolicy = new iam.PolicyStatement();
+    appRunnerPermissionsPolicy.addActions('ses:SendEmail', 'ses:SendRawEmail');
+    appRunnerPermissionsPolicy.addActions('ses:SendEmail', 'ses:SendHtmlEmail');
+    appRunnerPermissionsPolicy.addResources('*');
+    appRunnerPermissionsPolicy.addActions('sns:Publish');
+    appRunnerPermissionsPolicy.addResources('*');
+    
+    [cognitoClientId, cognitoPoolId, clubEmail, trackbossEnvironmentName, accountParam, regionParam].forEach((ssmParam) => {
+        appRunnerPermissionsPolicy.addActions('ssm:GetParameter');
+        appRunnerPermissionsPolicy.addResources(ssmParam.parameterArn);
+    });
+    [emailQueue, textQueue].forEach((sqsQueue) => {
+        appRunnerPermissionsPolicy.addActions('sqs:SendMessage');
+        appRunnerPermissionsPolicy.addResources(sqsQueue.queueArn);
+    });
+    appRunnerPermissionsPolicy.addActions('secretsmanager:GetSecretValue');
+    appRunnerPermissionsPolicy.addResources(squareSsm.secretArn);
+    appRunnerPermissionsPolicy.addActions('logs:PutLogEvents');
+    appRunnerPermissionsPolicy.addAllResources();
+
+    appRunnerRole.addToPolicy(appRunnerPermissionsPolicy);
   }
 }
