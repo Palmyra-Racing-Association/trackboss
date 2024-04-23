@@ -197,29 +197,44 @@ export class DeployStack extends Stack {
     
     const appRunnerRole = new iam.Role(this, 'trackboss-api-role', {
         assumedBy: new iam.ServicePrincipal('tasks.apprunner.amazonaws.com'),
+        roleName: `${trackbossEnvironmentName.stringValue}-api-runner-role`
     });
 
     // role for apprunner
-    const appRunnerPermissionsPolicy = new iam.PolicyStatement();
-    appRunnerPermissionsPolicy.addActions('ses:SendEmail', 'ses:SendRawEmail');
-    appRunnerPermissionsPolicy.addActions('ses:SendEmail', 'ses:SendHtmlEmail');
-    appRunnerPermissionsPolicy.addResources('*');
-    appRunnerPermissionsPolicy.addActions('sns:Publish');
-    appRunnerPermissionsPolicy.addResources('*');
+    const appRunnerSesPolicy = new iam.PolicyStatement();
+    appRunnerSesPolicy.addActions('ses:SendEmail', 'ses:SendRawEmail');
+    appRunnerSesPolicy.addActions('ses:SendEmail', 'ses:SendHtmlEmail');
+    appRunnerSesPolicy.addAllResources();
+    appRunnerRole.addToPolicy(appRunnerSesPolicy);
     
+    const appRunnerSnsPolicy = new iam.PolicyStatement();
+    appRunnerSnsPolicy.addActions('sns:Publish');
+    appRunnerSnsPolicy.addAllResources();
+    appRunnerRole.addToPolicy(appRunnerSnsPolicy);
+    
+    const appRunnerParamStorePolicy = new iam.PolicyStatement();
     [cognitoClientId, cognitoPoolId, clubEmail, trackbossEnvironmentName, accountParam, regionParam].forEach((ssmParam) => {
-        appRunnerPermissionsPolicy.addActions('ssm:GetParameter');
-        appRunnerPermissionsPolicy.addResources(ssmParam.parameterArn);
+        appRunnerParamStorePolicy.addActions('ssm:GetParameter');
+        appRunnerParamStorePolicy.addResources(ssmParam.parameterArn);
     });
-    [emailQueue, textQueue].forEach((sqsQueue) => {
-        appRunnerPermissionsPolicy.addActions('sqs:SendMessage');
-        appRunnerPermissionsPolicy.addResources(sqsQueue.queueArn);
-    });
-    appRunnerPermissionsPolicy.addActions('secretsmanager:GetSecretValue');
-    appRunnerPermissionsPolicy.addResources(squareSsm.secretArn);
-    appRunnerPermissionsPolicy.addActions('logs:PutLogEvents');
-    appRunnerPermissionsPolicy.addAllResources();
+    appRunnerRole.addToPolicy(appRunnerParamStorePolicy);
 
-    appRunnerRole.addToPolicy(appRunnerPermissionsPolicy);
+    const appRunnerSqsPolicy = new iam.PolicyStatement();
+    [emailQueue, textQueue].forEach((sqsQueue) => {
+        appRunnerSqsPolicy.addActions('sqs:SendMessage');
+        appRunnerSqsPolicy.addResources(sqsQueue.queueArn);
+    });
+    appRunnerRole.addToPolicy(appRunnerSqsPolicy);
+
+    const appRunnerSecretsManagerPolicy = new iam.PolicyStatement();
+    appRunnerSecretsManagerPolicy.addActions('secretsmanager:GetSecretValue');
+    appRunnerSecretsManagerPolicy.addResources(squareSsm.secretArn);
+    appRunnerRole.addToPolicy(appRunnerSecretsManagerPolicy);
+    
+    const appRunnerCloudWatchLogsPolicy = new iam.PolicyStatement();
+    appRunnerCloudWatchLogsPolicy.addActions('logs:PutLogEvents');
+    appRunnerCloudWatchLogsPolicy.addAllResources();
+    appRunnerRole.addToPolicy(appRunnerCloudWatchLogsPolicy);
+
   }
 }
