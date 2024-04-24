@@ -8,6 +8,7 @@ import logger from '../logger';
 import { getMemberList, getMembersWithTag } from '../database/member';
 import { MemberCommunication } from '../typedefs/memberCommunication';
 import { getEnvironmentParameter } from '../util/environmentWrapper';
+import { getBoardMemberList } from '../database/boardMember';
 
 const memberCommunication = Router();
 
@@ -73,6 +74,9 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
                 const isAdmin = (member.membershipAdminId === member.memberId);
                 return (isAdmin && member.active);
             });
+            // track admins uniquely so we can also grab board members even if they aren't
+            // membership admins.
+            const uniqueAdmins : any = {};
             activeAdmins.forEach((member) => {
                 communication?.members.push({
                     firstName: member.firstName,
@@ -80,9 +84,26 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
                     email: member.email,
                     phone: member.phoneNumber,
                 });
+                // this is just a placeholder value so that we can check for it later.
+                uniqueAdmins[member.memberId] = member;
+            });
+            // get all board members too, and if they aren't already in the list add them.
+            const boardMembers = await getBoardMemberList(new Date().getFullYear().toString());
+            boardMembers.forEach((boardMember) => {
+                // add board members who already not admins (this was a gaping hole in initial functionality as spouses
+                // can be board members) but would not get texts.
+                if (!uniqueAdmins[boardMember.memberId]) {
+                    communication.members.push({
+                        firstName: boardMember.firstName,
+                        lastName: boardMember.lastName,
+                        email: boardMember.email,
+                        phone: boardMember.phone,
+                    });
+                }
             });
         }
         const response = await insertMemberCommunication(communication);
+
         // now stick the message in the respective SQS queue for further processing.
         const outboundQueueName = `trackboss-queue-${communication.mechanism}`;
         AWS.config.update({ region: process.env.AWS_REGION });

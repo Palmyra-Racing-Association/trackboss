@@ -10,6 +10,7 @@ export type BoardMember = {
     firstName?: string,
     lastName?: string,
     email?: string,
+    phone?: string,
 }
 
 export type GetBoardMemberRequest = Record<string, never>;

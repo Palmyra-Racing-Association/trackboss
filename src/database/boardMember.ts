@@ -64,7 +64,7 @@ export async function getBoardMemberList(year?: string): Promise<BoardMember[]> 
         boardId: result.board_id,
         firstName: result.first_name,
         lastName: result.last_name,
-        phone: result.phone,
+        phone: result.phone_number,
         title: result.title,
         titleId: result.title_id,
         year: result.year,
