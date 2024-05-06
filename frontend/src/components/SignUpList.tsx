@@ -144,8 +144,10 @@ export default function SignUpList(props: SignupListProps) {
                             color="white"
                             onClick={
                                 async () => {
+                                    // retrieve the signups for all race or HS jobs.
                                     const retrieveJobs = (
-                                        (props.eventType === 'Race') || (props.eventType === 'Harescramble')
+                                        props.eventType.toLowerCase().includes('race') ||
+                                        (props.eventType === 'Harescramble')
                                     );
                                     const signupListExcel =
                                         await getSignupListExcel(state.token, props.eventId, retrieveJobs);
