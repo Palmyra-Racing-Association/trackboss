@@ -3,15 +3,30 @@
 import _ from 'lodash';
 import moment from 'moment';
 import {
+    Button,
     Heading,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    NumberInput,
+    SimpleGrid,
     VStack,
+    useDisclosure,
+    NumberInputField,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInputStepper,
+    useToast,
 } from '@chakra-ui/react';
 import React, { createRef, RefObject, useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { BsChevronDown } from 'react-icons/bs';
 import { Job } from '../../../src/typedefs/job';
 import { UserContext } from '../contexts/UserContext';
-import { getJobList } from '../controller/job';
+import { getJobList, modifyJobPoints, deleteJob, removeSignup } from '../controller/job';
 import { getWorkPointsByMembership, getWorkPointsTotal } from '../controller/workPoints';
 import { getYearlyThreshold, getYearlyThresholdValue } from '../controller/billing';
 // eslint-disable-next-line import/no-named-as-default
@@ -76,6 +91,8 @@ export default function WorkPointsHistory() {
     const [years, setYears] = useState<number[]>([]);
     const [workPointsEarned, setWorkPointsEarned] = useState<number>(0);
     const [workPointsThreshold, setWorkPointsThreshold] = useState<number>(0);
+    const [selectedJob, setSelectedJob] = useState<Job>();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const { state } = useContext(UserContext);
 
@@ -136,6 +153,8 @@ export default function WorkPointsHistory() {
     }, [year, allJobs]);
 
     const userActive = state.user?.active || false;
+    const toast = useToast();
+    const disableEdits = (state.storedUser?.memberType !== 'Admin');
     return (
         <VStack bg="white">
             <YearsDropDown
@@ -166,7 +185,97 @@ export default function WorkPointsHistory() {
                 responsive
                 subHeaderWrap
                 customStyles={customStyles}
+                onRowClicked={
+                    (row: Job) => {
+                        setSelectedJob(row);
+                        onOpen();
+                    }
+                }
             />
+            <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>{`Edit points for ${state?.user?.firstName} - ${selectedJob?.title}`}</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody pb={6}>
+                        <SimpleGrid columns={2}>
+                            <NumberInput
+                                min={0}
+                                max={30}
+                                defaultValue={selectedJob?.pointsAwarded}
+                                isDisabled={disableEdits}
+                                step={0.25}
+                                onChange={
+                                    async (changeValue) => {
+                                        // eslint-disable-next-line max-len
+                                        await modifyJobPoints(state.token, selectedJob?.jobId || 0, parseFloat(changeValue) || 0);
+                                        getJobsData();
+                                        toast({
+                                            containerStyle: {
+                                                background: 'orange',
+                                            },
+                                            // eslint-disable-next-line max-len
+                                            title: 'Points updated!',
+                                            // eslint-disable-next-line max-len
+                                            description: `${selectedJob?.member} ${selectedJob?.title}, ${selectedJob?.pointsAwarded}`,
+                                            status: 'success',
+                                            duration: 5000,
+                                            isClosable: true,
+                                        });
+                                    }
+                                }
+                            >
+                                <NumberInputField
+                                    placeholder="Points earned"
+                                />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
+                        </SimpleGrid>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button
+                            onClick={onClose}
+                            isDisabled={disableEdits}
+                            backgroundColor="orange"
+                            color="white"
+                            mr={3}
+                        >
+                            Save
+                        </Button>
+                        <Button
+                            onClick={
+                                async () => {
+                                    await removeSignup(state.token, selectedJob?.jobId || 0);
+                                    getJobsData();
+                                    toast({
+                                        containerStyle: {
+                                            background: 'red',
+                                        },
+                                        // eslint-disable-next-line max-len
+                                        title: 'Entry removed',
+                                        // eslint-disable-next-line max-len
+                                        description: `${selectedJob?.member} ${selectedJob?.title}, ${selectedJob?.jobId}`,
+                                        status: 'success',
+                                        duration: 5000,
+                                        isClosable: true,
+                                    });
+                                }
+                            }
+                            isDisabled={disableEdits}
+                            backgroundColor="red"
+                            color="white"
+                            mr={3}
+                        >
+                            Delete
+                        </Button>
+                        <Button onClick={onClose} backgroundColor="white">Cancel</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </VStack>
     );
 }
