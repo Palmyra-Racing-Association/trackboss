@@ -3,6 +3,7 @@ import {
     DeleteJobResponse,
     GetJobListResponse,
     GetJobResponse,
+    Job,
     PatchJobRequest,
     PatchJobResponse,
     PostCloneJobResponse,
@@ -152,6 +153,13 @@ export async function removeSignup(token:string, jobId: number) : Promise<any> {
         headers: generateHeaders(token),
     });
     return response.json();
+}
+
+export async function modifyJobPoints(token: string, jobId:number, points: number) : Promise<any> {
+    const signupJob : GetJobResponse = await getJob(token, jobId) as Job;
+    signupJob.pointsAwarded = points;
+    const updatedJob = await updateJob(token, jobId, signupJob);
+    return updatedJob;
 }
 
 interface Worker {
