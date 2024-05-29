@@ -2,26 +2,7 @@
 /* eslint-disable react/no-unused-prop-types */
 import _ from 'lodash';
 import moment from 'moment';
-import {
-    Button,
-    Heading,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    NumberInput,
-    SimpleGrid,
-    VStack,
-    useDisclosure,
-    NumberInputField,
-    NumberDecrementStepper,
-    NumberIncrementStepper,
-    NumberInputStepper,
-    useToast,
-} from '@chakra-ui/react';
+import { Heading, VStack, useDisclosure, useToast } from '@chakra-ui/react';
 import React, { createRef, RefObject, useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { Job } from '../../../src/typedefs/job';
@@ -32,6 +13,7 @@ import { getYearlyThreshold, getYearlyThresholdValue } from '../controller/billi
 // eslint-disable-next-line import/no-named-as-default
 import AddPointsModal from './AddPointsModal';
 import YearsDropDown from './shared/YearsDropDown';
+import EditPointsModal from './modals/EditPointsModal';
 
 const columns: any = [
     {
@@ -197,88 +179,14 @@ export default function WorkPointsHistory() {
                     }
                 }
             />
-            <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>{`Edit points for ${state?.user?.firstName} - ${selectedJob?.title}`}</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody pb={6}>
-                        <SimpleGrid columns={2}>
-                            <NumberInput
-                                min={0}
-                                max={30}
-                                defaultValue={selectedJob?.pointsAwarded}
-                                step={0.25}
-                                onChange={
-                                    async (changeValue) => {
-                                        // eslint-disable-next-line max-len
-                                        await modifyJobPoints(state.token, selectedJob?.jobId || 0, parseFloat(changeValue) || 0);
-                                        getJobsData();
-                                        toast({
-                                            containerStyle: {
-                                                background: 'orange',
-                                            },
-                                            // eslint-disable-next-line max-len
-                                            title: 'Points updated!',
-                                            // eslint-disable-next-line max-len
-                                            description: `${selectedJob?.member} ${selectedJob?.title}, ${changeValue}`,
-                                            status: 'success',
-                                            duration: 5000,
-                                            isClosable: true,
-                                        });
-                                    }
-                                }
-                            >
-                                <NumberInputField
-                                    placeholder="Points earned"
-                                />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                        </SimpleGrid>
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <Button
-                            onClick={onClose}
-                            backgroundColor="orange"
-                            color="white"
-                            mr={3}
-                        >
-                            Save
-                        </Button>
-                        <Button
-                            onClick={
-                                async () => {
-                                    await removeSignup(state.token, selectedJob?.jobId || 0);
-                                    getJobsData();
-                                    toast({
-                                        containerStyle: {
-                                            background: 'red',
-                                        },
-                                        // eslint-disable-next-line max-len
-                                        title: 'Entry removed',
-                                        // eslint-disable-next-line max-len
-                                        description: `${selectedJob?.member} ${selectedJob?.title}, ${selectedJob?.jobId}`,
-                                        status: 'success',
-                                        duration: 5000,
-                                        isClosable: true,
-                                    });
-                                    onClose();
-                                }
-                            }
-                            backgroundColor="red"
-                            color="white"
-                            mr={3}
-                        >
-                            Delete
-                        </Button>
-                        <Button onClick={onClose} backgroundColor="white">Cancel</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
+            <EditPointsModal
+                memberName={state.user?.firstName || ''}
+                selectedJob={selectedJob || {} as Job}
+                // eslint-disable-next-line react/jsx-no-bind
+                refreshPoints={getJobsData}
+                isOpen={isOpen}
+                onClose={onClose}
+            />
         </VStack>
     );
 }
