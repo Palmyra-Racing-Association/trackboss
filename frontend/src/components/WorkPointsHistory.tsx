@@ -153,8 +153,11 @@ export default function WorkPointsHistory() {
     }, [year, allJobs]);
 
     const userActive = state.user?.active || false;
+    const adminOrActingAsAdmin = (
+        (state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin') &&
+        (userActive)
+    );
     const toast = useToast();
-    const disableEdits = (state.storedUser?.memberType !== 'Admin');
     return (
         <VStack bg="white">
             <YearsDropDown
@@ -171,7 +174,7 @@ export default function WorkPointsHistory() {
                 membershipId={state?.user?.membershipId || 0}
                 memberId={state?.user?.memberId as number}
                 // eslint-disable-next-line max-len
-                visible={((state.storedUser?.memberType === 'Admin' || state.user?.memberType === 'Admin') && (userActive))}
+                visible={adminOrActingAsAdmin}
                 token={state.token}
                 // eslint-disable-next-line react/jsx-no-bind
                 refreshPoints={getJobsData}
@@ -188,7 +191,9 @@ export default function WorkPointsHistory() {
                 onRowClicked={
                     (row: Job) => {
                         setSelectedJob(row);
-                        onOpen();
+                        if (adminOrActingAsAdmin) {
+                            onOpen();
+                        }
                     }
                 }
             />
@@ -203,7 +208,6 @@ export default function WorkPointsHistory() {
                                 min={0}
                                 max={30}
                                 defaultValue={selectedJob?.pointsAwarded}
-                                isDisabled={disableEdits}
                                 step={0.25}
                                 onChange={
                                     async (changeValue) => {
@@ -217,7 +221,7 @@ export default function WorkPointsHistory() {
                                             // eslint-disable-next-line max-len
                                             title: 'Points updated!',
                                             // eslint-disable-next-line max-len
-                                            description: `${selectedJob?.member} ${selectedJob?.title}, ${selectedJob?.pointsAwarded}`,
+                                            description: `${selectedJob?.member} ${selectedJob?.title}, ${changeValue}`,
                                             status: 'success',
                                             duration: 5000,
                                             isClosable: true,
@@ -239,7 +243,6 @@ export default function WorkPointsHistory() {
                     <ModalFooter>
                         <Button
                             onClick={onClose}
-                            isDisabled={disableEdits}
                             backgroundColor="orange"
                             color="white"
                             mr={3}
@@ -263,9 +266,9 @@ export default function WorkPointsHistory() {
                                         duration: 5000,
                                         isClosable: true,
                                     });
+                                    onClose();
                                 }
                             }
-                            isDisabled={disableEdits}
                             backgroundColor="red"
                             color="white"
                             mr={3}
