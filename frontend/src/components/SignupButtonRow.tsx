@@ -10,6 +10,7 @@ import { BsCurrencyDollar, BsTrash2 } from 'react-icons/bs';
 import { signupForJob, removeSignup, signupForJobFreeForm, setPaidState } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 import MemberSelector from './shared/MemberSelector';
+import EditPointsModal from './modals/EditPointsModal';
 
 export default function SignupButtonRow(props: any) {
     const { state } = useContext(UserContext);
@@ -23,6 +24,12 @@ export default function SignupButtonRow(props: any) {
         isOpen: isNonMemberOpen,
         onOpen: onNonMemberOpen,
         onClose: onNonMemberClose,
+    } = useDisclosure();
+
+    const {
+        isOpen: isEditPointsOpen,
+        onOpen: onEditPointsOpen,
+        onClose: onEditPointsClose,
     } = useDisclosure();
 
     const [jobId] = useState(props.data.jobId);
@@ -161,6 +168,26 @@ export default function SignupButtonRow(props: any) {
                 >
                     {markedPaid ? 'Unmark paid' : 'Mark as Paid'}
                 </Button>
+                <Button
+                    background="orange.300"
+                    color="white"
+                    style={{ visibility: state.user?.memberType === 'Admin' ? 'visible' : 'hidden' }}
+                    onClick={
+                        async () => {
+                            onEditPointsOpen();
+                            await props.refreshData();
+                        }
+                    }
+                >
+                    Edit Points
+                </Button>
+                <EditPointsModal
+                    memberName={props.data.member}
+                    selectedJob={props.data}
+                    refreshPoints={props.refreshData}
+                    isOpen={isEditPointsOpen}
+                    onClose={onEditPointsClose}
+                />
             </ButtonGroup>
         );
     }
