@@ -7,19 +7,21 @@ import {
     ModalContent,
     ModalCloseButton,
     Button,
-    Center,
     Divider,
     Heading,
     ModalBody,
     ModalFooter,
     SimpleGrid,
-    HStack,
     VStack,
     Text,
     Switch,
 } from '@chakra-ui/react';
 import moment from 'moment';
 import { BsTrash2 } from 'react-icons/bs';
+import DateTimePicker from 'react-datetime-picker';
+import 'react-datetime-picker/dist/DateTimePicker.css';
+import 'react-calendar/dist/Calendar.css';
+import 'react-clock/dist/Clock.css';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
 import { UserContext } from '../contexts/UserContext';
 import { PatchJobRequest } from '../../../src/typedefs/job';
@@ -28,7 +30,6 @@ interface modalProps {
   isOpen: boolean,
   onClose: () => void,
   selectedEvent: any,
-  onSignUpOpen: () => void;
   admin: boolean;
   deleteEvent: () => void;
   // eslint-disable-next-line no-unused-vars
@@ -59,6 +60,9 @@ export default function SelectedEventModal(props: modalProps) {
         }
         return undefined;
     }
+    const [startDateTime, setStartDateTime] = useState<Date>(props.selectedEvent.start);
+    const [endDateTime, setEndDateTime] = useState<Date>(props.selectedEvent.end);
+    const [editDates, setEditDates] = useState<boolean>(false);
 
     return (
         <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
@@ -84,52 +88,41 @@ export default function SelectedEventModal(props: modalProps) {
                             )
                         }
                     </Text>
+                    {
+                        ((props.admin && editDates) && (
+                            <SimpleGrid>
+                                <VStack align="left">
+                                    <Text>Start Date/Time:</Text>
+                                    <DateTimePicker
+                                        disableClock
+                                        value={startDateTime}
+                                        onChange={
+                                            (date: any) => {
+                                                setStartDateTime(date);
+                                            }
+                                        }
+                                    />
+                                </VStack>
+                                <VStack align="left">
+                                    <Text>End Date/Time:</Text>
+                                    <DateTimePicker
+                                        disableClock
+                                        value={endDateTime}
+                                        minDate={startDateTime}
+                                        onChange={
+                                            (date: any) => {
+                                                setEndDateTime(date);
+                                            }
+                                        }
+                                    />
+                                </VStack>
+                            </SimpleGrid>
+                        ))
+                    }
                     <Text fontSize="sm" textAlign="center">
                         {props.selectedEvent.eventDescription}
                     </Text>
                 </ModalBody>
-                {
-                    'jobId' in props.selectedEvent && (
-                        <SimpleGrid columns={1}>
-                            <Center>
-                                <HStack spacing={0}>
-                                    <Text fontSize="xl">Work Points:</Text>
-                                    <Text
-                                        pl={2}
-                                        color="orange.400"
-                                        fontSize="3xl"
-                                    >
-                                        {props.selectedEvent.pointsAwarded}
-                                    </Text>
-                                </HStack>
-                            </Center>
-                            <Center>
-                                <VStack spacing={1}>
-                                    {
-                                        // Don't display the family sign up button if the job already has a member
-                                        props.admin && 'jobId' in props.selectedEvent && !props.selectedEvent.member && (
-                                            <Button
-                                                as="u"
-                                                color="orange.300"
-                                                textStyle="underline"
-                                                variant="ghost"
-                                                size="sm"
-                                                onClick={
-                                                    () => [
-                                                        props.onClose(),
-                                                        props.onSignUpOpen(),
-                                                    ]
-                                                }
-                                            >
-                                                Family Sign Ups
-                                            </Button>
-                                        )
-                                    }
-                                </VStack>
-                            </Center>
-                        </SimpleGrid>
-                    )
-                }
                 <Divider />
                 <ModalCloseButton />
                 <ModalFooter>
@@ -145,7 +138,19 @@ export default function SelectedEventModal(props: modalProps) {
                                 <Button
                                     ml={3}
                                     mr={3}
-                                    size="lg"
+                                    backgroundColor="orange.300"
+                                    color="white"
+                                    onClick={
+                                        () => {
+                                            setEditDates(!editDates);
+                                        }
+                                    }
+                                >
+                                    Edit Dates
+                                </Button>
+                                <Button
+                                    ml={3}
+                                    mr={3}
                                     backgroundColor="red"
                                     color="white"
                                     isDisabled={!enableDelete}
