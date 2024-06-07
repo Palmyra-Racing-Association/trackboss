@@ -20,7 +20,7 @@ const localizer: DateLocalizer = momentLocalizer(moment);
 export default function EventCalendar() {
     const { state } = useContext(UserContext);
     const { onClose: onViewEventClose, isOpen: isViewEventOpen, onOpen: onViewEventOpen } = useDisclosure();
-    const { onClose: onSignUpClose, isOpen: isSignUpOpen, onOpen: onSignUpOpen } = useDisclosure();
+    const { onClose: onSignUpClose, isOpen: isSignUpOpen } = useDisclosure();
     const { onClose: onCreateClose, isOpen: isCreateOpen, onOpen: onCreateOpen } = useDisclosure();
 
     const [selectedEvent, setSelectedEvent] = useState<Event | Job>();
@@ -182,7 +182,6 @@ export default function EventCalendar() {
                         isOpen={isViewEventOpen}
                         onClose={onViewEventClose}
                         selectedEvent={selectedEvent}
-                        onSignUpOpen={onSignUpOpen}
                         admin={state.user?.memberType === 'Admin'}
                         // eslint-disable-next-line react/jsx-no-bind
                         deleteEvent={deleteEventLocal}
