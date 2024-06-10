@@ -88,9 +88,6 @@ export default function SelectedEventModal(props: modalProps) {
                 <ModalBody>
                     <Text fontSize="2xl" textAlign="center">
                         {props.selectedEvent.title}
-                        (
-                        {props.selectedEvent.eventId}
-                        )
                     </Text>
                     <Text fontSize="xl" textAlign="center">
                         {
@@ -174,6 +171,9 @@ export default function SelectedEventModal(props: modalProps) {
                             </Accordion>
                         ))
                     }
+                    <Text fontSize="x-small">
+                        {`Event ID: ${props.selectedEvent.eventId}`}
+                    </Text>
                 </ModalBody>
                 <Divider />
                 <ModalCloseButton />
