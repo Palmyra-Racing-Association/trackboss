@@ -151,11 +151,14 @@ export async function patchEvent(id: number, req: PatchEventRequest): Promise<vo
     if (_.isEmpty(req)) {
         throw new Error('user input error');
     }
-    const values = [id, req.startDate, req.endDate, req.eventName, req.eventDescription];
+    const values = [req.startDate, req.endDate, req.eventName, req.eventDescription, id];
+
+    const updateSql =
+        'update event set start_date = ?, end_date = ?, event_name = ?, event_description = ? where event_id = ?';
 
     let result;
     try {
-        [result] = await getPool().query<OkPacket>(PATCH_EVENT_SQL, values);
+        [result] = await getPool().query<OkPacket>(updateSql, values);
     } catch (e) {
         logger.error(`DB error patching event: ${e}`);
         throw new Error('internal server error');
