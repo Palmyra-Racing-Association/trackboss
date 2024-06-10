@@ -15,6 +15,12 @@ import {
     VStack,
     Text,
     Switch,
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionIcon,
+    Box,
+    AccordionPanel,
 } from '@chakra-ui/react';
 import moment from 'moment';
 import { BsTrash2 } from 'react-icons/bs';
@@ -25,6 +31,8 @@ import 'react-clock/dist/Clock.css';
 import { getEventMonthDaySpan, getEventStartAndEndTime } from '../controller/utils';
 import { UserContext } from '../contexts/UserContext';
 import { PatchJobRequest } from '../../../src/typedefs/job';
+import { updateEvent } from '../controller/event';
+import { PatchEventRequest } from '../../../src/typedefs/event';
 
 interface modalProps {
   isOpen: boolean,
@@ -34,6 +42,7 @@ interface modalProps {
   deleteEvent: () => void;
   // eslint-disable-next-line no-unused-vars
   signUpForJob: (patchInfo: { jobId: number; editedJob: PatchJobRequest; }) => void;
+  eventsRefresh: () => void;
 }
 
 export default function SelectedEventModal(props: modalProps) {
@@ -62,7 +71,7 @@ export default function SelectedEventModal(props: modalProps) {
     }
     const [startDateTime, setStartDateTime] = useState<Date>(props.selectedEvent.start);
     const [endDateTime, setEndDateTime] = useState<Date>(props.selectedEvent.end);
-    const [editDates, setEditDates] = useState<boolean>(false);
+    const [datesDirty, setDatesDirty] = useState<boolean>(false);
 
     return (
         <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
@@ -79,6 +88,9 @@ export default function SelectedEventModal(props: modalProps) {
                 <ModalBody>
                     <Text fontSize="2xl" textAlign="center">
                         {props.selectedEvent.title}
+                        (
+                        {props.selectedEvent.eventId}
+                        )
                     </Text>
                     <Text fontSize="xl" textAlign="center">
                         {
@@ -88,40 +100,80 @@ export default function SelectedEventModal(props: modalProps) {
                             )
                         }
                     </Text>
-                    {
-                        ((props.admin && editDates) && (
-                            <SimpleGrid>
-                                <VStack align="left">
-                                    <Text>Start Date/Time:</Text>
-                                    <DateTimePicker
-                                        disableClock
-                                        value={startDateTime}
-                                        onChange={
-                                            (date: any) => {
-                                                setStartDateTime(date);
-                                            }
-                                        }
-                                    />
-                                </VStack>
-                                <VStack align="left">
-                                    <Text>End Date/Time:</Text>
-                                    <DateTimePicker
-                                        disableClock
-                                        value={endDateTime}
-                                        minDate={startDateTime}
-                                        onChange={
-                                            (date: any) => {
-                                                setEndDateTime(date);
-                                            }
-                                        }
-                                    />
-                                </VStack>
-                            </SimpleGrid>
-                        ))
-                    }
                     <Text fontSize="sm" textAlign="center">
                         {props.selectedEvent.eventDescription}
                     </Text>
+                    {
+                        ((props.admin) && (
+                            <Accordion allowToggle>
+                                <AccordionItem>
+                                    <h2>
+                                        <AccordionButton>
+                                            <Box as="span">
+                                                Edit Dates
+                                            </Box>
+                                            <AccordionIcon />
+                                        </AccordionButton>
+                                    </h2>
+                                    <AccordionPanel>
+                                        <SimpleGrid>
+                                            <VStack align="left">
+                                                <Text>Start Date/Time:</Text>
+                                                <DateTimePicker
+                                                    disableClock
+                                                    disableCalendar
+                                                    value={startDateTime}
+                                                    onChange={
+                                                        (date: any) => {
+                                                            setStartDateTime(date);
+                                                            setDatesDirty(true);
+                                                        }
+                                                    }
+                                                />
+                                            </VStack>
+                                            <VStack align="left">
+                                                <Text>End Date/Time:</Text>
+                                                <DateTimePicker
+                                                    disableClock
+                                                    disableCalendar
+                                                    value={endDateTime}
+                                                    minDate={startDateTime}
+                                                    onChange={
+                                                        (date: any) => {
+                                                            setEndDateTime(date);
+                                                            setDatesDirty(true);
+                                                        }
+                                                    }
+                                                />
+                                            </VStack>
+                                            <VStack align="left">
+                                                <Button
+                                                    width={50}
+                                                    backgroundColor="orange.300"
+                                                    color="white"
+                                                    isDisabled={!datesDirty}
+                                                    onClick={
+                                                        async () => {
+                                                            const patchEvent : PatchEventRequest = {};
+                                                            patchEvent.startDate = moment(startDateTime).toISOString();
+                                                            patchEvent.endDate = moment(endDateTime).toISOString();
+                                                            patchEvent.eventDescription = props.selectedEvent.description;
+                                                            patchEvent.eventName = props.selectedEvent.title;
+                                                            await updateEvent(state.token, props.selectedEvent.eventId, patchEvent);
+                                                            props.eventsRefresh();
+                                                            props.onClose();
+                                                        }
+                                                    }
+                                                >
+                                                    Save
+                                                </Button>
+                                            </VStack>
+                                        </SimpleGrid>
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            </Accordion>
+                        ))
+                    }
                 </ModalBody>
                 <Divider />
                 <ModalCloseButton />
@@ -135,19 +187,6 @@ export default function SelectedEventModal(props: modalProps) {
                     {
                         props.admin && (
                             <>
-                                <Button
-                                    ml={3}
-                                    mr={3}
-                                    backgroundColor="orange.300"
-                                    color="white"
-                                    onClick={
-                                        () => {
-                                            setEditDates(!editDates);
-                                        }
-                                    }
-                                >
-                                    Edit Dates
-                                </Button>
                                 <Button
                                     ml={3}
                                     mr={3}

@@ -72,6 +72,11 @@ export default function EventCalendar() {
         }
     }
 
+    async function refreshEvents() {
+        const events = await getCalendarEventsAndJobs(state.token);
+        setCalendarEvents(events);
+    }
+
     useEffect(() => {
         async function getData() {
             if (state.user) {
@@ -187,6 +192,8 @@ export default function EventCalendar() {
                         deleteEvent={deleteEventLocal}
                         // eslint-disable-next-line react/jsx-no-bind
                         signUpForJob={signUpForJob}
+                        // eslint-disable-next-line react/jsx-no-bind
+                        eventsRefresh={refreshEvents}
                     />
                 )
             }
