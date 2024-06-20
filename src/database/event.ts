@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
+import { addDays, parse } from 'date-fns';
 
 import logger from '../logger';
 import { getPool } from './pool';
@@ -184,4 +185,38 @@ export async function deleteEvent(id: number): Promise<void> {
     if (result.affectedRows < 1) {
         throw new Error('not found');
     }
+}
+
+export async function getRelatedEvents(event: Event) {
+    const values = [event.eventTypeId];
+
+    const relatedEventSql =
+        `select 
+        etr.related_event_type_id, etr.day_difference, etr.description,
+        et.type, et.default_start, et.default_end
+        from
+        event_type_relationship etr, event_type et
+        where etr.event_type_id = ? and
+        et.event_type_id = etr.related_event_type_id order by etr.day_difference`;
+
+    let relatedEventResults;
+    try {
+        [relatedEventResults] = await getPool().query<RowDataPacket[]>(relatedEventSql, values);
+    } catch (e) {
+        throw new Error('internal server error');
+    }
+    const relatedEvents: PostNewEventRequest[] = [];
+    relatedEventResults.forEach((related) => {
+        const startDate = parse(event.start.toString(), 'yyyy-MM-dd HH:mm:ss', new Date());
+        const endDate = parse(event.end.toString(), 'yyyy-MM-dd HH:mm:ss', new Date());
+        const precedingEvent = {
+            startDate: addDays(startDate, related.day_difference).toString(),
+            endDate: addDays(endDate, related.day_difference).toString(),
+            eventTypeId: related.related_event_type_id,
+            eventName: related.description,
+            eventDescription: related.description,
+        };
+        relatedEvents.push(precedingEvent);
+    });
+    return relatedEvents;
 }

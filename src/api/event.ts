@@ -1,6 +1,9 @@
 import { format } from 'date-fns';
 import { Request, Response, Router } from 'express';
-import { deleteEvent, getClosestEvent, getEvent, getEventList, insertEvent, patchEvent } from '../database/event';
+import {
+    deleteEvent, getClosestEvent, getEvent, getEventList, getRelatedEvents,
+    insertEvent, patchEvent,
+} from '../database/event';
 import {
     DeleteEventResponse,
     Event,
@@ -26,6 +29,7 @@ event.post('/new', async (req: Request, res: Response) => {
             await verify(headerCheck.token, 'Admin');
             const insertId = await insertEvent(req.body);
             response = await getEvent(insertId);
+            const relatedEvents = await getRelatedEvents(response);
             res.status(201);
         } catch (e: any) {
             logger.error(`Error at path ${req.path}`);
