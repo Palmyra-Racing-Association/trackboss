@@ -30,6 +30,13 @@ event.post('/new', async (req: Request, res: Response) => {
             const insertId = await insertEvent(req.body);
             response = await getEvent(insertId);
             const relatedEvents = await getRelatedEvents(response);
+            // awaiting all this on purpose because a) it is fast and b) I want the UI to update when all of this
+            // is done. We are in mañuel transmission mode here.
+            // eslint-disable-next-line no-restricted-syntax
+            for (const childEvent of relatedEvents) {
+                // eslint-disable-next-line no-await-in-loop
+                await insertEvent(childEvent);
+            }
             res.status(201);
         } catch (e: any) {
             logger.error(`Error at path ${req.path}`);

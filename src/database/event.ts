@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
-import { addDays, parse } from 'date-fns';
+import { addDays, format, parse } from 'date-fns';
 
 import logger from '../logger';
 import { getPool } from './pool';
@@ -207,14 +207,24 @@ export async function getRelatedEvents(event: Event) {
     }
     const relatedEvents: PostNewEventRequest[] = [];
     relatedEventResults.forEach((related) => {
-        const startDate = parse(event.start.toString(), 'yyyy-MM-dd HH:mm:ss', new Date());
-        const endDate = parse(event.end.toString(), 'yyyy-MM-dd HH:mm:ss', new Date());
+        let startDate = parse(event.start.toString(), 'yyyy-MM-dd HH:mm:ss', new Date());
+        let endDate = parse(event.start.toString(), 'yyyy-MM-dd HH:mm:ss', new Date());
+        startDate = addDays(startDate, related.day_difference);
+        endDate = addDays(endDate, related.day_difference);
+        const defaultStart = related.default_start.split(':');
+        startDate.setHours(defaultStart[0]);
+        startDate.setMinutes(defaultStart[1]);
+        startDate.setSeconds(defaultStart[2]);
+        const defaultEnd = related.default_end.split(':');
+        endDate.setHours(defaultEnd[0]);
+        endDate.setMinutes(defaultEnd[1]);
+        endDate.setSeconds(defaultEnd[2]);
         const precedingEvent = {
-            startDate: addDays(startDate, related.day_difference).toString(),
-            endDate: addDays(endDate, related.day_difference).toString(),
+            startDate: format(startDate, "yyyy-MM-dd'T'HH:mm:ss"),
+            endDate: format(endDate, "yyyy-MM-dd'T'HH:mm:ss"),
             eventTypeId: related.related_event_type_id,
-            eventName: related.description,
-            eventDescription: related.description,
+            eventName: related.type,
+            eventDescription: `${event.title} - ${related.type}`,
         };
         relatedEvents.push(precedingEvent);
     });
