@@ -223,7 +223,7 @@ export async function getRelatedEvents(event: Event) {
             startDate: format(startDate, "yyyy-MM-dd'T'HH:mm:ss"),
             endDate: format(endDate, "yyyy-MM-dd'T'HH:mm:ss"),
             eventTypeId: related.related_event_type_id,
-            eventName: related.type,
+            eventName: `${event.title} - ${related.type}`,
             eventDescription: `${event.title} - ${related.type}`,
         };
         relatedEvents.push(precedingEvent);

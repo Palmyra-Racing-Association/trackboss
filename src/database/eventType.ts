@@ -59,6 +59,8 @@ export async function getEventType(id: number): Promise<EventType> {
         active: !!results[0].active[0],
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
+        defaultEndTime: results[0].default_end,
+        defaultStartTime: results[0].default_start,
     };
 }
 
@@ -79,6 +81,8 @@ export async function getEventTypeList(): Promise<EventType[]> {
         lastModifiedBy: result.last_modified_by,
         lastModifiedDate: result.last_modified_date,
         active: !!result.active[0],
+        defaultEndTime: result.default_end,
+        defaultStartTime: result.default_start,
     }));
 }
 

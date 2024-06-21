@@ -106,7 +106,11 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                         <Select
                                             _placeholder={{ color: 'gray.100' }}
                                             placeholder="Select Label..."
-                                            onChange={(e) => { setEventTypeId(parseInt(e.target.value, 10)); }}
+                                            onChange={
+                                                (e) => {
+                                                    setEventTypeId(parseInt(e.target.value, 10));
+                                                }
+                                            }
                                         >
                                             {generateEventTypeOptions(eventTypes)}
                                         </Select>
@@ -154,13 +158,9 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                             color="white"
                             isDisabled={isEventCreating}
                             onClick={
-                                () => {
+                                async () => {
                                     setIsEventCreating(true);
-                                    // Set the loading state to false after 3 seconds
-                                    setTimeout(() => {
-                                        setIsEventCreating(false);
-                                        onClose();
-                                    }, 2750); // Adjust time as needed
+
                                     const newEvent: PostNewEventRequest = {
                                         startDate: startDateTime.toISOString(),
                                         endDate: endDateTime.toISOString(),
@@ -168,7 +168,9 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                         eventName,
                                         eventDescription: description,
                                     };
-                                    props.createEvent(newEvent);
+                                    await props.createEvent(newEvent);
+                                    setIsEventCreating(false);
+                                    onClose();
                                 }
                             }
                         >
