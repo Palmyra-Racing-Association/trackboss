@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { OkPacket, RowDataPacket } from 'mysql2';
+import { addDays, format, parse } from 'date-fns';
 
 import logger from '../logger';
 import { getPool } from './pool';
@@ -184,4 +185,48 @@ export async function deleteEvent(id: number): Promise<void> {
     if (result.affectedRows < 1) {
         throw new Error('not found');
     }
+}
+
+export async function getRelatedEvents(event: Event) {
+    const values = [event.eventTypeId];
+
+    const relatedEventSql =
+        `select 
+        etr.related_event_type_id, etr.day_difference, etr.description,
+        et.type, et.default_start, et.default_end
+        from
+        event_type_relationship etr, event_type et
+        where etr.event_type_id = ? and
+        et.event_type_id = etr.related_event_type_id order by etr.day_difference`;
+
+    let relatedEventResults;
+    try {
+        [relatedEventResults] = await getPool().query<RowDataPacket[]>(relatedEventSql, values);
+    } catch (e) {
+        throw new Error('internal server error');
+    }
+    const relatedEvents: PostNewEventRequest[] = [];
+    relatedEventResults.forEach((related) => {
+        let startDate = parse(event.start.toString(), 'yyyy-MM-dd HH:mm:ss', new Date());
+        let endDate = parse(event.start.toString(), 'yyyy-MM-dd HH:mm:ss', new Date());
+        startDate = addDays(startDate, related.day_difference);
+        endDate = addDays(endDate, related.day_difference);
+        const defaultStart = related.default_start.split(':');
+        startDate.setHours(defaultStart[0]);
+        startDate.setMinutes(defaultStart[1]);
+        startDate.setSeconds(defaultStart[2]);
+        const defaultEnd = related.default_end.split(':');
+        endDate.setHours(defaultEnd[0]);
+        endDate.setMinutes(defaultEnd[1]);
+        endDate.setSeconds(defaultEnd[2]);
+        const precedingEvent = {
+            startDate: format(startDate, "yyyy-MM-dd'T'HH:mm:ss"),
+            endDate: format(endDate, "yyyy-MM-dd'T'HH:mm:ss"),
+            eventTypeId: related.related_event_type_id,
+            eventName: `${event.title} - ${related.type}`,
+            eventDescription: `${event.title} - ${related.type}`,
+        };
+        relatedEvents.push(precedingEvent);
+    });
+    return relatedEvents;
 }

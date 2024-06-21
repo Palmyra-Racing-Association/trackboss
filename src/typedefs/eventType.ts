@@ -5,7 +5,9 @@ export type EventType = {
     type: string,
     active: boolean,
     lastModifiedDate: string,
-    lastModifiedBy: string
+    lastModifiedBy: string,
+    defaultStartTime: string,
+    defaultEndTime: string,
 }
 
 export type PostNewEventTypeRequest = {
