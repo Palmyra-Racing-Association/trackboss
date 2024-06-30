@@ -68,6 +68,7 @@ export class DeployStack extends Stack {
     });
  
     const trackbossApiService = new apprunner.Service(this, `${environmentName}-api-runner`, {
+        cpu: apprunner.Cpu.ONE_VCPU,
         instanceRole: iam.Role.fromRoleName(this, 'trackboss-role', 'ec2_aws_access'),
         source: apprunner.Source.fromEcr({
           imageConfiguration: {
