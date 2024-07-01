@@ -1,15 +1,14 @@
-DELIMITER //
-DROP VIEW IF EXISTS `v_job`;
-CREATE VIEW `v_job` AS
+create or replace view v_job as 
     SELECT
 		j.job_id,
-		if(
-			isnull(j.paid_labor),
-            CONCAT(m.first_name, ' ', m.last_name), 
-            j.paid_labor
-		) AS member,
+        case
+            when (isnull(j.paid_labor) and isnull(j.paid_labor_id)) then concat(m.first_name, ' ', m.last_name)
+            when (isnull(j.paid_labor) and not isnull(j.paid_labor_id)) then concat(pl.first_name, ' ', pl.last_name, pl.business_name) 
+            else j.paid_labor
+        end as member,
 		m.member_id,
 		m.membership_id,
+        pl.paid_labor_id,
 		e.event_name as event,
 		e.event_id,
 		e.event_type_id,
@@ -37,5 +36,6 @@ CREATE VIEW `v_job` AS
             LEFT JOIN
         event e ON e.event_id = j.event_id
             LEFT JOIN
-        job_type jt ON j.job_type_id = jt.job_type_id;
-//
+        job_type jt ON j.job_type_id = jt.job_type_id
+            LEFT JOIN
+        paid_labor pl on j.paid_labor_id = pl.paid_labor_id;
