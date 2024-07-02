@@ -23,6 +23,7 @@ import ridingAreaStatus from './ridingAreaStatus';
 import memberCommunication from './memberCommunication';
 import membershipTags from './membershipTags';
 import link from './link';
+import paidLabor from './paidLabor';
 
 const api = Router();
 
@@ -87,4 +88,6 @@ api.use('/ridingAreaStatus', ridingAreaStatus);
 api.use('/memberCommunication', memberCommunication);
 api.use('/membershipTags', membershipTags);
 api.use('/link', link);
+api.use('/paidLabor', paidLabor);
+
 export default api;
