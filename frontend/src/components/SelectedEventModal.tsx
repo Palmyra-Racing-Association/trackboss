@@ -152,8 +152,8 @@ export default function SelectedEventModal(props: modalProps) {
                                                     onClick={
                                                         async () => {
                                                             const patchEvent : PatchEventRequest = {};
-                                                            patchEvent.startDate = moment(startDateTime).toISOString();
-                                                            patchEvent.endDate = moment(endDateTime).toISOString();
+                                                            patchEvent.startDate = moment(startDateTime).toISOString(true).slice(0, -10);
+                                                            patchEvent.endDate = moment(endDateTime).toISOString(true).slice(0, -10);
                                                             patchEvent.eventDescription = props.selectedEvent.description;
                                                             patchEvent.eventName = props.selectedEvent.title;
                                                             await updateEvent(state.token, props.selectedEvent.eventId, patchEvent);
