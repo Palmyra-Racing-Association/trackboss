@@ -12,3 +12,5 @@ export type PaidLabor = {
 }
 
 export type GetPaidLaborResponse = PaidLabor | PaidLabor[] | ErrorResponse;
+
+export type DeletePaidLaborResponse = PaidLabor | ErrorResponse;

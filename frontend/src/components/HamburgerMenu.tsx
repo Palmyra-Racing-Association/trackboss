@@ -16,7 +16,7 @@ import {
     AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank, AiFillFolderOpen,
     AiOutlineNotification,
 } from 'react-icons/ai';
-import { FaMoneyBillAlt } from 'react-icons/fa';
+import { FaMoneyBillAlt, FaMoneyCheck } from 'react-icons/fa';
 import { HiUsers, HiCog } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
@@ -110,7 +110,23 @@ export default function HamburgerMenu(props: pageProps) {
             >
                 <Link to="/communicate">Communicate</Link>
             </Button>
-
+            <Button
+                justifyContent="flex-start"
+                height="80px"
+                fontFamily="heading"
+                fontSize="2xl"
+                leftIcon={<FaMoneyCheck />}
+                width="100%"
+                bg="white"
+                color="black"
+                borderRadius="0"
+                _hover={{ bg: 'gray.100' }}
+                _active={activeButtonStyle}
+                id="8"
+                isActive={props.activeButtonId === 10}
+            >
+                <Link to="/paidlabor">Paid Labor</Link>
+            </Button>
         </VStack>
     );
     return (
