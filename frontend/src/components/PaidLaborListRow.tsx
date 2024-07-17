@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
 import { ExpanderComponentProps } from 'react-data-table-component';
-import { Box, Button, ButtonGroup, useToast } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, useToast, useDisclosure } from '@chakra-ui/react';
 import { BsTrash2 } from 'react-icons/bs';
 
 import { updatePaidLabor, deletePaidLabor } from '../controller/paidLabor';
@@ -17,7 +17,8 @@ interface PaidLaborRowProps extends ExpanderComponentProps<PaidLabor> {
 export default function PaidLaborListRow(props: PaidLaborRowProps) {
     const { state } = useContext(UserContext);
     // const toast = useToast();
-    const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
+    const { isOpen, onClose, onOpen } = useDisclosure();
+
     return (
         <Box>
             <ButtonGroup variant="outline" ml={10} spacing="6">
@@ -28,7 +29,7 @@ export default function PaidLaborListRow(props: PaidLaborRowProps) {
                     rightIcon={<BsTrash2 />}
                     onClick={
                         async () => {
-                            await deletePaidLabor(state.token, props.data.paidLaborId);
+                            await deletePaidLabor(state.token, props.data.paidLaborId || 0);
                             if (props.updateCallback) {
                                 await props.updateCallback();
                             }
@@ -44,7 +45,7 @@ export default function PaidLaborListRow(props: PaidLaborRowProps) {
                     style={{ visibility: state.user?.memberType === 'Admin' ? 'visible' : 'hidden' }}
                     onClick={
                         async () => {
-                            setIsEditOpen(true);
+                            onOpen();
                         }
                     }
                 >
@@ -52,11 +53,14 @@ export default function PaidLaborListRow(props: PaidLaborRowProps) {
                 </Button>
             </ButtonGroup>
             <PaidLaborModal
-                isOpen={isEditOpen}
+                laborer={props.data}
+                editMode
+                isOpen={isOpen}
                 onClose={
                     async () => {
                         if (props.updateCallback) {
                             props.updateCallback();
+                            onClose();
                         }
                     }
                 }
