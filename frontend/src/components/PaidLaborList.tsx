@@ -1,4 +1,4 @@
-import { Box, Center, Input, InputGroup, InputLeftElement, VStack } from '@chakra-ui/react';
+import { Box, Button, Center, Input, InputGroup, InputLeftElement, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsSearch } from 'react-icons/bs';
@@ -119,6 +119,12 @@ export default function PaidLaborList() {
                             />
                         </InputGroup>
                     </Box>
+                    <Button
+                        backgroundColor="orange.300"
+                        color="white"
+                    >
+                        Create new paid laborer
+                    </Button>
                 </VStack>
             </Center>
             <DataTable
