@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Button, Divider, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text,
     Textarea, useDisclosure,
@@ -32,13 +32,18 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
         width: '70%',
         font: 'Russo One',
         padding: '12px 20px',
-        margin: '8px 0;',
+        margin: '6px 0;',
         display: 'inline-block',
         border: '1px solid #ccc',
         borderRadius: '0.375rem',
     };
 
     const { laborer, editMode } = props;
+
+    useEffect(() => {
+        setPhone(props.laborer?.phoneNumber);
+        setEmail(props.laborer?.email || '');
+    });
 
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
@@ -52,7 +57,7 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                 <Divider />
                 <ModalBody>
                     <Grid
-                        templateRows="repeat(4, 1fr)"
+                        templateRows="repeat(3, 1fr)"
                         templateColumns="repeat(2, 1fr)"
                         columnGap={1}
                         rowGap={1}
