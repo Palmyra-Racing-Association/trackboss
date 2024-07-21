@@ -4,7 +4,7 @@ import { ExpanderComponentProps } from 'react-data-table-component';
 import { Box, Button, ButtonGroup, useToast, useDisclosure } from '@chakra-ui/react';
 import { BsTrash2 } from 'react-icons/bs';
 
-import { updatePaidLabor, deletePaidLabor } from '../controller/paidLabor';
+import { updatePaidLabor, deletePaidLabor, createPaidLabor } from '../controller/paidLabor';
 import { UserContext } from '../contexts/UserContext';
 import { PaidLabor } from '../../../src/typedefs/paidLabor';
 import PaidLaborModal from './modals/PaidLaborModal';

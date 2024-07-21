@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
     Button, Divider, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text,
     Textarea, useDisclosure,
@@ -9,6 +9,9 @@ import { isEmail, isMobilePhone } from 'validator';
 import PhoneInput from 'react-phone-number-input/input';
 
 import { PaidLabor } from '../../../../src/typedefs/paidLabor';
+import { createPaidLabor, updatePaidLabor } from '../../controller/paidLabor';
+
+import { UserContext } from '../../contexts/UserContext';
 
 interface PaidLaborModalProps {
     laborer?: PaidLabor,
@@ -39,6 +42,8 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
     };
 
     const { laborer, editMode } = props;
+
+    const { state } = useContext(UserContext);
 
     useEffect(() => {
         setPhone(props.laborer?.phoneNumber);
@@ -139,7 +144,7 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                         backgroundColor="orange"
                         color="white"
                         onClick={
-                            () => {
+                            async () => {
                                 const laborerEntry : PaidLabor = {
                                     firstName,
                                     lastName,
@@ -150,9 +155,10 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                 if (editMode) {
                                     // we are editing an existing entry so PUT it
                                     laborerEntry.paidLaborId = laborer?.paidLaborId || 0;
+                                    await updatePaidLabor(state.token, laborerEntry);
                                 } else {
                                     // It's new, so add it to the back end, yay!
-                                    alert(`the new guy is called ${firstName}`);
+                                    await createPaidLabor(state.token, laborerEntry);
                                 }
                                 alert(JSON.stringify(laborerEntry));
 
