@@ -1,7 +1,7 @@
 import { ErrorResponse } from './errorResponse';
 
 export type PaidLabor = {
-    paidLaborId: number,
+    paidLaborId?: number,
     firstName?: string,
     lastName?: string,
     businessName?: string,
@@ -12,3 +12,5 @@ export type PaidLabor = {
 }
 
 export type GetPaidLaborResponse = PaidLabor | PaidLabor[] | ErrorResponse;
+
+export type DeletePaidLaborResponse = PaidLabor | ErrorResponse;

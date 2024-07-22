@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2';
+import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
 import { getPool } from './pool';
@@ -44,4 +44,71 @@ export async function getPaidLaborById(id: number): Promise<PaidLabor> {
         phoneNumber: results[0].phone_number,
         email: results[0].email,
     };
+}
+
+export async function deletePaidLaborById(id: number): Promise<PaidLabor> {
+    const values = [id];
+
+    let result;
+    try {
+        [result] = await getPool().query<OkPacket>('delete from paid_labor where paid_labor_id = ?', values);
+    } catch (e) {
+        logger.error(`DB error deleting event: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+    return { paidLaborId: id };
+}
+
+export async function createPaidLabor(paidLabor: PaidLabor): Promise<PaidLabor> {
+    const values = [paidLabor.businessName, paidLabor.email, paidLabor.firstName,
+        paidLabor.lastName, paidLabor.phoneNumber,
+    ];
+
+    let result;
+    try {
+        [result] = await getPool().query<OkPacket>(
+            `insert into paid_labor (business_name, email, first_name, last_name, phone)
+            values 
+            (?, ?, ?, ?, ?)`,
+            values,
+        );
+    } catch (e) {
+        logger.error(`DB error deleting event: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+    const createdPaidLabor: PaidLabor = await getPaidLaborById(result.insertId);
+    return createdPaidLabor;
+}
+
+export async function updatePaidLabor(id:number, paidLabor: PaidLabor): Promise<PaidLabor> {
+    const values = [paidLabor.businessName, paidLabor.email, paidLabor.firstName,
+        paidLabor.lastName, paidLabor.phoneNumber, id,
+    ];
+
+    let result;
+    try {
+        [result] = await getPool().query<OkPacket>(
+            `update paid_labor set 
+            business_name = ?, email = ?, first_name = ?, last_name = ?, phone = ? where 
+            paid_labor_id = ?`,
+            values,
+        );
+    } catch (e) {
+        logger.error(`DB error deleting event: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+    const createdPaidLabor: PaidLabor = await getPaidLaborById(result.insertId);
+    return createdPaidLabor;
 }
