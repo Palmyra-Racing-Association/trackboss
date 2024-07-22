@@ -7,7 +7,7 @@ import PaidLaborList from '../components/PaidLaborList';
 function PaidLaborListPage() {
     return (
         <ChakraProvider theme={theme}>
-            <Header title="Paid Labor - coming soon!" activeButtonId={10} />
+            <Header title="Paid Labor" activeButtonId={10} />
             <Box mt={0} pt={0}>
                 <PaidLaborList />
             </Box>

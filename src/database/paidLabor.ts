@@ -71,7 +71,7 @@ export async function createPaidLabor(paidLabor: PaidLabor): Promise<PaidLabor> 
     let result;
     try {
         [result] = await getPool().query<OkPacket>(
-            `insert into paid_labor (last_name, first_name, business_name, phone, email)
+            `insert into paid_labor (business_name, email, first_name, last_name, phone)
             values 
             (?, ?, ?, ?, ?)`,
             values,
@@ -97,7 +97,7 @@ export async function updatePaidLabor(id:number, paidLabor: PaidLabor): Promise<
     try {
         [result] = await getPool().query<OkPacket>(
             `update paid_labor set 
-            last_name = ?, first_name = ?, business_name = ?, phone = ?, email = ? where 
+            business_name = ?, email = ?, first_name = ?, last_name = ?, phone = ? where 
             paid_labor_id = ?`,
             values,
         );

@@ -45,11 +45,6 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
 
     const { state } = useContext(UserContext);
 
-    useEffect(() => {
-        setPhone(props.laborer?.phoneNumber);
-        setEmail(props.laborer?.email || '');
-    });
-
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
             <ModalOverlay />
@@ -65,7 +60,6 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                         templateRows="repeat(3, 1fr)"
                         templateColumns="repeat(2, 1fr)"
                         columnGap={1}
-                        rowGap={1}
                     >
                         <GridItem colSpan={1}>
                             <Text>First Name</Text>
@@ -95,7 +89,7 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                 }
                             />
                         </GridItem>
-                        <GridItem colSpan={2}>
+                        <GridItem colSpan={1}>
                             <Text>Business Name</Text>
                             <Input
                                 defaultValue={laborer?.businessName}
@@ -117,16 +111,20 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                             <PhoneInput
                                 autocomplete="new-password"
                                 style={chakraStyleForNonChakra}
+                                placeHolder={laborer?.phoneNumber}
                                 defaultCountry="US"
-                                value={phone}
-                                onChange={setPhone}
+                                onChange={
+                                    (e) => {
+                                        setPhone(e);
+                                    }
+                                }
                             />
                         </GridItem>
                         <GridItem colSpan={2}>
                             <Text>email</Text>
                             <Input
                                 size="md"
-                                value={email}
+                                defaultValue={laborer?.email}
                                 onChange={
                                     (e) => {
                                         const typedEmail = e.target.value;
@@ -146,11 +144,11 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                         onClick={
                             async () => {
                                 const laborerEntry : PaidLabor = {
-                                    firstName,
-                                    lastName,
-                                    businessName,
-                                    phoneNumber: phone,
-                                    email,
+                                    firstName: firstName || laborer?.firstName,
+                                    lastName: lastName || laborer?.lastName,
+                                    businessName: businessName || laborer?.businessName,
+                                    phoneNumber: phone || laborer?.phoneNumber,
+                                    email: email || laborer?.email,
                                 };
                                 if (editMode) {
                                     // we are editing an existing entry so PUT it
@@ -160,8 +158,6 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                     // It's new, so add it to the back end, yay!
                                     await createPaidLabor(state.token, laborerEntry);
                                 }
-                                alert(JSON.stringify(laborerEntry));
-
                                 props.onClose();
                             }
                         }
