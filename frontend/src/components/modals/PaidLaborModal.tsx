@@ -1,11 +1,8 @@
-/* eslint-disable react/no-unused-prop-types */
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
     Button, Divider, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text,
-    Textarea, useDisclosure,
+    useToast,
 } from '@chakra-ui/react';
-import { isEmail, isMobilePhone } from 'validator';
 import PhoneInput from 'react-phone-number-input/input';
 
 import { PaidLabor } from '../../../../src/typedefs/paidLabor';
@@ -26,10 +23,8 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
     const [businessName, setBusinessName] = useState<string>();
     const [phone, setPhone] = useState<string>();
     const [email, setEmail] = useState<string>('');
-    const [isBusiness, setIsBusiness] = useState<boolean>();
-    const [dirty, setDirty] = useState<boolean>();
-    const [phoneValid, setPhoneValid] = useState<boolean>();
-    const [emailValid, setEmailValid] = useState<boolean>();
+
+    const toast = useToast();
 
     const chakraStyleForNonChakra = {
         width: '70%',
@@ -57,7 +52,7 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                 <Divider />
                 <ModalBody>
                     <Grid
-                        templateRows="repeat(3, 1fr)"
+                        templateRows="repeat(4, 1fr)"
                         templateColumns="repeat(2, 1fr)"
                         columnGap={1}
                     >
@@ -69,7 +64,6 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                 size="md"
                                 onChange={
                                     (e) => {
-                                        setDirty(true);
                                         setFirstName(e.target.value);
                                     }
                                 }
@@ -83,7 +77,6 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                 size="md"
                                 onChange={
                                     (e) => {
-                                        setDirty(true);
                                         setLastName(e.target.value);
                                     }
                                 }
@@ -97,13 +90,12 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                 size="md"
                                 onChange={
                                     (e) => {
-                                        setDirty(true);
                                         setBusinessName(e.target.value);
                                     }
                                 }
                             />
                         </GridItem>
-                        <GridItem colSpan={1}>
+                        <GridItem colSpan={2}>
                             <Text>Phone</Text>
                             <Text size="xs">
                                 Phone must be ten digits and include area code. Number formatted automatically.
@@ -128,9 +120,7 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                 onChange={
                                     (e) => {
                                         const typedEmail = e.target.value;
-                                        setEmailValid(isEmail(typedEmail));
                                         setEmail(typedEmail);
-                                        setDirty(emailValid);
                                     }
                                 }
                             />
@@ -158,6 +148,17 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                     // It's new, so add it to the back end, yay!
                                     await createPaidLabor(state.token, laborerEntry);
                                 }
+                                toast({
+                                    containerStyle: {
+                                        background: 'orange',
+                                    },
+                                    // eslint-disable-next-line max-len
+                                    title: 'Paid labor info updated',
+                                    description: `${JSON.stringify(laborerEntry)}`,
+                                    status: 'success',
+                                    duration: 2500,
+                                    isClosable: true,
+                                });
                                 props.onClose();
                             }
                         }
