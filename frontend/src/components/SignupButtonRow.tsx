@@ -11,11 +11,13 @@ import { signupForJob, removeSignup, signupForJobFreeForm, setPaidState } from '
 import { UserContext } from '../contexts/UserContext';
 import MemberSelector from './shared/MemberSelector';
 import EditPointsModal from './modals/EditPointsModal';
+import PaidLaborSelector from './shared/PaidLaborSelector';
 
 export default function SignupButtonRow(props: any) {
     const { state } = useContext(UserContext);
     const [paidLabor, setPaidLabor] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<any>();
+    const [selectedPaidLaborOption, setSelectedPaidLaborOption] = useState<any>();
     const [markedPaid, setMarkedPaid] = useState<boolean>(props.data.paid);
 
     const [jobMembershipId] = useState(props.data.membershipId);
@@ -49,6 +51,14 @@ export default function SignupButtonRow(props: any) {
         }
         signupForJobDropdown();
     }, [selectedOption]);
+
+    useEffect(() => {
+        alert(JSON.stringify(selectedPaidLaborOption));
+        async function signupLaborForJobDropdown() {
+            props.refreshData();
+        }
+        signupLaborForJobDropdown();
+    }, [selectedPaidLaborOption]);
 
     let signupButton;
     if (!props.data.member) {
@@ -103,6 +113,11 @@ export default function SignupButtonRow(props: any) {
                                         setPaidLabor(nonMemberEvent.target.value);
                                     }
                                 }
+                            />
+                            <PaidLaborSelector
+                                isAdmin
+                                disabled={false}
+                                setSelectedOption={setSelectedPaidLaborOption}
                             />
                         </ModalBody>
 
