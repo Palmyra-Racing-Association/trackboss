@@ -54,6 +54,7 @@ export type GetJobResponse = Job | ErrorResponse
 export type PatchJobRequest = {
     memberId?: number,
     paidLabor?: string,
+    paidLaborId?: number,
     eventId?: number,
     jobTypeId?: number,
     jobStartDate?: string,
