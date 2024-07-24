@@ -1,21 +1,20 @@
 import {
-    Button, ButtonGroup, Input,
-    Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
-    ModalOverlay, SimpleGrid, useDisclosure,
+    Button, ButtonGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+    SimpleGrid, useDisclosure,
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
-import _ from 'lodash';
 import { BsCurrencyDollar, BsTrash2 } from 'react-icons/bs';
 
-import { signupForJob, removeSignup, signupForJobFreeForm, setPaidState } from '../controller/job';
+import { signupForJob, removeSignup, setPaidState } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 import MemberSelector from './shared/MemberSelector';
 import EditPointsModal from './modals/EditPointsModal';
+import PaidLaborSelector from './shared/PaidLaborSelector';
 
 export default function SignupButtonRow(props: any) {
     const { state } = useContext(UserContext);
-    const [paidLabor, setPaidLabor] = useState<string>('');
     const [selectedOption, setSelectedOption] = useState<any>();
+    const [selectedPaidLaborOption, setSelectedPaidLaborOption] = useState<any>();
     const [markedPaid, setMarkedPaid] = useState<boolean>(props.data.paid);
 
     const [jobMembershipId] = useState(props.data.membershipId);
@@ -49,6 +48,13 @@ export default function SignupButtonRow(props: any) {
         }
         signupForJobDropdown();
     }, [selectedOption]);
+
+    useEffect(() => {
+        async function signupLaborForJobDropdown() {
+            props.refreshData();
+        }
+        signupLaborForJobDropdown();
+    }, [selectedPaidLaborOption]);
 
     let signupButton;
     if (!props.data.member) {
@@ -90,19 +96,13 @@ export default function SignupButtonRow(props: any) {
                         <ModalCloseButton />
                         <ModalBody>
                             You can use this window to add a non member to a job.  Adding a member this way
-                            will cause their points to not be counted for this job, so please use the dropdown for that.
-                            This way stores the name you enter as it&apos;s entered, and doesn&apos;t
-                            link to a member record.
-                            <Input
-                                placeholder="Non Member Name"
-                                onChange={
-                                    (nonMemberEvent) => {
-                                        if (nonMemberEvent.target.value?.length === 1) {
-                                            nonMemberEvent.target.value = _.startCase(nonMemberEvent.target.value);
-                                        }
-                                        setPaidLabor(nonMemberEvent.target.value);
-                                    }
-                                }
+                            will cause their points to not be counted for this job, so please use the Member dropdown
+                            for that.  You can either select a name here, or type a new one (FirstName LastName).
+                            and then select it.  These are editable and contact info can be added on the Paid Labor tab.
+                            <PaidLaborSelector
+                                isAdmin
+                                disabled={false}
+                                setSelectedOption={setSelectedPaidLaborOption}
                             />
                         </ModalBody>
 
@@ -112,7 +112,9 @@ export default function SignupButtonRow(props: any) {
                                 color="white"
                                 onClick={
                                     async () => {
-                                        await signupForJobFreeForm(state.token, props.data.jobId, paidLabor);
+                                        // eslint-disable-next-line max-len
+                                        await signupForJob(state.token, props.data.jobId, selectedPaidLaborOption.value, true);
+                                        // await signupForJobFreeForm(state.token, props.data.jobId, paidLabor);
                                         await props.refreshData();
                                         setMarkedPaid(true);
                                         onNonMemberClose();

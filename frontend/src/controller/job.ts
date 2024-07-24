@@ -117,12 +117,17 @@ export async function setPaidState(token: string, jobId: number) : Promise<any> 
  * Signup a user for a job.
  * @param token user token
  * @param jobId job to sign up for.
- * @param memberId member to signup for the job.
+ * @param workerId member, or paid laborer, to signup for the job.
  * @returns job signed up for.
  */
-export async function signupForJob(token:string, jobId: number, memberId: number) : Promise<any> {
+export async function signupForJob(token:string, jobId: number, workerId: number, isPaidLabor: boolean = false)
+    : Promise<any> {
     const signupJob : any = await getJob(token, jobId);
-    signupJob.memberId = memberId;
+    if (isPaidLabor) {
+        signupJob.paidLaborId = workerId;
+    } else {
+        signupJob.memberId = workerId;
+    }
     const modifiedJob : any = await updateJob(token, jobId, signupJob);
     return modifiedJob;
 }
