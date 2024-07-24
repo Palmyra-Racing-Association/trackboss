@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
 import { ExpanderComponentProps } from 'react-data-table-component';
+import _ from 'lodash';
 import { Box, Button, ButtonGroup, useToast, useDisclosure } from '@chakra-ui/react';
-import { BsTrash2 } from 'react-icons/bs';
+import { BsTrash2, BsFillTelephoneFill } from 'react-icons/bs';
 
 import { updatePaidLabor, deletePaidLabor, createPaidLabor } from '../controller/paidLabor';
 import { UserContext } from '../contexts/UserContext';
@@ -23,6 +24,32 @@ export default function PaidLaborListRow(props: PaidLaborRowProps) {
         <Box>
             <ButtonGroup variant="outline" ml={10} spacing="6">
                 <Button
+                    background="orange.300"
+                    color="white"
+                    style={{ visibility: state.user?.memberType === 'Admin' ? 'visible' : 'hidden' }}
+                    onClick={
+                        async () => {
+                            onOpen();
+                        }
+                    }
+                >
+                    Edit Paid Labor
+                </Button>
+                <Button
+                    background="green"
+                    color="white"
+                    rightIcon={<BsFillTelephoneFill />}
+                    isDisabled={_.isEmpty(props.data.phoneNumber)}
+                    style={{ visibility: state.user?.memberType === 'Admin' ? 'visible' : 'hidden' }}
+                    onClick={
+                        () => {
+                            window.open(`tel:${props.data.phoneNumber}`);
+                        }
+                    }
+                >
+                    Call
+                </Button>
+                <Button
                     aria-label="Remove"
                     background="red"
                     color="white"
@@ -37,19 +64,6 @@ export default function PaidLaborListRow(props: PaidLaborRowProps) {
                     }
                 >
                     Delete
-                </Button>
-
-                <Button
-                    background="orange.300"
-                    color="white"
-                    style={{ visibility: state.user?.memberType === 'Admin' ? 'visible' : 'hidden' }}
-                    onClick={
-                        async () => {
-                            onOpen();
-                        }
-                    }
-                >
-                    Edit Paid Labor
                 </Button>
             </ButtonGroup>
             <PaidLaborModal
