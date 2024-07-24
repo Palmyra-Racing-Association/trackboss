@@ -33,7 +33,7 @@ export async function updatePaidLabor(token: string, laborer: PaidLabor) : Promi
     return response.json();
 }
 
-export async function createPaidLabor(token: string, laborer: PaidLabor) : Promise<GetPaidLaborResponse> {
+export async function createPaidLabor(token: string, laborer: PaidLabor) : Promise<PaidLabor> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/paidLabor`, {
         method: 'POST',
         mode: 'cors',

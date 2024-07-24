@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
-import Select from 'react-select';
+import CreatableSelect from 'react-select/creatable';
 import { UserContext } from '../../contexts/UserContext';
-import { getPaidLaborList } from '../../controller/paidLabor';
+import { getPaidLaborList, createPaidLabor } from '../../controller/paidLabor';
 import { PaidLabor } from '../../../../src/typedefs/paidLabor';
 
 interface PaidLaborSelectorProps {
@@ -16,6 +16,8 @@ export default function PaidLaborSelector(props: PaidLaborSelectorProps) {
     const { state } = useContext(UserContext);
 
     const [eligibleMembers, setEligibleMembers] = useState<any[]>([]);
+    const [refreshList, setRefreshList] = useState<boolean>();
+
     const [selectedOption] = useState<any>();
 
     useEffect(() => {
@@ -36,11 +38,11 @@ export default function PaidLaborSelector(props: PaidLaborSelectorProps) {
             setEligibleMembers(options);
         }
         getData();
-    }, []);
+    }, [refreshList]);
 
     return (
-        <Select
-            placeholder="Choose paid labor or type to narrow down the list"
+        <CreatableSelect
+            placeholder="Choose paid labor, type to narrow down the list, or add a new name"
             styles={
                 {
                     option: (provided, optionState) => ({
@@ -61,6 +63,23 @@ export default function PaidLaborSelector(props: PaidLaborSelectorProps) {
             onChange={
                 async (e) => {
                     props.setSelectedOption(e);
+                }
+            }
+            onCreateOption={
+                async (inputValue) => {
+                    const nameValue = inputValue.split(' ');
+                    const newLabor : PaidLabor = {
+                        firstName: nameValue[0],
+                        lastName: nameValue[1],
+                    };
+                    const createdLabor = await createPaidLabor(state.token, newLabor);
+                    props.setSelectedOption(
+                        {
+                            value: createdLabor.paidLaborId,
+                            label: `${createdLabor.lastName}, ${createdLabor.firstName}`,
+                        },
+                    );
+                    setRefreshList(true);
                 }
             }
         />

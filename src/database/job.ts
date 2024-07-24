@@ -305,7 +305,7 @@ export async function setJobVerifiedState(id: number, state: boolean) : Promise<
 
 export async function removeSignup(jobId: number) : Promise<number> {
     const [result] = await getPool().query<OkPacket>(
-        'update job set member_id = null, paid_labor = null where job_id = ?',
+        'update job set member_id = null, paid_labor = null, paid_labor_id = null where job_id = ?',
         [jobId],
     );
     return result.affectedRows;
