@@ -1,4 +1,6 @@
 import React, { useState, useContext } from 'react';
+import _ from 'lodash';
+
 import {
     Button, Divider, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text,
     useToast,
@@ -64,7 +66,7 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                 size="md"
                                 onChange={
                                     (e) => {
-                                        setFirstName(e.target.value);
+                                        setFirstName(_.startCase(e.target.value));
                                     }
                                 }
                             />
@@ -77,7 +79,7 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                 size="md"
                                 onChange={
                                     (e) => {
-                                        setLastName(e.target.value);
+                                        setLastName(_.startCase(e.target.value));
                                     }
                                 }
                             />
@@ -90,7 +92,7 @@ export default function PaidLaborModal(props: PaidLaborModalProps) {
                                 size="md"
                                 onChange={
                                     (e) => {
-                                        setBusinessName(e.target.value);
+                                        setBusinessName(_.startCase(e.target.value));
                                     }
                                 }
                             />

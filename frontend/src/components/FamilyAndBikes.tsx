@@ -215,24 +215,6 @@ export default function GeneralInfo(props: cardProps) {
                                             props.admin && (
                                                 <Button
                                                     textDecoration="underline"
-                                                    color="red"
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={
-                                                        () => {
-                                                            setBikeToRemove(bike);
-                                                            onRemoveBikeOpen();
-                                                        }
-                                                    }
-                                                >
-                                                    Remove
-                                                </Button>
-                                            )
-                                        }
-                                        {
-                                            props.admin && (
-                                                <Button
-                                                    textDecoration="underline"
                                                     color="orange"
                                                     variant="ghost"
                                                     size="sm"
@@ -244,6 +226,24 @@ export default function GeneralInfo(props: cardProps) {
                                                     }
                                                 >
                                                     Edit
+                                                </Button>
+                                            )
+                                        }
+                                        {
+                                            props.admin && (
+                                                <Button
+                                                    textDecoration="underline"
+                                                    color="red"
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={
+                                                        () => {
+                                                            setBikeToRemove(bike);
+                                                            onRemoveBikeOpen();
+                                                        }
+                                                    }
+                                                >
+                                                    Remove
                                                 </Button>
                                             )
                                         }

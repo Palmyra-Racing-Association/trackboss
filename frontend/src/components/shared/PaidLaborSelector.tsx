@@ -1,9 +1,13 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
 import CreatableSelect from 'react-select/creatable';
+import { useDisclosure } from '@chakra-ui/react';
+import _ from 'lodash';
+
 import { UserContext } from '../../contexts/UserContext';
 import { getPaidLaborList, createPaidLabor } from '../../controller/paidLabor';
 import { PaidLabor } from '../../../../src/typedefs/paidLabor';
+import PaidLaborModal from '../modals/PaidLaborModal';
 
 interface PaidLaborSelectorProps {
     isAdmin: boolean,
@@ -15,8 +19,15 @@ interface PaidLaborSelectorProps {
 export default function PaidLaborSelector(props: PaidLaborSelectorProps) {
     const { state } = useContext(UserContext);
 
+    const {
+        isOpen: isCreateOpen,
+        onOpen: onCreateOpen,
+        onClose: onCreateClose,
+    } = useDisclosure();
+
     const [eligibleMembers, setEligibleMembers] = useState<any[]>([]);
     const [refreshList, setRefreshList] = useState<boolean>();
+    const [newEntry, setNewEntry] = useState<PaidLabor>();
 
     const [selectedOption] = useState<any>();
 
@@ -41,47 +52,57 @@ export default function PaidLaborSelector(props: PaidLaborSelectorProps) {
     }, [refreshList]);
 
     return (
-        <CreatableSelect
-            placeholder="Choose paid labor, type to narrow down the list, or add a new name"
-            styles={
-                {
-                    option: (provided, optionState) => ({
-                        ...provided,
-                        backgroundColor: optionState.isSelected ? '#ffa24d' : 'white',
-                        borderBottom: '1px solid #ffa24d',
-                    }),
+        <>
+            <CreatableSelect
+                placeholder="Choose paid labor, type to narrow down the list, or add a new name"
+                styles={
+                    {
+                        option: (provided, optionState) => ({
+                            ...provided,
+                            backgroundColor: optionState.isSelected ? '#ffa24d' : 'white',
+                            borderBottom: '1px solid #ffa24d',
+                        }),
+                    }
                 }
-            }
-            getOptionLabel={(option) => option.label}
-            getOptionValue={(option) => option.value}
-            isSearchable
-            isClearable
-            backspaceRemovesValue
-            options={eligibleMembers}
-            value={selectedOption}
-            isDisabled={props.disabled && !props.isAdmin}
-            onChange={
-                async (e) => {
-                    props.setSelectedOption(e);
+                getOptionLabel={(option) => option.label}
+                getOptionValue={(option) => option.value}
+                isSearchable
+                isClearable
+                backspaceRemovesValue
+                createOptionPosition="first"
+                options={eligibleMembers}
+                value={selectedOption}
+                isDisabled={props.disabled && !props.isAdmin}
+                onChange={
+                    async (e) => {
+                        props.setSelectedOption(e);
+                    }
                 }
-            }
-            onCreateOption={
-                async (inputValue) => {
-                    const nameValue = inputValue.split(' ');
-                    const newLabor : PaidLabor = {
-                        firstName: nameValue[0],
-                        lastName: nameValue[1],
-                    };
-                    const createdLabor = await createPaidLabor(state.token, newLabor);
-                    props.setSelectedOption(
-                        {
-                            value: createdLabor.paidLaborId,
-                            label: `${createdLabor.lastName}, ${createdLabor.firstName}`,
-                        },
-                    );
-                    setRefreshList(true);
+                onCreateOption={
+                    async (inputValue) => {
+                        const nameValue = inputValue.split(' ');
+                        const newLabor: PaidLabor = {
+                            firstName: _.startCase(nameValue[0]),
+                            lastName: _.startCase(nameValue[1]),
+                        };
+                        setNewEntry(newLabor);
+                        onCreateOpen();
+                    }
                 }
-            }
-        />
+                openMenuOnClick
+                openMenuOnFocus
+            />
+            <PaidLaborModal
+                isOpen={isCreateOpen}
+                onClose={
+                    () => {
+                        setRefreshList(true);
+                        onCreateClose();
+                    }
+                }
+                editMode={false}
+                laborer={newEntry}
+            />
+        </>
     );
 }
