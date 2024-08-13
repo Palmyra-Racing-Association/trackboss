@@ -37,6 +37,10 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
     // this fun fact and always mess it up, so making this note here next time I need this.
     const startOfBillingPeriod = new Date(billingYear, 10, 21).getTime();
 
+    const isRenewalAllowed = (currentTime > startOfBillingPeriod);
+
+    let renewalAttestationComponent;
+
     let renewalPaymentComponent = (
         <>
             <Box>
@@ -59,7 +63,33 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
             </Box>
         </>
     );
-    if (currentTime >= startOfBillingPeriod) {
+    if (isRenewalAllowed) {
+        renewalAttestationComponent = (
+            <>
+                <Box mb={1}>
+                    By clicking this box, I attest that I have, and will maintain, valid health insurance for the
+                    {` ${billingYear + 1} season.  I agree to notify PRA of any change in my insurance status.`}
+                    <p />
+                    I also agree to the PRA sound rule and code of conduct found at
+                    &nbsp;
+                    <a target="_blank" href="https://palmyramx.com" rel="noreferrer">palmyramx.com</a>
+                    .
+                </Box>
+                <WrappedSwitchInput
+                    wrapperText="(Payment options appear after you agree to this if applicable)"
+                    defaultChecked={attested}
+                    onSwitchChange={
+                        async () => {
+                            setInsuranceAttested(true);
+                            await attestInsurance(state.token, props.viewBill?.billId || 0);
+                        }
+                    }
+                    maxWidth={400}
+                    locked={attested}
+                    toastMessage="Insurance attestation has been recorded and will be emailed to you."
+                />
+            </>
+        );
         renewalPaymentComponent = (
             <>
                 <Button
@@ -122,30 +152,8 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                         If your dues are $0 no payment options are presented as we just need attestation of insurance.
                     </Box>
                     <BillingStatsDisplay bill={props.viewBill} />
-                    <Box mb={1}>
-                        By clicking this box, I attest that I have, and will maintain, valid health insurance for the
-                        {` ${billingYear + 1} season.  I agree to notify PRA of any change in my insurance status.`}
-                        <p />
-                        I also agree to the PRA sound rule and code of conduct found at
-                        &nbsp;
-                        <a target="_blank" href="https://palmyramx.com" rel="noreferrer">palmyramx.com</a>
-                        .
-                    </Box>
-                    <WrappedSwitchInput
-                        wrapperText="(Payment options appear after you agree to this if applicable)"
-                        defaultChecked={attested}
-                        onSwitchChange={
-                            async () => {
-                                setInsuranceAttested(true);
-                                await attestInsurance(state.token, props.viewBill?.billId || 0);
-                            }
-                        }
-                        maxWidth={400}
-                        locked={attested}
-                        toastMessage="Insurance attestation has been recorded and will be emailed to you."
-                    />
+                    {renewalAttestationComponent}
                 </Box>
-
                 <Divider />
                 <ModalFooter>
                     {renewalPaymentComponent}
