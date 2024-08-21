@@ -14,7 +14,7 @@ export type Member = {
     membershipTypeId: number,
     firstName: string,
     lastName: string,
-    phoneNumber: string,
+    phoneNumber?: string,
     occupation: string,
     email: string,
     birthdate: string,
@@ -28,6 +28,7 @@ export type Member = {
     isBoardMember: boolean,
     boardMemberData? : BoardMember // optional field to be used only by the frontend to store data
     deactivationReason?: string,
+    subscribed?: boolean,
 }
 
 export type PostNewMemberRequest = {

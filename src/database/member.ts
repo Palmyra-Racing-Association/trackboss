@@ -49,6 +49,8 @@ async function mapMemberFromResult(results: any) {
         state: result.state,
         zip: result.zip,
         deactivationReason: result.cancel_reason,
+        // this is intentional - booleans in mysql require too much jacking around for conversion. This makes it easy.
+        subscribed: (result.subscribed === 'true'),
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));
@@ -190,6 +192,7 @@ export async function getMember(searchParam: string): Promise<Member> {
         state: results[0].state,
         zip: results[0].zip,
         deactivationReason: results[0].cancel_reason,
+        subscribed: results[0].subscribed === 'true',
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
@@ -228,6 +231,7 @@ export async function getMemberByPhone(phone: string): Promise<Member> {
         state: results[0].state,
         zip: results[0].zip,
         deactivationReason: results[0].cancel_reason,
+        subscribed: results[0].subscribed === 'true',
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
@@ -266,6 +270,7 @@ export async function getMemberByEmail(email: string): Promise<any> {
             state: results[0].state,
             zip: results[0].zip,
             deactivationReason: results[0].cancel_reason,
+            subscribed: results[0].subscribed === 'true',
             lastModifiedDate: results[0].last_modified_date,
             lastModifiedBy: results[0].last_modified_by,
         };
