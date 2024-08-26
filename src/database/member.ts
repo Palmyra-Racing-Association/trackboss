@@ -18,8 +18,9 @@ export const GET_MEMBER_LIST_SQL = 'SELECT * FROM v_member';
 export const GET_MEMBER_SQL = `${GET_MEMBER_LIST_SQL} WHERE member_id = ?`;
 export const GET_MEMBER_UUID_SQL = `${GET_MEMBER_LIST_SQL} WHERE uuid = ?`;
 export const INSERT_MEMBER_SQL = 'INSERT INTO member (membership_id, uuid, member_type_id, first_name, last_name, ' +
-    'phone_number, occupation, email, birthdate, date_joined, last_modified_date, last_modified_by, active) ' +
-    'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?, 1)';
+    // eslint-disable-next-line max-len
+    'phone_number, occupation, email, birthdate, date_joined, last_modified_date, last_modified_by, active, subscribed)' +
+    'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?, 1, ?)';
 export const PATCH_MEMBER_SQL = 'CALL sp_patch_member(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 export const GET_VALID_ACTORS_SQL = 'select member_id from pradb.member m where member_id=? or (m.member_type_id=2 ' +
     'and m.member_id=(select ms.membership_admin_id from pradb.member m left join pradb.membership ms on ' +
@@ -62,11 +63,9 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
         logger.info(`Creating new user for email ${req.email} on membership ${req.membershipId}`);
         try {
             const isMembershipAdmin = (req.memberTypeId === 8);
-            if (req.membershipType && req.membershipType !== 'Guest Member') {
-                const uuid = await createCognitoUser(req.email, isMembershipAdmin);
-                req.uuid = uuid;
-                logger.info(`Successfully created ${req.email} in cognito as ${uuid}`);
-            }
+            const uuid = await createCognitoUser(req.email, isMembershipAdmin);
+            req.uuid = uuid;
+            logger.info(`Successfully created ${req.email} in cognito as ${uuid}`);
         } catch (error: any) {
             logger.error(`Failure creating ${req.email} in cognito.  Continuing on trackboss database side`);
             logger.error(error);
@@ -84,6 +83,7 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
         req.birthdate,
         req.dateJoined,
         req.modifiedBy,
+        `${req.subscribed}`,
     ];
 
     let result;
@@ -300,6 +300,10 @@ export async function patchMember(id: string, req: PatchMemberRequest): Promise<
     let result;
     try {
         [result] = await getPool().query<OkPacket>(PATCH_MEMBER_SQL, values);
+        await getPool().query(
+            'update member set subscribed = ? where member_id = ?',
+            [`${req.subscribed}`, id],
+        );
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {

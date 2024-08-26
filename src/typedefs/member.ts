@@ -43,7 +43,8 @@ export type PostNewMemberRequest = {
     birthdate?: string,
     dateJoined?: string,
     membershipType?: string,
-    modifiedBy: number
+    modifiedBy: number,
+    subscribed: boolean,
 }
 
 export type PostNewMemberResponse = Member | ErrorResponse;
@@ -66,6 +67,7 @@ export type PatchMemberRequest = {
     dateJoined?: string,
     modifiedBy: number,
     deactivationReason?: string,
+    subscribed: boolean,
 }
 
 export type PatchMemberResponse = Member | ErrorResponse;

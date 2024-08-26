@@ -62,7 +62,7 @@ export default function GeneralInfo(props: cardProps) {
             await updateMember(
                 state.token,
                 memberToRemove.memberId,
-                { active: false, modifiedBy: state.user.memberId },
+                { active: false, modifiedBy: state.user.memberId, subscribed: false },
             );
         }
         await refreshFamilyList();

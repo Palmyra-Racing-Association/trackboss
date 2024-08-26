@@ -149,6 +149,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             // when did they join? RIGHT FREAKING NOW THAT'S WHEN! :)
             dateJoined: newMemberJoinDate,
             modifiedBy: actingUser.memberId,
+            subscribed: true,
             membershipType,
         };
         const primaryMemberId = await insertMember(newMember);
@@ -168,6 +169,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         const memberUpdate : PatchMemberRequest = {
             membershipId: newMembershipId,
             modifiedBy: actingUser.memberId,
+            subscribed: true,
         };
         await patchMember(`${primaryMemberId}`, memberUpdate);
         // now send a welcome email to the member.

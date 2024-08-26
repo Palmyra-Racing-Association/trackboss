@@ -19,6 +19,7 @@ import { updateMember } from '../../controller/member';
 import { updateMembership } from '../../controller/membership';
 
 import MembershipTypeSelector from '../shared/MembershipTypeSelector';
+import WrappedSwitchInput from '../input/WrappedSwitchInput';
 
 interface EditMemberModalProps {
     member: Member,
@@ -49,6 +50,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [membershipType, setMembershipType] = useState<number>(selectedMember.membershipTypeId);
     const [firstName, setFirstName] = useState<string>(selectedMember.firstName);
     const [lastName, setLastName] = useState<string>(selectedMember.lastName);
+    const [subscribed, setSubscribed] = useState<boolean>(selectedMember.subscribed || false);
     const [rowCount, setRowCount] = useState<number>(7);
 
     const { state, update } = useContext(UserContext);
@@ -220,6 +222,19 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                             </GridItem>
+                            <GridItem colSpan={2} display={props.hasEmail ? 'block' : 'none'}>
+                                <WrappedSwitchInput
+                                    wrapperText="Subscribed to communications"
+                                    defaultChecked={subscribed}
+                                    maxWidth={200}
+                                    onSwitchChange={
+                                        () => {
+                                            setSubscribed(!subscribed);
+                                            setDirty(true);
+                                        }
+                                    }
+                                />
+                            </GridItem>
                         </Grid>
                     </ModalBody>
                     <ModalFooter>
@@ -246,6 +261,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         phoneNumber,
                                         birthdate: moment(birthdate).format('YYYY-MM-DD'),
                                         modifiedBy: state.user?.memberId || 0,
+                                        subscribed,
                                     };
                                     await updateMember(state.token, selectedMember.memberId, memberUpdate);
                                     if (!props.isFamilyMember) {
