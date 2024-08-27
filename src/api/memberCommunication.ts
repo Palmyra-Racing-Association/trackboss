@@ -70,14 +70,11 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
             });
         } else {
             const allMembers = await getMemberList({});
-            const activeAdmins = allMembers.filter((member) => {
-                const isAdmin = (member.membershipAdminId === member.memberId);
-                return (isAdmin && member.active);
-            });
+            const subscribedMembers = allMembers.filter((member) => (member.active && member.subscribed));
             // track admins uniquely so we can also grab board members even if they aren't
             // membership admins.
-            const uniqueAdmins : any = {};
-            activeAdmins.forEach((member) => {
+            const uniqueSubscribedMembers : any = {};
+            subscribedMembers.forEach((member) => {
                 communication?.members.push({
                     firstName: member.firstName,
                     lastName: member.lastName,
@@ -85,14 +82,14 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
                     phone: member.phoneNumber,
                 });
                 // this is just a placeholder value so that we can check for it later.
-                uniqueAdmins[member.memberId] = member;
+                uniqueSubscribedMembers[member.memberId] = member;
             });
             // get all board members too, and if they aren't already in the list add them.
             const boardMembers = await getBoardMemberList(new Date().getFullYear().toString());
             boardMembers.forEach((boardMember) => {
                 // add board members who already not admins (this was a gaping hole in initial functionality as spouses
                 // can be board members) but would not get texts.
-                if (!uniqueAdmins[boardMember.memberId]) {
+                if (!uniqueSubscribedMembers[boardMember.memberId]) {
                     communication.members.push({
                         firstName: boardMember.firstName,
                         lastName: boardMember.lastName,

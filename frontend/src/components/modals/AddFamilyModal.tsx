@@ -37,6 +37,7 @@ export default function AddFamilyModal(props: modalProps) {
     const [birthDate, setBirthDate] = useState<Date>();
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [emailExists, setEmailExists] = useState<boolean>(false);
+    const [subscribed, setSubscribed] = useState<boolean>(false);
 
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
@@ -106,6 +107,14 @@ export default function AddFamilyModal(props: modalProps) {
                     <Box m={3}>
                         <WrappedSwitchInput
                             maxWidth={300}
+                            wrapperText="Subscribe to communciations?"
+                            defaultChecked={false}
+                            onSwitchChange={setSubscribed}
+                        />
+                    </Box>
+                    <Box m={3}>
+                        <WrappedSwitchInput
+                            maxWidth={300}
                             wrapperText="Allow online access?"
                             defaultChecked={allowOnlineAccess}
                             onSwitchChange={setAllowOnlineAccess}
@@ -149,12 +158,12 @@ export default function AddFamilyModal(props: modalProps) {
                                     memberTypeId: 9,
                                     firstName,
                                     lastName,
-                                    phoneNumber: props.membershipAdmin?.phoneNumber,
                                     occupation: '',
                                     email: '',
                                     birthdate: birthDate?.toLocaleDateString('en-CA'),
                                     dateJoined: props.membershipAdmin?.dateJoined,
                                     modifiedBy: props.membershipAdmin?.memberId || 0,
+                                    subscribed,
                                 };
                                 if (allowOnlineAccess) {
                                     familyMemberAdd.email = email;
