@@ -158,7 +158,6 @@ export default function AddFamilyModal(props: modalProps) {
                                     memberTypeId: 9,
                                     firstName,
                                     lastName,
-                                    phoneNumber: props.membershipAdmin?.phoneNumber,
                                     occupation: '',
                                     email: '',
                                     birthdate: birthDate?.toLocaleDateString('en-CA'),
