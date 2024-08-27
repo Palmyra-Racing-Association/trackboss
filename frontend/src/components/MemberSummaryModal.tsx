@@ -77,7 +77,7 @@ export default function MemberSummaryModal(props: modalProps) {
         const response = await updateMember(
             state.token,
             props.memberInfo.memberId,
-            { active: false, modifiedBy: state.user!.memberId, deactivationReason: reason },
+            { active: false, modifiedBy: state.user!.memberId, deactivationReason: reason, subscribed: false },
         );
         if ('reason' in response) {
             return false;
@@ -96,7 +96,11 @@ export default function MemberSummaryModal(props: modalProps) {
         } else {
             return false;
         }
-        const updatedMember = await updateMember(state.token, props.memberInfo.memberId, { memberTypeId, modifiedBy: state.user!.memberId });
+        const updatedMember = await updateMember(
+            state.token,
+            props.memberInfo.memberId,
+            { memberTypeId, modifiedBy: state.user!.memberId, subscribed: props.memberInfo.subscribed || false },
+        );
         if ('reason' in updatedMember) {
             return false;
         }

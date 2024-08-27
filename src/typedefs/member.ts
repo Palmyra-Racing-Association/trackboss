@@ -67,7 +67,7 @@ export type PatchMemberRequest = {
     dateJoined?: string,
     modifiedBy: number,
     deactivationReason?: string,
-    subscribed: boolean,
+    subscribed?: boolean,
 }
 
 export type PatchMemberResponse = Member | ErrorResponse;
