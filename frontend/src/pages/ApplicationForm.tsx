@@ -6,7 +6,7 @@ import {
     AccordionIcon,
     AccordionItem,
     AccordionPanel,
-    Box, Button, ChakraProvider, Divider, Image, Input, SimpleGrid, Stat,
+    Box, Button, ChakraProvider, Divider, Image, Input, Link, SimpleGrid, Stat,
     StatHelpText, StatLabel, StatNumber, Text, VStack,
     useDisclosure,
 } from '@chakra-ui/react';
@@ -93,21 +93,25 @@ function ApplicationForm() {
                 </SimpleGrid>
                 <Box paddingBottom={2} m={5}>
                     <Text>
-                        Please complete all sections. Note that when your application is accepted we will need payment,
-                        waiver of liability, minor waivers, and health insurance information. We will also need names
-                        and dates of birth for all family members.  The current year dues are $575 (subject to change).
+                        Applications for membership are open from September 1st - January 31st. Applications will be
+                        reviewed in February, and you will be notified of acceptance via the email provided on the
+                        application by the end of February. Please note that acceptance will be pending payment of
+                        new membership dues, waiver of liability, minor waivers, and attestation of rules,
+                        code of conduct, and possession of health insurance.
                     </Text>
                 </Box>
                 <Box paddingBottom={2} m={5}>
                     <Text>
-                        In order to be considered for a family membership, ALL family members MUST be listed at the time
-                        you apply.
+                        Please complete all sections of the application. Those applying for family membership will be
+                        required to submit names and dates of birth for all family members. The current year’s dues
+                        are $575 and are subject to change for the following year.
                     </Text>
                 </Box>
                 <Box paddingBottom={5} m={5}>
                     <Text>
-                        For ease of processing, we are only accepting applications online. If you need a paper
-                        application, please contact us.
+                        For ease of processing, we are only accepting applications online. If you need assistance with
+                        completing or submitting an application, please contact the Secretary at &nbsp;
+                        <Link href="mailto:hogbacksecretary@gmail.com">hogbacksecretary@gmail.com</Link>
                     </Text>
                 </Box>
                 <Box ml={5}>
