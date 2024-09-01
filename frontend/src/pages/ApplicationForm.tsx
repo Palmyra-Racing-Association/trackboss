@@ -91,12 +91,17 @@ function ApplicationForm() {
                         {`Palmyra Racing Association Application - ${season} season`}
                     </Text>
                 </SimpleGrid>
-                <Box paddingBottom={5} m={5}>
+                <Box paddingBottom={2} m={5}>
                     <Text>
                         Please complete all sections. Note that when your application is accepted we will need payment,
                         waiver of liability, minor waivers, and health insurance information. We will also need names
-                        and dates of birth for all family members.  We do not need any of
-                        that at the time of application. The current year dues are $575 (subject to change).
+                        and dates of birth for all family members.  The current year dues are $575 (subject to change).
+                    </Text>
+                </Box>
+                <Box paddingBottom={2} m={5}>
+                    <Text>
+                        In order to be considered for a family membership, ALL family members MUST be listed at the time
+                        you apply.
                     </Text>
                 </Box>
                 <Box paddingBottom={5} m={5}>
