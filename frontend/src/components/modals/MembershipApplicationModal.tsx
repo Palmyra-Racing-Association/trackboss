@@ -78,7 +78,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 <Text size="md">
                                     Recommended by
                                     &nbsp;
-                                    {membershipApplication.recommendedBy}
+                                    {membershipApplication.referredBy}
                                 </Text>
                             </TabPanel>
                             <TabPanel>

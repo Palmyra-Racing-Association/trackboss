@@ -14,7 +14,7 @@ export type MembershipApplication = {
     googleLink: string,
     receivedDate: Date,
     birthDate: string,
-    recommendedBy: string,
+    referredBy: string,
     familyMembers: any[],
     familyMember0FirstName?: string,
     familyMember0LastName?: string,
