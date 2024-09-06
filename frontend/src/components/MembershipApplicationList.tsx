@@ -12,11 +12,13 @@ const columns: any = [
         name: 'ID',
         selector: (row: MembershipApplication) => row.id,
         sortable: true,
+        hide: 'sm',
     },
     {
         name: 'Priority',
         selector: (row: MembershipApplication) => (row.applicationPriority ? 'High' : 'Medium'),
         sortable: true,
+        hide: 'sm',
     },
     {
         name: 'Last Name',
@@ -27,7 +29,6 @@ const columns: any = [
         name: 'First Name',
         selector: (row: MembershipApplication) => row.firstName,
         sortable: true,
-        hide: 'sm',
     },
     {
         name: 'Application date',
@@ -40,6 +41,7 @@ const columns: any = [
         name: 'Status',
         selector: (row: MembershipApplication) => row.status,
         sortable: true,
+        hide: 'sm',
     },
 ];
 

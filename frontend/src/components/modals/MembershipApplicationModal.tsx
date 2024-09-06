@@ -28,7 +28,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
     const isInReview = (membershipApplication.status === 'Review');
 
     return (
-        <Modal isCentered size="xl" isOpen={isOpen} onClose={onClose}>
+        <Modal isCentered size="lg" isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent m={3}>
                 <Heading ml={3}>
@@ -43,12 +43,22 @@ export default function MembershipApplicationModal(props: appModalProps) {
                     <Tabs variant="soft-rounded" bg="white" colorScheme="orange">
                         <TabList>
                             <Tab>Application Info</Tab>
-                            <Tab>Personal Info</Tab>
                             <Tab>Family Members</Tab>
                             <Tab>Notes</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel>
+                                <NameAddressDisplay
+                                    addressContainer={membershipApplication}
+                                />
+                                <Text size="md">
+                                    {membershipApplication.occupation}
+                                </Text>
+                                <Text size="md">
+                                    Recommended by
+                                    &nbsp;
+                                    {membershipApplication.referredBy}
+                                </Text>
                                 <Text size="lg">
                                     Application ID:
                                     &nbsp;
@@ -67,19 +77,6 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                     &nbsp;
                                     {membershipApplication.firstName}
                                 </Link>
-                            </TabPanel>
-                            <TabPanel>
-                                <NameAddressDisplay
-                                    addressContainer={membershipApplication}
-                                />
-                                <Text size="md">
-                                    {membershipApplication.occupation}
-                                </Text>
-                                <Text size="md">
-                                    Recommended by
-                                    &nbsp;
-                                    {membershipApplication.referredBy}
-                                </Text>
                             </TabPanel>
                             <TabPanel>
                                 <OrderedList>
@@ -131,7 +128,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                     </Alert>
                 </SimpleGrid>
                 <ModalFooter>
-                    <Grid templateColumns="repeat(3, 2fr)" gap={3}>
+                    <Grid templateColumns="repeat(2, 2fr)" gap={3}>
                         <GridItem>
                             <Button
                                 variant="ghost"
