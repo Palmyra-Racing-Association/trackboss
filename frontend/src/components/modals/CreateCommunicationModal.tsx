@@ -19,7 +19,7 @@ interface CreateCommunicationModalProps {
 
 export default function CreateCommunicationModal(props: CreateCommunicationModalProps) {
     // internal state management for the UI.
-    const [characterLimit, setCharacterLimit] = useState<number>(4000);
+    const [characterLimit, setCharacterLimit] = useState<number>(40000);
     const [characterCount, setCharacterCount] = useState<number>(0);
 
     const [totalCount, setTotalCount] = useState<number>(0);
@@ -94,7 +94,7 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                                         if (selectedType === 'TEXT') {
                                             setCharacterLimit(140);
                                         } else {
-                                            setCharacterLimit(4000);
+                                            setCharacterLimit(40000);
                                         }
                                         setMechanism(selectedType);
                                     }
