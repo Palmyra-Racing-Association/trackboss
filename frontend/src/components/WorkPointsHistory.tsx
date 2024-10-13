@@ -96,9 +96,11 @@ export default function WorkPointsHistory() {
             const allYears: number[] = [];
             // find the first year they were a member.
             let firstYear = parseInt(state.user?.dateJoined.substring(0, 4) || '0', 10);
-            // but we tracked points offline before 2016 so we can only go from then on.
             if (firstYear < 2016) {
-                firstYear = 2016;
+                // We have historical data going back at least this far for a handful of folks.  A Bit of a hack to do
+                // it this way but we needed some quick solutions so we could get life member for a few of the longer
+                // term folks.
+                firstYear = 2011;
             }
             const currentYear = new Date().getFullYear();
             for (let dropdownYear = firstYear; dropdownYear <= currentYear; dropdownYear++) {
