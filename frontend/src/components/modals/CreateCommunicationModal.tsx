@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import {
     Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Button, Checkbox, CheckboxGroup, Divider,
     Grid, GridItem, Heading, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Select,
-    Text, Textarea, useToast,
+    Text, useToast,
 } from '@chakra-ui/react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 import { MembershipTag } from '../../../../src/typedefs/membershipTag';
 import { createCommunication } from '../../controller/communication';
 import { MemberCommunication } from '../../../../src/typedefs/memberCommunication';
@@ -131,17 +134,16 @@ export default function CreateCommunicationModal(props: CreateCommunicationModal
                             </Accordion>
                         </GridItem>
                         <GridItem colSpan={2}>
-                            <Text>Communication Content</Text>
-                            <Textarea
-                                minHeight={350}
-                                size="lg"
-                                isRequired
+                            <Text>Communication Content (note text does not support formatting)</Text>
+                            <ReactQuill
+                                theme="snow" // You can also use 'bubble' or customize themes
+                                style={{ height: 350 }}
+                                placeholder="Compose your email..."
                                 onChange={
-                                    (e) => {
-                                        let content = e.target.value;
+                                    (content) => {
                                         if (content.length > characterLimit) {
-                                            e.target.value = content.substring(0, characterLimit);
-                                            content = e.target.value;
+                                            // eslint-disable-next-line no-param-reassign
+                                            content = content.substring(0, characterLimit);
                                         }
                                         setMessageText(content);
                                         setCharacterCount(content.length);

@@ -1,9 +1,9 @@
 import React from 'react';
 import {
     Button, Divider, Grid, GridItem, Heading, Input, Modal, ModalBody, ModalContent, ModalFooter, ModalOverlay, Text,
-    Textarea,
 } from '@chakra-ui/react';
 import { MemberCommunication } from '../../../../src/typedefs/memberCommunication';
+import 'react-quill/dist/quill.snow.css';
 
 interface ViewCommunicationModalProps {
     communication?: MemberCommunication,
@@ -50,12 +50,8 @@ export default function ViewCommunicationModal(props: ViewCommunicationModalProp
                         </GridItem>
                         <GridItem colSpan={2}>
                             <Text>Communication Content</Text>
-                            <Textarea
-                                minHeight={350}
-                                size="lg"
-                                isRequired
-                                disabled
-                                defaultValue={props.communication?.text}
+                            <div
+                                dangerouslySetInnerHTML={{ __html: props.communication?.text || '' }}
                             />
                         </GridItem>
                     </Grid>
