@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import AWS from 'aws-sdk';
+import sanitizeHtml from 'sanitize-html';
 import {
     getMemberCommunicationById, getMemberCommunications, insertMemberCommunication,
 } from '../database/memberCommunication';
@@ -43,6 +44,13 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
         const communication : MemberCommunication = req.body;
         // I add this here because we figure out what they are in this upcomign code block.
         communication.members = [];
+        // on texts remove paragraph breaks inserted by Quill.
+        if (communication.mechanism === 'TEXT') {
+            communication.text = sanitizeHtml(communication.text, {
+                allowedTags: [],
+                allowedAttributes: {},
+            });
+        }
         // use the base object type as a hashmap with any keys you want in there.
         // learned this trick ages ago.
         const uniqueRecipients : any = {};
