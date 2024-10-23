@@ -9,7 +9,6 @@ import isMobilePhone from 'validator/es/lib/isMobilePhone';
 import DatePicker from 'react-date-picker';
 import moment from 'moment';
 import Select from 'react-select';
-
 import { UserContext } from '../../contexts/UserContext';
 
 import { Member, PatchMemberRequest } from '../../../../src/typedefs/member';
@@ -51,6 +50,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [firstName, setFirstName] = useState<string>(selectedMember.firstName);
     const [lastName, setLastName] = useState<string>(selectedMember.lastName);
     const [subscribed, setSubscribed] = useState<boolean>(selectedMember.subscribed || false);
+    const [dependentStatus, setDependentStatus] = useState<string>(selectedMember.dependentStatus || '');
     const [rowCount, setRowCount] = useState<number>(7);
 
     const { state, update } = useContext(UserContext);
@@ -222,6 +222,26 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                             </GridItem>
+                            <GridItem colSpan={2}>
+                                <Text>Dependent Status</Text>
+                                <Select
+                                    isDisabled={selectedMember.memberType.toLowerCase() === 'membership admin'}
+                                    options={
+                                        [
+                                            { value: 'Primary', label: 'Primary member' },
+                                            { value: 'Spouse/Partner', label: 'Spouse/Partner' },
+                                            { value: 'Child', label: 'Child' },
+                                            { value: 'Disabled Adult', label: 'Disabled Adult' },
+                                        ]
+                                    }
+                                    onChange={
+                                        (e) => {
+                                            setDependentStatus(e?.value || '');
+                                            setDirty(true);
+                                        }
+                                    }
+                                />
+                            </GridItem>
                             <GridItem colSpan={2} display={props.hasEmail ? 'block' : 'none'}>
                                 <WrappedSwitchInput
                                     wrapperText="Subscribed to communications"
@@ -262,6 +282,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         birthdate: moment(birthdate).format('YYYY-MM-DD'),
                                         modifiedBy: state.user?.memberId || 0,
                                         subscribed,
+                                        dependentStatus,
                                     };
                                     await updateMember(state.token, selectedMember.memberId, memberUpdate);
                                     if (!props.isFamilyMember) {

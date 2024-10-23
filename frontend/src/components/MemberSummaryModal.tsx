@@ -234,8 +234,8 @@ export default function MemberSummaryModal(props: modalProps) {
                                         {
                                             family && _.map(family, (member) => (
 
-                                                member.memberId === state.user!.memberId ? <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName} (you)`}</ListItem>
-                                                    : <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName}`}</ListItem>
+                                                member.memberId === state.user!.memberId ? <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName} - ${member.dependentStatus} (you)`}</ListItem>
+                                                    : <ListItem key={member.memberId}>{`${member.firstName} ${member.lastName} - ${member.dependentStatus}`}</ListItem>
                                             ))
                                         }
                                     </UnorderedList>

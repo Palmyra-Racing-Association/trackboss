@@ -137,7 +137,7 @@ export default function GeneralInfo(props: cardProps) {
                                         >
                                             {
                                                 `${member.firstName} 
-                                                ${member.lastName} 
+                                                ${member.lastName} (${member.dependentStatus})
                                                 (Age: ${moment().diff(member.birthdate, 'years')})`
                                             }
                                         </ListItem>
