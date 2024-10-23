@@ -25,6 +25,7 @@ CREATE VIEW `v_member` AS
         ms.zip,
         ms.cancel_reason,
         m.subscribed,
+        m.dependent_status,
         DATE_FORMAT(m.last_modified_date, '%Y-%m-%d') AS last_modified_date,
         m.last_modified_by
     FROM

@@ -29,6 +29,7 @@ export type Member = {
     boardMemberData? : BoardMember // optional field to be used only by the frontend to store data
     deactivationReason?: string,
     subscribed?: boolean,
+    dependentStatus?: string,
 }
 
 export type PostNewMemberRequest = {
@@ -45,6 +46,7 @@ export type PostNewMemberRequest = {
     membershipType?: string,
     modifiedBy: number,
     subscribed: boolean,
+    dependentStatus?: string,
 }
 
 export type PostNewMemberResponse = Member | ErrorResponse;
@@ -68,6 +70,7 @@ export type PatchMemberRequest = {
     modifiedBy: number,
     deactivationReason?: string,
     subscribed?: boolean,
+    dependentStatus?: string,
 }
 
 export type PatchMemberResponse = Member | ErrorResponse;

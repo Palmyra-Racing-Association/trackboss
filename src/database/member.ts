@@ -19,8 +19,8 @@ export const GET_MEMBER_SQL = `${GET_MEMBER_LIST_SQL} WHERE member_id = ?`;
 export const GET_MEMBER_UUID_SQL = `${GET_MEMBER_LIST_SQL} WHERE uuid = ?`;
 export const INSERT_MEMBER_SQL = 'INSERT INTO member (membership_id, uuid, member_type_id, first_name, last_name, ' +
     // eslint-disable-next-line max-len
-    'phone_number, occupation, email, birthdate, date_joined, last_modified_date, last_modified_by, active, subscribed)' +
-    'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?, 1, ?)';
+    'phone_number, occupation, email, birthdate, date_joined, last_modified_date, last_modified_by, active, subscribed, dependent_status)' +
+    'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), ?, 1, ?, ?)';
 export const PATCH_MEMBER_SQL = 'CALL sp_patch_member(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 export const GET_VALID_ACTORS_SQL = 'select member_id from pradb.member m where member_id=? or (m.member_type_id=2 ' +
     'and m.member_id=(select ms.membership_admin_id from pradb.member m left join pradb.membership ms on ' +
@@ -52,6 +52,7 @@ async function mapMemberFromResult(results: any) {
         deactivationReason: result.cancel_reason,
         // this is intentional - booleans in mysql require too much jacking around for conversion. This makes it easy.
         subscribed: (result.subscribed === 'true'),
+        dependentStatus: result.dependent_status,
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));
@@ -84,6 +85,7 @@ export async function insertMember(req: PostNewMemberRequest): Promise<number> {
         req.dateJoined,
         req.modifiedBy,
         `${req.subscribed}`,
+        req.dependentStatus,
     ];
 
     let result;
@@ -193,6 +195,7 @@ export async function getMember(searchParam: string): Promise<Member> {
         zip: results[0].zip,
         deactivationReason: results[0].cancel_reason,
         subscribed: results[0].subscribed === 'true',
+        dependentStatus: results[0].dependent_status,
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
@@ -232,6 +235,7 @@ export async function getMemberByPhone(phone: string): Promise<Member> {
         zip: results[0].zip,
         deactivationReason: results[0].cancel_reason,
         subscribed: results[0].subscribed === 'true',
+        dependentStatus: results[0].dependent_status,
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
@@ -271,6 +275,7 @@ export async function getMemberByEmail(email: string): Promise<any> {
             zip: results[0].zip,
             deactivationReason: results[0].cancel_reason,
             subscribed: results[0].subscribed === 'true',
+            dependentStatus: results[0].dependent_status,
             lastModifiedDate: results[0].last_modified_date,
             lastModifiedBy: results[0].last_modified_by,
         };
@@ -303,6 +308,10 @@ export async function patchMember(id: string, req: PatchMemberRequest): Promise<
         await getPool().query(
             'update member set subscribed = ? where member_id = ?',
             [`${req.subscribed}`, id],
+        );
+        await getPool().query(
+            'update member set dependent_status = ? where member_id = ?',
+            [`${req.dependentStatus}`, id],
         );
     } catch (e: any) {
         if ('errno' in e) {
