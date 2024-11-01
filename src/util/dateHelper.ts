@@ -28,7 +28,7 @@ export function calculateBillingYear() : number {
     const rightNow = new Date();
     const rightNowYear = rightNow.getFullYear();
     let billingYear = rightNowYear;
-    if (isBefore(rightNow, (new Date(rightNowYear, 11)))) {
+    if (isBefore(rightNow, (new Date(rightNowYear, 10)))) {
         billingYear -= 1;
     }
     return billingYear;
