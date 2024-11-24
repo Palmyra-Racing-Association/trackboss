@@ -151,6 +151,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
             modifiedBy: actingUser.memberId,
             subscribed: true,
             membershipType,
+            dependentStatus: 'Primary',
         };
         const primaryMemberId = await insertMember(newMember);
         newMemberId = primaryMemberId;
