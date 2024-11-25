@@ -63,6 +63,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
         setMemberAddressState(selectedMember.state);
         setEmail(selectedMember.email);
         setPhoneNumber(selectedMember.phoneNumber || '');
+        setBirthDate(moment(selectedMember.birthdate).toDate());
     });
     return (
         <>
