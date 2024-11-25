@@ -46,7 +46,7 @@ export type PostNewMemberRequest = {
     membershipType?: string,
     modifiedBy: number,
     subscribed: boolean,
-    dependentStatus: string,
+    dependentStatus?: string,
 }
 
 export type PostNewMemberResponse = Member | ErrorResponse;
