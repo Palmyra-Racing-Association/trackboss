@@ -309,10 +309,12 @@ export async function patchMember(id: string, req: PatchMemberRequest): Promise<
             'update member set subscribed = ? where member_id = ?',
             [`${req.subscribed}`, id],
         );
-        await getPool().query(
-            'update member set dependent_status = ? where member_id = ?',
-            [`${req.dependentStatus}`, id],
-        );
+        if (req.dependentStatus) {
+            await getPool().query(
+                'update member set dependent_status = ? where member_id = ?',
+                [`${req.dependentStatus}`, id],
+            );
+        }
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {

@@ -51,6 +51,7 @@ export default function BillingStatsDisplay(props: billStatsProps) {
             </Stat>
             <Link
                 href={bill?.squareLink}
+                target="_blank"
             >
                 Square link
             </Link>

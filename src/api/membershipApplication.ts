@@ -20,6 +20,7 @@ import { insertMembership } from '../database/membership';
 import { generateBill, getWorkPointThreshold } from '../database/billing';
 import { getMembershipType } from '../database/memberType';
 import { generateSquareLinks } from '../util/billing';
+import { calculateBillingYear } from '../util/dateHelper';
 
 const membershipApplication = Router();
 
@@ -119,7 +120,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         let applicationStatus = 'Accepted';
         let membershipType = 'Associate Member';
         const currentYear = (new Date()).getFullYear();
-        let billingYear = (currentYear - 1);
+        let billingYear = calculateBillingYear();
         if (isGuest) {
             // Guests will be members for the current year only, and time limited.
             applicationStatus = 'Guest';
@@ -175,7 +176,7 @@ membershipApplication.post('/accept/:id', async (req: Request, res: Response) =>
         await patchMember(`${primaryMemberId}`, memberUpdate);
         // now send a welcome email to the member.
         await sendNewMemberEmail(application);
-        const { threshold } = await getWorkPointThreshold(currentYear - 1);
+        const { threshold } = await getWorkPointThreshold(billingYear);
         const billId = await generateBill({
             amount: membershipInfo.baseDuesAmt,
             amountWithFee: ((membershipInfo.baseDuesAmt) + (membershipInfo.baseDuesAmt * 0.0290) + 0.30),
