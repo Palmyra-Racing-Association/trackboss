@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Button, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader,
     ModalOverlay, Text, useDisclosure, useToast,
@@ -55,6 +55,15 @@ export default function EditMemberModal(props: EditMemberModalProps) {
 
     const { state, update } = useContext(UserContext);
 
+    useEffect(() => {
+        setFirstName(selectedMember.firstName);
+        setLastName(selectedMember.lastName);
+        setStreetAddress(selectedMember.address);
+        setCity(selectedMember.city);
+        setMemberAddressState(selectedMember.state);
+        setEmail(selectedMember.email);
+        setPhoneNumber(selectedMember.phoneNumber || '');
+    });
     return (
         <>
             <Button
@@ -309,6 +318,8 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         duration: 5000,
                                         isClosable: true,
                                     });
+                                    setFirstName('');
+                                    setLastName('');
                                     onClose();
                                 }
                             }
