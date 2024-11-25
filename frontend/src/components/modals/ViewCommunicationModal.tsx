@@ -51,6 +51,7 @@ export default function ViewCommunicationModal(props: ViewCommunicationModalProp
                         <GridItem colSpan={2}>
                             <Text>Communication Content</Text>
                             <div
+                                // eslint-disable-next-line react/no-danger
                                 dangerouslySetInnerHTML={{ __html: props.communication?.text || '' }}
                             />
                         </GridItem>
