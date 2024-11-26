@@ -256,6 +256,7 @@ export default function DuesAndWaiversList() {
                     <Heading>
                         {`Billing detail for ${selectedBill?.membershipAdmin} - ${selectedBill?.year}`}
                     </Heading>
+                    <Text size="x-small">{`Bill ID: ${selectedBill?.billId}`}</Text>
                     <BillingStatsDisplay bill={selectedBill} />
                     <WrappedSwitchInput
                         wrapperText="Contacted and renewing?"
@@ -265,6 +266,7 @@ export default function DuesAndWaiversList() {
                                 // eslint-disable-next-line no-empty
                                 if (selectedBill?.billId) {
                                     await markContactedAndRenewing(state.token, selectedBill?.billId);
+                                    getMembershipBillData();
                                 }
                             }
                         }
@@ -278,6 +280,7 @@ export default function DuesAndWaiversList() {
                             async () => {
                                 if (selectedBill?.billId) {
                                     await payBill(state.token, selectedBill?.billId, paymentMethod);
+                                    await markContactedAndRenewing(state.token, selectedBill?.billId);
                                     getMembershipBillData();
                                 }
                             }
@@ -320,6 +323,9 @@ export default function DuesAndWaiversList() {
                                 if (selectedBill?.billId) {
                                     await attestInsurance(state.token, selectedBill?.billId);
                                     getMembershipBillData();
+                                    if (selectedBill.amount === 0) {
+                                        await markContactedAndRenewing(state.token, selectedBill?.billId);
+                                    }
                                 }
                             }
                         }

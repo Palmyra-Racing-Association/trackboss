@@ -238,6 +238,11 @@ billing.patch('/attestIns/:billId', async (req: Request, res: Response) => {
             if (!originalBill.curYearIns && bill.curYearIns) {
                 await sendInsuranceConfirmEmail(bill);
             }
+            // if the bill is zero, mark the member as contacted because because they are done and there
+            // is no need to check them.
+            if (bill.amount === 0) {
+                await markContactedAndRenewing(billId);
+            }
             response = {};
             res.status(200);
         } catch (e: any) {
