@@ -67,7 +67,7 @@ function Dashboard() {
         const bills = await getBillsForMembership(state.token, state.user?.membershipId || 0) as Bill[];
         const today = new Date();
         let billYear = today.getFullYear() - 1;
-        if ((today.getMonth() > 10) && (today.getDay() > 14)) {
+        if ((today.getMonth() >= 10) && (today.getDate() >= 24)) {
             billYear = today.getFullYear();
         }
         const displayBill = bills.filter((bill) => bill.year === billYear);
@@ -86,6 +86,19 @@ function Dashboard() {
         }
         getData();
     }, [state.user]);
+
+    useEffect(() => {
+        async function getData() {
+            setEventCardProps(await getEventCardPropsLocal(state.token));
+            if (state.user) {
+                setPercent(await getWorkPointsPercentage(state.token, state.user.membershipId));
+            }
+            await loadTrackStatuses();
+            await loadLinks();
+            await loadBills();
+        }
+        getData();
+    }, []);
 
     useEffect(() => {
         async function getData() {

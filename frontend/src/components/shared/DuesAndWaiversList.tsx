@@ -260,7 +260,8 @@ export default function DuesAndWaiversList() {
                     <BillingStatsDisplay bill={selectedBill} />
                     <WrappedSwitchInput
                         wrapperText="Contacted and renewing?"
-                        defaultChecked={(selectedBill?.contactedAndRenewing) || false}
+                        // eslint-disable-next-line max-len
+                        defaultChecked={(selectedBill?.contactedAndRenewing) || (selectedBill?.curYearPaid && selectedBill.curYearIns) || false}
                         onSwitchChange={
                             async () => {
                                 // eslint-disable-next-line no-empty
