@@ -67,7 +67,9 @@ function Dashboard() {
         const bills = await getBillsForMembership(state.token, state.user?.membershipId || 0) as Bill[];
         const today = new Date();
         let billYear = today.getFullYear() - 1;
-        if ((today.getMonth() >= 10) && (today.getDate() >= 24)) {
+        const isAfterNovember = (today.getMonth() > 10);
+        const isAfterBillingStart = (today.getMonth() === 10) && (today.getDate() >= 24);
+        if (isAfterNovember || isAfterBillingStart) {
             billYear = today.getFullYear();
         }
         const displayBill = bills.filter((bill) => bill.year === billYear);
