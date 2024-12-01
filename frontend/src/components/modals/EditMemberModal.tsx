@@ -55,6 +55,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
 
     const { state, update } = useContext(UserContext);
 
+    /*
     useEffect(() => {
         setFirstName(selectedMember.firstName);
         setLastName(selectedMember.lastName);
@@ -65,6 +66,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
         setPhoneNumber(selectedMember.phoneNumber || '');
         setBirthDate(moment(selectedMember.birthdate).toDate());
     });
+    */
     return (
         <>
             <Button
