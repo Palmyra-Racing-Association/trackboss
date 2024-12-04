@@ -1,32 +1,39 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
     Center,
     Heading,
     Highlight,
     Text,
+    useDisclosure,
     VStack,
 } from '@chakra-ui/react';
+import { Bill } from '../../../src/typedefs/bill';
+import DuesAndWaiversModal from './modals/DuesAndWaiversModal';
+import { UserContext } from '../contexts/UserContext';
 
 interface pageProps {
     name: string,
     billYear: number,
-    billPaid?: boolean,
-    insuranceAttested?: boolean,
     gateCode?: string,
+    // eslint-disable-next-line react/no-unused-prop-types
+    lastBill?: Bill,
 }
 
 export default function Header(props: pageProps) {
-    const { billPaid, insuranceAttested, billYear } = props;
-    const allDone = (billPaid && insuranceAttested);
+    const { billYear, lastBill } = props;
+    const { isOpen, onClose, onOpen } = useDisclosure();
+    const { state } = useContext(UserContext);
+
+    const allDone = (lastBill?.curYearPaid && lastBill.curYearIns);
     let status = (allDone) ? 'complete' : 'incomplete';
     let highlightColor = 'green';
     if (!allDone) {
         highlightColor = 'red';
-        if (!billPaid && !insuranceAttested) {
+        if (!lastBill?.curYearPaid && !lastBill?.curYearIns) {
             status += '(payment, insurance)';
-        } else if (!billPaid) {
+        } else if (!lastBill.curYearPaid) {
             status += '(payment)';
-        } else if (!insuranceAttested) {
+        } else if (!lastBill?.curYearIns) {
             status += '(insurance)';
         }
     }
@@ -40,23 +47,41 @@ export default function Header(props: pageProps) {
                         {props.name}
                     </Heading>
                 </Heading>
-                <Text fontSize="xl">
+                <Text
+                    fontSize="xl"
+                    cursor="pointer"
+                    onClick={
+                        () => {
+                            onOpen();
+                        }
+                    }
+                >
                     <Highlight
                         query={['complete', 'incomplete']}
                         styles={{ px: '2', py: '1', rounded: 'full', color: 'white', bg: highlightColor }}
                     >
-                        {`${billYear + 1} renewal status: ${status}`}
+                        {`${billYear + 1} renewal status (view): ${status}`}
                     </Highlight>
                 </Text>
                 <Text fontSize="2xl" fontWeight="bold" color="orange">
                     {gateCodeMessage}
                 </Text>
             </VStack>
+            <DuesAndWaiversModal
+                viewBill={lastBill}
+                token={state.token}
+                insuranceAttested={lastBill?.curYearIns || false}
+                isOpen={isOpen}
+                onClose={
+                    async () => {
+                        onClose();
+                    }
+                }
+            />
         </Center>
     );
 }
 Header.defaultProps = {
-    billPaid: true,
-    insuranceAttested: true,
     gateCode: '',
+    lastBill: undefined,
 };

@@ -18,8 +18,6 @@ interface duesModalProps {
     viewBill?: Bill;
     insuranceAttested: boolean,
     onClose: () => void,
-    payOnlineAction: () => void,
-    paySnailMailAction: () => void,
 }
 
 export default function DuesAndWaiversModal(props: duesModalProps) {
@@ -112,7 +110,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     hidden={!attested || (props.viewBill?.amount === 0) || (props.viewBill?.curYearPaid)}
                     onClick={
                         async () => {
-                            props.payOnlineAction();
+                            window.open(`${props.viewBill?.squareLink}`);
                         }
                     }
                 >
@@ -127,7 +125,8 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     hidden={!attested || (props.viewBill?.amount === 0) || (props.viewBill?.curYearPaid)}
                     onClick={
                         async () => {
-                            props.paySnailMailAction();
+                            // eslint-disable-next-line max-len
+                            window.open(`mailto:hogbacksecretary@gmail.com?subject=Dues%20Payment%20for%20${props.viewBill?.firstName}%20${props.viewBill?.lastName}&body=I%20intend%20to%20pay%20my%202023%20dues%20of%20$${props.viewBill?.amount}%20via%20%3CYour%20method%20here%3E%20by%20${props.viewBill?.dueDate}`);
                         }
                     }
                 >

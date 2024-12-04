@@ -124,9 +124,8 @@ function Dashboard() {
                         <GreetingText
                             name={`${state.user.firstName} ${state.user.lastName}`}
                             billYear={lastBill?.year || (new Date()).getFullYear() - 1}
-                            billPaid={lastBill?.curYearPaid}
-                            insuranceAttested={lastBill?.curYearIns}
                             gateCode={gateCode}
+                            lastBill={lastBill}
                         />
                     )
                 }
