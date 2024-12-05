@@ -24,8 +24,8 @@ export async function getMembershipApplications() : Promise<MembershipApplicatio
     let results;
     try {
         const applicationsQuery =
-            // eslint-disable-next-line max-len
-            'select * from membership_application where application_status != \'Rejected\' order by membership_application_id;';
+            `select * from membership_application where application_status != 'Rejected' 
+                order by application_status desc, application_date;`;
         [results] = await getPool()
             .query<RowDataPacket[]>(applicationsQuery);
     } catch (e) {

@@ -118,7 +118,6 @@ export default function MembershipApplicationList() {
                 responsive
                 striped
                 subHeaderWrap
-                defaultSortFieldId={1}
                 customStyles={customStyles}
                 paginationComponentOptions={
                     {
