@@ -1,4 +1,4 @@
-import { useDisclosure } from '@chakra-ui/react';
+import { Center, useDisclosure } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { MembershipApplication } from '../../../src/typedefs/membershipApplication';
@@ -6,6 +6,7 @@ import { UserContext } from '../contexts/UserContext';
 import { getMembershipApplications } from '../controller/membershipApplication';
 import DataSearchBox from './input/DataSearchBox';
 import MembershipApplicationModal from './modals/MembershipApplicationModal';
+import WrappedSwitchInput from './input/WrappedSwitchInput';
 
 const columns: any = [
     {
@@ -72,6 +73,8 @@ export default function MembershipApplicationList() {
     const [filteredCells, setFilteredCells] = useState<MembershipApplication[]>([]);
     const { state } = useContext(UserContext);
     const [dirty, setDirty] = useState<boolean>(false);
+    const [showAccepted, setShowAccepted] = useState<boolean>(false);
+    const [showReview, setShowReview] = useState<boolean>(false);
 
     const { isOpen, onClose, onOpen } = useDisclosure(
         { onClose: () => setDirty((olDirtyGotYaMoney) => !olDirtyGotYaMoney) },
@@ -101,14 +104,46 @@ export default function MembershipApplicationList() {
             });
             setFilteredCells(filteredApplications);
         }
-    }, [searchTerm, cells]);
+        if (showReview) {
+            const reviewOnly = cells.filter((application) => (application.status === 'Review'));
+            setFilteredCells(reviewOnly);
+        }
+        if (showAccepted) {
+            const acceptedOnly = cells.filter((application) => (application.status === 'Accepted'));
+            setFilteredCells(acceptedOnly);
+        }
+    }, [searchTerm, showReview, showAccepted, cells]);
 
     return (
         <div>
-            <DataSearchBox
-                onTextChange={setSearchTerm}
-                searchValue={searchTerm}
-            />
+            <Center>
+                <DataSearchBox
+                    onTextChange={setSearchTerm}
+                    searchValue={searchTerm}
+                />
+                <WrappedSwitchInput
+                    maxWidth={100}
+                    defaultChecked={false}
+                    wrapperText="Only Show Review"
+                    locked={showAccepted}
+                    onSwitchChange={
+                        () => {
+                            setShowReview(!showReview);
+                        }
+                    }
+                />
+                <WrappedSwitchInput
+                    maxWidth={100}
+                    defaultChecked={false}
+                    wrapperText="Only Show Accepted"
+                    locked={showReview}
+                    onSwitchChange={
+                        () => {
+                            setShowAccepted(!showAccepted);
+                        }
+                    }
+                />
+            </Center>
             <DataTable
                 columns={columns}
                 data={filteredCells as MembershipApplication[]}
