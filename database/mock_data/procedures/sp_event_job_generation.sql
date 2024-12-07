@@ -45,8 +45,11 @@ BEGIN
 
         SET @JobDayInterval = 0;
         # only Races get job days tied to them as they can be multi day.  Everything else is a single.
-        if (_event_type = 'Race') THEN
-            SET @JobDayInterval = @JobDayNumber - 1;
+        if ((_event_type = 'Race')) THEN
+            SET @JobDayInterval = @JobDayNumber - 5;
+        END IF;
+        if ((_event_type = 'Harescramble')) THEN
+            SET @JobDayInterval = @JobDayNumber - 5;
         END IF;
 
         SET @JobDate = DATE_ADD(_event_start_date, interval @JobDayInterval DAY);
