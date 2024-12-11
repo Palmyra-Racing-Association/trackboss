@@ -27,6 +27,7 @@ import { ErrorResponse } from '../typedefs/errorResponse';
 import { MembershipTag } from '../typedefs/membershipTag';
 import { getMemberByEmail } from '../database/member';
 import { Member } from '../typedefs/member';
+import { runBillingComplete, runBillingCompleteCurrent } from '../util/billing';
 
 const membership = Router();
 
@@ -156,12 +157,17 @@ membership.patch('/:membershipID', async (req: Request, res: Response) => {
         try {
             const { membershipID } = req.params;
             const membershipIdNum = Number(membershipID);
+            const priorToUpdate = await getMembership(membershipIdNum);
             if (Number.isNaN(membershipIdNum)) {
                 throw new Error('not found');
             }
             await verify(headerCheck.token, 'Membership Admin');
             await patchMembership(membershipIdNum, req.body);
             response = await getMembership(membershipIdNum);
+            if (priorToUpdate.membershipType !== req.body.membershipType) {
+                console.log(`old ${priorToUpdate.membershipType} new ${response.membershipType}`);
+                runBillingCompleteCurrent([response], response.membershipId);
+            }
             res.status(200);
         } catch (e: any) {
             logger.error(`Error at path ${req.path}`);

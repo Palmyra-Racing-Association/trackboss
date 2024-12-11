@@ -233,6 +233,7 @@ member.patch('/:memberId', async (req: Request, res: Response) => {
         try {
             const { memberId } = req.params;
             await verify(headerCheck.token, 'Membership Admin', Number(memberId));
+            const prePatchMember = await getMember(memberId);
             await patchMember(memberId, req.body);
             const updatedMember = await getMember(memberId);
             response = updatedMember;
