@@ -15,6 +15,7 @@ import { Job } from '../typedefs/job';
 import { getBoardMemberList } from '../database/boardMember';
 import { sendPaymentConfirmationEmail } from './email';
 import { createPaymentLink } from '../integrations/square';
+import { calculateBillingYear } from './dateHelper';
 
 /**
  * Generate new bills in the database
@@ -157,6 +158,12 @@ export async function runBillingComplete(year: number, membershipList: Membershi
     const preGeneratedBills = await getBillList({ year, membershipId });
     const generatedBills = await generateNewBills(membershipList, preGeneratedBills, threshold, year);
     return generatedBills;
+}
+
+export async function runBillingCompleteCurrent(membershipList: Membership[], membershipId: number) {
+    const currentYear = calculateBillingYear();
+    const billsBillsBills = await runBillingComplete(currentYear, membershipList, membershipId);
+    return billsBillsBills;
 }
 
 export async function generateSquareLinks(billingYear: number, membershipId: number) {
