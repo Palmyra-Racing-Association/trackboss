@@ -33,6 +33,7 @@ import { UserContext } from '../contexts/UserContext';
 import { PatchJobRequest } from '../../../src/typedefs/job';
 import { updateEvent } from '../controller/event';
 import { PatchEventRequest } from '../../../src/typedefs/event';
+import WrappedSwitchInput from './input/WrappedSwitchInput';
 
 interface modalProps {
   isOpen: boolean,
@@ -72,6 +73,7 @@ export default function SelectedEventModal(props: modalProps) {
     const [startDateTime, setStartDateTime] = useState<Date>(props.selectedEvent.start);
     const [endDateTime, setEndDateTime] = useState<Date>(props.selectedEvent.end);
     const [datesDirty, setDatesDirty] = useState<boolean>(false);
+    const [restrictSignups] = useState<boolean>(props.selectedEvent.restrictSignups);
 
     return (
         <Modal isCentered size="lg" isOpen={props.isOpen} onClose={props.onClose}>
@@ -151,11 +153,12 @@ export default function SelectedEventModal(props: modalProps) {
                                                     isDisabled={!datesDirty}
                                                     onClick={
                                                         async () => {
-                                                            const patchEvent : PatchEventRequest = {};
+                                                            const patchEvent : PatchEventRequest = { restrictSignups: props.selectedEvent.restrictSignups };
                                                             patchEvent.startDate = moment(startDateTime).toISOString(true).slice(0, -10);
                                                             patchEvent.endDate = moment(endDateTime).toISOString(true).slice(0, -10);
                                                             patchEvent.eventDescription = props.selectedEvent.description;
                                                             patchEvent.eventName = props.selectedEvent.title;
+                                                            patchEvent.restrictSignups = props.selectedEvent.restrictSignups;
                                                             await updateEvent(state.token, props.selectedEvent.eventId, patchEvent);
                                                             props.eventsRefresh();
                                                             props.onClose();
@@ -171,6 +174,24 @@ export default function SelectedEventModal(props: modalProps) {
                             </Accordion>
                         ))
                     }
+                    <WrappedSwitchInput
+                        locked={!props.admin}
+                        defaultChecked={props.selectedEvent.restrictSignups}
+                        maxWidth={150}
+                        wrapperText="Signups Restricted?"
+                        onSwitchChange={
+                            async () => {
+                                const patchEvent : PatchEventRequest = { restrictSignups };
+                                patchEvent.startDate = moment(startDateTime).toISOString(true).slice(0, -10);
+                                patchEvent.endDate = moment(endDateTime).toISOString(true).slice(0, -10);
+                                patchEvent.eventDescription = props.selectedEvent.description;
+                                patchEvent.eventName = props.selectedEvent.title;
+                                patchEvent.restrictSignups = !props.selectedEvent.restrictSignups;
+                                await updateEvent(state.token, props.selectedEvent.eventId, patchEvent);
+                                props.eventsRefresh();
+                            }
+                        }
+                    />
                     <Text fontSize="x-small">
                         {`Event ID: ${props.selectedEvent.eventId}`}
                     </Text>

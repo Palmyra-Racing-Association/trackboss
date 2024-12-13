@@ -36,7 +36,8 @@ export default function SignupButtonRow(props: any) {
     const isAdmin = state.user?.memberType === 'Admin';
 
     const selfSignupAllowed = ((props.eventType.toLowerCase() !== 'meeting') &&
-        (props.eventType.toLowerCase() !== 'work day')
+        (props.eventType.toLowerCase() !== 'work day') &&
+        !props.restrictSignups
     );
 
     const disableForMembers = (Date.parse(props.data.start) < Date.now());
