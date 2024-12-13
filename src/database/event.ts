@@ -94,6 +94,7 @@ export async function getEventList(startDate?: string, endDate?: string): Promis
         eventType: result.event_type,
         title: result.title,
         eventDescription: result.event_description,
+        signupsRestricted: (result.signups_restricted === 1),
     }));
 }
 
@@ -120,6 +121,7 @@ export async function getEvent(id: number): Promise<Event> {
         eventType: results[0].event_type,
         title: results[0].title,
         eventDescription: results[0].event_description,
+        signupsRestricted: (results[0].signups_restricted === 1),
     };
 }
 
@@ -145,6 +147,7 @@ export async function getClosestEvent(): Promise<Event> {
         eventTypeId: results[0].event_type_id,
         title: results[0].title,
         eventDescription: results[0].event_description,
+        signupsRestricted: (results[0].signups_restricted === 1),
     };
 }
 

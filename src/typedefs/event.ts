@@ -7,7 +7,8 @@ export type Event = {
     eventType: string,
     eventTypeId: number,
     title: string,
-    eventDescription: string
+    eventDescription: string,
+    signupsRestricted: boolean,
 }
 
 export type DeletedEvent = {
