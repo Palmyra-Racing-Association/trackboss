@@ -120,7 +120,7 @@ function Dashboard() {
             <VStack align="left" spacing="2em">
                 <Header title="Track Boss Dashboard" activeButtonId={1} />
                 {
-                    state.user && (
+                    state.user && lastBill && (
                         <GreetingText
                             name={`${state.user.firstName} ${state.user.lastName}`}
                             billYear={lastBill?.year || (new Date()).getFullYear() - 1}
