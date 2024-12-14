@@ -7,7 +7,7 @@ import { getPool } from './pool';
 import { Event, PatchEventRequest, PostNewEventRequest } from '../typedefs/event';
 
 export const INSERTED_EVENT_ID_OUT = '@event_id';
-export const INSERT_EVENT_SQL = `CALL sp_event_job_generation(?, ?, ?, ?, ?, ${INSERTED_EVENT_ID_OUT})`;
+export const INSERT_EVENT_SQL = `CALL sp_event_job_generation(?, ?, ?, ?, ?, ?, ${INSERTED_EVENT_ID_OUT})`;
 export const GET_INSERTED_EVENT_ID_SQL = `SELECT ${INSERTED_EVENT_ID_OUT}`;
 export const GET_EVENT_LIST_SQL = 'SELECT * FROM v_event';
 export const GET_EVENT_LIST_DATERANGE_SQL = `${GET_EVENT_LIST_SQL} WHERE end >= ? order by start`;
@@ -16,7 +16,10 @@ export const PATCH_EVENT_SQL = 'CALL sp_patch_event(?, ?, ?, ?, ?)';
 export const DELETE_EVENT_SQL = 'CALL sp_delete_event(?)';
 
 export async function insertEvent(req: PostNewEventRequest): Promise<number> {
-    const values = [req.startDate, req.endDate, req.eventTypeId, req.eventName, req.eventDescription];
+    let restrict = 0;
+    if (req.restrictSignups) restrict = 1;
+    const values = [req.startDate, req.endDate, req.eventTypeId, req.eventName,
+        req.eventDescription, restrict];
 
     // Use a single connection for sequential queries with SQL variables
     // (variables are session-scoped)
@@ -94,6 +97,7 @@ export async function getEventList(startDate?: string, endDate?: string): Promis
         eventType: result.event_type,
         title: result.title,
         eventDescription: result.event_description,
+        restrictSignups: (result.restrict_signups === 1),
     }));
 }
 
@@ -120,6 +124,7 @@ export async function getEvent(id: number): Promise<Event> {
         eventType: results[0].event_type,
         title: results[0].title,
         eventDescription: results[0].event_description,
+        restrictSignups: (results[0].restrict_signups === 1),
     };
 }
 
@@ -145,6 +150,7 @@ export async function getClosestEvent(): Promise<Event> {
         eventTypeId: results[0].event_type_id,
         title: results[0].title,
         eventDescription: results[0].event_description,
+        restrictSignups: (results[0].restrict_signups === 1),
     };
 }
 
@@ -152,10 +158,13 @@ export async function patchEvent(id: number, req: PatchEventRequest): Promise<vo
     if (_.isEmpty(req)) {
         throw new Error('user input error');
     }
-    const values = [req.startDate, req.endDate, req.eventName, req.eventDescription, id];
+    let restrict = 0;
+    if (req.restrictSignups) restrict = 1;
+    const values = [req.startDate, req.endDate, req.eventName, req.eventDescription, restrict, id];
 
     const updateSql =
-        'update event set start_date = ?, end_date = ?, event_name = ?, event_description = ? where event_id = ?';
+        // eslint-disable-next-line max-len
+        'update event set start_date = ?, end_date = ?, event_name = ?, event_description = ?, restrict_signups = ? where event_id = ?';
 
     let result;
     try {
@@ -225,6 +234,7 @@ export async function getRelatedEvents(event: Event) {
             eventTypeId: related.related_event_type_id,
             eventName: `${event.title} - ${related.type}`,
             eventDescription: `${event.title} - ${related.type}`,
+            restrictSignups: event.restrictSignups,
         };
         relatedEvents.push(precedingEvent);
     });

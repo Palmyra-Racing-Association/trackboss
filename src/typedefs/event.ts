@@ -7,7 +7,8 @@ export type Event = {
     eventType: string,
     eventTypeId: number,
     title: string,
-    eventDescription: string
+    eventDescription: string,
+    restrictSignups: boolean,
 }
 
 export type DeletedEvent = {
@@ -19,7 +20,8 @@ export type PostNewEventRequest = {
     endDate?: string,
     eventTypeId: number,
     eventName?: string,
-    eventDescription?: string
+    eventDescription?: string,
+    restrictSignups?: boolean,
 }
 
 export type PostNewEventResponse = Event | ErrorResponse
@@ -32,7 +34,8 @@ export type PatchEventRequest = {
     startDate?: string,
     endDate?: string,
     eventName?: string,
-    eventDescription?: string
+    eventDescription?: string,
+    restrictSignups: boolean,
 }
 
 export type PatchEventResponse = Event | ErrorResponse

@@ -5,6 +5,7 @@ IN _event_end_date DATETIME,
 IN _event_type_id INT, 
 IN _event_name VARCHAR(255), 
 IN _event_description VARCHAR(255),
+IN _restrict_signups BOOLEAN,
 OUT _event_id INT
 )
 BEGIN
@@ -23,7 +24,7 @@ BEGIN
     FOR NOT FOUND SET finished = 1;
     
     ## Insert our new event and grab its ID
-	INSERT INTO event(start_date, end_date, event_type_id, event_name, event_description) VALUES (_event_start_date, _event_end_date, _event_type_id, _event_name, _event_description);
+	INSERT INTO event(start_date, end_date, event_type_id, event_name, event_description, restrict_signups) VALUES (_event_start_date, _event_end_date, _event_type_id, _event_name, _event_description, _restrict_signups);
     SELECT LAST_INSERT_ID() INTO _event_id;
     
     SELECT type INTO _event_type FROM event_type WHERE event_type_id = _event_type_id;

@@ -8,6 +8,8 @@ import { BsPrinter, BsSearch } from 'react-icons/bs';
 import { getSignupList, getSignupListExcel } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
 import SignupButtonRow from './SignupButtonRow';
+import { getEvent } from '../controller/event';
+import { Event } from '../../../src/typedefs/event';
 
 interface Worker {
     name: string,
@@ -85,6 +87,7 @@ export default function SignUpList(props: SignupListProps) {
     const [cells, setCells] = useState([] as Worker[]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [allCells, setAllCells] = useState<Worker[]>([]);
+    const [signupEvent, setSignupEvent] = useState<Event>();
 
     const { state } = useContext(UserContext);
 
@@ -94,9 +97,15 @@ export default function SignUpList(props: SignupListProps) {
         setAllCells(eventJobs);
     }
 
+    async function getEventData() {
+        const eventData = await getEvent(state?.token, props.eventId) as Event;
+        setSignupEvent(eventData);
+    }
+
     useEffect(() => {
         async function getData() {
             await getSignupListData();
+            await getEventData();
         }
         getData();
     }, []);
@@ -179,6 +188,7 @@ export default function SignUpList(props: SignupListProps) {
                                 await getSignupListData();
                             },
                             eventType: props.eventType,
+                            restrictSignups: signupEvent?.restrictSignups,
                         }
                     }
                     responsive

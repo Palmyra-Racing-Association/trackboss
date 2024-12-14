@@ -25,6 +25,7 @@ import { UserContext } from '../contexts/UserContext';
 import { getEventTypeList } from '../controller/eventType';
 import { EventType } from '../../../src/typedefs/eventType';
 import { PostNewEventRequest } from '../../../src/typedefs/event';
+import WrappedSwitchInput from './input/WrappedSwitchInput';
 
 interface CreateEventModalProps {
     // eslint-disable-next-line no-unused-vars
@@ -54,6 +55,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
     const [startDateTime, setStartDateTime] = useState<Date>(props.startDateTime);
     const [endDateTime, setEndDateTime] = useState<Date>(props.endDateTime);
     const [isEventCreating, setIsEventCreating] = useState<boolean>(false);
+    const [restrictSignups, setRestrictSignups] = useState<boolean>(false);
 
     useEffect(() => {
         async function getData() {
@@ -84,7 +86,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                             ) : (
                                 <SimpleGrid minChildWidth="200px" spacing="40px">
                                     <VStack align="left">
-                                        <Text>Event Name:</Text>
+                                        <Text fontSize="sm">Event Name:</Text>
                                         <Input
                                             placeholder="Name"
                                             _placeholder={{ color: 'gray.100' }}
@@ -93,7 +95,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                         />
                                     </VStack>
                                     <VStack align="left">
-                                        <Text>Description:</Text>
+                                        <Text fontSize="sm">Description:</Text>
                                         <Input
                                             placeholder="Description"
                                             _placeholder={{ color: 'gray.100' }}
@@ -102,7 +104,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                         />
                                     </VStack>
                                     <VStack align="left">
-                                        <Text>Label:</Text>
+                                        <Text fontSize="sm">Label:</Text>
                                         <Select
                                             _placeholder={{ color: 'gray.100' }}
                                             placeholder="Select Label..."
@@ -116,7 +118,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                         </Select>
                                     </VStack>
                                     <VStack align="left">
-                                        <Text>Start Date/Time:</Text>
+                                        <Text fontSize="sm">Start Date/Time:</Text>
                                         <DateTimePicker
                                             disableClock
                                             onChange={
@@ -132,12 +134,24 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                         />
                                     </VStack>
                                     <VStack align="left">
-                                        <Text>End Date/Time:</Text>
+                                        <Text fontSize="sm">End Date/Time:</Text>
                                         <DateTimePicker
                                             disableClock
                                             minDate={startDateTime}
                                             onChange={(date: any) => setEndDateTime(date)}
                                             value={endDateTime}
+                                        />
+                                    </VStack>
+                                    <VStack>
+                                        <WrappedSwitchInput
+                                            defaultChecked={false}
+                                            maxWidth={150}
+                                            wrapperText="Restrict Signups?"
+                                            onSwitchChange={
+                                                () => {
+                                                    setRestrictSignups(!restrictSignups);
+                                                }
+                                            }
                                         />
                                     </VStack>
                                 </SimpleGrid>
@@ -167,6 +181,7 @@ export default function CreateEventModal(props: CreateEventModalProps) {
                                         eventTypeId,
                                         eventName,
                                         eventDescription: description,
+                                        restrictSignups,
                                     };
                                     await props.createEvent(newEvent);
                                     setIsEventCreating(false);
