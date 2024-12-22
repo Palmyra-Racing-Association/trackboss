@@ -13,7 +13,6 @@ import BoardMemberListPage from './pages/BoardMemberListPage';
 import BillingListPage from './pages/BillingListPage';
 import MemberCommunicationsPage from './pages/MemberCommunicationsPage';
 import ApplicationForm from './pages/ApplicationForm';
-import PaidLaborListPage from './pages/PaidLaborListPage';
 
 export function App() {
     const { state, update } = useContext(UserContext);
@@ -50,7 +49,6 @@ export function App() {
             <Route path="billing" element={<BillingListPage />} />
             <Route path="communicate" element={<MemberCommunicationsPage />} />
             <Route path="apply" element={<ApplicationForm />} />
-            <Route path="paidlabor" element={(<PaidLaborListPage />)} />
         </Routes>
     );
 }

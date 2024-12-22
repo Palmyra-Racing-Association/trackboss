@@ -7,7 +7,7 @@ import Header from '../components/Header';
 import EventSignupSheet from '../components/EventSignupSheet';
 import PaidLaborList from '../components/PaidLaborList';
 
-function JobsByEventType() {
+function RaceAdministration() {
     return (
         <ChakraProvider theme={theme}>
             <Header title="Race Administration" activeButtonId={6} />
@@ -37,4 +37,4 @@ function JobsByEventType() {
     );
 }
 
-export default JobsByEventType;
+export default RaceAdministration;
