@@ -52,7 +52,7 @@ export default function HamburgerMenu(props: pageProps) {
                 id="6"
                 isActive={props.activeButtonId === 6}
             >
-                <Link to="/jobs">Race Administration</Link>
+                <Link to="/jobs">Event Administration</Link>
             </Button>
             <StackDivider borderColor="gray.300" />
         </VStack>
@@ -209,23 +209,6 @@ export default function HamburgerMenu(props: pageProps) {
                                     isActive={props.activeButtonId === 4}
                                 >
                                     <Link to="/settings">My Account</Link>
-                                </Button>
-                                <Button
-                                    justifyContent="flex-start"
-                                    height="80px"
-                                    fontFamily="heading"
-                                    fontSize="xl"
-                                    leftIcon={<HiCog />}
-                                    width="100%"
-                                    bg="white"
-                                    color="black"
-                                    borderRadius="0"
-                                    _hover={{ bg: 'gray.100' }}
-                                    _active={activeButtonStyle}
-                                    id="5"
-                                    isActive={props.activeButtonId === 5}
-                                >
-                                    <Link to="/board">Board Members</Link>
                                 </Button>
                             </VStack>
                             { (props.admin) && (adminButtons) }

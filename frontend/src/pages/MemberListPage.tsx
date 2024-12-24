@@ -1,38 +1,31 @@
-import React, { useContext } from 'react';
-import { Box, Center, ChakraProvider, IconButton } from '@chakra-ui/react';
-import { BsPrinter } from 'react-icons/bs';
+import React from 'react';
+import { ChakraProvider } from '@chakra-ui/react';
+import { HiCog, HiUsers } from 'react-icons/hi';
+
 import theme from '../theme';
 import Header from '../components/Header';
 import MemberList from '../components/MemberList';
-import { getMemberPointsExcel } from '../controller/workPoints';
-import { UserContext } from '../contexts/UserContext';
+import BoardMemberList from '../components/BoardMemberList';
+import CustomTabPanel from '../components/shared/CustomTabPanel';
 
 function MemberListPage() {
-    const { state } = useContext(UserContext);
-
     return (
         <ChakraProvider theme={theme}>
             <Header title="Members" activeButtonId={3} />
-            <Box mt={0} pt={0}>
-                <Center>
-                    <IconButton
-                        size="lg"
-                        aria-label="Print"
-                        background="orange.300"
-                        color="white"
-                        mr={2}
-                        onClick={
-                            async () => {
-                                const memberWorkListExcel = await getMemberPointsExcel(state.token);
-                                const objectUrl = URL.createObjectURL(memberWorkListExcel);
-                                window.location.href = objectUrl;
-                            }
-                        }
-                        icon={<BsPrinter />}
-                    />
-                </Center>
-                <MemberList />
-            </Box>
+            <CustomTabPanel
+                tabs={
+                    [
+                        { label: 'Members', icon: <HiUsers /> },
+                        { label: 'Board Members', icon: <HiCog /> },
+                    ]
+                }
+                panels={
+                    [
+                        <MemberList />,
+                        <BoardMemberList />,
+                    ]
+                }
+            />
         </ChakraProvider>
     );
 }

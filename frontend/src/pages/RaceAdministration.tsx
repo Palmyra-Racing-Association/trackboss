@@ -1,38 +1,26 @@
 import React from 'react';
-import { ChakraProvider, Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import { FaMoneyCheck, FaTeamspeak } from 'react-icons/fa';
 
 import theme from '../theme';
 import Header from '../components/Header';
 import EventSignupSheet from '../components/EventSignupSheet';
 import PaidLaborList from '../components/PaidLaborList';
+import CustomTabPanel from '../components/shared/CustomTabPanel';
 
 function RaceAdministration() {
     return (
         <ChakraProvider theme={theme}>
             <Header title="Race Administration" activeButtonId={6} />
-            <Tabs variant="soft-rounded" bg="white" colorScheme="orange">
-                <TabList>
-                    <Tab>
-                        Event Job Structure
-                        &nbsp;
-                        <FaTeamspeak />
-                    </Tab>
-                    <Tab>
-                        Paid Labor
-                        &nbsp;
-                        <FaMoneyCheck />
-                    </Tab>
-                </TabList>
-                <TabPanels>
-                    <TabPanel>
-                        <EventSignupSheet />
-                    </TabPanel>
-                    <TabPanel>
-                        <PaidLaborList />
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
+            <CustomTabPanel
+                tabs={
+                    [
+                        { label: 'Event Job Structure', icon: <FaTeamspeak /> },
+                        { label: 'Paid Labor', icon: <FaMoneyCheck /> },
+                    ]
+                }
+                panels={[<EventSignupSheet />, <PaidLaborList />]}
+            />
         </ChakraProvider>
     );
 }
