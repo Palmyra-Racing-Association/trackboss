@@ -16,7 +16,7 @@ import {
     AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank, AiFillFolderOpen,
     AiOutlineNotification,
 } from 'react-icons/ai';
-import { FaMoneyBillAlt, FaMoneyCheck } from 'react-icons/fa';
+import { FaMoneyBillAlt } from 'react-icons/fa';
 import { HiUsers, HiCog } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
@@ -41,7 +41,7 @@ export default function HamburgerMenu(props: pageProps) {
                 justifyContent="flex-start"
                 height="80px"
                 fontFamily="heading"
-                fontSize="2xl"
+                fontSize="xl"
                 leftIcon={<AiFillBank />}
                 width="100%"
                 bg="white"
@@ -52,7 +52,7 @@ export default function HamburgerMenu(props: pageProps) {
                 id="6"
                 isActive={props.activeButtonId === 6}
             >
-                <Link to="/jobs">Administer Event Jobs</Link>
+                <Link to="/jobs">Event Administration</Link>
             </Button>
             <StackDivider borderColor="gray.300" />
         </VStack>
@@ -63,7 +63,7 @@ export default function HamburgerMenu(props: pageProps) {
                 justifyContent="flex-start"
                 height="80px"
                 fontFamily="heading"
-                fontSize="2xl"
+                fontSize="xl"
                 leftIcon={<AiFillFolderOpen />}
                 width="100%"
                 bg="white"
@@ -71,7 +71,7 @@ export default function HamburgerMenu(props: pageProps) {
                 borderRadius="0"
                 _hover={{ bg: 'gray.100' }}
                 _active={activeButtonStyle}
-                id="7"
+                id="6"
                 isActive={props.activeButtonId === 7}
             >
                 <Link to="/applications">Membership Applications</Link>
@@ -80,7 +80,7 @@ export default function HamburgerMenu(props: pageProps) {
                 justifyContent="flex-start"
                 height="80px"
                 fontFamily="heading"
-                fontSize="2xl"
+                fontSize="xl"
                 leftIcon={<FaMoneyBillAlt />}
                 width="100%"
                 bg="white"
@@ -97,7 +97,7 @@ export default function HamburgerMenu(props: pageProps) {
                 justifyContent="flex-start"
                 height="80px"
                 fontFamily="heading"
-                fontSize="2xl"
+                fontSize="xl"
                 leftIcon={<AiOutlineNotification />}
                 width="100%"
                 bg="white"
@@ -109,23 +109,6 @@ export default function HamburgerMenu(props: pageProps) {
                 isActive={props.activeButtonId === 9}
             >
                 <Link to="/communicate">Communicate</Link>
-            </Button>
-            <Button
-                justifyContent="flex-start"
-                height="80px"
-                fontFamily="heading"
-                fontSize="2xl"
-                leftIcon={<FaMoneyCheck />}
-                width="100%"
-                bg="white"
-                color="black"
-                borderRadius="0"
-                _hover={{ bg: 'gray.100' }}
-                _active={activeButtonStyle}
-                id="8"
-                isActive={props.activeButtonId === 10}
-            >
-                <Link to="/paidlabor">Paid Labor</Link>
             </Button>
         </VStack>
     );
@@ -163,7 +146,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
-                                    fontSize="2xl"
+                                    fontSize="xl"
                                     leftIcon={<AiFillHome />}
                                     width="100%"
                                     bg="white"
@@ -180,7 +163,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
-                                    fontSize="2xl"
+                                    fontSize="xl"
                                     leftIcon={<AiFillCalendar />}
                                     width="100%"
                                     bg="white"
@@ -197,7 +180,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
-                                    fontSize="2xl"
+                                    fontSize="xl"
                                     leftIcon={<HiUsers />}
                                     width="100%"
                                     bg="white"
@@ -214,7 +197,7 @@ export default function HamburgerMenu(props: pageProps) {
                                     justifyContent="flex-start"
                                     height="80px"
                                     fontFamily="heading"
-                                    fontSize="2xl"
+                                    fontSize="xl"
                                     leftIcon={<HiCog />}
                                     width="100%"
                                     bg="white"
@@ -226,23 +209,6 @@ export default function HamburgerMenu(props: pageProps) {
                                     isActive={props.activeButtonId === 4}
                                 >
                                     <Link to="/settings">My Account</Link>
-                                </Button>
-                                <Button
-                                    justifyContent="flex-start"
-                                    height="80px"
-                                    fontFamily="heading"
-                                    fontSize="2xl"
-                                    leftIcon={<HiCog />}
-                                    width="100%"
-                                    bg="white"
-                                    color="black"
-                                    borderRadius="0"
-                                    _hover={{ bg: 'gray.100' }}
-                                    _active={activeButtonStyle}
-                                    id="5"
-                                    isActive={props.activeButtonId === 5}
-                                >
-                                    <Link to="/board">Board Members</Link>
                                 </Button>
                             </VStack>
                             { (props.admin) && (adminButtons) }

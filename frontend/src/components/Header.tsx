@@ -36,7 +36,7 @@ export default function Header(props:pageProps) {
                 />
                 <Spacer />
                 <Box>
-                    <Heading pr={90} size="xl">{props.title}</Heading>
+                    <Heading pr={90} size="lg">{props.title}</Heading>
                 </Box>
                 <Spacer />
             </Flex>

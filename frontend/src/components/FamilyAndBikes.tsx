@@ -3,7 +3,6 @@ import {
     Heading,
     VStack,
     HStack,
-    Divider,
     SimpleGrid,
     Button,
     UnorderedList,
@@ -106,7 +105,7 @@ export default function GeneralInfo(props: cardProps) {
         <SimpleGrid columns={1}>
             <VStack mt={25} borderRightWidth={0.5} borderRightColor="lightgrey">
                 <HStack>
-                    <Heading>Family</Heading>
+                    <Heading size="lg">Family</Heading>
                     {
                         props.admin && (
                             <Button
@@ -180,7 +179,7 @@ export default function GeneralInfo(props: cardProps) {
             </VStack>
             <VStack mt={25}>
                 <HStack>
-                    <Heading>Bikes</Heading>
+                    <Heading size="lg">Bikes</Heading>
                     {
                         props.admin && (
                             <Button
@@ -199,7 +198,6 @@ export default function GeneralInfo(props: cardProps) {
                         )
                     }
                 </HStack>
-                <Divider />
                 {
                     memberBikes && (
                         <UnorderedList pt={10} spacing={2}>

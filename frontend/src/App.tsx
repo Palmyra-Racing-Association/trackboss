@@ -7,13 +7,11 @@ import Settings from './pages/Settings';
 import CalendarPage from './pages/CalendarPage';
 import SignUpPage from './pages/SignUpPage';
 import me from './controller/api';
-import JobsByEventType from './pages/JobsByEventType';
 import MembershipApplications from './pages/MembershipApplications';
-import BoardMemberListPage from './pages/BoardMemberListPage';
 import BillingListPage from './pages/BillingListPage';
 import MemberCommunicationsPage from './pages/MemberCommunicationsPage';
 import ApplicationForm from './pages/ApplicationForm';
-import PaidLaborListPage from './pages/PaidLaborListPage';
+import RaceAdministration from './pages/RaceAdministration';
 
 export function App() {
     const { state, update } = useContext(UserContext);
@@ -44,13 +42,11 @@ export function App() {
             <Route path="members" element={<MemberListPage />} />
             <Route path="settings" element={<Settings />} />
             <Route path="calendar/signups/:date/:eventId/:eventType" element={<SignUpPage />} />
-            <Route path="jobs" element={<JobsByEventType />} />
+            <Route path="jobs" element={<RaceAdministration />} />
             <Route path="applications" element={<MembershipApplications />} />
-            <Route path="board" element={<BoardMemberListPage />} />
             <Route path="billing" element={<BillingListPage />} />
             <Route path="communicate" element={<MemberCommunicationsPage />} />
             <Route path="apply" element={<ApplicationForm />} />
-            <Route path="paidlabor" element={(<PaidLaborListPage />)} />
         </Routes>
     );
 }
