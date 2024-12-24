@@ -1,6 +1,6 @@
 import {
     Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel,
-    Center, SimpleGrid, Stat, StatLabel, StatNumber, useDisclosure,
+    Center, HStack, SimpleGrid, Stat, StatLabel, StatNumber, useDisclosure,
 } from '@chakra-ui/react';
 import _ from 'lodash';
 import React, { useContext, useEffect, useState } from 'react';
@@ -168,29 +168,31 @@ export default function MemberList() {
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>
-            <DataSearchBox
-                searchValue={searchTerm}
-                onTextChange={setSearchTerm}
-            />
-            {
-                state.user?.memberType === 'Admin' && (
-                    <Center>
-                        <WrappedSwitchInput
-                            wrapperText="Show inactive members?"
-                            duration={1000}
-                            defaultChecked={!showActive}
-                            toastMessage={`Showing ${!showActive ? 'active' : 'inactive'} memberships`}
-                            maxWidth={600}
-                            onSwitchChange={
-                                () => {
-                                    setShowActive(!showActive);
-                                    setDirty(true);
+            <HStack align="center">
+                <DataSearchBox
+                    searchValue={searchTerm}
+                    onTextChange={setSearchTerm}
+                />
+                {
+                    state.user?.memberType === 'Admin' && (
+                        <Center>
+                            <WrappedSwitchInput
+                                wrapperText="Show inactive members?"
+                                duration={1000}
+                                defaultChecked={!showActive}
+                                toastMessage={`Showing ${!showActive ? 'active' : 'inactive'} memberships`}
+                                maxWidth={600}
+                                onSwitchChange={
+                                    () => {
+                                        setShowActive(!showActive);
+                                        setDirty(true);
+                                    }
                                 }
-                            }
-                        />
-                    </Center>
-                )
-            }
+                            />
+                        </Center>
+                    )
+                }
+            </HStack>
             <DataTable
                 columns={columns}
                 data={cells}
