@@ -74,7 +74,7 @@ function EventSignupSheet() {
     return (
         <VStack>
             <HStack>
-                <Heading>
+                <Heading size="md">
                     {`Job Structure for ${selectedEventType}`}
                 </Heading>
                 <Menu>
