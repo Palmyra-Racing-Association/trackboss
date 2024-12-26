@@ -64,23 +64,6 @@ export default function HamburgerMenu(props: pageProps) {
                 height="80px"
                 fontFamily="heading"
                 fontSize="xl"
-                leftIcon={<AiFillFolderOpen />}
-                width="100%"
-                bg="white"
-                color="black"
-                borderRadius="0"
-                _hover={{ bg: 'gray.100' }}
-                _active={activeButtonStyle}
-                id="6"
-                isActive={props.activeButtonId === 7}
-            >
-                <Link to="/applications">Membership Applications</Link>
-            </Button>
-            <Button
-                justifyContent="flex-start"
-                height="80px"
-                fontFamily="heading"
-                fontSize="xl"
                 leftIcon={<FaMoneyBillAlt />}
                 width="100%"
                 bg="white"
@@ -89,7 +72,7 @@ export default function HamburgerMenu(props: pageProps) {
                 _hover={{ bg: 'gray.100' }}
                 _active={activeButtonStyle}
                 id="8"
-                isActive={props.activeButtonId === 8}
+                isActive={props.activeButtonId === 7}
             >
                 <Link to="/billing">Members Dues/Waivers</Link>
             </Button>
@@ -106,9 +89,26 @@ export default function HamburgerMenu(props: pageProps) {
                 _hover={{ bg: 'gray.100' }}
                 _active={activeButtonStyle}
                 id="8"
-                isActive={props.activeButtonId === 9}
+                isActive={props.activeButtonId === 8}
             >
                 <Link to="/communicate">Communicate</Link>
+            </Button>
+            <Button
+                justifyContent="flex-start"
+                height="80px"
+                fontFamily="heading"
+                fontSize="xl"
+                leftIcon={<AiFillFolderOpen />}
+                width="100%"
+                bg="white"
+                color="black"
+                borderRadius="0"
+                _hover={{ bg: 'gray.100' }}
+                _active={activeButtonStyle}
+                id="6"
+                isActive={props.activeButtonId === 9}
+            >
+                <Link to="/applications">Membership Applications</Link>
             </Button>
         </VStack>
     );

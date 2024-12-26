@@ -7,7 +7,7 @@ import CommunicationsList from '../components/CommunicationsList';
 function MemberCommunicationsPage() {
     return (
         <ChakraProvider theme={theme}>
-            <Header title="Member Communications" activeButtonId={9} />
+            <Header title="Member Communications" activeButtonId={8} />
             <Box mt={0} pt={0} />
             <CommunicationsList />
         </ChakraProvider>

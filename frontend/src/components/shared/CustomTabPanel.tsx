@@ -17,7 +17,7 @@ interface CustomTabsProps extends Omit<TabsProps, 'children'> {
 export default function MemberSelector(props: CustomTabsProps) {
     const { tabs, panels } = props;
     return (
-        <Tabs variant="soft-rounded" bg="white" colorScheme="orange">
+        <Tabs variant="soft-rounded" bg="white" colorScheme="orange" m={0} p={0}>
             <TabList>
                 {
                     tabs.map((tab) => (

@@ -7,7 +7,7 @@ import DuesAndWaiversList from '../components/shared/DuesAndWaiversList';
 function BillingListPage() {
     return (
         <ChakraProvider theme={theme}>
-            <Header title="Member Billing" activeButtonId={8} />
+            <Header title="Member Billing" activeButtonId={7} />
             <Box mt={0} pt={0}>
                 <DuesAndWaiversList />
             </Box>
