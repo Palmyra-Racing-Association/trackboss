@@ -7,11 +7,10 @@ import Settings from './pages/Settings';
 import CalendarPage from './pages/CalendarPage';
 import SignUpPage from './pages/SignUpPage';
 import me from './controller/api';
-import MembershipApplications from './pages/MembershipApplications';
-import BillingListPage from './pages/BillingListPage';
 import MemberCommunicationsPage from './pages/MemberCommunicationsPage';
 import ApplicationForm from './pages/ApplicationForm';
 import RaceAdministration from './pages/RaceAdministration';
+import EarlySeasonPage from './pages/EarlySeasonPage';
 
 export function App() {
     const { state, update } = useContext(UserContext);
@@ -43,8 +42,7 @@ export function App() {
             <Route path="settings" element={<Settings />} />
             <Route path="calendar/signups/:date/:eventId/:eventType" element={<SignUpPage />} />
             <Route path="jobs" element={<RaceAdministration />} />
-            <Route path="applications" element={<MembershipApplications />} />
-            <Route path="billing" element={<BillingListPage />} />
+            <Route path="early" element={<EarlySeasonPage />} />
             <Route path="communicate" element={<MemberCommunicationsPage />} />
             <Route path="apply" element={<ApplicationForm />} />
         </Routes>
