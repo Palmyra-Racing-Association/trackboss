@@ -42,6 +42,23 @@ export default function HamburgerMenu(props: pageProps) {
                 height="80px"
                 fontFamily="heading"
                 fontSize="xl"
+                leftIcon={<AiOutlineNotification />}
+                width="100%"
+                bg="white"
+                color="black"
+                borderRadius="0"
+                _hover={{ bg: 'gray.100' }}
+                _active={activeButtonStyle}
+                id="5"
+                isActive={props.activeButtonId === 5}
+            >
+                <Link to="/communicate">Communicate</Link>
+            </Button>
+            <Button
+                justifyContent="flex-start"
+                height="80px"
+                fontFamily="heading"
+                fontSize="xl"
                 leftIcon={<AiFillBank />}
                 width="100%"
                 bg="white"
@@ -92,23 +109,6 @@ export default function HamburgerMenu(props: pageProps) {
                 isActive={props.activeButtonId === 8}
             >
                 <Link to="/billing">Members Dues/Waivers</Link>
-            </Button>
-            <Button
-                justifyContent="flex-start"
-                height="80px"
-                fontFamily="heading"
-                fontSize="xl"
-                leftIcon={<AiOutlineNotification />}
-                width="100%"
-                bg="white"
-                color="black"
-                borderRadius="0"
-                _hover={{ bg: 'gray.100' }}
-                _active={activeButtonStyle}
-                id="8"
-                isActive={props.activeButtonId === 9}
-            >
-                <Link to="/communicate">Communicate</Link>
             </Button>
         </VStack>
     );
