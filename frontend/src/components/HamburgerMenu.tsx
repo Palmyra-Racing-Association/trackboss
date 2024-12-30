@@ -13,13 +13,12 @@ import {
 } from '@chakra-ui/react';
 
 import {
-    AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank, AiFillFolderOpen,
-    AiOutlineNotification,
+    AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank, AiOutlineNotification,
 } from 'react-icons/ai';
-import { FaMoneyBillAlt } from 'react-icons/fa';
 import { HiUsers, HiCog } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
+import { FaRegPaperPlane } from 'react-icons/fa';
 
 interface pageProps {
     activeButtonId: number,
@@ -37,6 +36,23 @@ export default function HamburgerMenu(props: pageProps) {
     const adminButtons = (
         <VStack width="100%" divider={<StackDivider borderColor="gray.300" />} spacing="0">
             <StackDivider borderColor="gray.300" />
+            <Button
+                justifyContent="flex-start"
+                height="80px"
+                fontFamily="heading"
+                fontSize="xl"
+                leftIcon={<AiOutlineNotification />}
+                width="100%"
+                bg="white"
+                color="black"
+                borderRadius="0"
+                _hover={{ bg: 'gray.100' }}
+                _active={activeButtonStyle}
+                id="5"
+                isActive={props.activeButtonId === 5}
+            >
+                <Link to="/communicate">Communicate</Link>
+            </Button>
             <Button
                 justifyContent="flex-start"
                 height="80px"
@@ -64,7 +80,7 @@ export default function HamburgerMenu(props: pageProps) {
                 height="80px"
                 fontFamily="heading"
                 fontSize="xl"
-                leftIcon={<FaMoneyBillAlt />}
+                leftIcon={<FaRegPaperPlane />}
                 width="100%"
                 bg="white"
                 color="black"
@@ -74,46 +90,12 @@ export default function HamburgerMenu(props: pageProps) {
                 id="8"
                 isActive={props.activeButtonId === 7}
             >
-                <Link to="/billing">Members Dues/Waivers</Link>
-            </Button>
-            <Button
-                justifyContent="flex-start"
-                height="80px"
-                fontFamily="heading"
-                fontSize="xl"
-                leftIcon={<AiOutlineNotification />}
-                width="100%"
-                bg="white"
-                color="black"
-                borderRadius="0"
-                _hover={{ bg: 'gray.100' }}
-                _active={activeButtonStyle}
-                id="8"
-                isActive={props.activeButtonId === 8}
-            >
-                <Link to="/communicate">Communicate</Link>
-            </Button>
-            <Button
-                justifyContent="flex-start"
-                height="80px"
-                fontFamily="heading"
-                fontSize="xl"
-                leftIcon={<AiFillFolderOpen />}
-                width="100%"
-                bg="white"
-                color="black"
-                borderRadius="0"
-                _hover={{ bg: 'gray.100' }}
-                _active={activeButtonStyle}
-                id="6"
-                isActive={props.activeButtonId === 9}
-            >
-                <Link to="/applications">Membership Applications</Link>
+                <Link to="/early">Billing + Applications</Link>
             </Button>
         </VStack>
     );
     return (
-        <HStack>
+        <HStack maxHeight={500}>
             <IconButton
                 aria-label="Back"
                 icon={<IoIosArrowBack size="lg" />}
