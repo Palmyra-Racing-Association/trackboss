@@ -11,7 +11,7 @@ import CustomTabPanel from '../components/shared/CustomTabPanel';
 function RaceAdministration() {
     return (
         <ChakraProvider theme={theme}>
-            <Header title="Event Administration" activeButtonId={6} />
+            <Header title="Race Administration" activeButtonId={6} />
             <CustomTabPanel
                 tabs={
                     [
