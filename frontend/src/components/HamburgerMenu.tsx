@@ -16,7 +16,6 @@ import {
     AiOutlineMenu, AiFillHome, AiFillCalendar, AiFillBank, AiFillFolderOpen,
     AiOutlineNotification,
 } from 'react-icons/ai';
-import { FaMoneyBillAlt } from 'react-icons/fa';
 import { HiUsers, HiCog } from 'react-icons/hi';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Link, useNavigate } from 'react-router-dom';
@@ -91,24 +90,7 @@ export default function HamburgerMenu(props: pageProps) {
                 id="6"
                 isActive={props.activeButtonId === 7}
             >
-                <Link to="/applications">Membership Applications</Link>
-            </Button>
-            <Button
-                justifyContent="flex-start"
-                height="80px"
-                fontFamily="heading"
-                fontSize="xl"
-                leftIcon={<FaMoneyBillAlt />}
-                width="100%"
-                bg="white"
-                color="black"
-                borderRadius="0"
-                _hover={{ bg: 'gray.100' }}
-                _active={activeButtonStyle}
-                id="8"
-                isActive={props.activeButtonId === 8}
-            >
-                <Link to="/billing">Members Dues/Waivers</Link>
+                <Link to="/early">Billing + Applications</Link>
             </Button>
         </VStack>
     );
@@ -136,7 +118,7 @@ export default function HamburgerMenu(props: pageProps) {
                     isOpen={isOpen}
                     placement="left"
                     onClose={onClose}
-                    size="md"
+                    size="sm"
                 >
                     <DrawerOverlay />
                     <DrawerContent>
