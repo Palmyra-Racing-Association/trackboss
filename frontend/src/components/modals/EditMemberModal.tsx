@@ -238,6 +238,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                 <Text>Dependent Status</Text>
                                 <Select
                                     isDisabled={selectedMember.memberType.toLowerCase() === 'membership admin'}
+                                    placeholder={selectedMember.dependentStatus}
                                     options={
                                         [
                                             { value: 'Primary', label: 'Primary member' },
