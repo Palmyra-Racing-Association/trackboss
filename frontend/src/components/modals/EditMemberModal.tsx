@@ -254,6 +254,13 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         }
                                     }
                                 />
+                                <WrappedSwitchInput
+                                    defaultChecked={false}
+                                    locked={(selectedMember?.dependentStatus !== 'Child')}
+                                    maxWidth={500}
+                                    wrapperText="Minor, student or military?"
+                                    onSwitchChange={() => true}
+                                />
                             </GridItem>
                             <GridItem colSpan={2} display={props.hasEmail ? 'block' : 'none'}>
                                 <WrappedSwitchInput
