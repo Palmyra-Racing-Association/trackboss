@@ -51,6 +51,8 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [lastName, setLastName] = useState<string>(selectedMember.lastName);
     const [subscribed, setSubscribed] = useState<boolean>(selectedMember.subscribed || false);
     const [dependentStatus, setDependentStatus] = useState<string>(selectedMember.dependentStatus || '');
+    // eslint-disable-next-line max-len
+    const [isEligibleDependent, setIsEligibleDependent] = useState<boolean>(selectedMember.isEligibleDependent || false);
     const [rowCount, setRowCount] = useState<number>(7);
 
     const { state, update } = useContext(UserContext);
@@ -255,11 +257,16 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     }
                                 />
                                 <WrappedSwitchInput
-                                    defaultChecked={false}
+                                    defaultChecked={isEligibleDependent}
                                     locked={(selectedMember?.dependentStatus !== 'Child')}
-                                    maxWidth={500}
+                                    maxWidth={200}
                                     wrapperText="Minor, student or military?"
-                                    onSwitchChange={() => true}
+                                    onSwitchChange={
+                                        () => {
+                                            setIsEligibleDependent(!isEligibleDependent);
+                                            setDirty(true);
+                                        }
+                                    }
                                 />
                             </GridItem>
                             <GridItem colSpan={2} display={props.hasEmail ? 'block' : 'none'}>
@@ -303,6 +310,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         modifiedBy: state.user?.memberId || 0,
                                         subscribed,
                                         dependentStatus,
+                                        isEligibleDependent,
                                     };
                                     await updateMember(state.token, selectedMember.memberId, memberUpdate);
                                     if (!props.isFamilyMember) {
