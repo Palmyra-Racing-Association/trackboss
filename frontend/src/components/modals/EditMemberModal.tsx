@@ -260,7 +260,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     defaultChecked={isEligibleDependent}
                                     locked={(selectedMember?.dependentStatus !== 'Child')}
                                     maxWidth={200}
-                                    wrapperText="Minor, student or military?"
+                                    wrapperText="Eligible Dependent?"
                                     onSwitchChange={
                                         () => {
                                             setIsEligibleDependent(!isEligibleDependent);
