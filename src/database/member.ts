@@ -53,6 +53,7 @@ async function mapMemberFromResult(results: any) {
         // this is intentional - booleans in mysql require too much jacking around for conversion. This makes it easy.
         subscribed: (result.subscribed === 'true'),
         dependentStatus: result.dependent_status,
+        isEligibleDependent: (result.is_eligible_dependent > 0),
         lastModifiedDate: result.last_modified_date,
         lastModifiedBy: result.last_modified_by,
     }));
@@ -196,6 +197,7 @@ export async function getMember(searchParam: string): Promise<Member> {
         deactivationReason: results[0].cancel_reason,
         subscribed: results[0].subscribed === 'true',
         dependentStatus: results[0].dependent_status,
+        isEligibleDependent: (results[0].is_eligible_dependent > 0),
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
@@ -236,6 +238,7 @@ export async function getMemberByPhone(phone: string): Promise<Member> {
         deactivationReason: results[0].cancel_reason,
         subscribed: results[0].subscribed === 'true',
         dependentStatus: results[0].dependent_status,
+        isEligibleDependent: (results[0].is_eligible_dependent > 0),
         lastModifiedDate: results[0].last_modified_date,
         lastModifiedBy: results[0].last_modified_by,
     };
@@ -276,6 +279,7 @@ export async function getMemberByEmail(email: string): Promise<any> {
             deactivationReason: results[0].cancel_reason,
             subscribed: results[0].subscribed === 'true',
             dependentStatus: results[0].dependent_status,
+            isEligibleDependent: (results[0].is_eligible_dependent > 0),
             lastModifiedDate: results[0].last_modified_date,
             lastModifiedBy: results[0].last_modified_by,
         };
@@ -315,6 +319,11 @@ export async function patchMember(id: string, req: PatchMemberRequest): Promise<
                 [`${req.dependentStatus}`, id],
             );
         }
+        const eligibleDependentFlag = req.isEligibleDependent ? 1 : 0;
+        await getPool().query(
+            'update member set is_eligible_dependent = ? where member_id = ?',
+            [eligibleDependentFlag, id],
+        );
     } catch (e: any) {
         if ('errno' in e) {
             switch (e.errno) {

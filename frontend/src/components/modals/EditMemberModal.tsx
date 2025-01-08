@@ -51,6 +51,8 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [lastName, setLastName] = useState<string>(selectedMember.lastName);
     const [subscribed, setSubscribed] = useState<boolean>(selectedMember.subscribed || false);
     const [dependentStatus, setDependentStatus] = useState<string>(selectedMember.dependentStatus || '');
+    // eslint-disable-next-line max-len
+    const [isEligibleDependent, setIsEligibleDependent] = useState<boolean>(selectedMember.isEligibleDependent || false);
     const [rowCount, setRowCount] = useState<number>(7);
 
     const { state, update } = useContext(UserContext);
@@ -238,6 +240,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                 <Text>Dependent Status</Text>
                                 <Select
                                     isDisabled={selectedMember.memberType.toLowerCase() === 'membership admin'}
+                                    placeholder={selectedMember.dependentStatus}
                                     options={
                                         [
                                             { value: 'Primary', label: 'Primary member' },
@@ -249,6 +252,18 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                     onChange={
                                         (e) => {
                                             setDependentStatus(e?.value || '');
+                                            setDirty(true);
+                                        }
+                                    }
+                                />
+                                <WrappedSwitchInput
+                                    defaultChecked={isEligibleDependent}
+                                    locked={(selectedMember?.dependentStatus !== 'Child')}
+                                    maxWidth={200}
+                                    wrapperText="Eligible Dependent?"
+                                    onSwitchChange={
+                                        () => {
+                                            setIsEligibleDependent(!isEligibleDependent);
                                             setDirty(true);
                                         }
                                     }
@@ -295,6 +310,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         modifiedBy: state.user?.memberId || 0,
                                         subscribed,
                                         dependentStatus,
+                                        isEligibleDependent,
                                     };
                                     await updateMember(state.token, selectedMember.memberId, memberUpdate);
                                     if (!props.isFamilyMember) {

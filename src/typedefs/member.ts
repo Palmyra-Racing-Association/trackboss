@@ -30,6 +30,7 @@ export type Member = {
     deactivationReason?: string,
     subscribed?: boolean,
     dependentStatus?: string,
+    isEligibleDependent?: boolean,
 }
 
 export type PostNewMemberRequest = {
@@ -71,6 +72,7 @@ export type PatchMemberRequest = {
     deactivationReason?: string,
     subscribed?: boolean,
     dependentStatus?: string,
+    isEligibleDependent?: boolean,
 }
 
 export type PatchMemberResponse = Member | ErrorResponse;
