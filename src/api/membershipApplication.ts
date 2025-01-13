@@ -256,7 +256,7 @@ membershipApplication.get('/list/excel', async (req: Request, res: Response) => 
             { header: 'Age', key: 'age', width: 6 },
             { header: 'Location', key: 'location', width: 15 },
             { header: 'Referred By', key: 'referredBy', width: 15 },
-            { header: 'Family Member', key: 'familyCount', width: 6 },
+            { header: 'Family Members', key: 'familyCount', width: 6 },
         ];
         applications.forEach((application: MembershipApplication) => {
             const row = {
