@@ -86,17 +86,17 @@ export default function DuesAndWaiversList() {
     }, []);
 
     useEffect(() => {
-        if (searchTerm) {
-            const nameBills = filteredBills.filter((bill:any) => {
+        if (searchTerm === '') {
+            setFilteredBills(allBillsData);
+        } else {
+            const nameBills = allBillsData.filter((bill:Bill) => {
                 const firstNameFound = (bill.firstName.toLowerCase().includes(searchTerm));
                 const lastNameFound = (bill.lastName.toLowerCase().includes(searchTerm));
                 return (firstNameFound || lastNameFound);
             });
             setFilteredBills(nameBills);
-        } else {
-            setFilteredBills(allBillsData);
         }
-    }, [searchTerm, filteredBills]);
+    }, [searchTerm]);
 
     useEffect(() => {
         runFilters();
