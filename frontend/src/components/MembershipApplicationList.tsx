@@ -1,9 +1,11 @@
-import { Center, useDisclosure } from '@chakra-ui/react';
+import { Center, IconButton, useDisclosure } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import { BsPrinter } from 'react-icons/bs';
+
 import { MembershipApplication } from '../../../src/typedefs/membershipApplication';
 import { UserContext } from '../contexts/UserContext';
-import { getMembershipApplications } from '../controller/membershipApplication';
+import { getMembershipApplicationListExcel, getMembershipApplications } from '../controller/membershipApplication';
 import DataSearchBox from './input/DataSearchBox';
 import MembershipApplicationModal from './modals/MembershipApplicationModal';
 import WrappedSwitchInput from './input/WrappedSwitchInput';
@@ -29,6 +31,11 @@ const columns: any = [
     {
         name: 'First Name',
         selector: (row: MembershipApplication) => row.firstName,
+        sortable: true,
+    },
+    {
+        name: 'Recommended by',
+        selector: (row:MembershipApplication) => row.referredBy,
         sortable: true,
     },
     {
@@ -120,6 +127,21 @@ export default function MembershipApplicationList() {
                 <DataSearchBox
                     onTextChange={setSearchTerm}
                     searchValue={searchTerm}
+                />
+                <IconButton
+                    size="lg"
+                    aria-label="Print"
+                    background="orange.300"
+                    color="white"
+                    mr={2}
+                    onClick={
+                        async () => {
+                            const excelData = await getMembershipApplicationListExcel(state.token);
+                            const objectUrl = URL.createObjectURL(excelData);
+                            window.location.href = objectUrl;
+                        }
+                    }
+                    icon={<BsPrinter />}
                 />
                 <WrappedSwitchInput
                     maxWidth={100}

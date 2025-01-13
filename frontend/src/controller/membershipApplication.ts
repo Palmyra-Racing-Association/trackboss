@@ -90,3 +90,12 @@ export async function reviewMembershipApplication(
     });
     return response.json();
 }
+
+export async function getMembershipApplicationListExcel(token: string): Promise<Blob> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication/list/excel`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.blob();
+}

@@ -75,14 +75,6 @@ export default function DuesAndWaiversList() {
             const paidBills = filteredBills.filter((bill) => (!bill.curYearPaid));
             setFilteredBills(paidBills);
         }
-        if (searchTerm) {
-            const nameBills = filteredBills.filter((bill) => {
-                const firstNameFound = (bill.firstName.toLowerCase().includes(searchTerm));
-                const lastNameFound = (bill.lastName.toLowerCase().includes(searchTerm));
-                return firstNameFound || lastNameFound;
-            });
-            setFilteredBills(nameBills);
-        }
         // if no filters, set data to all data
         if ((searchTerm === '') && !filterNoPayment && !filterPaperwork && !filterPaid) {
             setFilteredBills(allBillsData);
@@ -94,8 +86,21 @@ export default function DuesAndWaiversList() {
     }, []);
 
     useEffect(() => {
+        if (searchTerm === '') {
+            setFilteredBills(allBillsData);
+        } else {
+            const nameBills = allBillsData.filter((bill:Bill) => {
+                const firstNameFound = (bill.firstName.toLowerCase().includes(searchTerm));
+                const lastNameFound = (bill.lastName.toLowerCase().includes(searchTerm));
+                return (firstNameFound || lastNameFound);
+            });
+            setFilteredBills(nameBills);
+        }
+    }, [searchTerm]);
+
+    useEffect(() => {
         runFilters();
-    }, [searchTerm, filterNoPayment, filterPaid, filterPaperwork]);
+    }, [filterNoPayment, filterPaid, filterPaperwork]);
 
     const columns: any = [
         {
