@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { parseISO, format } from 'date-fns';
+import { parseISO, format, differenceInYears } from 'date-fns';
 import { sendAppConfirmationEmail, sendAppRejectedEmail, sendNewMemberEmail } from '../util/email';
 import {
     applicationExistsForEmail,
@@ -21,6 +21,7 @@ import { generateBill, getWorkPointThreshold } from '../database/billing';
 import { getMembershipType } from '../database/memberType';
 import { generateSquareLinks } from '../util/billing';
 import { calculateBillingYear } from '../util/dateHelper';
+import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
 
 const membershipApplication = Router();
 
@@ -235,6 +236,48 @@ membershipApplication.post('/review/:id', async (req: Request, res: Response) =>
         logger.error(error);
         res.status(500);
         res.send('Unable to process application due to error');
+    }
+});
+
+membershipApplication.get('/list/excel', async (req: Request, res: Response) => {
+    try {
+        await validateAdminAccess(req, res);
+        logger.info('Getting membership application list.');
+
+        const applications : MembershipApplication[] = await getMembershipApplications();
+
+        const workbookTitle = 'PRA applications';
+        const workbook = startWorkbook(workbookTitle);
+        const worksheet = workbook.getWorksheet(1);
+        worksheet.columns = [
+            { header: 'ID', key: 'id', width: 6 },
+            { header: 'Last Name', key: 'lastName', width: 10 },
+            { header: 'First Name', key: 'firstName', width: 15 },
+            { header: 'Age', key: 'age', width: 6 },
+            { header: 'Location', key: 'location', width: 15 },
+            { header: 'Referred By', key: 'referredBy', width: 15 },
+            { header: 'Family Member', key: 'familyCount', width: 6 },
+        ];
+        applications.forEach((application: MembershipApplication) => {
+            const row = {
+                id: application.id,
+                lastName: application.lastName,
+                firstName: application.firstName,
+                age: differenceInYears(new Date(), parseISO(application.birthDate)),
+                location: application.city,
+                referredBy: application.referredBy,
+                familyCount: application.familyMembers.length,
+            };
+            worksheet.addRow(row);
+        });
+        formatWorkbook(worksheet);
+        // write workbook to buffer.
+        httpOutputWorkbook(workbook, res, `applications${new Date().getTime()}`);
+    } catch (error) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
     }
 });
 
