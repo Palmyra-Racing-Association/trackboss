@@ -126,7 +126,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
                     onClick={
                         async () => {
                             // eslint-disable-next-line max-len
-                            window.open(`mailto:hogbacksecretary@gmail.com?subject=Dues%20Payment%20for%20${props.viewBill?.firstName}%20${props.viewBill?.lastName}&body=I%20intend%20to%20pay%20my%202023%20dues%20of%20$${props.viewBill?.amount}%20via%20%3CYour%20method%20here%3E%20by%20${props.viewBill?.dueDate}`);
+                            window.open(`mailto:hogbacksecretary@gmail.com?subject=Dues%20Payment%20for%20${props.viewBill?.firstName}%20${props.viewBill?.lastName}&body=I%20intend%20to%20pay%20my%20dues%20of%20$${props.viewBill?.amount}%20via%20%3CYour%20method%20here%3E%20by%20${props.viewBill?.dueDate}`);
                         }
                     }
                 >
