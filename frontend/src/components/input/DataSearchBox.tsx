@@ -22,7 +22,7 @@ export default function DataSearchBox(props: dataSearchBoxProps) {
                         value={props.searchValue}
                         onChange={
                             (e) => {
-                                props.onTextChange(e.target.value);
+                                props.onTextChange(e.target.value?.toLowerCase());
                             }
                         }
                     />
