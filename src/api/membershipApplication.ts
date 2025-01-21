@@ -244,8 +244,8 @@ membershipApplication.get('/list/excel', async (req: Request, res: Response) => 
         await validateAdminAccess(req, res);
         logger.info('Getting membership application list.');
 
-        const applications : MembershipApplication[] = await getMembershipApplications();
-
+        let applications : MembershipApplication[] = await getMembershipApplications();
+        applications = applications.filter((app) => app.status !== 'Accepted');
         const workbookTitle = 'PRA applications';
         const workbook = startWorkbook(workbookTitle);
         const worksheet = workbook.getWorksheet(1);
