@@ -37,7 +37,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
     const startOfBillingPeriod = new Date(billingYear, 10, 21).getTime();
 
     // after billing ends, we also don't allow them to pay so lock that as well.
-    const endOfBillingPeriod = new Date((billingYear + 1), 0, 21).getTime();
+    const endOfBillingPeriod = new Date((billingYear + 1), 1, 1).getTime();
 
     const insideRenewalPeriod = ((currentTime > startOfBillingPeriod) && (currentTime < endOfBillingPeriod));
     const paid = props.viewBill?.curYearPaid;
