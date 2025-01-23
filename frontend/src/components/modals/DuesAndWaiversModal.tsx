@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useContext, useState } from 'react';
 import {
     Box,
@@ -35,14 +36,20 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
     // this fun fact and always mess it up, so making this note here next time I need this.
     const startOfBillingPeriod = new Date(billingYear, 10, 21).getTime();
 
-    const isRenewalAllowed = (currentTime > startOfBillingPeriod);
+    // after billing ends, we also don't allow them to pay so lock that as well.
+    const endOfBillingPeriod = new Date((billingYear + 1), 1, 1).getTime();
+
+    const insideRenewalPeriod = ((currentTime > startOfBillingPeriod) && (currentTime < endOfBillingPeriod));
+    const paid = props.viewBill?.curYearPaid;
+
+    const isRenewalAllowed = ((insideRenewalPeriod) || (paid && attested));
 
     let renewalAttestationComponent;
 
     let renewalPaymentComponent = (
         <>
             <Box>
-                {`Renewal and payment options are available on or after December 1st, ${billingYear}.`}
+                {`Renewal and payment options are available from December 1st, ${billingYear} to Febuary 1st, ${billingYear + 1}`}
             </Box>
             <Box>
                 <Button
