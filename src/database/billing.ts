@@ -231,7 +231,7 @@ export async function cleanBilling(year: number, membershipId?: number): Promise
     let result;
     let sql;
     if (membershipId) {
-        sql = 'delete from member_bill where membership_id = ? and year = ?';
+        sql = 'delete from member_bill where membership_id = ? and year = ? and cur_year_ins = 0';
         param = [membershipId, year];
     } else {
         sql = 'delete from member_bill where year = ? and cur_year_ins = 0';

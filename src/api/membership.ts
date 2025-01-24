@@ -164,7 +164,7 @@ membership.patch('/:membershipID', async (req: Request, res: Response) => {
             await verify(headerCheck.token, 'Membership Admin');
             await patchMembership(membershipIdNum, req.body);
             response = await getMembership(membershipIdNum);
-            if (priorToUpdate.membershipType !== req.body.membershipType) {
+            if (priorToUpdate.membershipType !== response.membershipType) {
                 console.log(`old ${priorToUpdate.membershipType} new ${response.membershipType}`);
                 runBillingCompleteCurrent([response], response.membershipId);
             }
