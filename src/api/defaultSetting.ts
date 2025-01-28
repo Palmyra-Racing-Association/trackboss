@@ -6,6 +6,7 @@ import {
 import {
     getDefaultSetting, getAllDefaultSettings, getDefaultSettingValue,
     deleteDefaultSetting, insertDefaultSetting,
+    updateDefaultSetting,
 } from '../database/defaultSettings';
 import { checkHeader, validateAdminAccess } from '../util/auth';
 import logger from '../logger';
@@ -49,6 +50,8 @@ defaultSetting.get('/:settingName', async (req: Request, res: Response) => {
 defaultSetting.put('/:id', async (req: Request, res: Response) => {
     try {
         await validateAdminAccess(req, res);
+        const patchedSetting = await updateDefaultSetting(Number(req.params.id), req.body);
+        res.json(patchedSetting);
     } catch (error: any) {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);

@@ -18,7 +18,7 @@ export async function getDefaultSettingValue(settingName: string): Promise<strin
     return results[0].default_setting_value;
 }
 
-export async function getDefaultSetting(id: string) : Promise<DefaultSetting> {
+export async function getDefaultSetting(id: string): Promise<DefaultSetting> {
     const sql = 'select * from default_settings where default_setting_name = ?';
     const values: string[] = [id];
 
@@ -29,7 +29,7 @@ export async function getDefaultSetting(id: string) : Promise<DefaultSetting> {
         logger.error(`DB error getting member type list: ${e}`);
         throw new Error('internal server error');
     }
-    const setting : DefaultSetting = {
+    const setting: DefaultSetting = {
         settingId: results[0].default_setting_id,
         settingName: results[0].default_setting_name,
         settingValue: results[0].default_setting_value,
@@ -38,7 +38,7 @@ export async function getDefaultSetting(id: string) : Promise<DefaultSetting> {
     return setting;
 }
 
-export async function getAllDefaultSettings() : Promise<DefaultSetting[]> {
+export async function getAllDefaultSettings(): Promise<DefaultSetting[]> {
     const sql = 'select * from default_settings';
 
     let results;
@@ -48,7 +48,7 @@ export async function getAllDefaultSettings() : Promise<DefaultSetting[]> {
         logger.error(`DB error getting member type list: ${e}`);
         throw new Error('internal server error');
     }
-    const allSettings : DefaultSetting[] = results.map((setting) => ({
+    const allSettings: DefaultSetting[] = results.map((setting) => ({
         settingId: setting.default_setting_id,
         settingName: setting.default_setting_name,
         settingValue: setting.default_setting_value,
@@ -57,7 +57,7 @@ export async function getAllDefaultSettings() : Promise<DefaultSetting[]> {
     return allSettings;
 }
 
-export async function deleteDefaultSetting(id :number) : Promise<void> {
+export async function deleteDefaultSetting(id: number): Promise<void> {
     const values = [id];
 
     let result;
@@ -73,7 +73,7 @@ export async function deleteDefaultSetting(id :number) : Promise<void> {
     }
 }
 
-export async function insertDefaultSetting(newSetting: DefaultSetting) : Promise<number> {
+export async function insertDefaultSetting(newSetting: DefaultSetting): Promise<number> {
     // eslint-disable-next-line max-len
     const insertSql = 'insert into default_setting (default_setting_name, default_setting_value, default_setting_type) values (?, ?, ?)';
 
@@ -98,4 +98,37 @@ export async function insertDefaultSetting(newSetting: DefaultSetting) : Promise
     }
 
     return result.insertId;
+}
+
+export async function updateDefaultSetting(id: number, updatedSetting: DefaultSetting): Promise<DefaultSetting> {
+    const updateSql =
+        'update default_setting set default_setting_name = ?, default_setting_value = ?, ' +
+        'default_setting_type = ? where default_setting_id = ?';
+    const values = [updatedSetting.settingName, updatedSetting.settingValue,
+        updatedSetting.settingType, updatedSetting.settingId];
+    let result;
+    try {
+        [result] = await getPool().query<OkPacket>(updateSql, values);
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1451: // FK violation - referenced somewhere else
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error patching default setting in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error patching bdefault setting: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+    const newValue = await getDefaultSetting(updatedSetting.settingName);
+    return newValue;
 }
