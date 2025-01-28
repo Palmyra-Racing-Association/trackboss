@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2';
+import { OkPacket, RowDataPacket } from 'mysql2';
 
 import logger from '../logger';
 import { getPool } from './pool';
@@ -55,4 +55,47 @@ export async function getAllDefaultSettings() : Promise<DefaultSetting[]> {
         settingType: setting.default_setting_type,
     }));
     return allSettings;
+}
+
+export async function deleteDefaultSetting(id :number) : Promise<void> {
+    const values = [id];
+
+    let result;
+    try {
+        [result] = await getPool().query<OkPacket>('delete from default_setting where default_setting_id = ?', values);
+    } catch (e) {
+        logger.error(`DB error deleting default setting: ${e}`);
+        throw new Error('internal server error');
+    }
+
+    if (result.affectedRows < 1) {
+        throw new Error('not found');
+    }
+}
+
+export async function insertDefaultSetting(newSetting: DefaultSetting) : Promise<number> {
+    // eslint-disable-next-line max-len
+    const insertSql = 'insert into default_setting (default_setting_name, default_setting_value, default_setting_type) values (?, ?, ?)';
+
+    const values = [newSetting.settingName, newSetting.settingValue, newSetting.settingType];
+    let result;
+    try {
+        [result] = await getPool().query<OkPacket>(insertSql, values);
+    } catch (e: any) {
+        if ('errno' in e) {
+            switch (e.errno) {
+                case 1452: // FK violation - referenced is missing
+                    logger.error(`User error inserting default setting in DB: ${e}`);
+                    throw new Error('user input error');
+                default:
+                    logger.error(`DB error inserting default setting: ${e}`);
+                    throw new Error('internal server error');
+            }
+        } else {
+            // this should not happen - errors from query should always have 'errno' field
+            throw e;
+        }
+    }
+
+    return result.insertId;
 }

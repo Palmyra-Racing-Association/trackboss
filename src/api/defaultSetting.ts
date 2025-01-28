@@ -5,6 +5,7 @@ import {
 } from '../typedefs/defaultSetting';
 import {
     getDefaultSetting, getAllDefaultSettings, getDefaultSettingValue,
+    deleteDefaultSetting, insertDefaultSetting,
 } from '../database/defaultSettings';
 import { checkHeader, validateAdminAccess } from '../util/auth';
 import logger from '../logger';
@@ -58,6 +59,9 @@ defaultSetting.put('/:id', async (req: Request, res: Response) => {
 defaultSetting.post('/', async (req: Request, res: Response) => {
     try {
         await validateAdminAccess(req, res);
+        const newSetting : DefaultSetting = req.body;
+        await insertDefaultSetting(newSetting);
+        res.status(201);
     } catch (error: any) {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);
@@ -68,6 +72,8 @@ defaultSetting.post('/', async (req: Request, res: Response) => {
 defaultSetting.delete('/:id', async (req: Request, res: Response) => {
     try {
         await validateAdminAccess(req, res);
+        await deleteDefaultSetting(Number(req.params.id));
+        res.status(200);
     } catch (error: any) {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);
