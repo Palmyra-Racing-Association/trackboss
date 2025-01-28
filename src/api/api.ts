@@ -24,6 +24,7 @@ import memberCommunication from './memberCommunication';
 import membershipTags from './membershipTags';
 import link from './link';
 import paidLabor from './paidLabor';
+import defaultSetting from './defaultSetting';
 
 const api = Router();
 
@@ -89,5 +90,6 @@ api.use('/memberCommunication', memberCommunication);
 api.use('/membershipTags', membershipTags);
 api.use('/link', link);
 api.use('/paidLabor', paidLabor);
+api.use('/defaultSettings', defaultSetting);
 
 export default api;
