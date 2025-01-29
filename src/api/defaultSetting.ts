@@ -31,6 +31,7 @@ defaultSetting.get('/', async (req: Request, res: Response) => {
             res.status(500);
             response = { reason: 'internal server error' };
         }
+        res.send(response);
     }
 });
 
@@ -44,6 +45,7 @@ defaultSetting.get('/:settingName', async (req: Request, res: Response) => {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);
         res.status(500);
+        res.send(error);
     }
 });
 
@@ -56,6 +58,7 @@ defaultSetting.put('/:id', async (req: Request, res: Response) => {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);
         res.status(500);
+        res.send(error);
     }
 });
 
@@ -64,11 +67,13 @@ defaultSetting.post('/', async (req: Request, res: Response) => {
         await validateAdminAccess(req, res);
         const newSetting : DefaultSetting = req.body;
         await insertDefaultSetting(newSetting);
-        res.status(201);
+        const savedNewSetting = await getDefaultSetting(newSetting.settingName);
+        res.json(savedNewSetting);
     } catch (error: any) {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);
         res.status(500);
+        res.send(error);
     }
 });
 
@@ -77,10 +82,12 @@ defaultSetting.delete('/:id', async (req: Request, res: Response) => {
         await validateAdminAccess(req, res);
         await deleteDefaultSetting(Number(req.params.id));
         res.status(200);
+        res.send('deleted default setting');
     } catch (error: any) {
         logger.error(`Error at path ${req.path}`);
         logger.error(error);
         res.status(500);
+        res.send(error);
     }
 });
 

@@ -62,7 +62,7 @@ export async function deleteDefaultSetting(id: number): Promise<void> {
 
     let result;
     try {
-        [result] = await getPool().query<OkPacket>('delete from default_setting where default_setting_id = ?', values);
+        [result] = await getPool().query<OkPacket>('delete from default_settings where default_setting_id = ?', values);
     } catch (e) {
         logger.error(`DB error deleting default setting: ${e}`);
         throw new Error('internal server error');
@@ -75,7 +75,7 @@ export async function deleteDefaultSetting(id: number): Promise<void> {
 
 export async function insertDefaultSetting(newSetting: DefaultSetting): Promise<number> {
     // eslint-disable-next-line max-len
-    const insertSql = 'insert into default_setting (default_setting_name, default_setting_value, default_setting_type) values (?, ?, ?)';
+    const insertSql = 'insert into default_settings (default_setting_name, default_setting_value, default_setting_type) values (?, ?, ?)';
 
     const values = [newSetting.settingName, newSetting.settingValue, newSetting.settingType];
     let result;
@@ -102,7 +102,7 @@ export async function insertDefaultSetting(newSetting: DefaultSetting): Promise<
 
 export async function updateDefaultSetting(id: number, updatedSetting: DefaultSetting): Promise<DefaultSetting> {
     const updateSql =
-        'update default_setting set default_setting_name = ?, default_setting_value = ?, ' +
+        'update default_settings set default_setting_name = ?, default_setting_value = ?, ' +
         'default_setting_type = ? where default_setting_id = ?';
     const values = [updatedSetting.settingName, updatedSetting.settingValue,
         updatedSetting.settingType, updatedSetting.settingId];
