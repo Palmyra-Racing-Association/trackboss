@@ -68,7 +68,7 @@ export default function HamburgerMenu(props: pageProps) {
                 id="6"
                 isActive={props.activeButtonId === 6}
             >
-                <Link to="/jobs">Event Administration</Link>
+                <Link to="/administration">Club Administration</Link>
             </Button>
             <StackDivider borderColor="gray.300" />
         </VStack>

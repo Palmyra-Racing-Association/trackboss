@@ -17,6 +17,8 @@ interface duesModalProps {
     token: string,
     // eslint-disable-next-line react/require-default-props
     viewBill?: Bill;
+    // eslint-disable-next-line react/require-default-props
+    allowRenewal?: boolean,
     insuranceAttested: boolean,
     onClose: () => void,
 }
@@ -30,19 +32,9 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
 
     const attested = (props.insuranceAttested || insuranceAttested);
 
-    const currentTime = new Date().getTime();
-
-    // months are zero based, so January is 0, November is 10, December is 11, and there is no 12. I can never remember
-    // this fun fact and always mess it up, so making this note here next time I need this.
-    const startOfBillingPeriod = new Date(billingYear, 10, 21).getTime();
-
-    // after billing ends, we also don't allow them to pay so lock that as well.
-    const endOfBillingPeriod = new Date((billingYear + 1), 1, 1).getTime();
-
-    const insideRenewalPeriod = ((currentTime > startOfBillingPeriod) && (currentTime < endOfBillingPeriod));
     const paid = props.viewBill?.curYearPaid;
 
-    const isRenewalAllowed = ((insideRenewalPeriod) || (paid && attested));
+    const isRenewalAllowed = ((props.allowRenewal) || (paid && attested));
 
     let renewalAttestationComponent;
 

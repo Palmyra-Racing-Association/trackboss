@@ -72,7 +72,7 @@ function ApplicationForm() {
         document.title = `PRA application - ${season} season`;
     });
 
-    return (
+    const applicationForm = (
         <ChakraProvider theme={theme}>
             <Box
                 mt={0}
@@ -514,6 +514,7 @@ function ApplicationForm() {
             />
         </ChakraProvider>
     );
+    return applicationForm;
 }
 
 export default ApplicationForm;

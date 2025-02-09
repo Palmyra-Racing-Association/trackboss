@@ -34,12 +34,13 @@ export async function getDefaultSetting(id: string): Promise<DefaultSetting> {
         settingName: results[0].default_setting_name,
         settingValue: results[0].default_setting_value,
         settingType: results[0].default_setting_type,
+        settingDisplayName: results[0].default_setting_display_name,
     };
     return setting;
 }
 
 export async function getAllDefaultSettings(): Promise<DefaultSetting[]> {
-    const sql = 'select * from default_settings';
+    const sql = 'select * from default_settings order by default_setting_type';
 
     let results;
     try {
@@ -53,6 +54,7 @@ export async function getAllDefaultSettings(): Promise<DefaultSetting[]> {
         settingName: setting.default_setting_name,
         settingValue: setting.default_setting_value,
         settingType: setting.default_setting_type,
+        settingDisplayName: setting.default_setting_display_name,
     }));
     return allSettings;
 }
@@ -75,7 +77,7 @@ export async function deleteDefaultSetting(id: number): Promise<void> {
 
 export async function insertDefaultSetting(newSetting: DefaultSetting): Promise<number> {
     // eslint-disable-next-line max-len
-    const insertSql = 'insert into default_settings (default_setting_name, default_setting_value, default_setting_type) values (?, ?, ?)';
+    const insertSql = 'insert into default_settings (default_setting_name, default_setting_value, default_setting_type, default_setting_display_name) values (?, ?, ?, ?)';
 
     const values = [newSetting.settingName, newSetting.settingValue, newSetting.settingType];
     let result;
@@ -103,9 +105,9 @@ export async function insertDefaultSetting(newSetting: DefaultSetting): Promise<
 export async function updateDefaultSetting(id: number, updatedSetting: DefaultSetting): Promise<DefaultSetting> {
     const updateSql =
         'update default_settings set default_setting_name = ?, default_setting_value = ?, ' +
-        'default_setting_type = ? where default_setting_id = ?';
+        'default_setting_type = ?, default_setting_display_name = ? where default_setting_id = ?';
     const values = [updatedSetting.settingName, updatedSetting.settingValue,
-        updatedSetting.settingType, updatedSetting.settingId];
+        updatedSetting.settingType, updatedSetting.settingDisplayName, updatedSetting.settingId];
     let result;
     try {
         [result] = await getPool().query<OkPacket>(updateSql, values);
