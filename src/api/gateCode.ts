@@ -19,7 +19,8 @@ const getGateCodeByYear = async (year:string) => {
 
 const getGateCodeLatest = async () => {
     const [results] =
-        await getPool().query<RowDataPacket[]>('select * from gate_code order by year desc limit 1');
+        // eslint-disable-next-line max-len
+        await getPool().query<RowDataPacket[]>('select default_setting_value gate_code from default_settings where default_setting_name = \'GATE_CODE\'');
     if (results.length === 0) throw new Error('not found');
     return {
         id: results[0].gate_code_id,

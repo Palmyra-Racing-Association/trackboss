@@ -13,6 +13,15 @@ export async function getDefaultSettingsList(token: string): Promise<GetDefaultS
     return response.json();
 }
 
+export async function getDefaultSettingsByName(token: string, name: string): Promise<DefaultSetting> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/defaultSettings/${name}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: generateHeaders(token),
+    });
+    return response.json();
+}
+
 export async function deleteDefaultSetting(token: string, id:number): Promise<any> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/defaultSettings/${id}`, {
         method: 'DELETE',

@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
     Box, Text, Button, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, VStack, useDisclosure,
-    Input, SimpleGrid,
+    Input, SimpleGrid, useToast,
 } from '@chakra-ui/react';
 import { UserContext } from '../../contexts/UserContext';
 import { DefaultSetting } from '../../../../src/typedefs/defaultSetting';
@@ -13,6 +13,8 @@ function SiteSettings() {
     const { state } = useContext(UserContext);
     const isAdminUser = state.user?.memberType === 'Admin';
     const [defaultSettings, setDefaultSettings] = useState<DefaultSetting[]>();
+
+    const toast = useToast();
 
     async function getSettingsData() {
         let allSettings : DefaultSetting[] = [];
@@ -46,19 +48,20 @@ function SiteSettings() {
                 defaultSettings?.map((setting) => {
                     let settingInput;
                     if (setting.settingType === 'boolean') {
+                        const newValue = invertBooleanString(setting.settingValue);
                         settingInput = (
                             <WrappedSwitchInput
                                 maxWidth={150}
                                 defaultChecked={setting.settingValue === 'true'}
                                 wrapperText={setting.settingDisplayName}
-                                toastMessage={`Changed setting ${setting.settingName}`}
+                                toastMessage={`Flipped setting ${setting.settingDisplayName}`}
                                 onSwitchChange={
                                     async () => {
                                         const updatedSetting = {
                                             settingId: setting.settingId,
                                             settingName: setting.settingName,
                                             settingType: setting.settingType,
-                                            settingValue: invertBooleanString(setting.settingValue),
+                                            settingValue: newValue,
                                             settingDisplayName: setting.settingDisplayName,
                                         };
                                         await updateDefaultSetting(state.token, updatedSetting);
@@ -83,6 +86,16 @@ function SiteSettings() {
                                                 settingDisplayName: setting.settingDisplayName,
                                             };
                                             await updateDefaultSetting(state.token, updatedSetting);
+                                            toast({
+                                                containerStyle: {
+                                                    background: 'orange',
+                                                },
+                                                // eslint-disable-next-line max-len
+                                                description: `${setting.settingDisplayName} set to ${e.target.value}`,
+                                                status: 'success',
+                                                duration: 2000,
+                                                isClosable: true,
+                                            });
                                         }
                                     }
                                 />
