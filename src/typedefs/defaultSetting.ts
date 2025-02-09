@@ -5,6 +5,7 @@ export type DefaultSetting = {
     settingName: string,
     settingValue: string,
     settingType: string,
+    settingDisplayName: string,
 };
 
 export type GetDefaultSettingsResponse = DefaultSetting[] | ErrorResponse;

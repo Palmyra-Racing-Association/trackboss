@@ -17,9 +17,9 @@ defaultSetting.get('/', async (req: Request, res: Response) => {
     let response: GetDefaultSettingsResponse;
     try {
         await validateAdminAccess(req, res);
-        const links: DefaultSetting[] = await getAllDefaultSettings();
+        const settings: DefaultSetting[] = await getAllDefaultSettings();
         res.status(200);
-        response = links;
+        response = settings;
         res.send(response);
     } catch (e: any) {
         logger.error(`Error at path ${req.path}`);

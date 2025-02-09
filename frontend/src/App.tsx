@@ -41,7 +41,7 @@ export function App() {
             <Route path="members" element={<MemberListPage />} />
             <Route path="settings" element={<Settings />} />
             <Route path="calendar/signups/:date/:eventId/:eventType" element={<SignUpPage />} />
-            <Route path="jobs" element={<RaceAdministration />} />
+            <Route path="administration" element={<RaceAdministration />} />
             <Route path="early" element={<EarlySeasonPage />} />
             <Route path="communicate" element={<MemberCommunicationsPage />} />
             <Route path="apply" element={<ApplicationForm />} />
