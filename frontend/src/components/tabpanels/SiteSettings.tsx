@@ -1,8 +1,6 @@
-/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
 import {
-    Box, Text, Button, Heading, HStack, Menu, MenuButton, MenuItem, MenuList, VStack, useDisclosure,
-    Input, SimpleGrid, useToast,
+    Box, Text, Input, SimpleGrid, useToast,
 } from '@chakra-ui/react';
 import { UserContext } from '../../contexts/UserContext';
 import { DefaultSetting } from '../../../../src/typedefs/defaultSetting';
@@ -11,7 +9,6 @@ import WrappedSwitchInput from '../input/WrappedSwitchInput';
 
 function SiteSettings() {
     const { state } = useContext(UserContext);
-    const isAdminUser = state.user?.memberType === 'Admin';
     const [defaultSettings, setDefaultSettings] = useState<DefaultSetting[]>();
 
     const toast = useToast();
@@ -42,7 +39,7 @@ function SiteSettings() {
     }
 
     return (
-        <SimpleGrid columns={2} spacing={10}>
+        <SimpleGrid columns={2} spacing={5} maxWidth={700}>
             {
                 // eslint-disable-next-line arrow-body-style
                 defaultSettings?.map((setting) => {
@@ -71,10 +68,11 @@ function SiteSettings() {
                         );
                     } else if (setting.settingType === 'string') {
                         settingInput = (
-                            <Box>
-                                <Text>{setting.settingDisplayName}</Text>
+                            <Box maxWidth={250}>
+                                <Text size="sm">{setting.settingDisplayName}</Text>
                                 <Input
                                     variant="outline"
+                                    colorScheme="orange"
                                     placeholder={setting.settingValue}
                                     onChange={
                                         async (e) => {
