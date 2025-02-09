@@ -40,7 +40,7 @@ export async function getDefaultSetting(id: string): Promise<DefaultSetting> {
 }
 
 export async function getAllDefaultSettings(): Promise<DefaultSetting[]> {
-    const sql = 'select * from default_settings';
+    const sql = 'select * from default_settings order by default_setting_type';
 
     let results;
     try {
