@@ -48,6 +48,7 @@ export type PostNewMemberRequest = {
     modifiedBy: number,
     subscribed: boolean,
     dependentStatus?: string,
+    isEligibleDependent?: boolean,
 }
 
 export type PostNewMemberResponse = Member | ErrorResponse;

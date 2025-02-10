@@ -27,7 +27,6 @@ interface EditMemberModalProps {
     hasEmail?: boolean,
 }
 
-// eslint-disable-next-line no-unused-vars
 export default function EditMemberModal(props: EditMemberModalProps) {
     const selectedMember = props.member;
     const {
@@ -43,7 +42,6 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [phoneNumber, setPhoneNumber] = useState<string>(selectedMember.phoneNumber || '');
     const [email, setEmail] = useState<string>(selectedMember.email || '');
     const [dirty, setDirty] = useState<boolean>(false);
-    const [phoneValid, setPhoneValid] = useState<boolean>(isMobilePhone(phoneNumber, 'en-US'));
     const [emailValid, setEmailValid] = useState<boolean>(isEmail(email));
     const [birthdate, setBirthDate] = useState<Date>(moment(selectedMember.birthdate).toDate() || moment().toDate());
     const [membershipType, setMembershipType] = useState<number>(selectedMember.membershipTypeId);
@@ -53,11 +51,10 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [dependentStatus, setDependentStatus] = useState<string>(selectedMember.dependentStatus || '');
     // eslint-disable-next-line max-len
     const [isEligibleDependent, setIsEligibleDependent] = useState<boolean>(selectedMember.isEligibleDependent || false);
-    const [rowCount, setRowCount] = useState<number>(7);
+    const [rowCount] = useState<number>(7);
 
-    const { state, update } = useContext(UserContext);
+    const { state } = useContext(UserContext);
 
-    /*
     useEffect(() => {
         setFirstName(selectedMember.firstName);
         setLastName(selectedMember.lastName);
@@ -67,8 +64,8 @@ export default function EditMemberModal(props: EditMemberModalProps) {
         setEmail(selectedMember.email);
         setPhoneNumber(selectedMember.phoneNumber || '');
         setBirthDate(moment(selectedMember.birthdate).toDate());
-    });
-    */
+    }, [selectedMember]);
+
     return (
         <>
             <Button
@@ -220,18 +217,23 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                             </GridItem>
                             <GridItem colSpan={2}>
                                 <Text>Phone</Text>
-                                <Text color="red" size="xs" hidden={phoneValid}>
-                                    Phone must be ten digits and include area code
-                                </Text>
                                 <Input
                                     value={phoneNumber}
                                     size="md"
+                                    minLength={12}
+                                    maxLength={12}
+                                    pattern="^\+1\d{10}$"
                                     onChange={
                                         (e) => {
+                                            setDirty(true);
                                             const typedPhoneNumber = e.target.value;
-                                            setPhoneValid(isMobilePhone(typedPhoneNumber, 'en-US'));
-                                            setPhoneNumber(typedPhoneNumber);
-                                            setDirty(phoneValid);
+                                            if (typedPhoneNumber) {
+                                                if (!typedPhoneNumber.startsWith('+1')) {
+                                                    setPhoneNumber(`+1${typedPhoneNumber}`);
+                                                } else {
+                                                    setPhoneNumber(typedPhoneNumber);
+                                                }
+                                            }
                                         }
                                     }
                                 />
@@ -337,8 +339,6 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                         duration: 5000,
                                         isClosable: true,
                                     });
-                                    setFirstName('');
-                                    setLastName('');
                                     onClose();
                                 }
                             }
