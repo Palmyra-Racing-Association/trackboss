@@ -26,6 +26,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
     const [applicantNotes, setApplicantNotes] = useState<string>(membershipApplication.sharedNotes || '');
     const [internalNotes, setInternalNotes] = useState<string>(membershipApplication.internalNotes || '');
     const isInReview = (membershipApplication.status === 'Review');
+    const isAccepted = (membershipApplication.status === 'Accepted');
 
     return (
         <Modal isCentered size="lg" isOpen={isOpen} onClose={onClose}>
@@ -183,7 +184,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 color="green"
                                 variant="ghost"
                                 size="lg"
-                                isDisabled={!isInReview}
+                                isDisabled={isAccepted}
                                 onClick={
                                     async () => {
                                         await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);

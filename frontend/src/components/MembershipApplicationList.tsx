@@ -82,6 +82,7 @@ export default function MembershipApplicationList() {
     const [dirty, setDirty] = useState<boolean>(false);
     const [showAccepted, setShowAccepted] = useState<boolean>(false);
     const [showReview, setShowReview] = useState<boolean>(false);
+    const [showRejected, setShowRejected] = useState<boolean>(false);
 
     const { isOpen, onClose, onOpen } = useDisclosure(
         { onClose: () => setDirty((olDirtyGotYaMoney) => !olDirtyGotYaMoney) },
@@ -119,7 +120,11 @@ export default function MembershipApplicationList() {
             const acceptedOnly = cells.filter((application) => (application.status === 'Accepted'));
             setFilteredCells(acceptedOnly);
         }
-    }, [searchTerm, showReview, showAccepted, cells]);
+        if (showRejected) {
+            const rejectedOnly = cells.filter((application) => (application.status === 'Rejected'));
+            setFilteredCells(rejectedOnly);
+        }
+    }, [searchTerm, showReview, showAccepted, showRejected, cells]);
 
     return (
         <div>
@@ -162,6 +167,17 @@ export default function MembershipApplicationList() {
                     onSwitchChange={
                         () => {
                             setShowAccepted(!showAccepted);
+                        }
+                    }
+                />
+                <WrappedSwitchInput
+                    maxWidth={100}
+                    defaultChecked={false}
+                    wrapperText="Only Show Rejected"
+                    locked={showReview}
+                    onSwitchChange={
+                        () => {
+                            setShowRejected(!showRejected);
                         }
                     }
                 />
