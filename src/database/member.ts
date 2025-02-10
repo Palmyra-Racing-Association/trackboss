@@ -124,12 +124,18 @@ export async function getMemberList(filters: GetMemberListFilters): Promise<Memb
             // anyway (and this makes testing easier)
             values[counter++] = MEMBER_TYPE_MAP.get(filters.type) || filters.type;
         }
-        if (typeof filters.membershipId !== 'undefined') {
+        const usingMembershipFilter = typeof filters.membershipId !== 'undefined';
+        if (usingMembershipFilter) {
             dynamicSql += 'membership_id = ? AND ';
             values[counter++] = filters.membershipId;
         }
         // slice the trailing AND
-        sql = `${GET_MEMBER_LIST_SQL + dynamicSql.slice(0, -4)} order by last_name, first_name`;
+        sql = `${GET_MEMBER_LIST_SQL + dynamicSql.slice(0, -4)}`;
+        if (!usingMembershipFilter) {
+            sql += 'order by last_name, first_name';
+        } else {
+            sql += 'order by birthdate, last_name, first_name';
+        }
     } else {
         sql = GET_MEMBER_LIST_SQL;
         values = [];

@@ -13,6 +13,8 @@ import {
     Text,
 } from '@chakra-ui/react';
 import DatePicker from 'react-date-picker';
+import Select from 'react-select';
+
 import moment from 'moment';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
 import { Member, PostNewMemberRequest } from '../../../../src/typedefs/member';
@@ -33,11 +35,13 @@ export default function AddFamilyModal(props: modalProps) {
     const [firstName, setFirstName] = useState<string>();
     const [lastName, setLastName] = useState<string>();
     const [email, setEmail] = useState<string>();
+    const [phoneNumber, setPhoneNumber] = useState<string>();
     const [allowOnlineAccess, setAllowOnlineAccess] = useState<boolean>(true);
     const [birthDate, setBirthDate] = useState<Date>();
     const [isSaving, setIsSaving] = useState<boolean>(false);
     const [emailExists, setEmailExists] = useState<boolean>(false);
     const [subscribed, setSubscribed] = useState<boolean>(false);
+    const [dependentStatus, setDependentStatus] = useState<string>();
 
     return (
         <Modal isCentered size="xl" isOpen={props.isOpen} onClose={props.onClose}>
@@ -105,6 +109,46 @@ export default function AddFamilyModal(props: modalProps) {
                         </Text>
                     </Box>
                     <Box m={3}>
+                        <Text>Phone</Text>
+                        <Input
+                            value={phoneNumber}
+                            size="md"
+                            minLength={12}
+                            maxLength={12}
+                            pattern="^\+1\d{10}$"
+                            onChange={
+                                (e) => {
+                                    const typedPhoneNumber = e.target.value;
+                                    if (typedPhoneNumber) {
+                                        if (!typedPhoneNumber.startsWith('+1')) {
+                                            setPhoneNumber(`+1${typedPhoneNumber}`);
+                                        } else {
+                                            setPhoneNumber(typedPhoneNumber);
+                                        }
+                                    }
+                                }
+                            }
+                        />
+                    </Box>
+                    <Box m={3}>
+                        <Text>Dependent Status</Text>
+                        <Select
+                            options={
+                                [
+                                    { value: 'Primary', label: 'Primary member' },
+                                    { value: 'Spouse/Partner', label: 'Spouse/Partner' },
+                                    { value: 'Child', label: 'Child' },
+                                    { value: 'Disabled Adult', label: 'Disabled Adult' },
+                                ]
+                            }
+                            onChange={
+                                (e) => {
+                                    setDependentStatus(e?.value || '');
+                                }
+                            }
+                        />
+                    </Box>
+                    <Box m={3}>
                         <WrappedSwitchInput
                             maxWidth={300}
                             wrapperText="Subscribe to communciations?"
@@ -164,6 +208,8 @@ export default function AddFamilyModal(props: modalProps) {
                                     dateJoined: props.membershipAdmin?.dateJoined,
                                     modifiedBy: props.membershipAdmin?.memberId || 0,
                                     subscribed,
+                                    dependentStatus,
+                                    isEligibleDependent: true,
                                 };
                                 if (allowOnlineAccess) {
                                     familyMemberAdd.email = email;
