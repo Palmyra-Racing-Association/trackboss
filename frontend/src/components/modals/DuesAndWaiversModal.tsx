@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Box,
     Button, Divider, Heading, Modal, ModalContent, ModalFooter, ModalOverlay,
@@ -10,6 +10,7 @@ import { UserContext } from '../../contexts/UserContext';
 import { attestInsurance } from '../../controller/billing';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
 import BillingStatsDisplay from '../shared/BillingStatsDisplay';
+import { getDefaultSettingsByName } from '../../controller/defaultSettings';
 
 interface duesModalProps {
     isOpen: boolean,
@@ -17,8 +18,6 @@ interface duesModalProps {
     token: string,
     // eslint-disable-next-line react/require-default-props
     viewBill?: Bill;
-    // eslint-disable-next-line react/require-default-props, react/no-unused-prop-types
-    allowRenewal?: boolean,
     insuranceAttested: boolean,
     onClose: () => void,
 }
@@ -32,7 +31,17 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
 
     const attested = (props.insuranceAttested || insuranceAttested);
 
-    const isRenewalAllowed = true; // (props.allowRenewal);
+    const [isRenewalAllowed, setIsRenewalAllowed] = useState<boolean>();
+
+    async function getRenewalSetting() {
+        const renewalsEnabled = await getDefaultSettingsByName(state.token, 'RENEWALS_ENABLED');
+        const renewalSettingValue = (renewalsEnabled.settingValue === 'true');
+        setIsRenewalAllowed(renewalSettingValue);
+    }
+
+    useEffect(() => {
+        getRenewalSetting();
+    }, []);
 
     let renewalAttestationComponent;
 

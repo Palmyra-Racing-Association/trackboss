@@ -37,7 +37,10 @@ defaultSetting.get('/', async (req: Request, res: Response) => {
 
 defaultSetting.get('/:settingName', async (req: Request, res: Response) => {
     try {
-        await validateAdminAccess(req, res);
+        const headerCheck = checkHeader(req.headers.authorization);
+        if (!headerCheck.valid) {
+            res.status(401).send({ reason: headerCheck.reason });
+        }
         const { settingName } = req.params;
         const setting = await getDefaultSetting(settingName);
         res.send(setting);

@@ -5,13 +5,11 @@ import { Bill } from '../../../src/typedefs/bill';
 import { UserContext } from '../contexts/UserContext';
 import { getBillsForMembership } from '../controller/billing';
 import DuesAndWaiversModal from './modals/DuesAndWaiversModal';
-import { getDefaultSettingsByName } from '../controller/defaultSettings';
 
 export default function DuesAndWaivers() {
     const { state } = useContext(UserContext);
     const [allBills, setAllBills] = useState<Bill[]>();
     const [selectedBill, setSelectedBill] = useState<Bill>();
-    const [allowRenewal, setAllowRenewal] = useState<boolean>();
 
     const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -24,9 +22,6 @@ export default function DuesAndWaivers() {
             // console.log(error);
         }
         setAllBills(memberBills as Bill[]);
-        const renewalsEnabled = await getDefaultSettingsByName(state.token, 'RENEWALS_ENABLED');
-        const renewalSettingValue = (renewalsEnabled.settingValue === 'true');
-        setAllowRenewal(renewalSettingValue);
     }
 
     useEffect(() => {
@@ -123,7 +118,6 @@ export default function DuesAndWaivers() {
             (selectedBill &&
             <DuesAndWaiversModal
                 viewBill={selectedBill}
-                allowRenewal={allowRenewal}
                 token={state.token}
                 insuranceAttested={selectedBill?.curYearIns || false}
                 isOpen={isOpen}
