@@ -17,7 +17,7 @@ interface duesModalProps {
     token: string,
     // eslint-disable-next-line react/require-default-props
     viewBill?: Bill;
-    // eslint-disable-next-line react/require-default-props
+    // eslint-disable-next-line react/require-default-props, react/no-unused-prop-types
     allowRenewal?: boolean,
     insuranceAttested: boolean,
     onClose: () => void,
@@ -32,9 +32,7 @@ export default function DuesAndWaiversModal(props: duesModalProps) {
 
     const attested = (props.insuranceAttested || insuranceAttested);
 
-    const paid = props.viewBill?.curYearPaid;
-
-    const isRenewalAllowed = ((props.allowRenewal) || (paid && attested));
+    const isRenewalAllowed = true; // (props.allowRenewal);
 
     let renewalAttestationComponent;
 
