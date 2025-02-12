@@ -52,6 +52,18 @@ defaultSetting.get('/:settingName', async (req: Request, res: Response) => {
     }
 });
 
+defaultSetting.get('/applications/enabled', async (req: Request, res: Response) => {
+    try {
+        const setting = await getDefaultSetting('ALLOW_APPLICATIONS');
+        res.send(setting);
+    } catch (error: any) {
+        logger.error(`Error at path ${req.path}`);
+        logger.error(error);
+        res.status(500);
+        res.send(error);
+    }
+});
+
 defaultSetting.put('/:id', async (req: Request, res: Response) => {
     try {
         await validateAdminAccess(req, res);

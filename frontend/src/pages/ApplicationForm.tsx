@@ -24,6 +24,7 @@ import theme from '../theme';
 import { applicationExists } from '../controller/membershipApplication';
 import { memberExistsByEmail } from '../controller/member';
 import SimpleAlertModal from '../components/modals/SimpleAlertModal';
+import { getApplicationSetting } from '../controller/defaultSettings';
 
 function ApplicationForm() {
     const chakraStyleForNonChakra = {
@@ -59,7 +60,14 @@ function ApplicationForm() {
     const [alertMsg, setAlertMsg] = useState<string>();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isConfirmOpen, onOpen: onConfirmOpen, onClose: onConfirmClose } = useDisclosure();
+    const [isEnabled, setIsEnabled] = useState<boolean>();
+
     const eightteenYearsAgo = moment().subtract(18, 'years').toDate();
+
+    async function getEnabledSetting() {
+        const enabledSetting = await getApplicationSetting();
+        setIsEnabled(enabledSetting.settingValue === 'true');
+    }
 
     useEffect(() => {
         const date = new Date();
@@ -70,9 +78,11 @@ function ApplicationForm() {
             setSeason(date.getFullYear());
         }
         document.title = `PRA application - ${season} season`;
+        getEnabledSetting();
+        console.log(isEnabled);
     });
 
-    const applicationForm = (
+    let applicationForm = (
         <ChakraProvider theme={theme}>
             <Box
                 mt={0}
@@ -514,6 +524,24 @@ function ApplicationForm() {
             />
         </ChakraProvider>
     );
+    if (!isEnabled) {
+        applicationForm = (
+            <Box>
+                <SimpleGrid columns={2} maxWidth={800} m={5}>
+                    <Box maxW={200}>
+                        <Image width={200} height={90} src="logo192.png" />
+                    </Box>
+                    <Text fontSize="2xl">
+                        {`Palmyra Racing Association Application - ${season} season`}
+                    </Text>
+                </SimpleGrid>
+                <Box>
+                    Thanks for your interest.  Applications are currently closed.  They are typically open
+                    from September 1 to January 31.
+                </Box>
+            </Box>
+        );
+    }
     return applicationForm;
 }
 
