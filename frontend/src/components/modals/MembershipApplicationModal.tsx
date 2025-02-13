@@ -25,7 +25,8 @@ export default function MembershipApplicationModal(props: appModalProps) {
 
     const [applicantNotes, setApplicantNotes] = useState<string>(membershipApplication.sharedNotes || '');
     const [internalNotes, setInternalNotes] = useState<string>(membershipApplication.internalNotes || '');
-    const isInReview = (membershipApplication.status === 'Review');
+    const reviewOrRejected = ((membershipApplication.status === 'Review') ||
+        (membershipApplication.status === 'Rejected'));
     const isAccepted = (membershipApplication.status === 'Accepted');
 
     return (
@@ -150,7 +151,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 color="white"
                                 variant="ghost"
                                 size="lg"
-                                isDisabled={!isInReview}
+                                isDisabled={!reviewOrRejected}
                                 onClick={
                                     async () => {
                                         await reviewMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
@@ -167,7 +168,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 color="red"
                                 variant="ghost"
                                 size="lg"
-                                isDisabled={!isInReview}
+                                isDisabled={!reviewOrRejected}
                                 onClick={
                                     async () => {
                                         await rejectMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes);
@@ -201,7 +202,7 @@ export default function MembershipApplicationModal(props: appModalProps) {
                                 color="green"
                                 size="lg"
                                 variant="ghost"
-                                isDisabled={!isInReview}
+                                isDisabled={!reviewOrRejected}
                                 onClick={
                                     async () => {
                                         await acceptMembershipApplication(props.token, membershipApplication.id, internalNotes, applicantNotes, true);
