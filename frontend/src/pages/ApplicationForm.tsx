@@ -79,7 +79,6 @@ function ApplicationForm() {
         }
         document.title = `PRA application - ${season} season`;
         getEnabledSetting();
-        console.log(isEnabled);
     });
 
     let applicationForm = (

@@ -1,4 +1,6 @@
 FROM node:18-alpine
+ENV TZ="America/New_York"
+
 ENV PORT=3000
 ENV MYSQL_DB=pradb
 
