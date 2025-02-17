@@ -5,6 +5,7 @@ import api from './api/api';
 import logger from './logger';
 import { createVerifier } from './util/auth';
 import { getEnvironmentParameter } from './util/environmentWrapper';
+import startBillingJob from './jobs/billingJob';
 
 process.on('uncaughtException', (error, origin) => {
     logger.error('----- Uncaught exception -----');
@@ -40,6 +41,8 @@ const server = app.listen(port, async () => {
     logger.info(`PRA Club Manager API environment ${envName} 
         listening on port ${port}`);
 });
+
+startBillingJob();
 
 // export the HTTP server so that it can be closed if necessary (mostly for testing)
 export default server;
