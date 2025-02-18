@@ -1,0 +1,20 @@
+<div>
+    Hi {{firstName}} {{lastName}},
+    <br/>
+    So far you have <b>{{pointsEarned}}</b> of a <b>required {{pointsThreshold}} points</b>. 
+    <p/>
+    They were earned as follows:
+    <p/>
+    {{#each detail}}
+        {{this.start}} - {{this.title}} - {{this.pointsAwarded}} points(s)<br/>
+    {{/each}}
+    <p/>
+    Please note that this email reflects points that have been recorded.  If something appears to be missing, then it may not have been recorded yet.
+    You can view your points live at any time in TrackBoss.  
+    <p/>
+    Also note that any jobs you were paid for (in cash, instead of points) are not reflected in this total.  This total also may include work that you've 
+    signed up for but not completed.  That will be removed if it's not completed.
+    <p/>
+    Your work so far as earned you membership credits, making next year's dues (should you choose to renew) ${{amount}}. Note that you can still
+    earn points to reduce that.
+</div>
