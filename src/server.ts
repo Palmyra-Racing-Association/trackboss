@@ -6,7 +6,6 @@ import logger from './logger';
 import { createVerifier } from './util/auth';
 import { getEnvironmentParameter } from './util/environmentWrapper';
 import startBillingJob from './jobs/billingJob';
-import startPointsEmailJob from './jobs/pointsEmailJob';
 
 process.on('uncaughtException', (error, origin) => {
     logger.error('----- Uncaught exception -----');
@@ -44,7 +43,6 @@ const server = app.listen(port, async () => {
 });
 
 startBillingJob();
-startPointsEmailJob();
 
 // export the HTTP server so that it can be closed if necessary (mostly for testing)
 export default server;
