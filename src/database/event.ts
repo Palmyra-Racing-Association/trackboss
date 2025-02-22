@@ -77,7 +77,7 @@ export async function getEventList(startDate?: string, endDate?: string): Promis
         sql = GET_EVENT_LIST_DATERANGE_SQL;
         values = [sDate, eDate];
     } else {
-        sql = GET_EVENT_LIST_SQL;
+        sql = `${GET_EVENT_LIST_SQL} order by start`;
         values = [];
     }
 

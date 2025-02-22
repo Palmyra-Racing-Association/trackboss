@@ -1,5 +1,7 @@
 import { format } from 'date-fns';
 import { Request, Response, Router } from 'express';
+import ical from 'ical-generator';
+
 import {
     deleteEvent, getClosestEvent, getEvent, getEventList, getRelatedEvents,
     insertEvent, patchEvent,
@@ -250,6 +252,26 @@ event.delete('/:eventID', async (req: Request, res: Response) => {
         }
     }
     res.send(response);
+});
+
+event.get('/calendar/ical', async (req: Request, res: Response) => {
+    const eventList : Event[] = await getEventList();
+    const cal = ical({
+        name: 'Palmyra Racing Association - Calendar',
+    });
+
+    eventList.forEach((trackbossEvent) => {
+        cal.createEvent({
+            start: trackbossEvent.start,
+            end: trackbossEvent.end,
+            summary: trackbossEvent.title,
+            description: trackbossEvent.eventDescription,
+            location: '4343 Hogback Hill Road Palmyra NY 14522',
+            url: 'https://trackboss.hogbackmx.com',
+        });
+    });
+    res.setHeader('Content-Type', 'text/calendar');
+    res.send(cal.toString());
 });
 
 export default event;
