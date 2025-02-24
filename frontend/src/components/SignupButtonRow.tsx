@@ -4,6 +4,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { BsCurrencyDollar, BsTrash2 } from 'react-icons/bs';
+import moment from 'moment-timezone';
 
 import { signupForJob, removeSignup, setPaidState } from '../controller/job';
 import { UserContext } from '../contexts/UserContext';
@@ -40,7 +41,8 @@ export default function SignupButtonRow(props: any) {
         !props.restrictSignups
     );
 
-    const disableForMembers = (Date.parse(props.data.start) < Date.now());
+    const startEastern = moment(props.data.start, 'YYYY-MM-DD HH:mm:ss').tz('America/New_York', true);
+    const disableForMembers = startEastern.isBefore(moment());
 
     useEffect(() => {
         async function signupForJobDropdown() {
