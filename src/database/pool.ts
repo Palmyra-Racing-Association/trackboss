@@ -16,7 +16,6 @@ const dbConnection = {
 };
 
 export async function initConfig() {
-    logger.info('Unable to get connection from SM so getting it from env');
     const { MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB } = process.env;
     dbConnection.username = MYSQL_USER || '';
     dbConnection.password = MYSQL_PASS || '';
@@ -50,6 +49,7 @@ export function getPool(): Pool {
 
         pool = mysql.createPool({
             host: dbConnection.host,
+            port: 3306,
             user: dbConnection.username,
             password: dbConnection.password,
             database: dbConnection.dbname,
