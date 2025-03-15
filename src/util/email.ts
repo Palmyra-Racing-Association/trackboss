@@ -5,6 +5,7 @@ import { getPool } from '../database/pool';
 import { getBoardMemberList } from '../database/boardMember';
 import { Bill } from '../typedefs/bill';
 import { Member } from '../typedefs/member';
+import { getEnvironmentParameter } from './environmentWrapper';
 
 async function getEmailById(purpose: string) {
     const values = [purpose];
@@ -28,7 +29,7 @@ async function getEmailById(purpose: string) {
 
 export async function sendTextEmail(email: any) {
     AWS.config.update({ region: process.env.AWS_REGION });
-    const clubEmail = process.env.CLUB_EMAIL;
+    const clubEmail = await getEnvironmentParameter('clubEmail') || '';
     const ses = new AWS.SES();
     const emailParams = {
         Destination: {
@@ -53,7 +54,7 @@ export async function sendTextEmail(email: any) {
         // intercepting the process at the last possible point but keeps us from messing up and sending emails to
         // members from dev which we never want to do.
         // if (process.env.ENVIRONMENT_NAME === 'trackboss') {
-        // await ses.sendEmail(emailParams).promise();
+        await ses.sendEmail(emailParams).promise();
         // } else {
         logger.info(`This is environment ${process.env.ENVIRONMENT_NAME} so I'm logging this email`);
         logger.info(JSON.stringify(emailParams));

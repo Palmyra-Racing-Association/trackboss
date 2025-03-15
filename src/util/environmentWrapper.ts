@@ -24,11 +24,11 @@ export async function getEnvironmentParameter(name: string) {
 }
 
 export async function getCognitoPoolId() {
-    return process.env.COGNITO_POOL_ID;
+    return getEnvironmentParameter('cognitoPoolId');
 }
 
 export async function getCognitoClientId() {
-    return process.env.COGNITO_CLIENT_ID;
+    return getEnvironmentParameter('cognitoClientId');
 }
 
 export async function getSquareObject() {

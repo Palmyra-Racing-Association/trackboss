@@ -1,12 +1,11 @@
-import * as dotenv from 'dotenv';
+import 'dotenv/config';
 import express from 'express';
 import AWS from 'aws-sdk';
 import api from './api/api';
 import logger from './logger';
 import { createVerifier } from './util/auth';
+import { getEnvironmentParameter } from './util/environmentWrapper';
 import startBillingJob from './jobs/billingJob';
-
-// dotenv.config();
 
 process.on('uncaughtException', (error, origin) => {
     logger.error('----- Uncaught exception -----');
@@ -38,7 +37,7 @@ app.use((err: any, req: any, res: any, next: () => void) => {
 });
 
 const server = app.listen(port, async () => {
-    const envName = process.env.TRACKBOSS_ENVIRONMENT_NAME;
+    const envName = await getEnvironmentParameter('trackbossEnvironmentName');
     logger.info(`PRA Club Manager API environment ${envName} 
         listening on port ${port}`);
 });

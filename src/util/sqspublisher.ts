@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk';
 import logger from '../logger';
 import { MemberCommunication } from '../typedefs/memberCommunication';
+import { getEnvironmentParameter } from './environmentWrapper';
 
 export default async function publishCommunicationSqs(communication : MemberCommunication) {
     // now stick the message in the respective SQS queue for further processing.
@@ -9,8 +10,8 @@ export default async function publishCommunicationSqs(communication : MemberComm
     const sqs = new AWS.SQS();
 
     logger.info(`sending communication ${communication.memberCommunicationId} to outbound queue`);
-    const region = process.env.AWS_REGION;
-    const account = process.env.ACCOUNT;
+    const region = await getEnvironmentParameter('region');
+    const account = await getEnvironmentParameter('account');
     const sqsUrl = `https://sqs.${region}.amazonaws.com/${account}/${outboundQueueName}`;
     let result = {};
     sqs.sendMessage({

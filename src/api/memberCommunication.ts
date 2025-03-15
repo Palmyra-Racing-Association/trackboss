@@ -8,6 +8,7 @@ import { validateAdminAccess } from '../util/auth';
 import logger from '../logger';
 import { getMemberList, getMembersWithTag } from '../database/member';
 import { MemberCommunication } from '../typedefs/memberCommunication';
+import { getEnvironmentParameter } from '../util/environmentWrapper';
 import { getBoardMemberList } from '../database/boardMember';
 
 const memberCommunication = Router();
@@ -114,8 +115,8 @@ memberCommunication.post('/', async (req: Request, res: Response) => {
         const sqs = new AWS.SQS();
 
         logger.info(`sending communication id ${response.memberCommunicationId} to outbound queue`);
-        const region = process.env.AWS_REGION;
-        const account = process.env.ACCOUNT;
+        const region = await getEnvironmentParameter('region');
+        const account = await getEnvironmentParameter('account');
         const sqsUrl = `https://sqs.${region}.amazonaws.com/${account}/${outboundQueueName}`;
         sqs.sendMessage({
             MessageBody: JSON.stringify(response),
