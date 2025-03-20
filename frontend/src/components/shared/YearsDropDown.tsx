@@ -43,7 +43,7 @@ export default function YearsDropDown(props: YearsDropDownProps) {
                     }
                 </MenuList>
             </Menu>
-            <Heading>
+            <Heading size="lg">
                 {props.header}
                 (
                 {year}

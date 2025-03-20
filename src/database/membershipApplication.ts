@@ -20,13 +20,14 @@ export async function insertMembershipApplication(membershipApplication: any): P
     return result.insertId;
 }
 
-export async function getMembershipApplications() : Promise<MembershipApplication[]> {
+export async function getMembershipApplications(year: number) : Promise<MembershipApplication[]> {
     let results;
     try {
         const applicationsQuery =
-            'select * from membership_application order by application_status desc, application_date';
+            // eslint-disable-next-line max-len
+            'select * from membership_application where application_season = ? order by application_status desc, application_date';
         [results] = await getPool()
-            .query<RowDataPacket[]>(applicationsQuery);
+            .query<RowDataPacket[]>(applicationsQuery, [year]);
     } catch (e) {
         logger.error(`DB error getting bike list: ${e}`);
         throw new Error('internal server error');

@@ -105,7 +105,8 @@ membershipApplication.get('/exists/:emailAddress', async (req: Request, res: Res
 membershipApplication.get('/', async (req: Request, res: Response) => {
     try {
         await validateAdminAccess(req, res);
-        const allApplications = await getMembershipApplications();
+        const { year } = req.query;
+        const allApplications = await getMembershipApplications(parseInt(year as string, 10));
         res.send(allApplications);
     } catch (error: any) {
         logger.error(error);
@@ -243,8 +244,8 @@ membershipApplication.get('/list/excel', async (req: Request, res: Response) => 
     try {
         await validateAdminAccess(req, res);
         logger.info('Getting membership application list.');
-
-        let applications : MembershipApplication[] = await getMembershipApplications();
+        const { year } = req.query;
+        let applications : MembershipApplication[] = await getMembershipApplications(parseInt(year as string, 10));
         applications = applications.filter((app) => app.status !== 'Accepted');
         const workbookTitle = 'PRA applications';
         const workbook = startWorkbook(workbookTitle);

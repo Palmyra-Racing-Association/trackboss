@@ -10,8 +10,8 @@ function buildNotesBody(internalNotes: string, applicantNotes: string) {
 }
 
 // eslint-disable-next-line import/prefer-default-export
-export async function getMembershipApplications(token: string): Promise<MembershipApplication[]> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication`, {
+export async function getMembershipApplications(token: string, year: number): Promise<MembershipApplication[]> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication?year=${year}`, {
         method: 'GET',
         mode: 'cors',
         headers: generateHeaders(token),
@@ -91,8 +91,8 @@ export async function reviewMembershipApplication(
     return response.json();
 }
 
-export async function getMembershipApplicationListExcel(token: string): Promise<Blob> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication/list/excel`, {
+export async function getMembershipApplicationListExcel(token: string, year: number): Promise<Blob> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/membershipApplication/list/excel?year=${year}`, {
         method: 'GET',
         mode: 'cors',
         headers: generateHeaders(token),

@@ -9,6 +9,7 @@ import { getMembershipApplicationListExcel, getMembershipApplications } from '..
 import DataSearchBox from './input/DataSearchBox';
 import MembershipApplicationModal from './modals/MembershipApplicationModal';
 import WrappedSwitchInput from './input/WrappedSwitchInput';
+import YearsDropDown from './shared/YearsDropDown';
 
 const columns: any = [
     {
@@ -83,6 +84,9 @@ export default function MembershipApplicationList() {
     const [showAccepted, setShowAccepted] = useState<boolean>(false);
     const [showReview, setShowReview] = useState<boolean>(false);
     const [showRejected, setShowRejected] = useState<boolean>(false);
+    const [applicationYear, setApplicationYear] = useState<number>(new Date().getFullYear());
+    const [yearsList, setYearsList] = useState<number[]>([]);
+    const [initialYear, setInitialYear] = useState<number>(new Date().getFullYear());
 
     const { isOpen, onClose, onOpen } = useDisclosure(
         { onClose: () => setDirty((olDirtyGotYaMoney) => !olDirtyGotYaMoney) },
@@ -91,14 +95,29 @@ export default function MembershipApplicationList() {
     const [searchTerm, setSearchTerm] = useState<string>('');
 
     async function getMembershipApplicationsData() {
-        const allApplications: MembershipApplication[] = await getMembershipApplications(state.token);
+        const allApplications: MembershipApplication[] =
+            await getMembershipApplications(state.token, applicationYear || (new Date().getFullYear()));
         setCells(allApplications);
         setFilteredCells(allApplications);
     }
 
     useEffect(() => {
         getMembershipApplicationsData();
-    }, [dirty]);
+        const displayYears = [];
+        const now = new Date();
+        const nowYear = now.getFullYear();
+        // if it's after August, show next year
+        if (now.getMonth() > 7) {
+            setInitialYear(nowYear + 1);
+        } else {
+            // otherwise, show this year
+            setInitialYear(nowYear);
+        }
+        for (let pushYear = 2023; pushYear <= nowYear + 1; pushYear++) {
+            displayYears.push(pushYear);
+        }
+        setYearsList(displayYears.sort().reverse());
+    }, [dirty, applicationYear]);
 
     useEffect(() => {
         if (searchTerm === '') {
@@ -129,6 +148,14 @@ export default function MembershipApplicationList() {
     return (
         <div>
             <Center>
+                <YearsDropDown
+                    years={yearsList}
+                    initialYear={initialYear}
+                    header="Application Year"
+                    setYear={setApplicationYear}
+                />
+            </Center>
+            <Center>
                 <DataSearchBox
                     onTextChange={setSearchTerm}
                     searchValue={searchTerm}
@@ -141,7 +168,7 @@ export default function MembershipApplicationList() {
                     mr={2}
                     onClick={
                         async () => {
-                            const excelData = await getMembershipApplicationListExcel(state.token);
+                            const excelData = await getMembershipApplicationListExcel(state.token, applicationYear);
                             const objectUrl = URL.createObjectURL(excelData);
                             window.location.href = objectUrl;
                         }
