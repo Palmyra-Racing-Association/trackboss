@@ -46,6 +46,7 @@ export default function MemberSelector(props: MemberSelectorProps) {
     return (
         <Select
             placeholder="Choose a member or start typing to narrow down the list"
+            menuPlacement="top"
             styles={
                 {
                     option: (provided, optionState) => ({
