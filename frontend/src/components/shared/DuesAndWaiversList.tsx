@@ -2,6 +2,7 @@ import {
     Alert,
     Box,
     Button,
+    Center,
     Heading, HStack, IconButton, Link, Modal, ModalContent, ModalOverlay,
     Select, Stat, StatGroup, StatHelpText, StatLabel,
     StatNumber, Text, useDisclosure, VStack,
@@ -19,6 +20,8 @@ import DataSearchBox from '../input/DataSearchBox';
 import WrappedSwitchInput from '../input/WrappedSwitchInput';
 import BillingStatsDisplay from './BillingStatsDisplay';
 import dataTableStyles from './DataTableStyles';
+import getYearsForBillingDisplay from '../../util/billing';
+import YearsDropDown from './YearsDropDown';
 
 export default function DuesAndWaiversList() {
     const { state } = useContext(UserContext);
@@ -34,13 +37,16 @@ export default function DuesAndWaiversList() {
     const [filterPaperwork, setFilterPaperwork] = useState<boolean>(false);
     const [filterPaid, setFilterPaid] = useState<boolean>(false);
     const [paymentMethod, setPaymentMethod] = useState<string>('');
+    const [applicationYear, setApplicationYear] = useState<number>(new Date().getFullYear() - 1);
+    const [yearsList, setYearsList] = useState<number[]>([]);
+    const [initialYear, setInitialYear] = useState<number>(new Date().getFullYear() - 1);
 
     const { isOpen, onClose, onOpen } = useDisclosure();
 
     async function getMembershipBillData() {
         let memberBills : Bill[] = [];
         try {
-            memberBills = await getBills(state.token) as Bill[];
+            memberBills = await getBills(state.token, applicationYear) as Bill[];
         } catch (error) {
             // console.log(error);
         }
@@ -83,7 +89,8 @@ export default function DuesAndWaiversList() {
 
     useEffect(() => {
         getMembershipBillData();
-    }, []);
+        getYearsForBillingDisplay(setInitialYear, setYearsList);
+    }, [applicationYear]);
 
     useEffect(() => {
         if (searchTerm === '') {
@@ -156,8 +163,14 @@ export default function DuesAndWaiversList() {
 
     return (
         <VStack mt={25}>
-            <Text fontSize="2xl">{`${allBillsData[0]?.year} Data`}</Text>
-            <Text fontSize="x-small">Year changes over on 6/1</Text>
+            <Center>
+                <YearsDropDown
+                    years={yearsList}
+                    initialYear={initialYear}
+                    header="Billing data"
+                    setYear={setApplicationYear}
+                />
+            </Center>
             <StatGroup>
                 <Stat>
                     <StatLabel>Paid or Owes $0</StatLabel>

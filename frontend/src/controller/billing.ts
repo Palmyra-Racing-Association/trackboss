@@ -39,8 +39,8 @@ export async function getYearlyThresholdValue(token: string) {
     return undefined;
 }
 
-export async function getBills(token: string): Promise<GetBillListResponse> {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/list`, {
+export async function getBills(token: string, billingYear: number): Promise<GetBillListResponse> {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing/list?year=${billingYear}`, {
         method: 'GET',
         mode: 'cors',
         headers: generateHeaders(token),

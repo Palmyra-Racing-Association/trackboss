@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BsPrinter } from 'react-icons/bs';
 
+import getYearsForBillingDisplay from '../util/billing';
 import { MembershipApplication } from '../../../src/typedefs/membershipApplication';
 import { UserContext } from '../contexts/UserContext';
 import { getMembershipApplicationListExcel, getMembershipApplications } from '../controller/membershipApplication';
@@ -103,20 +104,7 @@ export default function MembershipApplicationList() {
 
     useEffect(() => {
         getMembershipApplicationsData();
-        const displayYears = [];
-        const now = new Date();
-        const nowYear = now.getFullYear();
-        // if it's after August, show next year
-        if (now.getMonth() > 7) {
-            setInitialYear(nowYear + 1);
-        } else {
-            // otherwise, show this year
-            setInitialYear(nowYear);
-        }
-        for (let pushYear = 2023; pushYear <= nowYear + 1; pushYear++) {
-            displayYears.push(pushYear);
-        }
-        setYearsList(displayYears.sort().reverse());
+        getYearsForBillingDisplay(setInitialYear, setYearsList);
     }, [dirty, applicationYear]);
 
     useEffect(() => {

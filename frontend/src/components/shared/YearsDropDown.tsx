@@ -5,7 +5,8 @@ import _ from 'lodash';
 
 interface YearsDropDownProps {
     years: number[],
-    header: string,
+    // eslint-disable-next-line react/require-default-props
+    header?: string,
     // eslint-disable-next-line no-unused-vars
     setYear: (value: number) => void,
     initialYear: number,
