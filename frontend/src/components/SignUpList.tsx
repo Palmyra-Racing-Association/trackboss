@@ -88,6 +88,8 @@ export default function SignUpList(props: SignupListProps) {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [allCells, setAllCells] = useState<Worker[]>([]);
     const [signupEvent, setSignupEvent] = useState<Event>();
+    const [allJobsCount, setAllJobsCount] = useState<number>(0);
+    const [signupsCount, setSignupsCount] = useState<number>(0);
 
     const { state } = useContext(UserContext);
 
@@ -95,6 +97,11 @@ export default function SignUpList(props: SignupListProps) {
         const eventJobs = await getSignupList(state?.token, props.eventId);
         setCells(eventJobs);
         setAllCells(eventJobs);
+        setAllJobsCount(eventJobs.length);
+        const filledJobs = eventJobs.filter(
+            (signup : any) => signup.member !== null,
+        );
+        setSignupsCount(filledJobs.length);
     }
 
     async function getEventData() {
@@ -176,6 +183,12 @@ export default function SignUpList(props: SignupListProps) {
                     choose a name from the drop down, or type it in the dropdown to narrow the list.  Admins can also
                     assign a non member to a job.
                 </Alert>
+                <Box mt={1} mb={1}>
+                    {
+                        `${signupsCount} of ${allJobsCount} 
+                        (${(signupsCount / allJobsCount * 100).toFixed(2)}%) jobs filled`
+                    }
+                </Box>
                 <DataTable
                     columns={columns}
                     data={cells}
