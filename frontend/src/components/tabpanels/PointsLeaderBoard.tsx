@@ -33,6 +33,7 @@ export default function PointsLeaderboard() {
             // console.log(error);
         }
         memberBills = memberBills.sort((billA, billB) => billB.pointsEarned - billA.pointsEarned);
+        memberBills = memberBills.filter((bill) => (bill.pointsEarned > 0));
         memberBills = memberBills.slice(0, 20);
         setAllBillsData(memberBills as Bill[]);
         setFilteredBills(memberBills as Bill[]);
@@ -107,8 +108,8 @@ export default function PointsLeaderboard() {
                 fixedHeaderScrollHeight="300px"
                 highlightOnHover
                 pagination
-                paginationPerPage={50}
-                paginationRowsPerPageOptions={[50, (allBillsData?.length || 999)]}
+                paginationPerPage={20}
+                paginationRowsPerPageOptions={[20, (allBillsData?.length || 999)]}
                 responsive
                 striped
                 subHeaderWrap
