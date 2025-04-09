@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
 import {
@@ -43,7 +44,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
     const [email, setEmail] = useState<string>(selectedMember.email || '');
     const [dirty, setDirty] = useState<boolean>(false);
     const [emailValid, setEmailValid] = useState<boolean>(isEmail(email));
-    const [birthdate, setBirthDate] = useState<Date>(moment(selectedMember.birthdate).toDate() || moment().toDate());
+    const [birthdate, setBirthDate] = useState<Date>();
     const [membershipType, setMembershipType] = useState<number>(selectedMember.membershipTypeId);
     const [firstName, setFirstName] = useState<string>(selectedMember.firstName);
     const [lastName, setLastName] = useState<string>(selectedMember.lastName);
@@ -139,7 +140,7 @@ export default function EditMemberModal(props: EditMemberModalProps) {
                                             setDirty(true);
                                         }
                                     }
-                                    value={birthdate}
+                                    value={birthdate instanceof Date && !Number.isNaN(birthdate.getTime()) ? birthdate : null}
                                     required
                                     maxDate={new Date()}
                                 />
