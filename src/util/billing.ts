@@ -48,6 +48,7 @@ export async function generateNewBills(
             (bill) => bill.membershipAdmin === membership.membershipAdmin,
         ) === 'undefined') {
             try {
+                logger.info(`Running billing for membership with id ${membership.membershipId}`);
                 const baseDues = await getBaseDues(membership.membershipId);
                 const earned = (await getWorkPointsByMembership(membership.membershipId, year)).total;
                 let owed = Math.max((1 - earned / threshold) * baseDues, 0);
