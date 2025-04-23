@@ -42,8 +42,8 @@ jobs:
       run: bash devops/deploy/backend/buildDockerImage.sh $HOME/work/trackboss/trackboss
     - name: Terminate existing API backend to reset it
       run: bash devops/deploy/backend/redeployApiBackend.sh $TRACKBOSS_ENVIRONMENT_NAME $HOME/work/trackboss/trackboss
-    - name: Reassociate the ENI with the public IP
-      run: bash devops/deploy/backend/enireattach.sh
+  #  - name: Reassociate the ENI with the public IP
+  #    run: bash devops/deploy/backend/enireattach.sh
   # backend-build:
   #   runs-on: ubuntu-latest
   #   steps:
