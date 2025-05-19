@@ -1,4 +1,5 @@
 import {
+    Button,
     Center,
     HStack,
     VStack,
@@ -9,6 +10,7 @@ import { Bill } from '../../../../src/typedefs/bill';
 import { UserContext } from '../../contexts/UserContext';
 
 import {
+    generateBills,
     getBills,
 } from '../../controller/billing';
 import DataSearchBox from '../input/DataSearchBox';
@@ -34,7 +36,7 @@ export default function PointsLeaderboard() {
         }
         memberBills = memberBills.sort((billA, billB) => billB.pointsEarned - billA.pointsEarned);
         memberBills = memberBills.filter((bill) => (bill.pointsEarned > 0));
-        memberBills = memberBills.slice(0, 20);
+        memberBills = memberBills.slice(0, 50);
         setAllBillsData(memberBills as Bill[]);
         setFilteredBills(memberBills as Bill[]);
     }
@@ -75,7 +77,6 @@ export default function PointsLeaderboard() {
             selector: (row: Bill) => row.pointsEarned,
             sortable: true,
             maxWidth: '10',
-            hide: 'sm',
         },
         {
             name: 'Type',
@@ -84,6 +85,21 @@ export default function PointsLeaderboard() {
             hide: 'sm',
         },
     ];
+
+    const refreshButton = (
+        <Button
+            backgroundColor="orange"
+            color="white"
+            onClick={
+                async () => {
+                    await generateBills(state.token);
+                    getMembershipBillData();
+                }
+            }
+        >
+            {`Refresh ${initialYear}`}
+        </Button>
+    );
 
     return (
         <VStack mt={25}>
@@ -100,6 +116,7 @@ export default function PointsLeaderboard() {
                     onTextChange={setSearchTerm}
                     searchValue={searchTerm}
                 />
+                {state.user?.memberType === 'Admin' && refreshButton}
             </HStack>
             <DataTable
                 columns={columns}

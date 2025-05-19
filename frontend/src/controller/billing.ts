@@ -64,7 +64,7 @@ export async function getBillsForMembership(
 export async function generateBills(token: string): Promise<PostCalculateBillsResponse> {
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/billing`, {
         method: 'POST',
-        mode: 'no-cors',
+        mode: 'cors',
         headers: generateHeaders(token),
     });
     return response.json();
