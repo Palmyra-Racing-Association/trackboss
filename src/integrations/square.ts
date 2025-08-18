@@ -19,10 +19,10 @@ export async function createPaymentLink(memberBill: Bill) {
         // Square uses cents for payment so we convert here.  and force two decimal places becuase the
         // calculation gets jacked up otherwise.
         const paymentAmount = (memberBill.amountWithFee * 100).toFixed(0);
+
         const response = await client.checkoutApi.createPaymentLink({
             idempotencyKey: v4(),
             order: {
-                customerId: memberBill.membershipId.toString(),
                 locationId,
                 referenceId: memberBill.billId.toString(),
                 lineItems: [
@@ -48,17 +48,13 @@ export async function createPaymentLink(memberBill: Bill) {
                 },
             },
             prePopulatedData: {
-                buyerAddress: {
-                    lastName: memberBill.lastName,
-                    firstName: memberBill.firstName,
-                },
                 buyerEmail: memberBill.membershipAdminEmail,
                 buyerPhoneNumber: memberBill.phone,
+                // Names don’t go in buyerAddress anymore — Square may ignore or reject
+                // You could use "buyerNote" if you want to carry forward the name
             },
         });
-        console.log(Date.now() - start);
-        console.log(response.result);
-        console.log(response?.result?.paymentLink?.url);
+
         return {
             squareUrl: response?.result?.paymentLink?.url,
             squareOrderId: response?.result?.paymentLink?.orderId,

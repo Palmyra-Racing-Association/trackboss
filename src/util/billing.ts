@@ -187,6 +187,7 @@ export async function generateSquareLinks(billingYear: number, membershipId: num
             const paymentInfo = await createPaymentLink(bill);
             bill.squareLink = paymentInfo.squareUrl;
             bill.squareOrderId = paymentInfo.squareOrderId;
+            console.log(`${bill.billId} - ${bill.squareLink}`);
             // slow down sally, you're moving too fast.....
             // eslint-disable-next-line no-await-in-loop
             await addSquareAttributes(bill);
