@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:22-alpine
 ENV TZ="America/New_York"
 
 ENV PORT=3000
