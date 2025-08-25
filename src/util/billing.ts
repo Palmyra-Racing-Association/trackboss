@@ -14,7 +14,7 @@ import { Membership } from '../typedefs/membership';
 import { Job } from '../typedefs/job';
 import { getBoardMemberList } from '../database/boardMember';
 import { sendPaymentConfirmationEmail } from './email';
-import { createPaymentLink } from '../integrations/square';
+import createPaymentLink from '../integrations/square';
 import { calculateBillingYear } from './dateHelper';
 
 /**

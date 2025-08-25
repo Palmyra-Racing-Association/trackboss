@@ -1,17 +1,16 @@
 import { v4 } from 'uuid';
-import { Client, Environment, Location } from 'square';
+import { SquareClient } from 'square';
 import { Bill } from '../typedefs/bill';
 import logger from '../logger';
 import { getSquareObject } from '../util/environmentWrapper';
 
-export async function createPaymentLink(memberBill: Bill) {
+export default async function createPaymentLink(memberBill: Bill) {
     const squareAccess = await getSquareObject();
     const { locationId, token } = squareAccess;
 
     // Set Square credentials and environment
-    const client = new Client({
-        environment: Environment.Production, // Change this to Environment.Production for live transactions
-        accessToken: token,
+    const client = new SquareClient({
+        token,
     });
 
     try {
@@ -20,7 +19,7 @@ export async function createPaymentLink(memberBill: Bill) {
         // calculation gets jacked up otherwise.
         const paymentAmount = (memberBill.amountWithFee * 100).toFixed(0);
 
-        const response = await client.checkoutApi.createPaymentLink({
+        const response = await client.checkout.paymentLinks.create({
             idempotencyKey: v4(),
             order: {
                 locationId,
@@ -50,36 +49,18 @@ export async function createPaymentLink(memberBill: Bill) {
             prePopulatedData: {
                 buyerEmail: memberBill.membershipAdminEmail,
                 buyerPhoneNumber: memberBill.phone,
-                // Names don’t go in buyerAddress anymore — Square may ignore or reject
+                // Names don't go in buyerAddress anymore — Square may ignore or reject
                 // You could use "buyerNote" if you want to carry forward the name
             },
         });
 
         return {
-            squareUrl: response?.result?.paymentLink?.url,
-            squareOrderId: response?.result?.paymentLink?.orderId,
+            squareUrl: response?.paymentLink?.url,
+            squareOrderId: response?.paymentLink?.orderId,
         };
     } catch (error) {
         logger.error(JSON.stringify(memberBill));
         logger.error(error);
         throw (error);
     }
-}
-
-export async function getLocations() {
-    const squareAccess = await getSquareObject();
-    const { token } = squareAccess;
-
-    // Set Square credentials and environment
-    const client = new Client({
-        environment: Environment.Production, // Change this to Environment.Production for live transactions
-        accessToken: token,
-    });
-    let squareLocations : Location[] = [];
-    try {
-        squareLocations = (await client.locationsApi.listLocations()).result.locations || [];
-    } catch (error) {
-        logger.error('Error accessing Square', error);
-    }
-    return squareLocations;
 }

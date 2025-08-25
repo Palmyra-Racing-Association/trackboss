@@ -23,7 +23,7 @@ import { sendInsuranceConfirmEmail } from '../util/email';
 import logger from '../logger';
 import { calculateBillingYear } from '../util/dateHelper';
 import { formatWorkbook, httpOutputWorkbook, startWorkbook } from '../excel/workbookHelper';
-import { createPaymentLink } from '../integrations/square';
+import createPaymentLink from '../integrations/square';
 
 //
 // TODO: Emails are not sent for generated bills (see emailBills helper function in util)
