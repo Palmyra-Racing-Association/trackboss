@@ -6,7 +6,6 @@ exports.handler = async function (event) {
     const notificationMessage = JSON.parse(event.Records[0].body);
     const { members, mechanism, subject } = notificationMessage;
     let { text } = notificationMessage;
-    text = text.replace(/\n/g, "<p>\n");
     console.log(`there are ${members.length} recipients.`);
     if (mechanism === 'TEXT') {
         console.log('Trackboss messaging lambda - starting text messages');
