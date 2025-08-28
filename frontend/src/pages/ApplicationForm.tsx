@@ -316,10 +316,10 @@ function ApplicationForm() {
                         />
                     </Box>
                 </SimpleGrid>
-                <Accordion allowToggle>
+                <Accordion defaultIndex={0}>
                     <AccordionItem>
                         <AccordionButton>
-                            Family members (besides you)
+                            Family members (Anyone besides the person filling out this application goes here)
                             <AccordionIcon />
                         </AccordionButton>
                         <AccordionPanel>
